@@ -17,22 +17,27 @@ paths:
     get:
       summary: "GET api/panel"
       parameters:
-        - in: path
+        - in: query
           name: data
           schema:
             type: string
           required: true
           description: panel data as compressed base64 encoded string
-        - in: path
+        - in: query
           name: type
           schema:
             type: string
             required: true
             description: type is either PDF or HTML
             default: HTML
+          required: true
       responses:
         "200":
           description: "OK"
+          content:
+            image/svg+xml:
+              schema:
+                type: string
     post:
       summary: "POST api/panel"
       requestBody:
@@ -44,6 +49,10 @@ paths:
       responses:
         "200":
           description: "OK"
+          content:
+            image/svg+xml:
+              schema:
+                type: string
   /api/panel/csv:
     post:
       summary: "POST api/panel/csv"
@@ -56,11 +65,16 @@ paths:
       responses:
         "200":
           description: "OK"
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+
   /api/panel/lines:
     get:
       summary: "GET api/panel/lines"
       parameters:
-        - in: path
+        - in: query
           name: data
           schema:
             type: string
