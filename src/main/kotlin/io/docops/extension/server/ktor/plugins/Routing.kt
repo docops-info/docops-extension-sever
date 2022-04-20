@@ -22,6 +22,9 @@ fun Application.configureRouting() {
         static("/static") {
             resources("static")
         }
+        static("/swagger-ui") {
+            resources("swagger-ui")
+        }
         //register the extension routing
         extensions()
     }
