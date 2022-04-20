@@ -16,23 +16,56 @@ paths:
   /api/panel:
     get:
       summary: "GET api/panel"
+      parameters:
+        - in: path
+          name: data
+          schema:
+            type: string
+          required: true
+          description: panel data as compressed base64 encoded string
+        - in: path
+          name: type
+          schema:
+            type: string
+            required: true
+            description: type is either PDF or HTML
+            default: HTML
       responses:
         "200":
           description: "OK"
     post:
       summary: "POST api/panel"
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
       responses:
         "200":
           description: "OK"
   /api/panel/csv:
     post:
       summary: "POST api/panel/csv"
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
       responses:
         "200":
           description: "OK"
   /api/panel/lines:
     get:
       summary: "GET api/panel/lines"
+      parameters:
+        - in: path
+          name: data
+          schema:
+            type: string
+          required: true
+          description: panel data as compressed base64 encoded string
       responses:
         "200":
           description: "OK"

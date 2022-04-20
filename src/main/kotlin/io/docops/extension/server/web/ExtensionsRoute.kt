@@ -26,6 +26,7 @@ fun Route.extensions() {
         get("/ping") {
             call.respondBytes("OK".toByteArray(), ContentType.Text.Html, HttpStatusCode.OK)
         }
+
         get("/panel") {
             val data = call.request.queryParameters["data"] as String
             val type = call.request.queryParameters["type"]
