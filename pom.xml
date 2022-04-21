@@ -20,9 +20,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>${project}</artifactId>
+    <artifactId>docops-extension-server</artifactId>
     <groupId>io.docops</groupId>
-    <version>2022.0-SNAPSHOT</version>
+    <version>2022.0</version>
     <packaging>jar</packaging>
 
     <name>${project}</name>
@@ -30,6 +30,7 @@
     <description>A library to render a grid of buttons.</description>
 
     <properties>
+        <asciidoctorj-docops-panel.version>2022.5</asciidoctorj-docops-panel.version>
         <project>docops-extension-server</project>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
@@ -39,7 +40,8 @@
         <junit.version>5.8.2</junit.version>
         <mojo.version>1.6.0</mojo.version>
         <logback_version>1.2.11</logback_version>
-        <maven-source.version>3.2.0</maven-source.version>
+        <maven-source.version>3.2.1</maven-source.version>
+        <maven-compiler.version>3.10.1</maven-compiler.version>
         <maven-plugin.version>3.0.0-M6</maven-plugin.version>
         <maven-release.version>3.0.0-M5</maven-release.version>
         <maven-deploy.version>3.0.0-M2</maven-deploy.version>
@@ -49,6 +51,7 @@
         <dokka.version>1.6.10</dokka.version>
         <commons-io.version>2.11.0</commons-io.version>
         <common-codec.version>1.15</common-codec.version>
+        <metrics.version>4.2.9</metrics.version>
     </properties>
 
     <organization>
@@ -240,12 +243,12 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jmx</artifactId>
-            <version>4.2.9</version>
+            <version>${metrics.version}</version>
         </dependency>
         <dependency>
             <groupId>io.docops</groupId>
             <artifactId>asciidoctorj-docops-panel</artifactId>
-            <version>2022.5</version>
+            <version>${asc}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -387,9 +390,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler.version}</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
