@@ -30,7 +30,7 @@
     <description>A library to render a grid of buttons.</description>
 
     <properties>
-        <asciidoctorj-docops-panel.version>2022.5</asciidoctorj-docops-panel.version>
+        <asciidoctorj-docops-panel.version>2022.6</asciidoctorj-docops-panel.version>
         <project>docops-extension-server</project>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
@@ -241,6 +241,13 @@
             <version>${ktor_version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>${maven-deploy.version}</version>
+            <type>maven-plugin</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jmx</artifactId>
             <version>${metrics.version}</version>
@@ -248,7 +255,7 @@
         <dependency>
             <groupId>io.docops</groupId>
             <artifactId>asciidoctorj-docops-panel</artifactId>
-            <version>${asc}</version>
+            <version>${asciidoctorj-docops-panel.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -376,7 +383,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy.version}</version>
+                <version>3.0.0-M2</version>
                 <executions>
                     <execution>
                         <id>default-deploy</id>
