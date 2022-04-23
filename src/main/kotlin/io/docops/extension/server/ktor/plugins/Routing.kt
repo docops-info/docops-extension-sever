@@ -22,6 +22,10 @@ fun Application.configureRouting() {
         static("/static") {
             resources("static")
         }
+        // Static plugin. Try to access `/static/index.html`
+        static("/editor") {
+            resources("editor")
+        }
         static("/swagger-ui") {
             resources("swagger-ui")
         }
