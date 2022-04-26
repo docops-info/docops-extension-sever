@@ -13,6 +13,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.*
 import java.io.*
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -35,7 +36,11 @@ fun Route.extensions() {
             val isPDF = "PDF" == type
             val contents = uncompressString(data)
             val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-            call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
+            if(isPDF) {
+                call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
+            }
+            val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
+            call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
         }
         get("/panel/lines") {
             val data = call.request.queryParameters["data"] as String
@@ -95,8 +100,9 @@ fun Route.extensions() {
         post("/panel/plain") {
             val contents = call.receiveText()
             val imgSrc = contentsToImageStr(contents, scriptLoader, false)
+
             //val str = "data:image/svg+xml;utf8," + String(imgSrc.toByteArray())
-            call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
+            call.respondBytes(imgSrc.escapeHTML().toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
             //call.respondBytes(imgSrc.toByteArray(), ContentType.Any, HttpStatusCode.OK)
         }
         post("/uncompress") {
