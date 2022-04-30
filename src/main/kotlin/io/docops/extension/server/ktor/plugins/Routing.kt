@@ -1,5 +1,6 @@
 package io.docops.extension.server.ktor.plugins
 
+import io.docops.extension.server.echart.chartRoutes
 import io.docops.extension.server.web.extensions
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -31,6 +32,7 @@ fun Application.configureRouting() {
         }
         //register the extension routing
         extensions()
+        chartRoutes()
     }
 }
 

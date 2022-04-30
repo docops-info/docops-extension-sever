@@ -25,7 +25,7 @@ import java.util.zip.InflaterOutputStream
 
 fun Route.extensions() {
     val scriptLoader = ScriptLoader()
-    route("/api"){
+    route("/api") {
         get("/ping") {
             call.respondBytes("OK".toByteArray(), ContentType.Text.Html, HttpStatusCode.OK)
         }
@@ -36,7 +36,7 @@ fun Route.extensions() {
             val isPDF = "PDF" == type
             val contents = uncompressString(data)
             val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-            if(isPDF) {
+            if (isPDF) {
                 call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
             }
             val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
@@ -47,7 +47,11 @@ fun Route.extensions() {
             val contents = uncompressString(data)
             val panels = sourceToPanel(contents = contents, scriptLoader = scriptLoader)
             val panelService = PanelService()
-            call.respondBytes(panelService.toLines("Link List", panels).joinToString("\n").toByteArray(), ContentType.Text.Plain, HttpStatusCode.OK)
+            call.respondBytes(
+                panelService.toLines("Link List", panels).joinToString("\n").toByteArray(),
+                ContentType.Text.Plain,
+                HttpStatusCode.OK
+            )
         }
         post("/panel") {
             val contents = call.receiveText()
@@ -102,7 +106,9 @@ fun Route.extensions() {
             val imgSrc = contentsToImageStr(contents, scriptLoader, false)
 
             //val str = "data:image/svg+xml;utf8," + String(imgSrc.toByteArray())
-            call.respondBytes(imgSrc.escapeHTML().toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
+            val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
+            call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
+            //call.respondBytes(imgSrc.escapeHTML().toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
             //call.respondBytes(imgSrc.toByteArray(), ContentType.Any, HttpStatusCode.OK)
         }
         post("/uncompress") {
@@ -110,7 +116,7 @@ fun Route.extensions() {
                 val contents = call.receiveText()
                 //val ctn = uncompressString(contents)
 
-                val res= CompressionUtil.decompressB64(contents)
+                val res = CompressionUtil.decompressB64(contents)
 
                 call.respondBytes(res.toByteArray(), ContentType.Any, HttpStatusCode.OK)
             } catch (e: Exception) {
@@ -126,10 +132,15 @@ private fun contentsToImageStr(
     scriptLoader: ScriptLoader, isPDf: Boolean
 ): String {
 
-    val panels: Panels = sourceToPanel(contents, scriptLoader)
-    val panelService = PanelService()
-    panels.isPdf = isPDf
-    return panelService.fromPanelToSvg(panels)
+    try {
+        val panels: Panels = sourceToPanel(contents, scriptLoader)
+        val panelService = PanelService()
+        panels.isPdf = isPDf
+        return panelService.fromPanelToSvg(panels)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        throw java.lang.RuntimeException(e)
+    }
 }
 
 private fun uncompressString(zippedBase64Str: String): String {
@@ -143,7 +154,7 @@ private fun uncompressString(zippedBase64Str: String): String {
     try {
         var line = input.readLine()
         while (line != null) {
-            content.append(line+"\n")
+            content.append(line + "\n")
             line = input.readLine()
         }
     } finally {
@@ -168,11 +179,13 @@ private fun strToPanelButtons(str: String): MutableList<PanelButton> {
 }
 
 fun sourceToPanel(contents: String, scriptLoader: ScriptLoader): Panels {
+    //language=kotlin
     val source = """
             import io.docops.asciidoc.buttons.dsl.*
             import io.docops.asciidoc.buttons.models.*
             import io.docops.asciidoc.buttons.theme.*
             import io.docops.asciidoc.buttons.*
+            import io.docops.asciidoc.buttons.models.ButtonImage
             
             $contents
         """.trimIndent()
