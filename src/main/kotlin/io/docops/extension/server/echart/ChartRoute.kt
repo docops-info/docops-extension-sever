@@ -23,6 +23,23 @@ fun Route.chartRoutes(){
                 call.respondBytes(res.toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
             } catch (e: Exception) {
                 e.printStackTrace()
+                throw e
+            }
+        }
+        post("/bar/stacked") {
+            try {
+                val contents = call.receiveText()
+                val source = """
+            import io.docops.extension.server.echart.*
+            
+            $contents
+        """.trimIndent()
+                val data = scriptLoader.parseKotlinScript<StackedBar>(source)
+                val res = data.toEChart()
+                call.respondBytes(res.toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e
             }
         }
     }

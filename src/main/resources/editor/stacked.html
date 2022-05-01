@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Panels Editor</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+    <!-- Milligram CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
+    <style>
+        html, body { height: 100% }
+        #editor, #return { height: 50% }
+    </style>
+</head>
+<body>
+<h1>Stacked Bar Editor</h1>
+
+<pre id="editor">
+stackBar {
+        title = "Group 1 Startup Time"
+        subTitle = "Memory & Disk Storage"
+        dimension = mutableListOf("CT", "NY", "NH", "VT", "ME")
+        s{
+            name = "Start Up (ms)"
+            stackGroupName = "group-1"
+            data = mutableListOf(24.0,33.0,23.0,33.0,43.0)
+        }
+        s{
+            name = "Storage (mb)"
+            stackGroupName = "group-1"
+            data = mutableListOf(5.0,17.0,12.0,14.0,15.0)
+        }
+        s{
+            name= " Memory (mb)"
+            stackGroupName = "group-1"
+            data = mutableListOf(100.0,120.0,90.0,55.0,62.0)
+        }
+}
+</pre>
+
+
+<script>
+    let editor = ace.edit("editor");
+    editor.setTheme("ace/theme/clouds");
+    editor.session.setMode("ace/mode/kotlin");
+    //editor.session.setMode("ace/mode/html");
+    let barColors = [
+        ['rgba(220,20,60, 0.5)', 'rgba(220,20,60, 1)'],
+        ['rgba(30,144,255, 0.5)', 'rgba(30,144,255, 1)'],
+        ['rgba(47,79,79, 0.5)', 'rgba(47,79,79, 1)'],
+        ['rgba(189,183,107, 0.5)', 'rgba(189,183,107, 1)'],
+        ['rgba(176,196,222, 0.5)', 'rgba(176,196,222, 1)'],
+        ['rgba(112,128,144, 0.5)', 'rgba(112,128,144, 1)'],
+    ];
+    let emphasisStyle = {
+        itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(112,128,144, 0.3)'
+        }
+    };
+    let itemStyle = function (idx){
+        return {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {offset: 0, color: barColors[idx][0]},
+                {offset: 1, color: barColors[idx][1]}
+            ])
+        };
+    }
+    function showHTML() {
+        $('#return').html(editor.getValue());
+    }
+    let successRes = function(data) {
+        // language=html
+        let obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
+        $('#return').empty().append(data);
+    }
+    // or use data: url to handle things like doctype
+    function showHTMLInIFrame() {
+        $.ajax({
+            type: "POST",
+            url: "/api/bar/stacked",
+            data: editor.getValue(),
+            success: successRes,
+            error: function( jqXhr, textStatus, errorThrown ){
+                console.log( errorThrown );
+            },
+            dataType: "text"
+        });
+
+    }
+    editor.on("input", showHTMLInIFrame);
+</script>
+<div id="return"></div>
+
+</body>
+</html>
