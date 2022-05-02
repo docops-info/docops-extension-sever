@@ -43,7 +43,7 @@ class StackedBar {
         val tpl = """
             <div id="$divId" style="width: ${width}px; height: ${height}px;"></div>
             <script>
-                myChart = echarts.init(document.getElementById('$divId'));
+                myChart = echarts.init(document.getElementById('$divId'), 'shine');
                 option = {
                     tooltip: {},
                     label: {
@@ -66,10 +66,30 @@ class StackedBar {
                         text: '$title',
                         subtext: '$subTitle'
                     },
+                    calculable: true,
+                    grid: {
+                      top: 80,
+                      bottom: 100,
+                      tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                          type: 'shadow',
+                          label: {
+                            show: true,
+                            formatter: function (params) {
+                              return params.value.replace('\n', '');
+                            }
+                          }
+                        }
+                      }
+                    },
                     xAxis: {
+                        name: "$xAxisLabel",
                         data: ${dimensionJson()}
                     },
-                    yAxis: {},
+                    yAxis: {
+                        name: "$yAxisLabel"
+                    },
                     series: ${seriesJson()}
                 };
                 myChart.setOption(option);
@@ -91,7 +111,7 @@ class Series
         return Json.encodeToString(data)
     }
     fun tpl(idx: Int): String {
-        //language=javascript
+        //language=json
         return """
             {
               "name": "$name",
@@ -103,7 +123,6 @@ class Series
                     "shadowColor": "rgba(112,128,144, 0.3)"
                   }
               },
-              itemStyle: itemStyle($idx),
               "data": ${dataJson()}
             }
         """.trimIndent()
@@ -114,28 +133,4 @@ class Series
 
 fun stackBar(stackedBar: StackedBar.()-> Unit): StackedBar {
     return StackedBar().apply(stackedBar).validate()
-}
-
-fun main() {
-    val s = stackBar {
-        title = "Group 1 Startup Time"
-        subTitle = "Memory & Disk Storage"
-        dimension = mutableListOf("CT", "NY", "NH", "VT", "ME")
-        s{
-            name = "Start Up (ms)"
-            stackGroupName = "group-1"
-            data = mutableListOf(24.0,33.0,23.0,33.0,43.0)
-        }
-        s{
-            name = "Storage (mb)"
-            stackGroupName = "group-1"
-            data = mutableListOf(5.0,17.0,12.0,14.0,15.0)
-        }
-        s{
-            name= " Memory (mb)"
-            stackGroupName = "group-1"
-            data = mutableListOf(100.0,120.0,90.0,55.0,62.0)
-        }
-    }
-    println(s.toEChart())
 }

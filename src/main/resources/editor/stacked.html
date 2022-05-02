@@ -17,13 +17,17 @@
         #editor, #return { height: 50% }
     </style>
 </head>
-<body>
+<body onload="showHTMLInIFrame();">
 <h1>Stacked Bar Editor</h1>
 
 <pre id="editor">
 stackBar {
+        height=600
+        width=970
         title = "Group 1 Startup Time"
         subTitle = "Memory & Disk Storage"
+        yAxisLabel="(ms)|(mb)"
+        xAxisLabel="State Group"
         dimension = mutableListOf("CT", "NY", "NH", "VT", "ME")
         s{
             name = "Start Up (ms)"
@@ -42,7 +46,7 @@ stackBar {
         }
 }
 </pre>
-
+<script src="js/theme.js"></script>
 
 <script>
     let editor = ace.edit("editor");
@@ -50,9 +54,9 @@ stackBar {
     editor.session.setMode("ace/mode/kotlin");
     //editor.session.setMode("ace/mode/html");
     let barColors = [
-        ['rgba(220,20,60, 0.5)', 'rgba(220,20,60, 1)'],
-        ['rgba(30,144,255, 0.5)', 'rgba(30,144,255, 1)'],
-        ['rgba(47,79,79, 0.5)', 'rgba(47,79,79, 1)'],
+        ['#ed9adc', '#f6afe2'],
+        ['#9d95f4', '#9eabe8'],
+        ['#c8a0f9', '#cb9ce5'],
         ['rgba(189,183,107, 0.5)', 'rgba(189,183,107, 1)'],
         ['rgba(176,196,222, 0.5)', 'rgba(176,196,222, 1)'],
         ['rgba(112,128,144, 0.5)', 'rgba(112,128,144, 1)'],
@@ -75,8 +79,6 @@ stackBar {
         $('#return').html(editor.getValue());
     }
     let successRes = function(data) {
-        // language=html
-        let obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
         $('#return').empty().append(data);
     }
     // or use data: url to handle things like doctype
