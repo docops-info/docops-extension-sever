@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two</title>
+</head>
+<body>
+<div>Hello From Two</div>
+<div id="content"></div>
+<script>
+    self.addEventListener('message', event => {
+        console.log('A new message arrived!')
+        console.log(event.data)
+
+        const data = { someData: 'hey' }
+        event.ports[0].postMessage(data)
+    })
+
+</script>
+</body>
+</html>

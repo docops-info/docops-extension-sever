@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>One</title>
+    <SCRIPT>
+
+        function openOther() {
+            let other = window.open("filetwo.html","second", "height=200,width=200,modal=yes,alwaysRaised=yes");
+            let channel = new MessageChannel();
+            other.postMessage('hello world', [channel.port2]);
+            const display = document.querySelector('span')
+            channel.port1.onmessage = event => {
+                display.innerHTML = event.data
+            }
+
+        }
+
+    </SCRIPT>
+</head>
+<body onload="openOther()">
+<span></span>
+</body>
+</html>
