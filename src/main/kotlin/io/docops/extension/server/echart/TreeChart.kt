@@ -19,10 +19,79 @@ class TreeChart {
 }
 
 fun treeChart(treeChart: TreeChart.() -> Unit): TreeChart {
-    val tc = TreeChart().apply(treeChart)
-    return tc
+    return TreeChart().apply(treeChart)
 }
 
+fun TreeChart.toEchart() : String {
+    val divId = "div_${System.currentTimeMillis()}"
+    val data = Json.encodeToString(this)
+    //language=html
+    val html = """
+        <div id="$divId" style="width: 800px; height: 500px;"></div>
+
+        <script>
+            myChart = echarts.init(document.getElementById('$divId'), 'shine');
+            myChart.showLoading();
+            var data = $data;
+
+            myChart.hideLoading();
+            data.children.forEach(function (datum, index) {
+                index % 2 === 0 && (datum.collapsed = true);
+            });
+            myChart.setOption(
+                (option = {
+                    tooltip: {
+                        trigger: 'item',
+                        triggerOn: 'mousemove'
+                    },
+                    label: {
+                        show: true
+                    },
+                    legend: {},
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'tree',
+                            data: [data],
+                            top: '1%',
+                            left: '7%',
+                            bottom: '1%',
+                            right: '20%',
+                            symbolSize: 7,
+                            label: {
+                                position: 'left',
+                                verticalAlign: 'middle',
+                                align: 'right',
+                                fontSize: 9
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'right',
+                                    verticalAlign: 'middle',
+                                    align: 'left'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true,
+                            animationDuration: 550,
+                            animationDurationUpdate: 750
+                        }
+                    ]
+                })
+            );
+
+        </script>
+    """.trimIndent()
+    return html
+}
 fun main() {
     val tc = treeChart {
         name = "Product Range"

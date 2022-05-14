@@ -41,6 +41,7 @@ fun Application.configureRouting() {
                     <div><a href='/editor/index.html'>Editor</a></div>
                     <div><a href='/editor/dataset.html'>Dataset</a></div>
                     <div><a href='/editor/chart.html'>Chart</a></div>
+                    <div><a href='/editor/treechart.html'>Tree Chart</a></div>
                     <div><a href='/editor/stacked.html'>Stacked</a></div>
                     <div><a href='/static/echart/demo.html'>Demo Echart</a></div>
                     </main>

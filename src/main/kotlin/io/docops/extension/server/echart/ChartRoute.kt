@@ -42,6 +42,23 @@ fun Route.chartRoutes(){
                 throw e
             }
         }
+        post("/treechart") {
+            try {
+                val contents = call.receiveText()
+                //language=kotlin
+                val source = """
+            import io.docops.extension.server.echart.*
+            
+            $contents
+            """.trimIndent()
+                val data = scriptLoader.parseKotlinScript<TreeChart>(source)
+                val res = data.toEchart()
+                call.respondBytes(res.toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e
+            }
+        }
     }
 }
 
