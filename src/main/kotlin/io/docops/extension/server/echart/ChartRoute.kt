@@ -59,6 +59,16 @@ fun Route.chartRoutes(){
                 throw e
             }
         }
+        post("/chart/custom") {
+            try {
+                val contents = call.receiveText()
+                val resp = ChartShell()
+                call.respondBytes (resp.build(contents).toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e
+            }
+        }
     }
 }
 

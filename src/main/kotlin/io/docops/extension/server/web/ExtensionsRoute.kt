@@ -105,11 +105,8 @@ fun Route.extensions() {
             val contents = call.receiveText()
             val imgSrc = contentsToImageStr(contents, scriptLoader, false)
 
-            //val str = "data:image/svg+xml;utf8," + String(imgSrc.toByteArray())
             val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
             call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
-            //call.respondBytes(imgSrc.escapeHTML().toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
-            //call.respondBytes(imgSrc.toByteArray(), ContentType.Any, HttpStatusCode.OK)
         }
         post("/uncompress") {
             try {
