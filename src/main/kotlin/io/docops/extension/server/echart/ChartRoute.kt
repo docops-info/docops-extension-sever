@@ -62,7 +62,9 @@ fun Route.chartRoutes(){
         post("/chart/custom") {
             try {
                 val contents = call.receiveText()
-                val resp = ChartShell()
+                val width = call.request.queryParameters["width"]
+                val height = call.request.queryParameters["height"]
+                val resp = ChartShell(width= width, height= height)
                 call.respondBytes (resp.build(contents).toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
             } catch (e: Exception) {
                 e.printStackTrace()
