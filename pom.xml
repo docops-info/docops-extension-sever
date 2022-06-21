@@ -30,6 +30,7 @@
     <description>A library to render a grid of buttons.</description>
 
     <properties>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <asciidoctorj-docops-panel.version>2022.8</asciidoctorj-docops-panel.version>
         <project>docops-extension-server</project>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +53,7 @@
         <commons-io.version>2.11.0</commons-io.version>
         <common-codec.version>1.15</common-codec.version>
         <metrics.version>4.2.9</metrics.version>
+        <main.class>io.docops.extension.server.ApplicationKt</main.class>
     </properties>
 
     <organization>
@@ -262,6 +264,8 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
+
+
     </dependencies>
 
     <build>
@@ -272,6 +276,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -294,6 +299,13 @@
                         <plugin>kotlinx-serialization</plugin>
                     </compilerPlugins>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -310,8 +322,33 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${mojo.version}</version>
                 <configuration>
-                    <mainClass>MainKt</mainClass>
+                    <mainClass>${main.class}</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.dokka</groupId>
