@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <title>Charts Editor</title>
-    <!-- Google Fonts -->
+    <link rel="icon" href="/extension/static/images/favicon.png" />
+
+  <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <!-- CSS Reset -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
@@ -99,7 +101,7 @@ option && myChart.setOption(option);
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/api/chart/custom?width=900&height=500",
+            url: "/extension/api/chart/custom?width=900&height=500",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){

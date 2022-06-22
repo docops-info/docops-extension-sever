@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Charts Editor</title>
+    <link rel="icon" href="/extension/static/images/favicon.png" />
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <!-- CSS Reset -->
@@ -65,7 +66,7 @@ barChart {
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/api/bar",
+            url: "/extension/api/bar",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){

@@ -14,26 +14,27 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-fun main() {
-    embeddedServer(CIO, port = 8010, host = "localhost") {
 
-        val l: Logger = LoggerFactory.getLogger("ExtensionsServer")
-        configureRouting()
-        configureHTTP()
-        configureMonitoring()
-        configureSerialization()
-        install(DropwizardMetrics) {
-            Slf4jReporter.forRegistry(registry)
-                .outputTo(l)
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build()
-                .start(10, TimeUnit.MINUTES)
-            JmxReporter.forRegistry(registry)
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build()
-                .start()
-        }
-    }.start(wait = true)
+fun main(args: Array<String>): Unit = EngineMain.main(args)
+
+fun Application.module() {
+    val l: Logger = LoggerFactory.getLogger("ExtensionsServer")
+
+    configureRouting()
+    configureHTTP()
+    configureMonitoring()
+    configureSerialization()
+    install(DropwizardMetrics) {
+        Slf4jReporter.forRegistry(registry)
+            .outputTo(l)
+            .convertRatesTo(TimeUnit.SECONDS)
+            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            .build()
+            .start(10, TimeUnit.MINUTES)
+        JmxReporter.forRegistry(registry)
+            .convertRatesTo(TimeUnit.SECONDS)
+            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            .build()
+            .start()
+    }
 }
