@@ -1,0 +1,51 @@
+<div id="editor">
+panels {
+    panel{
+        link="https://www.apple.com"
+        label="Apple"
+    }
+    panel{
+        link = "http://wwww.google.com"
+        label = "Google Search"
+    }
+}
+</div>
+
+
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/clouds");
+    editor.session.setMode("ace/mode/kotlin");
+    //editor.session.setMode("ace/mode/html");
+    editor.setOptions({
+        maxLines: 15
+    });
+    function showHTML() {
+        $('#return').html(editor.getValue());
+    }
+    var successRes = function(data) {
+        // language=html
+        var obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
+        $('#return').empty().append(obj);
+    }
+    // or use data: url to handle things like doctype
+    function showHTMLInIFrame() {
+        $.ajax({
+            type: "POST",
+            url: "/extension/api/panel/plain",
+            data: editor.getValue(),
+            success: successRes,
+            error: function( jqXhr, textStatus, errorThrown ){
+                console.log( errorThrown );
+            },
+            dataType: "text"
+        });
+
+    }
+    editor.on("input", showHTMLInIFrame);
+</script>
+
+<div id="return"></div>
+
+
+</div>

@@ -1,29 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Charts Editor</title>
-    <link rel="icon" href="/extension/static/images/favicon.png" />
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <!-- CSS Reset -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
-    <!-- Milligram CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+<h1>Charts Editor</h1>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
 
-    <style>
-        html, body { height: 100% }
-        #editor, #return { height: 50% }
-    </style>
-</head>
-<body>
-
-<h1>Panels Editor</h1>
-
-<pre id="editor">
+<div id="editor">
 barChart {
         title = "Hello"
         subTitle = "World"
@@ -45,21 +23,24 @@ barChart {
             nv("Oranges", 2.0)
         }
 }
-</pre>
+</div>
 
 
 <script>
-    let editor = ace.edit("editor");
+    var editor = ace.edit("editor");
     editor.setTheme("ace/theme/clouds");
     editor.session.setMode("ace/mode/kotlin");
+    editor.setOptions({
+        maxLines: 22
+    });
     //editor.session.setMode("ace/mode/html");
 
     function showHTML() {
         $('#return').html(editor.getValue());
     }
-    let successRes = function(data) {
+    var successRes = function(data) {
         // language=html
-        let obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
+        var obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
         $('#return').empty().append(data);
     }
     // or use data: url to handle things like doctype
@@ -79,5 +60,3 @@ barChart {
     editor.on("input", showHTMLInIFrame);
 </script>
 <div id="return"></div>
-</body>
-</html>

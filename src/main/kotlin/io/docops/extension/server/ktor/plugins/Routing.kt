@@ -5,6 +5,7 @@ import io.docops.extension.server.web.extensions
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -20,6 +21,20 @@ fun Application.configureRouting() {
                     idx.readBytes(),
                     ContentType.Text.Html
                 )
+            }
+        }
+        get("/partials/*") {
+            var path = call.request.uri
+            path = path.replace("/extension/", "")
+            val resource = Application::class.java.classLoader.getResourceAsStream(path)
+            if (resource != null) {
+                call.response.headers.append("HX-Trigger", "showFrame")
+                call.respondBytes(
+                    resource.readBytes(),
+                    ContentType.Text.Html
+                )
+            } else {
+                call.respond(HttpStatusCode.NotFound)
             }
         }
         // Static plugin. Try to access `/static/index.html`
