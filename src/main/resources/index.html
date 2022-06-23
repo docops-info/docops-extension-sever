@@ -32,9 +32,12 @@
         </ul>
     </div>
 
-    <a class="button" href="#" onclick="showHTMLInIFrame();">Generate</a>
-
     <div id="bod"></div>
    </div>
+    <script>
+        document.body.addEventListener("showFrame", function (evt){
+            if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
+        });
+    </script>
 </body>
 </html>

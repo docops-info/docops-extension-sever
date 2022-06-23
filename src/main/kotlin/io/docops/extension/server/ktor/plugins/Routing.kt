@@ -28,7 +28,7 @@ fun Application.configureRouting() {
             path = path.replace("/extension/", "")
             val resource = Application::class.java.classLoader.getResourceAsStream(path)
             if (resource != null) {
-                call.response.headers.append("HX-Trigger", "showFrame")
+                call.response.headers.append("HX-Trigger-After-Settle", "showFrame")
                 call.respondBytes(
                     resource.readBytes(),
                     ContentType.Text.Html
