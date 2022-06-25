@@ -5,6 +5,11 @@
         Server will take care of creating div and initializing chart</p>
 </div>
 
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+
+
 <pre id="editor">
 var option;
 
@@ -88,4 +93,6 @@ option && myChart.setOption(option);
         showHTMLInIFrame()
     });
 </script>
+<br/>
+<h3>Preview</h3>
 <div id="return"></div>
