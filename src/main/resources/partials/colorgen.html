@@ -1,0 +1,63 @@
+<br/><br/>
+<H2>Color Generator</H2>
+<div class="contentBox">
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+    <div class="colorBox">
+        <div class="color"></div>
+        <p class="code">#4cae3a</p>
+    </div>
+</div>
+<div class="actions">
+    <p>Press Space to Generate or Click on Generate Button</p>
+    <button class="button-black button-outline">Generate</button>
+</div>
+
+<script>
+    var code = document.querySelectorAll('.code');
+    var color = document.querySelectorAll('.color');
+    var button = document.querySelector('button');
+    button.addEventListener("click", colorGen);
+
+    function colorGen() {
+        var letters = '0123456789abcdef';
+        var hastag = ['#', '#', '#', '#', '#', '#'];
+        for (let i = 0; i < 6; i++) {
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+            hastag[i] += letters[Math.floor(Math.random() * 16)];
+        }
+
+        for (let i = 0; i < code.length; i++) {
+            code[i].innerHTML = hastag[i];
+            color[i].style.backgroundColor = hastag[i];
+        }
+    }
+    colorGen();
+    window.onkeyup = (e) => {
+        if (e.which || e.keycode === 33) {
+            colorGen();
+        }
+    };
+</script>
