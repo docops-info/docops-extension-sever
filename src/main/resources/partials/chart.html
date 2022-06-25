@@ -4,6 +4,8 @@
 
 <button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
 
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+
 <div id="editor">
 barChart {
         title = "Hello"
@@ -54,8 +56,9 @@ barChart {
             },
             dataType: "text"
         });
-
     }
+
+
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
