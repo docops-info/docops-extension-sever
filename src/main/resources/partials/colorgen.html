@@ -28,16 +28,22 @@
 </div>
 <div class="actions">
     <p>Press Space to Generate or Click on Generate Button</p>
+
     <button class="button-black button-outline">Generate</button>
+
+    <button class="button-black button-outline" onclick="copyTextToClipboard(txt);">Copy As ColorMap</button>
+
 </div>
 
 <script>
     var code = document.querySelectorAll('.code');
     var color = document.querySelectorAll('.color');
     var button = document.querySelector('button');
+    var txt;
     button.addEventListener("click", colorGen);
 
     function colorGen() {
+        txt = "colorMap {\n";
         var letters = '0123456789abcdef';
         var hastag = ['#', '#', '#', '#', '#', '#'];
         for (let i = 0; i < 6; i++) {
@@ -51,8 +57,10 @@
 
         for (let i = 0; i < code.length; i++) {
             code[i].innerHTML = hastag[i];
+            txt += "\tcolor(\""+ hastag[i] +"\")\n";
             color[i].style.backgroundColor = hastag[i];
         }
+        txt += "}";
     }
     colorGen();
     window.onkeyup = (e) => {
