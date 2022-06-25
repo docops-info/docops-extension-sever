@@ -1,71 +1,10 @@
 <br/><br/>
-<H2>Color Generator</H2>
-<div class="contentBox">
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-    <div class="colorBox">
-        <div class="color"></div>
-        <p class="code">#4cae3a</p>
-    </div>
-</div>
-<div class="actions">
-    <p>Press Space to Generate or Click on Generate Button</p>
+<H2>Color Generator {colorMap}</H2>
+<form data-hx-put="api/colorgen" data-hx-target="#contentBox">
+    <label for="points">Number Of Swaths</label>
+    <input type="number" id="points" name="points" value="6" step="1" max="20" min="2">
+    <button class="button-black button-outline">Submit</button>
+    <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
+</form>
 
-    <button class="button-black button-outline">Generate</button>
-
-    <button class="button-black button-outline" onclick="copyTextToClipboard(txt);">Copy As ColorMap</button>
-
-</div>
-
-<script>
-    var code = document.querySelectorAll('.code');
-    var color = document.querySelectorAll('.color');
-    var button = document.querySelector('button');
-    var txt;
-    button.addEventListener("click", colorGen);
-
-    function colorGen() {
-        txt = "colorMap {\n";
-        var letters = '0123456789abcdef';
-        var hastag = ['#', '#', '#', '#', '#', '#'];
-        for (let i = 0; i < 6; i++) {
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-            hastag[i] += letters[Math.floor(Math.random() * 16)];
-        }
-
-        for (let i = 0; i < code.length; i++) {
-            code[i].innerHTML = hastag[i];
-            txt += "\tcolor(\""+ hastag[i] +"\")\n";
-            color[i].style.backgroundColor = hastag[i];
-        }
-        txt += "}";
-    }
-    colorGen();
-    window.onkeyup = (e) => {
-        if (e.which || e.keycode === 33) {
-            colorGen();
-        }
-    };
-</script>
+<div id="contentBox" class="contentBox"></div>

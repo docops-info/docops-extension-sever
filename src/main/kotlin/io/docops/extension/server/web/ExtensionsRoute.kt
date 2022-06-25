@@ -121,6 +121,15 @@ fun Route.extensions() {
                 call.respond(HttpStatusCode.BadRequest)
             }
         }
+        put("/colorgen") {
+            val pts = call.receiveParameters()["points"]
+            if (pts != null) {
+                val cd = ColorDivCreator()
+                call.respondBytes(cd.gen(pts.toInt()), ContentType.Text.Html, HttpStatusCode.Accepted)
+            } else {
+                call.respond(HttpStatusCode.BadRequest)
+            }
+        }
     }
 }
 
