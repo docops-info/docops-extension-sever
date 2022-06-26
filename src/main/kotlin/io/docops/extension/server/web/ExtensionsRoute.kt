@@ -125,8 +125,7 @@ fun Route.extensions() {
             if (pts != null) {
                 val cd = ColorDivCreator()
                 val panel = cd.genPanels(pts.toInt())
-                val svg = PanelService().fromPanelToSvg(panel)
-                call.respondBytes(svg.toByteArray(), ContentType.Image.SVG, HttpStatusCode.Accepted)
+                call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }
