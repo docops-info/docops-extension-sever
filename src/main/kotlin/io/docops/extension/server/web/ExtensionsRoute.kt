@@ -13,7 +13,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.*
 import java.io.*
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -125,7 +124,9 @@ fun Route.extensions() {
             val pts = call.receiveParameters()["points"]
             if (pts != null) {
                 val cd = ColorDivCreator()
-                call.respondBytes(cd.gen(pts.toInt()), ContentType.Text.Html, HttpStatusCode.Accepted)
+                val panel = cd.genPanels(pts.toInt())
+                val svg = PanelService().fromPanelToSvg(panel)
+                call.respondBytes(svg.toByteArray(), ContentType.Image.SVG, HttpStatusCode.Accepted)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }
