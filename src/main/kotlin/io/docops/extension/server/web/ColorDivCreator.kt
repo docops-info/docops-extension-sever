@@ -2,13 +2,14 @@ package io.docops.extension.server.web
 
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
+import io.docops.asciidoc.buttons.theme.ButtonType
 import kotlin.math.floor
 
 
 class ColorDivCreator {
     val scriptLoader = ScriptLoader()
-    fun genPanels(num: Int): ByteArray {
-        val panelStr = genPanelStr(num)
+    fun genPanels(num: Int, buttonKind: ButtonType): ByteArray {
+        val panelStr = genPanelStr(num, buttonKind)
         val p = sourceToPanel(panelStr.first, scriptLoader)
         val svc = PanelService()
         val svg = svc.fromPanelToSvg(p)
@@ -46,18 +47,18 @@ class ColorDivCreator {
         return color
     }
 
-    fun genPanelStr(num: Int): Pair<String, StringBuilder> {
+    fun genPanelStr(num: Int, buttonKind: ButtonType): Pair<String, StringBuilder> {
         val str = StringBuilder()
         str.append("panels{\n")
 
-        val panelMap = getColorMap(num)
+        val panelMap = getColorMapAndPanels(num, buttonKind)
         str.append(
             """
     theme {
     ${panelMap.second}
         legendOn = false
         layout {
-            columns = 6
+            columns = 4
         }
     }
     """.trimIndent()
@@ -68,13 +69,20 @@ class ColorDivCreator {
 
     }
 
-    private fun getColorMap(num: Int): Pair<StringBuilder, StringBuilder> {
+    private fun getColorMapAndPanels(num: Int, buttonKind: ButtonType): Pair<StringBuilder, StringBuilder> {
+        var type = "panel"
+        if(buttonKind == ButtonType.ROUND) {
+            type = "round"
+        }
+        else if(buttonKind == ButtonType.SLIM_CARD) {
+            type="slim"
+        }
         val panels = StringBuilder()
         val str = StringBuilder("colorMap {\n")
         for (x in 0 until num) {
             val color = getRandomColor()
             str.append("\tcolor(\"$color\")\n")
-            panels.append("\n\tround{\n")
+            panels.append("\n\t$type{\n")
             panels.append("\t\tlink = \"https://www.apple.com\"\n")
             panels.append("\t\tlabel = \"$color\"\n")
             panels.append("\t}")

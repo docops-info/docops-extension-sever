@@ -3,6 +3,11 @@
 <form data-hx-put="api/colorgen" data-hx-target="#contentBox">
     <label for="points">Number Of Panels</label>
     <input type="number" id="points" name="points" value="6" step="1" max="20" min="2">
+    <label for="buttonType">Button Type</label>
+    <select id="buttonType" name="buttonType">
+        <option value="BUTTON">BUTTON</option>
+        <option value="ROUND">ROUND</option>
+    </select>
     <button class="button-black button-outline">Submit</button>
     <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
     <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(panelSource);" value="Copy Panel To AsciiDoc">

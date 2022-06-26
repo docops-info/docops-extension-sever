@@ -6,6 +6,7 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.dsl.panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
+import io.docops.asciidoc.buttons.theme.ButtonType
 import io.docops.asciidoc.buttons.theme.Grouping
 import io.docops.asciidoc.buttons.theme.GroupingOrder
 import io.ktor.http.*
@@ -121,10 +122,14 @@ fun Route.extensions() {
             }
         }
         put("/colorgen") {
-            val pts = call.receiveParameters()["points"]
-            if (pts != null) {
+            val params = call.receiveParameters()
+            val pts = params["points"]
+            val btnType = params["buttonType"]
+
+            if (pts != null && btnType != null) {
                 val cd = ColorDivCreator()
-                val panel = cd.genPanels(pts.toInt())
+                val buttonKind = ButtonType.valueOf(btnType)
+                val panel = cd.genPanels(pts.toInt(), buttonKind)
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
