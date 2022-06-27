@@ -34,13 +34,11 @@ fun Route.extensions() {
             val data = call.request.queryParameters["data"] as String
             val type = call.request.queryParameters["type"]
             val isPDF = "PDF" == type
+            val isIdea = "IDEA" == type
             val contents = uncompressString(data)
+            println(isPDF)
             val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-            if (isPDF) {
-                call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
-            }
-            val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
-            call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
+            call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
         }
         get("/panel/lines") {
             val data = call.request.queryParameters["data"] as String
