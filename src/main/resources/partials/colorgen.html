@@ -7,7 +7,11 @@
     <select id="buttonType" name="buttonType" data-hx-put="api/colorgen" data-hx-target="#contentBox">
         <option value="BUTTON">BUTTON</option>
         <option value="ROUND">ROUND</option>
+        <option value="SLIM_CARD">SLIM</option>
+        <option value="LARGE_CARD">LARGE</option>
     </select>
+    <label for="columns">Number Of Columns</label>
+    <input type="number" id="columns" name="columns" value="3" step="1" max="15" min="1">
     <button class="button-black button-outline">Submit</button>
     <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
     <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(panelSource);" value="Copy Panel To AsciiDoc">

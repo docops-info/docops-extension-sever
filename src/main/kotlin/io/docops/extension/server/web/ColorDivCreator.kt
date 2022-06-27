@@ -3,16 +3,24 @@ package io.docops.extension.server.web
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.ButtonType
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.floor
 
 
 class ColorDivCreator {
     val scriptLoader = ScriptLoader()
-    fun genPanels(num: Int, buttonKind: ButtonType): ByteArray {
-        val panelStr = genPanelStr(num, buttonKind)
+    fun genPanels(num: Int, buttonKind: ButtonType, columns: String?): ByteArray {
+        var cols = 3
+        columns?.let {
+            cols = it.toInt()
+        }
+        val panelStr = genPanelStr(num, buttonKind, cols)
         val p = sourceToPanel(panelStr.first, scriptLoader)
         val svc = PanelService()
         val svg = svc.fromPanelToSvg(p)
+
         //language=html
         val results = """
             <div id='imageblock'>
@@ -47,7 +55,7 @@ class ColorDivCreator {
         return color
     }
 
-    fun genPanelStr(num: Int, buttonKind: ButtonType): Pair<String, StringBuilder> {
+    fun genPanelStr(num: Int, buttonKind: ButtonType, cols: Int): Pair<String, StringBuilder> {
         val str = StringBuilder()
         str.append("panels{\n")
 
@@ -58,9 +66,9 @@ class ColorDivCreator {
     ${panelMap.second}
         legendOn = false
         layout {
-            columns = 4
+            columns = $cols
         }
-    }
+        }
     """.trimIndent()
         )
         str.append(panelMap.first)
@@ -77,17 +85,31 @@ class ColorDivCreator {
         else if(buttonKind == ButtonType.SLIM_CARD) {
             type="slim"
         }
+        else if(buttonKind == ButtonType.LARGE_CARD) {
+            type="large"
+        }
         val panels = StringBuilder()
-        val str = StringBuilder("colorMap {\n")
+        val str = StringBuilder("\tcolorMap {\n")
         for (x in 0 until num) {
+            val count = x % 5
             val color = getRandomColor()
-            str.append("\tcolor(\"$color\")\n")
+            str.append("\t\t\t\tcolor(\"$color\")\n")
             panels.append("\n\t$type{\n")
             panels.append("\t\tlink = \"https://www.apple.com\"\n")
             panels.append("\t\tlabel = \"$color\"\n")
+            if(buttonKind == ButtonType.SLIM_CARD || buttonKind == ButtonType.LARGE_CARD) {
+                panels.append("\t\ttype = \"Advertising $count\"\n")
+                panels.append("\t\tdescription = \"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"\n")
+                panels.append("\t\tauthor(\"author1\")\n")
+                panels.append("\t\tauthor(\"author2\")\n")
+                val formatter = SimpleDateFormat("MM/dd/yyyy")
+                val today = Date()
+                val next = Date(today.time - ((1000 * 60 * 60 * 24)* x))
+                panels.append("\t\tdate =\"${formatter.format(next)}\"\n")
+            }
             panels.append("\t}")
         }
-        str.append("}")
+        str.append("\t\t\t}")
         return Pair(panels, str)
     }
 }
