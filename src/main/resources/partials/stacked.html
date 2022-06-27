@@ -1,5 +1,8 @@
 <h1>Stacked Bar Editor</h1>
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
 
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 <div id="editor">
 stackBar {
         height=600
@@ -68,7 +71,7 @@ stackBar {
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/extension/api/bar/stacked",
+            url: "api/bar/stacked",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){
@@ -80,4 +83,6 @@ stackBar {
     }
     editor.on("input", showHTMLInIFrame);
 </script>
+<br/>
+<h3>Preview</h3>
 <div id="return"></div>

@@ -5,6 +5,12 @@
         Server will take care of creating div and initializing chart</p>
 </div>
 
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+
 <pre id="editor">
 var option;
 
@@ -73,7 +79,7 @@ option && myChart.setOption(option);
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/extension/api/chart/custom?width=900&height=500",
+            url: "api/chart/custom?width=900&height=500",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){
@@ -88,4 +94,6 @@ option && myChart.setOption(option);
         showHTMLInIFrame()
     });
 </script>
+<br/>
+<h3>Preview</h3>
 <div id="return"></div>

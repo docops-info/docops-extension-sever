@@ -1,5 +1,7 @@
 .navbar {
     margin-bottom: 10px;
+    position: fixed;
+    z-index: 2000;
 }
 
 .navbar ul {
@@ -30,4 +32,62 @@
 #editor {
     height: 100%;
     padding-top: 200px;
+}
+
+.button-black {
+    background-color: black;
+    border-color: black;
+}
+.button-black.button-clear,
+.button-black.button-outline {
+    background-color: transparent;
+    color: black;
+}
+.button-black.button-clear {
+    border-color: transparent;
+}
+
+/* Custom size */
+.button-small {
+    font-size: .8rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    padding: 0 1.5rem;
+}
+
+.button-large {
+    font-size: 1.4rem;
+    height: 4.5rem;
+    line-height: 4.5rem;
+    padding: 0 2rem;
+}
+
+.contentBox {
+    width: 100%;
+    height: 70vh;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.contentBox .colorBox {
+    width: 15%;
+    height: 80%;
+    box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contentBox .colorBox .color {
+    width: 100%;
+    height: 80%;
+    background-color: aqua;
+    border-radius: 10px 10px 0 0;
+}
+
+.contentBox .colorBox .code {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
 }

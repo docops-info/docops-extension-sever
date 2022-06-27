@@ -1,5 +1,10 @@
 <h1>Charts Editor</h1>
 
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 
 <div id="editor">
 barChart {
@@ -30,24 +35,20 @@ barChart {
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/clouds");
     editor.session.setMode("ace/mode/kotlin");
+    editor.setShowPrintMargin(false);
+    editor.getSession().setUseWrapMode(true);
     editor.setOptions({
         maxLines: 22
     });
-    //editor.session.setMode("ace/mode/html");
-
-    function showHTML() {
-        $('#return').html(editor.getValue());
-    }
     var successRes = function(data) {
         // language=html
         var obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
-        $('#return').empty().append(data);
+        $('#results').empty().append(data);
     }
-    // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/extension/api/bar",
+            url: "api/bar",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){
@@ -55,8 +56,11 @@ barChart {
             },
             dataType: "text"
         });
-
     }
+
+
     editor.on("input", showHTMLInIFrame);
 </script>
-<div id="return"></div>
+<br/>
+<h3>Preview</h3>
+<div id="results"></div>

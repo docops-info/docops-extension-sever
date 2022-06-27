@@ -1,3 +1,11 @@
+<br/>
+<br/>
+<h1>Panels</h1>
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+
 <div id="editor">
 panels {
     theme {
@@ -35,7 +43,7 @@ panels {
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/extension/api/panel/plain",
+            url: "api/panel/plain",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){
@@ -47,8 +55,8 @@ panels {
     }
     editor.on("input", showHTMLInIFrame);
 </script>
-
+<br/>
+<h3>Preview</h3>
 <div id="return"></div>
 
 
-</div>

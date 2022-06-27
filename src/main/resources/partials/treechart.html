@@ -1,4 +1,9 @@
 <h1>Tree Chart  Editor</h1>
+<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+
+<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+
 <div id="editor" class="editor">
 treeChart {
     name = "Product Range"
@@ -28,6 +33,8 @@ treeChart {
     }
 }
 </div>
+<br/>
+<h3>Preview</h3>
 <div id="return"></div>
 <script>
     var editor = ace.edit("editor");
@@ -43,7 +50,7 @@ treeChart {
     function showHTMLInIFrame() {
         $.ajax({
             type: "POST",
-            url: "/extension/api/treechart",
+            url: "api/treechart",
             data: editor.getValue(),
             success: successRes,
             error: function( jqXhr, textStatus, errorThrown ){

@@ -37,6 +37,11 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
+        post("/download") {
+            val body = call.receiveText()
+            call.response.header("Content-Disposition", "attachment; filename=\"snippet.kts\"")
+            call.respondBytes(body.toByteArray())
+        }
         // Static plugin. Try to access `/static/index.html`
         static("/static") {
             resources("static")
