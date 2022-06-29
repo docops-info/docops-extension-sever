@@ -4,19 +4,18 @@ import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.ButtonType
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.floor
 
 
-class ColorDivCreator {
+class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: String, val groupBY: String, val orderBy: String) {
     val scriptLoader = ScriptLoader()
-    fun genPanels(num: Int, buttonKind: ButtonType, columns: String?): ByteArray {
+    fun genPanels(): ByteArray {
         var cols = 3
-        columns?.let {
+        columns.let {
             cols = it.toInt()
         }
-        val panelStr = genPanelStr(num, buttonKind, cols)
+        val panelStr = genPanelStr(cols)
         val p = sourceToPanel(panelStr.first, scriptLoader)
         val svc = PanelService()
         val svg = svc.fromPanelToSvg(p)
@@ -55,11 +54,11 @@ class ColorDivCreator {
         return color
     }
 
-    fun genPanelStr(num: Int, buttonKind: ButtonType, cols: Int): Pair<String, StringBuilder> {
+    fun genPanelStr(cols: Int): Pair<String, StringBuilder> {
         val str = StringBuilder()
         str.append("panels{\n")
 
-        val panelMap = getColorMapAndPanels(num, buttonKind)
+        val panelMap = getColorMapAndPanels()
         str.append(
             """
     theme {
@@ -67,6 +66,8 @@ class ColorDivCreator {
         legendOn = false
         layout {
             columns = $cols
+            groupBy = $groupBY
+            groupOrder = $orderBy
         }
         }
     """.trimIndent()
@@ -77,7 +78,7 @@ class ColorDivCreator {
 
     }
 
-    private fun getColorMapAndPanels(num: Int, buttonKind: ButtonType): Pair<StringBuilder, StringBuilder> {
+    private fun getColorMapAndPanels(): Pair<StringBuilder, StringBuilder> {
         var type = "panel"
         if(buttonKind == ButtonType.ROUND) {
             type = "round"

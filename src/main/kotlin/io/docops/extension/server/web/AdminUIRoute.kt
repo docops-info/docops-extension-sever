@@ -6,23 +6,41 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.lang.Exception
 
 fun Route.adminUI() {
     route("/api") {
         put("/colorgen") {
-            val params = call.receiveParameters()
-            val pts = params["points"]
-            val btnType = params["buttonType"]
-            val columns = params["columns"]
-
-            if (pts != null && btnType != null) {
-                val cd = ColorDivCreator()
+            try {
+                val params = call.receiveParameters()
+                val pts = params["points"]!!
+                val btnType = params["buttonType"]!!
+                val columns = params["columns"]!!
+                val groupBY = params["sortBy"]!!
+                val orderBy = params["order"]!!
                 val buttonKind = ButtonType.valueOf(btnType)
-                val panel = cd.genPanels(pts.toInt(), buttonKind, columns)
+
+                val cd = ColorDivCreator(pts.toInt(), buttonKind, columns, groupBY, orderBy)
+                val panel = cd.genPanels()
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
-            } else {
-                call.respond(HttpStatusCode.BadRequest)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respondBytes("<div>Selection Not Supported</div>".toByteArray(), ContentType.Text.Html, HttpStatusCode.BadRequest)
             }
+        }
+    }
+    get("/partials/*") {
+        var path = call.request.uri
+        path = path.replace("/extension/", "")
+        val resource = Application::class.java.classLoader.getResourceAsStream(path)
+        if (resource != null) {
+            call.response.headers.append("HX-Trigger-After-Settle", "showFrame")
+            call.respondBytes(
+                resource.readBytes(),
+                ContentType.Text.Html
+            )
+        } else {
+            call.respond(HttpStatusCode.NotFound)
         }
     }
 }

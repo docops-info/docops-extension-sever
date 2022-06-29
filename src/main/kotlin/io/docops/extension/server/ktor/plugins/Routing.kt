@@ -25,20 +25,7 @@ fun Application.configureRouting() {
                 )
             }
         }
-        get("/partials/*") {
-            var path = call.request.uri
-            path = path.replace("/extension/", "")
-            val resource = Application::class.java.classLoader.getResourceAsStream(path)
-            if (resource != null) {
-                call.response.headers.append("HX-Trigger-After-Settle", "showFrame")
-                call.respondBytes(
-                    resource.readBytes(),
-                    ContentType.Text.Html
-                )
-            } else {
-                call.respond(HttpStatusCode.NotFound)
-            }
-        }
+
         post("/download") {
             val body = call.receiveText()
             call.response.header("Content-Disposition", "attachment; filename=\"snippet.kts\"")
