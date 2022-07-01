@@ -1,73 +1,52 @@
-<br/><br/>
-<H2>Panel Generator With Generated Colors</H2>
-<form data-hx-put="api/colorgen" data-hx-target="#contentBox">
-    <label for="points">Number Of Panels</label>
-    <input type="number" id="points" name="points" value="6" step="1" max="20" min="2">
-    <label for="buttonType">Button Type</label>
-    <select id="buttonType" name="buttonType" data-hx-put="api/colorgen" data-hx-target="#contentBox">
-        <option value="BUTTON">BUTTON</option>
-        <option value="ROUND">ROUND</option>
-        <option value="SLIM_CARD">SLIM</option>
-        <option value="LARGE_CARD">LARGE</option>
-    </select>
-    <label for="columns">Number Of Columns</label>
-    <input type="number" id="columns" name="columns" value="3" step="1" max="15" min="1">
-    <label for="sortBy">Sort By</label>
-    <select id="sortBy" name="sortBy" data-hx-put="api/colorgen" data-hx-target="#contentBox">
-        <option value="Grouping.TYPE">TYPE</option>
-        <option value="Grouping.TITLE">TITLE</option>
-        <option value="Grouping.AUTHOR">AUTHOR</option>
-        <option value="Grouping.DATE">DATE</option>
-    </select>
-    <label for="order">Order</label>
-    <select id="order" name="order" data-hx-put="api/colorgen" data-hx-target="#contentBox">
-        <option value="GroupingOrder.ASCENDING">ASCENDING</option>
-        <option value="GroupingOrder.DESCENDING">DESCENDING</option>
-    </select>
-
-    <button class="button-black button-outline">Submit</button>
-    <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
-    <input class="button-black button-outline" type="button" onclick="copyTextToClipboard(panelSource);" value="Copy Panel As AsciiDoc">
+<H1>Panel Generator With Generated Colors</H1>
+<form class="pure-form pure-form-stacked" data-hx-put="api/colorgen" data-hx-target="#contentBox">
+    <fieldset>
+        <legend>Panel Generator Controls</legend>
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+            <label for="points">Number Of Panels</label>
+            <input type="number" id="points" name="points" value="6" step="1" max="20" min="2" class="pure-u-23-24">
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+            <label for="buttonType">Button Type</label>
+            <select id="buttonType" name="buttonType" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
+                <option value="BUTTON">BUTTON</option>
+                <option value="ROUND">ROUND</option>
+                <option value="SLIM_CARD">SLIM</option>
+                <option value="LARGE_CARD">LARGE</option>
+            </select>
+            </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+            <label for="columns">Number Of Columns</label>
+            <input type="number" id="columns" name="columns" value="3" step="1" max="15" min="1" class="pure-u-23-24">
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+            <label for="sortBy">Sort By</label>
+            <select id="sortBy" name="sortBy" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
+                <option value="Grouping.TYPE">TYPE</option>
+                <option value="Grouping.TITLE">TITLE</option>
+                <option value="Grouping.AUTHOR">AUTHOR</option>
+                <option value="Grouping.DATE">DATE</option>
+            </select>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+            <label for="order">Order</label>
+            <select id="order" name="order" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
+                <option value="GroupingOrder.ASCENDING">ASCENDING</option>
+                <option value="GroupingOrder.DESCENDING">DESCENDING</option>
+            </select>
+        </div>
+        </div>
+    </fieldset>
+    <fieldset>
+    <button class="button-success pure-button"  >Submit</button>
+    <input  class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
+    <input  class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(panelSource);" value="Copy Panel As AsciiDoc">
+    </fieldset>
 </form>
-
-<div id="contentBox" class="contentBox"></div>
-
 <div id="errormessages">
 </div>
+<div id="contentBox" class="contentBox"></div>
 
-<script>
-    htmx.on("htmx:responseError", function(evt) {
-        var errdiv = document.getElementById("errormessages");
-        errdiv.innerHTML = `
-        <div id="errormessagealert" class="container mt-3 mb-3 alert alert-danger" role="alert">
-            <h4>Request Error: ` + evt.detail.xhr.status + `
-                <span style="float:right;"><a onclick="errormessagealert_off()">Close [X]</a></span>
-            </h4>
-            <code>` + evt.detail.xhr.responseText + `</code>
-        </div>`;
-        errormessagealert_on();
-    });
 
-    function errormessagealert_on() {
-        document.getElementById("errormessagealert").style.display = "block";
-    }
 
-    function errormessagealert_off() {
-        document.getElementById("errormessagealert").style.display = "none";
-    }
-</script>
-
-<style>
-    #errormessagealert {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-        display: none; /* Hidden by default */
-        background-color: rgba(106,3,3,1); /* Black background with opacity */
-        z-index: 5000; /* Specify a stack order in case you're using a different order for other elements */
-        color: white;
-        height: 500px;
-    }
-</style>

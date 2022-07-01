@@ -26,6 +26,15 @@ fun Application.configureRouting() {
             }
         }
 
+        get("/index.html") {
+            val idx = Application::class.java.classLoader.getResourceAsStream("index.html")
+            idx?.let {
+                call.respondBytes(
+                    idx.readBytes(),
+                    ContentType.Text.Html
+                )
+            }
+        }
         post("/download") {
             val body = call.receiveText()
             call.response.header("Content-Disposition", "attachment; filename=\"snippet.kts\"")

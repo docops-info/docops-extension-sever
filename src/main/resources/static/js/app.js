@@ -40,19 +40,3 @@ let makeAdoc = function (text) {
     return str;
 };
 
-let downloadBlob = function (FileName) {
-    saveData(FileName);
-}
-var saveData = (function () {
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    return function (fileName) {
-        var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
-            url = window.URL.createObjectURL(blob);
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(url);
-    };
-}());
