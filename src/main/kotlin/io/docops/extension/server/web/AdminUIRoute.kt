@@ -25,7 +25,18 @@ fun Route.adminUI() {
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
             } catch (e: Exception) {
                 e.printStackTrace()
-                call.respondBytes("<div>Selection Not Supported</div>".toByteArray(), ContentType.Text.Html, HttpStatusCode.BadRequest)
+                //language=html
+                call.respondBytes("""
+        <input class="checker" type="checkbox" id="o" checked hidden>
+        <div class="modal">
+          <div class="modal-body">
+            <div class="modal-content">Invalid selection(s) for panel!</div>
+            <div class="modal-footer">
+              <label for="o" class='mlabel'>close</label>
+            </div>
+          </div>
+        </div>
+    """.toByteArray(), ContentType.Text.Html, HttpStatusCode.BadRequest)
             }
         }
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
     <link rel="stylesheet" href="static/css/style.css" />
     <link rel="stylesheet" href="static/css/app.css" />
+    <link rel="stylesheet" href="static/css/modal.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/kotlin.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -62,11 +63,8 @@
         window.URL.revokeObjectURL(url);
     };
     }());
-        document.body.addEventListener("showFrame", function (evt){
-        if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
-    });
 
-        document.body.addEventListener('htmx:beforeSwap', function(evt) {
+    document.body.addEventListener('htmx:beforeSwap', function(evt) {
         if(evt.detail.xhr.status === 404){
         // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
         alert("Error: Could Not Find Resource");
