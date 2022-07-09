@@ -41,6 +41,7 @@ fun Route.adminUI() {
         }
     }
     get("/partials/*") {
+        //val port= this@adminUI.environment?.config?.propertyOrNull("ktor.deployment.rootPath")?.getString()
         var path = call.request.uri
         path = path.replace("/extension/", "")
         val resource = Application::class.java.classLoader.getResourceAsStream(path)

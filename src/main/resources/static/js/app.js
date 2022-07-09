@@ -40,3 +40,24 @@ let makeAdoc = function (text) {
     return str;
 };
 
+let  handleErrors = function(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+};
+
+let getImage = function(path, div) {
+    fetch(path,
+        {
+            method: "POST",
+            body: editor.getValue()
+        })
+        .then(handleErrors)
+        .then(response => {
+            let myDiv = document.getElementById(div);
+            response.text().then(function (text) {
+                myDiv.innerHTML = text;
+            });
+        }).catch(error => console.log(error));
+};

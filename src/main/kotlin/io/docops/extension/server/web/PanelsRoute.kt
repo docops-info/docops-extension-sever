@@ -95,9 +95,11 @@ fun Route.panels() {
         post("/panel/plain") {
             val contents = call.receiveText()
             val imgSrc = contentsToImageStr(contents, scriptLoader, false)
-
-            val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
-            call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
+            call.respondText("""<div>
+                $imgSrc
+                </div>""".trimMargin(),ContentType.Image.SVG, HttpStatusCode.OK)
+            //val str = Base64.getEncoder().encodeToString(imgSrc.toByteArray())
+            //call.respondText("data:image/svg+xml;base64,$str", ContentType.Text.Plain, HttpStatusCode.OK)
         }
     }
 }
