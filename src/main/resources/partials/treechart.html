@@ -35,7 +35,7 @@ treeChart {
 </div>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/clouds");
@@ -43,22 +43,10 @@ treeChart {
     editor.setOptions({
         maxLines: 25
     });
-    var successRes = function(data) {
-        $('#return').empty().append(data);
-    }
+
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/treechart",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
-
+        getImage("api/treechart", "results");
     }
     editor.on("input", showHTMLInIFrame);
 </script>

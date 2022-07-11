@@ -39,20 +39,8 @@ barChart {
     editor.setOptions({
         maxLines: 22
     });
-    var successRes = function(data) {
-        $('#results').empty().append(data);
-    }
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/bar",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
+        getImage("api/bar", 'results');
     }
     editor.on("input", showHTMLInIFrame);
 </script>

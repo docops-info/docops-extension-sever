@@ -62,25 +62,12 @@ stackBar {
             ])
         };
     }
-    var successRes = function(data) {
-        $('#return').empty().append(data);
-    }
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/bar/stacked",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
-
+        getImage("api/bar/stacked", "results");
     }
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>

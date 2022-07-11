@@ -55,9 +55,9 @@ let getImage = function(path, div) {
         })
         .then(handleErrors)
         .then(response => {
-            let myDiv = document.getElementById(div);
             response.text().then(function (text) {
-                myDiv.innerHTML = text;
+                $('#'+div).html('').html(text);
             });
         }).catch(error => console.log(error));
 };
+var myChart;
