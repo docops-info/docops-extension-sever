@@ -4,8 +4,8 @@
         <legend>Panel Generator Controls</legend>
         <div class="pure-g">
             <div class="pure-u-1 pure-u-md-1-2">
-            <label for="points">Number Of Panels</label>
-            <input type="number" id="points" name="points" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="6" step="1" max="20" min="2" class="pure-u-23-24">
+            <label for="points">Number Of Panels <span id="pointsValue"></span></label>
+            <input type="range" id="points" name="points" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="6" step="1" max="20" min="2" class="pure-u-23-24">
             </div>
             <div class="pure-u-1 pure-u-md-1-2">
             <label for="buttonType">Button Type</label>
@@ -17,8 +17,8 @@
             </select>
             </div>
         <div class="pure-u-1 pure-u-md-1-2">
-            <label for="columns">Number Of Columns</label>
-            <input type="number" id="columns" name="columns" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="3" step="1" max="15" min="1" class="pure-u-23-24">
+            <label for="columns">Number Of Columns <span id="colsValue"></span></label>
+            <input type="range" id="columns" name="columns" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="3" step="1" max="15" min="1" class="pure-u-23-24">
         </div>
         <div class="pure-u-1 pure-u-md-1-2">
             <label for="sortBy">Sort By</label>
@@ -36,6 +36,10 @@
                 <option value="GroupingOrder.DESCENDING">DESCENDING</option>
             </select>
         </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="dropShadow">Drop Shadow <span id="shadowValue"></span></label>
+                <input type="range" id="dropShadow" name="dropShadow" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="0" step="1" max="9" min="0" class="pure-u-23-24">
+            </div>
         </div>
     </fieldset>
     <fieldset>

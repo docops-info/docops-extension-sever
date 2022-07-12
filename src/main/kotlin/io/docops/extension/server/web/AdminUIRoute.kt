@@ -18,10 +18,12 @@ fun Route.adminUI() {
                 val columns = params["columns"]!!
                 val groupBY = params["sortBy"]!!
                 val orderBy = params["order"]!!
+                val dropShadow = params["dropShadow"]!!
                 val buttonKind = ButtonType.valueOf(btnType)
 
-                val cd = ColorDivCreator(pts.toInt(), buttonKind, columns, groupBY, orderBy)
+                val cd = ColorDivCreator(pts.toInt(), buttonKind, columns, groupBY, orderBy, dropShadow)
                 val panel = cd.genPanels()
+
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
             } catch (e: Exception) {
                 e.printStackTrace()

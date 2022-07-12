@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.math.floor
 
 
-class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: String, val groupBY: String, val orderBy: String) {
+class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: String, val groupBY: String, val orderBy: String, val dropShadow: String) {
     val scriptLoader = ScriptLoader()
     fun genPanels(): ByteArray {
         var cols = 3
@@ -41,6 +41,9 @@ class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: Str
                 hljs.highlightElement(el);
             });
             </script>
+            <span id="pointsValue" data-hx-swap-oob="true">$num</span>
+            <span id="colsValue" data-hx-swap-oob="true">$cols</span>
+            <span id="shadowValue" data-hx-swap-oob="true">$dropShadow</span>
         """.trimIndent()
         return results.toByteArray()
     }
@@ -69,6 +72,7 @@ class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: Str
             groupBy = $groupBY
             groupOrder = $orderBy
         }
+        dropShadow = $dropShadow
         }
     """.trimIndent()
         )
