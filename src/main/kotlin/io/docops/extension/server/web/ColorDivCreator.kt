@@ -27,7 +27,7 @@ class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: Str
             </div>
             <br/>
             <h3>Panel Source</h3>
-            <div class='contentBox'>
+            <div class='pure-u-1 pure-u-md-1-2'>
             <pre>
             <code>
             ${panelStr.first}
