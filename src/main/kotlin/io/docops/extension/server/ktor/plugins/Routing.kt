@@ -1,7 +1,9 @@
 package io.docops.extension.server.ktor.plugins
 
 import io.docops.extension.server.echart.chartRoutes
+import io.docops.extension.server.web.adminUI
 import io.docops.extension.server.web.extensions
+import io.docops.extension.server.web.panels
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -23,18 +25,14 @@ fun Application.configureRouting() {
                 )
             }
         }
-        get("/partials/*") {
-            var path = call.request.uri
-            path = path.replace("/extension/", "")
-            val resource = Application::class.java.classLoader.getResourceAsStream(path)
-            if (resource != null) {
-                call.response.headers.append("HX-Trigger-After-Settle", "showFrame")
+
+        get("/index.html") {
+            val idx = Application::class.java.classLoader.getResourceAsStream("index.html")
+            idx?.let {
                 call.respondBytes(
-                    resource.readBytes(),
+                    idx.readBytes(),
                     ContentType.Text.Html
                 )
-            } else {
-                call.respond(HttpStatusCode.NotFound)
             }
         }
         post("/download") {
@@ -55,6 +53,8 @@ fun Application.configureRouting() {
         }
         //register the extension routing
         extensions()
+        panels()
+        adminUI()
         chartRoutes()
     }
 }

@@ -5,12 +5,11 @@
         Server will take care of creating div and initializing chart</p>
 </div>
 
-<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-
-<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-
-<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
-
+<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<br/>
+<br/>
 <pre id="editor">
 var option;
 
@@ -69,31 +68,13 @@ option && myChart.setOption(option);
     editor.setOptions({
       maxLines: 50
     });
-    function showHTML() {
-        $('#return').html(editor.getValue());
-    }
-    var successRes = function(data) {
-        $('#return').empty().append(data);
-    }
+
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/chart/custom?width=900&height=500",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
-
+      getImage("api/chart/custom?width=900&height=500", 'results');
     }
     editor.on("input", showHTMLInIFrame);
-    window.addEventListener('load', (event) => {
-        showHTMLInIFrame()
-    });
 </script>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>

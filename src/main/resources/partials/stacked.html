@@ -1,8 +1,9 @@
 <h1>Stacked Bar Editor</h1>
-<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-
-<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<br/>
+<br/>
 <div id="editor">
 stackBar {
         height=600
@@ -61,28 +62,12 @@ stackBar {
             ])
         };
     }
-    function showHTML() {
-        $('#return').html(editor.getValue());
-    }
-    var successRes = function(data) {
-        $('#return').empty().append(data);
-    }
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/bar/stacked",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
-
+        getImage("api/bar/stacked", "results");
     }
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>

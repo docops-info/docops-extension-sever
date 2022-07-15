@@ -1,11 +1,9 @@
-<br/>
-<br/>
 <h1>Panels</h1>
-<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-
-<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
-
+<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<br/>
+<br/>
 <div id="editor">
 panels {
     theme {
@@ -27,36 +25,21 @@ panels {
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/clouds");
     editor.session.setMode("ace/mode/kotlin");
-    //editor.session.setMode("ace/mode/html");
     editor.setOptions({
         maxLines: 15
     });
-    function showHTML() {
-        $('#return').html(editor.getValue());
-    }
-    var successRes = function(data) {
-        // language=html
-        var obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
-        $('#return').empty().append(obj);
-    }
-    // or use data: url to handle things like doctype
-    function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/panel/plain",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
+    editor.getSession().on('change', function() {
+        showHTMLInIFrame()
+    });
 
+    function showHTMLInIFrame() //writes in <div> with id=output
+    {
+        getImage("api/panel/plain", "results");
     }
-    editor.on("input", showHTMLInIFrame);
+
 </script>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>
 
 

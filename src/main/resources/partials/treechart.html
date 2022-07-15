@@ -1,9 +1,9 @@
 <h1>Tree Chart  Editor</h1>
-<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-
-<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
-
+<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<br/>
+<br/>
 <div id="editor" class="editor">
 treeChart {
     name = "Product Range"
@@ -35,30 +35,18 @@ treeChart {
 </div>
 <br/>
 <h3>Preview</h3>
-<div id="return"></div>
+<div id="results"></div>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/clouds");
     editor.session.setMode("ace/mode/kotlin");
     editor.setOptions({
-        maxLines: 30
+        maxLines: 25
     });
-    var successRes = function(data) {
-        $('#return').empty().append(data);
-    }
+
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/treechart",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
-
+        getImage("api/treechart", "results");
     }
     editor.on("input", showHTMLInIFrame);
 </script>

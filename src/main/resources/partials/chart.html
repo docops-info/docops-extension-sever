@@ -1,11 +1,10 @@
 <h1>Charts Editor</h1>
 
-<button class="button-black button-outline" onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-
-<button class="button-black button-outline" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-
-<button class="button-black button-outline" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
-
+<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<br/>
+<br/>
 <div id="editor">
 barChart {
         title = "Hello"
@@ -40,25 +39,9 @@ barChart {
     editor.setOptions({
         maxLines: 22
     });
-    var successRes = function(data) {
-        // language=html
-        var obj = `<object type=\"image/svg+xml\" data=\"` + data +`\"></object>`;
-        $('#results').empty().append(data);
-    }
     function showHTMLInIFrame() {
-        $.ajax({
-            type: "POST",
-            url: "api/bar",
-            data: editor.getValue(),
-            success: successRes,
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-            },
-            dataType: "text"
-        });
+        getImage("api/bar", 'results');
     }
-
-
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
