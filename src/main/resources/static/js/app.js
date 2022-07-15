@@ -40,6 +40,7 @@ let makeAdoc = function (text) {
     return str;
 };
 
+
 let  handleErrors = function(response) {
     if (!response.ok) {
         throw Error(response.statusText);

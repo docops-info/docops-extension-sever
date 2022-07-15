@@ -4,48 +4,56 @@
         <legend>Panel Generator Controls</legend>
         <div class="pure-g">
             <div class="pure-u-1 pure-u-md-1-3">
-            <label for="points">Number Of Panels <span id="pointsValue"></span></label>
-            <input type="range" id="points" name="points" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="6" step="1" max="20" min="2" class="pure-u-23-24">
+                <label for="points">Number Of Panels <span id="pointsValue"></span></label>
+                <input type="range" id="points" name="points" data-hx-put="api/colorgen" data-hx-target="#contentBox"
+                       value="6" step="1" max="20" min="2" class="pure-u-23-24">
             </div>
             <div class="pure-u-1 pure-u-md-1-2">
-            <label for="buttonType">Button Type</label>
-            <select id="buttonType" name="buttonType" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
-                <option value="BUTTON">BUTTON</option>
-                <option value="ROUND">ROUND</option>
-                <option value="SLIM_CARD">SLIM</option>
-                <option value="LARGE_CARD">LARGE</option>
-            </select>
+                <label for="buttonType">Button Type</label>
+                <select id="buttonType" name="buttonType" data-hx-put="api/colorgen" data-hx-target="#contentBox"
+                        class="pure-input-1-2">
+                    <option value="BUTTON">BUTTON</option>
+                    <option value="ROUND">ROUND</option>
+                    <option value="SLIM_CARD">SLIM</option>
+                    <option value="LARGE_CARD">LARGE</option>
+                </select>
             </div>
-        <div class="pure-u-1 pure-u-md-1-3">
-            <label for="columns">Number Of Columns <span id="colsValue"></span></label>
-            <input type="range" id="columns" name="columns" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="3" step="1" max="15" min="1" class="pure-u-23-24">
-        </div>
-        <div class="pure-u-1 pure-u-md-1-2">
-            <label for="sortBy">Sort By</label>
-            <select id="sortBy" name="sortBy" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
-                <option value="Grouping.TYPE">TYPE</option>
-                <option value="Grouping.TITLE">TITLE</option>
-                <option value="Grouping.AUTHOR">AUTHOR</option>
-                <option value="Grouping.DATE">DATE</option>
-            </select>
-        </div>
-        <div class="pure-u-1 pure-u-md-1-3">
-            <label for="order">Order</label>
-            <select id="order" name="order" data-hx-put="api/colorgen" data-hx-target="#contentBox" class="pure-input-1-2">
-                <option value="GroupingOrder.ASCENDING">ASCENDING</option>
-                <option value="GroupingOrder.DESCENDING">DESCENDING</option>
-            </select>
-        </div>
+            <div class="pure-u-1 pure-u-md-1-3">
+                <label for="columns">Number Of Columns <span id="colsValue"></span></label>
+                <input type="range" id="columns" name="columns" data-hx-put="api/colorgen" data-hx-target="#contentBox"
+                       value="3" step="1" max="15" min="1" class="pure-u-23-24">
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="sortBy">Sort By</label>
+                <select id="sortBy" name="sortBy" data-hx-put="api/colorgen" data-hx-target="#contentBox"
+                        class="pure-input-1-2">
+                    <option value="Grouping.TYPE">TYPE</option>
+                    <option value="Grouping.TITLE">TITLE</option>
+                    <option value="Grouping.AUTHOR">AUTHOR</option>
+                    <option value="Grouping.DATE">DATE</option>
+                </select>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-3">
+                <label for="order">Order</label>
+                <select id="order" name="order" data-hx-put="api/colorgen" data-hx-target="#contentBox"
+                        class="pure-input-1-2">
+                    <option value="GroupingOrder.ASCENDING">ASCENDING</option>
+                    <option value="GroupingOrder.DESCENDING">DESCENDING</option>
+                </select>
+            </div>
             <div class="pure-u-1 pure-u-md-1-3">
                 <label for="dropShadow">Drop Shadow <span id="shadowValue"></span></label>
-                <input type="range" id="dropShadow" name="dropShadow" data-hx-put="api/colorgen" data-hx-target="#contentBox" value="0" step="1" max="9" min="0" class="pure-u-23-24">
+                <input type="range" id="dropShadow" name="dropShadow" data-hx-put="api/colorgen"
+                       data-hx-target="#contentBox" value="0" step="1" max="9" min="0" class="pure-u-23-24">
             </div>
         </div>
     </fieldset>
     <fieldset>
-    <button class="button-success pure-button" >Submit</button>
-    <input  class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(txt);" value="Copy As ColorMap">
-    <input  class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(panelSource);" value="Copy Panel As AsciiDoc">
+        <button class="button-success pure-button">Submit</button>
+        <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(txt);"
+               value="Copy As ColorMap">
+        <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(panelSource);"
+               value="Copy Panel As AsciiDoc">
     </fieldset>
 </form>
 <div id="errormessages">

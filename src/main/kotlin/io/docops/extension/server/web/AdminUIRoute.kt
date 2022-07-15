@@ -1,6 +1,10 @@
 package io.docops.extension.server.web
 
 import io.docops.asciidoc.buttons.theme.ButtonType
+import io.docops.asciidoctorj.extension.adr.ADRParser
+import io.docops.asciidoctorj.extension.adr.AdrMaker
+import io.docops.asciidoctorj.extension.adr.model.Adr
+import io.docops.asciidoctorj.extension.adr.model.Status
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -41,6 +45,38 @@ fun Route.adminUI() {
     """.toByteArray(), ContentType.Text.Html, HttpStatusCode.BadRequest)
             }
         }
+        put("/adr") {
+            val params = call.receiveParameters()
+            val title = params["title"]!!
+            val date = params["date"]!!
+            val status = params["status"]!!
+            val decision = params["decision"]!!
+            val consequences = params["consequences"]!!
+            val participants = params["participants"]!!
+            val context = params["context"]!!
+            try {
+                val adrText =  """
+        Title:$title
+        Date: $date
+        Status:$status
+        Context:$context
+        Decision:$decision
+        Consequences:$consequences
+        Participants:$participants 
+        """.trimIndent()
+                val adr = ADRParser().parse(adrText)
+                var svg = (AdrMaker().makeAdrSvg(adr))
+                adr.urlMap.forEach { (t, u) ->
+                    svg = svg.replace("_${t}_", u)
+                }
+                val results = makeAdrSource(adrText, svg)
+                call.respondBytes(results.toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //language=html
+                call.respondBytes("""incomplete""".toByteArray(), ContentType.Text.Html, HttpStatusCode.BadRequest)
+            }
+        }
     }
     get("/partials/*") {
         //val port= this@adminUI.environment?.config?.propertyOrNull("ktor.deployment.rootPath")?.getString()
@@ -58,3 +94,27 @@ fun Route.adminUI() {
         }
     }
 }
+
+fun makeAdrSource(txt: String, svg: String): String {
+    return """
+        <div id='imageblock'>
+        $svg
+        </div>
+        <br/>
+        <h3>Adr Source</h3>
+        <div class='pure-u-1 pure-u-md-20-24'>
+        <pre>
+        <code>
+        $txt
+        </code>
+        </pre>
+        </div>
+        <script>
+        var adrSource = `[adr]\n----\n${txt}\n----`;
+        document.querySelectorAll('pre code').forEach((el) => {
+            hljs.highlightElement(el);
+        });
+        </script>
+    """.trimIndent()
+}
+
