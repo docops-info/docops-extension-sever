@@ -60,10 +60,6 @@ fun Route.panels() {
                         groupBy = Grouping.TITLE
                         groupOrder = GroupingOrder.ASCENDING
                     }
-                    font {
-                        color = "#000000"
-                        weight = FontWeight.bold
-                    }
                     colorMap {
                         color("#e0a1c6")
                         color("#f3b69e")

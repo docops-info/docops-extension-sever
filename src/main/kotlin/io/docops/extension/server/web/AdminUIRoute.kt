@@ -3,8 +3,6 @@ package io.docops.extension.server.web
 import io.docops.asciidoc.buttons.theme.ButtonType
 import io.docops.asciidoctorj.extension.adr.ADRParser
 import io.docops.asciidoctorj.extension.adr.AdrMaker
-import io.docops.asciidoctorj.extension.adr.model.Adr
-import io.docops.asciidoctorj.extension.adr.model.Status
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -24,8 +22,17 @@ fun Route.adminUI() {
                 val orderBy = params["order"]!!
                 val dropShadow = params["dropShadow"]!!
                 val buttonKind = ButtonType.valueOf(btnType)
+                val color = params["color"]!!
+                val weight = params["weight"]!!
+                val font = params["font"]!!
+                val decoration = params["decoration"]!!
+                val size = params["size"]!!
 
-                val cd = ColorDivCreator(pts.toInt(), buttonKind, columns, groupBY, orderBy, dropShadow)
+                val cd = ColorDivCreator(num = pts.toInt(), buttonKind=buttonKind,
+                    columns=columns, groupBY=groupBY,
+                    orderBy=orderBy, dropShadow=dropShadow,
+                    color = color, weight=weight, font=font,
+                    decoration=decoration, size = size)
                 val panel = cd.genPanels()
 
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
@@ -56,7 +63,7 @@ fun Route.adminUI() {
             val context = params["context"]!!
             try {
                 val adrText =  """
-        Title:$title
+   Title: $title
         Date: $date
         Status:$status
         Context:$context

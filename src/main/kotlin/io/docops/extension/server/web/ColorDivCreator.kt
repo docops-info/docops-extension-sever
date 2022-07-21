@@ -8,7 +8,16 @@ import java.util.*
 import kotlin.math.floor
 
 
-class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: String, val groupBY: String, val orderBy: String, val dropShadow: String) {
+class ColorDivCreator(
+    val num: Int, val buttonKind: ButtonType, val columns: String,
+    val groupBY: String, val orderBy: String,
+    val dropShadow: String,
+    val color: String,
+    val weight: String,
+    val font: String,
+    val decoration: String,
+    val size: String
+) {
     val scriptLoader = ScriptLoader()
     fun genPanels(): ByteArray {
         var cols = 3
@@ -44,6 +53,7 @@ class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: Str
             <span id="pointsValue" data-hx-swap-oob="true">$num</span>
             <span id="colsValue" data-hx-swap-oob="true">$cols</span>
             <span id="shadowValue" data-hx-swap-oob="true">$dropShadow</span>
+            <span id="fSize" data-hx-swap-oob="true">$size</span>
         """.trimIndent()
         return results.toByteArray()
     }
@@ -65,12 +75,19 @@ class ColorDivCreator(val num: Int, val buttonKind: ButtonType, val columns: Str
         str.append(
             """
     theme {
-    ${panelMap.second}
+        ${panelMap.second}
         legendOn = false
         layout {
             columns = $cols
             groupBy = $groupBY
             groupOrder = $orderBy
+        }
+        font = font {
+            color = "$color"
+            font = "$font"
+            weight = $weight
+            size = "${size}pt"
+            decoration = "$decoration"
         }
         dropShadow = $dropShadow
         }
