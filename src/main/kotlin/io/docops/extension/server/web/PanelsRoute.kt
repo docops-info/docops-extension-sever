@@ -1,6 +1,5 @@
 package io.docops.extension.server.web
 
-import io.docops.asciidoc.buttons.dsl.FontWeight
 import io.docops.asciidoc.buttons.dsl.PanelButton
 import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService

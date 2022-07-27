@@ -14,6 +14,9 @@ fun Route.adminUI() {
     route("/api") {
         put("/colorgen") {
             try {
+                var bold = false
+                var underline = false
+                var italics = false
                 val params = call.receiveParameters()
                 val pts = params["points"]!!
                 val btnType = params["buttonType"]!!
@@ -23,16 +26,28 @@ fun Route.adminUI() {
                 val dropShadow = params["dropShadow"]!!
                 val buttonKind = ButtonType.valueOf(btnType)
                 val color = params["color"]!!
-                val weight = params["weight"]!!
+                val weight = params["bold"]
+                 if(weight != null) {
+                    bold = true
+                }
+                val italic = params["italic"]
+                val und = params["underline"]
+
+                if("on" == italic) {
+                    italics = true
+                }
+                if("on" == und) {
+                    underline = true
+                }
                 val font = params["font"]!!
-                val decoration = params["decoration"]!!
                 val size = params["size"]!!
 
-                val cd = ColorDivCreator(num = pts.toInt(), buttonKind=buttonKind,
-                    columns=columns, groupBY=groupBY,
-                    orderBy=orderBy, dropShadow=dropShadow,
-                    color = color, weight=weight, font=font,
-                    decoration=decoration, size = size)
+                val cd = ColorDivCreator(
+                    num = pts.toInt(), buttonKind =buttonKind,
+                    columns =columns, groupBY =groupBY,
+                    orderBy =orderBy, dropShadow =dropShadow,
+                    color = color, weight =bold, font =font,
+                    italics= italics, decoration =underline, size = size)
                 val panel = cd.genPanels()
 
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)

@@ -13,12 +13,13 @@ class ColorDivCreator(
     val groupBY: String, val orderBy: String,
     val dropShadow: String,
     val color: String,
-    val weight: String,
+    val weight: Boolean,
+    val italics: Boolean,
     val font: String,
-    val decoration: String,
+    val decoration: Boolean,
     val size: String
 ) {
-    val scriptLoader = ScriptLoader()
+    private val scriptLoader = ScriptLoader()
     fun genPanels(): ByteArray {
         var cols = 3
         columns.let {
@@ -83,11 +84,16 @@ class ColorDivCreator(
             groupOrder = $orderBy
         }
         font = font {
-            color = "$color"
-            font = "$font"
-            weight = $weight
-            size = "${size}pt"
-            decoration = "$decoration"
+             family = "$font"
+             size = "${size}pt"
+             color = "$color"
+             spacing = "normal"
+             bold = $weight
+             italic = $italics
+             underline = $decoration
+             vertical = false
+             case = Case.NONE
+        
         }
         dropShadow = $dropShadow
         }

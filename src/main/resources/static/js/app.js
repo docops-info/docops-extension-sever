@@ -61,4 +61,12 @@ let getImage = function(path, div) {
             });
         }).catch(error => console.log(error));
 };
+let setFontStyle = function (id) {
+    let elem = document.getElementById(id+"I");
+    elem.classList.toggle("activecheck");
+    elem.classList.toggle("button-success");
+    let input = document.getElementById(id);
+    input.checked = !input.checked;
+}
+
 var myChart;
