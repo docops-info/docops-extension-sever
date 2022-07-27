@@ -23,6 +23,7 @@ fun Route.adminUI() {
                 val columns = params["columns"]!!
                 val groupBY = params["sortBy"]!!
                 val orderBy = params["order"]!!
+                val case = params["case"]!!
                 val dropShadow = params["dropShadow"]!!
                 val buttonKind = ButtonType.valueOf(btnType)
                 val color = params["color"]!!
@@ -40,6 +41,7 @@ fun Route.adminUI() {
                     underline = true
                 }
                 val font = params["font"]!!
+                val fpoint = params["fpoint"]!!
                 val size = params["size"]!!
 
                 val cd = ColorDivCreator(
@@ -47,7 +49,8 @@ fun Route.adminUI() {
                     columns =columns, groupBY =groupBY,
                     orderBy =orderBy, dropShadow =dropShadow,
                     color = color, weight =bold, font =font,
-                    italics= italics, decoration =underline, size = size)
+                    italics= italics, decoration =underline, size = size+fpoint,
+                case = case)
                 val panel = cd.genPanels()
 
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)

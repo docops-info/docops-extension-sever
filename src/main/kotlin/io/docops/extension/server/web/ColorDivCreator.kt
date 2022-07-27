@@ -17,7 +17,8 @@ class ColorDivCreator(
     val italics: Boolean,
     val font: String,
     val decoration: Boolean,
-    val size: String
+    val size: String,
+    val case: String
 ) {
     private val scriptLoader = ScriptLoader()
     fun genPanels(): ByteArray {
@@ -85,14 +86,14 @@ class ColorDivCreator(
         }
         font = font {
              family = "$font"
-             size = "${size}pt"
+             size = "$size"
              color = "$color"
              spacing = "normal"
              bold = $weight
              italic = $italics
              underline = $decoration
              vertical = false
-             case = Case.NONE
+             case = $case
         
         }
         dropShadow = $dropShadow
