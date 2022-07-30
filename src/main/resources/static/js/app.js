@@ -61,12 +61,16 @@ let getImage = function(path, div) {
             });
         }).catch(error => console.log(error));
 };
-let setFontStyle = function (id) {
-    let elem = document.getElementById(id+"I");
-    elem.classList.toggle("activecheck");
-    elem.classList.toggle("button-success");
-    let input = document.getElementById(id);
-    input.checked = !input.checked;
-}
+
+document.addEventListener('click', function(event) {
+    let id = event.target.dataset.toggleId;
+    if (!id) return;
+
+    let elem = document.getElementById(id);
+    elem.checked = !elem.checked;
+    let btnState = document.getElementById(id + "I");
+    btnState.classList.toggle("activecheck");
+    btnState.classList.toggle("button-success");
+});
 
 var myChart;
