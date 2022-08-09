@@ -18,7 +18,9 @@ class ColorDivCreator(
     val font: String,
     val decoration: Boolean,
     val size: String,
-    val case: String
+    val case: String,
+    val newWin: Boolean,
+    val spacing: String
 ) {
     private val scriptLoader = ScriptLoader()
     fun genPanels(): ByteArray {
@@ -88,7 +90,7 @@ class ColorDivCreator(
              family = "$font"
              size = "$size"
              color = "$color"
-             spacing = "normal"
+             spacing = "$spacing"
              bold = $weight
              italic = $italics
              underline = $decoration
@@ -96,6 +98,7 @@ class ColorDivCreator(
              case = $case
         
         }
+        newWin = $newWin
         dropShadow = $dropShadow
         }
     """.trimIndent()

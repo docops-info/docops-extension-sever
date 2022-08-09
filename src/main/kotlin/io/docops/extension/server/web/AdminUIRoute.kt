@@ -17,6 +17,7 @@ fun Route.adminUI() {
                 var bold = false
                 var underline = false
                 var italics = false
+                var newWin = false
                 val params = call.receiveParameters()
                 val pts = params["points"]!!
                 val btnType = params["buttonType"]!!
@@ -33,24 +34,27 @@ fun Route.adminUI() {
                 }
                 val italic = params["italic"]
                 val und = params["underline"]
-
+                val newWinParam = params["newWin"]
                 if("on" == italic) {
                     italics = true
                 }
                 if("on" == und) {
                     underline = true
                 }
+                if("on" == newWinParam){
+                    newWin = true
+                }
                 val font = params["font"]!!
                 val fpoint = params["fpoint"]!!
                 val size = params["size"]!!
-
+                val spacing = params["spacing"]!!
                 val cd = ColorDivCreator(
                     num = pts.toInt(), buttonKind =buttonKind,
                     columns =columns, groupBY =groupBY,
                     orderBy =orderBy, dropShadow =dropShadow,
                     color = color, weight =bold, font =font,
                     italics= italics, decoration =underline, size = size+fpoint,
-                case = case)
+                case = case, newWin = newWin, spacing = spacing)
                 val panel = cd.genPanels()
 
                 call.respondBytes(panel, ContentType.Text.Html, HttpStatusCode.Accepted)
