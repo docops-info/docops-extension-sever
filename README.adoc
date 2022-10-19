@@ -1,4 +1,6 @@
 :doctitle: {artifact}: {major}{minor}{patch}{extension}{build}
+:source-highlighter: rouge
+:rouge-css: style
 :imagesdir: images
 :data-uri:
 :group: io.docops
@@ -90,3 +92,17 @@ Document Operations (DocOps) is a documentation philosophy based on agile softwa
 We are a group of product developers that have been challenged multiple times to unravel the task of large scale, multi-audience documentation.  We are developing a series of tools and services to lower the barriers of DocOps at any scale.  Often leveraging other open source projects from other amazing teams and fantastic engineers, we are developing the best documentation experience we can.
 
 link:https://docops.io/[docops.io]
+
+== Docker
+
+=== Build
+
+[source,shellscript]
+----
+### build
+docker build -t docops-extension-server .
+
+# run
+docker run -p 8010:8010 docops-extension-server
+
+----
