@@ -7,15 +7,52 @@
 <div id="editor">
 panels {
     theme {
+        colorMap {
+            color("#A84DE1")
+            color("#E020BF")
+            color("#35D728")
+            color("#A93810")
+        }
         legendOn = false
+        layout {
+            columns = 3
+            groupBy = Grouping.TYPE
+            groupOrder = GroupingOrder.ASCENDING
+        }
+        font = font {
+            family = "Arial, Helvetica, sans-serif"
+            size = "8pt"
+            color = "black"
+            spacing = "normal"
+            bold = false
+            italic = false
+            underline = false
+            vertical = false
+            case = Case.NONE
+
+        }
+        newWin = false
+        dropShadow = 0
     }
-    panel{
-        link="https://www.apple.com"
-        label="Apple"
+    rectangle {
+        label = "Devices"
+        link {
+            label = "Apple"
+            href = "https://www.apple.com"
+        }
+        buttonImage = ButtonImage(ref = "static/images/docops.svg")
     }
-    panel{
-        link = "http://wwww.google.com"
-        label = "Google Search"
+    rectangle {
+        label = "Search Engine"
+        link {
+            href = "https://www.google.com"
+            label = "Google Search"
+        }
+        link {
+            href = "https://duckduckgo.com"
+            label = "Duck Duck Go"
+        }
+        buttonImage = ButtonImage(ref = "static/images/favicon.png")
     }
 }
 </div>

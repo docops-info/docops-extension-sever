@@ -120,6 +120,9 @@ class ColorDivCreator(
         else if(buttonKind == ButtonType.LARGE_CARD) {
             type="large"
         }
+        else if(buttonKind == ButtonType.RECTANGLE) {
+            type = "rectangle"
+        }
         val panels = StringBuilder()
         val str = StringBuilder("\tcolorMap {\n")
         for (x in 0 until num) {
@@ -129,15 +132,21 @@ class ColorDivCreator(
             panels.append("\n\t$type{\n")
             panels.append("\t\tlink = \"https://www.apple.com\"\n")
             panels.append("\t\tlabel = \"$color\"\n")
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val today = Date()
+            val next = Date(today.time - ((1000 * 60 * 60 * 24)* x))
+            panels.append("\t\tdate = \"${formatter.format(next)}\"\n")
+            panels.append("\t\ttype = \"Advertising $count\"\n")
             if(buttonKind == ButtonType.SLIM_CARD || buttonKind == ButtonType.LARGE_CARD) {
-                panels.append("\t\ttype = \"Advertising $count\"\n")
                 panels.append("\t\tdescription = \"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"\n")
                 panels.append("\t\tauthor(\"author1\")\n")
                 panels.append("\t\tauthor(\"author2\")\n")
-                val formatter = SimpleDateFormat("MM/dd/yyyy")
-                val today = Date()
-                val next = Date(today.time - ((1000 * 60 * 60 * 24)* x))
-                panels.append("\t\tdate =\"${formatter.format(next)}\"\n")
+            }
+            if(buttonKind == ButtonType.RECTANGLE) {
+                panels.append("link {\n")
+                panels.append("\thref = \"https://www.apple.com\"\n")
+                panels.append("\tlabel = \"Devices\"\n")
+                panels.append("}\n")
             }
             panels.append("\t}")
         }

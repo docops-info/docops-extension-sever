@@ -49,7 +49,7 @@ fun Route.adminUI() {
                 val size = params["size"]!!
                 val spacing = params["spacing"]!!
                 val cd = ColorDivCreator(
-                    num = pts.toInt(), buttonKind =buttonKind,
+                    num = pts.toInt(), buttonKind = buttonKind,
                     columns =columns, groupBY =groupBY,
                     orderBy =orderBy, dropShadow =dropShadow,
                     color = color, weight =bold, font =font,
