@@ -44,7 +44,7 @@ fun Application.configureRouting() {
         static("/static") {
             resources("static")
         }
-        // Static plugin. Try to access `/static/index.html`
+        // Static plugin. Try to access `/docs/index.html`
         static("/docs") {
             resources("docs")
         }
