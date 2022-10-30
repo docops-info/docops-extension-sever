@@ -22,7 +22,7 @@
 
     <artifactId>docops-extension-server</artifactId>
     <groupId>io.docops</groupId>
-    <version>2022.11</version>
+    <version>2022.12-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project}</name>
@@ -41,13 +41,13 @@
         <kotlin.version>1.7.20</kotlin.version>
         <ktor_version>2.1.2</ktor_version>
         <junit.version>5.9.0</junit.version>
-        <mojo.version>1.6.0</mojo.version>
+        <mojo.version>3.1.0</mojo.version>
         <logback_version>1.4.4</logback_version>
         <maven-shared-utlis.version>3.3.4</maven-shared-utlis.version>
         <maven-source.version>3.2.1</maven-source.version>
         <maven-compiler.version>3.10.1</maven-compiler.version>
         <maven-plugin.version>3.0.0-M6</maven-plugin.version>
-        <maven-release.version>3.0.0-M5</maven-release.version>
+        <maven-release.version>3.0.0-M6</maven-release.version>
         <maven-deploy.version>3.0.0</maven-deploy.version>
         <maven-scm-provider.version>2.0.0-M1</maven-scm-provider.version>
         <nexus-staging.version>1.6.7</nexus-staging.version>
@@ -277,8 +277,6 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -341,7 +339,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.4.2</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -427,7 +425,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>package</phase>
+                        <phase>site</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
