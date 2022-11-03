@@ -1,7 +1,7 @@
 <H1>Panel Image Builder</H1>
 <form class="pure-form pure-form-stacked" data-hx-put="api/panelimage" data-hx-target="#contentBox">
     <fieldset>
-        <legend>Architecture Decision Record</legend>
+        <legend>Panel Image Builder</legend>
         <div class="pure-g">
             <div class="pure-u-4-24">
                 <label for="color">Fill Color</label>
@@ -33,7 +33,11 @@
                value="Save Image">
     </fieldset>
 </form>
-<div id="contentBox" class="contentBox"></div>
+<div >
+    <section id="contentBox" class="tool-bar">
+
+    </section>
+</div>
 <script>
     $("#color").spectrum({
         color: "#c90076"
@@ -41,7 +45,7 @@
     $("#fontColor").spectrum({
         color: "#ffffff"
     });
-    let saveSvg = function(elId, name) {
+    var saveSvg = function(elId, name) {
         var svgEl = document.getElementById(elId);
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl.outerHTML;
