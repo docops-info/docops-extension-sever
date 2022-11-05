@@ -127,7 +127,10 @@ fun Route.adminUI() {
             val contents =  if("CIRCLE" == imageType) {
                 makePanelRoundMiddleImage(fillColor, fontColor, line1, line2, line3)
 
-            } else {
+            } else if("TAGLINE" == imageType) {
+                makeTagLine(fillColor, fontColor, line1, line2, line3)
+            }
+            else {
                 makeLineImage(fillColor, fontColor, line1, line2, line3)
             }
             call.respondBytes(contents.toByteArray(), ContentType.Text.Html, HttpStatusCode.Accepted)
@@ -151,80 +154,8 @@ fun Route.adminUI() {
 
 }
 
-fun makeLineImage(fillColor: String, fontColor: String, line1: String, line2: String?, line3: String?) : String {
-    val results = StringBuilder("""
-            <div id='imageblock'>
-            <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="1000" height="1000" viewBox="0 0 1000 1000" id="panelText" xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
-                <path id="Color-Fill" fill="$fillColor" stroke="none" d="M 0 0 L 1000 0 L 1000 1000 L 0 1000 Z"/>
-                <g id="Logo-Placeholder-Replace-With-Your-Logo-">
-                    <text id="text1" text-anchor="middle" xml:space="preserve">""")
-    if(line1.isNotEmpty()) {
-        results.append("""
-                        <tspan x="50%" y="451" font-family="Rubik Mono One" font-size="90" fill="$fontColor" letter-spacing="2.56" xml:space="preserve">${line1.uppercase()}</tspan>
-                """.trimIndent())
-    }
-    line2?.let {
-        results.append("""
-   <tspan x="50%" y="551" font-family="Rubik Mono One" font-size="90" fill="$fontColor" letter-spacing="2.56"
-                               xml:space="preserve">${line2.uppercase()}</tspan>""".trimIndent())
-    }
 
-    line3?.let {
-        results.append("""
-    <tspan x="50%" y="651" font-family="Rubik Mono One" font-size="90" fill="$fontColor" letter-spacing="2.56"
-                               xml:space="preserve">${line3.uppercase()}</tspan>
-                  """.trimIndent())
-    }
-    results.append("""</text>
-                </g>
-                <g id="Dividers">
-                    <path id="Bottom-Divider-" fill="none" stroke="#3f4652" stroke-width="5" stroke-linecap="round"
-                          stroke-linejoin="round" d="M 117.5 707.5 L 882.5 707.5"/>
-                    <path id="Top-Divider-" fill="none" stroke="#3f4652" stroke-width="5" stroke-linecap="round"
-                          stroke-linejoin="round" d="M 117.5 292.5 L 882.5 292.5"/>
-                </g>
-            </svg>
-            </div>
-        """.trimIndent())
-    return results.toString()
-}
-fun makePanelRoundMiddleImage(fillColor: String, fontColor: String, line1: String, line2: String?, line3: String?) : String
-{
-    var start = 420
-    val span1 = """<tspan text-anchor="middle" x="50%" y="$start" font-family="Helvetica Neue" font-size="72" font-stretch="condensed" font-weight="700" fill="$fontColor" xml:space="preserve">$line1</tspan>"""
-    var span2 = ""
-    var span3 = ""
-    line2?.let {
-        start += 72
-        span2 = """<tspan text-anchor="middle" x="50%" y="$start" font-family="Helvetica Neue" font-size="72" font-stretch="condensed"
-                           font-weight="700" fill="$fontColor" xml:space="preserve">$line2</tspan>"""
-    }
-    line3?.let {
-        start+=72
-        span3 = """<tspan text-anchor="middle" x="50%" y="$start" font-family="Helvetica Neue" font-size="72" font-stretch="condensed"
-                           font-weight="700" fill="$fontColor" xml:space="preserve">$line3</tspan>"""
-    }
-    return """
-        <div id='imageblock'>
-        <?xml version="1.0" encoding="UTF-8"?>
-        <svg id="panelText" width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink">
-            <path id="Color-Fill" fill="$fillColor" stroke="none" d="M 0 0 L 1000 0 L 1000 1000 L 0 1000 Z"/>
-            <g id="Logo-Placeholder-Replace-With-Your-Logo-">
-                <path id="Logo-Shape" fill="#3f4652" fill-rule="evenodd" stroke="none"
-                      d="M 832.5 500 C 832.5 316.365356 683.634644 167.5 500 167.5 C 316.365326 167.5 167.5 316.365356 167.5 500 C 167.5 683.634644 316.365326 832.5 500 832.5 C 683.634644 832.5 832.5 683.634644 832.5 500 Z"/>
-                <text text-anchor="middle" id="Beyond-The-Idea" xml:space="preserve">
-                    $span1
-                    $span2
-                    $span3
-                </text>
-            </g>
-        </svg>
-        </div>
-    """.trimIndent()
-}
+
 fun makeAdrSource(txt: String, svg: String): String {
     return """
         <div id='imageblock'>
