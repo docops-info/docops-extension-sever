@@ -14,6 +14,7 @@ import io.ktor.server.routing.*
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
+import java.lang.RuntimeException
 import java.nio.charset.Charset
 import java.util.*
 import java.util.zip.GZIPInputStream
@@ -161,5 +162,11 @@ fun sourceToPanel(contents: String, scriptLoader: ScriptLoader): Panels {
             
             $contents
         """.trimIndent()
-    return scriptLoader.parseKotlinScript(source = source)
+    try {
+        return scriptLoader.parseKotlinScript(source = source)
+    } catch (e: Exception) {
+        println(source)
+        throw e
+    }
+
 }
