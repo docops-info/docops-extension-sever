@@ -22,7 +22,7 @@
 
     <artifactId>docops-extension-server</artifactId>
     <groupId>io.docops</groupId>
-    <version>2022.12</version>
+    <version>2022.13</version>
     <packaging>jar</packaging>
 
     <name>${project}</name>
@@ -31,7 +31,7 @@
 
     <properties>
         <project>docops-extension-server</project>
-        <docops-button-render.version>2022.16</docops-button-render.version>
+        <docops-button-render.version>2022.17</docops-button-render.version>
         <asciidoctorj-docops-panel.version>2022.19</asciidoctorj-docops-panel.version>
         <asciidoctorj-docops-adr.version>2022.9</asciidoctorj-docops-adr.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
@@ -56,7 +56,7 @@
         <commons-io.version>2.11.0</commons-io.version>
         <common-codec.version>1.15</common-codec.version>
         <metrics.version>4.2.12</metrics.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.3</slf4j.version>
         <main.class>io.docops.extension.server.ApplicationKt</main.class>
     </properties>
 
@@ -430,7 +430,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>site</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
