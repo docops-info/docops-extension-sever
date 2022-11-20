@@ -32,14 +32,36 @@ fun Route.panels() {
             call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
         }
 
+        get("/panel/pancolor") {
+            val data = call.request.queryParameters["color"] as String
+            val label = call.request.queryParameters["label"] as String
+            /*val imgSrc = """
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="10">
+                    <rect x="0" y="0" width="100" height="10" fill="$data"  rx="5" ry="5"/>
+                </svg>
+            """.trimIndent()*/
+            //language=svg
+            val imgSrc = """
+                <svg xmlns="http://www.w3.org/2000/svg" width="300" height="20">
+                    <rect x="0" y="0" width="300" height="20" fill="$data"  rx="5" ry="5"/>
+                    <a href="https://www.apple.com">
+                        <text x="150" y="15" text-anchor="middle">$label</text>
+                    </a>
+                 </svg>
+            """.trimIndent()
+            //val imgSrc = """<svg><rect width="100" height="100" fill="red"></rect></svg>"""
+            call.respondBytes(imgSrc.toByteArray(), ContentType.Image.SVG, HttpStatusCode.OK)
+        }
+
 
         get("/panel/lines") {
             val data = call.request.queryParameters["data"] as String
+            val server = call.request.queryParameters["server"] as String
             val contents = uncompressString(data)
             val panels = sourceToPanel(contents = contents, scriptLoader = scriptLoader)
             val panelService = PanelService()
             call.respondBytes(
-                panelService.toLines("Link List", panels).joinToString("\n").toByteArray(),
+                panelService.toLines("Link List", panels, server).joinToString("\n").toByteArray(),
                 ContentType.Text.Plain,
                 HttpStatusCode.OK
             )
