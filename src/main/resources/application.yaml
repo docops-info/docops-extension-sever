@@ -1,0 +1,45 @@
+server:
+  servlet:
+    context-path: /extension
+  port: 8010
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus
+    jmx:
+      exposure:
+        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus
+  security:
+    enabled: false
+  health:
+    defaults:
+      enabled: true
+  info:
+    git:
+      mode: full
+  tracing:
+    sampling:
+      probability: 1.0f
+  otlp:
+    metrics:
+      export:
+        enabled: false
+        step: 1m
+
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  endpoint:
+    health:
+      show-details: always
+spring:
+  application:
+    name: DocopsExtensionsSupportApplication
+  mvc:
+    problemdetails:
+      enabled: true

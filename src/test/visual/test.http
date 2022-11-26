@@ -158,6 +158,52 @@ Content-Type: application/x-www-form-urlencoded
 
 fillColor=%23c90076&fontColor=%23eeeeee&download=on&line1=Test%201&line2=For Second&line3=Third Line
 
+### Create badges
+
+PUT http://localhost:8010/extension/api/badge
+Content-Type: application/json
+
+[
+  {
+    "label": "Compelling Offering",
+    "message": "300",
+    "url": "https://docops.travp.net/solr/Compelling Offering"
+  },
+  {
+    "label": "TMVS",
+    "message": "504",
+    "url": "https://docops.travp.net/solr/TMVS"
+  },
+  {
+    "label": "Intuitive Experience",
+    "message": "120",
+    "url": "https://docops.travp.net/solr/Intuitive%20Experience"
+  }
+
+]
 ###
+
+### Metrics
+GET http://localhost:8010/extension/actuator/metrics
+
+### docops.panel.generator.color
+GET http://localhost:8010/extension/actuator/metrics/docops.panel.generator.color
+
+### docops.panel.image
+GET http://localhost:8010/extension/actuator/metrics/docops.panel.image
+
+
+### docops.panel
+GET http://localhost:8010/extension/actuator/metrics/docops.panel
+
+
+### docops.adr
+GET http://localhost:8010/extension/actuator/metrics/docops.adr
+
+### docops.api.ping
+GET http://localhost:8010/extension/actuator/metrics/docops.api.ping
+
+### docops.badge
+GET http://localhost:8010/extension/api/badge
 
 

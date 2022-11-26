@@ -13,8 +13,14 @@ paths:
       responses:
         "200":
           description: "OK"
-  /partial/{variable}:
+  /partial/{fragment}:
     get:
+      parameters:
+        - in: path
+          name: fragment
+          schema:
+            type: string
+          required: true
       summary: "GET partial/*"
       responses:
         "200":
@@ -33,7 +39,6 @@ paths:
           name: type
           schema:
             type: string
-            required: true
             description: type is either PDF or HTML
             default: HTML
           required: true
@@ -49,7 +54,7 @@ paths:
       requestBody:
         required: true
         content:
-          text/plain:
+          text/html:
             schema:
               type: string
       responses:
