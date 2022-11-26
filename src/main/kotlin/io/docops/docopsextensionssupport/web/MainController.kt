@@ -33,6 +33,13 @@ class MainController(private val observationRegistry: ObservationRegistry) {
         }
     }
 
+    @GetMapping("/badge.html")
+    fun getBadge(): Any {
+        return Observation.createNotStarted("docops.badge.html", observationRegistry).observe {
+            HtmxResponse()
+                .addTemplate("badge")
+        }
+    }
     @GetMapping("/chart.html")
     fun getChart(): Any {
         return Observation.createNotStarted("docops.chart.html", observationRegistry).observe {
