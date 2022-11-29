@@ -6,6 +6,7 @@ import io.github.dsibilio.badgemaker.model.BadgeFormat
 import io.github.dsibilio.badgemaker.model.NamedColor
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
@@ -25,7 +26,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.badge.put", observationRegistry).observe {
-            val src = makeBadge(message=badge.message, label=badge.label)
+            val src = makeBadge(message=badge.message, label=badge.label, color = null)
             servletResponse.contentType = "image/svg+xml";
             servletResponse.characterEncoding = "UTF-8";
             servletResponse.status = 200
@@ -35,20 +36,34 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-    private fun makeBadge(message: String, label: String): String {
-        val rands = (0 until 9).random()
+    private fun makeBadge(message: String, label: String, color: String?): String {
+
+        val clr: NamedColor = if(color != null) {
+            NamedColor.valueOf(color)
+        } else {
+            val rands = (0 until 9).random()
+            NamedColor.values()[rands]
+        }
+
         val fmt: BadgeFormat = BadgeFormatBuilder(message)
             .withLabel(label)
-            .withLabelColor(NamedColor.values()[rands]) // left-side background color (default: GREY)
+            .withLabelColor(clr) // left-side background color (default: GREY)
             .withMessageColor(NamedColor.BRIGHTGREEN) // right-side background color (default: BRIGHTGREEN)
             .withScaleMultiplier(1) // the scale factor of the rendered badge (default: 1, min: 1, max: 10000)
             .build()
         return BadgeMaker.makeBadge(fmt)
     }
     @GetMapping("/badge/item", produces = ["image/svg+xml"])
-    fun getBadgeByUrl(@RequestParam() message: String, @RequestParam() label: String, servletResponse: HttpServletResponse) {
+    fun getBadgeByUrl(servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
+        val map = servletRequest.queryString.replace("&amp;", "&")
+            .split("&")
+            .map { it.split("=") }.associate { it.first() to it.last() }
+        println(map)
+        val message: String = map["message"]as String
+        val label: String = map["label"] as String
+        val color: String? = map["color"]
         return Observation.createNotStarted("docops.badge.get", observationRegistry).observe {
-            val src = makeBadge(message=message, label=label)
+            val src = makeBadge(message=message, label=label, color)
             servletResponse.contentType = "image/svg+xml";
             servletResponse.characterEncoding = "UTF-8";
             servletResponse.status = 200
