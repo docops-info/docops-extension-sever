@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.dsibilio.badgemaker.core.BadgeFormatBuilder
 import io.github.dsibilio.badgemaker.core.BadgeMaker
 import io.github.dsibilio.badgemaker.model.BadgeFormat
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import java.net.URLDecoder
+import java.nio.charset.Charset
 
 
 @Controller
@@ -26,7 +29,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.badge.put", observationRegistry).observe {
-            val src = makeBadge(message=badge.message, label=badge.label, color = null)
+            val src = makeBadge(message=badge.message, label=badge.label, color = null, "GREEN")
             servletResponse.contentType = "image/svg+xml";
             servletResponse.characterEncoding = "UTF-8";
             servletResponse.status = 200
@@ -36,7 +39,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-    private fun makeBadge(message: String, label: String, color: String?): String {
+    private fun makeBadge(message: String, label: String, color: String?, mColor: String): String {
 
         val clr: NamedColor = if(color != null) {
             NamedColor.valueOf(color)
@@ -48,29 +51,62 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
         val fmt: BadgeFormat = BadgeFormatBuilder(message)
             .withLabel(label)
             .withLabelColor(clr) // left-side background color (default: GREY)
-            .withMessageColor(NamedColor.BRIGHTGREEN) // right-side background color (default: BRIGHTGREEN)
+            .withMessageColor(NamedColor.valueOf(mColor)) // right-side background color (default: BRIGHTGREEN)
             .withScaleMultiplier(1) // the scale factor of the rendered badge (default: 1, min: 1, max: 10000)
+            .withLogo("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=")
             .build()
         return BadgeMaker.makeBadge(fmt)
     }
-    @GetMapping("/badge/item", produces = ["image/svg+xml"])
+    @GetMapping("/badge/itemx", produces = ["image/svg+xml"])
     fun getBadgeByUrl(servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        val map = servletRequest.queryString.replace("&amp;", "&")
+        val data = unescape(URLDecoder.decode(servletRequest.queryString, Charset.defaultCharset()))
+        val map = unescape(URLDecoder.decode(servletRequest.queryString, Charset.defaultCharset())).replace("&amp;", "&")
             .split("&")
             .map { it.split("=") }.associate { it.first() to it.last() }
-        println(map)
         val message: String = map["message"]as String
         val label: String = map["label"] as String
         val color: String? = map["color"]
         return Observation.createNotStarted("docops.badge.get", observationRegistry).observe {
-            val src = makeBadge(message=message, label=label, color)
-            servletResponse.contentType = "image/svg+xml";
-            servletResponse.characterEncoding = "UTF-8";
+
+            val src = makeBadge(message=message, label=label, color = color, mColor = "GREEN")
+            servletResponse.contentType = "image/svg+xml"
+            servletResponse.characterEncoding = "UTF-8"
             servletResponse.status = 200
             val writer = servletResponse.writer
             writer.print(src)
             writer.flush()
         }
+    }
+    @GetMapping("/badge/item", produces = ["image/svg+xml"])
+    fun getBadgeParams(@RequestParam payload: String, servletResponse: HttpServletResponse) {
+        val data = uncompressString(payload)
+        val split = data.split("|")
+        val message: String = split[1]
+        val label: String = split[0]
+
+        var color: String? = null
+        var mcolor: String = "GREEN"
+        if(split.size >3) {
+            color = split[3].trim()
+        }
+        if(split.size >4) {
+            val c = split[4].trim()
+            if(c.isNotEmpty()) {
+                mcolor = c
+            }
+        }
+
+        return Observation.createNotStarted("docops.badge.get", observationRegistry).observe {
+
+            val src = makeBadge(message=message, label=label, color, mcolor)
+            servletResponse.contentType = "image/svg+xml"
+            servletResponse.characterEncoding = "UTF-8"
+            servletResponse.status = 200
+            val writer = servletResponse.writer
+            writer.print(src)
+            writer.flush()
+        }
+
     }
 
     private fun gen(badge: MutableList<Badge>): String {
@@ -87,7 +123,6 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
             //language=html
             svgList[it.message] = """<div><a href="${it.url}">${BadgeMaker.makeBadge(fmt)}</a></div>"""
         }
-
         val sorted = svgList.toSortedMap(compareByDescending { it })
         val str = StringBuffer()
         svgList.forEach { _, v ->
@@ -99,5 +134,36 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
                 $str
             </div> 
         """.trimIndent()
+    }
+
+    fun unescape(text: String): String {
+        val result = StringBuilder(text.length)
+        var i = 0
+        val n = text.length
+        while (i < n) {
+            val charAt = text[i]
+            if (charAt != '&') {
+                result.append(charAt)
+                i++
+            } else {
+                if (text.startsWith("&amp;", i)) {
+                    result.append('&')
+                    i += 5
+                } else if (text.startsWith("&apos;", i)) {
+                    result.append('\'')
+                    i += 6
+                } else if (text.startsWith("&quot;", i)) {
+                    result.append('"')
+                    i += 6
+                } else if (text.startsWith("&lt;", i)) {
+                    result.append('<')
+                    i += 4
+                } else if (text.startsWith("&gt;", i)) {
+                    result.append('>')
+                    i += 4
+                } else i++
+            }
+        }
+        return result.toString()
     }
 }
