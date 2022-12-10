@@ -4,33 +4,30 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.ButtonType
+import io.docops.docopsextensionssupport.aop.LogExecution
 import io.docops.docopsextensionssupport.support.*
-import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import java.awt.Label
+import org.springframework.web.bind.annotation.*
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
-import java.lang.Exception
 import java.nio.charset.Charset
 import java.util.*
 import java.util.zip.GZIPInputStream
 
 @Controller
+@RequestMapping("/api")
+@LogExecution
 class PanelGenerator(private val observationRegistry: ObservationRegistry) {
     private val scriptLoader = ScriptLoader()
 
-    @GetMapping("/api/panel")
+    @GetMapping("/panel")
+    @ResponseBody
     fun getPanel(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
@@ -49,7 +46,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-    @PutMapping("/api/colorgen")
+    @PutMapping("/colorgen")
+    @ResponseBody
     fun putColorGen(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.panel.generator.color", observationRegistry).observe {
             try {
@@ -129,7 +127,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
     }
 
 
-    @PutMapping("/api/panelimage")
+    @PutMapping("/panelimage")
+    @ResponseBody
     fun panelImage(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.panel.image", observationRegistry).observe {
             val params = httpServletRequest.parameterMap
@@ -167,7 +166,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-    @PostMapping("/api/panel/plain")
+    @PostMapping("/panel/plain")
+    @ResponseBody
     fun panelsPlain(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
 
         return Observation.createNotStarted("docops.panel.plain", observationRegistry).observe {
@@ -186,7 +186,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-    @GetMapping("/api/panel/pancolor")
+    @GetMapping("/panel/pancolor")
+    @ResponseBody
     fun panColor(@RequestParam("color") color: String, @RequestParam("label") label: String, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.panel.pancolor", observationRegistry).observe {
             //language=svg

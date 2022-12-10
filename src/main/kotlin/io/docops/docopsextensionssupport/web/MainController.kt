@@ -1,19 +1,23 @@
 package io.docops.docopsextensionssupport.web
 
+import io.docops.docopsextensionssupport.aop.LogExecution
 import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 
 @Controller
+@LogExecution
 class MainController(private val observationRegistry: ObservationRegistry) {
 
 
-    @GetMapping("/panelgenerator.html")
+    @GetMapping("/panelgenerator.html", produces = [MediaType.TEXT_HTML_VALUE])
     fun getPanelGenerator(model: Model): Any {
         return Observation.createNotStarted("docops.panel.generator.html", observationRegistry)
             .observe {
@@ -88,6 +92,7 @@ class MainController(private val observationRegistry: ObservationRegistry) {
         }
     }
     @GetMapping("/api/ping")
+    @ResponseBody
     fun ping(servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.api.ping", observationRegistry).observe {
             fun run() {

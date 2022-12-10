@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.aop.LogExecution
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.dsibilio.badgemaker.core.BadgeFormatBuilder
 import io.github.dsibilio.badgemaker.core.BadgeMaker
@@ -7,17 +8,16 @@ import io.github.dsibilio.badgemaker.model.BadgeFormat
 import io.github.dsibilio.badgemaker.model.NamedColor
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import java.net.URLDecoder
-import java.nio.charset.Charset
+
 
 
 @Controller
 @RequestMapping("/api")
+@LogExecution
 class BadgeController(private val observationRegistry: ObservationRegistry) {
 
     @PutMapping("/badge", produces = [MediaType.TEXT_HTML_VALUE])
@@ -27,6 +27,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
     }
 
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
+    @ResponseBody
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.badge.put", observationRegistry).observe {
             val src = makeBadge(message = badge.message, label = badge.label, color = null, "GREEN")
@@ -59,12 +60,13 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml"])
+
     fun getBadgeParams(@RequestParam payload: String, servletResponse: HttpServletResponse) {
         val data = uncompressString(payload)
         val split = data.split("|")
         when {
             split.size != 5 -> {
-                throw BadgeFormatException("Badge Format invalid, expecting 4 pipeddelimited values [$data]")
+                throw BadgeFormatException("Badge Format invalid, expecting 4 pipe delimited values [$data]")
             }
 
             else -> {
@@ -126,34 +128,35 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
         """.trimIndent()
     }
 
-    fun unescape(text: String): String {
-        val result = StringBuilder(text.length)
-        var i = 0
-        val n = text.length
-        while (i < n) {
-            val charAt = text[i]
-            if (charAt != '&') {
-                result.append(charAt)
-                i++
-            } else {
-                if (text.startsWith("&amp;", i)) {
-                    result.append('&')
-                    i += 5
-                } else if (text.startsWith("&apos;", i)) {
-                    result.append('\'')
-                    i += 6
-                } else if (text.startsWith("&quot;", i)) {
-                    result.append('"')
-                    i += 6
-                } else if (text.startsWith("&lt;", i)) {
-                    result.append('<')
-                    i += 4
-                } else if (text.startsWith("&gt;", i)) {
-                    result.append('>')
-                    i += 4
-                } else i++
-            }
+
+}
+fun unescape(text: String): String {
+    val result = StringBuilder(text.length)
+    var i = 0
+    val n = text.length
+    while (i < n) {
+        val charAt = text[i]
+        if (charAt != '&') {
+            result.append(charAt)
+            i++
+        } else {
+            if (text.startsWith("&amp;", i)) {
+                result.append('&')
+                i += 5
+            } else if (text.startsWith("&apos;", i)) {
+                result.append('\'')
+                i += 6
+            } else if (text.startsWith("&quot;", i)) {
+                result.append('"')
+                i += 6
+            } else if (text.startsWith("&lt;", i)) {
+                result.append('<')
+                i += 4
+            } else if (text.startsWith("&gt;", i)) {
+                result.append('>')
+                i += 4
+            } else i++
         }
-        return result.toString()
     }
+    return result.toString()
 }

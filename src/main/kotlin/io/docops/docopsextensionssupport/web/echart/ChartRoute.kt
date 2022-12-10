@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.web.echart
 
 import io.docops.asciidoc.buttons.service.ScriptLoader
+import io.docops.docopsextensionssupport.aop.LogExecution
 import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
@@ -11,17 +12,21 @@ import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import java.lang.IllegalArgumentException
 import java.nio.charset.Charset
 
 
 @Controller
 @RequestMapping("/api")
+@LogExecution
 class ChartRoute(private val observationRegistry: ObservationRegistry) {
 
     private val scriptLoader = ScriptLoader()
 
 
     @PostMapping("/bar")
+    @ResponseBody
     fun bar(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         return Observation.createNotStarted("docops.charts.bar", observationRegistry).observe {
             try {
@@ -30,14 +35,7 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
                 val res = fromTpl(data)
                 process(res, servletResponse)
             } catch (e: Exception) {
-                e.printStackTrace()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
-                servletResponse.status = 400
-                val writer = servletResponse.writer
-                //language=html
-                writer.print(e.message)
-                writer.flush()
+                throw IllegalArgumentException(e.message,e)
             }
         }
     }
@@ -51,14 +49,7 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
                 val res = data.toEChart()
                 process(res, servletResponse)
             } catch (e: Exception) {
-                e.printStackTrace()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
-                servletResponse.status = 400
-                val writer = servletResponse.writer
-                //language=html
-                writer.print(e.message)
-                writer.flush()
+                throw IllegalArgumentException(e.message,e)
             }
         }
     }
@@ -72,14 +63,7 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
                 val res = data.toEchart()
                 process(res, servletResponse)
             } catch (e: Exception) {
-                e.printStackTrace()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
-                servletResponse.status = 400
-                val writer = servletResponse.writer
-                //language=html
-                writer.print(e.message)
-                writer.flush()
+                throw IllegalArgumentException(e.message,e)
             }
         }
     }
@@ -96,14 +80,7 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
                 val res = resp.build(source)
                 process(res, servletResponse)
             } catch (e: Exception) {
-                e.printStackTrace()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
-                servletResponse.status = 400
-                val writer = servletResponse.writer
-                //language=html
-                writer.print(e.message)
-                writer.flush()
+                throw IllegalArgumentException(e.message,e)
             }
         }
     }
@@ -126,14 +103,7 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
             writer.print(res)
             writer.flush()
         } catch (e: Exception) {
-            e.printStackTrace()
-            servletResponse.contentType = "text/html";
-            servletResponse.characterEncoding = "UTF-8";
-            servletResponse.status = 400
-            val writer = servletResponse.writer
-            //language=html
-            writer.print(e.message)
-            writer.flush()
+            throw IllegalArgumentException(e.message,e)
         }
     }
 }

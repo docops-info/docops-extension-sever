@@ -15,8 +15,8 @@ class ProblemDetailErrorHandlingControllingAdvice {
 
     @ExceptionHandler(IllegalArgumentException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun onException(request: HttpServletRequest): ProblemDetail {
-        return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST)
+    fun onException(request: HttpServletRequest, ex: IllegalArgumentException): ProblemDetail {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message!!)
     }
 
     @ExceptionHandler(BadgeFormatException::class)

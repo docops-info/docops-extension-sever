@@ -7,10 +7,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus
+        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus,swagger-ui
     jmx:
       exposure:
-        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus
+        include: info,health,loggers,metrics,beans,mappings,threaddump,heapdump,prometheus,swagger-ui
   security:
     enabled: false
   health:
@@ -43,3 +43,10 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+springdoc:
+  api-docs:
+    enabled: true
+  show-actuator: true
+  model-and-view-allowed: true
+  swagger-ui:
+    path: /swagger-ui.html

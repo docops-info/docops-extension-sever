@@ -2,23 +2,27 @@ package io.docops.docopsextensionssupport.web
 
 import io.docops.asciidoctorj.extension.adr.ADRParser
 import io.docops.asciidoctorj.extension.adr.AdrMaker
+import io.docops.docopsextensionssupport.aop.LogExecution
 import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
 import io.micrometer.observation.Observation
 import io.micrometer.observation.ObservationRegistry
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 
 @Controller
+@RequestMapping("/api")
+@LogExecution
 class AdrController(private val observationRegistry: ObservationRegistry) {
 
 
-    @PutMapping("/api/adr")
+    @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
+    @ResponseBody
+
     fun adr(@RequestParam("title") title: String,
             @RequestParam("date") date: String,
             @RequestParam("status") status: String,
@@ -53,13 +57,7 @@ Participants: $participants
                 writer.flush()
             } catch (e: Exception) {
                 e.printStackTrace()
-                servletResponse.setContentType("text/html");
-                servletResponse.setCharacterEncoding("UTF-8");
-                servletResponse.status = 400
-                val writer = servletResponse.writer
-                writer.print("incomplete")
-                writer.flush()
-                //language=html
+                throw IllegalArgumentException(e.message, e)
             }
         }
     }

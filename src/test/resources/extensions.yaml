@@ -1,0 +1,360 @@
+openapi: 3.0.3
+info:
+  title: DocOps Extensions Server
+  description: DocOps Extensions Server
+  version: 2022.0.0
+servers:
+  - url: '/extension'
+  - url: 'http://localhost:8010/extension'
+paths:
+  /extension/:
+    get:
+      summary: "GET extension/"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/chart/custom:
+    post:
+      summary: "POST extension/api/chart/custom"
+      responses:
+        "200":
+          description: "OK"
+    get:
+      summary: "GET extension/api/panel"
+      parameters:
+        - name: "data"
+          in: "query"
+          required: false
+        - name: "type"
+          in: "query"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panel:
+    post:
+      summary: "POST extension/api/panel"
+      responses:
+        "200":
+          description: "OK"
+    get:
+      summary: "GET extension/api/panel"
+      operationId: "getPanel"
+      parameters:
+        - name: "data"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panel/csv:
+    post:
+      summary: "POST extension/api/panel/csv"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panel/lines:
+    get:
+      summary: "GET extension/api/panel/lines"
+      parameters:
+        - name: "data"
+          in: "query"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/ping:
+    get:
+      summary: "GET extension/api/ping"
+      responses:
+        "200":
+          description: "OK"
+
+  
+  /extension/api/treechart:
+    post:
+      summary: "POST extension/api/treechart"
+      responses:
+        "200":
+          description: "OK"
+
+  
+  /extension/partial/{fragment}:
+    get:
+      summary: "GET extension/partial/{fragment}"
+      parameters:
+        - name: "fragment"
+          in: "path"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/adr:
+    put:
+      summary: "PUT extension/api/adr"
+      operationId: "adr"
+      parameters:
+        - name: "title"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "date"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "status"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "decision"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "consequences"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "participants"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "context"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/adrbuilder.html:
+    get:
+      summary: "GET extension/adrbuilder.html"
+      operationId: "getAdr"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/badge.html:
+    get:
+      summary: "GET extension/badge.html"
+      operationId: "getBadge"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/chart.html:
+    get:
+      summary: "GET extension/chart.html"
+      operationId: "getChart"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/mychart.html:
+    get:
+      summary: "GET extension/mychart.html"
+      operationId: "mychart"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/panelgenerator.html:
+    get:
+      summary: "GET extension/panelgenerator.html"
+      operationId: "getPanelGenerator"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/panelimagebuilder.html:
+    get:
+      summary: "GET extension/panelimagebuilder.html"
+      operationId: "getPanelImageBuilder"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/panelseditor.html:
+    get:
+      summary: "GET extension/panelseditor.html"
+      operationId: "panelsEditor"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/stacked.html:
+    get:
+      summary: "GET extension/stacked.html"
+      operationId: "stacked"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/treechart.html:
+    get:
+      summary: "GET extension/treechart.html"
+      operationId: "treeChart"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  
+  /extension/api/badge:
+    put:
+      summary: "PUT extension/api/badge"
+      operationId: "getBadge"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/Badge"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/html:
+              schema:
+                type: "string"
+  
+  /extension/api/badge/item:
+    get:
+      summary: "GET extension/api/badge/item"
+      operationId: "getBadgeParams"
+      parameters:
+        - name: "payload"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT extension/api/badge/item"
+      operationId: "getBadgeByForm"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormBadge"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/colorgen:
+    put:
+      summary: "PUT extension/api/colorgen"
+      operationId: "putColorGen"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panel/pancolor:
+    get:
+      summary: "GET extension/api/panel/pancolor"
+      operationId: "panColor"
+      parameters:
+        - name: "color"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "label"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panel/plain:
+    post:
+      summary: "POST extension/api/panel/plain"
+      operationId: "panelsPlain"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/panelimage:
+    put:
+      summary: "PUT extension/api/panelimage"
+      operationId: "panelImage"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/bar:
+    post:
+      summary: "POST extension/api/bar"
+      operationId: "bar"
+      responses:
+        "200":
+          description: "OK"
+  
+  /extension/api/bar/stacked:
+    post:
+      summary: "POST extension/api/bar/stacked"
+      operationId: "stacked"
+      responses:
+        "200":
+          description: "OK"
