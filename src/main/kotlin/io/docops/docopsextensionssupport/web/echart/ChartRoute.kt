@@ -1,15 +1,12 @@
 package io.docops.docopsextensionssupport.web.echart
 
 import io.docops.asciidoc.buttons.service.ScriptLoader
-import io.docops.docopsextensionssupport.aop.LogExecution
-import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
-import io.micrometer.observation.Observation
-import io.micrometer.observation.ObservationRegistry
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
@@ -19,16 +16,16 @@ import java.nio.charset.Charset
 
 @Controller
 @RequestMapping("/api")
-@LogExecution
-class ChartRoute(private val observationRegistry: ObservationRegistry) {
+@Observed(name = "chart.controller")
+class ChartRoute() {
 
     private val scriptLoader = ScriptLoader()
 
 
     @PostMapping("/bar")
     @ResponseBody
+    @Timed(value = "docops.charts.bar", percentiles = [0.5, 0.95])
     fun bar(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.charts.bar", observationRegistry).observe {
             try {
                 val source = getPostBody(httpServletRequest)
                 val data = scriptLoader.parseKotlinScript<BarChartModels>(source)
@@ -37,12 +34,11 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
             } catch (e: Exception) {
                 throw IllegalArgumentException(e.message,e)
             }
-        }
     }
 
     @PostMapping("/bar/stacked")
+    @Timed(value = "docops.charts.bar.stacked", percentiles = [0.5, 0.95])
     fun stacked(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.charts.bar.stacked", observationRegistry).observe {
             try {
                 val source = getPostBody(httpServletRequest)
                 val data = scriptLoader.parseKotlinScript<StackedBar>(source)
@@ -51,12 +47,11 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
             } catch (e: Exception) {
                 throw IllegalArgumentException(e.message,e)
             }
-        }
     }
 
     @PostMapping("/treechart")
+    @Timed(value = "docops.charts.treechart", percentiles = [0.5, 0.95])
     fun treeChart(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.charts.treechart", observationRegistry).observe {
             try {
                 val source = getPostBody(httpServletRequest)
                 val data = scriptLoader.parseKotlinScript<TreeChart>(source)
@@ -65,12 +60,11 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
             } catch (e: Exception) {
                 throw IllegalArgumentException(e.message,e)
             }
-        }
     }
 
     @PostMapping("/chart/custom")
+    @Timed(value = "docops.charts.custom", percentiles = [0.5, 0.95])
     fun custom(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.charts.custom", observationRegistry).observe {
             try {
                 val source = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
 
@@ -82,7 +76,6 @@ class ChartRoute(private val observationRegistry: ObservationRegistry) {
             } catch (e: Exception) {
                 throw IllegalArgumentException(e.message,e)
             }
-        }
     }
 
     private fun getPostBody(httpServletRequest: HttpServletRequest): String {

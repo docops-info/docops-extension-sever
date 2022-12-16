@@ -1,43 +1,41 @@
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.docopsextensionssupport.aop.LogExecution
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.dsibilio.badgemaker.core.BadgeFormatBuilder
 import io.github.dsibilio.badgemaker.core.BadgeMaker
 import io.github.dsibilio.badgemaker.model.BadgeFormat
 import io.github.dsibilio.badgemaker.model.NamedColor
-import io.micrometer.observation.Observation
-import io.micrometer.observation.ObservationRegistry
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 
-
 @Controller
 @RequestMapping("/api")
-@LogExecution
-class BadgeController(private val observationRegistry: ObservationRegistry) {
+@Observed(name = "badge.controller")
+class BadgeController() {
 
     @PutMapping("/badge", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
+    @Timed(value = "docops.badge.put", percentiles = [0.5, 0.95])
     fun getBadge(@RequestBody badge: MutableList<Badge>): String {
         return gen(badge)
     }
 
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
+    @Timed(value = "docops.badge.put", percentiles = [0.5, 0.95])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.badge.put", observationRegistry).observe {
-            val src = makeBadge(message = badge.message, label = badge.label, color = null, "GREEN")
-            servletResponse.contentType = "image/svg+xml";
-            servletResponse.characterEncoding = "UTF-8";
-            servletResponse.status = 200
-            val writer = servletResponse.writer
-            writer.print(src)
-            writer.flush()
-        }
+        val src = makeBadge(message = badge.message, label = badge.label, color = null, "GREEN")
+        servletResponse.contentType = "image/svg+xml";
+        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.status = 200
+        val writer = servletResponse.writer
+        writer.print(src)
+        writer.flush()
     }
 
     private fun makeBadge(message: String, label: String, color: String?, mColor: String): String {
@@ -60,7 +58,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml"])
-
+    @Timed(value = "docops.badge.get", percentiles = [0.5, 0.95])
     fun getBadgeParams(@RequestParam payload: String, servletResponse: HttpServletResponse) {
         val data = uncompressString(payload)
         val split = data.split("|")
@@ -73,10 +71,9 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
                 val message: String = split[1]
                 val label: String = split[0]
 
-                var color: String? = null
                 var mcolor: String = "GREEN"
 
-                color = split[3].trim()
+                var color: String = split[3].trim()
 
 
                 val c = split[4].trim()
@@ -85,16 +82,13 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
                 }
 
 
-                return Observation.createNotStarted("docops.badge.get", observationRegistry).observe {
-
-                    val src = makeBadge(message = message, label = label, color, mcolor)
-                    servletResponse.contentType = "image/svg+xml"
-                    servletResponse.characterEncoding = "UTF-8"
-                    servletResponse.status = 200
-                    val writer = servletResponse.writer
-                    writer.print(src)
-                    writer.flush()
-                }
+                val src = makeBadge(message = message, label = label, color, mcolor)
+                servletResponse.contentType = "image/svg+xml"
+                servletResponse.characterEncoding = "UTF-8"
+                servletResponse.status = 200
+                val writer = servletResponse.writer
+                writer.print(src)
+                writer.flush()
 
             }
         }
@@ -117,7 +111,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
         }
         val sorted = svgList.toSortedMap(compareByDescending { it })
         val str = StringBuffer()
-        svgList.forEach { _, v ->
+        svgList.forEach { (_, v) ->
             str.append(v)
         }
         //language=html
@@ -130,6 +124,7 @@ class BadgeController(private val observationRegistry: ObservationRegistry) {
 
 
 }
+
 fun unescape(text: String): String {
     val result = StringBuilder(text.length)
     var i = 0

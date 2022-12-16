@@ -2,27 +2,28 @@ package io.docops.docopsextensionssupport.web
 
 import io.docops.asciidoctorj.extension.adr.ADRParser
 import io.docops.asciidoctorj.extension.adr.AdrMaker
-import io.docops.docopsextensionssupport.aop.LogExecution
-import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
-import io.micrometer.observation.Observation
-import io.micrometer.observation.ObservationRegistry
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 
 @Controller
 @RequestMapping("/api")
-@LogExecution
-class AdrController(private val observationRegistry: ObservationRegistry) {
+@Observed(name="adr.controller")
+class AdrController() {
 
 
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
 
+    @Timed(value = "docops.adr", percentiles = [0.5, 0.95])
+    @Observed(name = "AdrController.adr",
+        contextualName = "creating-adr",
+        lowCardinalityKeyValues = ["decision", "status"])
     fun adr(@RequestParam("title") title: String,
             @RequestParam("date") date: String,
             @RequestParam("status") status: String,
@@ -31,7 +32,6 @@ class AdrController(private val observationRegistry: ObservationRegistry) {
             @RequestParam("participants") participants: String,
             @RequestParam("context") context: String,
         servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        return Observation.createNotStarted("docops.adr", observationRegistry).observe {
             try {
                 val adrText = """
                 
@@ -59,7 +59,7 @@ Participants: $participants
                 e.printStackTrace()
                 throw IllegalArgumentException(e.message, e)
             }
-        }
+
     }
     fun makeAdrSource(txt: String, svg: String): String {
         return """
