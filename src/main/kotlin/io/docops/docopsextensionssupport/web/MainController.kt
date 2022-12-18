@@ -79,6 +79,12 @@ class MainController() {
             .addTemplate("adrbuilder")
     }
 
+    @GetMapping("/stats.html")
+    @Timed(value = "docops.panel.stats.html", percentiles = [0.5, 0.95])
+    fun getStats() {
+        HtmxResponse()
+            .addTemplate("stats")
+    }
     @GetMapping("/api/ping")
     @ResponseBody
     @Timed(value = "docops.api.ping", percentiles = [0.5, 0.95])

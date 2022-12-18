@@ -73,7 +73,7 @@ class BadgeController() {
 
                 var mcolor: String = "GREEN"
 
-                var color: String = split[3].trim()
+                val color: String = split[3].trim()
 
 
                 val c = split[4].trim()
