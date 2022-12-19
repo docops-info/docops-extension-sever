@@ -49,12 +49,10 @@
                 if (httpRequest.readyState === XMLHttpRequest.DONE) {
                     if (httpRequest.status === 200) {
                         const items = JSON.parse(this.responseText);
-                        console.log(items);
                         let select = document.getElementById("metrics");
                         var itemArray = items["names"];
                         for(var i = 0; i < itemArray.length; i++) {
                             var opt = itemArray[i];
-                            console.log(opt);
                             var el = document.createElement("option");
                             el.textContent = opt;
                             el.value = opt;
