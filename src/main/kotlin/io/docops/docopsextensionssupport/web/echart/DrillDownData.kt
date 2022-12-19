@@ -10,7 +10,7 @@ import kotlinx.serialization.encodeToString
 @Serializable
 class DataGroup(val dataGroupId: String, val value: Double, val data: MutableList<MutableList<Data>>)
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class Data(val value: Double, val groupId: String)
 
 @ChartDsl

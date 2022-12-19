@@ -1,46 +1,6 @@
 <h1>Usage Metrics View - Per JVM</h1>
 <script>
 
-
-        function makeRequest(path, id) {
-            let httpRequest = new XMLHttpRequest();
-
-            if (!httpRequest) {
-                alert("Giving up :( Cannot create an XMLHTTP instance");
-                return false;
-            }
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if (httpRequest.status === 200) {
-                        makeImage(httpRequest.responseText, path, id);
-                    } else {
-                        alert("There was a problem with the request.");
-                    }
-                }
-            };
-            httpRequest.open("GET", "actuator/metrics"+path);
-            httpRequest.send();
-        }
-
-
-        function makeImage(data, path, id) {
-            let httpRequest = new XMLHttpRequest();
-            httpRequest.open("POST", "api/jsonToSvg");
-            httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            httpRequest.send(data);
-            httpRequest.onreadystatechange = function(){
-                if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if (httpRequest.status === 200) {
-                        const svgString = this.responseText;
-                        var elem = document.getElementById(id);
-                        elem.innerHTML = svgString;
-                    } else {
-                        alert("There was a problem with the request.");
-                    }
-                }
-            };
-        }
-
         var updateMetrics = function () {
             let httpRequest = new XMLHttpRequest();
             httpRequest.open("GET", "actuator/metrics");
@@ -69,7 +29,11 @@
 
         var getMetrics = function () {
             let select = document.getElementById("metrics");
-            makeRequest("/"+select.value, 'panel')
+            //makeRequest("/"+select.value, 'panel')
+            htmx.ajax("GET", "actuator/metrics"+"/"+select.value, '#output').then(() => {
+                var content = document.getElementById("output")
+                htmx.ajax("GET", "api/jsonToSvg?payload="+encodeURI(content.innerHTML), {target: "#panel"});
+            });
         }
 
 </script>
@@ -88,6 +52,8 @@
                 <option>Select</option>
             </select>
             </div>
+        <div id="output" style="display: none"></div>
+        </td>
     </tr>
 
     </tbody>
@@ -97,3 +63,4 @@
 <h3>Results</h3>
 
 <div id="panel"></div>
+
