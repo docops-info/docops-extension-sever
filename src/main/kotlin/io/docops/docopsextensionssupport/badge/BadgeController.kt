@@ -29,13 +29,42 @@ class BadgeController() {
     @ResponseBody
     @Timed(value = "docops.badge.put", percentiles = [0.5, 0.95])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
-        val src = makeBadge(message = badge.message, label = badge.label, color = null, "GREEN")
+        var mColor = badge.messageColor
+        if(null == mColor) {
+            mColor = "GREEN"
+        }
+        val src = makeBadge(message = badge.message, label = badge.label, color = badge.labelColor, mColor)
+        val badgeSource =
+"""
+[badge]
+----
+${badge.message}|${badge.label}|${badge.url}|${badge.labelColor}|$mColor
+----
+""".trimIndent()
+        val contents = makeBadgeAndSource(badgeSource, src)
         servletResponse.contentType = "image/svg+xml";
         servletResponse.characterEncoding = "UTF-8";
         servletResponse.status = 200
         val writer = servletResponse.writer
-        writer.print(src)
+        writer.print(contents)
         writer.flush()
+    }
+    fun makeBadgeAndSource(txt: String, svg: String): String {
+        return """
+        <div id='imageblock'>
+        $svg
+        </div>
+        <br/>
+        <h3>Adr Source</h3>
+        <div class='pure-u-1 pure-u-md-20-24'>
+        <pre>
+        <code class="kotlin">
+$txt
+        </code>
+        </pre>
+        
+        </div>
+    """.trimIndent()
     }
 
     private fun makeBadge(message: String, label: String, color: String?, mColor: String): String {
