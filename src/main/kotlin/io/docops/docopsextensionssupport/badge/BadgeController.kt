@@ -38,11 +38,11 @@ class BadgeController() {
 """
 [badge]
 ----
-${badge.message}|${badge.label}|${badge.url}|${badge.labelColor}|$mColor
+${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$mColor
 ----
 """.trimIndent()
         val contents = makeBadgeAndSource(badgeSource, src)
-        servletResponse.contentType = "image/svg+xml";
+        servletResponse.contentType = "text/html";
         servletResponse.characterEncoding = "UTF-8";
         servletResponse.status = 200
         val writer = servletResponse.writer
@@ -62,7 +62,12 @@ ${badge.message}|${badge.label}|${badge.url}|${badge.labelColor}|$mColor
 $txt
         </code>
         </pre>
-        
+        <script>
+        var badgeSource = `${txt}`;
+        document.querySelectorAll('pre code').forEach((el) => {
+            hljs.highlightElement(el);
+        });
+        </script>
         </div>
     """.trimIndent()
     }
