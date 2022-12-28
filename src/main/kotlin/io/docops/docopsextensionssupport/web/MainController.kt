@@ -85,6 +85,12 @@ class MainController() {
         HtmxResponse()
             .addTemplate("stats")
     }
+    @GetMapping("/simpleicons.html")
+    @Timed(value = "docops.simpleicons.html", percentiles = [0.5, 0.95])
+    fun getSimpleIcons() {
+        HtmxResponse()
+            .addTemplate("simpleicons")
+    }
     @GetMapping("/api/ping")
     @ResponseBody
     @Timed(value = "docops.api.ping", percentiles = [0.5, 0.95])
