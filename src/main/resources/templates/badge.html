@@ -41,23 +41,21 @@
             </div>
             <div class="pure-u-1">
                 <label for="messageColor">Message Color</label>
-                <select id="messageColor" name="messageColor" data-hx-put="'api/badge/item'" data-hx-target="'#contentBox'"
-                        class="pure-u-1-3">
-                    <option value="BRIGHTGREEN">BRIGHTGREEN</option>
-                    <option value="GREEN">GREEN</option>
-                    <option value="YELLOW">YELLOW</option>
-                    <option value="YELLOWGREEN">YELLOWGREEN</option>
-                    <option value="ORANGE">ORANGE</option>
-                    <option value="RED" selected>RED</option>
-                    <option value="GREY">GREY</option>
-                    <option value="GREY">LIGHTGREY</option>
-                </select>
+                <input type="text" id="messageColor" name="messageColor" data-hx-put="'api/panelimage'" data-hx-target="'#contentBox'"
+                       value="#000000" class="pure-u-1-3">
+
             </div>
             <div class="pure-u-6">
                 <label for="logo">Logo</label>
+                <div class="pure-g">
+                    <div class="pure-u-8-24">
                 <input type="text" id="logo" name="logo" data-hx-put="'api/badge/item'" data-hx-target="'#contentBox'"
-                       value="Acer"  class="pure-u-1-6">
-                <a class="pure-menu-link pure-u-1-6" data-hx-get="'simpleicons.html'" data-hx-target="'#simpleicons'">Simple Icons</a>
+                       value="Acer"  class="pure-u-1-1">
+                    </div>
+                    <div class="pure-u-8-24">
+                <a class="button-success pure-button pure-u-1-1" data-hx-get="'simpleicons.html'" data-hx-target="'#simpleicons'">Show Simple Icon Set</a>
+                    </div>
+                </div>
             </div>
                 <button class="button-success pure-button" data-hx-indicator="'#spinner'">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
             </div>
@@ -73,4 +71,8 @@
 <div id="simpleicons"></div>
 
 
-
+<script>
+    $("#messageColor").spectrum({
+        color: "#c90076"
+    });
+</script>

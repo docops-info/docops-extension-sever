@@ -1,8 +1,5 @@
 <h3>Icons starting with: <span th:text="${letter}"></span></h3>
 
-
-
-
 <div th:each="items: ${icons}">
     <span class="pure-u-1-5 pure-button"  th:each="icon: ${items}" th:text="${icon}" th:id="${icon}" hx:vals="${ {iconName: icon } }" data-hx-target="'#placeholder'" data-hx-get="'api/simple/icon'" data-hx-trigger="'click'"></span>
 </div>
