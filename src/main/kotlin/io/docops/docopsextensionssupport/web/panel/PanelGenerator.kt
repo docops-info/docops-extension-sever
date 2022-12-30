@@ -28,7 +28,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
     @GetMapping("/panel")
     @ResponseBody
-    @Timed(value = "docops.panel", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel", histogram = true, percentiles = [0.5, 0.95])
     fun getPanel(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
@@ -47,7 +47,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
     @PutMapping("/colorgen")
     @ResponseBody
-    @Timed(value = "docops.panel.generator.color", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.generator.color", histogram = true, percentiles = [0.5, 0.95])
     fun putColorGen(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         try {
             var bold = false
@@ -127,7 +127,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
     @PutMapping("/panelimage")
     @ResponseBody
-    @Timed(value = "docops.panel.image", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.image", histogram = true, percentiles = [0.5, 0.95])
     fun panelImage(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         val params = httpServletRequest.parameterMap
         var fillColor = params["fillColor"]?.get(0)!!
@@ -165,7 +165,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
     @PostMapping("/panel/plain")
     @ResponseBody
-    @Timed(value = "docops.panel.plain", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.plain", histogram = true, percentiles = [0.5, 0.95])
     fun panelsPlain(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
 
         val contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
@@ -184,7 +184,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
     @GetMapping("/panel/pancolor")
     @ResponseBody
-    @Timed(value = "docops.panel.pancolor", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.pancolor", histogram = true, percentiles = [0.5, 0.95])
     fun panColor(
         @RequestParam("color") color: String,
         @RequestParam("label") label: String,

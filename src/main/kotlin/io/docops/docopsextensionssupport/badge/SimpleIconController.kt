@@ -38,7 +38,7 @@ class SimpleIconController {
         return provider.findCandidateComponents(packageName)
     }
     @RequestMapping("/simple/icons", method = [RequestMethod.GET, RequestMethod.POST])
-    @Timed(value = "docops.simpleicons", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.simpleicons", histogram = true, percentiles = [0.5, 0.95])
     fun getByLetter(@RequestParam(name = "SEL") selected : String,  model: Model) : String {
 
         val list = allClasses.filter { it.beanClassName!!.startsWith("org.silentsoft.simpleicons.icons.$selected") }.map { it.beanClassName?.replace("org.silentsoft.simpleicons.icons.", "") }.map { it?.replace("Icon", "") }
@@ -49,7 +49,7 @@ class SimpleIconController {
 
 
     @GetMapping("/simple/icon")
-    @Timed(value = "docops.simpleicon", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.simpleicon", histogram = true, percentiles = [0.5, 0.95])
     fun showIcon(@RequestParam(name = "iconName") iconName: String, servletResponse: HttpServletResponse) {
         val ico = SimpleIcons.get(iconName)
         val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(ico.svg.toByteArray()))

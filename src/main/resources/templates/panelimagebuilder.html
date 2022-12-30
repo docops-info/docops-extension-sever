@@ -1,19 +1,22 @@
 <H1>Panel Image Builder</H1>
+
+<div class="pure-g">
+    <div class="pure-u-8-24">
 <form class="pure-form pure-form-stacked" data-hx-put="'api/panelimage'" data-hx-target="'#contentBox'">
     <fieldset>
         <legend>Panel Image Builder</legend>
         <div class="pure-g">
-            <div class="pure-u-4-24">
+            <div class="pure-u-8-24">
                 <label for="color">Fill Color</label>
                 <input type="text" id="color" name="fillColor" data-hx-put="'api/panelimage'" data-hx-target="'#contentBox'"
                        value="#000000" class="pure-u-18-24">
             </div>
-            <div class="pure-u-4-24">
+            <div class="pure-u-8-24">
                 <label for="fontColor">Font Color</label>
                 <input type="text" id="fontColor" name="fontColor" data-hx-put="'api/panelimage'" data-hx-target="'#contentBox'"
                        value="#000000" class="pure-u-18-24">
             </div>
-            <div class="pure-u-4-24">
+            <div class="pure-u-8-24">
                 <label for="imageType">Image Type</label>
                 <select id="imageType" name="imageType" data-hx-put="'api/panelimage'" data-hx-target="'#contentBox'">
                     <option value="LINE">LINE</option>
@@ -42,10 +45,14 @@
                value="Save Image">
     </fieldset>
 </form>
+    </div>
 <div >
-    <section id="contentBox" class="tool-bar">
+    <div class="pure-u-16-24">
+        <section id="contentBox" class="tool-bar">
 
-    </section>
+        </section>
+    </div>
+</div>
 </div>
 <script>
     $("#color").spectrum({

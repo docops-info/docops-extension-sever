@@ -20,7 +20,7 @@ class AdrController() {
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
 
-    @Timed(value = "docops.adr", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.adr", histogram = true, percentiles = [0.5, 0.95])
     @Observed(name = "AdrController.adr",
         contextualName = "creating-adr",
         lowCardinalityKeyValues = ["decision", "status"])

@@ -5,6 +5,8 @@
 <button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 <br/>
 <br/>
+<div class="pure-g">
+    <div class="pure-u-8-24">
 <div id="editor">
 barChart {
         title = "Hello"
@@ -29,6 +31,12 @@ barChart {
 }
 </div>
 
+    </div>
+    <div class="pure-u-16-24">
+        <h3>Preview</h3>
+        <div id="results"></div>
+    </div>
+</div>
 
 <script>
     var editor = ace.edit("editor");
@@ -45,5 +53,4 @@ barChart {
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
-<h3>Preview</h3>
-<div id="results"></div>
+

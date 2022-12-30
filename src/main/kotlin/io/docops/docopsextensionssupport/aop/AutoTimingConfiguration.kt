@@ -15,7 +15,4 @@ class AutoTimingConfiguration {
         return TimedAspect(registry)
     }
 
-    fun observedAspect() {
-
-    }
 }

@@ -23,7 +23,7 @@ class BadgeController() {
 
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
-    @Timed(value = "docops.badge.put", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badge.put", histogram = true, percentiles = [0.5, 0.95])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         var mColor = badge.messageColor
         if (null == mColor) {
@@ -72,7 +72,7 @@ $txt
 
 
     @GetMapping("/badge/item", produces = ["image/svg+xml"])
-    @Timed(value = "docops.badge.get", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badge.get", histogram = true, percentiles = [0.5, 0.95])
     fun getBadgeParams(@RequestParam payload: String, servletResponse: HttpServletResponse) {
         val data = uncompressString(payload)
         val split = data.split("|")

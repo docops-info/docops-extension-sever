@@ -24,7 +24,7 @@ class ChartRoute() {
 
     @PostMapping("/bar")
     @ResponseBody
-    @Timed(value = "docops.charts.bar", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.charts.bar", histogram = true, percentiles = [0.5, 0.95])
     fun bar(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
             try {
                 val source = getPostBody(httpServletRequest)
@@ -37,7 +37,7 @@ class ChartRoute() {
     }
 
     @PostMapping("/bar/stacked")
-    @Timed(value = "docops.charts.bar.stacked", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.charts.bar.stacked", histogram = true, percentiles = [0.5, 0.95])
     fun stacked(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
             try {
                 val source = getPostBody(httpServletRequest)
@@ -50,7 +50,7 @@ class ChartRoute() {
     }
 
     @PostMapping("/treechart")
-    @Timed(value = "docops.charts.treechart", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.charts.treechart", histogram = true, percentiles = [0.5, 0.95])
     fun treeChart(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
             try {
                 val source = getPostBody(httpServletRequest)
@@ -63,7 +63,7 @@ class ChartRoute() {
     }
 
     @PostMapping("/chart/custom")
-    @Timed(value = "docops.charts.custom", percentiles = [0.5, 0.95])
+    @Timed(value = "docops.charts.custom", histogram = true, percentiles = [0.5, 0.95])
     fun custom(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
             try {
                 val source = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
