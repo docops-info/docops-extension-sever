@@ -1,10 +1,13 @@
 package io.docops.docopsextensionssupport.web.echart
 
 import io.docops.asciidoc.buttons.service.ScriptLoader
+import io.docops.asciidoc.charts.*
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.PostMapping
@@ -81,7 +84,8 @@ class ChartRoute() {
     private fun getPostBody(httpServletRequest: HttpServletRequest): String {
         val contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
         return """
-                import io.docops.docopsextensionssupport.web.echart.*
+                import io.docops.asciidoc.charts.*
+                import kotlin.collections.*
                 
                 $contents
                 """.trimIndent()
@@ -99,9 +103,23 @@ class ChartRoute() {
             throw IllegalArgumentException(e.message,e)
         }
     }
+
 }
 
+fun dataGroupJsonString(dg: MutableList<DataGroup>) : String {
+    return Json.encodeToString(dg)
+}
 
+fun seriesDataJson(seriesData: MutableList<Data>) : String {
+    return Json.encodeToString(seriesData)
+}
+fun xAxisJson(xAxisData: MutableList<String>): String {
+    return Json.encodeToString(xAxisData)
+}
+
+fun legendJson(legend: MutableList<String>): String {
+    return Json.encodeToString(legend)
+}
 fun fromTpl(bcModels: BarChartModels): String {
     //language=html
     val tpl = """
@@ -118,7 +136,7 @@ fun fromTpl(bcModels: BarChartModels): String {
             ];
             option = {
             legend: {
-                data: ${bcModels.legendJson()},
+                data: ${legendJson(bcModels.legend)},
                 orient: 'vertical',
                 right: 10,
                 top: 'center'
@@ -141,7 +159,7 @@ fun fromTpl(bcModels: BarChartModels): String {
                  },
                 xAxis: {
                     name: '${bcModels.xAxisLabel}',
-                    data: ${bcModels.xAxisJson()}
+                    data: ${xAxisJson(bcModels.xAxisData)}
                 },
                 yAxis: {
                     name: '${bcModels.yAxisLabel}'
@@ -167,14 +185,14 @@ fun fromTpl(bcModels: BarChartModels): String {
                           ])
                         }
                       },
-                    data: ${bcModels.seriesDataJson()},
+                    data: ${seriesDataJson(bcModels.seriesData)},
                     universalTransition: {
                         enabled: true,
                         divideShape: 'clone'
                     }
                 }
             };
-            const drillDownData = ${bcModels.dataGroupJsonString()};
+            const drillDownData = ${dataGroupJsonString(bcModels.dg)};
             myChart.on('click', function (event) {
                 if (event.data) {
                     let subData = drillDownData.find(function (data) {
