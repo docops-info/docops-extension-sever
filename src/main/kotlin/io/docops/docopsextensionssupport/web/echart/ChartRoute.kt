@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.web.echart
 
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.charts.*
+import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
@@ -10,9 +11,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.nio.charset.Charset
 
@@ -81,6 +80,33 @@ class ChartRoute() {
             }
     }
 
+    @GetMapping("/echart")
+    @Timed(value = "docops.charts.loadEChart", histogram = true, percentiles = [0.5, 0.95])
+    fun loadEChart(@RequestParam("data") payload: String, @RequestParam("type") type: String, @RequestParam(required = false,defaultValue = "800") width: String = "800",@RequestParam(required = false,defaultValue = "500") height: String = "500", servletResponse: HttpServletResponse) {
+        val source = uncompressString(payload)
+        when (type) {
+            "bar" -> {
+                val data = scriptLoader.parseKotlinScript<BarChartModels>(source)
+                val res = fromTpl(data)
+                process(res, servletResponse)
+            }
+            "stackbar" -> {
+                val data = scriptLoader.parseKotlinScript<StackedBar>(source)
+                val res = data.toEChart()
+                process(res, servletResponse)
+            }
+            "tree" -> {
+                val data = scriptLoader.parseKotlinScript<TreeChart>(source)
+                val res = data.toEchart()
+                process(res, servletResponse)
+            }
+            "custom" -> {
+                val resp = ChartShell(width = width, height = height)
+                val res = resp.build(source)
+                process(res, servletResponse)
+            }
+        }
+    }
     private fun getPostBody(httpServletRequest: HttpServletRequest): String {
         val contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
         return """
