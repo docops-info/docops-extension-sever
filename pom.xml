@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2020 The DocOps Consortium
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -10,7 +25,7 @@
     </parent>
     <groupId>io.docops</groupId>
     <artifactId>docops-extension-server</artifactId>
-    <version>2022.15</version>
+    <version>2022.16</version>
     <name>docops-extensions-support</name>
     <description>docops-extensions-support</description>
     <packaging>jar</packaging>
@@ -20,7 +35,7 @@
         <kotlin.version>1.8.0</kotlin.version>
         <serialization.version>1.4.1</serialization.version>
         <docops-button-render.version>2022.19</docops-button-render.version>
-        <asciidoctorj-docops-panel.version>2022.21</asciidoctorj-docops-panel.version>
+        <asciidoctorj-docops-panel.version>2022.22</asciidoctorj-docops-panel.version>
         <asciidoctorj-docops-adr.version>2022.10</asciidoctorj-docops-adr.version>
 
         <maven-shared-utlis.version>3.3.4</maven-shared-utlis.version>
@@ -34,6 +49,43 @@
         <maven-gpg.version>3.0.1</maven-gpg.version>
         <dokka.version>1.6.10</dokka.version>
     </properties>
+
+    <organization>
+        <url>https://docops.io/</url>
+        <name>DocOps</name>
+    </organization>
+    <inceptionYear>2022</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steve Roach</name>
+            <email>steve@docops.io</email>
+            <organization>DocOps</organization>
+            <organizationUrl>https://docops.io/</organizationUrl>
+            <timezone>America/New_York</timezone>
+        </developer>
+        <developer>
+            <name>Ian Cooper Rose</name>
+            <email>ian@docops.io</email>
+            <organization>DocOps</organization>
+            <organizationUrl>https://docops.io/</organizationUrl>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/docops-info/docops-button-render.git</connection>
+        <developerConnection>scm:git:git@github.com:docops-info/docops-button-render.git</developerConnection>
+        <url>https://github.com/docops-info/docops-button-render</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -92,7 +144,7 @@
         <dependency>
             <groupId>io.docops</groupId>
             <artifactId>docops-button-render</artifactId>
-            <version>2022.19-SNAPSHOT</version>
+            <version>${docops-button-render.version}</version>
         </dependency>
         <dependency>
             <groupId>io.docops</groupId>
