@@ -6,7 +6,7 @@ fun makePanelRoundMiddleImage (fillColor: String, fontColor: String, line1: Stri
     val now = System.currentTimeMillis()
     return """
         <?xml version="1.0" encoding="UTF-8"?>
-        <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"
+        <svg id="panelText" width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"
              xmlns:xlink="http://www.w3.org/1999/xlink">
             <path id="Color-Fill" fill="$fillColor" stroke="none" d="M 0 0 L 512 0 L 512 512 L 0 512 Z"/>
             <g id="Logo-$now">

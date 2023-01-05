@@ -222,7 +222,6 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-
 }
 
 fun uncompressString(zippedBase64Str: String): String {

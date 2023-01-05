@@ -91,6 +91,14 @@ class MainController() {
         HtmxResponse()
             .addTemplate("simpleicons")
     }
+    @GetMapping("/twotoneimagebuilder.html")
+    @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getTwoTone() {
+        HtmxResponse()
+            .addTemplate("twotoneimagebuilder")
+    }
+
+
     @GetMapping("/api/ping")
     @ResponseBody
     @Timed(value = "docops.api.ping", histogram = true, percentiles = [0.5, 0.95])
