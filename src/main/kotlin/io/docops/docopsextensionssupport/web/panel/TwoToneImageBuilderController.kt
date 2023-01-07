@@ -1,8 +1,5 @@
 package io.docops.docopsextensionssupport.web.panel
 
-import io.docops.docopsextensionssupport.support.makeLineImage
-import io.docops.docopsextensionssupport.support.makePanelRoundMiddleImage
-import io.docops.docopsextensionssupport.support.makeTagLine
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
@@ -37,7 +34,7 @@ class TwoToneImageBuilderController {
             line1Size = line1Size,
             line2Size = line2Size
         )
-        servletResponse.contentType = "text/html";
+        servletResponse.contentType = "image/svg+xml";
         servletResponse.characterEncoding = "UTF-8";
         servletResponse.status = 200
         val writer = servletResponse.writer
@@ -53,11 +50,11 @@ class TwoToneImageBuilderController {
                 <title>ICON</title>
                 <style>
                     .oddstyle {
-                        font: bold ${line1Size}px "Apple Chancery", Arial, Helvetica, sans-serif;
+                        font: bold ${line1Size}px Arial, Helvetica, sans-serif;
                         fill: $fillColor2;
                     }
                     .evenstyle {
-                        font: bold ${line2Size}px "Apple Chancery", Arial, Helvetica, sans-serif;
+                        font: bold ${line2Size}px Arial, Helvetica, sans-serif;
                         fill: $fillColor1;
                     }
                 </style>

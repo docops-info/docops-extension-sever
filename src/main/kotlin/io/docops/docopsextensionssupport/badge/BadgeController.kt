@@ -1,13 +1,11 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
-
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.silentsoft.badge4j.Style
 import org.silentsoft.simpleicons.SimpleIcons
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.io.ByteArrayInputStream

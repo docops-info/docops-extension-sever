@@ -225,21 +225,26 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 }
 
 fun uncompressString(zippedBase64Str: String): String {
-    val bytes: ByteArray = Base64.getUrlDecoder().decode(zippedBase64Str)
-    var zi: GZIPInputStream? = null
-    zi = GZIPInputStream(ByteArrayInputStream(bytes))
-    val reader = InputStreamReader(zi, Charset.defaultCharset())
-    val input = BufferedReader(reader)
-
-    val content = StringBuilder()
     try {
-        var line = input.readLine()
-        while (line != null) {
-            content.append(line + "\n")
-            line = input.readLine()
+        val bytes: ByteArray = Base64.getMimeDecoder().decode(zippedBase64Str)
+        var zi: GZIPInputStream? = null
+        zi = GZIPInputStream(ByteArrayInputStream(bytes))
+        val reader = InputStreamReader(zi, Charset.defaultCharset())
+        val input = BufferedReader(reader)
+
+        val content = StringBuilder()
+        try {
+            var line = input.readLine()
+            while (line != null) {
+                content.append(line + "\n")
+                line = input.readLine()
+            }
+        } finally {
+            reader.close()
         }
-    } finally {
-        reader.close()
+        return content.toString()
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
-    return content.toString()
+    return ""
 }
