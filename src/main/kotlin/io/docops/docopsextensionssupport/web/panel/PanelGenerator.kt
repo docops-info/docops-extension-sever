@@ -226,7 +226,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
 fun uncompressString(zippedBase64Str: String): String {
     try {
-        val bytes: ByteArray = Base64.getMimeDecoder().decode(zippedBase64Str)
+        val decoder = Base64.getUrlDecoder()
+        val bytes: ByteArray = decoder.decode(zippedBase64Str)
         var zi: GZIPInputStream? = null
         zi = GZIPInputStream(ByteArrayInputStream(bytes))
         val reader = InputStreamReader(zi, Charset.defaultCharset())
