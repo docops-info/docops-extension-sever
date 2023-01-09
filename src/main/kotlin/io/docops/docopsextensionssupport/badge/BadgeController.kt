@@ -9,6 +9,11 @@ import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.io.ByteArrayInputStream
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -51,7 +56,7 @@ ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$mColor|${badge
         $svg
         </div>
         <br/>
-        <h3>Adr Source</h3>
+        <h3>Badge Source</h3>
         <div class='pure-u-1 pure-u-md-20-24'>
         <pre>
         <code class="kotlin">
@@ -112,22 +117,7 @@ $txt
 
 
     private fun badgeAgain(formBadge: FormBadge): String {
-        var logo = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 200 150'%2F%3E"
-        if(formBadge.logo!!.isNotBlank()){
-            val stuff  = SimpleIcons.get(formBadge.logo)
-            if (stuff != null)  {
-                val ico = stuff.svg
-                val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                    .parse(ByteArrayInputStream(ico?.toByteArray()))
-                var src = ""
-                xml?.let {
-                    src = manipulateSVG(xml, stuff.hex)
-                }
-                logo = "data:image/svg+xml;base64," + Base64.getEncoder()
-                    .encodeToString(src.toByteArray())
-            }
-        }
-
+        val logo = getBadgeLogo(formBadge.logo)
         return org.silentsoft.badge4j.Badge.builder()
             .label(formBadge.label)
             .labelColor(formBadge.labelColor)
@@ -139,7 +129,48 @@ $txt
             .build()
     }
 
+    fun getBadgeLogo(input: String?): String {
+        //http://docops.io/images/docops.svg
+        var logo = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 200 150'%2F%3E"
+        input?.let {
+            if (input.startsWith("<") && input.endsWith(">")) {
 
+                val simpleIcon = SimpleIcons.get(input.replace("<","")  .replace(">","") )
+                if (simpleIcon != null) {
+                    val ico = simpleIcon.svg
+                    val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                        .parse(ByteArrayInputStream(ico?.toByteArray()))
+                    var src = ""
+                    xml?.let {
+                        src = manipulateSVG(xml, simpleIcon.hex)
+                    }
+                    logo = "data:image/svg+xml;base64," + Base64.getEncoder()
+                        .encodeToString(src.toByteArray())
+                }
+            } else if (input.startsWith("http")) {
+                logo = getLogoFromUrl(input)
+                logo = "data:image/svg+xml;base64," + Base64.getEncoder()
+                    .encodeToString(logo.toByteArray())
+            }
+        }
+        return logo
+    }
+    fun getLogoFromUrl(url: String,): String {
+        val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(20))
+            .build()
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .timeout(Duration.ofSeconds(10))
+            .build()
+        return try {
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+            response.body()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
 
 }
 
