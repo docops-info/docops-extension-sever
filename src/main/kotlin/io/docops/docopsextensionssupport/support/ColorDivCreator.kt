@@ -55,10 +55,10 @@ class ColorDivCreator(
                 hljs.highlightElement(el);
             });
             </script>
-            <span id="pointsValue" data-hx-swap-oob="true">$num</span>
-            <span id="colsValue" data-hx-swap-oob="true">$cols</span>
-            <span id="shadowValue" data-hx-swap-oob="true">$dropShadow</span>
-            <span id="fSize" data-hx-swap-oob="true">$size</span>
+            <span id="pointsValue" class='badge-green' data-hx-swap-oob="true">$num</span>
+            <span id="colsValue" class='badge-green' data-hx-swap-oob="true">$cols</span>
+            <span id="shadowValue" class='badge-green' data-hx-swap-oob="true">$dropShadow</span>
+            <span id="fSize" class='badge-green' data-hx-swap-oob="true">$size</span>
         """.trimIndent()
         return results
     }
