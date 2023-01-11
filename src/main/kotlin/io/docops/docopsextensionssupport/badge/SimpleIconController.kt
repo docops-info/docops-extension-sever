@@ -2,7 +2,6 @@ package io.docops.docopsextensionssupport.badge
 
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
-import jakarta.servlet.http.HttpServletResponse
 import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider
@@ -50,22 +49,17 @@ class SimpleIconController {
 
     @GetMapping("/simple/icon")
     @Timed(value = "docops.simpleicon", histogram = true, percentiles = [0.5, 0.95])
-    fun showIcon(@RequestParam(name = "iconName") iconName: String, servletResponse: HttpServletResponse) {
+    fun showIcon(@RequestParam(name = "iconName") iconName: String, model: Model): String {
         val ico = SimpleIcons.get(iconName)
         val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(ico.svg.toByteArray()))
         val src  =manipulateSVG(xml, ico.hex)
-       // val src = "data:image/svg+xml;base64," + Base64.getEncoder()
+        // val src = "data:image/svg+xml;base64," + Base64.getEncoder()
         //    .encodeToString(ico.svg.toByteArray())
-        servletResponse.contentType = "text/html"
-        servletResponse.characterEncoding = "UTF-8"
-        servletResponse.status = 200
-        val writer = servletResponse.writer
-        //language=html
-        writer.print("""$src
-            <input type="text" id="logo" name="logo" data-hx-put="'api/badge/item'" data-hx-target="'#contentBox'"
-                       value="<$iconName>"  class="pure-u-1-1" data-hx-swap-oob="true">
-        """.trimMargin())
-        writer.flush()
+
+        model.addAttribute("iconName", "<$iconName>")
+        model.addAttribute("src", src)
+        return "showicon"
+
     }
 
 
