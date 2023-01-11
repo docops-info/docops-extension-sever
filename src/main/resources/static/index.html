@@ -33,11 +33,8 @@
 
             <div class="pure-menu">
                 <ul class="pure-menu-list">
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panelgenerator.html" data-hx-target="#bod">Panel Generator</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panelimagebuilder.html" data-hx-target="#bod">Panel Image Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="twotoneimagebuilder.html" data-hx-target="#bod">Two Color Image Builder</a></li>
+                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
                     <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panelseditor.html" data-hx-target="#bod">Editor</a></li>
                     <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="chart.html" data-hx-target="#bod">Chart</a></li>
                     <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="treechart.html" data-hx-target="#bod">Tree Chart</a></li>
                     <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="stacked.html" data-hx-target="#bod">Stacked</a></li>
@@ -61,38 +58,38 @@
     let downloadBlob = function (FileName) {
         saveData(FileName);
     }
-        var saveData = (function () {
+    var saveData = (function () {
         var a = document.createElement("a");
         document.body.appendChild(a);
         a.style = "display: none";
         return function (fileName) {
-        var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
-        url = window.URL.createObjectURL(blob);
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(url);
-    };
+            var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
     }());
 
     document.body.addEventListener('htmx:beforeSwap', function(evt) {
         if(evt.detail.xhr.status === 404){
-        // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
-        alert("Error: Could Not Find Resource");
-    } else if(evt.detail.xhr.status === 422){
-        // allow 422 responses to swap as we are using this as a signal that
-        // a form was submitted with bad data and want to rerender with the
-        // errors
-        //
-        // set isError to false to avoid error logging in console
-        evt.detail.shouldSwap = true;
-        evt.detail.isError = false;
-    } else if(evt.detail.xhr.status === 400){
-        // if the response code 418 (I'm a teapot) is returned, retarget the
-        // content of the response to the element with the id `teapot`
-        evt.detail.shouldSwap = true;
-        evt.detail.target = htmx.find("#errormessages");
-    }
+            // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
+            alert("Error: Could Not Find Resource");
+        } else if(evt.detail.xhr.status === 422){
+            // allow 422 responses to swap as we are using this as a signal that
+            // a form was submitted with bad data and want to rerender with the
+            // errors
+            //
+            // set isError to false to avoid error logging in console
+            evt.detail.shouldSwap = true;
+            evt.detail.isError = false;
+        } else if(evt.detail.xhr.status === 400){
+            // if the response code 418 (I'm a teapot) is returned, retarget the
+            // content of the response to the element with the id `teapot`
+            evt.detail.shouldSwap = true;
+            evt.detail.target = htmx.find("#errormessages");
+        }
     });
 
 </script>

@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody
 class MainController() {
 
 
+    @GetMapping("/panels.html", produces = [MediaType.TEXT_HTML_VALUE])
+    @Timed(value = "docops.panels.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getPanelsView(model: Model): String {
+        return "panels"
+    }
     @GetMapping("/panelgenerator.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Timed(value = "docops.panel.generator.html", histogram = true, percentiles = [0.5, 0.95])
     fun getPanelGenerator(model: Model): Any {
@@ -93,9 +98,8 @@ class MainController() {
     }
     @GetMapping("/twotoneimagebuilder.html")
     @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getTwoTone() {
-        HtmxResponse()
-            .addTemplate("twotoneimagebuilder")
+    fun getTwoTone(): String {
+        return "twotoneimagebuilder"
     }
 
 
@@ -112,3 +116,6 @@ class MainController() {
     }
 
 }
+
+
+
