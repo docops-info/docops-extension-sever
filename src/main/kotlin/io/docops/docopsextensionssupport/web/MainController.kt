@@ -21,6 +21,13 @@ class MainController() {
     fun getPanelsView(model: Model): String {
         return "panels"
     }
+
+    @GetMapping("/charts.html", produces = [MediaType.TEXT_HTML_VALUE])
+    @Timed(value = "docops.charts.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getChartssView(model: Model): String {
+        return "charts"
+    }
+
     @GetMapping("/panelgenerator.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Timed(value = "docops.panel.generator.html", histogram = true, percentiles = [0.5, 0.95])
     fun getPanelGenerator(model: Model): Any {
