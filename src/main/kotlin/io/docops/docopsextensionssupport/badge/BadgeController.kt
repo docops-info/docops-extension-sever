@@ -33,7 +33,7 @@ class BadgeController() {
             mColor = "GREEN"
         }
         //val src = makeBadge(message = badge.message, label = badge.label, color = badge.labelColor, mColor)
-        val src = badgeAgain(formBadge = badge)
+        val src = makeBadgeMessageOnly(formBadge = badge)
         val badgeSource =
             """
 [badge]
@@ -59,15 +59,12 @@ ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$mColor|${badge
         <h3>Badge Source</h3>
         <div class='pure-u-1 pure-u-md-20-24'>
         <pre>
-        <code class="kotlin">
+        <code class="asciidoc">
 $txt
         </code>
         </pre>
         <script>
         var badgeSource = `${txt}`;
-        document.querySelectorAll('pre code').forEach((el) => {
-            hljs.highlightElement(el);
-        });
         </script>
         </div>
     """.trimIndent()
@@ -119,7 +116,7 @@ $txt
     private fun badgeAgain(formBadge: FormBadge): String {
         val logo = getBadgeLogo(formBadge.logo)
         return org.silentsoft.badge4j.Badge.builder()
-            .label(formBadge.label)
+            .label(formBadge.labelOrNull())
             .labelColor(formBadge.labelColor)
             .message(formBadge.message)
             .color(formBadge.messageColor)
@@ -129,6 +126,19 @@ $txt
             .build()
     }
 
+    private fun makeBadgeMessageOnly(formBadge: FormBadge): String {
+        val logo = getBadgeLogo(formBadge.logo)
+
+        return org.silentsoft.badge4j.Badge.builder()
+            .label(formBadge.labelOrNull())
+            .labelColor(formBadge.labelColor)
+            .message(formBadge.message)
+            .color(formBadge.messageColor)
+            .style(Style.Flat)
+            .links(arrayOf(formBadge.url))
+            .logo(logo)
+            .build()
+    }
     fun getBadgeLogo(input: String?): String {
         //http://docops.io/images/docops.svg
         var logo = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 200 150'%2F%3E"
