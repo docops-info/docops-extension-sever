@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.boot.SpringBootVersion
 import org.springframework.stereotype.Component
 
 
@@ -15,7 +16,7 @@ class ServerResponseFilter : Filter {
         httpServletResponse.setHeader(
             "X-Vendor", "https://docops.io"
         )
-        httpServletResponse.setHeader("X-Engine", "Spring Boot 3")
+        httpServletResponse.setHeader("X-Engine", "Spring Boot ${SpringBootVersion.getVersion()}")
         filterChain.doFilter(servletRequest, servletResponse)
 
     }
