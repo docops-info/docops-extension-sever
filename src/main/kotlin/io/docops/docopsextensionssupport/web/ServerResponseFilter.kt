@@ -13,7 +13,7 @@ class ServerResponseFilter : Filter {
     override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) {
         val httpServletResponse = servletResponse as HttpServletResponse
         httpServletResponse.setHeader(
-            "X-Vendor", "http://docops.io"
+            "X-Vendor", "https://docops.io"
         )
         httpServletResponse.setHeader("X-Engine", "Spring Boot 3")
         filterChain.doFilter(servletRequest, servletResponse)
