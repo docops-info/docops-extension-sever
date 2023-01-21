@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.web
 
-import io.github.wimdeblauwe.hsbt.mvc.HtmxResponse
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
@@ -19,96 +18,90 @@ class MainController() {
     @GetMapping("/panels.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Timed(value = "docops.panels.html", histogram = true, percentiles = [0.5, 0.95])
     fun getPanelsView(model: Model): String {
-        return "panels"
-    }
-
-    @GetMapping("/charts.html", produces = [MediaType.TEXT_HTML_VALUE])
-    @Timed(value = "docops.charts.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getChartssView(model: Model): String {
-        return "charts"
+        return "panels/panels"
     }
 
     @GetMapping("/panelgenerator.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Timed(value = "docops.panel.generator.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getPanelGenerator(model: Model): Any {
-        return HtmxResponse()
-            .addTemplate("panelgenerator")
+    fun getPanelGenerator(model: Model): String {
+        return "panels/panelgenerator"
     }
 
     @GetMapping("/panelimagebuilder.html")
     @Timed(value = "docops.panel.image.builder.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getPanelImageBuilder() {
-        HtmxResponse()
-            .addTemplate("panelimagebuilder")
+    fun getPanelImageBuilder(): String {
+        return "panels/panelimagebuilder"
+    }
+
+    @GetMapping("/twotoneimagebuilder.html")
+    @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getTwoTone(): String {
+        return "panels/twotoneimagebuilder"
+    }
+    @GetMapping("/panelseditor.html")
+    @Timed(value = "docops.panel.editor.html", histogram = true, percentiles = [0.5, 0.95])
+    fun panelsEditor(): String {
+        return "panels/panelseditor"
+    }
+
+    @GetMapping("/charts.html", produces = [MediaType.TEXT_HTML_VALUE])
+    @Timed(value = "docops.charts.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getChartsView(model: Model): String {
+        return "chart/charts"
     }
 
     @GetMapping("/badge.html")
     @Timed(value = "docops.badge.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getBadge() {
-        HtmxResponse()
-            .addTemplate("badge")
+    fun getBadge(): String {
+        return "badge/badge"
     }
 
     @GetMapping("/chart.html")
     @Timed(value = "docops.chart.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getChart() {
-        HtmxResponse()
-            .addTemplate("chart")
-    }
+    fun getChart(model: Model): String {
+        return "chart/chart"
 
-    @GetMapping("/panelseditor.html")
-    @Timed(value = "docops.panel.editor.html", histogram = true, percentiles = [0.5, 0.95])
-    fun panelsEditor() {
-        HtmxResponse()
-            .addTemplate("panelseditor")
-    }
-
-    @GetMapping("/treechart.html")
-    @Timed(value = "docops.treechart.html", histogram = true, percentiles = [0.5, 0.95])
-    fun treeChart() {
-        HtmxResponse()
-            .addTemplate("treechart")
-    }
-
-    @GetMapping("/stacked.html")
-    @Timed(value = "docops.stacked.html", histogram = true, percentiles = [0.5, 0.95])
-    fun stacked() {
-        HtmxResponse()
-            .addTemplate("stacked")
     }
 
     @GetMapping("/mychart.html")
     @Timed(value = "docops.mychart.html", histogram = true, percentiles = [0.5, 0.95])
-    fun mychart() {
-        HtmxResponse()
-            .addTemplate("mychart")
+    fun mychart(model: Model): String {
+        return "chart/customchart"
+    }
+
+
+
+    @GetMapping("/treechart.html")
+    @Timed(value = "docops.treechart.html", histogram = true, percentiles = [0.5, 0.95])
+    fun treeChart(): String {
+        return "chart/treechart"
+    }
+
+    @GetMapping("/stacked.html")
+    @Timed(value = "docops.stacked.html", histogram = true, percentiles = [0.5, 0.95])
+    fun stacked(): String {
+        return "chart/stacked"
     }
 
     @GetMapping("/adrbuilder.html")
     @Timed(value = "docops.panel.image.builder.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getAdr(model: Model) {
-        HtmxResponse()
-            .addTemplate("adrbuilder")
+    fun getAdr(model: Model): String {
+        return "adr/adrbuilder"
     }
+
+
+    @GetMapping("/simpleicons.html")
+    @Timed(value = "docops.simpleicons.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getSimpleIcons(): String {
+        return "icons/simpleicons"
+    }
+
 
     @GetMapping("/stats.html")
     @Timed(value = "docops.panel.stats.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getStats() {
-        HtmxResponse()
-            .addTemplate("stats")
+    fun getStats(): String {
+        return "stats/stats"
     }
-    @GetMapping("/simpleicons.html")
-    @Timed(value = "docops.simpleicons.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getSimpleIcons() {
-        HtmxResponse()
-            .addTemplate("simpleicons")
-    }
-    @GetMapping("/twotoneimagebuilder.html")
-    @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
-    fun getTwoTone(): String {
-        return "twotoneimagebuilder"
-    }
-
 
     @GetMapping("/api/ping")
     @ResponseBody

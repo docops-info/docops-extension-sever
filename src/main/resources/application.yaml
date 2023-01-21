@@ -1,4 +1,3 @@
-
 server:
   servlet:
     context-path: /extension
@@ -38,6 +37,11 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    web: INFO
+
 spring:
   application:
     name: DocopsExtensionsSupportApplication
@@ -46,6 +50,14 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  profiles:
+    active: ${SPRING_ENV:NOT_SET}
+  devtools:
+    restart:
+      additional-paths: ./src/main/jte
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftlh
 springdoc:
   api-docs:
     enabled: true
@@ -53,3 +65,4 @@ springdoc:
   model-and-view-allowed: true
   swagger-ui:
     path: /swagger-ui.html
+

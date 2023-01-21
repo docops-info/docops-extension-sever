@@ -39,11 +39,10 @@ class SimpleIconController {
     @RequestMapping("/simple/icons", method = [RequestMethod.GET, RequestMethod.POST])
     @Timed(value = "docops.simpleicons", histogram = true, percentiles = [0.5, 0.95])
     fun getByLetter(@RequestParam(name = "SEL") selected : String,  model: Model) : String {
-
         val list = allClasses.filter { it.beanClassName!!.startsWith("org.silentsoft.simpleicons.icons.$selected") }.map { it.beanClassName?.replace("org.silentsoft.simpleicons.icons.", "") }.map { it?.replace("Icon", "") }
         model.addAttribute("icons", list.chunked(5))
         model.addAttribute("letter", selected)
-        return "iconsbyletter"
+        return "icons/iconsbyletter"
     }
 
 
@@ -58,7 +57,7 @@ class SimpleIconController {
 
         model.addAttribute("iconName", "<$iconName>")
         model.addAttribute("src", src)
-        return "showicon"
+        return "icons/showicon"
 
     }
 

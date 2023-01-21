@@ -11,7 +11,7 @@
 <br/>
 <br/>
 <div class="pure-g">
-  <div class="pure-u-8-24">
+    <div class="pure-u-8-24">
 <pre id="editor">
 var option;
 
@@ -60,11 +60,11 @@ option = {
 
 option && myChart.setOption(option);
 </pre>
-  </div>
-  <div class="pure-u-16-24">
-    <h3>Preview</h3>
-    <div id="results"></div>
-  </div>
+    </div>
+    <div class="pure-u-16-24">
+        <h3>Preview</h3>
+        <div id="results"></div>
+    </div>
 </div>
 
 <script>
@@ -73,18 +73,16 @@ option && myChart.setOption(option);
     editor.session.setMode("ace/mode/javascript");
     //editor.session.setMode("ace/mode/html");
     editor.setOptions({
-      maxLines: 50
+        maxLines: 50
     });
 
     // or use data: url to handle things like doctype
     function showHTMLInIFrame() {
-      getImage("api/chart/custom?width=900&height=500", 'results');
+        getImage("api/chart/custom?width=900&height=500", 'results');
     }
     editor.on("input", showHTMLInIFrame);
 </script>
-<a id="chart" class="pure-button" data-hx-get="chart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Bar Chart</a></li>
-<a id="treechart" class="pure-button" data-hx-get="treechart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Tree Chart</a></li>
-<a id="stacked" class="pure-button" data-hx-get="stacked.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Stacked</a></li>
-<a id="mychart" class="pure-button pure-button-primary pure-button-active" data-hx-get="mychart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">My Custom EChart</a></li>
+<#include "chartcommon.ftlh">
+<@chartCommon chart = "" treechart = "" stacked = "" mychart = "pure-button-primary pure-button-active"/>
 
 

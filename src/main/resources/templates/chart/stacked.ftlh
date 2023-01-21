@@ -6,36 +6,36 @@
 <br/>
 <div class="pure-g">
     <div class="pure-u-8-24">
-<div id="editor">
-stackBar {
-        height=600
-        width=970
-        title = "Group 1 Startup Time"
-        subTitle = "Memory & Disk Storage"
-        yAxisLabel="(ms)|(mb)"
-        xAxisLabel="State Group"
-        dimension = mutableListOf("CT", "NY", "NH", "VT", "ME")
-        s{
-            name = "Start Up (ms)"
-            stackGroupName = "group-1"
-            data = mutableListOf(24.0,33.0,23.0,33.0,43.0)
-        }
-        s{
-            name = "Storage (mb)"
-            stackGroupName = "group-1"
-            data = mutableListOf(5.0,17.0,12.0,14.0,15.0)
-        }
-        s{
-            name= " Memory (mb)"
-            stackGroupName = "group-1"
-            data = mutableListOf(100.0,120.0,90.0,55.0,62.0)
-        }
-}
-</div>
+        <div id="editor">
+            stackBar {
+                height=600
+                width=970
+                title = "Group 1 Startup Time"
+                subTitle = "Memory & Disk Storage"
+                yAxisLabel="(ms)|(mb)"
+                xAxisLabel="State Group"
+                dimension = mutableListOf("CT", "NY", "NH", "VT", "ME")
+                s{
+                    name = "Start Up (ms)"
+                    stackGroupName = "group-1"
+                    data = mutableListOf(24.0,33.0,23.0,33.0,43.0)
+                }
+                s{
+                    name = "Storage (mb)"
+                    stackGroupName = "group-1"
+                    data = mutableListOf(5.0,17.0,12.0,14.0,15.0)
+                }
+                s{
+                    name= " Memory (mb)"
+                    stackGroupName = "group-1"
+                    data = mutableListOf(100.0,120.0,90.0,55.0,62.0)
+                }
+            }
+        </div>
     </div>
     <div class="pure-u-16-24">
         <h3>Preview</h3>
-    <div id="results"></div>
+        <div id="results"></div>
     </div>
 </div>
 <script src="editor/js/theme.js"></script>
@@ -77,7 +77,5 @@ stackBar {
     editor.on("input", showHTMLInIFrame);
 </script>
 <br/>
-<a id="chart" class="pure-button" data-hx-get="chart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Bar Chart</a></li>
-<a id="treechart" class="pure-button" data-hx-get="treechart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Tree Chart</a></li>
-<a id="stacked" class="pure-button pure-button-primary pure-button-active" data-hx-get="stacked.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">Stacked</a></li>
-<a id="mychart" class="pure-button" data-hx-get="mychart.html" data-hx-target="'#contentBoxPanel'" data-hx-swap-oob="true">My Custom EChart</a></li>
+<#include "chartcommon.ftlh">
+<@chartCommon chart = "" treechart = "" stacked = "pure-button-primary pure-button-active" mychart = ""/>
