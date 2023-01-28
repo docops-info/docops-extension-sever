@@ -21,12 +21,7 @@ management:
       mode: full
   tracing:
     sampling:
-      probability: 1.0f
-  otlp:
-    metrics:
-      export:
-        enabled: false
-        step: 1m
+      probability: 1.0
 
   metrics:
     distribution:
@@ -39,8 +34,10 @@ management:
       show-details: always
 
 logging:
-  level:
-    web: INFO
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+
 
 spring:
   application:
@@ -50,11 +47,6 @@ spring:
   mvc:
     problemdetails:
       enabled: true
-  profiles:
-    active: ${SPRING_ENV:NOT_SET}
-  devtools:
-    restart:
-      additional-paths: ./src/main/jte
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftlh

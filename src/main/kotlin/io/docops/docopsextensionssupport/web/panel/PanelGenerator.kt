@@ -10,6 +10,7 @@ import io.micrometer.observation.ObservationRegistry
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
@@ -19,12 +20,14 @@ import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.util.*
 import java.util.zip.GZIPInputStream
+import kotlin.system.measureTimeMillis
 
 @Controller
 @RequestMapping("/api")
 @Observed(name = "panel.controller")
 class PanelGenerator(private val observationRegistry: ObservationRegistry) {
     private val scriptLoader = ScriptLoader()
+    private val log = LoggerFactory.getLogger(PanelGenerator::class.java)
 
     @GetMapping("/panel")
     @ResponseBody
@@ -34,80 +37,84 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         @RequestParam("type") type: String,
         servletResponse: HttpServletResponse
     ) {
-        val isPDF = "PDF" == type
-        val contents = uncompressString(data)
-        val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-        servletResponse.contentType = "image/svg+xml";
-        servletResponse.characterEncoding = "UTF-8";
-        servletResponse.status = 200
-        val writer = servletResponse.writer
-        writer.print(imgSrc)
-        writer.flush()
+        val timings = measureTimeMillis {
+            val isPDF = "PDF" == type
+            val contents = uncompressString(data)
+            val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
+            servletResponse.contentType = "image/svg+xml";
+            servletResponse.characterEncoding = "UTF-8";
+            servletResponse.status = 200
+            val writer = servletResponse.writer
+            writer.print(imgSrc)
+            writer.flush()
+        }
+        log.info("getPanel Total Time : $timings ms")
     }
 
     @PutMapping("/colorgen")
     @ResponseBody
     @Timed(value = "docops.panel.generator.color", histogram = true, percentiles = [0.5, 0.95])
     fun putColorGen(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
-        try {
-            var bold = false
-            var underline = false
-            var italics = false
-            var newWin = false
-            val params = httpServletRequest.parameterMap
-            val pts = params["points"]?.get(0) as String
-            val btnType = params["buttonType"]?.get(0)!!
-            val columns = params["columns"]?.get(0)!!
-            val groupBY = params["sortBy"]?.get(0)!!
-            val orderBy = params["order"]?.get(0)!!
-            val case = params["case"]?.get(0)!!
-            val dropShadow = params["dropShadow"]?.get(0)!!
-            val buttonKind = ButtonType.valueOf(btnType)
-            val color = params["color"]?.get(0)!!
-            val weight = params["bold"]
-            if (weight != null) {
-                bold = true
-            }
-            val italic = params["italic"]?.get(0)
-            val und = params["underline"]?.get(0)
-            val newWinParam = params["newWin"]?.get(0)
-            if ("on" == italic) {
-                italics = true
-            }
-            if ("on" == und) {
-                underline = true
-            }
-            if ("on" == newWinParam) {
-                newWin = true
-            }
-            val font = params["font"]?.get(0)!!
-            val fpoint = params["fpoint"]?.get(0)!!
-            val size = params["size"]?.get(0)!!
-            val spacing = params["spacing"]?.get(0)!!
-            val cd = ColorDivCreator(
-                num = pts.toInt(), buttonKind = buttonKind,
-                columns = columns, groupBY = groupBY,
-                orderBy = orderBy, dropShadow = dropShadow,
-                color = color, weight = bold, font = font,
-                italics = italics, decoration = underline, size = size + fpoint,
-                case = case, newWin = newWin, spacing = spacing
-            )
-            val panel = cd.genPanels()
-            servletResponse.contentType = "text/html";
-            servletResponse.characterEncoding = "UTF-8";
-            servletResponse.status = 200
-            val writer = servletResponse.writer
-            writer.print(panel)
-            writer.flush()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            servletResponse.contentType = "text/html";
-            servletResponse.characterEncoding = "UTF-8";
-            servletResponse.status = 400
-            val writer = servletResponse.writer
-            //language=html
-            writer.print(
-                """
+        val timings = measureTimeMillis {
+            try {
+                var bold = false
+                var underline = false
+                var italics = false
+                var newWin = false
+                val params = httpServletRequest.parameterMap
+                val pts = params["points"]?.get(0) as String
+                val btnType = params["buttonType"]?.get(0)!!
+                val columns = params["columns"]?.get(0)!!
+                val groupBY = params["sortBy"]?.get(0)!!
+                val orderBy = params["order"]?.get(0)!!
+                val case = params["case"]?.get(0)!!
+                val dropShadow = params["dropShadow"]?.get(0)!!
+                val buttonKind = ButtonType.valueOf(btnType)
+                val color = params["color"]?.get(0)!!
+                val weight = params["bold"]
+                if (weight != null) {
+                    bold = true
+                }
+                val italic = params["italic"]?.get(0)
+                val und = params["underline"]?.get(0)
+                val newWinParam = params["newWin"]?.get(0)
+                if ("on" == italic) {
+                    italics = true
+                }
+                if ("on" == und) {
+                    underline = true
+                }
+                if ("on" == newWinParam) {
+                    newWin = true
+                }
+                val font = params["font"]?.get(0)!!
+                val fpoint = params["fpoint"]?.get(0)!!
+                val size = params["size"]?.get(0)!!
+                val spacing = params["spacing"]?.get(0)!!
+                val cd = ColorDivCreator(
+                    num = pts.toInt(), buttonKind = buttonKind,
+                    columns = columns, groupBY = groupBY,
+                    orderBy = orderBy, dropShadow = dropShadow,
+                    color = color, weight = bold, font = font,
+                    italics = italics, decoration = underline, size = size + fpoint,
+                    case = case, newWin = newWin, spacing = spacing
+                )
+                val panel = cd.genPanels()
+                servletResponse.contentType = "text/html";
+                servletResponse.characterEncoding = "UTF-8";
+                servletResponse.status = 200
+                val writer = servletResponse.writer
+                writer.print(panel)
+                writer.flush()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                servletResponse.contentType = "text/html";
+                servletResponse.characterEncoding = "UTF-8";
+                servletResponse.status = 400
+                val writer = servletResponse.writer
+                //language=html
+                writer.print(
+                    """
         <input class="checker" type="checkbox" id="o" checked hidden>
         <div class="modal">
           <div class="modal-body">
@@ -118,10 +125,11 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
           </div>
         </div>
     """
-            )
-            writer.flush()
+                )
+                writer.flush()
+            }
         }
-
+        log.info("putColorGen Total Time : $timings ms")
     }
 
 

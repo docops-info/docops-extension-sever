@@ -8,7 +8,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -65,14 +64,12 @@ class StatsJsonToImageController {
         separator {
           LineThickness 0.5
           LineColor black
-          LineStyle 1;5
         }
       }
       arrow {
         BackGroundColor lightblue
         LineColor green
         LineThickness 2
-        LineStyle 2;5
       }
       highlight {
         BackGroundColor red
@@ -82,15 +79,14 @@ class StatsJsonToImageController {
     }
     </style>
             $httpEntity
-    @endjson""".trimIndent()
+@endjson""".trimIndent()
         val reader = SourceStringReader(source)
         val os = ByteArrayOutputStream()
 
         val desc = reader.outputImage(os, FileFormatOption(FileFormat.SVG))
         os.close()
 
-        val svg = String(os.toByteArray(), Charset.forName("UTF-8"))
-        return svg
+        return String(os.toByteArray(), Charset.forName("UTF-8"))
     }
 
 

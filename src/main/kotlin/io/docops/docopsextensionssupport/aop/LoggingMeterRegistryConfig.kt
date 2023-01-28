@@ -9,9 +9,7 @@ import org.springframework.context.annotation.Configuration
 import java.time.Duration
 
 
-@Configuration
 class LoggingMeterRegistryConfig {
-    @Bean
     fun loggingMeterRegistry(): LoggingMeterRegistry {
         val config: LoggingRegistryConfig = object : LoggingRegistryConfig {
             override fun get(s: String): String? {

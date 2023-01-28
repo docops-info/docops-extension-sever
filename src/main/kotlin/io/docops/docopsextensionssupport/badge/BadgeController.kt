@@ -28,9 +28,9 @@ class BadgeController() {
     @ResponseBody
     @Timed(value = "docops.badge.put", histogram = true, percentiles = [0.5, 0.95])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
-        var mColor = badge.messageColor
-        if (null == mColor) {
-            mColor = "GREEN"
+        var fillColor = badge.messageColor
+        if (null == fillColor) {
+            fillColor = "GREEN"
         }
         //val src = makeBadge(message = badge.message, label = badge.label, color = badge.labelColor, mColor)
         val src = makeBadgeMessageOnly(formBadge = badge)
@@ -38,7 +38,7 @@ class BadgeController() {
             """
 [badge]
 ----
-${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$mColor|${badge.logo}
+${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}
 ----
 """.trimIndent()
         val contents = makeBadgeAndSource(badgeSource, src)
@@ -134,7 +134,7 @@ $txt
             .labelColor(formBadge.labelColor)
             .message(formBadge.message)
             .color(formBadge.messageColor)
-            .style(Style.Flat)
+            .style(Style.Plastic)
             .links(arrayOf(formBadge.url))
             .logo(logo)
             .build()

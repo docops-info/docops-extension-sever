@@ -83,7 +83,7 @@
                     <ul>
                         <li class="pure-button" id="boldI" data-toggle-id="bold" >
                             <input type="checkbox" id="bold" name="bold" style="display: none">
-                            <label for="bold"><i  class="fa fa-bold"></i></label>
+                            <label class="label-checkbox" for="bold"><i  class="fa fa-bold"></i></label>
                         </li>
                         <li class="pure-button" id="italicI" data-toggle-id="italic">
                             <input type="checkbox" id="italic" name="italic" style="display: none">
@@ -162,7 +162,7 @@
 
     </fieldset>
     <fieldset>
-        <button class="button-success pure-button" data-hx-indicator="#spinner">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
+        <button class="button-success pure-button" data-hx-indicator="#spinner">Submit <img class="htmx-indicator" src="images/bars.svg" alt="busy"/></button>
         <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(txt);"
                value="Copy As ColorMap">
         <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(panelSource);"

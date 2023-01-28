@@ -70,7 +70,8 @@ document.addEventListener('click', function(event) {
     elem.checked = !elem.checked;
     let btnState = document.getElementById(id + "I");
     btnState.classList.toggle("activecheck");
-    btnState.classList.toggle("button-success");
+    btnState.classList.toggle("button-secondary");
+    btnState.classList.toggle("inset-btn");
 });
 
 var myChart;
