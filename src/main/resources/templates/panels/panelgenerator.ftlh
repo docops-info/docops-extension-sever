@@ -178,4 +178,4 @@
 </script>
 <div id="contentBox" class="contentBox"></div>
 <#include "panelcommon.ftlh">
-<@panelsMacro panelgenerator = "pure-button-primary pure-button-active" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "" />
+<@panelsMacro panelgenerator = "pure-button-primary pure-button-active" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "" slimpanel=""/>

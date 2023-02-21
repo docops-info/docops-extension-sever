@@ -4,8 +4,6 @@ import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.logging.LoggingMeterRegistry
 import io.micrometer.core.instrument.logging.LoggingRegistryConfig
 import io.micrometer.core.instrument.util.NamedThreadFactory
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import java.time.Duration
 
 

@@ -3,7 +3,7 @@ package io.docops.docopsextensionssupport.web.panel
 import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
-import io.docops.asciidoc.buttons.theme.ButtonType
+import io.docops.asciidoc.buttons.theme.*
 import io.docops.docopsextensionssupport.support.*
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.ObservationRegistry
@@ -41,8 +41,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
             val isPDF = "PDF" == type
             val contents = uncompressString(data)
             val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-            servletResponse.contentType = "image/svg+xml";
-            servletResponse.characterEncoding = "UTF-8";
+            servletResponse.contentType = "image/svg+xml"
+            servletResponse.characterEncoding = "UTF-8"
             servletResponse.status = 200
             val writer = servletResponse.writer
             writer.print(imgSrc)
@@ -100,16 +100,16 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
                     case = case, newWin = newWin, spacing = spacing
                 )
                 val panel = cd.genPanels()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
+                servletResponse.contentType = "text/html"
+                servletResponse.characterEncoding = "UTF-8"
                 servletResponse.status = 200
                 val writer = servletResponse.writer
                 writer.print(panel)
                 writer.flush()
             } catch (e: Exception) {
                 e.printStackTrace()
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
+                servletResponse.contentType = "text/html"
+                servletResponse.characterEncoding = "UTF-8"
                 servletResponse.status = 400
                 val writer = servletResponse.writer
                 //language=html
@@ -163,8 +163,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
                 makeLineImage(fillColor, fontColor, line1, line2, line3)
             }
         }
-        servletResponse.contentType = "text/html";
-        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.contentType = "text/html"
+        servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
         writer.print(contents)
@@ -178,8 +178,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
 
         val contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
         val imgSrc = contentsToImageStr(contents, scriptLoader, false)
-        servletResponse.contentType = "text/html";
-        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.contentType = "text/html"
+        servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
         writer.print(
@@ -207,8 +207,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
                     </a>
                  </svg>
             """.trimIndent()
-        servletResponse.contentType = "image/svg+xml";
-        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.contentType = "image/svg+xml"
+        servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
         writer.print(imgSrc)
@@ -229,6 +229,8 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
             throw java.lang.RuntimeException(e)
         }
     }
+
+
 
 }
 
