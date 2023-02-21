@@ -127,14 +127,14 @@ class MainController() {
     fun customizeView(model: Model, httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse): String {
         val params = httpServletRequest.parameterMap
         val theme = params["theme"]?.get(0)
-        if("----" != theme) {
+        return if("----" != theme) {
             model.addAttribute("theme", gradientMap[theme])
-            return "panels/customslim"
+            "panels/customslim"
         } else {
             servletResponse.contentType = "text/html";
             servletResponse.characterEncoding = "UTF-8";
             servletResponse.status = 500
-            return "panels/errors"
+            "panels/errors"
 
         }
 
