@@ -87,4 +87,4 @@
 <h3>Preview</h3>
 <div id="results"></div>
 <#include "panelcommon.ftlh">
-<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "pure-button-primary pure-button-active" />
+<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "pure-button-primary pure-button-active" slimpanel=""/>

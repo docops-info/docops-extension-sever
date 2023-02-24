@@ -1,7 +1,9 @@
 package io.docops.docopsextensionssupport.web
 
+import io.docops.asciidoc.buttons.theme.*
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
@@ -33,6 +35,11 @@ class MainController() {
         return "panels/panelimagebuilder"
     }
 
+    @GetMapping("/slimpanel.html")
+    @Timed(value = "docops.panel.slim.html", histogram = true, percentiles = [0.5, 0.95])
+    fun getSlimPanelEditor(): String {
+        return "panels/slimpanel"
+    }
     @GetMapping("/twotoneimagebuilder.html")
     @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
     fun getTwoTone(): String {
@@ -43,6 +50,7 @@ class MainController() {
     fun panelsEditor(): String {
         return "panels/panelseditor"
     }
+
 
     @GetMapping("/charts.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Timed(value = "docops.charts.html", histogram = true, percentiles = [0.5, 0.95])
@@ -115,6 +123,35 @@ class MainController() {
         writer.flush()
     }
 
+    @GetMapping("panels/customslim.html")
+    fun customizeView(model: Model, httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse): String {
+        val params = httpServletRequest.parameterMap
+        val theme = params["theme"]?.get(0)
+        return if("----" != theme) {
+            model.addAttribute("theme", gradientMap[theme])
+            "panels/customslim"
+        } else {
+            servletResponse.contentType = "text/html";
+            servletResponse.characterEncoding = "UTF-8";
+            servletResponse.status = 500
+            "panels/errors"
+
+        }
+
+    }
+
+    private val gradientMap = mapOf<String, GradientStyle>(
+        "BluesTheme" to BluesTheme,
+        "RedsTheme" to RedsTheme,
+        "GreensTheme" to GreensTheme,
+        "PurplesTheme" to PurplesTheme,
+        "LightPurpleTheme" to LightPurpleTheme,
+        "MagentasTheme" to MagentasTheme,
+        "DarkTheme" to DarkTheme,
+        "DarkTheme2" to DarkTheme2,
+        "LightGreysTheme" to LightGreysTheme,
+        "OrangesTheme" to OrangesTheme
+        )
 }
 
 

@@ -166,6 +166,7 @@ fun sourceToPanel(contents: String, scriptLoader: ScriptLoader): Panels {
             import io.docops.asciidoc.buttons.theme.*
             import io.docops.asciidoc.buttons.*
             import io.docops.asciidoc.buttons.models.ButtonImage
+            import io.docops.asciidoc.buttons.theme.GradientStyle
             
             $contents
         """.trimIndent()
