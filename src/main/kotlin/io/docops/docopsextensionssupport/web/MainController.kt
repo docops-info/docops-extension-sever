@@ -115,8 +115,8 @@ class MainController() {
     @ResponseBody
     @Timed(value = "docops.api.ping", histogram = true, percentiles = [0.5, 0.95])
     fun ping(servletResponse: HttpServletResponse) {
-        servletResponse.contentType = "text/html";
-        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.contentType = "text/html"
+        servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
         writer.print("OK")
@@ -131,8 +131,8 @@ class MainController() {
             model.addAttribute("theme", gradientMap[theme])
             "panels/customslim"
         } else {
-            servletResponse.contentType = "text/html";
-            servletResponse.characterEncoding = "UTF-8";
+            servletResponse.contentType = "text/html"
+            servletResponse.characterEncoding = "UTF-8"
             servletResponse.status = 500
             "panels/errors"
 
