@@ -141,16 +141,16 @@ class MainController() {
     }
 
     private val gradientMap = mapOf<String, GradientStyle>(
-        "BluesTheme" to BluesTheme,
-        "RedsTheme" to RedsTheme,
-        "GreensTheme" to GreensTheme,
-        "PurplesTheme" to PurplesTheme,
+        "BlueTheme" to BlueTheme,
+        "RedTheme" to RedTheme,
+        "GreenTheme" to GreenTheme,
+        "PurpleTheme" to PurpleTheme,
         "LightPurpleTheme" to LightPurpleTheme,
-        "MagentasTheme" to MagentasTheme,
+        "MagentaTheme" to MagentaTheme,
         "DarkTheme" to DarkTheme,
         "DarkTheme2" to DarkTheme2,
-        "LightGreysTheme" to LightGreysTheme,
-        "OrangesTheme" to OrangesTheme
+        "LightGreyTheme" to LightGreyTheme,
+        "OrangeTheme" to OrangeTheme
         )
 }
 

@@ -11,16 +11,16 @@
                 <label for="theme">Predefined Themes</label>
                 <select id="theme" name="theme" data-hx-put="api/slimpanel" data-hx-target="#contentBox" data-hx-trigger="change[target.selectedIndex != 0]">
                     <option>----</option>
-                    <option value="BluesTheme">Blue Theme</option>
-                    <option value="RedsTheme">Red Theme</option>
-                    <option value="GreensTheme">Green Theme</option>
-                    <option value="PurplesTheme">Purple Theme</option>
+                    <option value="BlueTheme">Blue Theme</option>
+                    <option value="RedTheme">Red Theme</option>
+                    <option value="GreenTheme">Green Theme</option>
+                    <option value="PurpleTheme">Purple Theme</option>
                     <option value="LightPurpleTheme">Light Purple Theme</option>
-                    <option value="MagentasTheme">Magenta Theme</option>
+                    <option value="MagentaTheme">Magenta Theme</option>
                     <option value="DarkTheme">Dark1 Theme</option>
                     <option value="DarkTheme2">Dark2 Theme</option>
-                    <option value="LightGreysTheme">LightGrey Theme</option>
-                    <option value="OrangesTheme">Oranges Theme</option>
+                    <option value="LightGreyTheme">LightGrey Theme</option>
+                    <option value="OrangeTheme">Oranges Theme</option>
                 </select>
             </div>
         </fieldset>
