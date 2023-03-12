@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.web
 
 import io.docops.asciidoctorj.extension.adr.ADRParser
 import io.docops.asciidoctorj.extension.adr.AdrMaker
+import io.docops.asciidoctorj.extension.adr.AdrParserConfig
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
@@ -32,6 +33,7 @@ class AdrController() {
             @RequestParam("participants") participants: String,
             @RequestParam("context") context: String,
         servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
+
             try {
                 val adrText = """
                 
@@ -42,9 +44,12 @@ Context: $context
 Decision: $decision
 Consequences: $consequences
 Participants: $participants 
+
         """.trimIndent()
-                val adr = ADRParser().parse(adrText)
-                var svg = (AdrMaker().makeAdrSvg(adr))
+                val config = AdrParserConfig(newWin = true, isPdf = false)
+                val adr = ADRParser().parse(adrText, config)
+                var svg = AdrMaker().makeAdrSvg(adr, dropShadow = true, config)
+
                 adr.urlMap.forEach { (t, u) ->
                     svg = svg.replace("_${t}_", u)
                 }
