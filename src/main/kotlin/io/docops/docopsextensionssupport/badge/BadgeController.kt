@@ -1,21 +1,27 @@
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.silentsoft.badge4j.Style
 import org.silentsoft.simpleicons.SimpleIcons
+import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import org.w3c.dom.Document
+import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.xpath.*
 
 
 @Controller
@@ -71,9 +77,13 @@ $txt
     }
 
 
-    @GetMapping("/badge/item", produces = ["image/svg+xml"])
+    @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
     @Timed(value = "docops.badge.get", histogram = true, percentiles = [0.5, 0.95])
-    fun getBadgeParams(@RequestParam payload: String, servletResponse: HttpServletResponse) {
+    fun getBadgeParams(
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
+        servletResponse: HttpServletResponse
+    ): ResponseEntity<ByteArray> {
         val data = uncompressString(payload)
         val split = data.split("|")
         when {
@@ -84,28 +94,38 @@ $txt
             else -> {
                 val message: String = split[1]
                 val label: String = split[0]
-
                 var mcolor: String = "GREEN"
-
                 val color: String = split[3].trim()
-
-
                 val c = split[4].trim()
                 if (c.isNotEmpty()) {
                     mcolor = c
                 }
+                var logo: String = ""
+                if ("SVG" == type) {
+                    logo = split[5].trim()
+                }
 
-                val logo = split[5].trim()
+                val src = badgeAgain(
+                    FormBadge(
+                        label = label,
+                        message = message, url = "", labelColor = color, messageColor = mcolor, logo = logo
+                    ), type
+                )
+                return if("SVG" == type) {
+                    val headers = HttpHeaders()
+                    headers.cacheControl = CacheControl.noCache().headerValue
+                    headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+                    ResponseEntity(src.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+                }else {
+                    val headers = HttpHeaders()
+                    servletResponse.contentType = "image/png"
+                    headers.cacheControl = CacheControl.noCache().headerValue
+                    headers.contentType = MediaType.IMAGE_PNG
+                    val res = findHeightWidth(src)
+                    val baos = SvgToPng().toPngFromSvg(src, res)
+                    ResponseEntity(baos, headers, HttpStatus.OK)
+                }
 
-
-                val src = badgeAgain(FormBadge(label = label,
-                    message = message, url =  "", labelColor = color, messageColor = mcolor, logo = logo ))
-                servletResponse.contentType = "image/svg+xml"
-                servletResponse.characterEncoding = "UTF-8"
-                servletResponse.status = 200
-                val writer = servletResponse.writer
-                writer.print(src)
-                writer.flush()
 
             }
         }
@@ -113,17 +133,26 @@ $txt
     }
 
 
-    private fun badgeAgain(formBadge: FormBadge): String {
+
+    private fun badgeAgain(formBadge: FormBadge, type: String): String {
         val logo = getBadgeLogo(formBadge.logo)
-        return org.silentsoft.badge4j.Badge.builder()
+        val builder = org.silentsoft.badge4j.Badge.builder()
             .label(formBadge.labelOrNull())
             .labelColor(formBadge.labelColor)
             .message(formBadge.message)
             .color(formBadge.messageColor)
-            .style(Style.Plastic)
             .links(arrayOf(formBadge.url))
-            .logo(logo)
-            .build()
+        when {
+            "PDF" == type && formBadge.logo.isNullOrEmpty() -> {
+                 builder.style(Style.FlatSquare)
+            }
+            else -> {
+                builder.style(Style.Plastic)
+                builder.logo(logo)
+            }
+        }
+        return builder.build()
+
     }
 
     private fun makeBadgeMessageOnly(formBadge: FormBadge): String {
@@ -139,13 +168,15 @@ $txt
             .logo(logo)
             .build()
     }
+
     fun getBadgeLogo(input: String?): String {
         //http://docops.io/images/docops.svg
-        var logo = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox%3D'0 0 200 150'%2F%3E"
+        var logo =
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII="
         input?.let {
             if (input.startsWith("<") && input.endsWith(">")) {
 
-                val simpleIcon = SimpleIcons.get(input.replace("<","")  .replace(">","") )
+                val simpleIcon = SimpleIcons.get(input.replace("<", "").replace(">", ""))
                 if (simpleIcon != null) {
                     val ico = simpleIcon.svg
                     val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
@@ -165,7 +196,8 @@ $txt
         }
         return logo
     }
-    fun getLogoFromUrl(url: String,): String {
+
+    fun getLogoFromUrl(url: String): String {
         val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(20))
             .build()
@@ -194,23 +226,57 @@ fun unescape(text: String): String {
             result.append(charAt)
             i++
         } else {
-            if (text.startsWith("&amp;", i)) {
-                result.append('&')
-                i += 5
-            } else if (text.startsWith("&apos;", i)) {
-                result.append('\'')
-                i += 6
-            } else if (text.startsWith("&quot;", i)) {
-                result.append('"')
-                i += 6
-            } else if (text.startsWith("&lt;", i)) {
-                result.append('<')
-                i += 4
-            } else if (text.startsWith("&gt;", i)) {
-                result.append('>')
-                i += 4
-            } else i++
+            when {
+                text.startsWith("&amp;", i) -> {
+                    result.append('&')
+                    i += 5
+                }
+                text.startsWith("&apos;", i) -> {
+                    result.append('\'')
+                    i += 6
+                }
+                text.startsWith("&quot;", i) -> {
+                    result.append('"')
+                    i += 6
+                }
+                text.startsWith("&lt;", i) -> {
+                    result.append('<')
+                    i += 4
+                }
+                text.startsWith("&gt;", i) -> {
+                    result.append('>')
+                    i += 4
+                }
+                else -> i++
+            }
         }
     }
     return result.toString()
+}
+fun findHeightWidth(src: String): Pair<String, String> {
+    val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
+    val elem = document.documentElement
+    val xpathExpressionHeight = "/svg/@height"
+   val height =  evaluateXPath(document, xpathExpressionHeight)
+    val xpathExpressionWidth = "/svg/@width"
+    val width =  evaluateXPath(document, xpathExpressionWidth)
+    return return Pair(height[0], width[0])
+}
+private fun evaluateXPath(document: Document, xpathExpression: String): List<String> {
+    val xpathFactory: XPathFactory = XPathFactory.newInstance()
+    val xpath: XPath = xpathFactory.newXPath()
+    val values: MutableList<String> = ArrayList()
+    try {
+        val expr: XPathExpression = xpath.compile(xpathExpression)
+        val nodes: NodeList = expr.evaluate(document, XPathConstants.NODESET) as NodeList
+        for (i in 0 until nodes.getLength()) {
+
+
+            //Customize the code to fetch the value based on the node type and hierarchy
+            values.add(nodes.item(i).nodeValue)
+        }
+    } catch (e: XPathExpressionException) {
+        e.printStackTrace()
+    }
+    return values
 }
