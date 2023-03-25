@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.badge
 
+import com.starxg.badge4j.Badge
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
@@ -27,7 +28,7 @@ import javax.xml.xpath.*
 @Controller
 @RequestMapping("/api")
 @Observed(name = "badge.controller")
-class BadgeController() {
+class BadgeController {
 
 
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
@@ -48,8 +49,8 @@ ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${ba
 ----
 """.trimIndent()
         val contents = makeBadgeAndSource(badgeSource, src)
-        servletResponse.contentType = "text/html";
-        servletResponse.characterEncoding = "UTF-8";
+        servletResponse.contentType = "text/html"
+        servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
         writer.print(contents)
@@ -94,13 +95,13 @@ $txt
             else -> {
                 val message: String = split[1]
                 val label: String = split[0]
-                var mcolor: String = "GREEN"
+                var mcolor = "GREEN"
                 val color: String = split[3].trim()
                 val c = split[4].trim()
                 if (c.isNotEmpty()) {
                     mcolor = c
                 }
-                var logo: String = ""
+                var logo = ""
                 if ("SVG" == type) {
                     logo = split[5].trim()
                 }
@@ -111,18 +112,27 @@ $txt
                         message = message, url = "", labelColor = color, messageColor = mcolor, logo = logo
                     ), type
                 )
+
+                val output = Badge.create(label, message, color, mcolor, null, 0, 1)
+
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+               // return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
                 return if("SVG" == type) {
+                    //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
+
                     val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-                    ResponseEntity(src.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+                    ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
                 }else {
                     val headers = HttpHeaders()
                     servletResponse.contentType = "image/png"
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType.IMAGE_PNG
                     val res = findHeightWidth(src)
-                    val baos = SvgToPng().toPngFromSvg(src, res)
+                    val baos = SvgToPng().toPngFromSvg(output, res)
                     ResponseEntity(baos, headers, HttpStatus.OK)
                 }
 
@@ -255,12 +265,11 @@ fun unescape(text: String): String {
 }
 fun findHeightWidth(src: String): Pair<String, String> {
     val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
-    val elem = document.documentElement
     val xpathExpressionHeight = "/svg/@height"
    val height =  evaluateXPath(document, xpathExpressionHeight)
     val xpathExpressionWidth = "/svg/@width"
     val width =  evaluateXPath(document, xpathExpressionWidth)
-    return return Pair(height[0], width[0])
+    return Pair(height[0], width[0])
 }
 private fun evaluateXPath(document: Document, xpathExpression: String): List<String> {
     val xpathFactory: XPathFactory = XPathFactory.newInstance()
@@ -269,7 +278,7 @@ private fun evaluateXPath(document: Document, xpathExpression: String): List<Str
     try {
         val expr: XPathExpression = xpath.compile(xpathExpression)
         val nodes: NodeList = expr.evaluate(document, XPathConstants.NODESET) as NodeList
-        for (i in 0 until nodes.getLength()) {
+        for (i in 0 until nodes.length) {
 
 
             //Customize the code to fetch the value based on the node type and hierarchy

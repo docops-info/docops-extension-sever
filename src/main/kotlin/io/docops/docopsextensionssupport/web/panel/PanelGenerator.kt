@@ -14,12 +14,20 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
+import org.w3c.dom.Document
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
+import java.io.StringWriter
 import java.nio.charset.Charset
 import java.util.*
 import java.util.zip.GZIPInputStream
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.Transformer
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 import kotlin.system.measureTimeMillis
 
 @Controller
@@ -35,12 +43,19 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
     fun getPanel(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
+        @RequestParam("width", required = false, defaultValue = "") width: String,
+        @RequestParam("height", required = false, defaultValue = "") height: String,
         servletResponse: HttpServletResponse
     ) {
         val timings = measureTimeMillis {
             val isPDF = "PDF" == type
             val contents = uncompressString(data)
-            val imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
+            var imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
+            val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(ByteArrayInputStream(imgSrc.toByteArray()))
+            if(width.isNotEmpty() || height.isNotEmpty()) {
+                imgSrc = manipulateSVG(xml, width, height)
+            }
             servletResponse.contentType = "image/svg+xml"
             servletResponse.characterEncoding = "UTF-8"
             servletResponse.status = 200
@@ -230,7 +245,25 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         }
     }
 
-
+    fun manipulateSVG(document: Document, width: String?, height: String?): String {
+        val elem = document.documentElement
+        width?.let {
+            elem.setAttribute("width", width)
+        }
+        height?.let {
+            elem.setAttribute("height", height)
+        }
+        val transformer: Transformer = TransformerFactory.newInstance().newTransformer().apply {
+            setOutputProperty(OutputKeys.INDENT, "yes")
+            setOutputProperty(OutputKeys.METHOD, "xml")
+            setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5")
+        }
+        val source = DOMSource(document)
+        val writer = StringWriter()
+        val result = StreamResult(writer)
+        transformer.transform(source, result)
+        return writer.toString()
+    }
 
 }
 

@@ -62,8 +62,10 @@ class TwoToneImageBuilderController {
                     <rect width="100%" height="100%" fill="none" />
                     <rect width="100%" height="50%" fill="$fillColor1"/>
                     <rect y="95.5" width="100%" height="50%" fill="$fillColor2" />
-                    <text text-anchor="middle" x="150" y="67.75" fill="blue" class="oddstyle">$text1</text>
-                    <text text-anchor="middle" x="150" y="163.25" class="evenstyle">$text2</text>
+                    <text text-anchor="middle" x="150" y="67.75" fill="#000" opacity="0.25" class="oddstyle">$text1</text>
+                    <text text-anchor="middle" x="151" y="64.75" fill="blue" class="oddstyle">$text1</text>
+                    <text text-anchor="middle" x="150" y="166.25" fill="#000" opacity="0.25" class="evenstyle">$text2</text>
+                    <text text-anchor="middle" x="151" y="163.25" class="evenstyle">$text2</text>
                 </g>
             </svg>
         """.trimIndent()
