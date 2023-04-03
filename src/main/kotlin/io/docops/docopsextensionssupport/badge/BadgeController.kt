@@ -128,7 +128,6 @@ $txt
                     ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
                 }else {
                     val headers = HttpHeaders()
-                    servletResponse.contentType = "image/png"
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType.IMAGE_PNG
                     val res = findHeightWidth(src)
@@ -270,6 +269,15 @@ fun findHeightWidth(src: String): Pair<String, String> {
     val xpathExpressionWidth = "/svg/@width"
     val width =  evaluateXPath(document, xpathExpressionWidth)
     return Pair(height[0], width[0])
+}
+fun findHeightWidthViewBox(src: String): Pair<String, String> {
+    val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
+    val xpathExpression = "/svg/@viewBox"
+    val values =  evaluateXPath(document, xpathExpression)
+    println(values[0].split(" "))
+    val xpathExpressionWidth = "/svg/@width"
+    val width =  evaluateXPath(document, xpathExpressionWidth)
+    return Pair("800", "970")
 }
 private fun evaluateXPath(document: Document, xpathExpression: String): List<String> {
     val xpathFactory: XPathFactory = XPathFactory.newInstance()

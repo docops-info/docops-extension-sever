@@ -4,13 +4,17 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.*
+import io.docops.docopsextensionssupport.badge.findHeightWidth
+import io.docops.docopsextensionssupport.badge.findHeightWidthViewBox
 import io.docops.docopsextensionssupport.support.*
+import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.ObservationRegistry
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
@@ -20,6 +24,7 @@ import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
 import java.io.StringWriter
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.zip.GZIPInputStream
 import javax.xml.parsers.DocumentBuilderFactory
@@ -46,26 +51,44 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         @RequestParam("width", required = false, defaultValue = "") width: String,
         @RequestParam("height", required = false, defaultValue = "") height: String,
         servletResponse: HttpServletResponse
-    ) {
-        val timings = measureTimeMillis {
-            val isPDF = "PDF" == type
-            val contents = uncompressString(data)
-            var imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
-            val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                .parse(ByteArrayInputStream(imgSrc.toByteArray()))
-            if(width.isNotEmpty() || height.isNotEmpty()) {
-                imgSrc = manipulateSVG(xml, width, height)
-            }
-            servletResponse.contentType = "image/svg+xml"
-            servletResponse.characterEncoding = "UTF-8"
-            servletResponse.status = 200
-            val writer = servletResponse.writer
-            writer.print(imgSrc)
-            writer.flush()
+    ): ResponseEntity<ByteArray> {
+
+        val isPDF = "PDF" == type
+        val contents = uncompressString(data)
+        var imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
+        val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+            .parse(ByteArrayInputStream(imgSrc.toByteArray()))
+        if (width.isNotEmpty() || height.isNotEmpty()) {
+            imgSrc = manipulateSVG(xml, width, height)
         }
-        log.info("getPanel Total Time : $timings ms")
+        return if (isPDF) {
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.IMAGE_PNG
+            val res = findHeightWidthViewBox(imgSrc)
+            val baos = SvgToPng().toPngFromSvg(imgSrc, res)
+            ResponseEntity(baos, headers, HttpStatus.OK)
+        } else {
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+
+        }
     }
 
+
+    @GetMapping("/panel/lines")
+    @ResponseBody
+    @Timed(value = "docops.panel.lines", histogram = true, percentiles = [0.5, 0.95])
+    fun toLines(@RequestParam("data") data: String, @RequestParam("server") server: String): ResponseEntity<String> {
+        val contents = uncompressString(data)
+        val panelService = PanelService()
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.TEXT_PLAIN
+        val lines = panelService.toLines("Panel Links",sourceToPanel(contents, scriptLoader) , server = server)
+        return ResponseEntity(lines.joinToString("\n"), headers, HttpStatus.OK)
+    }
     @PutMapping("/colorgen")
     @ResponseBody
     @Timed(value = "docops.panel.generator.color", histogram = true, percentiles = [0.5, 0.95])
