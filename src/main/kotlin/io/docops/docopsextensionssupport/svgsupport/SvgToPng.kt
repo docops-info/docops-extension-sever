@@ -19,9 +19,8 @@ class SvgToPng {
         val converter = PNGTranscoder()
         converter.addTranscodingHint(PNGTranscoder.KEY_HEIGHT,  res.first.toFloat())
         converter.addTranscodingHint(PNGTranscoder.KEY_WIDTH,  res.second.toFloat())
-        //converter.addTranscodingHint(PNGTranscoder.KEY_EXECUTE_ONLOAD,  false);
+        converter.addTranscodingHint(PNGTranscoder.KEY_EXECUTE_ONLOAD,  false);
         converter.addTranscodingHint(PNGTranscoder.KEY_DEFAULT_FONT_FAMILY, "Arial");
-        converter.addTranscodingHint(PNGTranscoder.KEY_USER_STYLESHEET_URI,"")
         converter.transcode(input, output)
         return baos.toByteArray()
     }

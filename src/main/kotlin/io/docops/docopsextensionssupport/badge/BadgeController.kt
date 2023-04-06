@@ -274,10 +274,9 @@ fun findHeightWidthViewBox(src: String): Pair<String, String> {
     val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
     val xpathExpression = "/svg/@viewBox"
     val values =  evaluateXPath(document, xpathExpression)
-    println(values[0].split(" "))
-    val xpathExpressionWidth = "/svg/@width"
-    val width =  evaluateXPath(document, xpathExpressionWidth)
-    return Pair("800", "970")
+    val items = values[0].split(" ")
+
+    return Pair(items[3], items[2])
 }
 private fun evaluateXPath(document: Document, xpathExpression: String): List<String> {
     val xpathFactory: XPathFactory = XPathFactory.newInstance()

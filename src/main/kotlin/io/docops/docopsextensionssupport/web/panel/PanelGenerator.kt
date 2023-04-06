@@ -4,7 +4,6 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.*
-import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.badge.findHeightWidthViewBox
 import io.docops.docopsextensionssupport.support.*
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
