@@ -102,7 +102,7 @@ Participants: $participants
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray>{
         val contents = uncompressString(data)
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 75, increaseWidthBy = width.toInt())
+        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 90, increaseWidthBy = width.toInt())
         val adr = ADRParser().parse(contents, config)
         var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
         adr.urlMap.forEach { (t, u) ->
