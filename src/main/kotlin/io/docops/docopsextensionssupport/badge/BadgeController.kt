@@ -40,7 +40,9 @@ class BadgeController {
             fillColor = "GREEN"
         }
         //val src = makeBadge(message = badge.message, label = badge.label, color = badge.labelColor, mColor)
-        val src = makeBadgeMessageOnly(formBadge = badge)
+        //val src = makeBadgeMessageOnly(formBadge = badge)
+        val src = Badge.create(badge.label, badge.message, badge.labelColor, badge.messageColor, null, 0, 1)
+        //val src = badgeAgain(formBadge = badge, type = "SVG")
         val badgeSource =
             """
 [badge]
@@ -106,12 +108,7 @@ $txt
                     logo = split[5].trim()
                 }
 
-                val src = badgeAgain(
-                    FormBadge(
-                        label = label,
-                        message = message, url = "", labelColor = color, messageColor = mcolor, logo = logo
-                    ), type
-                )
+
 
                 val output = Badge.create(label, message, color, mcolor, null, 0, 1)
 
@@ -130,7 +127,7 @@ $txt
                     val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType.IMAGE_PNG
-                    val res = findHeightWidth(src)
+                    val res = findHeightWidth(output)
                     val baos = SvgToPng().toPngFromSvg(output, res)
                     ResponseEntity(baos, headers, HttpStatus.OK)
                 }

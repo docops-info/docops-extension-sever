@@ -78,8 +78,8 @@ class TwoToneImageBuilderController {
                     
                 </style>
                 <g id="Page-1" stroke="none" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd">
-                    <rect width="100%" height="100%" fill="none" />
-                    <rect width="100%" height="50%" class="${btn1.id}_cls"/>
+                    <path d="${generateRectPathData(300.toFloat(), 191f, 22.0F, 22.0F, 0.0F, 0.0F)}" fill="none"/>
+                    <path d="${generateRectPathData(300.toFloat(), (191/2).toFloat(), 22.0F, 22.0F, 0.0F, 0.0F)}" class="${btn1.id}_cls"/>
                     <rect y="95.5" width="100%" height="50%"  class="${btn2.id}_cls" />
                     <text text-anchor="middle" x="150" y="67.75" fill="#000" opacity="0.25" class="oddstyle">$text1</text>
                     <text text-anchor="middle" x="151" y="64.75" fill="blue" class="oddstyle">$text1</text>
@@ -88,5 +88,16 @@ class TwoToneImageBuilderController {
                 </g>
             </svg>
         """.trimIndent()
+    }
+    fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRightRound:Float, bottomRightRound:Float, bottomLeftRound:Float): String {
+        return """M 0 $topLetRound 
+ A $topLetRound $topLetRound 0 0 1 $topLetRound 0
+ L ${(width - topRightRound)} 0
+ A $topRightRound $topRightRound 0 0 1 $width $topRightRound
+ L $width ${(height - bottomRightRound)}
+ A $bottomRightRound $bottomRightRound 0 0 1 ${(width - bottomRightRound)} $height
+ L $bottomLeftRound $height
+ A $bottomLeftRound $bottomLeftRound 0 0 1 0 ${(height - bottomLeftRound)}
+ Z"""
     }
 }
