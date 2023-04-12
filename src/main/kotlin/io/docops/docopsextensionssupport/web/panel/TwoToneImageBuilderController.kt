@@ -63,6 +63,9 @@ class TwoToneImageBuilderController {
                 $def2
                 </defs>
                 <style>
+                    .twotone:hover {
+                        fill: red;
+                    }
                     .oddstyle {
                         font: bold ${line1Size}px Arial, Helvetica, sans-serif;
                         fill: $fillColor2;
@@ -77,7 +80,7 @@ class TwoToneImageBuilderController {
                     $color2
                     
                 </style>
-                <g id="Page-1" stroke="none" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd" class='twotone'>
                     <path d="${generateRectPathData(300.toFloat(), 191f, 22.0F, 22.0F, 0.0F, 0.0F)}" fill="none"/>
                     <path d="${generateRectPathData(300.toFloat(), (191/2).toFloat(), 22.0F, 22.0F, 0.0F, 0.0F)}" class="${btn1.id}_cls"/>
                     <rect y="95.5" width="100%" height="50%"  class="${btn2.id}_cls" />
