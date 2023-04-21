@@ -57,7 +57,7 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         var imgSrc = contentsToImageStr(contents, scriptLoader, isPDF)
         val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
             .parse(ByteArrayInputStream(imgSrc.toByteArray()))
-        if (width.isNotEmpty() || height.isNotEmpty()) {
+        if (!isPDF && (width.isNotEmpty() || height.isNotEmpty())) {
             imgSrc = manipulateSVG(xml, width, height)
         }
         return if (isPDF) {
