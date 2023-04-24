@@ -4,6 +4,7 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.ButtonType
+import java.awt.Color
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
@@ -71,7 +72,28 @@ class ColorDivCreator(
         }
         return color
     }
+    fun getRandomColorHex(): String {
+        val random = Random()
+        val RGB = 0xff + 1
+        val colors = IntArray(2)
+        val a = 256
+        val r1 = Math.floor(Math.random() * RGB).toInt()
+        val r2 = Math.floor(Math.random() * RGB).toInt()
+        val r3 = Math.floor(Math.random() * RGB).toInt()
 
+        //return  Color(r1, r2, r3)
+        val color = String.format("#%02x%02x%02x", r1, r2,r3)
+        return color
+
+    }
+
+    private fun getBase16(input: Int) : String {
+        println(input)
+        if(input < 10) {
+            return "0$input"
+        }
+        return input.toString(16)
+    }
     fun genPanelStr(cols: Int): Pair<String, StringBuilder> {
         val str = StringBuilder()
         str.append("panels{\n")
@@ -128,7 +150,7 @@ class ColorDivCreator(
         val str = StringBuilder("\tcolorMap {\n")
         for (x in 0 until num) {
             val count = x % 5
-            val color = getRandomColor()
+            val color = getRandomColorHex()
             str.append("\t\t\t\tcolor(\"$color\")\n")
             panels.append("\n\t$type{\n")
             panels.append("\t\tlink = \"https://www.apple.com\"\n")
@@ -148,6 +170,10 @@ class ColorDivCreator(
                 panels.append("\thref = \"https://www.apple.com\"\n")
                 panels.append("\tlabel = \"Devices\"\n")
                 panels.append("}\n")
+            }
+            if(buttonKind == ButtonType.LARGE_CARD) {
+                panels.append("line1=Line(\"Line1\")\n")
+                panels.append("line2=Line(\"Line2\")\n")
             }
             panels.append("\t}")
         }
