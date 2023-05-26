@@ -15,6 +15,7 @@ import org.w3c.dom.Document
 import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
 import java.net.URI
+import java.net.URLDecoder
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
@@ -87,7 +88,7 @@ $txt
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray> {
-        val data = uncompressString(payload)
+        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val split = data.split("|")
         when {
             split.size != 6 -> {
@@ -109,21 +110,20 @@ $txt
                 }
 
 
-
                 val output = Badge.create(label, message, color, mcolor, null, 0, 1)
 
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-               // return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
-                return if("SVG" == type) {
+                // return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+                return if ("SVG" == type) {
                     //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
 
                     val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
                     ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
-                }else {
+                } else {
                     val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType.IMAGE_PNG
@@ -139,7 +139,6 @@ $txt
     }
 
 
-
     private fun badgeAgain(formBadge: FormBadge, type: String): String {
         val logo = getBadgeLogo(formBadge.logo)
         val builder = org.silentsoft.badge4j.Badge.builder()
@@ -150,8 +149,9 @@ $txt
             .links(arrayOf(formBadge.url))
         when {
             "PDF" == type && formBadge.logo.isNullOrEmpty() -> {
-                 builder.style(Style.FlatSquare)
+                builder.style(Style.FlatSquare)
             }
+
             else -> {
                 builder.style(Style.Plastic)
                 builder.logo(logo)
@@ -220,6 +220,76 @@ $txt
         }
     }
 
+    @PostMapping("/badges", consumes = [MediaType.ALL_VALUE], produces = ["image/svg+xml", "image/png"])
+    @Timed(value = "docops.badges.post", histogram = true, percentiles = [0.5, 0.95])
+    fun badges(
+        @RequestBody payload: String,
+        @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String
+    ):  ResponseEntity<ByteArray>{
+        //val data = uncompressString(payload)
+        val data = (URLDecoder.decode(payload,"UTF-8"))
+        val lines = mutableListOf<String>()
+        var x = 0.0f
+        var y = 0.0f
+        val buffer = 5.0f
+        val str = StringBuilder()
+        var count =0
+        data.lines().forEach { line ->
+            val split = line.split("|")
+            var link = ""
+            if (split.size > 2) {
+                link = split[2]
+            }
+            if (split.size != 6) {
+                throw BadgeFormatException("Badge Format invalid, expecting 5 pipe delimited values [$data]")
+            }
+            val message: String = split[1]
+            val label: String = split[0]
+            var mcolor = "GREEN"
+            val color: String = split[3].trim()
+            val c = split[4].trim()
+            if (c.isNotEmpty()) {
+                mcolor = c
+            }
+            var logo = ""
+            if ("SVG" == type) {
+                logo = split[5].trim()
+            }
+
+
+            var output = Badge.create(label, message, color, mcolor)
+            output = output.replace("id='m'", "id='m${count}'")
+            output = output.replace("url(#m4)", "url(#m${count++})")
+            str.append(
+                """<g transform="translate($x, $y)">
+                $output
+                </g>
+            """.trimMargin()
+            )
+            x += buffer + getXY(output)
+
+        }
+        val output = """
+            <svg xmlns="http://www.w3.org/2000/svg" width="$x" height="20">
+            $str
+            </svg>
+        """.trimIndent()
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+
+
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+       return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+
+    }
+
+    fun getXY(originalSvg: String): Float {
+        val hw = findHeightWidth(originalSvg)
+        return hw.second.toFloat()
+    }
+
 }
 
 fun unescape(text: String): String {
@@ -237,44 +307,54 @@ fun unescape(text: String): String {
                     result.append('&')
                     i += 5
                 }
+
                 text.startsWith("&apos;", i) -> {
                     result.append('\'')
                     i += 6
                 }
+
                 text.startsWith("&quot;", i) -> {
                     result.append('"')
                     i += 6
                 }
+
                 text.startsWith("&lt;", i) -> {
                     result.append('<')
                     i += 4
                 }
+
                 text.startsWith("&gt;", i) -> {
                     result.append('>')
                     i += 4
                 }
+
                 else -> i++
             }
         }
     }
     return result.toString()
 }
+
 fun findHeightWidth(src: String): Pair<String, String> {
-    val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
+    val document =
+        DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
     val xpathExpressionHeight = "/svg/@height"
-   val height =  evaluateXPath(document, xpathExpressionHeight)
+    val height = evaluateXPath(document, xpathExpressionHeight)
     val xpathExpressionWidth = "/svg/@width"
-    val width =  evaluateXPath(document, xpathExpressionWidth)
+    val width = evaluateXPath(document, xpathExpressionWidth)
     return Pair(height[0], width[0])
 }
+
 fun findHeightWidthViewBox(src: String): Pair<String, String> {
-    val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
+    val document =
+        DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ByteArrayInputStream(src.toByteArray()))
     val xpathExpression = "/svg/@viewBox"
-    val values =  evaluateXPath(document, xpathExpression)
+    val values = evaluateXPath(document, xpathExpression)
     val items = values[0].split(" ")
 
     return Pair(items[3], items[2])
 }
+
 private fun evaluateXPath(document: Document, xpathExpression: String): List<String> {
     val xpathFactory: XPathFactory = XPathFactory.newInstance()
     val xpath: XPath = xpathFactory.newXPath()
