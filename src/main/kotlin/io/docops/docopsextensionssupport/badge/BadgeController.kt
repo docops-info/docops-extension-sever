@@ -8,6 +8,7 @@ import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.silentsoft.badge4j.Style
 import org.silentsoft.simpleicons.SimpleIcons
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -29,7 +30,7 @@ import javax.xml.xpath.*
 @Controller
 @RequestMapping("/api")
 @Observed(name = "badge.controller")
-class BadgeController {
+class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
 
 
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
@@ -110,7 +111,8 @@ $txt
                 }
 
 
-                val output = Badge.create(label, message, color, mcolor, null, 0, 1)
+                //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
+                val output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor, split[1], logo)
 
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
