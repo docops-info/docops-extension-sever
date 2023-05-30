@@ -2,8 +2,16 @@ package io.docops.docopsextensionssupport.badge
 
 import io.docops.asciidoc.buttons.theme.theme
 import io.docops.asciidoc.utils.escapeXml
+import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Service
+import java.io.ByteArrayInputStream
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.util.*
+import javax.xml.parsers.DocumentBuilderFactory
 
 @Service
 class DocOpsBadgeGenerator {
@@ -15,7 +23,8 @@ class DocOpsBadgeGenerator {
         labelColor: String = "#999999",
         messageColor: String = "#ececec",
         href: String = "",
-        icon: String = ""
+        icon: String = "",
+        fontColor: String = "#000000"
     ): String {
         val t = theme {
             columns = 1
@@ -50,9 +59,10 @@ class DocOpsBadgeGenerator {
         var startX = 50
         var img = ""
         if (icon.isNotEmpty()) {
+            val logo = getBadgeLogo(icon)
             startX += 82
             labelWidth += 10
-            img = """<image x='10' y='35' width='112' height='130' xlink:href='$icon'/>"""
+            img = """<image x='10' y='35' width='112' height='130' xlink:href='$logo'/>"""
         }
         //language=SVG
         return """
@@ -100,8 +110,8 @@ class DocOpsBadgeGenerator {
             </g>
             <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif'
                font-size='110' filter="url(#Bevel2)">
-                <text x='$startX' y='138' textLength='${labelWidth - 60}'  fill="#000000" >$labelLink</text>
-                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="#000000" >$messageLink</text>
+                <text x='$startX' y='138' textLength='${labelWidth - 60}'  fill="$fontColor" >$labelLink</text>
+                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" >$messageLink</text>
             </g>
             $img
              </svg>
@@ -112,17 +122,61 @@ class DocOpsBadgeGenerator {
         str.codePoints().forEach {
                 code ->
             total += when {
-                code >= Companion.widths.size -> {
-                    Companion.widths[64].toFloat()
+                code >= widths.size -> {
+                    widths[64].toFloat()
                 }
                 else -> {
-                    Companion.widths[code].toFloat()
+                    widths[code].toFloat()
                 }
             }
         }
         return total
     }
 
+    private fun getBadgeLogo(input: String?): String {
+        //http://docops.io/images/docops.svg
+        var logo =
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII="
+        input?.let {
+            if (input.startsWith("<") && input.endsWith(">")) {
+
+                val simpleIcon = SimpleIcons.get(input.replace("<", "").replace(">", ""))
+                if (simpleIcon != null) {
+                    val ico = simpleIcon.svg
+                    val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                        .parse(ByteArrayInputStream(ico?.toByteArray()))
+                    var src = ""
+                    xml?.let {
+                        src = manipulateSVG(xml, simpleIcon.hex)
+                    }
+                    logo = "data:image/svg+xml;base64," + Base64.getEncoder()
+                        .encodeToString(src.toByteArray())
+                }
+            } else if (input.startsWith("http")) {
+                logo = getLogoFromUrl(input)
+                logo = "data:image/svg+xml;base64," + Base64.getEncoder()
+                    .encodeToString(logo.toByteArray())
+            }
+        }
+        return logo
+    }
+
+    private fun getLogoFromUrl(url: String): String {
+        val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(20))
+            .build()
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .timeout(Duration.ofSeconds(10))
+            .build()
+        return try {
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+            response.body()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
     companion object {
         val widths = arrayOf<Number>(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1316650390625,0.42833404541015624,0.5066665649414063,0.7066665649414062,0.7066665649414062,1.0383331298828125,0.8183334350585938,0.34499969482421877,0.4850006103515625,0.4850006103515625,0.5383331298828125,0.7350006103515625,0.42833404541015624,0.4850006103515625,0.42833404541015624,0.42833404541015624,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.42833404541015624,0.42833404541015624,0.7350006103515625,0.7350006103515625,0.7350006103515625,0.7066665649414062,1.1649993896484374,0.8199996948242188,0.8183334350585938,0.8716659545898438,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.9316665649414062,0.8716659545898438,0.42833404541015624,0.65,0.8183334350585938,0.7066665649414062,0.9833328247070312,0.8716659545898438,0.9316665649414062,0.8183334350585938,0.9316665649414062,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.8716659545898438,0.8183334350585938,1.0949996948242187,0.8183334350585938,0.8183334350585938,0.7633331298828125,0.42833404541015624,0.42833404541015624,0.42833404541015624,0.6199996948242188,0.7349990844726563,0.4850006103515625,0.7066665649414062,0.7066665649414062,0.65,0.7066665649414062,0.7066665649414062,0.4633331298828125,0.7066665649414062,0.7066665649414062,0.375,0.42166748046875,0.65,0.375,0.9833328247070312,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.498333740234375,0.65,0.42833404541015624,0.7066665649414062,0.65,0.8716659545898438,0.65,0.65,0.65,0.4850006103515625,0.4100006103515625,0.4850006103515625,0.7350006103515625)
     }

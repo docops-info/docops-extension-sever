@@ -7,7 +7,6 @@ import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.silentsoft.badge4j.Style
-import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -15,13 +14,8 @@ import org.springframework.web.bind.annotation.*
 import org.w3c.dom.Document
 import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
-import java.net.URI
 import java.net.URLDecoder
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 import java.nio.charset.StandardCharsets
-import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
@@ -92,7 +86,8 @@ $txt
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val split = data.split("|")
         when {
-            split.size != 6 -> {
+            split.size < 6 -> {
+                println(data)
                 throw BadgeFormatException("Badge Format invalid, expecting 5 pipe delimited values [$data]")
             }
 
@@ -110,9 +105,13 @@ $txt
                     logo = split[5].trim()
                 }
 
+                var fontColor = "#ffffff"
+                if(split.size == 7) {
+                    fontColor = split[6]
+                }
 
                 //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
-                val output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor, split[1], logo)
+                val output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor, split[1], logo, fontColor)
 
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
@@ -120,107 +119,22 @@ $txt
                 // return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
                 return if ("SVG" == type) {
                     //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
-
-                    val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
                     ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
                 } else {
-                    val headers = HttpHeaders()
                     headers.cacheControl = CacheControl.noCache().headerValue
                     headers.contentType = MediaType.IMAGE_PNG
                     val res = findHeightWidth(output)
                     val baos = SvgToPng().toPngFromSvg(output, res)
                     ResponseEntity(baos, headers, HttpStatus.OK)
                 }
-
-
             }
         }
 
     }
 
 
-    private fun badgeAgain(formBadge: FormBadge, type: String): String {
-        val logo = getBadgeLogo(formBadge.logo)
-        val builder = org.silentsoft.badge4j.Badge.builder()
-            .label(formBadge.labelOrNull())
-            .labelColor(formBadge.labelColor)
-            .message(formBadge.message)
-            .color(formBadge.messageColor)
-            .links(arrayOf(formBadge.url))
-        when {
-            "PDF" == type && formBadge.logo.isNullOrEmpty() -> {
-                builder.style(Style.FlatSquare)
-            }
-
-            else -> {
-                builder.style(Style.Plastic)
-                builder.logo(logo)
-            }
-        }
-        return builder.build()
-
-    }
-
-    private fun makeBadgeMessageOnly(formBadge: FormBadge): String {
-        val logo = getBadgeLogo(formBadge.logo)
-
-        return org.silentsoft.badge4j.Badge.builder()
-            .label(formBadge.labelOrNull())
-            .labelColor(formBadge.labelColor)
-            .message(formBadge.message)
-            .color(formBadge.messageColor)
-            .style(Style.Plastic)
-            .links(arrayOf(formBadge.url))
-            .logo(logo)
-            .build()
-    }
-
-    fun getBadgeLogo(input: String?): String {
-        //http://docops.io/images/docops.svg
-        var logo =
-            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII="
-        input?.let {
-            if (input.startsWith("<") && input.endsWith(">")) {
-
-                val simpleIcon = SimpleIcons.get(input.replace("<", "").replace(">", ""))
-                if (simpleIcon != null) {
-                    val ico = simpleIcon.svg
-                    val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                        .parse(ByteArrayInputStream(ico?.toByteArray()))
-                    var src = ""
-                    xml?.let {
-                        src = manipulateSVG(xml, simpleIcon.hex)
-                    }
-                    logo = "data:image/svg+xml;base64," + Base64.getEncoder()
-                        .encodeToString(src.toByteArray())
-                }
-            } else if (input.startsWith("http")) {
-                logo = getLogoFromUrl(input)
-                logo = "data:image/svg+xml;base64," + Base64.getEncoder()
-                    .encodeToString(logo.toByteArray())
-            }
-        }
-        return logo
-    }
-
-    fun getLogoFromUrl(url: String): String {
-        val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
-            .connectTimeout(Duration.ofSeconds(20))
-            .build()
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .timeout(Duration.ofSeconds(10))
-            .build()
-        return try {
-            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-            response.body()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
-    }
 
     @PostMapping("/badges", consumes = [MediaType.ALL_VALUE], produces = ["image/svg+xml", "image/png"])
     @Timed(value = "docops.badges.post", histogram = true, percentiles = [0.5, 0.95])
