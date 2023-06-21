@@ -14,7 +14,7 @@ class BadgeTest {
 
     @Test
     fun determineWidth() {
-       val svg = createBadge("#There was a captain", "Named Eli Lilly Hoe", "#4c1130", "#351c75", "https://www.apple.com", "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMjI0IDM4Ny44MTRWNTEyTDMyIDMyMGwxOTItMTkydjEyNi45MTJDNDQ3LjM3NSAyNjAuMTUyIDQzNy43OTQgMTAzLjAxNiAzODAuOTMgMCA1MjEuMjg3IDE1MS43MDcgNDkxLjQ4IDM5NC43ODUgMjI0IDM4Ny44MTR6Ii8+PC9zdmc+")
+       val svg = createBadge("Hello", "World", "#4c1130", "#351c75")
         val f = File("badgeout.svg")
         f.writeBytes(svg.toByteArray())
 

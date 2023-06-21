@@ -134,17 +134,26 @@ class ColorDivCreator(
 
     private fun getColorMapAndPanels(): Pair<StringBuilder, StringBuilder> {
         var type = "panel"
-        if(buttonKind == ButtonType.ROUND) {
-            type = "round"
-        }
-        else if(buttonKind == ButtonType.SLIM_CARD) {
-            type="slim"
-        }
-        else if(buttonKind == ButtonType.LARGE_CARD) {
-            type="large"
-        }
-        else if(buttonKind == ButtonType.RECTANGLE) {
-            type = "rectangle"
+        when (buttonKind) {
+            ButtonType.ROUND -> {
+                type = "round"
+            }
+            ButtonType.SLIM_CARD -> {
+                type="slim"
+            }
+            ButtonType.LARGE_CARD -> {
+                type="large"
+            }
+            ButtonType.RECTANGLE -> {
+                type = "rectangle"
+            }
+
+            ButtonType.BUTTON -> {
+                type = "panel"
+            }
+            ButtonType.PILL -> {
+                type = "pill"
+            }
         }
         val panels = StringBuilder()
         val str = StringBuilder("\tcolorMap {\n")

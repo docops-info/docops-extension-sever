@@ -34,7 +34,7 @@
         <repackage.classifier/>
         <kotlin.version>1.8.20</kotlin.version>
         <serialization.version>1.5.0</serialization.version>
-        <docops-button-render.version>2023.14</docops-button-render.version>
+        <docops-button-render.version>2023.15</docops-button-render.version>
         <asciidoctorj-docops-panel.version>2023.20</asciidoctorj-docops-panel.version>
         <asciidoctorj-docops-adr.version>2023.12</asciidoctorj-docops-adr.version>
 
@@ -128,6 +128,17 @@
             <artifactId>asciidoctorj-docops-panel</artifactId>
             <version>${asciidoctorj-docops-panel.version}</version>
 
+            <exclusions>
+                <exclusion>
+                    <groupId>io.docops</groupId>
+                    <artifactId>docops-button-render</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.docops</groupId>
+            <artifactId>docops-button-render</artifactId>
+            <version>${docops-button-render.version}</version>
         </dependency>
         <dependency>
             <groupId>io.docops</groupId>

@@ -75,6 +75,11 @@ $txt
     """.trimIndent()
     }
 
+    @GetMapping("/text/{text}")
+    @ResponseBody
+    fun textLen(@PathVariable(required = true) text: String): Float {
+        return docOpsBadgeGenerator.measureText(text) * 100F
+    }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
     @Timed(value = "docops.badge.get", histogram = true, percentiles = [0.5, 0.95])

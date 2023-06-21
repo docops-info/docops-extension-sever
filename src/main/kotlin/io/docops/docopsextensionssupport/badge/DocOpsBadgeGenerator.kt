@@ -60,9 +60,9 @@ class DocOpsBadgeGenerator {
         var img = ""
         if (icon.isNotEmpty()) {
             val logo = getBadgeLogo(icon)
-            startX += 82
-            labelWidth += 10
-            img = """<image x='10' y='35' width='112' height='130' xlink:href='$logo'/>"""
+            startX += 127
+            labelWidth += 100
+            img = """<image x='30' y='49' width='100' height='100' xlink:href='$logo'/>"""
         }
         //language=SVG
         return """
@@ -117,7 +117,7 @@ class DocOpsBadgeGenerator {
              </svg>
         """.trimIndent()
     }
-    private fun measureText(str: String, fontSize : Int = 10): Float {
+    fun measureText(str: String, fontSize : Int = 10): Float {
         var total = 0f
         str.codePoints().forEach {
                 code ->

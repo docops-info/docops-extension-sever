@@ -32,6 +32,7 @@
                         <option value="SLIM_CARD">SLIM</option>
                         <option value="LARGE_CARD">LARGE</option>
                         <option value="RECTANGLE">RECTANGLE</option>
+                        <option value="PILL">PILL</option>
                     </select>
                 </div>
 
