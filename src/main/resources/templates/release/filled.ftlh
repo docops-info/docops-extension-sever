@@ -26,22 +26,24 @@
                 </div>
 
                 <div class="pure-u-1">
-                    <label for="line_${release_index}">Line</label> <button type="submit" name="addLine" value="line_${release_index}">+ New Line</button>
+                    <label for="line_${release_index}">Line</label>
                     <#list release.lines as line>
                     <input type="text" id="line_${release_index}" name="line_${release_index}"
                            value="${line}"  class="pure-u-23-24">
                     </#list>
+                    <button type="submit" name="addLine" value="line_${release_index}">+ New Line</button>
                 </div>
                 </#list>
                 <div class="pure-u-1">
+                    <div>
+                        <button type="submit" name="addType" value="increase">+ New Milestone</button>
+                    </div>
                     <label for="logo">Build</label>
                     <div class="pure-g">
                         <button class="button-success pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     </div>
                 </div>
-                <div>
-                    <button type="submit" name="addType" value="increase">+ New Milestone</button>
-                </div>
+
             </div>
 
             <div class="pure-u-1-2">
@@ -49,8 +51,6 @@
                     <#noautoesc>
                     <div id="contentBox"> ${svg}</div>
                     </#noautoesc>
-                    <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(badgeSource);"
-                           value="Copy Badge As AsciiDoc">
                 </div>
             </div>
         </div>

@@ -76,12 +76,15 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
         }
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 width="800" height="$height"
-                 viewBox="0 0 800 $height">
+                 width="1000" height="$height"
+                 viewBox="0 0 1000 $height">
                  ${svgDefs()}                
-                <rect id="mainview" width="100%" height="100%" fill="#f4f0e0" rx="5" ry="5" filter="url(#Bevel)"/>
-                <text x="300" text-anchor="middle" y="44" font-size="32px" filter="url(#Bevel3)">${releaseStrategy.title}</text>
+                <text x="500" text-anchor="middle" y="44" font-size="32px" filter="url(#Bevel3)">${releaseStrategy.title}</text>
                
+               <rect x="90" y="20" width="60" height="$height" fill="#b3b3b3"/>
+    
+                <line x1="120" y1="20" x2="120" y2="$height" stroke="#f0f0f0"
+                   stroke-width="14"  fill="#ffffff"  stroke-dasharray="24 24 24" />
                 $str
             </svg>
         """.trimIndent()
@@ -196,7 +199,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
                         .filtered-8 {
                             filter: url(#filter-8);
                             fill: black;
-                            font-family: 'Lemon', cursive;
+                            font-family: Arial, Helvetica, sans-serif;
                         }
                     </style>
                     <filter id="filter-2">
