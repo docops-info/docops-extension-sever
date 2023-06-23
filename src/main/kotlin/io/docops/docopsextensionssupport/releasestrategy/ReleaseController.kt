@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
@@ -70,8 +69,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
         if(releaseStrategy.releases.size > 2) {
             height += (220 * (releaseStrategy.releases.size-2))
         }
-        releaseStrategy.releases.forEach {
-            str.append(strat(it, startY))
+        releaseStrategy.releases.forEachIndexed { index, release ->
+            str.append(strat(release, startY, index))
             startY += 215
         }
         return """
@@ -90,16 +89,21 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int): String {
+    private fun strat(release: Release, startY: Int, index: Int): String {
 
-        val str = StringBuilder("""<text x="440" y="248" fill="#00ff00" font-family="Arial, Helvetica, sans-serif" font-size="16px"
+        val str = StringBuilder("""<text x="440" y="218" fill="#00ff00" font-family="Arial, Helvetica, sans-serif" font-size="16px"
         class="filtered-8">""")
         release.lines.forEach {
             str.append("<tspan x=\"440\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text>")
+        var color = "#eeeeee"
+        if(index % 2 == 0) {
+            color = "#FFEFC1"
+        }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
+            <rect x="410" y="200" height="225" width="810" fill="$color"/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
