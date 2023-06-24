@@ -21,6 +21,7 @@ import java.util.*
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer,
     val objectMapper: ObjectMapper) {
 
+    //suport for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE])
     fun getRelease(@RequestParam(name = "payload") payload: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
