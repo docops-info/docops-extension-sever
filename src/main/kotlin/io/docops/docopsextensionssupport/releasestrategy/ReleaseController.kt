@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -8,15 +9,18 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import java.io.StringWriter
+import java.util.*
+
 
 @Controller
 @RequestMapping("/api/release")
-class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMarkerConfigurer) {
+class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer,
+    val objectMapper: ObjectMapper) {
 
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
-    fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy) : String{
-        return createSvg(releaseStrategy)
+    fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
+        return createTimelineSvg(releaseStrategy)
     }
 
 
@@ -30,18 +34,24 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
         val releaseStrategy = ReleaseStrategy(title, releases)
 
         model["releaseStrategy"] = releaseStrategy
-        model["svg"] = createSvg(releaseStrategy)
+        val svg = createTimelineSvg(releaseStrategy)
+        model["svg"] = svg
+        model["bsvg"] = Base64.getEncoder().encodeToString(svg.toByteArray())
+        // model["svg"] = createSvg(releaseStrategy)
         val selectedStrategy = mutableListOf<SelectedStrategy>()
         ReleaseEnum.values().forEach {
             selectedStrategy.add(SelectedStrategy(it.name, false))
         }
         model["releaseTypes"] = ReleaseEnum.values()
+        model["sourceJson"] = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(releaseStrategy)
         val writer = StringWriter()
         val tpl = freeMarkerConfigurer.configuration.getTemplate("release/filled.ftlh")
         tpl.process(model, writer)
         return writer.toString()
 
     }
+
+    fun createTimelineSvg(releaseStrategy: ReleaseStrategy) = ReleaseMaker().make(releaseStrategy)
 
     private fun getReleaseTypes(servletRequest: HttpServletRequest): MutableList<Release> {
         val addLine = servletRequest.getParameter("addLine")
@@ -51,23 +61,26 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
         types.forEach {
             val type = ReleaseEnum.valueOf(servletRequest.getParameter(it))
             val splitType = it.split("type_")
+            val dateEntry = servletRequest.getParameter("date_${splitType[1]}")
+            val goal = servletRequest.getParameter("goal_${splitType[1]}")
             val lineArr = servletRequest.getParameterValues("line_${splitType[1]}").toMutableList()
-            if(addLine != null && addLine.isNotEmpty() && addLine == "line_${splitType[1]}") {
+            if (addLine != null && addLine.isNotEmpty() && addLine == "line_${splitType[1]}") {
                 lineArr.add("")
             }
-            releases.add(Release(type, lineArr, true))
+            releases.add(Release(type, lineArr, date = dateEntry, true, goal))
         }
-        if(addType != null && addType == "increase") {
-            releases.add(Release(ReleaseEnum.M1, mutableListOf("")))
+        if (addType != null && addType == "increase") {
+            releases.add(Release(ReleaseEnum.M1, mutableListOf(""), "TBD", goal = "Our goal is ..."))
         }
         return releases
     }
+
     private fun createSvg(releaseStrategy: ReleaseStrategy): String {
         val str = StringBuilder()
-        var startY= -125
+        var startY = -125
         var height = 500
-        if(releaseStrategy.releases.size > 2) {
-            height += (220 * (releaseStrategy.releases.size-2))
+        if (releaseStrategy.releases.size > 2) {
+            height += (220 * (releaseStrategy.releases.size - 2))
         }
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(strat(release, startY, index))
@@ -88,21 +101,27 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
 
     private fun strat(release: Release, startY: Int, index: Int): String {
 
-        val str = StringBuilder("""<text x="440" y="218" fill="#00ff00" font-family="Arial, Helvetica, sans-serif" font-size="16px"
-        class="filtered-8">""")
+        val str = StringBuilder(
+            """<text x="440" y="218" fill="#00ff00" font-family="Arial, Helvetica, sans-serif" font-size="16px"
+        class="filtered-8">"""
+        )
         release.lines.forEach {
             str.append("<tspan x=\"440\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text>")
         var color = "#eeeeee"
-        if(index % 2 == 0) {
+        if (index % 2 == 0) {
             color = "#FFEFC1"
         }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
             <rect x="410" y="200" height="225" width="810" fill="$color"/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
-            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
+            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${
+            release.type.color(
+                release.type
+            )
+        }" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
             fill="#073763" filter="url(#Bevel2)">${release.type}
@@ -111,6 +130,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer : FreeMa
             </g>
         """.trimMargin()
     }
+
     private fun svgDefs(): String {
         val ani = """
             fill: transparent;

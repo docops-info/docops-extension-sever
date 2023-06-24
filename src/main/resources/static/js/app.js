@@ -74,4 +74,11 @@ document.addEventListener('click', function(event) {
     btnState.classList.toggle("inset-btn");
 });
 
+function downloadSVGAsText(content) {
+    const a = document.createElement('a');
+    const e = new MouseEvent('click');
+    a.download = 'strategy.svg';
+    a.href = 'data:image/svg+xml;base64,' + content;
+    a.dispatchEvent(e);
+}
 var myChart;

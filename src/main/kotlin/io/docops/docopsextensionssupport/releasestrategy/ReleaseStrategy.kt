@@ -39,5 +39,11 @@ enum class ReleaseEnum {
 }
 
 class SelectedStrategy(val releaseEnum: String, val selected: Boolean = false)
-class Release (val type: ReleaseEnum, val lines: MutableList<String>, val selected: Boolean = false)
+class Release(
+    val type: ReleaseEnum,
+    val lines: MutableList<String>,
+    val date: String,
+    val selected: Boolean = false,
+    val goal: String
+)
 class ReleaseStrategy (val title: String, val releases: MutableList<Release>)

@@ -4,7 +4,7 @@
     <fieldset id="response-div" >
         <legend>Release Strategy</legend>
         <div class="pure-g">
-            <div class="pure-u-1-2">
+            <div class="pure-u-1-1">
                 <div class="pure-u-1">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" data-hx-put="api/release/build"
@@ -21,6 +21,16 @@
                     </select>
                 </div>
                 <div class="pure-u-1">
+                    <label for="date_0">Goal</label>
+                    <input type="text" id="goal_0" name="goal_0"
+                           value="Our goal is to ..."  class="pure-u-23-24">
+                </div>
+                <div class="pure-u-1">
+                    <label for="date_0">Target Date</label>
+                    <input type="text" id="date_0" name="date_0"
+                           value="TBD"  class="pure-u-23-24">
+                </div>
+                <div class="pure-u-1">
                     <label for="line_0">Line</label>
                     <input type="text" id="line_0" name="line_0" data-hx-put="api/release/build"
                            value="Reason for "  class="pure-u-23-24">
@@ -33,12 +43,12 @@
                 </div>
             </div>
 
-            <div class="pure-u-1-2">
+            <div class="pure-u-1-1">
                 <div class="pure-u-1-2">
-                <div id="contentBox"></div>
-                <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(badgeSource);"
-                       value="Copy Badge As AsciiDoc">
-            </div>
+                    <div id="contentBox"></div>
+                    <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(badgeSource);"
+                           value="Copy Badge As AsciiDoc">
+                </div>
             </div>
         </div>
     </fieldset>
