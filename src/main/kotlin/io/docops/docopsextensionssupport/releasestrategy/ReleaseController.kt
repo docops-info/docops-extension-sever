@@ -1,14 +1,18 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.docops.docopsextensionssupport.badge.findHeightWidth
+import io.docops.docopsextensionssupport.svgsupport.SvgToPng
+import io.docops.docopsextensionssupport.web.panel.uncompressString
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import java.io.StringWriter
+import java.net.URLDecoder
 import java.util.*
 
 
@@ -17,6 +21,18 @@ import java.util.*
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer,
     val objectMapper: ObjectMapper) {
 
+    @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE])
+    fun getRelease(@RequestParam(name = "payload") payload: String) : ResponseEntity<ByteArray> {
+        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
+        val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
+        val output = createTimelineSvg(release, true)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.IMAGE_PNG
+        val res = findHeightWidth(output)
+        val baos = SvgToPng().toPngFromSvg(output, res)
+        return ResponseEntity(baos, headers, HttpStatus.OK)
+    }
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
@@ -51,7 +67,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     }
 
-    fun createTimelineSvg(releaseStrategy: ReleaseStrategy) = ReleaseMaker().make(releaseStrategy)
+    fun createTimelineSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false) = ReleaseMaker().make(releaseStrategy, isPdf)
 
     private fun getReleaseTypes(servletRequest: HttpServletRequest): MutableList<Release> {
         val addLine = servletRequest.getParameter("addLine")
