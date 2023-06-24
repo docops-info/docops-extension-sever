@@ -36,8 +36,10 @@ class ReleaseMaker {
             }
         }
         var x = 200
+        var anchor = "text-anchor=\"middle\""
         if(isPdf) {
             x=15
+            anchor=""
         }
         //language=svg
         val item = """
@@ -46,7 +48,7 @@ class ReleaseMaker {
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 50,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
             <path d="m 400,0 v 200 l 100,-100 z" fill="#fcfcfc" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestone" font-size="36px">${release.type}</text>
-            <text x="$x" y="12" class="milestone lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
+            <text $anchor x="$x" y="12" class="milestone lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
                 $lineText
             </text>
         </g>
