@@ -12,6 +12,15 @@
                 </div>
 
                 <div class="pure-u-1">
+                    <label for="style">Display Style</label>
+                    <select id="style" name="style" data-hx-put="api/release/build"
+                            class="pure-input-1-2">
+                        <option value="TL">Timeline</option>
+                        <option value="R">Roadmap</option>
+                        <option value="TLG">Timeline Grouped</option>
+                    </select>
+                </div>
+                <div class="pure-u-1">
                     <label for="type_0">Type</label>
                     <select id="type_0" name="type_0" data-hx-put="api/release/build"
                             class="pure-input-1-2">

@@ -46,4 +46,10 @@ class Release(
     val selected: Boolean = false,
     val goal: String
 )
-class ReleaseStrategy (val title: String, val releases: MutableList<Release>)
+class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL")
+
+fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "R" to "Roadmap", "TLG" to "Timeline Grouped")
+
+fun ReleaseStrategy.grouped(): Map<Char, List<Release>> {
+    return releases.groupBy { it.type.toString().get(0) }
+}

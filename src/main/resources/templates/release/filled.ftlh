@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="styles" type="java.util.HashMap" -->
 <#-- @ftlvariable name="svg" type="java.lang.String" -->
 <#-- @ftlvariable name="releaseStrategy" type="io.docops.docopsextensionssupport.releasestrategy.ReleaseStrategy" -->
 
@@ -9,6 +10,19 @@
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" data-hx-put="api/release/build"
                        value="${releaseStrategy.title}"  class="pure-u-23-24">
+            </div>
+            <div class="pure-u-1">
+                <label for="style">Display Style</label>
+                <select id="style" name="style" data-hx-put="api/release/build"
+                        class="pure-input-1-2">
+                    <#list styles?keys as style>
+                        <#if releaseStrategy.style == style>
+                        <option value="${style}" selected>${styles[style]}</option>
+                        <#else>
+                            <option value="${style}">${styles[style]}</option>
+                        </#if>
+                    </#list>
+                </select>
             </div>
             <#list releaseStrategy.releases as release>
                 <div class="pure-u-1">

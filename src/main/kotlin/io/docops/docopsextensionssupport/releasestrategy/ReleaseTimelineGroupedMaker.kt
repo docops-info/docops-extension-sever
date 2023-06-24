@@ -1,22 +1,33 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
-class ReleaseMaker {
+import java.util.*
+
+class ReleaseTimelineGroupedMaker {
 
     fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
+        val id = UUID.randomUUID().toString()
         val width = determineWidth(releaseStrategy = releaseStrategy)
-        val str = StringBuilder(head(width))
-        str.append(defs(isPdf))
+        val height = determineHeight(releaseStrategy = releaseStrategy)
+        val str = StringBuilder(head(width, height = height, id=id))
+        str.append(defs(isPdf, id))
         str.append(title(releaseStrategy.title, width))
-        releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(buildReleaseItem(release,index, isPdf))
+        var row = 0
+        releaseStrategy.grouped().forEach { (t, u) ->
+            u.forEachIndexed { index, release -> str.append(buildReleaseItem(release,index, isPdf, row, id)) }
+            row++
         }
+
 
         str.append(tail())
         return str.toString()
     }
 
 
-    private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean): String {
+    private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean, row: Int, id: String): String {
+        var startY = 60
+        if(row > 0) {
+            startY = row * 240 + 60
+        }
         var startX = 20
         if (currentIndex > 0) {
             startX = currentIndex * 500
@@ -28,7 +39,7 @@ class ReleaseMaker {
             lineText.append(
                 """
                 <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif">- $s</tspan>
+                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- $s</tspan>
             """.trimIndent()
             )
             if (index <= 7) {
@@ -45,12 +56,12 @@ class ReleaseMaker {
         }
         //language=svg
         return """
-         <g transform="translate($startX,60)" class="${shadeColor(release)}">
-             <text text-anchor="middle" x="200" y="-12" class="milestone">${release.date}</text>
+         <g transform="translate($startX,$startY)" class="${shadeColor(release)}">
+             <text text-anchor="middle" x="200" y="-12" class="milestoneTLG">${release.date}</text>
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 50,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
-            <text x="410" y="110" class="milestone" font-size="36px" fill="#fcfcfc">${release.type}</text>
-            <text $anchor x="$x" y="12" class="milestone lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
+            <text x="410" y="110" class="milestoneTLG" font-size="36px" fill="#fcfcfc">${release.type}</text>
+            <text $anchor x="$x" y="12" class="milestoneTLG lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
                 $lineText
             </text>
         </g>
@@ -87,15 +98,21 @@ class ReleaseMaker {
 
         else -> ""
     }
-    private fun determineWidth(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 550
+    private fun determineWidth(releaseStrategy: ReleaseStrategy): Int {
+        val groups = releaseStrategy.grouped()
+        var maxLen = 0
+        groups.forEach { (t, u) ->
+            maxLen = maxOf(maxLen, u.size)
+        }
+        return maxLen * 550
+    }
+    private fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 400
 
+    private fun head(width: Int, height: Int, id: String) : String{
 
-    private fun head(width: Int) : String{
-        val ratioWidth = width
-        val ratioHeight = 400
         return """
-            <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $width 400' xmlns='http://www.w3.org/2000/svg' role='img'
-     aria-label='Docops: Release Strategy'>
+            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
+     aria-label='Docops: Release Strategy' id="ID$id">
     <title>Docops: Release Strategy</title>
         """.trimIndent()
     }
@@ -105,33 +122,33 @@ class ReleaseMaker {
     private fun tail() = "</svg>"
 
     //language=svg
-    private fun defs(isPdf: Boolean): String {
+    private fun defs(isPdf: Boolean, id: String): String {
         var style = ""
         if (!isPdf) {
             style = """
                 <style>
-            .shadM {
+            #ID${id} .shadM {
                 fill: #c30213;
                 filter: drop-shadow(0 2mm 1mm #c30213);
             }
-            .shadR {
+            #ID${id} .shadR {
                 fill: rgb(51, 182, 169);
                 filter: drop-shadow(0 2mm 1mm rgb(51, 182, 169));
             }
 
-            .shadG {
+            #ID${id} .shadG {
                 fill: rgb(84, 210, 0);
                 filter: drop-shadow(0 2mm 1mm rgb(84, 210, 0));
             }
-            .milestone {
+            #ID${id} .milestone {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
                 font-weight: bold;
             }
-            .lines {
+            #ID${id} .lines {
                 font-size: 10px;
             }
 
-            .milestone > .entry {
+            #ID${id} .milestone > .entry {
                 text-anchor: start;
                 font-weight: normal;
             }
