@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
+import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import java.io.StringWriter
+import java.lang.RuntimeException
 import java.net.URLDecoder
 import java.util.*
 
@@ -59,7 +61,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 return  createTimelineGrouped(releaseStrategy)
             }
         }
-        return createTimelineSvg(releaseStrategy)
+        val pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"Unknown Release Strategy style ${releaseStrategy.style}")
+        throw ErrorResponseException(HttpStatus.BAD_REQUEST,pb, null)
     }
 
 

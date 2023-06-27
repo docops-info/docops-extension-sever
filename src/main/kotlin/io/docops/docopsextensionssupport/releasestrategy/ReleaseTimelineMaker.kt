@@ -103,7 +103,7 @@ class ReleaseTimelineMaker {
         """.trimIndent()
     }
     private fun title(title: String, width: Int) = """
-        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="18px">$title</text>
+        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
     """.trimIndent()
     private fun tail() = "</svg>"
 
