@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="getUrl" type="java.lang.String" -->
 <#-- @ftlvariable name="styles" type="java.util.HashMap" -->
 <#-- @ftlvariable name="svg" type="java.lang.String" -->
 <#-- @ftlvariable name="releaseStrategy" type="io.docops.docopsextensionssupport.releasestrategy.ReleaseStrategy" -->
@@ -5,7 +6,7 @@
 <fieldset id="response-div" >
     <legend>Release Strategy</legend>
     <div class="pure-g">
-        <div class="pure-u-1-2">
+        <div class="pure-u-1-1">
             <div class="pure-u-1">
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" data-hx-put="api/release/build"
@@ -43,22 +44,25 @@
                     <input type="text" id="goal_${release_index}" name="goal_${release_index}"
                            value="${release.goal}"  class="pure-u-23-24">
                 </div>
-                <div class="pure-u-1">
+                <div class="pure-u-1-2">
                     <label for="date_${release_index}">Target Date</label>
                     <input type="text" id="date_${release_index}" name="date_${release_index}"
                            value="${release.date}"  class="pure-u-23-24">
                 </div>
-                <div class="pure-u-1">
-                    <label for="line_${release_index}">Line</label>
+                <div class="pure-g">
+                <div class="pure-u-1-2">
                     <#list release.lines as line>
                         <input type="text" id="line_${release_index}" name="line_${release_index}"
                                value="${line}"  class="pure-u-23-24">
                     </#list>
-                    <button type="submit" name="addLine" value="line_${release_index}">+ New Line</button>
+                </div>
+                <div class="pure-u-1-2">
+                    <button class="button-secondary pure-button" type="submit" name="addLine" value="line_${release_index}">+ New Line</button>
+                </div>
                 </div>
             </#list>
             <div class="pure-u-1">
-                <div>
+                <div><br/>
                     <button class="button-success pure-button" type="submit" name="addType" value="increase">+ New Milestone</button>
                 </div>
                 <label for="logo">Build</label>
@@ -87,6 +91,9 @@
                         </code>
                     </pre>
 
+            </div>
+            <div class="pure-u-1">
+                Copy Url: <a href="${getUrl}" target="_blank">${getUrl}</a>
             </div>
         </div>
     </div>

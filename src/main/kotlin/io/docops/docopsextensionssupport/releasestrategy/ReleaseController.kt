@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -25,27 +26,35 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     //suport for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE])
-    fun getRelease(@RequestParam(name = "payload") payload: String) : ResponseEntity<ByteArray> {
+    fun getRelease(@RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
+        val isPdf = "PDF" == type
         var output = ""
         when (release.style) {
             "TL" -> {
-                output = createTimelineSvg(release, true)
+                output = createTimelineSvg(release, isPdf)
             }
             "R" -> {
-                output = createRoadMap(release, true)
+                output = createRoadMap(release, isPdf)
             }
             "TLG" -> {
-                output = createTimelineGrouped(release, true)
+                output = createTimelineGrouped(release, isPdf)
             }
         }
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.IMAGE_PNG
-        val res = findHeightWidth(output)
-        val baos = SvgToPng().toPngFromSvg(output, res)
-        return ResponseEntity(baos, headers, HttpStatus.OK)
+        return if(isPdf) {
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.IMAGE_PNG
+            val res = findHeightWidth(output)
+            val baos = SvgToPng().toPngFromSvg(output, res)
+            ResponseEntity(baos, headers, HttpStatus.OK)
+        } else {
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(output.toByteArray(),headers,HttpStatus.OK)
+        }
     }
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
@@ -100,6 +109,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         model["releaseTypes"] = ReleaseEnum.values()
         model["sourceJson"] = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(releaseStrategy)
         model["styles"] = releaseStrategy.styles()
+        val json = objectMapper.writeValueAsString(releaseStrategy)
+        model["getUrl"] = "api/release/?payload=${compressString(json)}&type=svg"
         val writer = StringWriter()
         val tpl = freeMarkerConfigurer.configuration.getTemplate("release/filled.ftlh")
         tpl.process(model, writer)

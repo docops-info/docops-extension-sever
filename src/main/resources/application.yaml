@@ -2,6 +2,9 @@ server:
   servlet:
     context-path: /extension
   port: 8010
+  compression:
+    enabled: true
+    mime-types: image/svg+xml,text/html
 
 management:
   endpoints:
@@ -50,6 +53,14 @@ spring:
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftlh
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
+          fixed:
+            paths: /**
 springdoc:
   api-docs:
     enabled: true
