@@ -95,6 +95,9 @@
             <div class="pure-u-1">
                 Copy Url: <a href="${getUrl}" target="_blank">${getUrl}</a>
             </div>
+            <div class="pure-u-1">
+                <button class="button-success pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div"  data-hx-get="${prefill}">Prefill <img class="htmx-indicator" src="images/bars.svg"/></button>
+            </div>
         </div>
     </div>
 </fieldset>

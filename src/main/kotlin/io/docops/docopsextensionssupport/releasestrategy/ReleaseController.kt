@@ -24,8 +24,8 @@ import java.util.*
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer,
     val objectMapper: ObjectMapper) {
 
-    //suport for pdf png file type
-    @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE])
+    //support for pdf png file type
+    @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
     fun getRelease(@RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
@@ -56,6 +56,13 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             ResponseEntity(output.toByteArray(),headers,HttpStatus.OK)
         }
     }
+    @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
+    @ResponseBody
+    fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
+        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
+        val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
+        return makeFilledView(model = model, releaseStrategy = release)
+    }
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
@@ -85,11 +92,15 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         val releases = getReleaseTypes(servletRequest)
 
         val releaseStrategy = ReleaseStrategy(title, releases, style)
+        return makeFilledView(model=model, releaseStrategy =  releaseStrategy)
 
+    }
+
+    private fun makeFilledView(model: ModelMap, releaseStrategy: ReleaseStrategy): String {
         model["releaseStrategy"] = releaseStrategy
 
         var svg = ""
-        when (style) {
+        when (releaseStrategy.style) {
             "TL" -> {
                 svg = createTimelineSvg(releaseStrategy)
             }
@@ -111,11 +122,11 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         model["styles"] = releaseStrategy.styles()
         val json = objectMapper.writeValueAsString(releaseStrategy)
         model["getUrl"] = "api/release/?payload=${compressString(json)}&type=svg"
+        model["prefill"] = "api/release/prefill?payload=${compressString(json)}&type=svg"
         val writer = StringWriter()
         val tpl = freeMarkerConfigurer.configuration.getTemplate("release/filled.ftlh")
         tpl.process(model, writer)
         return writer.toString()
-
     }
 
     fun createTimelineSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineMaker().make(releaseStrategy, isPdf)
