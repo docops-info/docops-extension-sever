@@ -8,7 +8,7 @@ class ReleaseTimelineGroupedMaker {
         val id = UUID.randomUUID().toString()
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val height = determineHeight(releaseStrategy = releaseStrategy)
-        val str = StringBuilder(head(width, height = height, id=id))
+        val str = StringBuilder(head(width, height = height, id=id, title = releaseStrategy.title))
         str.append(defs(isPdf, id))
         str.append(title(releaseStrategy.title, width))
         var row = 0
@@ -28,13 +28,13 @@ class ReleaseTimelineGroupedMaker {
         if(row > 0) {
             startY = row * 240 + 60
         }
-        var startX = 20
+        var startX = 0
         if (currentIndex > 0) {
-            startX = currentIndex * 500
+            startX = currentIndex * 425 -(20*currentIndex)
         }
         val goal = release.lines[0]
         val lineText = StringBuilder()
-        var lineStart = 15
+        var lineStart = 25
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
@@ -43,9 +43,9 @@ class ReleaseTimelineGroupedMaker {
             """.trimIndent()
             )
             if (index <= 7) {
-                lineStart += 5
+                lineStart += 10
             } else {
-                lineStart -= 5
+                lineStart -= 10
             }
         }
         var x = 200
@@ -58,7 +58,7 @@ class ReleaseTimelineGroupedMaker {
         return """
          <g transform="translate($startX,$startY)" class="${shadeColor(release)}">
              <text text-anchor="middle" x="200" y="-12" class="milestoneTLG">${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 50,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTLG" font-size="36px" fill="#fcfcfc">${release.type}</text>
             <text $anchor x="$x" y="12" class="milestoneTLG lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
@@ -106,14 +106,16 @@ class ReleaseTimelineGroupedMaker {
         }
         return maxLen * 550
     }
-    private fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 400
+    private fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.grouped().size * 260
 
-    private fun head(width: Int, height: Int, id: String) : String{
+    private fun head(width: Int, height: Int, id: String, title: String) : String{
 
+        //language=svg
         return """
-            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
-     aria-label='Docops: Release Strategy' id="ID$id">
-    <title>Docops: Release Strategy</title>
+        <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
+            aria-label='Docops: Release Strategy' id="ID$id">
+            <desc>https://docops.io/extension</desc>
+            <title>$title</title>
         """.trimIndent()
     }
     private fun title(title: String, width: Int) = """

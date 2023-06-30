@@ -20,6 +20,7 @@ class ReleaseRoadMapMaker {
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  width="800" height="$height"
                  viewBox="0 0 800 $height">
+                 <desc>https://docops.io/extension</desc>
                  ${svgDefs(isPdf)}                
                 <rect id="mainview" width="100%" height="100%" fill="#f4f0e0" rx="5" ry="5" filter="url(#Bevel)"/>
                 <text x="300" text-anchor="middle" y="44" font-size="32px" filter="url(#Bevel3)" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title}</text>

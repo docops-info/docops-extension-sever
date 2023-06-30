@@ -7,7 +7,7 @@ class ReleaseTimelineMaker {
     fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
-        val str = StringBuilder(head(width, id))
+        val str = StringBuilder(head(width, id, title= releaseStrategy.title))
         str.append(defs(isPdf, id))
         str.append(title(releaseStrategy.title, width))
         releaseStrategy.releases.forEachIndexed { index, release ->
@@ -20,13 +20,13 @@ class ReleaseTimelineMaker {
 
 
     private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean): String {
-        var startX = 20
+        var startX = 0
         if (currentIndex > 0) {
-            startX = currentIndex * 500
+            startX = currentIndex * 425 -(20*currentIndex)
         }
         val goal = release.lines[0]
         val lineText = StringBuilder()
-        var lineStart = 15
+        var lineStart = 25
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
@@ -35,9 +35,9 @@ class ReleaseTimelineMaker {
             """.trimIndent()
             )
             if (index <= 7) {
-                lineStart += 5
+                lineStart += 10
             } else {
-                lineStart -= 5
+                lineStart -= 10
             }
         }
         var x = 200
@@ -50,7 +50,7 @@ class ReleaseTimelineMaker {
         return """
          <g transform="translate($startX,60)" class="${shadeColor(release)}">
              <text text-anchor="middle" x="200" y="-12" class="milestoneTL">${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 50,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">${release.type}</text>
             <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
@@ -93,13 +93,15 @@ class ReleaseTimelineMaker {
     private fun determineWidth(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 550
 
 
-    private fun head(width: Int, id: String) : String{
+    private fun head(width: Int, id: String, title: String) : String{
         val ratioWidth = width
         val ratioHeight = 400
+        //language=svg
         return """
             <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $width 400' xmlns='http://www.w3.org/2000/svg' role='img'
-     aria-label='Docops: Release Strategy' id="ID$id">
-    <title>Docops: Release Strategy</title>
+            aria-label='Docops: Release Strategy' id="ID$id">
+            <desc>https://docops.io/extension</desc>
+            <title>$title</title>
         """.trimIndent()
     }
     private fun title(title: String, width: Int) = """
@@ -115,16 +117,16 @@ class ReleaseTimelineMaker {
                 <style>
             #ID${id} .shadM {
                 fill: #c30213;
-                filter: drop-shadow(0 2mm 1mm #c30213);
+                filter: drop-shadow(0 1mm 1mm #c30213);
             }
             #ID${id} .shadR {
                 fill: rgb(51, 182, 169);
-                filter: drop-shadow(0 2mm 1mm rgb(51, 182, 169));
+                filter: drop-shadow(0 1mm 1mm rgb(51, 182, 169));
             }
 
             #ID${id} .shadG {
                 fill: rgb(84, 210, 0);
-                filter: drop-shadow(0 2mm 1mm rgb(84, 210, 0));
+                filter: drop-shadow(0 1mm 1mm rgb(84, 210, 0));
             }
             #ID${id} .milestoneTL {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
