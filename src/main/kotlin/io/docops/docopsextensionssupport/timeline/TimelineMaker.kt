@@ -11,7 +11,7 @@ class TimelineMaker {
     companion object {
          val DEFAULT_COLORS = mutableListOf("#75147C","#377E7F","#EA4238", "#73808E", "#296218")
     }
-    fun makeTimelineSvg(source: String) : String {
+    fun makeTimelineSvg(source: String, title: String) : String {
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val head = head(entries)
@@ -20,6 +20,7 @@ class TimelineMaker {
         val colors = defs.second
         sb.append(defs.first)
         sb.append("<g transform=\"scale(1.0)\">")
+        sb.append("""<text x="460" y="10" text-anchor="middle" style="font-size: 8px;font-family: Arial, sans-serif;" class="edge">${title.escapeXml()}</text>""")
         sb.append(buildRoad(head.second-100))
         entries.forEachIndexed { index, entry ->
             val color = colors[index]!!
@@ -123,6 +124,7 @@ class TimelineMaker {
         width += 140
         return Pair("""
         <svg width="$width" height="400" xmlns="http://www.w3.org/2000/svg">
+        <desc>https://docops.io/extension</desc>
     """.trimIndent(),width)
     }
 
@@ -239,7 +241,7 @@ text: Annual start of vacation, time to relax
 and plugin the controller.
     """.trimIndent()
     val maker = TimelineMaker()
-    val svg = maker.makeTimelineSvg(entry)
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }
