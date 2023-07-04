@@ -141,11 +141,16 @@ class MainController() {
     }
 
     @GetMapping("/strat.html")
-    @Timed(value = "docops.rlease.strategy.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.strategy.html", histogram = true, percentiles = [0.5, 0.95])
     fun stratForm(model: Model): String {
         return "release/strat"
     }
 
+    @GetMapping("/timeline.html")
+    @Timed(value = "docops.timeline.strategy.html", histogram = true, percentiles = [0.5, 0.95])
+    fun timeline(model: Model): String {
+        return "timeline/tm"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

@@ -72,20 +72,7 @@ class ColorDivCreator(
         }
         return color
     }
-    fun getRandomColorHex(): String {
-        val random = Random()
-        val RGB = 0xff + 1
-        val colors = IntArray(2)
-        val a = 256
-        val r1 = Math.floor(Math.random() * RGB).toInt()
-        val r2 = Math.floor(Math.random() * RGB).toInt()
-        val r3 = Math.floor(Math.random() * RGB).toInt()
 
-        //return  Color(r1, r2, r3)
-        val color = String.format("#%02x%02x%02x", r1, r2,r3)
-        return color
-
-    }
 
     private fun getBase16(input: Int) : String {
         println(input)

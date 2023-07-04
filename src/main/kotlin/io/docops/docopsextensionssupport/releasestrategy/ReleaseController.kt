@@ -14,7 +14,6 @@ import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import java.io.StringWriter
-import java.lang.RuntimeException
 import java.net.URLDecoder
 import java.util.*
 

@@ -1,29 +1,32 @@
 {
-  "style": "TLG",
+  "style": "TL",
   "title": "PI Portal Okta Release Strategy",
   "releases": [
     {
       "type": "RC1",
-      "date": "July 7th, 2023",
-      "goal": "Certify the rollback package is tested and verified in prod",
+      "date": "July 23<tspan baseline-shift = \"super\">rd</tspan>, 2023",
+      "goal": "Deploy new portal code with Okta off",
       "selected": false,
       "lines": [
-        "Create Pi Portal package for internal and external",
-        "PI Portal Package is locked with in UCD with Okta off setting",
-        "Create anonther package with settings locked with Okta on" ,
+        "Devops will create PI Portal package for internal and external",
+        "This PI Portal Package is locked with Okta off setting in UCD",
         "Deploy package with Okta setting to off",
-        "Validate thids package is working as extected",
-        "QA sign off"
+        "Validate this package is working as expected with Okta off",
+        "This proves, the connectivity to the Postgres SQL database",
+        "Firewall rules and database credentials are correct",
+        "Fallback package to production package, aka Chrome version."
       ]
     },
     {
       "type": "GA",
-      "date": "July 7th, 2023",
+      "date": "July 30<tspan baseline-shift = \"super\">th</tspan>, 2023",
       "goal": "Deploy PI Portal with Okta on Internal and off for external",
       "selected": false,
       "lines": [
         "Deploy PI Portal package for internal on and external off",
-        "Validate Okta is working"
+        "QA validates Okta is working on internal",
+        "QA validates Okta off on external",
+        "Fallback package to production package, aka RC1."
       ]
     }
   ]
