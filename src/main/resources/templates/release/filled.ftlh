@@ -2,6 +2,9 @@
 <#-- @ftlvariable name="styles" type="java.util.HashMap" -->
 <#-- @ftlvariable name="svg" type="java.lang.String" -->
 <#-- @ftlvariable name="releaseStrategy" type="io.docops.docopsextensionssupport.releasestrategy.ReleaseStrategy" -->
+<h1>Release Strategy Builder</h1>
+
+<form class="pure-form pure-form-stacked" data-hx-put="api/release/build" data-hx-target="#response-div">
 
 <fieldset id="response-div" >
     <legend>Release Strategy</legend>
@@ -86,7 +89,7 @@
                     <pre>
                         <code>
                         <#noautoesc>
-                            ${sourceJson}
+${sourceJson}
                         </#noautoesc>
                         </code>
                     </pre>
@@ -101,8 +104,11 @@
         </div>
     </div>
 </fieldset>
+</form>
 <script>
     document.querySelectorAll('pre code').forEach((el) => {
         hljs.highlightElement(el);
     });
 </script>
+<#include "stratcommon.ftlh">
+<@stratMacro builder = "pure-button-primary pure-button-active" fromJson= ""/>

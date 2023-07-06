@@ -1,3 +1,4 @@
+<div id="response-div">
 <h1>Release Strategy Builder</h1>
 
 <form class="pure-form pure-form-stacked" data-hx-put="api/release/build" data-hx-target="#response-div">
@@ -62,3 +63,6 @@
         </div>
     </fieldset>
 </form>
+</div>
+<#include "stratcommon.ftlh">
+<@stratMacro builder = "pure-button-primary pure-button-active" fromJson= ""/>

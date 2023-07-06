@@ -62,6 +62,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
         return makeFilledView(model = model, releaseStrategy = release)
     }
+
+    @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
+    @ResponseBody
+    fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
+        val release = objectMapper.readValue<ReleaseStrategy>(payload, ReleaseStrategy::class.java)
+        return makeFilledView(model = model, releaseStrategy = release)
+    }
+
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {

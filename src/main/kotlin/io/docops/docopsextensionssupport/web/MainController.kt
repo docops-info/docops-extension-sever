@@ -146,6 +146,16 @@ class MainController() {
         return "release/strat"
     }
 
+    @GetMapping("/fromJson.html")
+    @Timed(value = "docops.release.strategy.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    fun stratFromJson(model: Model): String {
+        return "release/fromjson"
+    }
+    @GetMapping("/builder.html")
+    @Timed(value = "docops.release.strategy.builder.html", histogram = true, percentiles = [0.5, 0.95])
+    fun stratBuilder(model: Model): String {
+        return "release/releasebuilder"
+    }
     @GetMapping("/timeline.html")
     @Timed(value = "docops.timeline.strategy.html", histogram = true, percentiles = [0.5, 0.95])
     fun timeline(model: Model): String {
