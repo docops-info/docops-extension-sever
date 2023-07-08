@@ -18,14 +18,14 @@ class ReleaseRoadMapMaker {
         }
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 width="800" height="$height"
-                 viewBox="0 0 800 $height">
+                 width="${releaseStrategy.scale * 1200}" height="${height * releaseStrategy.scale}"
+                 viewBox="0 0 ${releaseStrategy.scale * 1200} ${height * releaseStrategy.scale}">
                  <desc>https://docops.io/extension</desc>
-                 ${svgDefs(isPdf)}                
-                <rect id="mainview" width="100%" height="100%" fill="#f4f0e0" rx="5" ry="5" filter="url(#Bevel)"/>
-                <text x="300" text-anchor="middle" y="44" font-size="32px" filter="url(#Bevel3)" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title}</text>
-               
+                 ${svgDefs(isPdf)}     
+                 <g transform="scale(${releaseStrategy.scale})">           
+                <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title}</text>
                 $str
+                </g>
             </svg>
         """.trimIndent()
     }
@@ -33,20 +33,19 @@ class ReleaseRoadMapMaker {
     private fun strat(release: Release, startY: Int, index: Int): String {
 
         val str = StringBuilder(
-            """<text x="440" y="218" fill="#00ff00" font-family="Arial, Helvetica, sans-serif" font-size="16px"
-        class="filtered-8">"""
+            """<text x="410" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">"""
         )
         release.lines.forEach {
-            str.append("<tspan x=\"440\" dy=\"18\">* $it</tspan>")
+            str.append("<tspan x=\"410\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text>")
-        var color = "#eeeeee"
+        var color = "#cccccc"
         if (index % 2 == 0) {
-            color = "#FFEFC1"
+            color = "#fcfcfc"
         }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
-            <rect x="410" y="200" height="225" width="810" fill="$color"/>
+            <rect x="0" y="200" height="225" width="1400" fill="$color"/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${
             release.type.color(
@@ -106,11 +105,6 @@ class ReleaseRoadMapMaker {
                             stroke-dashoffset: 0;
                         }
                     }
-                        .filtered-8 {
-                            filter: url(#filter-8);
-                            fill: black;
-                            font-family: 'Lemon', cursive;
-                        }
                     </style>
         """.trimIndent()
         if(isPdf) {
@@ -145,19 +139,6 @@ class ReleaseRoadMapMaker {
                         <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
                         <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
                                      result="litPaint"/>
-                    </filter>
-                    <filter id="filter-8" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
-                        <feGaussianBlur stdDeviation="5" in="SourceAlpha" result="BLUR"/>
-
-                        <feSpecularLighting surfaceScale="6" specularConstant="1" specularExponent="30" lighting-color="#white"
-                                            in="BLUR" result="SPECULAR">
-                            <fePointLight x="40" y="-30" z="200"/>
-                        </feSpecularLighting>
-                        <feComposite operator="in" in="SPECULAR" in2="SourceAlpha" result="COMPOSITE"/>
-                        <feMerge>
-                            <feMergeNode in="SourceAlpha"/>
-                            <feMergeNode in="COMPOSITE"/>
-                        </feMerge>
                     </filter>
                     <filter id="filter-2">
                         <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>

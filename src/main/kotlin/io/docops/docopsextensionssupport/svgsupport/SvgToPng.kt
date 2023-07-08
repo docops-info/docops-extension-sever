@@ -13,16 +13,21 @@ import java.io.StringReader
 class SvgToPng {
 
     fun toPngFromSvg(svg: String, res: Pair<String, String>): ByteArray {
-        val input = TranscoderInput(StringReader(svg))
-        val baos = ByteArrayOutputStream()
-        val output = TranscoderOutput(baos)
-        val converter = PNGTranscoder()
-        converter.addTranscodingHint(PNGTranscoder.KEY_HEIGHT,  res.first.toFloat())
-        converter.addTranscodingHint(PNGTranscoder.KEY_WIDTH,  res.second.toFloat())
-        converter.addTranscodingHint(PNGTranscoder.KEY_EXECUTE_ONLOAD,  false);
-        converter.addTranscodingHint(PNGTranscoder.KEY_DEFAULT_FONT_FAMILY, "Arial");
-        converter.transcode(input, output)
-        return baos.toByteArray()
+        try {
+            val input = TranscoderInput(StringReader(svg))
+            val baos = ByteArrayOutputStream()
+            val output = TranscoderOutput(baos)
+            val converter = PNGTranscoder()
+            converter.addTranscodingHint(PNGTranscoder.KEY_HEIGHT,  res.first.toFloat())
+            converter.addTranscodingHint(PNGTranscoder.KEY_WIDTH,  res.second.toFloat())
+            converter.addTranscodingHint(PNGTranscoder.KEY_EXECUTE_ONLOAD,  false);
+            converter.addTranscodingHint(PNGTranscoder.KEY_DEFAULT_FONT_FAMILY, "Arial");
+            converter.transcode(input, output)
+            return baos.toByteArray()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
     }
     fun toJpegFromSvg(svg: String, outputStream: OutputStream) {
         val input = TranscoderInput(StringReader(svg))

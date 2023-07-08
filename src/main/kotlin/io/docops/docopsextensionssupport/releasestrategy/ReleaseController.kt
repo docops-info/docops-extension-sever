@@ -1,11 +1,13 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import jakarta.servlet.http.HttpServletRequest
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -20,14 +22,13 @@ import java.util.*
 
 @Controller
 @RequestMapping("/api/release")
-class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer,
-    val objectMapper: ObjectMapper) {
+class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
 
     //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
     fun getRelease(@RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
+        val release = Json.decodeFromString<ReleaseStrategy>(data)
         val isPdf = "PDF" == type
         var output = ""
         when (release.style) {
@@ -59,14 +60,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     @ResponseBody
     fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val release = objectMapper.readValue<ReleaseStrategy>(data, ReleaseStrategy::class.java)
+        val release = Json.decodeFromString<ReleaseStrategy>(data)
         return makeFilledView(model = model, releaseStrategy = release)
     }
 
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
-        val release = objectMapper.readValue<ReleaseStrategy>(payload, ReleaseStrategy::class.java)
+        val release = Json.decodeFromString<ReleaseStrategy>(payload)
         return makeFilledView(model = model, releaseStrategy = release)
     }
 
@@ -124,10 +125,11 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         ReleaseEnum.values().forEach {
             selectedStrategy.add(SelectedStrategy(it.name, false))
         }
+        val format = Json { prettyPrint = true }
         model["releaseTypes"] = ReleaseEnum.values()
-        model["sourceJson"] = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(releaseStrategy)
+        model["sourceJson"] = format.encodeToString(releaseStrategy)
         model["styles"] = releaseStrategy.styles()
-        val json = objectMapper.writeValueAsString(releaseStrategy)
+        val json = Json.encodeToString(releaseStrategy)
         model["getUrl"] = "api/release/?payload=${compressString(json)}&type=svg"
         model["prefill"] = "api/release/prefill?payload=${compressString(json)}&type=svg"
         val writer = StringWriter()

@@ -11,15 +11,15 @@ class TimelineMaker {
     companion object {
          val DEFAULT_COLORS = mutableListOf("#75147C","#377E7F","#EA4238", "#73808E", "#296218")
     }
-    fun makeTimelineSvg(source: String, title: String) : String {
+    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean) : String {
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
-        val head = head(entries)
+        val head = head(entries, scale)
         sb.append(head.first)
-        val defs = defs(entries)
+        val defs = defs(entries, isPdf)
         val colors = defs.second
         sb.append(defs.first)
-        sb.append("<g transform=\"scale(1.0)\">")
+        sb.append("<g transform=\"scale($scale)\">")
         sb.append("""<text x="460" y="10" text-anchor="middle" style="font-size: 8px;font-family: Arial, sans-serif;" class="edge">${title.escapeXml()}</text>""")
         sb.append(buildRoad(head.second-100))
         entries.forEachIndexed { index, entry ->
@@ -54,7 +54,7 @@ class TimelineMaker {
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-86" font-size="10px">${entry.date}</text>
         <rect x="-70" y="30" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx="5"/>
-        <foreignObject x="-68" y="40" width="168" height="100">
+        <foreignObject x="-68" y="42" width="168" height="100">
             <div xmlns="http://www.w3.org/1999/xhtml">
                 <p>${entry.text.escapeXml()}</p>
             </div>
@@ -87,7 +87,7 @@ class TimelineMaker {
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="10px">${entry.date}</text>
         <rect x="-70" y="-180" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx='5'/>
-        <foreignObject x="-68" y="-170" width="168" height="100">
+        <foreignObject x="-68" y="-168" width="168" height="100">
             <div xmlns="http://www.w3.org/1999/xhtml" >
                 <p>${entry.text.escapeXml()}</p>
             </div>
@@ -116,21 +116,22 @@ class TimelineMaker {
     
         """.trimIndent()
     }
-    private fun head(entries: MutableList<Entry>) : Pair<String, Int> {
+    private fun head(entries: MutableList<Entry>, scale: String) : Pair<String, Int> {
         var width = 0
         entries.forEachIndexed { index, entry ->
             width = 140 * index + 80
         }
         width += 140
+        val scaleF = scale.toFloat()
         return Pair("""
-        <svg width="$width" height="400" xmlns="http://www.w3.org/2000/svg">
+        <svg width="${width * scaleF}" height="400" viewBox="0 0 ${width * scaleF} 400" xmlns="http://www.w3.org/2000/svg">
         <desc>https://docops.io/extension</desc>
     """.trimIndent(),width)
     }
 
     private fun tail() : String = "</svg>"
 
-    private fun defs(entries: MutableList<Entry>): Pair<String, MutableMap<Int, String>> {
+    private fun defs(entries: MutableList<Entry>, isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
         entries.forEachIndexed { index, entry ->
@@ -147,6 +148,27 @@ class TimelineMaker {
             <stop offset="60%" style="stop-color:$color; stop-opacity:1" />
         </radialGradient>
             """.trimIndent())
+        }
+        var style = """
+            <style>
+            .edge {
+                filter: drop-shadow(0 2mm 2mm #66557c);
+            }
+            .cricleedge {
+                filter: drop-shadow(0 2mm 2mm #a899bd);
+            }
+            .odd {
+                font-size:8px;
+                font-family: Arial, sans-serif;
+            }
+            .even {
+                font-size:8px;
+                font-family: Arial, sans-serif;
+            }
+        </style>
+        """.trimIndent()
+        if(isPdf) {
+            style = ""
         }
         return Pair("""
         <defs>
@@ -188,22 +210,7 @@ class TimelineMaker {
             <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa" />
          </marker>   
         $sb
-        <style>
-            .edge {
-                filter: drop-shadow(0 2mm 2mm #66557c);
-            }
-            .cricleedge {
-                filter: drop-shadow(0 2mm 2mm #a899bd);
-            }
-            .odd {
-                font-size:8px;
-                font-family: Arial, sans-serif;
-            }
-            .even {
-                font-size:8px;
-                font-family: Arial, sans-serif;
-            }
-        </style>
+        $style
     </defs>
     
     """.trimIndent(),colors)
@@ -241,7 +248,7 @@ text: Annual start of vacation, time to relax
 and plugin the controller.
     """.trimIndent()
     val maker = TimelineMaker()
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood")
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", true)
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }

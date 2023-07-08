@@ -7,13 +7,13 @@ class ReleaseTimelineMaker {
     fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
-        val str = StringBuilder(head(width, id, title= releaseStrategy.title))
-        str.append(defs(isPdf, id))
+        val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
+        str.append(defs(isPdf, id,releaseStrategy.scale))
         str.append(title(releaseStrategy.title, width))
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf))
         }
-
+        str.append("</g>")
         str.append(tail())
         return str.toString()
     }
@@ -24,7 +24,6 @@ class ReleaseTimelineMaker {
         if (currentIndex > 0) {
             startX = currentIndex * 425 -(20*currentIndex)
         }
-        val goal = release.lines[0]
         val lineText = StringBuilder()
         var lineStart = 25
         release.lines.forEachIndexed { index, s ->
@@ -90,15 +89,15 @@ class ReleaseTimelineMaker {
 
         else -> ""
     }
-    private fun determineWidth(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 550
+    private fun determineWidth(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 410 + releaseStrategy.releases.size * 20 + 40
 
 
-    private fun head(width: Int, id: String, title: String) : String{
-        val ratioWidth = width
-        val ratioHeight = 400
+    private fun head(width: Int, id: String, title: String, scale: Float) : String{
+        val ratioWidth = width * scale
+        val ratioHeight = 200 * scale
         //language=svg
         return """
-            <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $width 400' xmlns='http://www.w3.org/2000/svg' role='img'
+            <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $ratioWidth 400' xmlns='http://www.w3.org/2000/svg' role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>$title</title>
@@ -110,7 +109,7 @@ class ReleaseTimelineMaker {
     private fun tail() = "</svg>"
 
     //language=svg
-    private fun defs(isPdf: Boolean, id: String): String {
+    private fun defs(isPdf: Boolean, id: String, scale: Float): String {
         var style = ""
         if (!isPdf) {
             style = """
@@ -174,6 +173,7 @@ class ReleaseTimelineMaker {
              </linearGradient>
              $style
          </defs>
+         <g transform='scale($scale)'>
          """.trimIndent()
     }
 }

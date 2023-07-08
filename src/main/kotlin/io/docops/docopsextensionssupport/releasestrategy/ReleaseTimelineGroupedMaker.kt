@@ -8,16 +8,15 @@ class ReleaseTimelineGroupedMaker {
         val id = UUID.randomUUID().toString()
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val height = determineHeight(releaseStrategy = releaseStrategy)
-        val str = StringBuilder(head(width, height = height, id=id, title = releaseStrategy.title))
-        str.append(defs(isPdf, id))
+        val str = StringBuilder(head(width, height = height, id=id, title = releaseStrategy.title, releaseStrategy.scale))
+        str.append(defs(isPdf, id,  releaseStrategy.scale))
         str.append(title(releaseStrategy.title, width))
         var row = 0
         releaseStrategy.grouped().forEach { (t, u) ->
             u.forEachIndexed { index, release -> str.append(buildReleaseItem(release,index, isPdf, row, id)) }
             row++
         }
-
-
+        str.append("</g>")
         str.append(tail())
         return str.toString()
     }
@@ -108,11 +107,11 @@ class ReleaseTimelineGroupedMaker {
     }
     private fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.grouped().size * 260
 
-    private fun head(width: Int, height: Int, id: String, title: String) : String{
+    private fun head(width: Int, height: Int, id: String, title: String, scale: Float) : String{
 
         //language=svg
         return """
-        <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
+        <svg width="${width * scale}" height="${height*scale}" viewBox='0 0 ${width * scale}  ${height*scale}' xmlns='http://www.w3.org/2000/svg' role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>$title</title>
@@ -124,7 +123,7 @@ class ReleaseTimelineGroupedMaker {
     private fun tail() = "</svg>"
 
     //language=svg
-    private fun defs(isPdf: Boolean, id: String): String {
+    private fun defs(isPdf: Boolean, id: String, scale: Float): String {
         var style = ""
         if (!isPdf) {
             style = """
@@ -188,6 +187,7 @@ class ReleaseTimelineGroupedMaker {
              </linearGradient>
              $style
          </defs>
+         <g transform='scale($scale)'>
          """.trimIndent()
     }
 }
