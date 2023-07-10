@@ -11,7 +11,7 @@ enum class ReleaseEnum {
     fun color(releaseEnum: ReleaseEnum): String {
         return when (releaseEnum) {
             in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
-                "#c30213"
+                "#6cadde"
             }
             in arrayOf(RC1,RC2,RC3,RC4,RC5,RC6,RC7,RC8,RC9) -> {
                 "#2cc3cc"

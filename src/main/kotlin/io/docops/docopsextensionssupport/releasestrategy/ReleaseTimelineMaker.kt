@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.asciidoc.buttons.theme.Theme
+import io.docops.asciidoc.utils.escapeXml
 import java.util.UUID
 
 class ReleaseTimelineMaker {
@@ -11,15 +13,20 @@ class ReleaseTimelineMaker {
         str.append(defs(isPdf, id,releaseStrategy.scale))
         str.append(title(releaseStrategy.title, width))
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(buildReleaseItem(release,index, isPdf))
+            str.append(buildReleaseItem(release,index, isPdf, id))
         }
+        val w = (width * releaseStrategy.scale)/2
+        str.append("""
+            <path d="m 2,0 v 40 l 20,-20 z" transform="translate($w, 275)" onclick="inc();" fill="#cfcfcf" cursor="pointer" class="raise"/>
+            <path d="m 2,0 v 40 l -20,-20 z" transform="translate(${w-10}, 275)" onclick="dec();" fill="#cfcfcf" cursor="pointer" class="raise"/>
+        """.trimMargin())
         str.append("</g>")
         str.append(tail())
         return str.toString()
     }
 
 
-    private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean): String {
+    private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean, id: String): String {
         var startX = 0
         if (currentIndex > 0) {
             startX = currentIndex * 425 -(20*currentIndex)
@@ -30,7 +37,7 @@ class ReleaseTimelineMaker {
             lineText.append(
                 """
                 <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- $s</tspan>
+                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
             """.trimIndent()
             )
             if (index <= 7) {
@@ -47,12 +54,12 @@ class ReleaseTimelineMaker {
         }
         //language=svg
         return """
-         <g transform="translate($startX,60)" class="${shadeColor(release)}">
+         <g transform="translate($startX,60)" class="${shadeColor(release)}" id='GID$id'>
              <text text-anchor="middle" x="200" y="-12" class="milestoneTL">${release.date}</text>
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">${release.type}</text>
-            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
+            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal.escapeXml()}
                 $lineText
             </text>
         </g>
@@ -76,15 +83,15 @@ class ReleaseTimelineMaker {
 
     private fun strokeColor(release: Release): String = when {
         release.type.toString().startsWith("M") -> {
-            "#c30213"
+            "#6cadde"
         }
 
         release.type.toString().startsWith("R") -> {
-            "rgb(51, 182, 169)"
+            "#C766A0"
         }
 
         release.type.toString().startsWith("G") -> {
-            "rgb(84, 210, 0)"
+            "#F2DE83"
         }
 
         else -> ""
@@ -100,11 +107,11 @@ class ReleaseTimelineMaker {
             <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $ratioWidth 400' xmlns='http://www.w3.org/2000/svg' role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
-            <title>$title</title>
+            <title>${title.escapeXml()}</title>
         """.trimIndent()
     }
     private fun title(title: String, width: Int) = """
-        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
+        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
     """.trimIndent()
     private fun tail() = "</svg>"
 
@@ -115,17 +122,17 @@ class ReleaseTimelineMaker {
             style = """
                 <style>
             #ID${id} .shadM {
-                fill: #c30213;
-                filter: drop-shadow(0 1mm 1mm #c30213);
+                fill: #6cadde;
+                filter: drop-shadow(0 1mm 1mm #6cadde);
             }
             #ID${id} .shadR {
-                fill: rgb(51, 182, 169);
-                filter: drop-shadow(0 1mm 1mm rgb(51, 182, 169));
+                fill: #C766A0;
+                filter: drop-shadow(0 1mm 1mm #C766A0);
             }
 
             #ID${id} .shadG {
-                fill: rgb(84, 210, 0);
-                filter: drop-shadow(0 1mm 1mm rgb(84, 210, 0));
+                fill: #F2DE83;
+                filter: drop-shadow(0 1mm 1mm #F2DE83);
             }
             #ID${id} .milestoneTL {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -138,6 +145,17 @@ class ReleaseTimelineMaker {
             #ID${id} .milestoneTL > .entry {
                 text-anchor: start;
                 font-weight: normal;
+            }
+            .raise {
+                pointer-events: bounding-box;
+                opacity: 1;
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+            }
+
+            .raise:hover {
+                stroke: gold;
+                stroke-width: 3px;
+                opacity: 0.9;
             }
         </style>
             """.trimIndent()
@@ -171,6 +189,21 @@ class ReleaseTimelineMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
+             <script>
+              var scale = $scale;
+              var inc = function() {
+                    scale += 0.1;
+                    var box = document.querySelector("#ID$id");
+                    box.setAttribute("transform", "scale("+scale+")");
+                    
+              }
+              var dec = function() {
+                    scale -= 0.1;
+                    var box = document.querySelector("#ID$id");
+                    box.setAttribute("transform", "scale("+scale+")");
+                    
+              }
+             </script>
              $style
          </defs>
          <g transform='scale($scale)'>
