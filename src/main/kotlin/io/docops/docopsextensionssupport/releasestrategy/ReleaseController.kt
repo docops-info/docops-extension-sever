@@ -49,7 +49,12 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             val res = findHeightWidth(output)
             val baos = SvgToPng().toPngFromSvg(output, res)
             ResponseEntity(baos, headers, HttpStatus.OK)
-        } else {
+         } else if ("XLS".equals(type,true)) {
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            ResponseEntity(release.excel(output),headers, HttpStatus.OK)
+         } else {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")

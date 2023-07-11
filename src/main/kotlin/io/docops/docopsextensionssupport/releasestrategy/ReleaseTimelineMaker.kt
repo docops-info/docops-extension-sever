@@ -54,7 +54,7 @@ class ReleaseTimelineMaker {
         }
         //language=svg
         return """
-         <g transform="translate($startX,60)" class="${shadeColor(release)}" id='GID$id'>
+         <g transform="translate($startX,60)" class="${shadeColor(release)}">
              <text text-anchor="middle" x="200" y="-12" class="milestoneTL">${release.date}</text>
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
@@ -191,22 +191,35 @@ class ReleaseTimelineMaker {
              </linearGradient>
              <script>
               var scale = $scale;
-              var inc = function() {
-                    scale += 0.1;
-                    var box = document.querySelector("#ID$id");
-                    box.setAttribute("transform", "scale("+scale+")");
-                    
-              }
-              var dec = function() {
-                    scale -= 0.1;
-                    var box = document.querySelector("#ID$id");
-                    box.setAttribute("transform", "scale("+scale+")");
-                    
-              }
+            var inc = function () {
+                scale += 0.1;
+
+                var box = document.querySelector("#ID$id");
+                //box.setAttribute("transform", "scale(" + scale + ")");
+                var width = box.getAttribute("width");
+                var height = box.getAttribute("height");
+                box.setAttribute("width", scale * parseFloat(width));
+                box.setAttribute("height", scale * parseFloat(height));
+                var innerBox =  document.querySelector("#GID$id");
+                innerBox.setAttribute("transform", "scale(" + scale + ")");
+
+            }
+            var dec = function () {
+                scale -= 0.1;
+                var box = document.querySelector("#ID$id");
+               // box.setAttribute("transform", "scale(" + scale + ")");
+                var width = box.getAttribute("width");
+                var height = box.getAttribute("height");
+                box.setAttribute("width", scale * parseFloat(width));
+                box.setAttribute("height", scale * parseFloat(height));
+                var innerBox =  document.querySelector("#GID$id");
+                innerBox.setAttribute("transform", "scale(" + scale + ")");
+
+            }
              </script>
              $style
          </defs>
-         <g transform='scale($scale)'>
+         <g transform='scale($scale)' id='GID$id'>
          """.trimIndent()
     }
 }
