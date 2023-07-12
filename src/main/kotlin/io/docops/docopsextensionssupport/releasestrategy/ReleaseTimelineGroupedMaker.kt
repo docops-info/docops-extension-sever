@@ -84,15 +84,15 @@ class ReleaseTimelineGroupedMaker {
 
     private fun strokeColor(release: Release): String = when {
         release.type.toString().startsWith("M") -> {
-            "#c30213"
+            "#6cadde"
         }
 
         release.type.toString().startsWith("R") -> {
-            "rgb(51, 182, 169)"
+            "#C766A0"
         }
 
         release.type.toString().startsWith("G") -> {
-            "rgb(84, 210, 0)"
+            "#136e33"
         }
 
         else -> ""
@@ -130,16 +130,16 @@ class ReleaseTimelineGroupedMaker {
                 <style>
             #ID${id} .shadM {
                 fill: #c30213;
-                filter: drop-shadow(0 2mm 1mm #c30213);
+                filter: drop-shadow(0 2mm 1mm #6cadde);
             }
             #ID${id} .shadR {
                 fill: rgb(51, 182, 169);
-                filter: drop-shadow(0 2mm 1mm rgb(51, 182, 169));
+                filter: drop-shadow(0 2mm 1mm #C766A0);
             }
 
             #ID${id} .shadG {
                 fill: rgb(84, 210, 0);
-                filter: drop-shadow(0 2mm 1mm rgb(84, 210, 0));
+                filter: drop-shadow(0 2mm 1mm #136e33);
             }
             #ID${id} .milestone {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;

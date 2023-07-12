@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.asciidoctorj.extension.adr.makeUrl
 
 class RoadMapParser {
 
@@ -30,7 +29,6 @@ class RoadMapParser {
 
                 }
             }
-            println(s)
             if (s.trim().startsWith("- now")) {
                 newList = mutableListOf()
                 now.add(newList)

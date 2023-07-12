@@ -16,10 +16,10 @@ class ReleaseTimelineMaker {
             str.append(buildReleaseItem(release,index, isPdf, id))
         }
         val w = (width * releaseStrategy.scale)/2
-        str.append("""
+       /* str.append("""
             <path d="m 2,0 v 40 l 20,-20 z" transform="translate($w, 275)" onclick="inc();" fill="#cfcfcf" cursor="pointer" class="raise"/>
             <path d="m 2,0 v 40 l -20,-20 z" transform="translate(${w-10}, 275)" onclick="dec();" fill="#cfcfcf" cursor="pointer" class="raise"/>
-        """.trimMargin())
+        """.trimMargin())*/
         str.append("</g>")
         str.append(tail())
         return str.toString()
@@ -91,26 +91,24 @@ class ReleaseTimelineMaker {
         }
 
         release.type.toString().startsWith("G") -> {
-            "#F2DE83"
+            "#136e33"
         }
 
         else -> ""
     }
-    private fun determineWidth(releaseStrategy: ReleaseStrategy) = releaseStrategy.releases.size * 410 + releaseStrategy.releases.size * 20 + 40
+    private fun determineWidth(releaseStrategy: ReleaseStrategy) = (releaseStrategy.releases.size * 410 + releaseStrategy.releases.size * 20 + 40) * releaseStrategy.scale
 
 
-    private fun head(width: Int, id: String, title: String, scale: Float) : String{
-        val ratioWidth = width * scale
-        val ratioHeight = 200 * scale
+    private fun head(width: Float, id: String, title: String, scale: Float) : String{
         //language=svg
         return """
-            <svg width="$ratioWidth" height="$ratioHeight" viewBox='0 0 $ratioWidth 400' xmlns='http://www.w3.org/2000/svg' role='img'
+            <svg width="$width" height="260" viewBox='0 0 $width 260' xmlns='http://www.w3.org/2000/svg' role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
         """.trimIndent()
     }
-    private fun title(title: String, width: Int) = """
+    private fun title(title: String, width: Float) = """
         <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
     """.trimIndent()
     private fun tail() = "</svg>"
@@ -121,42 +119,17 @@ class ReleaseTimelineMaker {
         if (!isPdf) {
             style = """
                 <style>
-            #ID${id} .shadM {
-                fill: #6cadde;
-                filter: drop-shadow(0 1mm 1mm #6cadde);
-            }
-            #ID${id} .shadR {
-                fill: #C766A0;
-                filter: drop-shadow(0 1mm 1mm #C766A0);
-            }
+            #ID${id} .shadM { fill: #6cadde; filter: drop-shadow(0 1mm 1mm #6cadde); }
+            #ID${id} .shadR { fill: #C766A0; filter: drop-shadow(0 1mm 1mm #C766A0); }
 
-            #ID${id} .shadG {
-                fill: #F2DE83;
-                filter: drop-shadow(0 1mm 1mm #F2DE83);
-            }
-            #ID${id} .milestoneTL {
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                font-weight: bold;
-            }
-            #ID${id} .lines {
-                font-size: 10px;
-            }
+            #ID${id} .shadG { fill: #136e33; filter: drop-shadow(0 1mm 1mm #136e33); }
+            #ID${id} .milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
+            #ID${id} .lines { font-size: 10px; }
 
-            #ID${id} .milestoneTL > .entry {
-                text-anchor: start;
-                font-weight: normal;
-            }
-            .raise {
-                pointer-events: bounding-box;
-                opacity: 1;
-                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
-            }
+            #ID${id} .milestoneTL > .entry { text-anchor: start; font-weight: normal; }
+            .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }
 
-            .raise:hover {
-                stroke: gold;
-                stroke-width: 3px;
-                opacity: 0.9;
-            }
+            .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
         </style>
             """.trimIndent()
         }
@@ -189,34 +162,6 @@ class ReleaseTimelineMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
-             <script>
-              var scale = $scale;
-            var inc = function () {
-                scale += 0.1;
-
-                var box = document.querySelector("#ID$id");
-                //box.setAttribute("transform", "scale(" + scale + ")");
-                var width = box.getAttribute("width");
-                var height = box.getAttribute("height");
-                box.setAttribute("width", scale * parseFloat(width));
-                box.setAttribute("height", scale * parseFloat(height));
-                var innerBox =  document.querySelector("#GID$id");
-                innerBox.setAttribute("transform", "scale(" + scale + ")");
-
-            }
-            var dec = function () {
-                scale -= 0.1;
-                var box = document.querySelector("#ID$id");
-               // box.setAttribute("transform", "scale(" + scale + ")");
-                var width = box.getAttribute("width");
-                var height = box.getAttribute("height");
-                box.setAttribute("width", scale * parseFloat(width));
-                box.setAttribute("height", scale * parseFloat(height));
-                var innerBox =  document.querySelector("#GID$id");
-                innerBox.setAttribute("transform", "scale(" + scale + ")");
-
-            }
-             </script>
              $style
          </defs>
          <g transform='scale($scale)' id='GID$id'>
