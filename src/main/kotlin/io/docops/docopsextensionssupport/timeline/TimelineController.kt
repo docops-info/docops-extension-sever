@@ -28,8 +28,9 @@ class TimelineController {
             contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
              title = httpServletRequest.getParameter("title")
         }
+        val scale = httpServletRequest.getParameter("scale")
         val tm = TimelineMaker()
-        val svg = tm.makeTimelineSvg(contents, title, "1.0", false)
+        val svg = tm.makeTimelineSvg(contents, title, scale, false)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

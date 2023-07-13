@@ -8,16 +8,16 @@ class RoadMapMaker {
         private  val CORD = mutableMapOf(0 to 120, 1 to 225, 2 to 330, 3 to 435, 4 to 540, 5 to 645)
 
 
-    fun makeRoadMapImage(source: String, scale: String): String {
+    fun makeRoadMapImage(source: String, scale: String, title: String): String {
         val roadmaps = RoadMapParser().parse(source)
-        return draw(roadmaps, scale)
+        return draw(roadmaps, scale, title)
     }
-    private fun draw(roadmaps: RoadMaps, scale: String): String {
+    private fun draw(roadmaps: RoadMaps, scale: String, title: String): String {
         val sb = StringBuilder()
         sb.append(head(roadmaps, scale.toFloat()))
         sb.append(style())
         sb.append("<g transform='scale($scale)'>")
-        sb.append(title())
+        sb.append(title(title))
         sb.append(makeNow())
         sb.append(row(0, roadmaps))
         sb.append(row(1, roadmaps))
@@ -77,9 +77,9 @@ class RoadMapMaker {
         sb.append("</g>")
         return sb.toString()
     }
-    private fun title() = """
+    private fun title(title: String) = """
         <rect width="100%" height="100%" fill="#fcfcfc"/>
-        <text x="26" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46">Roadmap</text>
+        <text x="26" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46">$title</text>
         <text x="105" y="100" class="now">NOW</text>
         <text x="304.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="504.5" y="100" class="later" text-anchor="middle">LATER</text>
@@ -165,7 +165,7 @@ fun main() {
         0ne thing to do later
     """.trimIndent()
     val rm = RoadMapMaker()
-    val output = rm.makeRoadMapImage(str, "1.0")
+    val output = rm.makeRoadMapImage(str, "1.0", "Unit Test")
     val f = File("gen/roadmapout.svg")
     f.writeBytes(output.toByteArray())
 }

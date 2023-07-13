@@ -48,7 +48,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(45f, -68, 42)
+        val text = entry.toTextWithSpan(45f, -68, 42, "odd")
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -78,7 +78,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(45f, -68, -168)
+        val text = entry.toTextWithSpan(45f, -68, -168, "even")
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -121,8 +121,9 @@ class TimelineMaker {
         }
         width += 140
         val scaleF = scale.toFloat()
+        val height = 400 * scale.toFloat()
         return Pair("""
-        <svg width="${width * scaleF}" height="400" viewBox="0 0 ${width * scaleF} 400" xmlns="http://www.w3.org/2000/svg">
+        <svg width="${width * scaleF}" height="$height" viewBox="0 0 ${width * scaleF} $height" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <desc>https://docops.io/extension</desc>
     """.trimIndent(),width)
     }
@@ -148,13 +149,13 @@ class TimelineMaker {
             """.trimIndent())
         }
         var style = """
-            <style>
-            .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
-            .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-            .odd { font-size:8px; font-family: Arial, sans-serif; }
-            .even { font-size:8px; font-family: Arial, sans-serif; }
-            .rmLink { fill: blue; text-decoration: underline; }
-        </style>
+<style>
+    .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
+    .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
+    .odd { font-size:8px; font-family: Arial, sans-serif; }
+    .even { font-size:8px; font-family: Arial, sans-serif; }
+    .rmLink { fill: blue; text-decoration: underline; }
+</style>
         """.trimIndent()
         if(isPdf) {
             style = ""
@@ -211,7 +212,7 @@ fun main() {
 -
 date: July 23rd, 2023
 text: DocOps extension Server releases a new feature, Timeline Maker
-for asciidoctorj. With a simple text markup block you can
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
 create very powerful timeline images. Enjoy!
 -
 date: August 15th, 2023
@@ -235,9 +236,12 @@ Time to celebrate. Good times.
 date: December 11th, 2023
 text: Annual start of vacation, time to relax
 and plugin the controller.
+-
+date: 01/01/2024
+text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
     val maker = TimelineMaker()
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", true)
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false)
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }

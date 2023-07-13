@@ -14,7 +14,7 @@ class TimelineParser {
         groups.forEachIndexed {i, lines ->
             lines.forEach { line ->
                 val key: String
-                if (line.contains(":")) {
+                if (line.startsWith("date:") || line.startsWith("text:")) {
                     if (currKey.isNotEmpty()) {
                         m[currKey.uppercase()] = value
                     }
