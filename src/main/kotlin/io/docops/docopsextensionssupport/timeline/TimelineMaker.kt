@@ -23,13 +23,16 @@ class TimelineMaker {
         val colors = defs.second
         sb.append(defs.first)
         sb.append("<g transform=\"scale($scale)\">")
-        sb.append("""<text x="460" y="10" text-anchor="middle" style="font-size: 8px;font-family: Arial, sans-serif;" class="edge">${title.escapeXml()}</text>""")
+        sb.append("""<text x="460" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge">${title.escapeXml()}</text>""")
+        sb.append("""<g transform="translate(0,24)">""")
+
         sb.append(buildRoad(head.second-100))
         entries.forEachIndexed { index, entry ->
             val color = colors[index]!!
             sb.append(makeEntry(index, entry, color))
 
         }
+        sb.append("</g>")
         sb.append("</g>")
         sb.append(tail())
         return sb.toString()
@@ -121,7 +124,7 @@ class TimelineMaker {
         }
         width += 140
         val scaleF = scale.toFloat()
-        val height = 400 * scale.toFloat()
+        val height = 424 * scale.toFloat()
         return Pair("""
         <svg width="${width * scaleF}" height="$height" viewBox="0 0 ${width * scaleF} $height" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <desc>https://docops.io/extension</desc>
