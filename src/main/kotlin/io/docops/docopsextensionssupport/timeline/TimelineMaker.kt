@@ -2,6 +2,9 @@ package io.docops.docopsextensionssupport.timeline
 
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.roadmap.linesToMultiLineText
+import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
+import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
@@ -45,6 +48,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
+        val text = entry.toTextWithSpan(45f, -68, 42)
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -54,11 +58,7 @@ class TimelineMaker {
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-86" font-size="10px">${entry.date}</text>
         <rect x="-70" y="30" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx="5"/>
-        <foreignObject x="-68" y="42" width="168" height="100">
-            <div xmlns="http://www.w3.org/1999/xhtml">
-                <p>${entry.text.escapeXml()}</p>
-            </div>
-        </foreignObject>
+        $text
         <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
         <rect id="buttongrad" x="-71" y="21" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
@@ -78,6 +78,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
+        val text = entry.toTextWithSpan(45f, -68, -168)
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -87,11 +88,8 @@ class TimelineMaker {
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="10px">${entry.date}</text>
         <rect x="-70" y="-180" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx='5'/>
-        <foreignObject x="-68" y="-168" width="168" height="100">
-            <div xmlns="http://www.w3.org/1999/xhtml" >
-                <p>${entry.text.escapeXml()}</p>
-            </div>
-        </foreignObject>
+        $text
+        
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
         <rect id="buttongrad" x="-71" y="-189" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
@@ -151,20 +149,11 @@ class TimelineMaker {
         }
         var style = """
             <style>
-            .edge {
-                filter: drop-shadow(0 2mm 2mm #66557c);
-            }
-            .cricleedge {
-                filter: drop-shadow(0 2mm 2mm #a899bd);
-            }
-            .odd {
-                font-size:8px;
-                font-family: Arial, sans-serif;
-            }
-            .even {
-                font-size:8px;
-                font-family: Arial, sans-serif;
-            }
+            .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
+            .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
+            .odd { font-size:8px; font-family: Arial, sans-serif; }
+            .even { font-size:8px; font-family: Arial, sans-serif; }
+            .rmLink { fill: blue; text-decoration: underline; }
         </style>
         """.trimIndent()
         if(isPdf) {
