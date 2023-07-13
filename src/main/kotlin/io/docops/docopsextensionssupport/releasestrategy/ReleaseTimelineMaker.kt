@@ -100,9 +100,10 @@ class ReleaseTimelineMaker {
 
 
     private fun head(width: Float, id: String, title: String, scale: Float) : String{
+        val height = 260 * scale
         //language=svg
         return """
-            <svg width="$width" height="260" viewBox='0 0 $width 260' xmlns='http://www.w3.org/2000/svg' role='img'
+            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
