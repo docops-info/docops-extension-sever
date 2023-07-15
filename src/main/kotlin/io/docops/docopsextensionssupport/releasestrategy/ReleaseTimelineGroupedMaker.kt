@@ -82,21 +82,6 @@ class ReleaseTimelineGroupedMaker {
         else -> ""
     }
 
-    private fun strokeColor(release: Release): String = when {
-        release.type.toString().startsWith("M") -> {
-            "#6cadde"
-        }
-
-        release.type.toString().startsWith("R") -> {
-            "#C766A0"
-        }
-
-        release.type.toString().startsWith("G") -> {
-            "#136e33"
-        }
-
-        else -> ""
-    }
     private fun determineWidth(releaseStrategy: ReleaseStrategy): Int {
         val groups = releaseStrategy.grouped()
         var maxLen = 0

@@ -81,21 +81,7 @@ class ReleaseTimelineMaker {
         else -> ""
     }
 
-    private fun strokeColor(release: Release): String = when {
-        release.type.toString().startsWith("M") -> {
-            "#6cadde"
-        }
 
-        release.type.toString().startsWith("R") -> {
-            "#C766A0"
-        }
-
-        release.type.toString().startsWith("G") -> {
-            "#136e33"
-        }
-
-        else -> ""
-    }
     private fun determineWidth(releaseStrategy: ReleaseStrategy) = (releaseStrategy.releases.size * 410 + releaseStrategy.releases.size * 20 + 40) * releaseStrategy.scale
 
 
@@ -168,4 +154,19 @@ class ReleaseTimelineMaker {
          <g transform='scale($scale)' id='GID$id'>
          """.trimIndent()
     }
+}
+fun strokeColor(release: Release): String = when {
+    release.type.toString().startsWith("M") -> {
+        "#6cadde"
+    }
+
+    release.type.toString().startsWith("R") -> {
+        "#C766A0"
+    }
+
+    release.type.toString().startsWith("G") -> {
+        "#136e33"
+    }
+
+    else -> ""
 }

@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.asciidoc.utils.escapeXml
+
 class ReleaseRoadMapMaker {
 
     fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean): String {
@@ -8,13 +10,13 @@ class ReleaseRoadMapMaker {
     private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String {
         val str = StringBuilder()
         var startY = -125
-        var height = 500
+        var height = 550
         if (releaseStrategy.releases.size > 2) {
-            height += (220 * (releaseStrategy.releases.size - 2))
+            height += (245 * (releaseStrategy.releases.size))
         }
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(strat(release, startY, index))
-            startY += 215
+            startY += 225
         }
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -23,7 +25,7 @@ class ReleaseRoadMapMaker {
                  <desc>https://docops.io/extension</desc>
                  ${svgDefs(isPdf)}     
                  <g transform="scale(${releaseStrategy.scale})">           
-                <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title}</text>
+                <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title.escapeXml()}</text>
                 $str
                 </g>
             </svg>
@@ -33,10 +35,10 @@ class ReleaseRoadMapMaker {
     private fun strat(release: Release, startY: Int, index: Int): String {
 
         val str = StringBuilder(
-            """<text x="410" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">"""
+            """<text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">"""
         )
         release.lines.forEach {
-            str.append("<tspan x=\"410\" dy=\"18\">* $it</tspan>")
+            str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text>")
         var color = "#cccccc"
@@ -45,14 +47,11 @@ class ReleaseRoadMapMaker {
         }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
-            <rect x="0" y="200" height="225" width="1400" fill="$color"/>
+            <rect x="0" y="200" height="235" width="1400" fill="$color"/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
-            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${
-            release.type.color(
-                release.type
-            )
-        }" filter="url(#Bevel)"/>
+            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
+            <text x="325" y="410" text-anchor="middle" dominant-baseline="middle" class="milestoneDate" fill="${release.type.color(release.type)}">${release.date}</text>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
             fill="#073763">${release.type}
             </text>
@@ -71,32 +70,10 @@ class ReleaseRoadMapMaker {
         """.trimIndent()
         var style = """
             <style>
-                        .milestone:hover {
-                            cursor: pointer;
-                            /* calculate using: (2 * PI * R) */
-                            stroke-width: 16;
-                            stroke-opacity: 1;
-                            fill: lightblue;
-
-                        }
-
-                        .milestone {
-                            font-size: 60px;
-                            font-weight: bold;
-                            font-family: Arial, Helvetica, sans-serif;
-                        }
-                    .bev:hover {
-                        $ani
-                        stroke: #c30213;
-                    }
-                    .bev2:hover {
-                        $ani
-                        stroke: #2cc3cc;
-                    }
-                    .bev3:hover {
-                        $ani
-                        stroke: #3dd915;
-                    }
+                    .milestone:hover { cursor: pointer; /* calculate using: (2 * PI * R) */ stroke-width: 16; stroke-opacity: 1; fill: lightblue; }
+                    .milestone { font-size: 60px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
+                    .milestoneDate { font-size: 18px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
+                    .bev:hover { $ani stroke: #6cadde; } .bev2:hover { $ani stroke: #C766A0; } .bev3:hover { $ani stroke: #136e33; }
                     @keyframes clock-animation {
                         0% {
                             stroke-dashoffset: 471;
