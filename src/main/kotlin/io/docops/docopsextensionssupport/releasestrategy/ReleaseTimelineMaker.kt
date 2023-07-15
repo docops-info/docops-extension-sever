@@ -82,11 +82,11 @@ class ReleaseTimelineMaker {
     }
 
 
-    private fun determineWidth(releaseStrategy: ReleaseStrategy) = (releaseStrategy.releases.size * 410 + releaseStrategy.releases.size * 20 + 40) * releaseStrategy.scale
+    private fun determineWidth(releaseStrategy: ReleaseStrategy) = ((releaseStrategy.releases.size * 410) + (releaseStrategy.releases.size * 20) + 80) * releaseStrategy.scale
 
 
     private fun head(width: Float, id: String, title: String, scale: Float) : String{
-        val height = 260 * scale
+        val height = 270 * scale
         //language=svg
         return """
             <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'

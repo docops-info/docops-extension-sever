@@ -114,16 +114,16 @@ class ReleaseTimelineGroupedMaker {
             style = """
                 <style>
             #ID${id} .shadM {
-                fill: #c30213;
+                fill: #6cadde;
                 filter: drop-shadow(0 2mm 1mm #6cadde);
             }
             #ID${id} .shadR {
-                fill: rgb(51, 182, 169);
+                fill: #C766A0;
                 filter: drop-shadow(0 2mm 1mm #C766A0);
             }
 
             #ID${id} .shadG {
-                fill: rgb(84, 210, 0);
+                fill: #136e33;
                 filter: drop-shadow(0 2mm 1mm #136e33);
             }
             #ID${id} .milestone {
