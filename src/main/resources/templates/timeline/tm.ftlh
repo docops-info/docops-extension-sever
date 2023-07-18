@@ -2,6 +2,7 @@
 <fieldset id="response-div" >
     <legend>Timeline Builder</legend>
     <div class="pure-1-2">
+        <label for="scale">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
                value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
     </div>

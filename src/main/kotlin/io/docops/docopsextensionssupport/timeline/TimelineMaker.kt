@@ -12,7 +12,16 @@ import java.io.File
 class TimelineMaker {
 
     companion object {
-         val DEFAULT_COLORS = mutableListOf("#75147C","#377E7F","#EA4238", "#73808E", "#296218")
+         val DEFAULT_COLORS = mutableListOf("#45618E",
+             "#A43B3B",
+             "#FFD373",
+             "#F7E67A",
+             "#01FF90",
+             "#FF6F36",
+             "#EAA213",
+             "#FFAF10",
+             "#FF7F00",
+             "#6D4F98")
     }
     fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean) : String {
         val entries = TimelineParser().parse(source)
@@ -51,7 +60,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(45f, -68, 42, "odd")
+        val text = entry.toTextWithSpan(35f, -68, 42, "odd")
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -81,7 +90,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(45f, -68, -168, "even")
+        val text = entry.toTextWithSpan(35f, -68, -168, "even")
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -92,7 +101,6 @@ class TimelineMaker {
         <text x="-30" y="96" font-size="10px">${entry.date}</text>
         <rect x="-70" y="-180" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx='5'/>
         $text
-        
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
         <rect id="buttongrad" x="-71" y="-189" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
@@ -137,7 +145,7 @@ class TimelineMaker {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
         entries.forEachIndexed { index, entry ->
-            val color = if(index>4) {
+            val color = if(index>9) {
                 getRandomColorHex()
             } else {
                 DEFAULT_COLORS[index]
@@ -155,8 +163,8 @@ class TimelineMaker {
 <style>
     .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
     .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-    .odd { font-size:8px; font-family: Arial, sans-serif; }
-    .even { font-size:8px; font-family: Arial, sans-serif; }
+    .odd { font-size:10px; font-family: Arial, sans-serif; }
+    .even { font-size:10px; font-family: Arial, sans-serif; }
     .rmLink { fill: blue; text-decoration: underline; }
 </style>
         """.trimIndent()
