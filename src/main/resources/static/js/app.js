@@ -81,4 +81,13 @@ function downloadSVGAsText(content) {
     a.href = 'data:image/svg+xml;base64,' + content;
     a.dispatchEvent(e);
 }
+function downloadSVG(elemId, name) {
+    const svg = document.getElementById(elemId).innerHTML;
+    const blob = new Blob([svg.toString()]);
+    const element = document.createElement("a");
+    element.download = name;
+    element.href = window.URL.createObjectURL(blob);
+    element.click();
+    element.remove();
+}
 var myChart;

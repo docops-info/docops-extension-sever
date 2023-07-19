@@ -2,6 +2,11 @@
     <fieldset id="response-div" >
         <legend>Timeline Builder</legend>
         <div class="pure-1-2">
+            <label for="title">Scale</label>
+            <input type="text" id="title" name="title" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
+                   value="planner"  class="pure-u-1-4">
+        </div>
+        <div class="pure-1-2">
             <label for="scale">Scale</label>
             <input type="number" id="scale" name="scale" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
                    value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
@@ -19,6 +24,7 @@ do this later
     </fieldset>
     <fieldset>
         <button class="button-success pure-button">Submit</button>
+        <button class="button-secondary pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
     </fieldset>
 </form>
 <div id="contentBox" class="contentBox"></div>
