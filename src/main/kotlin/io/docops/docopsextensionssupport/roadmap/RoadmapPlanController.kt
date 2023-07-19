@@ -22,8 +22,9 @@ class RoadmapPlanController {
         if(contents.isNullOrEmpty()) {
             contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
         }
+        val scale = httpServletRequest.getParameter("scale")
         val rmm = RoadMapMaker()
-        val svg = rmm.makeRoadMapImage(contents, "1.0", "Roadmap")
+        val svg = rmm.makeRoadMapImage(contents, scale, "Roadmap")
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

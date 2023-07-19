@@ -161,6 +161,11 @@ class MainController() {
     fun timeline(model: Model): String {
         return "timeline/tm"
     }
+    @GetMapping("/roadmap.html")
+    @Timed(value = "docops.roadmap.plan.html", histogram = true, percentiles = [0.5, 0.95])
+    fun roadmap(model: Model): String {
+        return "roadmap/rm"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,
