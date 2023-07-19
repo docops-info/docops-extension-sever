@@ -51,7 +51,7 @@ class RoadMapMaker {
         if(roadmaps.now.size-1 >= index ){
             sb.append(now)
             var text = """<text x="2" y="2" class="primary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.now[index][0], 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 2)
             text += spans
             text += "</text>"
@@ -60,7 +60,7 @@ class RoadMapMaker {
         if(roadmaps.next.size-1 >= index ){
             sb.append(next)
             var text = """<text x="192" y="2" class="secondary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.next[index][0], 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
             text += "</text>"
@@ -69,7 +69,7 @@ class RoadMapMaker {
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
             var text = """<text x="382" y="2" class="tertiary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.later[index][0], 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 382)
             text += spans
             text += "</text>"
@@ -155,7 +155,8 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
 fun main() {
     val str = """
         - now
-PI Portal is in Model Office. OPLLite & QuickPAF are in Model Office. Deployment for Portal to UAT, MO like it is production.
+PI Portal is in Model Office. OPLLite & QuickPAF are in Model Office. 
+Deployment for Portal to UAT, MO like it is production.
 - now
  Liberty Server M2 facing challenges in MO. This is why we have release strategies.
         - now 

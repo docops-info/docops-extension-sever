@@ -48,6 +48,21 @@ enum class ReleaseEnum {
             else -> "bev"
         }
     }
+    fun speed(releaseEnum: ReleaseEnum): String {
+        return when (releaseEnum) {
+            in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
+                "10s"
+            }
+            in arrayOf(RC1,RC2,RC3,RC4,RC5,RC6,RC7,RC8,RC9) -> {
+                "8s"
+            }
+            GA -> {
+                "4s"
+            }
+
+            else -> "10s"
+        }
+    }
 }
 
 class SelectedStrategy(val releaseEnum: String, val selected: Boolean = false)

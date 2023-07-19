@@ -51,7 +51,10 @@ class ReleaseRoadMapMaker {
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
-            <use href="#svg2" x="305" y="340" fill="${release.type.color(release.type)}" width="40" height="40"/>
+            <use href="#svg2" x="305" y="340" fill="${release.type.color(release.type)}" width="40" height="40">
+            <animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
+                        path="M 0, -40 m 66, 0 a 66,66 0 1,0 -132,0 a 66,66 0 1,0  132,0" />
+            </use>
             <text x="325" y="410" text-anchor="middle" dominant-baseline="middle" class="milestoneDate" fill="${release.type.color(release.type)}">${release.date}</text>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
             fill="#073763">${release.type}
