@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
+import io.docops.asciidoc.utils.escapeXml
 import java.io.File
 
 class RoadMapMaker {
@@ -109,7 +110,7 @@ class RoadMapMaker {
 }
 
 fun wrapText(text: String, width: Float) : MutableList<String> {
-    val words = text.trim().split(" ")
+    val words = text.trim().escapeXml().split(" ")
     var rowText = ""
     val lines = mutableListOf<String>()
     words.forEachIndexed { index, s ->
@@ -152,20 +153,24 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
     return text.toString()
 }
 fun main() {
-    val str = """in
+    val str = """
         - now
-        hello there this is a roadmap item
-        - next 
-        out of sequence item [[https://www.google.com google]]
-        - now
-        this is [[https://www.apple.com apple]] doing what it always does, which is innovate and make their products incrementally better 
+PI Portal is in Model Office. OPLLite & QuickPAF are in Model Office. Deployment for Portal to UAT, MO like it is production.
+- now
+ Liberty Server M2 facing challenges in MO. This is why we have release strategies.
+        - now 
+eService is in Sys. PQS is in SYS. Version Support for OPLLite & QuickPaf in SYS
+- now
+Liberty server setup in production for OplLite & quick PAF
         - next
-        next thing
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS        
         - later
-        0ne thing to do later
+Contact View needed for Arch runway. NXT for arch runway.
     """.trimIndent()
     val rm = RoadMapMaker()
-    val output = rm.makeRoadMapImage(str, "1.0", "Unit Test")
+    val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress")
     val f = File("gen/roadmapout.svg")
     f.writeBytes(output.toByteArray())
 }
