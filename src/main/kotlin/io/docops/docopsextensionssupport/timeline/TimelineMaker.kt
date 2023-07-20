@@ -2,9 +2,6 @@ package io.docops.docopsextensionssupport.timeline
 
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.roadmap.linesToMultiLineText
-import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
-import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
@@ -23,7 +20,7 @@ class TimelineMaker {
              "#FF7F00",
              "#6D4F98")
     }
-    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean) : String {
+    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String) : String {
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val head = head(entries, scale)
@@ -38,7 +35,7 @@ class TimelineMaker {
         sb.append(buildRoad(head.second-100))
         entries.forEachIndexed { index, entry ->
             val color = colors[index]!!
-            sb.append(makeEntry(index, entry, color))
+            sb.append(makeEntry(index, entry, color, chars))
 
         }
         sb.append("</g>")
@@ -47,20 +44,20 @@ class TimelineMaker {
         return sb.toString()
     }
 
-    private fun makeEntry(index: Int, entry: Entry, color: String): String {
+    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String): String {
         return if(index % 2 == 0) {
-            odd(index,entry, color)
+            odd(index,entry, color, chars)
         } else{
-            even(index, entry, color)
+            even(index, entry, color, chars)
         }
     }
-    private fun odd(index: Int, entry: Entry, color: String): String {
+    private fun odd(index: Int, entry: Entry, color: String, chars: String): String {
         var x = 80
         if(index>0)
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(35f, -68, 42, "odd")
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd")
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -84,13 +81,13 @@ class TimelineMaker {
     
         """.trimIndent()
     }
-    private fun even(index: Int, entry: Entry, color: String): String {
+    private fun even(index: Int, entry: Entry, color: String, chars: String): String {
         var x = 80
         if(index>0)
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(35f, -68, -168, "even")
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even")
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -252,7 +249,7 @@ date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
     val maker = TimelineMaker()
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false)
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false, "35")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }

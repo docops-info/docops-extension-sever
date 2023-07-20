@@ -9,23 +9,23 @@ class RoadMapMaker {
         private  val CORD = mutableMapOf(0 to 120, 1 to 225, 2 to 330, 3 to 435, 4 to 540, 5 to 645)
 
 
-    fun makeRoadMapImage(source: String, scale: String, title: String): String {
+    fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
         val roadmaps = RoadMapParser().parse(source)
-        return draw(roadmaps, scale, title)
+        return draw(roadmaps, scale, title, numChars)
     }
-    private fun draw(roadmaps: RoadMaps, scale: String, title: String): String {
+    private fun draw(roadmaps: RoadMaps, scale: String, title: String, numChars: String): String {
         val sb = StringBuilder()
         sb.append(head(roadmaps, scale.toFloat()))
         sb.append(style())
         sb.append("<g transform='scale($scale)'>")
         sb.append(title(title))
         sb.append(makeNow())
-        sb.append(row(0, roadmaps))
-        sb.append(row(1, roadmaps))
-        sb.append(row(2, roadmaps))
-        sb.append(row(3, roadmaps))
-        sb.append(row(4, roadmaps))
-        sb.append(row(5, roadmaps))
+        sb.append(row(0, roadmaps, numChars))
+        sb.append(row(1, roadmaps, numChars))
+        sb.append(row(2, roadmaps, numChars))
+        sb.append(row(3, roadmaps, numChars))
+        sb.append(row(4, roadmaps, numChars))
+        sb.append(row(5, roadmaps, numChars))
         sb.append("</g>")
         sb.append(tail())
         return joinXmlLines(sb.toString())
@@ -43,7 +43,7 @@ class RoadMapMaker {
         return """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height" viewBox="0 0 $width $height">"""
     }
 
-    private fun row(index: Int, roadmaps: RoadMaps) : String {
+    private fun row(index: Int, roadmaps: RoadMaps, numChars: String) : String {
         var sb = StringBuilder("""<g transform="translate(26,${CORD[index]})">""")
         val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184"/>"""
         val next = """<rect x="190" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184"/>"""
@@ -51,7 +51,7 @@ class RoadMapMaker {
         if(roadmaps.now.size-1 >= index ){
             sb.append(now)
             var text = """<text x="2" y="2" class="primary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 2)
             text += spans
             text += "</text>"
@@ -60,7 +60,7 @@ class RoadMapMaker {
         if(roadmaps.next.size-1 >= index ){
             sb.append(next)
             var text = """<text x="192" y="2" class="secondary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
             text += "</text>"
@@ -69,7 +69,7 @@ class RoadMapMaker {
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
             var text = """<text x="382" y="2" class="tertiary">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), 32f), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 382)
             text += spans
             text += "</text>"
@@ -171,7 +171,7 @@ emergency messages in SYS
 Contact View needed for Arch runway. NXT for arch runway.
     """.trimIndent()
     val rm = RoadMapMaker()
-    val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress")
+    val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
     val f = File("gen/roadmapout.svg")
     f.writeBytes(output.toByteArray())
 }

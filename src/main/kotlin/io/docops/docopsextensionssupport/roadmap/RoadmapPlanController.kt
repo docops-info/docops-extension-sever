@@ -24,8 +24,13 @@ class RoadmapPlanController {
         }
         val scale = httpServletRequest.getParameter("scale")
         val title = httpServletRequest.getParameter("title")
+        val numChars = httpServletRequest.getParameter("numChars")
+        var chars = numChars
+        if(numChars == null || numChars.isEmpty()) {
+            chars = "32"
+        }
         val rmm = RoadMapMaker()
-        val svg = rmm.makeRoadMapImage(contents, scale, title)
+        val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -37,12 +42,14 @@ class RoadmapPlanController {
     fun getRoadMap(@RequestParam(name = "payload") payload: String,
                    @RequestParam(name="scale") scale: String,
                    @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-                   @RequestParam("title", required = false) title: String)
+                   @RequestParam("title", required = false) title: String,
+                   @RequestParam("numChars", required = false, defaultValue = "30") numChars: String
+    )
                         : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val rmm = RoadMapMaker()
         val isPdf = "PDF" == type
-        val svg = rmm.makeRoadMapImage(data, scale, title)
+        val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
         return if(isPdf) {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

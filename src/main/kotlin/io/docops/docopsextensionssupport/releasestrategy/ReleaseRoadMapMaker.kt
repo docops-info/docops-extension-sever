@@ -63,7 +63,7 @@ class ReleaseRoadMapMaker {
             fill="#073763">${release.type}
             </text>
             $str
-            <path d="M 420 430 L 1400 430" stroke="#b3b3b3" stroke-width="5"/>
+            <path d="M 420 430 L 1400 430" stroke="#fcfcfc" stroke-width="1"/>
             </g>
         """.trimMargin()
     }

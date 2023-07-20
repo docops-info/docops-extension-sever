@@ -29,8 +29,13 @@ class TimelineController {
              title = httpServletRequest.getParameter("title")
         }
         val scale = httpServletRequest.getParameter("scale")
+        val numChars = httpServletRequest.getParameter("numChars")
+        var chars = numChars
+        if(numChars == null || numChars.isEmpty()) {
+            chars = "32"
+        }
         val tm = TimelineMaker()
-        val svg = tm.makeTimelineSvg(contents, title, scale, false)
+        val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -39,11 +44,16 @@ class TimelineController {
 
     @GetMapping("/")
     @ResponseBody
-    fun getTimeLine(@RequestParam(name = "payload") payload: String, @RequestParam(name="title") title: String, @RequestParam(name="scale") scale: String, @RequestParam("type", required = false, defaultValue = "SVG") type: String): ResponseEntity<ByteArray> {
+    fun getTimeLine(@RequestParam(name = "payload") payload: String,
+                    @RequestParam(name="title") title: String,
+                    @RequestParam(name="scale") scale: String,
+                    @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+                    @RequestParam("numChars", required = false, defaultValue = "35") numChars: String
+                    ): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val tm = TimelineMaker()
         val isPdf = "PDF" == type
-        val svg = tm.makeTimelineSvg(data, title, scale, isPdf)
+        val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
         return if(isPdf) {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

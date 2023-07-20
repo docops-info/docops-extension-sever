@@ -75,7 +75,7 @@ class Release(
     val goal: String
 )
 @Serializable
-class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f)
+class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35)
 
 fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "R" to "Roadmap", "TLG" to "Timeline Grouped")
 

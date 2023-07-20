@@ -6,6 +6,11 @@
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
                value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
     </div>
+    <div class="pure-1-2">
+        <label for="numChars">Number of Characters per Line</label>
+        <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               value="32" step="1" max="60" min="10" class="pure-u-1-4">
+    </div>
         <div class="pure-1-2">
             <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
