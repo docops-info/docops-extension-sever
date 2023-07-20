@@ -51,16 +51,16 @@ enum class ReleaseEnum {
     fun speed(releaseEnum: ReleaseEnum): String {
         return when (releaseEnum) {
             in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
-                "20s"
+                "40s"
             }
             in arrayOf(RC1,RC2,RC3,RC4,RC5,RC6,RC7,RC8,RC9) -> {
-                "16s"
+                "36s"
             }
             GA -> {
-                "10s"
+                "30s"
             }
 
-            else -> "20s"
+            else -> "40s"
         }
     }
 }

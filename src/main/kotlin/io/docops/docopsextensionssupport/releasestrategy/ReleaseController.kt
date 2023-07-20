@@ -127,11 +127,11 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         model["svg"] = svg
         model["bsvg"] = Base64.getEncoder().encodeToString(svg.toByteArray())
         val selectedStrategy = mutableListOf<SelectedStrategy>()
-        ReleaseEnum.values().forEach {
+        ReleaseEnum.entries.forEach {
             selectedStrategy.add(SelectedStrategy(it.name, false))
         }
         val format = Json { prettyPrint = true }
-        model["releaseTypes"] = ReleaseEnum.values()
+        model["releaseTypes"] = ReleaseEnum.entries
         model["sourceJson"] = format.encodeToString(releaseStrategy)
         model["styles"] = releaseStrategy.styles()
         val json = Json.encodeToString(releaseStrategy)
