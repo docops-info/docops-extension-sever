@@ -26,7 +26,9 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
-    fun getRelease(@RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String) : ResponseEntity<ByteArray> {
+    fun getRelease(@RequestParam(name = "payload") payload: String,
+                   @RequestParam("type", required = false, defaultValue = "PDF") type: String,
+                   @RequestParam("animate", required = false, defaultValue = "ON") animate: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val release = Json.decodeFromString<ReleaseStrategy>(data)
         val isPdf = "PDF" == type
@@ -36,7 +38,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 output = createTimelineSvg(release, isPdf)
             }
             "R" -> {
-                output = createRoadMap(release, isPdf)
+                output = createRoadMap(release, isPdf, animate)
             }
             "TLG" -> {
                 output = createTimelineGrouped(release, isPdf)
@@ -84,7 +86,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 return createTimelineSvg(releaseStrategy)
             }
             "R" -> {
-                return  createRoadMap(releaseStrategy)
+                return  createRoadMap(releaseStrategy, animate = "ON")
             }
             "TLG" -> {
                 return  createTimelineGrouped(releaseStrategy)
@@ -118,7 +120,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 svg = createTimelineSvg(releaseStrategy)
             }
             "R" -> {
-                svg = createRoadMap(releaseStrategy)
+                svg = createRoadMap(releaseStrategy, animate = "ON")
             }
             "TLG" -> {
                 svg = createTimelineGrouped(releaseStrategy = releaseStrategy)
@@ -147,7 +149,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     fun createTimelineGrouped(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineGroupedMaker().make(releaseStrategy, isPdf)
 
-    fun createRoadMap(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseRoadMapMaker().make(releaseStrategy, isPdf)
+    fun createRoadMap(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String = "ON"): String = ReleaseRoadMapMaker().make(releaseStrategy, isPdf, animate)
     private fun getReleaseTypes(servletRequest: HttpServletRequest): MutableList<Release> {
         val addLine = servletRequest.getParameter("addLine")
         val addType = servletRequest.getParameter("addType")

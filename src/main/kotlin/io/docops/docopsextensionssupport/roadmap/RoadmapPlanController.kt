@@ -34,7 +34,11 @@ class RoadmapPlanController {
 
     @GetMapping("/")
     @ResponseBody
-    fun getRoadMap(@RequestParam(name = "payload") payload: String, @RequestParam(name="scale") scale: String, @RequestParam("type", required = false, defaultValue = "SVG") type: String, @RequestParam("title", required = false) title: String): ResponseEntity<ByteArray> {
+    fun getRoadMap(@RequestParam(name = "payload") payload: String,
+                   @RequestParam(name="scale") scale: String,
+                   @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+                   @RequestParam("title", required = false) title: String)
+                        : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val rmm = RoadMapMaker()
         val isPdf = "PDF" == type

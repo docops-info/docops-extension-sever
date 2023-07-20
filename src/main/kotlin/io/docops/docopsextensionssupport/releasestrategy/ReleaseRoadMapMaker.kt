@@ -4,10 +4,10 @@ import io.docops.asciidoc.utils.escapeXml
 
 class ReleaseRoadMapMaker {
 
-    fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean): String {
-        return createSvg(releaseStrategy, isPdf)
+    fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean, animate: String): String {
+        return createSvg(releaseStrategy, isPdf, animate)
     }
-    private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String {
+    private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String): String {
         val str = StringBuilder()
         var startY = -125
         var height = 350
@@ -15,7 +15,7 @@ class ReleaseRoadMapMaker {
             height += (220 * (releaseStrategy.releases.size - 1))
         }
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(strat(release, startY, index))
+            str.append(strat(release, startY, index, animate))
             startY += 225
         }
         return """
@@ -32,8 +32,12 @@ class ReleaseRoadMapMaker {
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int, index: Int): String {
-
+    private fun strat(release: Release, startY: Int, index: Int, animate: String): String {
+        var ani = ""
+        if("ON".equals(animate, true)) {
+            ani =  """<animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
+                        path="M 110 60 L 1200 60"/>"""
+        }
         val str = StringBuilder(
             """<text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">"""
         )
@@ -52,8 +56,7 @@ class ReleaseRoadMapMaker {
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
             <use href="#svg2" x="305" y="340" fill="${release.type.color(release.type)}" width="40" height="40">
-            <animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
-                        path="M 110 60 L 1200 60" />
+            $ani
             </use>
             <text x="325" y="410" text-anchor="middle" dominant-baseline="middle" class="milestoneDate" fill="${release.type.color(release.type)}">${release.date}</text>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
