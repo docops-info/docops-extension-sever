@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import jakarta.servlet.http.HttpServletRequest
+import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
@@ -14,7 +15,7 @@ import java.nio.charset.Charset
 @Controller
 @RequestMapping("/api/roadmap")
 class RoadmapPlanController {
-
+    val log = LogFactory.getLog(RoadmapPlanController::class.java)
     @PutMapping("/")
     @ResponseBody
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
@@ -46,7 +47,9 @@ class RoadmapPlanController {
                    @RequestParam("numChars", required = false, defaultValue = "30") numChars: String
     )
                         : ResponseEntity<ByteArray> {
+        log.info("compressed data received $payload")
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+        log.info("Received from plugin > $data")
         val rmm = RoadMapMaker()
         val isPdf = "PDF" == type
         val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
