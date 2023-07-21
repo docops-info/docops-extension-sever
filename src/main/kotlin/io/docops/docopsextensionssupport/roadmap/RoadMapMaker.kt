@@ -50,7 +50,7 @@ class RoadMapMaker {
         val later = """<rect x="380" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
         if(roadmaps.now.size-1 >= index ){
             sb.append(now)
-            var text = """<text x="2" y="2" class="primary">"""
+            var text = """<text x="2" y="2" class="primaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 2)
             text += spans
@@ -59,18 +59,16 @@ class RoadMapMaker {
         }
         if(roadmaps.next.size-1 >= index ){
             sb.append(next)
-            var text = """<text x="192" y="2" class="secondary">"""
+            var text = """<text x="192" y="2" class="secondaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
-            println(lines)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
             text += "</text>"
             sb.append(text)
-            println(text)
         }
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
-            var text = """<text x="382" y="2" class="tertiary">"""
+            var text = """<text x="382" y="2" class="tertiaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 382)
             text += spans
@@ -102,9 +100,9 @@ class RoadMapMaker {
         .nextBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; }
         .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
         .laterBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
-        .primary { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #45a98f; }
-        .secondary{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e0349c; }
-        .tertiary { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e56516; }
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #45a98f; }
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e0349c; }
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e56516; }
         .rmLink { fill: blue; text-decoration: underline; }
     </style>
     """.trimIndent()

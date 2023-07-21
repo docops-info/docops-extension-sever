@@ -47,13 +47,10 @@ class RoadmapPlanController {
                    @RequestParam("numChars", required = false, defaultValue = "30") numChars: String
     )
                         : ResponseEntity<ByteArray> {
-        log.info("compressed data received $payload")
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        log.info("Received from plugin > $data")
         val rmm = RoadMapMaker()
         val isPdf = "PDF" == type
         val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
-        log.info(svg)
         return if(isPdf) {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
