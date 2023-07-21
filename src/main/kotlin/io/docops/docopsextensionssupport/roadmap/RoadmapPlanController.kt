@@ -53,6 +53,7 @@ class RoadmapPlanController {
         val rmm = RoadMapMaker()
         val isPdf = "PDF" == type
         val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+        log.info(svg)
         return if(isPdf) {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

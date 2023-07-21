@@ -61,10 +61,12 @@ class RoadMapMaker {
             sb.append(next)
             var text = """<text x="192" y="2" class="secondary">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
+            println(lines)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
             text += "</text>"
             sb.append(text)
+            println(text)
         }
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
