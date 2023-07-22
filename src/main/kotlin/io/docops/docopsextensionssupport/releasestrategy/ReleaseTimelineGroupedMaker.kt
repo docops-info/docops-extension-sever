@@ -2,9 +2,9 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import java.util.*
 
-class ReleaseTimelineGroupedMaker {
+open class ReleaseTimelineGroupedMaker {
 
-    fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
+    open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val id = UUID.randomUUID().toString()
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val height = determineHeight(releaseStrategy = releaseStrategy)
@@ -13,7 +13,14 @@ class ReleaseTimelineGroupedMaker {
         str.append(title(releaseStrategy.title, width))
         var row = 0
         releaseStrategy.grouped().forEach { (t, u) ->
-            u.forEachIndexed { index, release -> str.append(buildReleaseItem(release,index, isPdf, row, id)) }
+            u.forEachIndexed { index, release -> str.append(buildReleaseItem(
+                release,
+                index,
+                isPdf,
+                row,
+                id,
+                releaseStrategy
+            )) }
             row++
         }
         str.append("</g>")
@@ -22,7 +29,14 @@ class ReleaseTimelineGroupedMaker {
     }
 
 
-    private fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean, row: Int, id: String): String {
+    protected open fun buildReleaseItem(
+        release: Release,
+        currentIndex: Int,
+        isPdf: Boolean,
+        row: Int,
+        id: String,
+        releaseStrategy: ReleaseStrategy
+    ): String {
         var startY = 60
         if(row > 0) {
             startY = row * 240 + 60
@@ -66,7 +80,7 @@ class ReleaseTimelineGroupedMaker {
         </g>
         """.trimIndent()
     }
-    private fun shadeColor(release: Release): String = when {
+    protected fun shadeColor(release: Release): String = when {
         release.type.toString().startsWith("M") -> {
             "shadM"
         }
@@ -82,7 +96,8 @@ class ReleaseTimelineGroupedMaker {
         else -> ""
     }
 
-    private fun determineWidth(releaseStrategy: ReleaseStrategy): Int {
+
+    protected fun determineWidth(releaseStrategy: ReleaseStrategy): Int {
         val groups = releaseStrategy.grouped()
         var maxLen = 0
         groups.forEach { (t, u) ->
@@ -90,9 +105,9 @@ class ReleaseTimelineGroupedMaker {
         }
         return maxLen * 550
     }
-    private fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.grouped().size * 260
+    protected fun determineHeight(releaseStrategy: ReleaseStrategy) = releaseStrategy.grouped().size * 260
 
-    private fun head(width: Int, height: Int, id: String, title: String, scale: Float) : String{
+    protected fun head(width: Int, height: Int, id: String, title: String, scale: Float) : String{
 
         //language=svg
         return """
@@ -102,13 +117,13 @@ class ReleaseTimelineGroupedMaker {
             <title>$title</title>
         """.trimIndent()
     }
-    private fun title(title: String, width: Int) = """
+    protected fun title(title: String, width: Int) = """
         <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
     """.trimIndent()
-    private fun tail() = "</svg>"
+    protected fun tail() = "</svg>"
 
     //language=svg
-    private fun defs(isPdf: Boolean, id: String, scale: Float): String {
+    protected fun defs(isPdf: Boolean, id: String, scale: Float): String {
         var style = ""
         if (!isPdf) {
             style = """
@@ -170,6 +185,21 @@ class ReleaseTimelineGroupedMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
+             <linearGradient id="shadM_rect" x2="0%" y2="100%">
+                 <stop class="stop1" offset="0%" stop-color="#b5d6ee"/>
+                 <stop class="stop2" offset="50%" stop-color="#90c1e6"/>
+                 <stop class="stop3" offset="100%" stop-color="#6cadde"/>
+            </linearGradient>
+            <linearGradient id="shadR_rect" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#e3b2cf"/>
+                <stop class="stop2" offset="50%" stop-color="#d58cb7"/>
+                <stop class="stop3" offset="100%" stop-color="#C766A0"/>
+            </linearGradient>
+            <linearGradient id="shadG_rect" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#89b699"/>
+                <stop class="stop2" offset="50%" stop-color="#4e9266"/>
+                <stop class="stop3" offset="100%" stop-color="#136e33"/>
+            </linearGradient>
              $style
          </defs>
          <g transform='scale($scale)'>

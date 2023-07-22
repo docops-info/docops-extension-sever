@@ -15,20 +15,20 @@ class RoadMapMaker {
     private fun draw(roadmaps: RoadMaps, scale: String, title: String, numChars: String): String {
         val sb = StringBuilder()
         sb.append(head(roadmaps, scale.toFloat()))
-        sb.append(style())
+        sb.append(defs())
         sb.append("<g transform='scale($scale)'>")
-        sb.append(title(title))
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#fbfbfb\"/>")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) {
             index -> sb.append(row(index, roadmaps, numChars))
         }
-
-        /*sb.append(row(0, roadmaps, numChars))
-        sb.append(row(1, roadmaps, numChars))
-        sb.append(row(2, roadmaps, numChars))
-        sb.append(row(3, roadmaps, numChars))
-        sb.append(row(4, roadmaps, numChars))
-        sb.append(row(5, roadmaps, numChars))*/
+        sb.append("""
+        <text x="105" y="100" class="now">NOW</text>
+        <text x="304.5" y="100" class="next" text-anchor="middle">NEXT</text>
+        <text x="504.5" y="100" class="later" text-anchor="middle">LATER</text>
+         <rect x="0" y="0" stroke-width="0" fill="url(#headerTitleBar)"  height="80" width="100%" opacity="0.4"/>
+        <text x="26" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="#45618E">$title</text>
+        """.trimIndent())
         sb.append("</g>")
         sb.append(tail())
         return joinXmlLines(sb.toString())
@@ -54,7 +54,7 @@ class RoadMapMaker {
         val later = """<rect x="380" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
         if(roadmaps.now.size-1 >= index ){
             sb.append(now)
-            var text = """<text x="2" y="2" class="primaryRoad">"""
+            var text = """<text x="2" y="2" class="primaryRoad glass" fill="#421A56">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 2)
             text += spans
@@ -63,7 +63,7 @@ class RoadMapMaker {
         }
         if(roadmaps.next.size-1 >= index ){
             sb.append(next)
-            var text = """<text x="192" y="2" class="secondaryRoad">"""
+            var text = """<text x="192" y="2" class="secondaryRoad glass">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
@@ -72,7 +72,7 @@ class RoadMapMaker {
         }
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
-            var text = """<text x="382" y="2" class="tertiaryRoad">"""
+            var text = """<text x="382" y="2" class="tertiaryRoad glass">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 382)
             text += spans
@@ -82,13 +82,7 @@ class RoadMapMaker {
         sb.append("</g>")
         return sb.toString()
     }
-    private fun title(title: String) = """
-        <rect width="100%" height="100%" fill="#fcfcfc"/>
-        <text x="26" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46">$title</text>
-        <text x="105" y="100" class="now">NOW</text>
-        <text x="304.5" y="100" class="next" text-anchor="middle">NEXT</text>
-        <text x="504.5" y="100" class="later" text-anchor="middle">LATER</text>
-    """.trimIndent()
+
 
     private fun makeNow() : String {
         return ""
@@ -96,7 +90,23 @@ class RoadMapMaker {
     private fun tail() = "</svg>"
 
     //language=html
-    private fun style() = """
+    private fun defs() = """
+        <defs>
+        <linearGradient id="headerTitleBar" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#f8d8c4"/>
+            <stop class="stop2" offset="50%" stop-color="#f5c5a7"/>
+            <stop class="stop3" offset="100%" stop-color="#f2b28a"/>
+        </linearGradient>
+
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
+        </filter>
+    
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
         .nowBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; }
@@ -108,7 +118,60 @@ class RoadMapMaker {
         .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e0349c; }
         .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e56516; }
         .rmLink { fill: blue; text-decoration: underline; }
+        .glass:after, .glass:before {
+        content: "";
+        display: block;
+        position: absolute
+    }
+
+    .glass {
+        overflow: hidden;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
+        background-image: radial-gradient(circle at center, rgba(0, 167, 225, .25), rgba(0, 110, 149, .5));
+        box-shadow: 0 5px 10px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2);
+        position: relative
+    }
+
+    .glass:after {
+        background: rgba(0, 167, 225, .2);
+        z-index: 0;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(3px) saturate(400%);
+        -webkit-backdrop-filter: blur(3px) saturate(400%)
+    }
+
+    .glass:before {
+        width: calc(100% - 4px);
+        height: 35px;
+        background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
+        top: 2px;
+        left: 2px;
+        border-radius: 30px 30px 200px 200px;
+        opacity: .7
+    }
+
+    .glass:hover {
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .9)
+    }
+
+    .glass:hover:before {
+        opacity: 1
+    }
+
+    .glass:active {
+        text-shadow: 0 0 2px rgba(0, 0, 0, .9);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2)
+    }
+
+    .glass:active:before {
+        height: 25px
+    }
     </style>
+    </defs>
     """.trimIndent()
 
 }

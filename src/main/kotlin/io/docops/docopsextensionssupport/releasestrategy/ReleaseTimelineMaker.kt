@@ -4,9 +4,9 @@ import io.docops.asciidoc.buttons.theme.Theme
 import io.docops.asciidoc.utils.escapeXml
 import java.util.UUID
 
-class ReleaseTimelineMaker {
+open class ReleaseTimelineMaker {
 
-    fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
+    open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
         val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
@@ -15,11 +15,6 @@ class ReleaseTimelineMaker {
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, id))
         }
-        val w = (width * releaseStrategy.scale)/2
-       /* str.append("""
-            <path d="m 2,0 v 40 l 20,-20 z" transform="translate($w, 275)" onclick="inc();" fill="#cfcfcf" cursor="pointer" class="raise"/>
-            <path d="m 2,0 v 40 l -20,-20 z" transform="translate(${w-10}, 275)" onclick="dec();" fill="#cfcfcf" cursor="pointer" class="raise"/>
-        """.trimMargin())*/
         str.append("</g>")
         str.append(tail())
         return str.toString()
@@ -65,7 +60,7 @@ class ReleaseTimelineMaker {
         </g>
         """.trimIndent()
     }
-    private fun shadeColor(release: Release): String = when {
+    protected fun shadeColor(release: Release): String = when {
         release.type.toString().startsWith("M") -> {
             "shadM"
         }
@@ -82,7 +77,7 @@ class ReleaseTimelineMaker {
     }
 
 
-    private fun determineWidth(releaseStrategy: ReleaseStrategy) = ((releaseStrategy.releases.size * 410) + (releaseStrategy.releases.size * 20) + 80) * releaseStrategy.scale
+    protected fun determineWidth(releaseStrategy: ReleaseStrategy) = ((releaseStrategy.releases.size * 410) + (releaseStrategy.releases.size * 20) + 80) * releaseStrategy.scale
 
 
     private fun head(width: Float, id: String, title: String, scale: Float) : String{
@@ -95,13 +90,13 @@ class ReleaseTimelineMaker {
             <title>${title.escapeXml()}</title>
         """.trimIndent()
     }
-    private fun title(title: String, width: Float) = """
+    protected fun title(title: String, width: Float) = """
         <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
     """.trimIndent()
-    private fun tail() = "</svg>"
+    protected fun tail() = "</svg>"
 
     //language=svg
-    private fun defs(isPdf: Boolean, id: String, scale: Float): String {
+    protected fun defs(isPdf: Boolean, id: String, scale: Float): String {
         var style = ""
         if (!isPdf) {
             style = """
@@ -117,7 +112,19 @@ class ReleaseTimelineMaker {
             .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }
 
             .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
+            
         </style>
+            <script>
+             function strategyShowItem(item) {
+                 var elem = document.querySelector("#"+item);
+                 var display = elem.getAttribute("visibility");
+                 if("hidden" === display) {
+                     elem.setAttribute("visibility", "")
+                 } else {
+                     elem.setAttribute("visibility", "hidden")
+                 }
+             }
+             </script>
             """.trimIndent()
         }
         return """
@@ -149,11 +156,31 @@ class ReleaseTimelineMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
+             <linearGradient id="shadM_rect" x2="0%" y2="100%">
+                 <stop class="stop1" offset="0%" stop-color="#b5d6ee"/>
+                 <stop class="stop2" offset="50%" stop-color="#90c1e6"/>
+                 <stop class="stop3" offset="100%" stop-color="#6cadde"/>
+            </linearGradient>
+            <linearGradient id="shadR_rect" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#e3b2cf"/>
+                <stop class="stop2" offset="50%" stop-color="#d58cb7"/>
+                <stop class="stop3" offset="100%" stop-color="#C766A0"/>
+            </linearGradient>
+            <linearGradient id="shadG_rect" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#89b699"/>
+                <stop class="stop2" offset="50%" stop-color="#4e9266"/>
+                <stop class="stop3" offset="100%" stop-color="#136e33"/>
+            </linearGradient>
              $style
+             
+             
+                   
          </defs>
          <g transform='scale($scale)' id='GID$id'>
          """.trimIndent()
     }
+
+
 }
 fun strokeColor(release: Release): String = when {
     release.type.toString().startsWith("M") -> {

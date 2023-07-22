@@ -41,6 +41,9 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             "TL" -> {
                 output = createTimelineSvg(release, isPdf)
             }
+            "TLS" -> {
+                output = createTimelineSummarySvg(release, isPdf)
+            }
             "R" -> {
                 output = createRoadMap(release, isPdf, animate)
             }
@@ -67,6 +70,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             ResponseEntity(output.toByteArray(),headers,HttpStatus.OK)
         }
     }
+
+
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.release.get.prefill.html", histogram = true, percentiles = [0.5, 0.95])
@@ -91,6 +96,9 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         when (releaseStrategy.style) {
             "TL" -> {
                 return createTimelineSvg(releaseStrategy)
+            }
+            "TLS" -> {
+                return createTimelineSummarySvg(releaseStrategy)
             }
             "R" -> {
                 return  createRoadMap(releaseStrategy, animate = "ON")
@@ -127,6 +135,9 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             "TL" -> {
                 svg = createTimelineSvg(releaseStrategy)
             }
+            "TLS" -> {
+                svg = createTimelineSummarySvg(releaseStrategy)
+            }
             "R" -> {
                 svg = createRoadMap(releaseStrategy, animate = "ON")
             }
@@ -154,6 +165,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     }
 
     fun createTimelineSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineMaker().make(releaseStrategy, isPdf)
+
+    private fun createTimelineSummarySvg(release: ReleaseStrategy, pdf: Boolean = false) : String =ReleaseTimelineSummaryMaker().make(release, isPdf = pdf)
 
     fun createTimelineGrouped(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineGroupedMaker().make(releaseStrategy, isPdf)
 

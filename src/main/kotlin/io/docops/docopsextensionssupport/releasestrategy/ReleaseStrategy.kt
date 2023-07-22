@@ -77,7 +77,7 @@ class Release(
 @Serializable
 class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35)
 
-fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "R" to "Roadmap", "TLG" to "Timeline Grouped")
+fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "TLS" to "Timeline Summary",  "R" to "Roadmap", "TLG" to "Timeline Grouped")
 
 fun ReleaseStrategy.excel(output: String): ByteArray {
     val workbook = XSSFWorkbook()

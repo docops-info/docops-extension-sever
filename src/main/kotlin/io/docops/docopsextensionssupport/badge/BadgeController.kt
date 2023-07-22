@@ -1,12 +1,10 @@
 package io.docops.docopsextensionssupport.badge
 
-import com.starxg.badge4j.Badge
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
-import org.silentsoft.badge4j.Style
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -35,9 +33,7 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
         if (null == fillColor) {
             fillColor = "GREEN"
         }
-        //val src = makeBadge(message = badge.message, label = badge.label, color = badge.labelColor, mColor)
-        //val src = makeBadgeMessageOnly(formBadge = badge)
-        val src = Badge.create(badge.label, badge.message, badge.labelColor, badge.messageColor, null, 0, 1)
+        val svg = docOpsBadgeGenerator.createBadge(badge.label, badge.message, badge.labelColor!!, badge.messageColor!!, "", "", "")
         //val src = badgeAgain(formBadge = badge, type = "SVG")
         val badgeSource =
             """
@@ -46,7 +42,7 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
 ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}
 ----
 """.trimIndent()
-        val contents = makeBadgeAndSource(badgeSource, src)
+        val contents = makeBadgeAndSource(badgeSource, svg)
         servletResponse.contentType = "text/html"
         servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
@@ -178,7 +174,7 @@ $txt
             }
 
 
-            var output = Badge.create(label, message, color, mcolor)
+            var output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor)
             output = output.replace("id='m'", "id='m${count}'")
             output = output.replace("url(#m4)", "url(#m${count++})")
             str.append(
