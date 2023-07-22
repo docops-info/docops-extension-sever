@@ -4,6 +4,8 @@ import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -22,10 +24,12 @@ import java.util.*
 
 @Controller
 @RequestMapping("/api/release")
+@Observed(name = "release.controller")
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
 
     //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
+    @Timed(value = "docops.release.get.html", histogram = true, percentiles = [0.5, 0.95])
     fun getRelease(@RequestParam(name = "payload") payload: String,
                    @RequestParam("type", required = false, defaultValue = "PDF") type: String,
                    @RequestParam("animate", required = false, defaultValue = "ON") animate: String) : ResponseEntity<ByteArray> {
@@ -65,6 +69,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     }
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
+    @Timed(value = "docops.release.get.prefill.html", histogram = true, percentiles = [0.5, 0.95])
     fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val release = Json.decodeFromString<ReleaseStrategy>(data)
@@ -73,6 +78,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
+    @Timed(value = "docops.release.put.json.html", histogram = true, percentiles = [0.5, 0.95])
     fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val release = Json.decodeFromString<ReleaseStrategy>(payload)
         return makeFilledView(model = model, releaseStrategy = release)
@@ -80,6 +86,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
+    @Timed(value = "docops.release.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
         when (releaseStrategy.style) {
             "TL" -> {
@@ -99,6 +106,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     @PutMapping("/build", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
+    @Timed(value = "docops.release.put.build.html", histogram = true, percentiles = [0.5, 0.95])
     fun createStrategy(@ModelAttribute model: ModelMap,
                        @RequestParam("title") title: String,
                        @RequestParam("style") style: String,

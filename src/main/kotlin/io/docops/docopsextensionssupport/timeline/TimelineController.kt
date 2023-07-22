@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -17,10 +19,12 @@ import java.nio.charset.Charset
 
 @Controller
 @RequestMapping("/api/timeline")
+@Observed(name = "timeline.controller")
 class TimelineController {
 
     @PutMapping("/")
     @ResponseBody
+    @Timed(value = "docops.timeline.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putTimeline(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         var title = "title"
         var contents = httpServletRequest.getParameter("content")
@@ -44,6 +48,7 @@ class TimelineController {
 
     @GetMapping("/")
     @ResponseBody
+    @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])
     fun getTimeLine(@RequestParam(name = "payload") payload: String,
                     @RequestParam(name="title") title: String,
                     @RequestParam(name="scale") scale: String,
@@ -71,6 +76,7 @@ class TimelineController {
 
     @GetMapping("/table")
     @ResponseBody
+    @Timed(value = "docops.roadmap.table.data.html", histogram = true, percentiles = [0.5, 0.95])
     fun getTimeLineTable(@RequestParam(name = "payload") payload: String, @RequestParam(name="title") title: String): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val tm = TimelineParser()

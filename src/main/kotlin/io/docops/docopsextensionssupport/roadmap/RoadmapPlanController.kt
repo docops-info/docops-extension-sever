@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.roadmap
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Timed
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
@@ -14,10 +16,12 @@ import java.nio.charset.Charset
 
 @Controller
 @RequestMapping("/api/roadmap")
+@Observed(name = "roadmap.controller")
 class RoadmapPlanController {
     val log = LogFactory.getLog(RoadmapPlanController::class.java)
     @PutMapping("/")
     @ResponseBody
+    @Timed(value = "docops.roadmap.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         var contents = httpServletRequest.getParameter("content")
         if(contents.isNullOrEmpty()) {
@@ -40,6 +44,7 @@ class RoadmapPlanController {
 
     @GetMapping("/")
     @ResponseBody
+    @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])
     fun getRoadMap(@RequestParam(name = "payload") payload: String,
                    @RequestParam(name="scale") scale: String,
                    @RequestParam("type", required = false, defaultValue = "SVG") type: String,
