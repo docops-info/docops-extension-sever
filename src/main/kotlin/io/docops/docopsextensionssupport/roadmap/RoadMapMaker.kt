@@ -150,7 +150,7 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
     return newLines
 }
 fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
-    var text = StringBuilder()
+    val text = StringBuilder()
     lines.forEach {
         text.append("""<tspan x="$x" dy="$dy">$it</tspan>""")
     }
