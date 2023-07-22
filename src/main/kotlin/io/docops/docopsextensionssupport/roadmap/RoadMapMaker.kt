@@ -6,7 +6,6 @@ import java.io.File
 class RoadMapMaker {
 
 
-        private  val CORD = mutableMapOf(0 to 120, 1 to 225, 2 to 330, 3 to 435, 4 to 540, 5 to 645)
 
 
     fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
@@ -20,12 +19,16 @@ class RoadMapMaker {
         sb.append("<g transform='scale($scale)'>")
         sb.append(title(title))
         sb.append(makeNow())
-        sb.append(row(0, roadmaps, numChars))
+        repeat(roadmaps.maxLength()) {
+            index -> sb.append(row(index, roadmaps, numChars))
+        }
+
+        /*sb.append(row(0, roadmaps, numChars))
         sb.append(row(1, roadmaps, numChars))
         sb.append(row(2, roadmaps, numChars))
         sb.append(row(3, roadmaps, numChars))
         sb.append(row(4, roadmaps, numChars))
-        sb.append(row(5, roadmaps, numChars))
+        sb.append(row(5, roadmaps, numChars))*/
         sb.append("</g>")
         sb.append(tail())
         return joinXmlLines(sb.toString())
@@ -38,13 +41,14 @@ class RoadMapMaker {
         return sb.toString()
     }
     private fun head(roadmaps: RoadMaps, scale: Float) : String {
-        val width = 612* scale
-        val height = 791 * scale
+        val width = 612 * scale
+        val height = ((roadmaps.maxLength() * 105) + 106) * scale
+        //val height = 791 * scale
         return """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height" viewBox="0 0 $width $height">"""
     }
 
     private fun row(index: Int, roadmaps: RoadMaps, numChars: String) : String {
-        var sb = StringBuilder("""<g transform="translate(26,${CORD[index]})">""")
+        var sb = StringBuilder("""<g transform="translate(26,${105 * (index+1)})">""")
         val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184"/>"""
         val next = """<rect x="190" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184"/>"""
         val later = """<rect x="380" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
@@ -162,16 +166,51 @@ Deployment for Portal to UAT, MO like it is production.
         - now 
 eService is in Sys. PQS is in SYS. Version Support for OPLLite & QuickPaf in SYS
 - now
+- now
+more to do here
+- now
+we are now max size
+- now
+over the max size
 Liberty server setup in production for OplLite & quick PAF
         - next
  eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
         - next
-emergency messages in SYS        
+emergency messages in SYS     
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
+           - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
         - later
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
+        - next
+ eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
+        - next
+emergency messages in SYS    
 Contact View needed for Arch runway. NXT for arch runway.
+
     """.trimIndent()
     val rm = RoadMapMaker()
-    val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
+    val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
     val f = File("gen/roadmapout.svg")
     f.writeBytes(output.toByteArray())
 }

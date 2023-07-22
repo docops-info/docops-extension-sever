@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.roadmap
 
+import kotlin.math.max
+
 
 class RoadMapParser {
 
@@ -52,3 +54,7 @@ class RoadMapParser {
     }
 }
 data class RoadMaps(val now: MutableList<MutableList<String>>, val next: MutableList<MutableList<String>>, val later: MutableList<MutableList<String>>, val urlMap: MutableMap<String, String>)
+
+fun RoadMaps.maxLength() : Int {
+    return max(now.size, max(next.size,later.size))
+}
