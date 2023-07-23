@@ -58,9 +58,9 @@ class ReleaseRoadMapMaker {
         val tspans = linesToSpanText(lines,24,400)
         val startTextY = 300 - (lines.size * 12)
         //language=svg
-        return """<g transform="translate(-200,$startY)" cursor="pointer">
+        return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
             <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
-            <g onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
+            <g>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
