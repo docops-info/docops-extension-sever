@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
+import io.docops.docopsextensionssupport.roadmap.wrapText
 
 class ReleaseRoadMapMaker {
 
@@ -39,19 +41,24 @@ class ReleaseRoadMapMaker {
                         path="M 110 60 L 1200 60"/>"""
         }
         val str = StringBuilder(
-            """<text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">"""
+            """<g id="detail$index" visibility="hidden">
+                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">""".trimIndent()
         )
         release.lines.forEach {
             str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
         }
-        str.append("</text>")
+        str.append("</text></g>")
         var color = "#dddddd"
         if (index % 2 == 0) {
             color = "#fcfcfc"
         }
+        val lines = linesToUrlIfExist(wrapText(release.goal, 60F), mutableMapOf())
+        val tspans = linesToSpanText(lines,24,400)
+        val startTextY = 300 - (lines.size * 12)
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
-            <rect x="0" y="200" height="235" width="1400" fill="$color" stroke='#cccccc' class='row'/>
+            <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
+            <g onclick="toggleItem('detail$index', 'goal$index')">
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
@@ -62,8 +69,14 @@ class ReleaseRoadMapMaker {
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
             fill="#073763">${release.type}
             </text>
+            </g>
             $str
-            <path d="M 420 430 L 1400 430" stroke="#fcfcfc" stroke-width="1"/>
+            <g id="goal$index" transform="translate(450,$startTextY)" text-anchor="middle">
+                <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="#fcfcfc">
+                    $tspans
+                </text>
+            </g>
+            <path d="M 420 430 L 1400 430" stroke="none" stroke-width="1"/>
             </g>
         """.trimMargin()
     }
@@ -86,6 +99,21 @@ class ReleaseRoadMapMaker {
                         }
                     }
                     </style>
+                    <script>
+                     function toggleItem(item1, item2) {
+                        showHideItem(item1);
+                        showHideItem(item2)
+                    }
+                    function showHideItem(item) {
+                        var elem = document.querySelector("#"+item);
+                        var display = elem.getAttribute("visibility");
+                        if("hidden" === display) {
+                            elem.setAttribute("visibility", "")
+                        } else {
+                            elem.setAttribute("visibility", "hidden")
+                        }
+                    }
+             </script>
         """.trimIndent()
         if(isPdf) {
             style = ""
@@ -124,9 +152,57 @@ class ReleaseRoadMapMaker {
                         <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
                         <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
                     </filter>
+                    <linearGradient id="releaseM" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#9b9db7"/>
+                        <stop class="stop2" offset="50%" stop-color="#696c93"/>
+                        <stop class="stop3" offset="100%" stop-color="#373c6f"/>
+                    </linearGradient>
+                    <linearGradient id="releaseR" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#b9b0d8"/>
+                        <stop class="stop2" offset="50%" stop-color="#9688c4"/>
+                        <stop class="stop3" offset="100%" stop-color="#7461b1"/>
+                    </linearGradient>
+                    <linearGradient id="headerSix" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#e5c6fc"/>
+                        <stop class="stop2" offset="50%" stop-color="#d8aafb"/>
+                        <stop class="stop3" offset="100%" stop-color="#cc8efa"/>
+                    </linearGradient>
+                    <linearGradient id="headerSeven" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#ffe5f9"/>
+                        <stop class="stop2" offset="50%" stop-color="#ffd8f6"/>
+                        <stop class="stop3" offset="100%" stop-color="#ffccf4"/>
+                    </linearGradient>
+                    <linearGradient id="releaseG" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#87909d"/>
+                        <stop class="stop2" offset="50%" stop-color="#4b596c"/>
+                        <stop class="stop3" offset="100%" stop-color="#10223c"/>
+                    </linearGradient>
                     ${car()}
                     $style
                 </defs>
         """.trimIndent()
+    }
+
+     fun linearColor(release: Release): String = when {
+        release.type.toString().startsWith("M") -> {
+            "releaseM"
+        }
+
+        release.type.toString().startsWith("R") -> {
+            "releaseR"
+        }
+
+        release.type.toString().startsWith("G") -> {
+            "releaseG"
+        }
+
+        else -> ""
+    }
+    private fun linesToSpanText(lines: MutableList<String>, dy: Int, x: Int): String {
+        val text = StringBuilder()
+        lines.forEach {
+            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">$it</tspan>""")
+        }
+        return text.toString()
     }
 }

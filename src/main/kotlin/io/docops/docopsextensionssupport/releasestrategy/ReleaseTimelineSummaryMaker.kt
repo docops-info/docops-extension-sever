@@ -24,7 +24,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
 
     private fun head(width: Float, id: String, title: String, scale: Float) : String{
-        val height = (270  + 205)* scale
+        val height = (270  + 215)* scale
         //language=svg
         return """
             <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'

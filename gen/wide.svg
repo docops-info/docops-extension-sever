@@ -151,14 +151,75 @@
                     stroke-dashoffset: 0;
                 }
             }
+            .color1 {color: #10223c;}
+            .color2 {color: #373c6f;}
+            .color3 {color: #7461b1;}
+            .color4 {color: #cc8efa;}
+            .color5 {color: #ffccf4;}
         </style>
+        <script>
+            function toggle(item1, item2) {
+                showHide(item1);
+                showHide(item2)
+            }
+            function showHide(item) {
+                var elem = document.querySelector("#"+item);
+                var display = elem.getAttribute("visibility");
+                if("hidden" === display) {
+                    elem.setAttribute("visibility", "")
+                } else {
+                    elem.setAttribute("visibility", "hidden")
+                }
+            }
+        </script>
+    <linearGradient id="headerOne" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#b5d6ee"/>
+        <stop class="stop2" offset="50%" stop-color="#90c1e6"/>
+        <stop class="stop3" offset="100%" stop-color="#6cadde"/>
+    </linearGradient>
+    <linearGradient id="headerTwo" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#e3b2cf"/>
+        <stop class="stop2" offset="50%" stop-color="#d58cb7"/>
+        <stop class="stop3" offset="100%" stop-color="#C766A0"/>
+    </linearGradient>
+    <linearGradient id="headerThree" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#89b699"/>
+        <stop class="stop2" offset="50%" stop-color="#4e9266"/>
+        <stop class="stop3" offset="100%" stop-color="#136e33"/>
+    </linearGradient>
+    <linearGradient id="headerFour" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#9b9db7"/>
+        <stop class="stop2" offset="50%" stop-color="#696c93"/>
+        <stop class="stop3" offset="100%" stop-color="#373c6f"/>
+    </linearGradient>
+    <linearGradient id="headerFive" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#b9b0d8"/>
+        <stop class="stop2" offset="50%" stop-color="#9688c4"/>
+        <stop class="stop3" offset="100%" stop-color="#7461b1"/>
+    </linearGradient>
+    <linearGradient id="headerSix" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#e5c6fc"/>
+        <stop class="stop2" offset="50%" stop-color="#d8aafb"/>
+        <stop class="stop3" offset="100%" stop-color="#cc8efa"/>
+    </linearGradient>
+    <linearGradient id="headerSeven" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#ffe5f9"/>
+        <stop class="stop2" offset="50%" stop-color="#ffd8f6"/>
+        <stop class="stop3" offset="100%" stop-color="#ffccf4"/>
+    </linearGradient>
+    <linearGradient id="headerEight" x2="0%" y2="100%">
+        <stop class="stop1" offset="0%" stop-color="#87909d"/>
+        <stop class="stop2" offset="50%" stop-color="#4b596c"/>
+        <stop class="stop3" offset="100%" stop-color="#10223c"/>
+    </linearGradient>
     </defs>
     <g transform="scale(1.5)">
         <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif">Release
             Strategy Builder
         </text>
         <g transform="translate(-200,-125)" cursor="pointer">
-            <rect x="0" y="200" height="235" width="1400" fill="#fcfcfc" stroke='#cccccc' class='row'/>
+            <rect x="0" y="200" height="235" width="1400" fill="url(#headerFour)" stroke='#cccccc' class='row'/>
+            <g onclick="toggle('detail1', 'goal1')">
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="bev" cx="323" cy="307" r="73" fill="#6cadde" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
@@ -172,29 +233,38 @@
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
                   fill="#073763">M1
             </text>
-            <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">
-                <tspan x="420" dy="18">* Team will deploy to application server current production code</tspan>
-                <tspan x="420" dy="18">* Setup IHS proxy</tspan>
-                <tspan x="420" dy="18">* Team will Mark out websphere servers and mark in liberty servers</tspan>
-                <tspan x="420" dy="18">* Team will validate Okta changes on Liberty</tspan>
-                <tspan x="420" dy="18">* Once validated team will mark out liberty servers and mark in websphere
-                    servers
-                </tspan>
-                <tspan x="420" dy="18">* QA will validate Production is still working</tspan>
-                <tspan x="420" dy="18">* Team will record all observations</tspan>
-                <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
-                <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
-                <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
-                <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
-            </text>
+            </g>
+            <g id="detail1" visibility="hidden">
+                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">
+                    <tspan x="420" dy="18">* Team will deploy to application server current production code</tspan>
+                    <tspan x="420" dy="18">* Setup IHS proxy</tspan>
+                    <tspan x="420" dy="18">* Team will Mark out websphere servers and mark in liberty servers</tspan>
+                    <tspan x="420" dy="18">* Team will validate Okta changes on Liberty</tspan>
+                    <tspan x="420" dy="18">* Once validated team will mark out liberty servers and mark in websphere
+                        servers
+                    </tspan>
+                    <tspan x="420" dy="18">* QA will validate Production is still working</tspan>
+                    <tspan x="420" dy="18">* Team will record all observations</tspan>
+                    <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
+                    <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
+                    <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
+                    <tspan x="420" dy="18">* Team will validate logs and record observations as well</tspan>
+                </text>
+            </g>
+            <g id="goal1" transform="translate(450,300)" text-anchor="middle">
+                <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="#fcfcfc">
+                    <tspan x="400" dy="24">Our goal is to Establish the Liberty</tspan>
+                    <tspan x="400" dy="24">infrastructure with Okta enabled</tspan>
+                </text>
+            </g>
             <path d="M 420 430 L 1400 430" stroke="#b3b3b3" stroke-width="5"/>
         </g>
         <g transform="translate(-200,100)" cursor="pointer">
-            <rect x="0" y="200" height="235" width="1400" fill="#dddddd" stroke='#cccccc' class='row'/>
+            <rect x="0" y="200" height="235" width="1400" fill="url(#headerFive)" stroke='#cccccc' class='row'/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="bev2" cx="323" cy="307" r="73" fill="#C766A0" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
-            <use href="#svg2" x="305" y="340" fill="#C766A0" width="40" height="40">
+            <use href="#svg2" x="305" y="340" fill="#ffffff" width="40" height="40">
                 <animateMotion dur="16s" repeatCount="indefinite"
                                path="M 110 60 L 1200 60"/>
             </use>
@@ -204,7 +274,7 @@
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
                   fill="#073763">RC1
             </text>
-            <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">
+            <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">
                 <tspan x="420" dy="18">* Team will deploy to application server current production code</tspan>
                 <tspan x="420" dy="18">* Setup IHS proxy</tspan>
                 <tspan x="420" dy="18">* Team will Mark out websphere servers and mark in liberty servers</tspan>
@@ -222,7 +292,7 @@
             <path d="M 420 430 L 1400 430" stroke="#a3a3a3" stroke-width="5"/>
         </g>
         <g transform="translate(-200,325)" cursor="pointer">
-            <rect x="0" y="200" height="235" width="1400" fill="#fcfcfc" stroke='#cccccc' class='row'/>
+            <rect x="0" y="200" height="235" width="1400" fill="url(#headerEight)" stroke='#cccccc' class='row'/>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="bev3" cx="323" cy="307" r="73" fill="#3dd915" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
@@ -236,7 +306,7 @@
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
                   fill="#073763">GA
             </text>
-            <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px">
+            <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">
                 <tspan x="420" dy="18">* Team will deploy to application server current production code</tspan>
                 <tspan x="420" dy="18">* Setup IHS proxy</tspan>
                 <tspan x="420" dy="18">* Team will Mark out websphere servers and mark in liberty servers</tspan>

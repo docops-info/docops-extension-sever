@@ -51,14 +51,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 output = createTimelineGrouped(release, isPdf)
             }
         }
-        return if(isPdf) {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidth(output)
-            val baos = SvgToPng().toPngFromSvg(output, res)
-            ResponseEntity(baos, headers, HttpStatus.OK)
-         } else if ("XLS".equals(type,true)) {
+        return if ("XLS".equals(type,true)) {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
