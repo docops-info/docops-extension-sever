@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import java.util.*
 
 class ReleaseRoadMapMaker {
 
@@ -10,6 +11,7 @@ class ReleaseRoadMapMaker {
         return createSvg(releaseStrategy, isPdf, animate)
     }
     private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String): String {
+        val id = UUID.randomUUID().toString()
         val str = StringBuilder()
         var startY = -125
         var height = 350
@@ -17,7 +19,7 @@ class ReleaseRoadMapMaker {
             height += (220 * (releaseStrategy.releases.size - 1))
         }
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(strat(release, startY, index, animate))
+            str.append(strat(release, startY, index, animate, id))
             startY += 225
         }
         return """
@@ -34,14 +36,14 @@ class ReleaseRoadMapMaker {
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int, index: Int, animate: String): String {
+    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String): String {
         var ani = ""
         if("ON".equals(animate, true)) {
             ani =  """<animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
                         path="M 110 60 L 1200 60"/>"""
         }
         val str = StringBuilder(
-            """<g id="detail$index" visibility="hidden">
+            """<g id="detail_${id}_$index" visibility="hidden">
                 <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">""".trimIndent()
         )
         release.lines.forEach {
@@ -58,7 +60,7 @@ class ReleaseRoadMapMaker {
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer">
             <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
-            <g onclick="toggleItem('detail$index', 'goal$index')">
+            <g onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
@@ -71,7 +73,7 @@ class ReleaseRoadMapMaker {
             </text>
             </g>
             $str
-            <g id="goal$index" transform="translate(450,$startTextY)" text-anchor="middle">
+            <g id="goal_${id}_$index" transform="translate(450,$startTextY)" text-anchor="middle">
                 <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="#fcfcfc">
                     $tspans
                 </text>
