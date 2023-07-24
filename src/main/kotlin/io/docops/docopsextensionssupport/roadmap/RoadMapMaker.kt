@@ -54,7 +54,7 @@ class RoadMapMaker {
         val later = """<rect x="380" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
         if(roadmaps.now.size-1 >= index ){
             sb.append(now)
-            var text = """<text x="2" y="2" class="primaryRoad glass" fill="#421A56">"""
+            var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 2)
             text += spans
@@ -63,7 +63,7 @@ class RoadMapMaker {
         }
         if(roadmaps.next.size-1 >= index ){
             sb.append(next)
-            var text = """<text x="192" y="2" class="secondaryRoad glass">"""
+            var text = """<text x="192" y="2" class="secondaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 192)
             text += spans
@@ -72,7 +72,7 @@ class RoadMapMaker {
         }
         if(roadmaps.later.size-1 >= index ){
             sb.append(later)
-            var text = """<text x="382" y="2" class="tertiaryRoad glass">"""
+            var text = """<text x="382" y="2" class="tertiaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = ""), numChars.toFloat()), roadmaps.urlMap)
             val spans = linesToMultiLineText(lines,12, 382)
             text += spans
