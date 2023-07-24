@@ -43,7 +43,7 @@ class ReleaseRoadMapMaker {
                         path="M 110 60 L 1200 60"/>"""
         }
         val str = StringBuilder(
-            """<g id="detail_${id}_$index" visibility="hidden">
+            """<g id="detail_${id}_$index" transform="translate(-1000,0)">
                 <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">""".trimIndent()
         )
         release.lines.forEach {
@@ -100,20 +100,15 @@ class ReleaseRoadMapMaker {
                             stroke-dashoffset: 0;
                         }
                     }
+                    .box1Clicked { transition-timing-function: ease-out; transition: 1.25s; transform: translateX(0%); }
+                    .box2Clicked { transition-timing-function: ease-out; transition: 2.25s; transform: translateX(-330%); }
                     </style>
                     <script>
                      function toggleItem(item1, item2) {
-                        showHideItem(item1);
-                        showHideItem(item2)
-                    }
-                    function showHideItem(item) {
-                        var elem = document.querySelector("#"+item);
-                        var display = elem.getAttribute("visibility");
-                        if("hidden" === display) {
-                            elem.setAttribute("visibility", "")
-                        } else {
-                            elem.setAttribute("visibility", "hidden")
-                        }
+                        var elem2 = document.querySelector("#"+item2);
+                        elem2.classList.toggle("box2Clicked");
+                        var elem = document.querySelector("#"+item1);
+                        elem.classList.toggle("box1Clicked");
                     }
              </script>
         """.trimIndent()
