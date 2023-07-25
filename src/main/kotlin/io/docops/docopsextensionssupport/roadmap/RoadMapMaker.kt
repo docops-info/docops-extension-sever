@@ -26,8 +26,8 @@ class RoadMapMaker {
         <text x="105" y="100" class="now">NOW</text>
         <text x="304.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="504.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#headerTitleBar)"  height="80" width="100%" opacity="0.4"/>
-        <text x="26" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="#45618E">$title</text>
+         <rect x="0" y="0" stroke-width="0" fill="url(#headerSix)"  height="80" width="100%" opacity="0.4"/>
+        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="#45618E" text-anchor="middle">$title</text>
         """.trimIndent())
         sb.append("</g>")
         sb.append(tail())
@@ -97,7 +97,16 @@ class RoadMapMaker {
             <stop class="stop2" offset="50%" stop-color="#f5c5a7"/>
             <stop class="stop3" offset="100%" stop-color="#f2b28a"/>
         </linearGradient>
-
+        <linearGradient id="headerSix" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#e5c6fc"/>
+            <stop class="stop2" offset="50%" stop-color="#d8aafb"/>
+            <stop class="stop3" offset="100%" stop-color="#cc8efa"/>
+        </linearGradient>
+        <linearGradient id="headerSeven" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#ffe5f9"/>
+            <stop class="stop2" offset="50%" stop-color="#ffd8f6"/>
+            <stop class="stop3" offset="100%" stop-color="#ffccf4"/>
+        </linearGradient>
         <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
             <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">

@@ -65,8 +65,8 @@ class TimelineMaker {
         <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
-        <text x="-36" y="-86" font-size="10px">${entry.date}</text>
-        <rect x="-70" y="30" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx="5"/>
+        <text x="-36" y="-86" font-size="10px" fill='#000000'>${entry.date}</text>
+        <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx="5"/>
         $text
         <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
@@ -95,8 +95,8 @@ class TimelineMaker {
         <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
-        <text x="-30" y="96" font-size="10px">${entry.date}</text>
-        <rect x="-70" y="-180" width="170" height="150" class="edge" fill="#fcfcfc" stroke="$color" stroke-width="2"  rx='5'/>
+        <text x="-30" y="96" font-size="10px" fill='#000000'>${entry.date}</text>
+        <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx='5'/>
         $text
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
@@ -142,11 +142,8 @@ class TimelineMaker {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
         entries.forEachIndexed { index, entry ->
-            val color = if(index>9) {
-                getRandomColorHex()
-            } else {
-                DEFAULT_COLORS[index]
-            }
+            val color = getRandomColorHex()
+
             colors[index] = color
             val colorMap = gradientFromColor(color)
             sb.append("""
@@ -154,14 +151,19 @@ class TimelineMaker {
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$color; stop-opacity:1" />
         </radialGradient>
+        <linearGradient id="headerTimeline$index" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${colorMap["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${colorMap["color3"]}"/>
+        </linearGradient>
             """.trimIndent())
         }
         var style = """
 <style>
     .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
     .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-    .odd { font-size:10px; font-family: Arial, sans-serif; }
-    .even { font-size:10px; font-family: Arial, sans-serif; }
+    .odd { font-size:10px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+    .even { font-size:10px; font-family: Arial, sans-serif; fill: #fcfcfc;}
     .rmLink { fill: blue; text-decoration: underline; }
 </style>
         """.trimIndent()
