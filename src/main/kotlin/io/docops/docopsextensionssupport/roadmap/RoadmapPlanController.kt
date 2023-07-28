@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
+import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -38,8 +39,14 @@ class RoadmapPlanController {
         val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        return ResponseEntity(svg.toByteArray(),headers,HttpStatus.OK)
+        headers.contentType = MediaType.parseMediaType("text/html")
+        val div = """
+            <div>$svg</div>
+            <div class="pure-u-1">
+                Copy Url: <a href="api/roadmap/?payload=${compressString(contents)}&title=$title&numChars=$numChars&scale=$scale&type=svg" target="_blank">Open Url</a>
+            </div>
+        """.trimIndent()
+        return ResponseEntity(div.toByteArray(),headers,HttpStatus.OK)
     }
 
     @GetMapping("/")

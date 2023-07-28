@@ -54,12 +54,6 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                 lineStart -= 10
             }
         }
-        var x = 200
-        var anchor = "text-anchor='middle'"
-        if (isPdf) {
-            x = 15
-            anchor = ""
-        }
         val goals = release.goal.escapeXml()
         val lines = linesToUrlIfExist(wrapText(goals, 20F), mutableMapOf())
         val spans = linesToSpanText(lines,24, 150)

@@ -142,8 +142,11 @@ class TimelineMaker {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
         entries.forEachIndexed { index, entry ->
-            val color = getRandomColorHex()
-
+            val color = if(index>9) {
+                getRandomColorHex()
+            } else {
+                DEFAULT_COLORS[index]
+            }
             colors[index] = color
             val colorMap = gradientFromColor(color)
             sb.append("""
@@ -162,8 +165,8 @@ class TimelineMaker {
 <style>
     .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
     .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-    .odd { font-size:10px; font-family: Arial, sans-serif; fill: #fcfcfc;}
-    .even { font-size:10px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+    .odd { font-size:10px; font-family: Arial, sans-serif; fill: #000000;}
+    .even { font-size:10px; font-family: Arial, sans-serif; fill: #000000;}
     .rmLink { fill: blue; text-decoration: underline; }
 </style>
         """.trimIndent()

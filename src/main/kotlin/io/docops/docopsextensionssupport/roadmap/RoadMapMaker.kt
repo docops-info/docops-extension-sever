@@ -17,7 +17,7 @@ class RoadMapMaker {
         sb.append(head(roadmaps, scale.toFloat()))
         sb.append(defs())
         sb.append("<g transform='scale($scale)'>")
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#fbfbfb\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"url(#headerEight)\" opacity=\"0.1\"/>")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) {
             index -> sb.append(row(index, roadmaps, numChars))
@@ -26,7 +26,7 @@ class RoadMapMaker {
         <text x="105" y="100" class="now">NOW</text>
         <text x="304.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="504.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#headerSix)"  height="80" width="100%" opacity="0.4"/>
+         <rect x="0" y="0" stroke-width="0" fill="url(#headerEight)"  height="80" width="100%" opacity="1.0"/>
         <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="#45618E" text-anchor="middle">$title</text>
         """.trimIndent())
         sb.append("</g>")
@@ -97,15 +97,10 @@ class RoadMapMaker {
             <stop class="stop2" offset="50%" stop-color="#f5c5a7"/>
             <stop class="stop3" offset="100%" stop-color="#f2b28a"/>
         </linearGradient>
-        <linearGradient id="headerSix" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#e5c6fc"/>
-            <stop class="stop2" offset="50%" stop-color="#d8aafb"/>
-            <stop class="stop3" offset="100%" stop-color="#cc8efa"/>
-        </linearGradient>
-        <linearGradient id="headerSeven" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffe5f9"/>
-            <stop class="stop2" offset="50%" stop-color="#ffd8f6"/>
-            <stop class="stop3" offset="100%" stop-color="#ffccf4"/>
+        <linearGradient id="headerEight" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#ffb79a"/>
+            <stop class="stop2" offset="50%" stop-color="#ff9368"/>
+            <stop class="stop3" offset="100%" stop-color="#FF6F36"/>
         </linearGradient>
         <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
@@ -230,55 +225,20 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
 }
 fun main() {
     val str = """
-        - now
-PI Portal is in Model Office. OPLLite & QuickPAF are in Model Office. 
-Deployment for Portal to UAT, MO like it is production.
+ - now
+Determine consuming applications for Form Property Service & Customer inquiry Service
+- later
+Use common docker image to streamline the process.
 - now
- Liberty Server M2 facing challenges in MO. This is why we have release strategies.
-        - now 
-eService is in Sys. PQS is in SYS. Version Support for OPLLite & QuickPaf in SYS
-- now
-- now
-more to do here
-- now
-we are now max size
-- now
-over the max size
-Liberty server setup in production for OplLite & quick PAF
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS     
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-           - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-        - later
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-        - next
- eService is targeted for UAT. PQS is targeted for UAT. Version Support for OPLLite & QuickPaf in UAT      
-        - next
-emergency messages in SYS    
-Contact View needed for Arch runway. NXT for arch runway.
+analyze Form Property Service for their dependencies - Patrick analyze cusomter inquiry search for cloud dependencies.
+- next
+take these Form Property Service feature and customer inquiry service to governance
+- next
+start iBob process, Surekha for both application
+- next
+dockerize Form property service
+ build spring boot 3 version of application
+ analyze black duck results
 
     """.trimIndent()
     val rm = RoadMapMaker()
