@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.buttons.theme.Theme
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.util.UUID
 
 open class ReleaseTimelineMaker {
@@ -10,7 +11,7 @@ open class ReleaseTimelineMaker {
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
         val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
-        str.append(defs(isPdf, id,releaseStrategy.scale))
+        str.append(defs(isPdf, id,releaseStrategy.scale, releaseStrategy))
         str.append(title(releaseStrategy.title, width))
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, id))
@@ -96,20 +97,20 @@ open class ReleaseTimelineMaker {
     protected fun tail() = "</svg>"
 
     //language=svg
-    protected fun defs(isPdf: Boolean, id: String, scale: Float): String {
+    protected fun defs(isPdf: Boolean, id: String, scale: Float, releaseStrategy: ReleaseStrategy): String {
         var style = ""
         if (!isPdf) {
             style = """
                 <style>
-            #ID${id} .shadM { fill: #6cadde; filter: drop-shadow(0 1mm 1mm #6cadde); }
-            #ID${id} .shadR { fill: #C766A0; filter: drop-shadow(0 1mm 1mm #C766A0); }
+            #ID${id} .shadM { fill: ${releaseStrategy.displayConfig.colors[0]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[0]}); }
+            #ID${id} .shadR { fill: ${releaseStrategy.displayConfig.colors[1]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[1]}); }
 
-            #ID${id} .shadG { fill: #136e33; filter: drop-shadow(0 1mm 1mm #136e33); }
+            #ID${id} .shadG { fill: ${releaseStrategy.displayConfig.colors[2]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[2]}); }
             #ID${id} .milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
             #ID${id} .lines { font-size: 10px; }
 
             #ID${id} .milestoneTL > .entry { text-anchor: start; font-weight: normal; }
-            .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }
+            .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4)); }
 
             .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
             
@@ -126,6 +127,11 @@ open class ReleaseTimelineMaker {
              }
              </script>
             """.trimIndent()
+        }
+        val colors = StringBuilder()
+        val shades = mutableMapOf<Int, String>(0 to "M", 1 to "R", 2 to "G")
+        releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
+            colors.append(gradientColorFromColor(s, "shad${shades[index]}_rect"))
         }
         return """
              <defs>
@@ -156,25 +162,8 @@ open class ReleaseTimelineMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
-             <linearGradient id="shadM_rect" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#b5d6ee"/>
-                 <stop class="stop2" offset="50%" stop-color="#90c1e6"/>
-                 <stop class="stop3" offset="100%" stop-color="#6cadde"/>
-            </linearGradient>
-            <linearGradient id="shadR_rect" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#e3b2cf"/>
-                <stop class="stop2" offset="50%" stop-color="#d58cb7"/>
-                <stop class="stop3" offset="100%" stop-color="#C766A0"/>
-            </linearGradient>
-            <linearGradient id="shadG_rect" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#89b699"/>
-                <stop class="stop2" offset="50%" stop-color="#4e9266"/>
-                <stop class="stop3" offset="100%" stop-color="#136e33"/>
-            </linearGradient>
+             $colors
              $style
-             
-             
-                   
          </defs>
          <g transform='scale($scale)' id='GID$id'>
          """.trimIndent()
@@ -196,4 +185,29 @@ fun strokeColor(release: Release): String = when {
     }
 
     else -> ""
+}
+fun fishTailColor(release: Release, releaseStrategy: ReleaseStrategy): String = when {
+    release.type.toString().startsWith("M") -> {
+        releaseStrategy.displayConfig.colors[0]
+    }
+
+    release.type.toString().startsWith("R") -> {
+        releaseStrategy.displayConfig.colors[1]
+    }
+
+    release.type.toString().startsWith("G") -> {
+        releaseStrategy.displayConfig.colors[2]
+    }
+
+    else -> ""
+}
+fun gradientColorFromColor(color: String, id: String): String {
+
+    val gradient = gradientFromColor(color)
+    return """
+        <linearGradient id="$id" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>"""
 }

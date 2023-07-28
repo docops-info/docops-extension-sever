@@ -19,7 +19,7 @@ class ReleaseRoadMapMaker {
             height += (220 * (releaseStrategy.releases.size - 1))
         }
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(strat(release, startY, index, animate, id))
+            str.append(strat(release, startY, index, animate, id, releaseStrategy))
             startY += 225
         }
         return """
@@ -27,7 +27,7 @@ class ReleaseRoadMapMaker {
                  width="${releaseStrategy.scale * 1200}" height="${height * releaseStrategy.scale}"
                  viewBox="0 0 ${releaseStrategy.scale * 1200} ${height * releaseStrategy.scale}">
                  <desc>https://docops.io/extension</desc>
-                 ${svgDefs(isPdf)}     
+                 ${svgDefs(isPdf,releaseStrategy)}     
                  <g transform="scale(${releaseStrategy.scale})">    
                 <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif">${releaseStrategy.title.escapeXml()}</text>
                 $str
@@ -36,7 +36,7 @@ class ReleaseRoadMapMaker {
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String): String {
+    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy): String {
         var ani = ""
         if("ON".equals(animate, true)) {
             ani =  """<animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
@@ -44,37 +44,38 @@ class ReleaseRoadMapMaker {
         }
         val str = StringBuilder(
             """<g id="detail_${id}_$index" transform="translate(-1000,0)">
-                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="#fcfcfc">""".trimIndent()
+                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="${releaseStrategy.displayConfig.fontColor}">""".trimIndent()
         )
         release.lines.forEach {
             str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text></g>")
-        var color = "#dddddd"
-        if (index % 2 == 0) {
-            color = "#fcfcfc"
-        }
         val lines = linesToUrlIfExist(wrapText(release.goal, 60F), mutableMapOf())
         val tspans = linesToSpanText(lines,24,400)
         val startTextY = 300 - (lines.size * 12)
+        var completed = ""
+        if(release.completed) {
+            completed = "<use xlink:href=\"#done\" x=\"300\" y=\"-40\"/>"
+        }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
             <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
             <g>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
-            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${release.type.color(release.type)}" filter="url(#Bevel)"/>
+            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${circleStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
-            <use href="#svg2" x="305" y="340" fill="${release.type.color(release.type)}" width="40" height="40">
+            <use href="#svg2" x="305" y="340" fill="#fcfcfc" width="40" height="40">
             $ani
             </use>
-            <text x="325" y="410" text-anchor="middle" dominant-baseline="middle" class="milestoneDate" fill="${release.type.color(release.type)}">${release.date}</text>
+             <text  class="milestoneDate" fill="#073763"><textPath text-anchor="middle" startOffset="25%" xlink:href="#curve">${release.date}</textPath></text>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
             fill="#073763">${release.type}
             </text>
+           $completed
             </g>
             $str
             <g id="goal_${id}_$index" transform="translate(450,$startTextY)" text-anchor="middle">
-                <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="#fcfcfc">
+                <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="${releaseStrategy.displayConfig.fontColor}">
                     $tspans
                 </text>
             </g>
@@ -83,14 +84,14 @@ class ReleaseRoadMapMaker {
         """.trimMargin()
     }
 
-    private fun svgDefs(isPdf: Boolean): String {
+    private fun svgDefs(isPdf: Boolean, releaseStrategy: ReleaseStrategy): String {
         val ani = """ fill: transparent; stroke-width: 10px; stroke-dasharray: 471; stroke-dashoffset: 471; animation: clock-animation 2s linear infinite;""".trimIndent()
         var style = """
             <style>
                     .milestone:hover { cursor: pointer; /* calculate using: (2 * PI * R) */ stroke-width: 16; stroke-opacity: 1; fill: lightblue; }
                     .milestone { font-size: 60px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
                     .milestoneDate { font-size: 18px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
-                    .bev:hover { $ani stroke: #6cadde; } .bev2:hover { $ani stroke: #C766A0; } .bev3:hover { $ani stroke: #136e33; }
+                    .bev:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[0]}; } .bev2:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[1]}; } .bev3:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[2]}; }
                     .row { filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }
                     @keyframes clock-animation {
                         0% {
@@ -115,7 +116,11 @@ class ReleaseRoadMapMaker {
         if(isPdf) {
             style = ""
         }
-
+        val colors = StringBuilder()
+        val shades = mutableMapOf(0 to "M", 1 to "R", 2 to "G")
+        releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
+            colors.append(gradientColorFromColor(s, "release${shades[index]}"))
+        }
         //language=svg
         return """
             <defs>
@@ -149,38 +154,19 @@ class ReleaseRoadMapMaker {
                         <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
                         <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
                     </filter>
-                    <linearGradient id="releaseM" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#9b9db7"/>
-                        <stop class="stop2" offset="50%" stop-color="#696c93"/>
-                        <stop class="stop3" offset="100%" stop-color="#373c6f"/>
-                    </linearGradient>
-                    <linearGradient id="releaseR" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#b9b0d8"/>
-                        <stop class="stop2" offset="50%" stop-color="#9688c4"/>
-                        <stop class="stop3" offset="100%" stop-color="#7461b1"/>
-                    </linearGradient>
-                    <linearGradient id="headerSix" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#e5c6fc"/>
-                        <stop class="stop2" offset="50%" stop-color="#d8aafb"/>
-                        <stop class="stop3" offset="100%" stop-color="#cc8efa"/>
-                    </linearGradient>
-                    <linearGradient id="headerSeven" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#ffe5f9"/>
-                        <stop class="stop2" offset="50%" stop-color="#ffd8f6"/>
-                        <stop class="stop3" offset="100%" stop-color="#ffccf4"/>
-                    </linearGradient>
-                    <linearGradient id="releaseG" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#87909d"/>
-                        <stop class="stop2" offset="50%" stop-color="#4b596c"/>
-                        <stop class="stop3" offset="100%" stop-color="#10223c"/>
-                    </linearGradient>
+                    <path id="curve" fill="transparent" d="M267,317a56,56 0 1,0 112,0a56,56 0 1,0 -112,0" />
+                    <svg id="done" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"  width="100">
+                        <path d="M 7.6885391,404.6142 C 7.6885391,404.6142 122.85389,534.30185 145.88696,587.27791 L 244.92916,587.27791 C 286.38869,460.59602 447.62018,158.16034 585.8186,52.208207 C 614.45182,15.394067 542.5208,0.19798715 484.4731,24.568517 C 396.98668,61.298507 231.98485,341.73657 201.16633,409.22081 C 157.4035,420.73735 111.33735,335.51499 111.33735,335.51499 L 7.6885391,404.6142 z"
+                      style="fill:#00bb00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/>
+                    </svg>
+                    $colors
                     ${car()}
                     $style
                 </defs>
         """.trimIndent()
     }
 
-     fun linearColor(release: Release): String = when {
+     private fun linearColor(release: Release): String = when {
         release.type.toString().startsWith("M") -> {
             "releaseM"
         }
@@ -202,4 +188,19 @@ class ReleaseRoadMapMaker {
         }
         return text.toString()
     }
+}
+fun circleStroke(release: Release, releaseStrategy: ReleaseStrategy): String = when {
+    release.type.toString().startsWith("M") -> {
+        releaseStrategy.displayConfig.circleColors[0]
+    }
+
+    release.type.toString().startsWith("R") -> {
+        releaseStrategy.displayConfig.circleColors[1]
+    }
+
+    release.type.toString().startsWith("G") -> {
+        releaseStrategy.displayConfig.circleColors[2]
+    }
+
+    else -> ""
 }

@@ -72,10 +72,14 @@ class Release(
     val lines: MutableList<String>,
     val date: String,
     val selected: Boolean = false,
-    val goal: String
+    val goal: String,
+    val completed: Boolean = false
 )
+
 @Serializable
-class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35)
+class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"))
+@Serializable
+class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35, val displayConfig: DisplayConfig = DisplayConfig())
 
 fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "TLS" to "Timeline Summary",  "R" to "Roadmap", "TLG" to "Timeline Grouped")
 

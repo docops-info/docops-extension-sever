@@ -34,6 +34,9 @@
             },
             "goal": {
               "type": "string"
+            },
+            "completed": {
+              "type": "boolean"
             }
           },
           "required": [
@@ -41,23 +44,57 @@
             "lines",
             "date",
             "selected",
-            "goal"
+            "goal",
+            "completed"
           ]
         }
       ]
     },
     "style": {
       "type": "string",
-      "enum": ["TL", "R", "TLG"]
+      "enum": ["TL", "TLS","R", "TLG"]
     },
     "scale": {
       "type": "number"
+    },
+    "displayConfig": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "array",
+          "items":
+          {
+            "type": "string"
+          },
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true
+        },
+        "fontColor": {
+          "type": "string"
+        },
+        "milestoneColor": {
+          "type": "string"
+        },
+        "circleColors": {
+          "type": "array",
+          "items":
+          {
+            "type": "string"
+          },
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true
+        }
+      }
     }
+
   },
   "required": [
     "title",
     "releases",
     "style",
-    "scale"
+    "scale",
+    "colors"
   ]
 }
