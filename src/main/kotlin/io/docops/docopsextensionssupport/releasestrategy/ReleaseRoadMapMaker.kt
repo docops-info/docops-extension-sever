@@ -62,7 +62,7 @@ class ReleaseRoadMapMaker {
             <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
             <g>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
-            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${circleStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
+            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${releaseStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
             <use href="#svg2" x="305" y="340" fill="#fcfcfc" width="40" height="40">
             $ani
@@ -189,7 +189,7 @@ class ReleaseRoadMapMaker {
         return text.toString()
     }
 }
-fun circleStroke(release: Release, releaseStrategy: ReleaseStrategy): String = when {
+fun releaseStroke(release: Release, releaseStrategy: ReleaseStrategy): String = when {
     release.type.toString().startsWith("M") -> {
         releaseStrategy.displayConfig.circleColors[0]
     }

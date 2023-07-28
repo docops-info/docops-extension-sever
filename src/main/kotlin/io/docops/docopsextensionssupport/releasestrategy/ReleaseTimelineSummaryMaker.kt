@@ -68,6 +68,10 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         if(currentIndex>0) {
             positionX += currentIndex * 5
         }
+        var completed = ""
+        if(release.completed) {
+            completed = "<use xlink:href=\"#done\" x=\"405\" y=\"-100\"/>"
+        }
         //language=svg
         return """
          <g transform="translate(${positionX+10},60)" class="${shadeColor(release)}">
@@ -75,6 +79,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${fishTailColor(release, releaseStrategy)}" fill="url(#${shadeColor(release)}_rect)"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="url(#${shadeColor(release)}_rect)" stroke="${fishTailColor(release, releaseStrategy)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="${releaseStrategy.displayConfig.fontColor}">${release.type}</text>
+            $completed
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
                 <rect x="0" y="0" height="200" width="300" fill="url(#${shadeColor(release)}_rect)" class="raise"/>
                 <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="10px"
