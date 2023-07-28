@@ -64,7 +64,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         }
         var completed = ""
         if(release.completed) {
-            completed = "<use xlink:href=\"#done\" x=\"405\" y=\"-100\"/>"
+            completed = "<use xlink:href=\"#doneCheckMark\" x=\"405\" y=\"-100\"/>"
         }
         //language=svg
         return """
