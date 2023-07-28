@@ -85,7 +85,7 @@ open class ReleaseTimelineMaker {
         val height = 270 * scale
         //language=svg
         return """
-            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' role='img'
+            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
