@@ -37,8 +37,10 @@ class ReleaseRoadMapMaker {
     }
 
     private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy): String {
+        var yAni = 236
         var ani = ""
         if("ON".equals(animate, true)) {
+            yAni = 340
             ani =  """<animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
                         path="M 110 60 L 1200 60"/>"""
         }
@@ -64,7 +66,7 @@ class ReleaseRoadMapMaker {
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${releaseStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
             <circle cx="323" cy="307" r="66" fill="#ffffff"/>
-            <use href="#svg2" x="305" y="340" fill="${carColor(release, releaseStrategy)}" width="40" height="40">
+            <use href="#svg2" x="305" y="$yAni" fill="${carColor(release, releaseStrategy)}" width="40" height="40">
             $ani
             </use>
              <text  class="milestoneDate" fill="#073763"><textPath text-anchor="middle" startOffset="25%" xlink:href="#curve">${release.date}</textPath></text>
