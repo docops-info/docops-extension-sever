@@ -55,7 +55,7 @@ class ReleaseRoadMapMaker {
         val startTextY = 300 - (lines.size * 12)
         var completed = ""
         if(release.completed) {
-            completed = "<use xlink:href=\"#doneCheckMark\" x=\"300\" y=\"-40\"/>"
+            completed = "<use xlink:href=\"#doneCheckMark\" x=\"300\" y=\"-240\"/>"
         }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
