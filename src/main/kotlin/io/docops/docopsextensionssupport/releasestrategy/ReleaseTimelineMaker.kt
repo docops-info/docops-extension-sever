@@ -48,6 +48,10 @@ open class ReleaseTimelineMaker {
             x = 15
             anchor = ""
         }
+        var completed = ""
+        if(release.completed) {
+            completed = "<use xlink:href=\"#completedCheck\" x=\"425\" y=\"60\" width=\"24\" height=\"24\"/>"
+        }
         //language=svg
         return """
          <g transform="translate($startX,60)" class="${shadeColor(release)}">
@@ -55,6 +59,7 @@ open class ReleaseTimelineMaker {
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">${release.type}</text>
+            $completed
             <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal.escapeXml()}
                 $lineText
             </text>
