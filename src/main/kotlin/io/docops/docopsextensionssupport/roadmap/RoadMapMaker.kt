@@ -118,7 +118,7 @@ class RoadMapMaker {
         </linearGradient>
         <linearGradient x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" id="linearGradient4619" gradientUnits="userSpaceOnUse">
             <stop id="stop4621" style="stop-color:#ffffff;stop-opacity:1" offset="0"/>
-            <stop id="stop4623" style="stop-color:#74aeff;stop-opacity:1" offset="1"/>
+            <stop id="stop4623" style="stop-color:#45a98f;stop-opacity:1" offset="1"/>
         </linearGradient>
   
         <marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
