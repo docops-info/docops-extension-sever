@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.timeline
 
+import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -36,14 +37,34 @@ class TimelineController {
         val numChars = httpServletRequest.getParameter("numChars")
         var chars = numChars
         if(numChars == null || numChars.isEmpty()) {
-            chars = "32"
+            chars = "24"
         }
         val tm = TimelineMaker()
         val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        return ResponseEntity(svg.toByteArray(),headers,HttpStatus.OK)
+        headers.contentType = MediaType.parseMediaType("text/html")
+        val div = """
+        <div id='imageblock'>
+        $svg
+        </div>
+        <br/>
+        <h3>Timeline Source</h3>
+        <div class='pure-u-1 pure-u-md-20-24'>
+        <pre>
+        <code class="kotlin">
+        $contents
+        </code>
+        </pre>
+        </div>
+        <script>
+        var adrSource = `[timeline,title="Demo timeline Builder by docops.io",scale="0.7",role="center"]\n----\n${contents}\n----`;
+        document.querySelectorAll('pre code').forEach((el) => {
+            hljs.highlightElement(el);
+        });
+        </script>
+        """.trimIndent()
+        return ResponseEntity(div.toByteArray(),headers,HttpStatus.OK)
     }
 
     @GetMapping("/")
@@ -95,3 +116,4 @@ class TimelineController {
         return ResponseEntity(sb.toString().toByteArray(),headers,HttpStatus.OK)
     }
 }
+

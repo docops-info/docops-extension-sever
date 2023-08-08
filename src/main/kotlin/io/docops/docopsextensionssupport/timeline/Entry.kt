@@ -7,7 +7,7 @@ import io.docops.docopsextensionssupport.roadmap.wrapText
 
 class Entry (val date: String, val index: Int, val text: String)
 
-fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String): String {
+fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int): String {
     val urlMap = mutableMapOf<String,String>()
     var s = text.escapeXml()
     if(text.contains("[[") && text.contains("]]")) {
@@ -24,7 +24,7 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String): String
     }
     var text = """<text x="$x" y="$y" class="$clazz">"""
     val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
-    val spans = linesToMultiLineText(lines,12, x)
+    val spans = linesToMultiLineText(lines,dy, x)
     text += spans
     text += "</text>"
     return text

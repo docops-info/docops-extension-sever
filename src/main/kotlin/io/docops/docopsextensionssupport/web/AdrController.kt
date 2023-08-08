@@ -99,6 +99,7 @@ Participants: $participants
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
         @RequestParam("increaseWidth", required = false, defaultValue = "0") width: String,
+        @RequestParam("scale", required = false, defaultValue = "1.0") scale: String,
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray>{
         val contents = uncompressString(data)

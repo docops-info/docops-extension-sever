@@ -9,21 +9,51 @@
     <div class="pure-1-2">
         <label for="numChars">Number of Characters per Line</label>
         <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="32" step="1" max="60" min="10" class="pure-u-1-4">
+               value="24" step="1" max="60" min="10" class="pure-u-1-4">
     </div>
         <div class="pure-1-2">
             <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
-date: 01/01/2024
-text: First entry
+date: 1891
+text: Mailbox, invented by Phillip Downing
 -
-date: 01/02/2024
-text: Second entry
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+-
+date: September 1st, 2023
+text: DocOps.io will begin work on revamping the asciidoctorj converter.
+With the asciidoctorj 3.0.0 release coming we will need to migrate
+custom plug-ins to the new version.
+-
+date: October 18th, 2023
+text: Time to reimagine the future. Is it possible
+to write a lexer parser for custom language?
+-
+date: December 11th, 2023
+text: Annual start of vacation, time to relax
+and plugin the controller.
+-
+date: 01/01/2024
+text: First entry where we show text is wrapping or not and the [[https://roach.gy roach.gy]] aligning properly
             </textarea>
         </div>
 </fieldset>
 <fieldset>
     <button class="button-success pure-button">Submit</button>
+    <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(adrSource);"
+           value="Copy Source As AsciiDoc">
 </fieldset>
 </form>
 <div id="contentBox" class="contentBox"></div>

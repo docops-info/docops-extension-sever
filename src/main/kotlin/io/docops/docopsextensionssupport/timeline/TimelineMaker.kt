@@ -57,7 +57,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd")
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd", 14)
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -65,7 +65,9 @@ class TimelineMaker {
         <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
-        <text x="-36" y="-86" font-size="10px" fill='#000000'>${entry.date}</text>
+        <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
+        ${dateTotSpan(entry.date,0,14)}    
+        </text>
         <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx="5"/>
         $text
         <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
@@ -87,7 +89,7 @@ class TimelineMaker {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even")
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even", dy=14)
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -95,7 +97,9 @@ class TimelineMaker {
         <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
-        <text x="-30" y="96" font-size="10px" fill='#000000'>${entry.date}</text>
+        <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
+        ${dateTotSpan(entry.date,0,14)}
+        </text>
         <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx='5'/>
         $text
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
@@ -111,6 +115,14 @@ class TimelineMaker {
     </g>
     
         """.trimIndent()
+    }
+    private fun dateTotSpan(date: String, x: Int, dy: Int) : String {
+        val sp = date.split(" ")
+        val sb=StringBuilder()
+        sp.forEach {
+            sb.append("""<tspan x="$x" dy="$dy">${it.escapeXml()}</tspan>""")
+        }
+        return sb.toString()
     }
     private fun buildRoad(width: Int): String {
         return """
@@ -165,8 +177,8 @@ class TimelineMaker {
 <style>
     .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
     .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-    .odd { font-size:10px; font-family: Arial, sans-serif; fill: #000000;}
-    .even { font-size:10px; font-family: Arial, sans-serif; fill: #000000;}
+    .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
+    .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
     .rmLink { fill: blue; text-decoration: underline; }
 </style>
         """.trimIndent()
@@ -236,7 +248,7 @@ for extension server are the various plug-ing for asciidoctorj.
 date: September 1st, 2023
 text: DocOps.io will begin work on revamping the asciidoctorj converter.
 with the asciidoctorj 3.0.0 release coming we will need to migrate
-custom plug-ins to the new version of the extensions as they will bring braking changes.
+custom plug-ins to the new version of the extensions as they will bring breaking changes.
 - 
 date: October 18th, 2023
 text: Time to reimagine the future. Is it possible
