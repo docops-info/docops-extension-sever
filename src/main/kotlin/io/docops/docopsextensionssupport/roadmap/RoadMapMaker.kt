@@ -17,7 +17,7 @@ class RoadMapMaker {
         sb.append(head(roadmaps, scale.toFloat()))
         sb.append(defs())
         sb.append("<g transform='scale($scale)'>")
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"url(#fcfcfc)\" opacity=\"0.1\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#F0FFF0\" opacity=\"1.0\"/>")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) {
             index -> sb.append(row(index, roadmaps, numChars))
