@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.web
 
 import io.docops.asciidoctorj.extension.adr.ADRParser
-import io.docops.asciidoctorj.extension.adr.AdrMaker
 import io.docops.asciidoctorj.extension.adr.AdrMakerNext
 import io.docops.asciidoctorj.extension.adr.AdrParserConfig
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -103,7 +102,7 @@ Participants: $participants
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray>{
         val contents = uncompressString(data)
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 90, increaseWidthBy = width.toInt())
+        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 90, increaseWidthBy = width.toInt(), scale = scale.toFloat())
         val adr = ADRParser().parse(contents, config)
         var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
         adr.urlMap.forEach { (t, u) ->
