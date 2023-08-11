@@ -1,8 +1,6 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoctorj.extension.adr.compressString
-import io.docops.docopsextensionssupport.badge.findHeightWidth
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed

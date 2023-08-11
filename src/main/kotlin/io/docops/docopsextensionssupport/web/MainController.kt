@@ -166,6 +166,11 @@ class MainController() {
     fun roadmap(model: Model): String {
         return "roadmap/rm"
     }
+    @GetMapping("/button/fromJson.html")
+    @Timed(value = "docops.button.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    fun buttonFromJson(model: Model): String {
+        return "buttons/fromjson"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,
