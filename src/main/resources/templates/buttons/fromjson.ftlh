@@ -1,7 +1,7 @@
 <div>
 <h1>Create Buttons from JSON</h1>
 
-<form class="pure-form pure-form-stacked" data-hx-put="api/buttons/form" data-hx-target="#contentBox">
+<form class="pure-form pure-form-stacked" data-hx-put="api/buttons/form" data-hx-target="#contentBox" >
 
 <fieldset id="response-div" >
     <legend>JSON</legend>

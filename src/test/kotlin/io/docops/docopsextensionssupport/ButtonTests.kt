@@ -50,22 +50,17 @@ class ButtonTests {
         }
     }
     private fun buttonFactory(type: ButtonType) {
-        val fo =  Font()
-        fo.size  = "18px"
-        fo.color = "#000000"
-        val fo2 =  Font()
-        fo2.size  = "12px"
-        fo2.color = "#000000"
+
         val links = mutableListOf<Link>(Link(label = "Ben & Jerry's", href = "https://www.benjerry.com"), Link("Flavors", href = "https://www.benjerry.com/flavors"))
         val b = Buttons(buttons =  mutableListOf(
             Button(label = "Cookies & Cream", link="https://www.apple.com", type="Cookies", description = "Chocolate & Cheesecake Ice Creams with Chocolate Cookies & a Cheesecake Core", cardLine1 = CardLines("Cookies &", size="34px"), cardLine2 = CardLines("Cream", size="34px"), links = links),
             Button(label = "Mint Chocolate Chance", link="https://www.google.com", type = "Mint", description = "Mint Ice Cream Loaded with Fudge Brownies", cardLine1 = CardLines("Mint Chocolate", size="34px"), cardLine2 = CardLines("Chance", size = "34px")),
-            Button(label = "New York Super Fudge Chunk", link="https://www.microsoft.com", type = "Fudge", description = "Chocolate Ice Cream with White & Dark Fudge Chunks, Pecans, Walnuts & Fudge-Covered Almonds", font = fo, cardLine1 = CardLines("New York", size="34px"), cardLine2 = CardLines("Super Fudge", size="34px")),
+            Button(label = "New York Super Fudge Chunk", link="https://www.microsoft.com", type = "Fudge", description = "Chocolate Ice Cream with White & Dark Fudge Chunks, Pecans, Walnuts & Fudge-Covered Almonds", cardLine1 = CardLines("New York", size="34px"), cardLine2 = CardLines("Super Fudge", size="34px")),
             Button(label = "Cherry Garcia", link="https://www.amazon.com", description = "Cherry Ice Cream with Cherries & Fudge Flakes", author = mutableListOf("Steve"), type = "Fruit", cardLine1 = CardLines("Cherry", size="34px"), cardLine2 = CardLines("Garcia", size="34px")),
             Button(label = "Chunky Monkey", link="https://www.facebook.com", author = mutableListOf("Duffy", "Rose"), description = "Banana Ice Cream with Fudge Chunks & Walnuts", type = "FB", cardLine1 = CardLines("Chunky", size="34px"), cardLine2 = CardLines("Monkey", size="34px"))
         ),
             buttonType = type,
-            buttonDisplay = ButtonDisplay(DIVISION2, scale = 0.7f, font = fo2)
+            buttonDisplay = ButtonDisplay(DIVISION2, scale = 0.7f)
         )
         val json = Json.encodeToString(b)
         println(json)

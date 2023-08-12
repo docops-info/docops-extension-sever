@@ -20,10 +20,9 @@ class ButtonController {
     @PutMapping("/buttons/form")
     @ResponseBody
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
-        val buttons = Json.decodeFromString<Buttons>(payload)
-        val pb = PanelBridge()
         try {
-            val imgSrc= pb.buttonToPanelButton(buttons)
+            val buttons = Json.decodeFromString<Buttons>(payload)
+            val imgSrc= buttons.createSVGShape()
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
@@ -37,9 +36,9 @@ class ButtonController {
     @PutMapping("/buttons")
     @ResponseBody
     fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
-        val pb = PanelBridge()
         try {
-            val imgSrc= pb.buttonToPanelButton(buttons)
+
+            val imgSrc= buttons.createSVGShape()
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)

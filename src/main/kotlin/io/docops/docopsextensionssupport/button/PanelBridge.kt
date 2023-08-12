@@ -8,20 +8,6 @@ import net.sourceforge.plantuml.bpm.Line
 
 class PanelBridge {
 
-    fun bridgeFont(font: io.docops.docopsextensionssupport.button.Font): Font {
-        val fo = Font()
-        fo.size = font.size
-        fo.bold = font.bold
-        fo.case = font.case
-        fo.color = font.color
-        fo.family = font.family
-        fo.italic = font.italic
-        fo.bold = font.bold
-        fo.spacing = font.spacing
-        fo.underline = font.underline
-        fo.vertical = font.vertical
-        return fo
-    }
 
     fun buttonToPanelButton(buttons: Buttons): String {
         return when (buttons.buttonType) {
@@ -64,9 +50,6 @@ class PanelBridge {
                 pb.date = d
             }
 
-            it.font?.let { pf ->
-                pb.font = bridgeFont(pf)
-            }
 
             it.type?.let { type ->
                 pb.type = type
@@ -83,9 +66,7 @@ class PanelBridge {
         val cm = ColorMap()
         cm.named(buttons.buttonDisplay.colors.toMutableList())
         var themeFont: Font? = null
-        buttons.buttonDisplay.font?.let {
-            themeFont = bridgeFont(it)
-        }
+
         panels.theme {
             scale = buttons.buttonDisplay.scale
             colorMap = cm
@@ -112,9 +93,7 @@ class PanelBridge {
                 pb.date = d
             }
 
-            it.font?.let { pf ->
-                pb.font = bridgeFont(pf)
-            }
+
 
             it.type?.let { type ->
                 pb.type = type
@@ -136,9 +115,7 @@ class PanelBridge {
         val cm = ColorMap()
         cm.named(buttons.buttonDisplay.colors.toMutableList())
         var themeFont: Font? = null
-        buttons.buttonDisplay.font?.let {
-            themeFont = bridgeFont(it)
-        }
+
         panels.theme {
             scale = buttons.buttonDisplay.scale
             colorMap = cm
@@ -165,9 +142,7 @@ class PanelBridge {
                 pb.date = d
             }
 
-            it.font?.let { pf ->
-                pb.font = bridgeFont(pf)
-            }
+
             it.cardLine1?.let { line->
                 pb.line1 = Line(line = line.line, size = line.size)
 
@@ -191,9 +166,7 @@ class PanelBridge {
         val cm = ColorMap()
         cm.named(buttons.buttonDisplay.colors.toMutableList())
         var themeFont: Font? = null
-        buttons.buttonDisplay.font?.let {
-            themeFont = bridgeFont(it)
-        }
+
         panels.theme {
             scale = buttons.buttonDisplay.scale
             colorMap = cm
@@ -214,9 +187,7 @@ class PanelBridge {
             }
             pb.label = it.label
             pb.link = it.link
-            it.font?.let { pf ->
-                pb.font = bridgeFont(pf)
-            }
+
             panelButtons.add(pb)
 
         }
@@ -229,9 +200,7 @@ class PanelBridge {
         val cm = ColorMap()
         cm.named(buttons.buttonDisplay.colors.toMutableList())
         var themeFont: Font? = null
-        buttons.buttonDisplay.font?.let {
-            themeFont = bridgeFont(it)
-        }
+
         panels.theme {
             scale = buttons.buttonDisplay.scale
             colorMap = cm
@@ -250,9 +219,7 @@ class PanelBridge {
             }
             rb.label = it.label
             rb.link = it.link
-            it.font?.let { pf ->
-                rb.font = bridgeFont(pf)
-            }
+
             panelButtons.add(rb)
 
         }
@@ -265,9 +232,6 @@ class PanelBridge {
         val cm = ColorMap()
         cm.named(buttons.buttonDisplay.colors.toMutableList())
         var themeFont: Font? = null
-        buttons.buttonDisplay.font?.let {
-            themeFont = bridgeFont(it)
-        }
         panels.theme {
             scale = buttons.buttonDisplay.scale
             colorMap = cm
