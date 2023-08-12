@@ -23,15 +23,25 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     abstract fun createShape(): String
 
     open fun height(): Float {
+        var scale = 1.0f
+        buttons.buttonDisplay?.let {
+            scale = it.scale
+        }
         if (buttons.buttons.size > 1) {
-            return (buttons.buttons.size * BUTTON_HEIGHT + (buttons.buttons.size * 10)) * buttons.buttonDisplay.scale
+            return (buttons.buttons.size * BUTTON_HEIGHT + (buttons.buttons.size * 10)) * scale
         }
         val h = BUTTON_HEIGHT + 20
-        return h * buttons.buttonDisplay.scale
+        return h * scale
     }
 
     open fun width(): Float {
-        return (buttons.buttonDisplay.columns * BUTTON_WIDTH + buttons.buttonDisplay.columns * BUTTON_PADDING + buttons.buttonDisplay.columns * BUTTON_PADDING) * buttons.buttonDisplay.scale
+        var columns = 3
+        var scale = 1.0f
+        buttons.buttonDisplay?.let {
+            columns = it.columns
+            scale = it.scale
+        }
+        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
     }
 
     protected fun toRows(): MutableList<MutableList<Button>> {
@@ -39,11 +49,13 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         var rowArray = mutableListOf<Button>()
         rows.add(rowArray)
         buttons.buttons.forEach {
-            if (rowArray.size == buttons.buttonDisplay.columns) {
-                rowArray = mutableListOf()
-                rows.add(rowArray)
+            buttons.buttonDisplay?.let { disp ->
+                if (rowArray.size == disp.columns) {
+                    rowArray = mutableListOf()
+                    rows.add(rowArray)
+                }
+                rowArray.add(it)
             }
-            rowArray.add(it)
         }
         return rows
     }

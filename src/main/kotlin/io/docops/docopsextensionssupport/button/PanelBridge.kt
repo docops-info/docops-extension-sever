@@ -64,11 +64,15 @@ class PanelBridge {
 
         panels.slimButtons = panelButtons
         val cm = ColorMap()
-        cm.named(buttons.buttonDisplay.colors.toMutableList())
+        buttons.buttonDisplay?.let {
+            cm.named(it.colors.toMutableList())
+        }
         var themeFont: Font? = null
 
         panels.theme {
-            scale = buttons.buttonDisplay.scale
+            buttons.buttonDisplay?.let {
+                scale = it.scale
+            }
             colorMap = cm
             font = themeFont
         }
@@ -113,11 +117,15 @@ class PanelBridge {
 
         panels.rectangleButtons = panelButtons
         val cm = ColorMap()
-        cm.named(buttons.buttonDisplay.colors.toMutableList())
+        buttons.buttonDisplay?.let {
+            cm.named(it.colors.toMutableList())
+        }
         var themeFont: Font? = null
 
         panels.theme {
-            scale = buttons.buttonDisplay.scale
+            buttons.buttonDisplay?.let {
+                scale = it.scale
+            }
             colorMap = cm
             font = themeFont
         }
@@ -164,11 +172,15 @@ class PanelBridge {
 
         panels.largeButtons = panelButtons
         val cm = ColorMap()
-        cm.named(buttons.buttonDisplay.colors.toMutableList())
+        buttons.buttonDisplay?.let {
+            cm.named(it.colors.toMutableList())
+        }
         var themeFont: Font? = null
 
         panels.theme {
-            scale = buttons.buttonDisplay.scale
+            buttons.buttonDisplay?.let {
+                scale = it.scale
+            }
             colorMap = cm
             font = themeFont
         }
@@ -198,11 +210,15 @@ class PanelBridge {
 
         panels.panelButtons = panelButtons
         val cm = ColorMap()
-        cm.named(buttons.buttonDisplay.colors.toMutableList())
+        buttons.buttonDisplay?.let {
+            cm.named(it.colors.toMutableList())
+        }
         var themeFont: Font? = null
 
         panels.theme {
-            scale = buttons.buttonDisplay.scale
+            buttons.buttonDisplay?.let {
+                scale = it.scale
+            }
             colorMap = cm
             font = themeFont
         }
@@ -230,10 +246,14 @@ class PanelBridge {
 
         panels.roundButtons = panelButtons
         val cm = ColorMap()
-        cm.named(buttons.buttonDisplay.colors.toMutableList())
+        buttons.buttonDisplay?.let {
+            cm.named(it.colors.toMutableList())
+        }
         var themeFont: Font? = null
         panels.theme {
-            scale = buttons.buttonDisplay.scale
+            buttons.buttonDisplay?.let {
+                scale = it.scale
+            }
             colorMap = cm
             font = themeFont
         }

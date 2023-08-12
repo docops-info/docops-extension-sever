@@ -2,11 +2,18 @@ package io.docops.docopsextensionssupport.button
 
 import io.docops.asciidoc.buttons.theme.DIVISION2
 import io.docops.docopsextensionssupport.button.shape.ButtonShape
+import io.docops.docopsextensionssupport.button.shape.Pill
 import io.docops.docopsextensionssupport.button.shape.Regular
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import java.awt.Color
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.util.*
-
+import kotlinx.serialization.decodeFromString
 
 @Serializable
 class CardLines(val line: String = "", val size: String = "50px")
@@ -63,13 +70,18 @@ class ButtonDisplay(
 class Buttons(
     val buttons: MutableList<Button>,
     val buttonType: ButtonType,
-    val buttonDisplay: ButtonDisplay,
+    var buttonDisplay: ButtonDisplay? = null,
+    var buttonDisplayUrl: String? = null,
     val id: String = UUID.randomUUID().toString()
 ) {
 
     val typeMap = mutableMapOf<String, String>()
 
     init {
+        buttonDisplayUrl?.let {
+            val content = getResourceFromUrl(it)
+            buttonDisplay = Json.decodeFromString<ButtonDisplay>(content)
+        }
         buttons.forEach {
             val color = determineButtonColor(it)
             it.color = determineButtonColor(it)
@@ -82,18 +94,22 @@ class Buttons(
     }
 
     private fun determineButtonColor(button: Button): String {
-        var color = ""
+        var color: String = ""
 
         if (null == button.color && null != button.type) {
             val col = typeMap[button.type]
-            if (null == col) {
-                color = buttonDisplay.colors[typeMap.size % buttonDisplay.colors.size]
-                typeMap[button.type] = color
+            if ( null == col ) {
+                buttonDisplay?.let {
+                    color = it.colors[typeMap.size % it.colors.size]
+                    typeMap[button.type] = color
+                }
             } else {
                 color = col
             }
         } else if (null == button.color && null == button.type) {
-            color = buttonDisplay.colors[0]
+            buttonDisplay?.let {
+                color = it.colors[0]
+            }
         } else {
             color = button.color!!
         }
@@ -103,7 +119,9 @@ class Buttons(
     private fun determineStyle(button: Button): ButtonStyle {
         var labelStyle = button.buttonStyle?.labelStyle
         if (null == labelStyle) {
-            labelStyle = buttonDisplay.buttonStyle.labelStyle
+            buttonDisplay?.let {
+                labelStyle = it.buttonStyle.labelStyle
+            }
         }
         var descriptionStyle: String? = button.buttonStyle?.descriptionStyle
         var dateStyle: String? = button.buttonStyle?.dateStyle
@@ -120,16 +138,15 @@ class Buttons(
     }
 
     fun createSVGShape(): String {
-        val creator: ButtonShape
-        when (ButtonType.REGULAR) {
-            buttonType -> {
-                creator = Regular(this)
+        val creator: ButtonShape = when (buttonType) {
+            ButtonType.REGULAR -> {
+                Regular(this)
             }
-
+            ButtonType.PILL -> {
+                Pill(this)
+            }
             ButtonType.LARGE -> TODO()
-            ButtonType.PILL -> TODO()
             ButtonType.RECTANGLE -> TODO()
-            ButtonType.REGULAR -> TODO()
             ButtonType.ROUND -> TODO()
             ButtonType.SLIM -> TODO()
         }
@@ -152,6 +169,22 @@ fun buildGradientDef(color: String, id: String): String {
         """
 }
 
+fun getResourceFromUrl(url: String): String {
+    val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
+        .connectTimeout(Duration.ofSeconds(20))
+        .build()
+    val request = HttpRequest.newBuilder()
+        .uri(URI.create(url))
+        .timeout(Duration.ofMinutes(1))
+        .build()
+    return try {
+        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+        response.body()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ""
+    }
+}
 fun gradientFromColor(color: String): Map<String, String> {
     val decoded = Color.decode(color)
     val tinted1 = tint(decoded, 0.5)

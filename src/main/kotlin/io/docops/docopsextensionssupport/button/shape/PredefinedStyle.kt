@@ -16,6 +16,40 @@ fun filters() = """
             <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
             <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
         </filter>
+        <filter id="buttonBlur">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+        <feOffset in="blur" dy="2" result="offsetBlur"/>
+        <feMerge>
+            <feMergeNode in="offsetBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+        </filter>
+
+        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
+            <stop offset="0" stop-color="#000000" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="topshineBlur">
+            <feGaussianBlur stdDeviation="0.93"/>
+        </filter>
+
+        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="bottomshine">
+            <feGaussianBlur stdDeviation="0.95"/>
+        </filter>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
+        </filter>
         """
 
 fun DARK1() = mutableListOf("#080808", "#101010", "#181818","#202020","#282828", "#303030")

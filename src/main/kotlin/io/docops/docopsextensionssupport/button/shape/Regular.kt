@@ -9,7 +9,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
 import java.io.File
 
-class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
+open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     override fun createShape(): String {
         val sb = StringBuilder()
@@ -19,8 +19,12 @@ class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         sb.append(end())
         return sb.toString()
     }
-    private fun draw() : String{
-        val sb = StringBuilder("<g transform=\"scale(${buttons.buttonDisplay.scale})\">")
+    open fun draw() : String{
+        var scale = 1.0f
+        buttons.buttonDisplay?.let {
+            scale = it.scale
+        }
+        val sb = StringBuilder("<g transform=\"scale($scale)\">")
         val rows = toRows()
         rows.forEachIndexed { index, buttons ->
             sb.append(drawButton(index, buttons))
@@ -30,10 +34,11 @@ class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
     fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
-        val win = if (!buttons.buttonDisplay.newWin) {
-            "_top"
-        } else {
-            "_blank"
+        var win = "_top"
+        buttons.buttonDisplay?.let {
+            if (it.newWin) {
+                win = "_blank"
+            }
         }
         var startX = 10
 
@@ -62,22 +67,25 @@ class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         return btns.toString()
     }
-    private fun start() : String {
+    protected fun start() : String {
         val height= height()
         val width = width()
         return """<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}">"""
     }
 
-    private fun end() = """</svg>"""
-    private fun defs() : String{
-
+    protected fun end() = """</svg>"""
+    protected fun defs() : String{
+        var strokeColor: String = "gold"
+        buttons.buttonDisplay?.let {
+            strokeColor = it.strokeColor
+        }
         return """
             <defs>
             ${filters()}
             ${gradient()}
             <style>
             ${glass()}
-            ${raise(strokeColor = buttons.buttonDisplay.strokeColor)}
+            ${raise(strokeColor = strokeColor)}
             ${gradientStyle()}
             </style>
             </defs>
