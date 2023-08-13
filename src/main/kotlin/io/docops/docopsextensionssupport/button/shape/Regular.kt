@@ -2,10 +2,8 @@ package io.docops.docopsextensionssupport.button.shape
 
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.button.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import java.io.File
+import io.docops.docopsextensionssupport.button.Button
+import io.docops.docopsextensionssupport.button.Buttons
 
 open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
@@ -86,6 +84,9 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${raise(strokeColor = strokeColor)}
             ${baseCard()}
             ${gradientStyle()}
+            ${myBox()}
+            ${keyFrame()}
+            ${linkText()}
             </style>
             </defs>
         """.trimIndent()
