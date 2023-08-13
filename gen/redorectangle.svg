@@ -1,234 +1,400 @@
-<?xml version="1.0" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" id="DocOps-d579112a-939f-4d7e-ace6-9ce55ff19a43"
-     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 990.0 203.0"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="990.0" height="1340.0" viewBox="0 0 990.0 1340.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink" id="f2778aa9-e475-4a01-870b-6516b648c961">
     <defs>
-        <linearGradient id="IDee27dd1a-7b74-44d2-ab13-798434223a93" x2="1" y2="1">
-            <stop class="stop1" offset="0%" stop-color="#a2b0c6"/>
-            <stop class="stop2" offset="50%" stop-color="#7388aa"/>
-            <stop class="stop3" offset="100%" stop-color="#45618E"/>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
+                                lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"/>
+        </filter>
+        <filter id="buttonBlur">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+            <feOffset in="blur" dy="2" result="offsetBlur"/>
+            <feMerge>
+                <feMergeNode in="offsetBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
+            <stop offset="0" stop-color="#000000" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="#000000" stop-opacity="0"/>
         </linearGradient>
+        <filter id="topshineBlur">
+            <feGaussianBlur stdDeviation="0.93"/>
+        </filter>
+        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="bottomshine">
+            <feGaussianBlur stdDeviation="0.95"/>
+        </filter>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
+                                lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"/>
+        </filter>
+        <linearGradient id="btn_e476b778-9953-4cc0-b918-a1dc60ec600b" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#bc86b2"/>
+            <stop class="stop2" offset="50%" stop-color="#9a4a8c"/>
+            <stop class="stop3" offset="100%" stop-color="#790e66"/>
+        </linearGradient>
+        <linearGradient id="btn_b1bd76b0-032a-4482-bb5b-7305044401f7" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#7f9ca4"/>
+            <stop class="stop2" offset="50%" stop-color="#3f6b76"/>
+            <stop class="stop3" offset="100%" stop-color="#003a49"/>
+        </linearGradient>
+        <linearGradient id="btn_e288584d-eb71-49b3-91eb-95e62b68aa10" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#7f8ab7"/>
+            <stop class="stop2" offset="50%" stop-color="#3f4f93"/>
+            <stop class="stop3" offset="100%" stop-color="#00156f"/>
+        </linearGradient>
+        <linearGradient id="btn_96c0a9cf-2fe9-4ee1-a9bf-0a2df2b7fc35" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#aa7fda"/>
+            <stop class="stop2" offset="50%" stop-color="#7f3fc7"/>
+            <stop class="stop3" offset="100%" stop-color="#5500b5"/>
+        </linearGradient>
+        <linearGradient id="btn_1beef17e-f491-497e-89a4-772a0bb170ca" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#d67fd5"/>
+            <stop class="stop2" offset="50%" stop-color="#c23fc0"/>
+            <stop class="stop3" offset="100%" stop-color="#ae00ab"/>
+        </linearGradient>
+        <linearGradient id="btn_96236445-4959-4cf9-b876-373e75acff84" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#7f9ca4"/>
+            <stop class="stop2" offset="50%" stop-color="#3f6b76"/>
+            <stop class="stop3" offset="100%" stop-color="#003a49"/>
+        </linearGradient>
+        <linearGradient id="btn_9c2142b4-6531-4162-a9a7-2cba2b64d35b" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#7f8ab7"/>
+            <stop class="stop2" offset="50%" stop-color="#3f4f93"/>
+            <stop class="stop3" offset="100%" stop-color="#00156f"/>
+        </linearGradient>
+        <linearGradient id="btn_7e86ed88-08fc-44f9-b34d-13fbcba17897" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#aa7fda"/>
+            <stop class="stop2" offset="50%" stop-color="#7f3fc7"/>
+            <stop class="stop3" offset="100%" stop-color="#5500b5"/>
+        </linearGradient>
+        <linearGradient id="btn_7c9e2102-cda0-4031-b252-ddb9754d523f" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#d67fd5"/>
+            <stop class="stop2" offset="50%" stop-color="#c23fc0"/>
+            <stop class="stop3" offset="100%" stop-color="#ae00ab"/>
+        </linearGradient>
+        <linearGradient id="btn_89d3aed1-77eb-4d8c-9498-83032e053168" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#bc86b2"/>
+            <stop class="stop2" offset="50%" stop-color="#9a4a8c"/>
+            <stop class="stop3" offset="100%" stop-color="#790e66"/>
+        </linearGradient>
+        <linearGradient id="btn_21750583-6436-4945-b82c-2afbefbd220f" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#bc86b2"/>
+            <stop class="stop2" offset="50%" stop-color="#9a4a8c"/>
+            <stop class="stop3" offset="100%" stop-color="#790e66"/>
+        </linearGradient>
+        <path id="outerBox" fill="#ffffff"
+              d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 382.0 A 18.0 18.0 0 0 1 282.0 400.0 L 18.0 400.0 A 18.0 18.0 0 0 1 0 382.0 Z">
+            <title>Title</title>
+        </path>
+        <g id="topTextBox">
+            <path fill="#ffffff"
+                  d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+        </g>
+        <path id="bottomTextBox"
+              d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 300.0 0 A 0.0 0.0 0 0 1 300.0 0.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+        <path id="singleBox"
+              d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 191.0 A 0.0 0.0 0 0 1 300.0 191.0 L 0.0 191.0 A 0.0 0.0 0 0 1 0 191.0 Z"/>
         <style>
-            .IDee27dd1a-7b74-44d2-ab13-798434223a93_cls {
-                fill: url(#IDee27dd1a-7b74-44d2-ab13-798434223a93);
-            }
-
-            .ID6f86d79c-a779-4728-9a82-a373484b45c9_cls {
-                fill: url(#ID6f86d79c-a779-4728-9a82-a373484b45c9);
-            }
-
-            .IDdc7f5201-3fc8-4505-9f1d-c40c2931ae29_cls {
-                fill: url(#IDdc7f5201-3fc8-4505-9f1d-c40c2931ae29);
-            }
-
-            .ID340f66c4-3639-4360-9920-93b860973b47_cls {
-                fill: url(#ID340f66c4-3639-4360-9920-93b860973b47);
-            }
-
-            .IDeb77ac1f-a830-488b-8e0e-0f97fed8892e_cls {
-                fill: url(#IDeb77ac1f-a830-488b-8e0e-0f97fed8892e);
-            }
-
-            .linkText {
-                fill: #4076ff;
-                font-size: 12px;
-                font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-weight: normal;
-                cursor: pointer;
-            }
-            .btnclass1 {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
-                fill: #000000;
-                letter-spacing: normal;
-            }
-            .btnclass2 {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 18px;
-                fill: #000000;
-                letter-spacing: normal;
-            }
-            .shape {
-                stroke: black;
-            }
-
-            .IDee27dd1a-7b74-44d2-ab13-798434223a93_cls {
-                fill: url(#IDee27dd1a-7b74-44d2-ab13-798434223a93);
-            }
-
-            .ID6f86d79c-a779-4728-9a82-a373484b45c9_cls {
-                fill: url(#ID6f86d79c-a779-4728-9a82-a373484b45c9);
-            }
-
-            .IDdc7f5201-3fc8-4505-9f1d-c40c2931ae29_cls {
-                fill: url(#IDdc7f5201-3fc8-4505-9f1d-c40c2931ae29);
-            }
-
-            .ID340f66c4-3639-4360-9920-93b860973b47_cls {
-                fill: url(#ID340f66c4-3639-4360-9920-93b860973b47);
-            }
-
-            .IDeb77ac1f-a830-488b-8e0e-0f97fed8892e_cls {
-                fill: url(#IDeb77ac1f-a830-488b-8e0e-0f97fed8892e);
-            }
-
-            #DocOps-d579112a-939f-4d7e-ace6-9ce55ff19a43 .btnclass1 {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
-                fill: #000000;
-                letter-spacing: normal;
-            }
-
-            #DocOps-d579112a-939f-4d7e-ace6-9ce55ff19a43 .btnclass2 {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 18px;
-                fill: #000000;
-                letter-spacing: normal;
-            }
-
-            .glass {
-                overflow: hidden;
-                color: white;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-                background-image: radial-gradient(circle at center, rgba(0, 167, 225, 0.25), rgba(0, 110, 149, 0.5));
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.75), inset 0 0 0 2px rgba(0, 0, 0, 0.3), inset 0 -6px 6px -3px rgba(0, 129, 174, 0.2);
-                position: relative;
-            }
-
-            .glass:after {
-                content: "";
-                background: rgba(0, 167, 225, 0.2);
-                display: block;
-                position: absolute;
-                z-index: 0;
-                height: 100%;
-                width: 100%;
-                top: 0;
-                left: 0;
-                backdrop-filter: blur(3px) saturate(400%);
-                -webkit-backdrop-filter: blur(3px) saturate(400%);
-            }
-
-            .glass:before {
-                content: "";
-                display: block;
-                position: absolute;
-                width: calc(100% - 4px);
-                height: 35px;
-                background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
-                top: 2px;
-                left: 2px;
-                border-radius: 30px 30px 200px 200px;
-                opacity: 0.7;
-            }
-
-            .glass:hover {
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-            }
-
-            .glass:hover:before {
-                opacity: 1;
-            }
-
-            .glass:active {
-                text-shadow: 0 0 2px rgba(0, 0, 0, 0.9);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.75), inset 0 0 0 2px rgba(0, 0, 0, 0.3), inset 0 -6px 6px -3px rgba(0, 129, 174, 0.2);
-            }
-
-            .glass:active:before {
-                height: 25px;
-            }
-            @keyframes draw {
-                0% {
-                    stroke-dasharray: 140 540;
-                    stroke-dashoffset: -474;
-                    stroke-width: 3px;
-                }
-                100% {
-                    stroke-dasharray: 760;
-                    stroke-dashoffset: 0;
-                    stroke-width: 5px;
-                }
-            }
-            .mybox:hover {
-                -webkit-animation: 0.5s draw linear forwards;
-                animation: 0.5s draw linear forwards;
-            }
+            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
+            1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
+            center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
+            rgba(0,0,0,.3),inset 0 -6px 6px -3px
+            rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px)
+            saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% -
+            4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px
+            30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px
+            rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
+            3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
+            rgba(0,129,174,.2)}.glass:active:before{height:25px}.raise {pointer-events: bounding-box;opacity: 1;filter:
+                    drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: gold;stroke-width: 3px; opacity:
+                    0.9;}.basecard { -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow( 3px 3px
+            2px rgba(0, 0, 0, .3)); } .basecard:hover { cursor: pointer; stroke-width: 3; stroke-dasharray: 8;
+                                      }.btn_e476b778-9953-4cc0-b918-a1dc60ec600b_cls { fill: url(#btn_e476b778-9953-4cc0-b918-a1dc60ec600b);
+                                       }.btn_b1bd76b0-032a-4482-bb5b-7305044401f7_cls { fill: url(#btn_b1bd76b0-032a-4482-bb5b-7305044401f7);
+                                        }.btn_e288584d-eb71-49b3-91eb-95e62b68aa10_cls { fill: url(#btn_e288584d-eb71-49b3-91eb-95e62b68aa10);
+                                         }.btn_96c0a9cf-2fe9-4ee1-a9bf-0a2df2b7fc35_cls { fill: url(#btn_96c0a9cf-2fe9-4ee1-a9bf-0a2df2b7fc35);
+                                          }.btn_1beef17e-f491-497e-89a4-772a0bb170ca_cls { fill: url(#btn_1beef17e-f491-497e-89a4-772a0bb170ca);
+                                           }.btn_96236445-4959-4cf9-b876-373e75acff84_cls { fill: url(#btn_96236445-4959-4cf9-b876-373e75acff84);
+                                            }.btn_9c2142b4-6531-4162-a9a7-2cba2b64d35b_cls { fill: url(#btn_9c2142b4-6531-4162-a9a7-2cba2b64d35b);
+                                             }.btn_7e86ed88-08fc-44f9-b34d-13fbcba17897_cls { fill: url(#btn_7e86ed88-08fc-44f9-b34d-13fbcba17897);
+                                              }.btn_7c9e2102-cda0-4031-b252-ddb9754d523f_cls { fill: url(#btn_7c9e2102-cda0-4031-b252-ddb9754d523f);
+                                               }.btn_89d3aed1-77eb-4d8c-9498-83032e053168_cls { fill: url(#btn_89d3aed1-77eb-4d8c-9498-83032e053168);
+                                                }.btn_21750583-6436-4945-b82c-2afbefbd220f_cls { fill: url(#btn_21750583-6436-4945-b82c-2afbefbd220f);
+                                                 }.shape { stroke: black; } .mybox:hover { -webkit-animation: 0.5s draw linear forwards; animation: 0.5s draw
+            linear forwards; }@keyframes draw { 0% { stroke-dasharray: 140 540; stroke-dashoffset: -474; stroke-width:
+                    3px; } 100% { stroke-dasharray: 760; stroke-dashoffset: 0; stroke-width: 5px; } }.linkText { fill: #4076ff;
+                                                                                                         font-size: 15px; font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+                                                                                                         font-weight: normal; cursor: pointer; } .linkText:hover { fill: #ea0606; border: #d2ddec solid; }
         </style>
     </defs>
-    <g filter="url(#Bevel2)" transform="translate(10, 10)">
-        <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
-              ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-            <text x="115" y="16" class="glass btnclass1">Cookies &amp; Cream</text>
-        </a>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-        <rect x="10" y="10" height="98" width="98"
-              class="mybox shape IDee27dd1a-7b74-44d2-ab13-798434223a93_cls" rx="18" ry="18" fill="#45618E"/>
-        </a>
-        <g class="glass" transform="translate(10,10)">
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
-                  font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
-                <a xlink:href="https://www.apple.com" target="_blank" fill="#000000">1</a>
+    <g transform="scale(0.7)">
+        <g transform="translate(10,10)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Cookies &amp; Cream
+                </text>
+            </a>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_e476b778-9953-4cc0-b918-a1dc60ec600b_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.apple.com" target="_top" fill="#000000">1</a>
+                </text>
+            </g>
+            <text x="115" y="20">
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry&apos;s</a>
+                </tspan>
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
+                </tspan>
             </text>
         </g>
-        <text x="115" y="22">
-            <tspan x="115" dy="8">
-                <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry's</a>
-            </tspan>
-            <tspan x="115" dy="12">
-                <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
-            </tspan>
-        </text>
-    </g>
-    <g filter="url(#Bevel2)" transform="translate(330, 10)">
-        <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
-              ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-            <text x="130" y="16" class="glass btnclass1">Cookies &amp; Cream</text>
-        </a>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-            <rect x="10" y="10" height="98" width="98"
-                  class="mybox shape IDee27dd1a-7b74-44d2-ab13-798434223a93_cls" rx="18" ry="18" fill="#45618E"/>
-        </a>
-        <g class="glass" transform="translate(10,10)">
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
-                  font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
-                <a xlink:href="https://www.apple.com" target="_blank" fill="#000000">2</a>
+        <g transform="translate(330,10)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.google.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Mint Chocolate Chance
+                </text>
+            </a>
+            <a xlink:href="https://www.google.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_b1bd76b0-032a-4482-bb5b-7305044401f7_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.google.com" target="_top" fill="#000000">2</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(650,10)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.microsoft.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    New York Super Fudge Chunk
+                </text>
+            </a>
+            <a xlink:href="https://www.microsoft.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_e288584d-eb71-49b3-91eb-95e62b68aa10_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.microsoft.com" target="_top" fill="#000000">3</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(10,140)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.amazon.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Cherry Garcia
+                </text>
+            </a>
+            <a xlink:href="https://www.amazon.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_96c0a9cf-2fe9-4ee1-a9bf-0a2df2b7fc35_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.amazon.com" target="_top" fill="#000000">4</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(330,140)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.facebook.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Chunky Monkey
+                </text>
+            </a>
+            <a xlink:href="https://www.facebook.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_1beef17e-f491-497e-89a4-772a0bb170ca_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.facebook.com" target="_top" fill="#000000">5</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(650,140)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.google.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Mint Chocolate Chance
+                </text>
+            </a>
+            <a xlink:href="https://www.google.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_96236445-4959-4cf9-b876-373e75acff84_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.google.com" target="_top" fill="#000000">6</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(10,270)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.microsoft.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    New York Super Fudge Chunk
+                </text>
+            </a>
+            <a xlink:href="https://www.microsoft.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_9c2142b4-6531-4162-a9a7-2cba2b64d35b_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.microsoft.com" target="_top" fill="#000000">7</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(330,270)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.amazon.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Cherry Garcia
+                </text>
+            </a>
+            <a xlink:href="https://www.amazon.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_7e86ed88-08fc-44f9-b34d-13fbcba17897_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.amazon.com" target="_top" fill="#000000">8</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(650,270)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.facebook.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Chunky Monkey
+                </text>
+            </a>
+            <a xlink:href="https://www.facebook.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_7c9e2102-cda0-4031-b252-ddb9754d523f_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.facebook.com" target="_top" fill="#000000">9</a>
+                </text>
+            </g>
+            <text x="115" y="20"></text>
+        </g>
+        <g transform="translate(10,400)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Cookies &amp; Cream
+                </text>
+            </a>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_89d3aed1-77eb-4d8c-9498-83032e053168_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.apple.com" target="_top" fill="#000000">10</a>
+                </text>
+            </g>
+            <text x="115" y="20">
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry&apos;s</a>
+                </tspan>
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
+                </tspan>
             </text>
         </g>
-        <text x="130" y="22">
-            <tspan x="130" dy="16">
-                <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry's</a>
-            </tspan>
-            <tspan x="130" dy="20">
-                <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
-            </tspan>
-        </text>
-    </g>
-    <g filter="url(#Bevel2)" transform="translate(650, 10)">
-        <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
-              ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-            <text x="130" y="16" class="glass btnclass1">Cookies &amp; Cream</text>
-        </a>
-        <a xlink:href="https://www.apple.com" class="linkText" target="_blank">
-            <rect x="10" y="10" height="98" width="98"
-                  class="mybox shape IDee27dd1a-7b74-44d2-ab13-798434223a93_cls" rx="18" ry="18" fill="#45618E"/>
-        </a>
-        <g class="glass" transform="translate(10,10)">
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
-                  font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
-                <a xlink:href="https://www.apple.com" target="_blank" fill="#000000">3</a>
+        <g transform="translate(330,400)" cursor="pointer" filter="url(#Bevel2)">
+            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
+                  ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <text x="115" y="16" class="glass"
+                      style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: bold;">
+                    Cookies &amp; Cream
+                </text>
+            </a>
+            <a xlink:href="https://www.apple.com" class="linkText" target="_top">
+                <rect x="10" y="10" height="98" width="98"
+                      class="mybox shape btn_21750583-6436-4945-b82c-2afbefbd220f_cls" rx="18" ry="18" fill="#45618E"/>
+            </a>
+            <g class="glass" transform="translate(10,10)">
+                <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
+                      font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+                    <a xlink:href="https://www.apple.com" target="_top" fill="#000000">11</a>
+                </text>
+            </g>
+            <text x="115" y="20">
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry&apos;s</a>
+                </tspan>
+                <tspan x="115" dy="14">
+                    <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
+                </tspan>
             </text>
         </g>
-        <text x="130" y="22">
-            <tspan x="130" dy="16">
-                <a xlink:href="https://www.benjerry.com" class="linkText" target="_blank">Ben &amp; Jerry's</a>
-            </tspan>
-            <tspan x="130" dy="20">
-                <a xlink:href="https://www.benjerry.com/flavors" class="linkText" target="_blank">Flavors</a>
-            </tspan>
-        </text>
     </g>
 </svg>

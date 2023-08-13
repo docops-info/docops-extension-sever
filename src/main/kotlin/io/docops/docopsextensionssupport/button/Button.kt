@@ -180,7 +180,9 @@ class Buttons(
                 Rectangle(this)
             }
             ButtonType.ROUND -> TODO()
-            ButtonType.SLIM -> TODO()
+            ButtonType.SLIM -> {
+                Slim(this)
+            }
         }
         return creator.drawShape()
     }

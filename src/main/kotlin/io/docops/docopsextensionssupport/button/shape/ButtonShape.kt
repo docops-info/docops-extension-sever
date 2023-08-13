@@ -80,4 +80,12 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         const val BUTTON_PADDING = 5
         const val  BUTTON_SPACING = 10
     }
+
+    fun linesToMultiLineText(style: String?, lines: MutableList<String>, dy: Int, x: Int): String {
+        val text = StringBuilder()
+        lines.forEach {
+            text.append("""<tspan x="$x" dy="$dy" style="$style">$it</tspan>""")
+        }
+        return text.toString()
+    }
 }
