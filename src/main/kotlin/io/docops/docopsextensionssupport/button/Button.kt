@@ -1,10 +1,8 @@
 package io.docops.docopsextensionssupport.button
 
-import io.docops.asciidoc.buttons.theme.DIVISION2
-import io.docops.docopsextensionssupport.button.shape.ButtonShape
-import io.docops.docopsextensionssupport.button.shape.Pill
-import io.docops.docopsextensionssupport.button.shape.Regular
+import io.docops.docopsextensionssupport.button.shape.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.awt.Color
 import java.net.URI
@@ -13,11 +11,12 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
 import java.util.*
-import kotlinx.serialization.decodeFromString
 
 @Serializable
 class CardLines(val line: String = "", val size: String = "50px")
 
+@Serializable
+class EmbeddedImage(val ref: String, val type: String = "image/png")
 @Serializable
 class Button(
     var id: String = UUID.randomUUID().toString(),
@@ -33,7 +32,8 @@ class Button(
     var color: String? = null,
     var gradient: String? = null,
     var buttonGradientStyle: String? = null,
-    var buttonStyle: ButtonStyle? = null
+    var buttonStyle: ButtonStyle? = null,
+    var embeddedImage: EmbeddedImage? = null
 )
 
 @Serializable
@@ -58,7 +58,7 @@ enum class ButtonType {
 
 @Serializable
 class ButtonDisplay(
-    val colors: List<String> = DIVISION2,
+    val colors: List<String> = DARK1(),
     val scale: Float = 1.0f,
     val columns: Int = 3,
     val newWin: Boolean = false,
@@ -124,9 +124,37 @@ class Buttons(
             }
         }
         var descriptionStyle: String? = button.buttonStyle?.descriptionStyle
+        if(null == descriptionStyle) {
+            buttonDisplay?.let {
+                it.buttonStyle.descriptionStyle?.let { ds ->
+                    descriptionStyle = ds
+                }
+            }
+        }
         var dateStyle: String? = button.buttonStyle?.dateStyle
-        val typeStyle: String? = button.buttonStyle?.typeStyle
-        val authorStyle: String? = button.buttonStyle?.authorStyle
+        if(null == dateStyle) {
+            buttonDisplay?.let {
+                it.buttonStyle.dateStyle?.let { dts ->
+                    dateStyle = dts
+                }
+            }
+        }
+        var typeStyle: String? = button.buttonStyle?.typeStyle
+        if(null == typeStyle) {
+            buttonDisplay?.let {
+                it.buttonStyle.typeStyle?.let { ts ->
+                    typeStyle = ts
+                }
+            }
+        }
+        var authorStyle: String? = button.buttonStyle?.authorStyle
+        if(null == authorStyle) {
+            buttonDisplay?.let {
+                it.buttonStyle.authorStyle?.let { ast ->
+                    authorStyle = ast
+                }
+            }
+        }
 
         return ButtonStyle(
             labelStyle = labelStyle,
@@ -145,7 +173,9 @@ class Buttons(
             ButtonType.PILL -> {
                 Pill(this)
             }
-            ButtonType.LARGE -> TODO()
+            ButtonType.LARGE -> {
+                Large(this)
+            }
             ButtonType.RECTANGLE -> TODO()
             ButtonType.ROUND -> TODO()
             ButtonType.SLIM -> TODO()

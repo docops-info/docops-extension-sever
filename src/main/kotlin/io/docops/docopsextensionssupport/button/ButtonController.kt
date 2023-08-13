@@ -5,11 +5,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import java.nio.charset.StandardCharsets
 
 @Controller
@@ -22,27 +18,27 @@ class ButtonController {
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
         try {
             val buttons = Json.decodeFromString<Buttons>(payload)
-            val imgSrc= buttons.createSVGShape()
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-            return ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+            return createResponse(buttons)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }
     }
 
-    @PutMapping("/buttons")
-    @ResponseBody
-    fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
-        try {
-
-            val imgSrc= buttons.createSVGShape()
+    private fun createResponse(buttons: Buttons): ResponseEntity<ByteArray> {
+            val imgSrc = buttons.createSVGShape()
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
             return ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+
+    }
+
+    @PutMapping("/buttons")
+    @ResponseBody
+    fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
+        try {
+            return createResponse(buttons)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e

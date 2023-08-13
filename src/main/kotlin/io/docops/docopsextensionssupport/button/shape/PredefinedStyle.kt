@@ -7,6 +7,7 @@ fun glass () = """.glass:after,.glass:before{content:"";display:block;position:a
 
 fun raise (strokeColor: String = "gold", opacity: Float = 0.9f) = """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};}"""
 
+fun baseCard() = """.basecard { -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); } .basecard:hover { cursor: pointer; stroke-width: 3; stroke-dasharray: 8; }"""
 fun filters() = """
        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
@@ -57,3 +58,14 @@ fun DARK1() = mutableListOf("#080808", "#101010", "#181818","#202020","#282828",
 fun DARKREDLIGHT() = mutableListOf("#080000", "#100000", "#180000", "#200000", "#280000", "#300000", "#380000", "#400000")
 
 fun REDLIGHT() = mutableListOf("#780000","#800000", "#880000","#900000", "#980000", "#A00000", "#A80000")
+
+fun uses() =  """
+            <path id="outerBox" fill="#ffffff"  d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 382.0 A 18.0 18.0 0 0 1 282.0 400.0 L 18.0 400.0 A 18.0 18.0 0 0 1 0 382.0 Z">
+                        <title>Title</title>
+                    </path>
+            <g id="topTextBox">
+                <path fill="#ffffff" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+            </g>
+            <path id="bottomTextBox" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 300.0 0 A 0.0 0.0 0 0 1 300.0 0.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+            <path id="singleBox" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 191.0 A 0.0 0.0 0 0 1 300.0 191.0 L 0.0 191.0 A 0.0 0.0 0 0 1 0 191.0 Z"/>
+        """
