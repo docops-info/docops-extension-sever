@@ -23,14 +23,15 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     abstract fun createShape(): String
 
     open fun height(): Float {
+        val size = toRows().size
         var scale = 1.0f
         buttons.buttonDisplay?.let {
             scale = it.scale
         }
-        if (buttons.buttons.size > 1) {
-            return (buttons.buttons.size * BUTTON_HEIGHT + (buttons.buttons.size * 10)) * scale
+        if (size > 1) {
+            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
         }
-        val h = BUTTON_HEIGHT + 20
+        val h = BUTTON_HEIGHT + 30
         return h * scale
     }
 

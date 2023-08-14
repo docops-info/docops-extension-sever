@@ -6,21 +6,13 @@ import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.Link
 
 class Rectangle(buttons: Buttons) : Regular(buttons) {
-    override fun createShape(): String {
-        val sb = StringBuilder()
-        sb.append(start())
-        sb.append(defs())
-        sb.append(draw())
-        sb.append(end())
-        return sb.toString()
-    }
 
     override fun draw() : String{
         var scale = 1.0f
         buttons.buttonDisplay?.let {
             scale = it.scale
         }
-        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val sb = StringBuilder("<rect width='100%' height='100%' fill='#202020'/><g transform=\"scale($scale)\">")
         val rows = toRows()
         var count = 0
         rows.forEachIndexed { index, buttons ->
@@ -93,19 +85,26 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         return sb.toString()
     }
     override fun height(): Float {
-        if (buttons.buttons.size > 1) {
-            return buttons.buttons.size * BUTTON_HEIGHT + 20 + 0.0f
-
+        val size = toRows().size
+        var scale = 1.0f
+        buttons.buttonDisplay?.let {
+            scale = it.scale
         }
-        return BUTTON_HEIGHT + 20 + 0.0f
+        if (size > 1) {
+            return (size * Slim.BUTTON_HEIGHT + (size * 10)) * scale + 10
+        }
+        val h = Slim.BUTTON_HEIGHT + 30
+        return h * scale
     }
 
     override fun width(): Float {
         var columns = 3
+        var scale = 1.0f
         buttons.buttonDisplay?.let {
             columns = it.columns
+            scale = it.scale
         }
-        return columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING + 0.0f
+        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
     }
     companion object {
         const val BUTTON_HEIGHT: Int = 120

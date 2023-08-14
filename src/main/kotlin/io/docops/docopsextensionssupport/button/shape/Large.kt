@@ -8,14 +8,7 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
 class Large(buttons: Buttons) : Regular(buttons) {
-    override fun createShape(): String {
-        val sb = StringBuilder()
-        sb.append(start())
-        sb.append(defs())
-        sb.append(draw())
-        sb.append(end())
-        return sb.toString()
-    }
+
 
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
@@ -115,30 +108,28 @@ class Large(buttons: Buttons) : Regular(buttons) {
         </g>
         """.trimIndent()
     }
-    override fun start() : String {
+
+    override fun height(): Float {
+        val size = toRows().size
         var scale = 1.0f
-        val height= height()
-        val width = width()
-        buttons.buttonDisplay?.let { 
+        buttons.buttonDisplay?.let {
             scale = it.scale
         }
-        return """<svg xmlns="http://www.w3.org/2000/svg" width="${width * scale}" height="${height * scale}"
-     viewBox="0 0 ${width * scale} ${height * scale}" xmlns:xlink="http://www.w3.org/1999/xlink">"""
-    }
-    override fun height(): Float {
-        if (buttons.buttons.size > 1) {
-            return buttons.buttons.size * BUTTON_HEIGHT + 20 + 0.0f
-
+        if (size > 1) {
+            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
         }
-        return BUTTON_HEIGHT + 20 + 0.0f
+        val h = BUTTON_HEIGHT + 30
+        return h * scale
     }
 
     override fun width(): Float {
         var columns = 3
-        buttons.buttonDisplay?.let { 
+        var scale = 1.0f
+        buttons.buttonDisplay?.let {
             columns = it.columns
+            scale = it.scale
         }
-        return columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING + 0.0f
+        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
     }
     companion object {
         const val BUTTON_HEIGHT: Int = 410

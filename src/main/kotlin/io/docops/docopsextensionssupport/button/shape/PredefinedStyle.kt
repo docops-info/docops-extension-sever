@@ -56,6 +56,7 @@ fun filters() = """
             <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
             <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
         </filter>
+        <circle id="myCircle" cx="0" cy="0" r="60" class="card" stroke="black" stroke-width="1"/>
         """
 
 fun DARK1() = mutableListOf("#080808", "#101010", "#181818","#202020","#282828", "#303030")

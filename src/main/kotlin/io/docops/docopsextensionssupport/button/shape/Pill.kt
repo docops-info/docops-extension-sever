@@ -5,29 +5,9 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
 class Pill(buttons: Buttons) : Regular(buttons) {
-    override fun createShape(): String {
-        val sb = StringBuilder()
-        sb.append(start())
-        sb.append(defs())
-        sb.append(draw())
-        sb.append(end())
-        return sb.toString()
-    }
 
-    override fun draw(): String {
-        var scale = 1.0f
-        buttons.buttonDisplay?.let {
-            scale = it.scale
-        }
-        val sb = StringBuilder("<g transform=\"scale($scale)\">")
-        val rows = toRows()
-        rows.forEachIndexed { index, buttons ->
-            sb.append(drawPills(index, buttons))
-        }
-        sb.append("</g>")
-        return sb.toString()
-    }
-    fun drawPills(index: Int, buttonList: MutableList<Button>): String {
+
+    override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.buttonDisplay?.let {
@@ -66,14 +46,16 @@ class Pill(buttons: Buttons) : Regular(buttons) {
         return btns.toString()
     }
     override fun height(): Float {
+        val size = toRows().size
         var scale = 1.0f
         buttons.buttonDisplay?.let {
             scale = it.scale
         }
-        if (buttons.buttons.size > 1) {
-            return (buttons.buttons.size * BUTTON_HEIGHT + (buttons.buttons.size * 10)) * scale
+        if (size > 1) {
+            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
         }
-        return (BUTTON_HEIGHT + 20) * scale
+        val h = BUTTON_HEIGHT + 30
+        return h * scale
     }
 
     override fun width(): Float {

@@ -179,7 +179,9 @@ class Buttons(
             ButtonType.RECTANGLE -> {
                 Rectangle(this)
             }
-            ButtonType.ROUND -> TODO()
+            ButtonType.ROUND -> {
+                Round(this)
+            }
             ButtonType.SLIM -> {
                 Slim(this)
             }

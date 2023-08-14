@@ -8,14 +8,6 @@ import io.docops.docopsextensionssupport.button.Buttons
 
 class Slim(buttons: Buttons) : Regular(buttons) {
 
-    override fun createShape(): String {
-        val sb = StringBuilder()
-        sb.append(start())
-        sb.append(defs())
-        sb.append(draw())
-        sb.append(end())
-        return sb.toString()
-    }
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"
