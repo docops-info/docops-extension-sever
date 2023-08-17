@@ -12,14 +12,13 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         buttons.buttonDisplay?.let {
             scale = it.scale
         }
-        val sb = StringBuilder("<rect width='100%' height='100%' fill='#202020'/><g transform=\"scale($scale)\">")
+        val sb = StringBuilder("<g transform=\"scale($scale)\">")
         val rows = toRows()
         var count = 0
         rows.forEachIndexed { index, buttons ->
 
             sb.append(drawButtonInternal(index, buttons, count))
             count += buttons.size
-            println(buttons.size)
         }
         sb.append("</g>")
         return sb.toString()
@@ -72,11 +71,17 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
     private fun linksToText(links: MutableList<Link>?): String {
         val sb = StringBuilder("""<text x="115" y="20">""")
+        var linkText = "linkText"
+        buttons.buttonDisplay?.let {
+            if(it.useDark) {
+                linkText = "linkTextDark"
+            }
+        }
         links?.let {
             it.forEach { link ->
                 sb.append("""
             <tspan x="115" dy="14">
-                <a xlink:href="${link.href}" class="linkText" target="_blank">${link.label.escapeXml()}</a>
+                <a xlink:href="${link.href}" class="$linkText" target="_blank">${link.label.escapeXml()}</a>
             </tspan>
                 """.trimIndent())
             }

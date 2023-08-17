@@ -62,6 +62,7 @@ class ButtonDisplay(
     val scale: Float = 1.0f,
     val columns: Int = 3,
     val newWin: Boolean = false,
+    val useDark: Boolean = false,
     var strokeColor: String = "gold",
     val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;")
 )
