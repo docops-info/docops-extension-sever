@@ -10,6 +10,8 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Serializable
@@ -17,6 +19,7 @@ class CardLines(val line: String = "", val size: String = "50px")
 
 @Serializable
 class EmbeddedImage(val ref: String, val type: String = "image/png")
+
 @Serializable
 class Button(
     var id: String = UUID.randomUUID().toString(),
@@ -55,6 +58,18 @@ enum class ButtonType {
     SLIM
 }
 
+@Serializable
+enum class ButtonSortBy {
+    TYPE, LABEL, DATE, AUTHOR, ORDER
+}
+
+@Serializable
+enum class SortDirection {
+    ASCENDING, DESCENDING
+}
+
+@Serializable
+class Sort(val sort: ButtonSortBy = ButtonSortBy.LABEL, val direction: SortDirection = SortDirection.ASCENDING)
 
 @Serializable
 class ButtonDisplay(
@@ -64,6 +79,7 @@ class ButtonDisplay(
     val newWin: Boolean = false,
     val useDark: Boolean = false,
     var strokeColor: String = "gold",
+    var sortBy: Sort = Sort(ButtonSortBy.LABEL, SortDirection.ASCENDING),
     val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;")
 )
 
@@ -92,6 +108,7 @@ class Buttons(
             }
             it.buttonGradientStyle = """.btn_${it.id}_cls { fill: url(#btn_${it.id}); }"""
         }
+        sort()
     }
 
     private fun determineButtonColor(button: Button): String {
@@ -99,7 +116,7 @@ class Buttons(
 
         if (null == button.color && null != button.type) {
             val col = typeMap[button.type]
-            if ( null == col ) {
+            if (null == col) {
                 buttonDisplay?.let {
                     color = it.colors[typeMap.size % it.colors.size]
                     typeMap[button.type] = color
@@ -125,7 +142,7 @@ class Buttons(
             }
         }
         var descriptionStyle: String? = button.buttonStyle?.descriptionStyle
-        if(null == descriptionStyle) {
+        if (null == descriptionStyle) {
             buttonDisplay?.let {
                 it.buttonStyle.descriptionStyle?.let { ds ->
                     descriptionStyle = ds
@@ -133,7 +150,7 @@ class Buttons(
             }
         }
         var dateStyle: String? = button.buttonStyle?.dateStyle
-        if(null == dateStyle) {
+        if (null == dateStyle) {
             buttonDisplay?.let {
                 it.buttonStyle.dateStyle?.let { dts ->
                     dateStyle = dts
@@ -141,7 +158,7 @@ class Buttons(
             }
         }
         var typeStyle: String? = button.buttonStyle?.typeStyle
-        if(null == typeStyle) {
+        if (null == typeStyle) {
             buttonDisplay?.let {
                 it.buttonStyle.typeStyle?.let { ts ->
                     typeStyle = ts
@@ -149,7 +166,7 @@ class Buttons(
             }
         }
         var authorStyle: String? = button.buttonStyle?.authorStyle
-        if(null == authorStyle) {
+        if (null == authorStyle) {
             buttonDisplay?.let {
                 it.buttonStyle.authorStyle?.let { ast ->
                     authorStyle = ast
@@ -171,23 +188,74 @@ class Buttons(
             ButtonType.REGULAR -> {
                 Regular(this)
             }
+
             ButtonType.PILL -> {
                 Pill(this)
             }
+
             ButtonType.LARGE -> {
                 Large(this)
             }
+
             ButtonType.RECTANGLE -> {
                 Rectangle(this)
             }
+
             ButtonType.ROUND -> {
                 Round(this)
             }
+
             ButtonType.SLIM -> {
                 Slim(this)
             }
         }
         return creator.drawShape()
+    }
+
+    private fun dateFromStr(date: String): LocalDate {
+        val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        return LocalDate.parse(date, formatter)
+    }
+    private fun sort() {
+        buttonDisplay?.let {
+            when (it.sortBy.sort) {
+                ButtonSortBy.LABEL -> {
+                    if (it.sortBy.direction == SortDirection.DESCENDING) {
+                        buttons.sortByDescending { item ->
+                            item.label
+                        }
+                    } else {
+                        buttons.sortBy { item ->
+                            item.label
+                        }
+                    }
+                }
+
+                ButtonSortBy.TYPE -> {
+
+                    if (it.sortBy.direction == SortDirection.DESCENDING) {
+                        buttons.sortByDescending { item -> if(!item.type.isNullOrEmpty()){item.type} else {""} }
+                    } else {
+                        buttons.sortBy { item -> if(!item.type.isNullOrEmpty()){item.type} else {""} }
+                    }
+                }
+                ButtonSortBy.DATE -> {
+                    if (it.sortBy.direction == SortDirection.DESCENDING) {
+                        buttons.sortByDescending { item -> if(!item.date.isNullOrEmpty()){dateFromStr(item.date)} else {dateFromStr("01/01/1970")} }
+                    } else {
+                        buttons.sortBy { item -> if(!item.date.isNullOrEmpty()){dateFromStr(item.date)} else {dateFromStr("01/01/1970")}}
+                    }
+                }
+                ButtonSortBy.AUTHOR -> {
+                    if (it.sortBy.direction == SortDirection.DESCENDING) {
+                        buttons.sortByDescending { item -> if(!item.author.isNullOrEmpty()){item.author[0]} else {""} }
+                    } else {
+                        buttons.sortBy { item -> if(!item.author.isNullOrEmpty()){item.author[0]} else {""}}
+                    }
+                }
+                ButtonSortBy.ORDER -> {}
+            }
+        }
     }
 }
 
@@ -222,6 +290,7 @@ fun getResourceFromUrl(url: String): String {
         ""
     }
 }
+
 fun gradientFromColor(color: String): Map<String, String> {
     val decoded = Color.decode(color)
     val tinted1 = tint(decoded, 0.5)
