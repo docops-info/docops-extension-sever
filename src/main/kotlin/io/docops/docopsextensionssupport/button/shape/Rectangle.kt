@@ -80,7 +80,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
     private fun makeEmbedImage( buttonImage: EmbeddedImage): String {
         return """
-            <image x="10" y="10" width="98" height="98" href="${buttonImage?.ref}"/>""".trimIndent()
+            <image x="10" y="10" width="98" height="98" href="${buttonImage.ref}"/>""".trimIndent()
 
     }
     private fun linksToText(links: MutableList<Link>?): String {

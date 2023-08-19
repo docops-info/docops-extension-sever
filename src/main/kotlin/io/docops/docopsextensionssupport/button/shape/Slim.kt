@@ -24,9 +24,19 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         }
 
         buttonList.forEach { button ->
+
             var lines = ""
             button.description?.let {
-                lines = linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 2)
+                lines += "<text x=\"0\" y=\"38\" >"
+                lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 2)
+                lines+= "</text>"
+            }
+            var linesOrImage = lines
+            if(lines.trim().isEmpty()) {
+                button.embeddedImage?.let {
+                    linesOrImage= """
+            <image x="0" y="0" width="150" height="140" href="${it.ref}"/>"""
+                }
             }
             val title = linesToMultiLineText(button.buttonStyle?.labelStyle,wrapText(button.label.escapeXml(), 15f), 12, 75)
             var btnDate = ""
@@ -48,9 +58,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         <text text-anchor="middle" x="75" y="8" class="glass">
             $title
         </text>
-         <text x="0" y="38" >
-            $lines
-        </text>
+        $linesOrImage
         <path class="btn_${button.id}_cls" transform="translate(0,125)" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 150.0 0 A 0.0 0.0 0 0 1 150.0 0.0 L 150.0 20.0 A 5.0 5.0 0 0 1 144.0 25.0 L 5.0 25.0 A 5.0 5.0 0 0 1 0 20.0 Z"/>
         <text x="145" y="135" text-anchor="end">${authors}</text>
         <text x="145" y="145" style="${button.buttonStyle?.dateStyle}" text-anchor="end">${btnDate}</text>
