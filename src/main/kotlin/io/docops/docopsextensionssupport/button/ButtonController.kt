@@ -1,9 +1,11 @@
 package io.docops.docopsextensionssupport.button
 
+import io.docops.docopsextensionssupport.web.panel.PanelGenerator
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.observation.annotation.Observed
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -14,7 +16,7 @@ import java.nio.charset.StandardCharsets
 @RequestMapping("/api")
 @Observed(name = "buttons.controller")
 class ButtonController {
-
+    private val log = LoggerFactory.getLogger(ButtonController::class.java)
     @PutMapping("/buttons/form")
     @ResponseBody
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
@@ -56,6 +58,7 @@ class ButtonController {
     fun getButtons(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
         try {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            log.info("Data received after uncompressed: -> $data")
             val content = Json.decodeFromString<Buttons>(data)
             return createResponse(content)
         } catch (e: Exception) {
