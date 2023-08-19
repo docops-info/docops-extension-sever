@@ -30,9 +30,11 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     @Timed(value = "docops.release.get.html", histogram = true, percentiles = [0.5, 0.95])
     fun getRelease(@RequestParam(name = "payload") payload: String,
                    @RequestParam("type", required = false, defaultValue = "PDF") type: String,
-                   @RequestParam("animate", required = false, defaultValue = "ON") animate: String) : ResponseEntity<ByteArray> {
+                   @RequestParam("animate", required = false, defaultValue = "ON") animate: String,
+                   @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val release = Json.decodeFromString<ReleaseStrategy>(data)
+        release.useDark = useDark
         val isPdf = "PDF" == type
         var output = ""
         when (release.style) {

@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.timeline
 
-import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -39,7 +38,7 @@ class TimelineController {
         if(numChars == null || numChars.isEmpty()) {
             chars = "24"
         }
-        val tm = TimelineMaker()
+        val tm = TimelineMaker(false)
         val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
@@ -74,10 +73,11 @@ class TimelineController {
                     @RequestParam(name="title") title: String,
                     @RequestParam(name="scale") scale: String,
                     @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-                    @RequestParam("numChars", required = false, defaultValue = "35") numChars: String
+                    @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
+                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean
                     ): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val tm = TimelineMaker()
+        val tm = TimelineMaker(useDark=useDark)
         val isPdf = "PDF" == type
         val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
         return if(isPdf) {

@@ -22,7 +22,7 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int
             urlMap["[[${display}]]"] = url
         }
     }
-    var text = """<text x="$x" y="$y" class="$clazz">"""
+    var text = """<text x="$x" y="$y" class="$clazz" >"""
     val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
     val spans = linesToMultiLineText(lines,dy, x)
     text += spans

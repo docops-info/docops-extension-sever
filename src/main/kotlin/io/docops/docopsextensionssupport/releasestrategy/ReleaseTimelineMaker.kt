@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.asciidoc.buttons.theme.Theme
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.util.UUID
@@ -12,7 +11,11 @@ open class ReleaseTimelineMaker {
         val id = UUID.randomUUID().toString()
         val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
         str.append(defs(isPdf, id,releaseStrategy.scale, releaseStrategy))
-        str.append(title(releaseStrategy.title, width))
+        var titleFill = "#000000"
+        if(releaseStrategy.useDark) {
+            titleFill = "#fcfcfc"
+        }
+        str.append(title(releaseStrategy.title, width, titleFill))
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, id))
         }
@@ -96,8 +99,8 @@ open class ReleaseTimelineMaker {
             <title>${title.escapeXml()}</title>
         """.trimIndent()
     }
-    protected fun title(title: String, width: Float) = """
-        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
+    protected fun title(title: String, width: Float, titleFill: String) = """
+        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
     """.trimIndent()
     protected fun tail() = "</svg>"
 

@@ -10,7 +10,11 @@ open class ReleaseTimelineGroupedMaker {
         val height = determineHeight(releaseStrategy = releaseStrategy)
         val str = StringBuilder(head(width, height = height, id=id, title = releaseStrategy.title, releaseStrategy.scale))
         str.append(defs(isPdf, id,  releaseStrategy.scale))
-        str.append(title(releaseStrategy.title, width))
+        var titleFill = "#000000"
+        if(releaseStrategy.useDark) {
+            titleFill = "#fcfcfc"
+        }
+        str.append(title(releaseStrategy.title, width, titleFill))
         var row = 0
         releaseStrategy.grouped().forEach { (t, u) ->
             u.forEachIndexed { index, release -> str.append(buildReleaseItem(
@@ -122,8 +126,8 @@ open class ReleaseTimelineGroupedMaker {
             <title>$title</title>
         """.trimIndent()
     }
-    protected fun title(title: String, width: Int) = """
-        <text x="${width/2}" y="18" fill="#000000" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
+    protected fun title(title: String, width: Int, titleFill: String) = """
+        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
     """.trimIndent()
     protected fun tail() = "</svg>"
 

@@ -3,10 +3,23 @@ package io.docops.docopsextensionssupport.roadmap
 import io.docops.asciidoc.utils.escapeXml
 import java.io.File
 
-class RoadMapMaker {
+abstract class RoadMapTheme {
+    open fun displayText() = "#000000"
+    open fun titleColor() = "#45618E"
 
+    open fun paperColor() = "#FCE6F4"
+}
 
+class RegularTheme : RoadMapTheme() {
+    override fun titleColor() = "#fcfcfc"
+}
 
+class DarkTheme: RoadMapTheme() {
+    override fun displayText() = "#fcfcfc"
+    override fun titleColor(): String = "#FCE6F4"
+    override fun paperColor(): String = "#3A2152"
+}
+class RoadMapMaker(val useDark: Boolean = false) {
 
     fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
         val roadmaps = RoadMapParser().parse(source)
@@ -16,8 +29,12 @@ class RoadMapMaker {
         val sb = StringBuilder()
         sb.append(head(roadmaps, scale.toFloat()))
         sb.append(defs())
+        var roadMapTheme: RoadMapTheme = RegularTheme()
+        if(useDark) {
+            roadMapTheme = DarkTheme()
+        }
         sb.append("<g transform='scale($scale)'>")
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#F0FFF0\" opacity=\"1.0\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) {
             index -> sb.append(row(index, roadmaps, numChars))
@@ -26,8 +43,8 @@ class RoadMapMaker {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#linearGradient4619)"  height="80" width="100%" opacity="1.0"/>
-        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="#45618E" text-anchor="middle">$title</text>
+         <rect x="0" y="0" stroke-width="0" fill="url(#blackPurple2)"  height="80" width="100%" opacity="1.0"/>
+        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">$title</text>
         """.trimIndent())
         sb.append("</g>")
         sb.append(tail())
@@ -56,7 +73,7 @@ class RoadMapMaker {
             sb.append(now)
             var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines,12, 2)
+            val spans = linesToMultiLineText(lines, 12, 2)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -65,7 +82,7 @@ class RoadMapMaker {
             sb.append(next)
             var text = """<text x="212" y="2" class="secondaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines,12, 212)
+            val spans = linesToMultiLineText(lines, 12, 212)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -81,7 +98,7 @@ class RoadMapMaker {
             sb.append(later)
             var text = """<text x="422" y="2" class="tertiaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines,12, 422)
+            val spans = linesToMultiLineText(lines, 12, 422)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -120,7 +137,12 @@ class RoadMapMaker {
             <stop id="stop4621" style="stop-color:#ffffff;stop-opacity:1" offset="0"/>
             <stop id="stop4623" style="stop-color:#45a98f;stop-opacity:1" offset="1"/>
         </linearGradient>
-  
+        <linearGradient id="blackPurple" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse"><stop class="stop1" stop-color="#ffffff" offset="0"></stop><stop class="stop3" offset="1" stop-color="#6b587d"></stop></linearGradient>
+        <linearGradient id="blackPurple2" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#9c90a8"/>
+            <stop class="stop2" offset="50%" stop-color="#6b587d"/>
+            <stop class="stop3" offset="100%" stop-color="#3A2152"/>
+        </linearGradient>
         <marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
         </marker>
@@ -143,9 +165,9 @@ class RoadMapMaker {
         .nextBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; }
         .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
         .laterBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #45a98f; }
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e0349c; }
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #e56516; }
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #45a98f; }
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e0349c; }
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e56516; }
         .rmLink { fill: blue; text-decoration: underline; }
         .glass:after, .glass:before {
         content: "";
@@ -205,6 +227,7 @@ class RoadMapMaker {
 
 }
 
+
 fun wrapText(text: String, width: Float) : MutableList<String> {
     val words = text.trim().escapeXml().split(" ")
     var rowText = ""
@@ -243,7 +266,7 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
 fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
     val text = StringBuilder()
     lines.forEach {
-        text.append("""<tspan x="$x" dy="$dy">$it</tspan>""")
+        text.append("""<tspan x="$x" dy="$dy" fill="#fcfcfc">$it</tspan>""")
     }
     return text.toString()
 }
@@ -265,7 +288,7 @@ build spring boot 3 version of application
 analyze black duck results
 
     """.trimIndent()
-    val rm = RoadMapMaker()
+    val rm = RoadMapMaker(true)
     val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
     val f = File("gen/roadmapout2.svg")
     f.writeBytes(output.toByteArray())

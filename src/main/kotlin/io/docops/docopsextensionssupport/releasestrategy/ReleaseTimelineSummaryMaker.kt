@@ -12,7 +12,11 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val id = UUID.randomUUID().toString()
         val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
         str.append(defs(isPdf, id,  releaseStrategy.scale, releaseStrategy))
-        str.append(title(releaseStrategy.title, width))
+         var titleFill = "#000000"
+         if(releaseStrategy.useDark) {
+             titleFill = "#fcfcfc"
+         }
+        str.append(title(releaseStrategy.title, width, titleFill))
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, id, releaseStrategy))
             str.append(buildReleaseItemHidden(release,index, isPdf, id, releaseStrategy))

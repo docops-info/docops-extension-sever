@@ -77,7 +77,7 @@ class ButtonDisplay(
     val scale: Float = 1.0f,
     val columns: Int = 3,
     val newWin: Boolean = false,
-    val useDark: Boolean = false,
+    var useDark: Boolean = false,
     var strokeColor: String = "gold",
     var sortBy: Sort = Sort(ButtonSortBy.LABEL, SortDirection.ASCENDING),
     val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;")
@@ -89,6 +89,7 @@ class Buttons(
     val buttonType: ButtonType,
     var theme: ButtonDisplay? = null,
     var themeUrl: String? = null,
+    var useDark: Boolean = false,
     val id: String = UUID.randomUUID().toString()
 ) {
 
@@ -99,6 +100,9 @@ class Buttons(
             val content = getResourceFromUrl(it)
             theme = Json.decodeFromString<ButtonDisplay>(content)
         }
+        theme?.let {
+            it.useDark = useDark
+        }
         buttons.forEach {
             val color = determineButtonColor(it)
             it.color = determineButtonColor(it)
@@ -108,6 +112,7 @@ class Buttons(
             }
             it.buttonGradientStyle = """.btn_${it.id}_cls { fill: url(#btn_${it.id}); }"""
         }
+
         sort()
     }
 

@@ -6,10 +6,11 @@ import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 
-class TimelineMaker {
+class TimelineMaker(val useDark: Boolean) {
 
     companion object {
-         val DEFAULT_COLORS = mutableListOf("#45618E",
+         val DEFAULT_COLORS = mutableListOf(
+             "#45618E",
              "#A43B3B",
              "#FFD373",
              "#F7E67A",
@@ -28,8 +29,15 @@ class TimelineMaker {
         val defs = defs(entries, isPdf)
         val colors = defs.second
         sb.append(defs.first)
+        var titleFill = "#000000"
+        if(useDark) {
+            titleFill = "#fcfcfc"
+        }
         sb.append("<g transform=\"scale($scale)\">")
-        sb.append("""<text x="460" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge">${title.escapeXml()}</text>""")
+        if(useDark) {
+            sb.append("<rect width='100%' height='100%' fill='#2A1E36'/>")
+        }
+        sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24)">""")
 
         sb.append(buildRoad(head.second-100))
@@ -68,7 +76,7 @@ class TimelineMaker {
         <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14)}    
         </text>
-        <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx="5"/>
+        <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx="5"/>
         $text
         <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
@@ -100,7 +108,7 @@ class TimelineMaker {
         <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14)}
         </text>
-        <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#headerTimeline$index)" stroke="$color" stroke-width="2"  rx='5'/>
+        <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx='5'/>
         $text
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
 
@@ -213,6 +221,11 @@ class TimelineMaker {
         <filter id="bottomshine">
             <feGaussianBlur stdDeviation="0.95"/>
         </filter>
+        <linearGradient id="panelBack" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#939393"/>
+            <stop class="stop2" offset="50%" stop-color="#5d5d5d"/>
+            <stop class="stop3" offset="100%" stop-color="#282828"/>
+        </linearGradient>
         <marker
                 id="triangle"
                 viewBox="0 0 10 10"
@@ -265,7 +278,7 @@ and plugin the controller.
 date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
-    val maker = TimelineMaker()
+    val maker = TimelineMaker(true)
     val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false, "35")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())

@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.button
 
-import io.docops.docopsextensionssupport.web.panel.PanelGenerator
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.observation.annotation.Observed
 import kotlinx.serialization.decodeFromString
@@ -26,14 +25,15 @@ class ButtonController {
     private fun fromRequestParameter(payload: String): ResponseEntity<ByteArray> {
         try {
             val buttons = Json.decodeFromString<Buttons>(payload)
-            return createResponse(buttons)
+            return createResponse(buttons, true)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }
     }
 
-    private fun createResponse(buttons: Buttons): ResponseEntity<ByteArray> {
+    private fun createResponse(buttons: Buttons, useDark: Boolean): ResponseEntity<ByteArray> {
+        buttons.useDark = useDark
             val imgSrc = buttons.createSVGShape()
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -46,7 +46,7 @@ class ButtonController {
     @ResponseBody
     fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
         try {
-            return createResponse(buttons)
+            return createResponse(buttons, true)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
@@ -55,12 +55,12 @@ class ButtonController {
 
     @GetMapping("/buttons")
     @ResponseBody
-    fun getButtons(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
+    fun getButtons(@RequestParam(name = "payload") payload: String, @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean): ResponseEntity<ByteArray> {
         try {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             log.info("Data received after uncompressed: -> $data")
             val content = Json.decodeFromString<Buttons>(data)
-            return createResponse(content)
+            return createResponse(content, useDark)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
