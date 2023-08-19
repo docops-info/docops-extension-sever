@@ -10,7 +10,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             if (it.newWin) {
                 win = "_blank"
             }
@@ -48,7 +48,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
     override fun height(): Float {
         val size = toRows().size
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             scale = it.scale
         }
         if (size > 1) {
@@ -61,7 +61,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
     override fun width(): Float {
         var columns = 3
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             columns = it.columns
             scale = it.scale
         }

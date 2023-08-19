@@ -17,7 +17,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
     open fun draw() : String{
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             scale = it.scale
         }
         val sb = StringBuilder("<g transform=\"scale($scale)\">")
@@ -31,7 +31,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     open fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             if (it.newWin) {
                 win = "_blank"
             }
@@ -71,7 +71,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     protected fun end() = """</svg>"""
     protected fun defs() : String{
         var strokeColor: String = "gold"
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             strokeColor = it.strokeColor
         }
         return """

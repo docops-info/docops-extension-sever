@@ -10,7 +10,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
         val btns = StringBuilder()
         var win = "_top"
         var strokeColor = "gold"
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             if (it.newWin) {
                 win = "_blank"
             }
@@ -66,7 +66,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
 
     override fun height(): Float {
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             scale = it.scale
         }
         val size = toRows().size
@@ -76,7 +76,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
     override fun width(): Float {
         var cols = 3
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             scale = it.scale
             cols = it.columns
         }

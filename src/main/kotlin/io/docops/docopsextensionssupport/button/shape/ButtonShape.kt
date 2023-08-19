@@ -25,7 +25,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     open fun height(): Float {
         val size = toRows().size
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             scale = it.scale
         }
         if (size > 1) {
@@ -38,7 +38,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     open fun width(): Float {
         var columns = 3
         var scale = 1.0f
-        buttons.buttonDisplay?.let {
+        buttons.theme?.let {
             columns = it.columns
             scale = it.scale
         }
@@ -50,7 +50,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         var rowArray = mutableListOf<Button>()
         rows.add(rowArray)
         buttons.buttons.forEach {
-            buttons.buttonDisplay?.let { disp ->
+            buttons.theme?.let { disp ->
                 if (rowArray.size == disp.columns) {
                     rowArray = mutableListOf()
                     rows.add(rowArray)

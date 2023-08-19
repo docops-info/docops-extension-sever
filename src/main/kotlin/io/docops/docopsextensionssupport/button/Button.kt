@@ -87,17 +87,17 @@ class ButtonDisplay(
 class Buttons(
     val buttons: MutableList<Button>,
     val buttonType: ButtonType,
-    var buttonDisplay: ButtonDisplay? = null,
-    var buttonDisplayUrl: String? = null,
+    var theme: ButtonDisplay? = null,
+    var themeUrl: String? = null,
     val id: String = UUID.randomUUID().toString()
 ) {
 
     val typeMap = mutableMapOf<String, String>()
 
     init {
-        buttonDisplayUrl?.let {
+        themeUrl?.let {
             val content = getResourceFromUrl(it)
-            buttonDisplay = Json.decodeFromString<ButtonDisplay>(content)
+            theme = Json.decodeFromString<ButtonDisplay>(content)
         }
         buttons.forEach {
             val color = determineButtonColor(it)
@@ -117,7 +117,7 @@ class Buttons(
         if (null == button.color && null != button.type) {
             val col = typeMap[button.type]
             if (null == col) {
-                buttonDisplay?.let {
+                theme?.let {
                     color = it.colors[typeMap.size % it.colors.size]
                     typeMap[button.type] = color
                 }
@@ -125,7 +125,7 @@ class Buttons(
                 color = col
             }
         } else if (null == button.color && null == button.type) {
-            buttonDisplay?.let {
+            theme?.let {
                 color = it.colors[0]
             }
         } else {
@@ -137,13 +137,13 @@ class Buttons(
     private fun determineStyle(button: Button): ButtonStyle {
         var labelStyle = button.buttonStyle?.labelStyle
         if (null == labelStyle) {
-            buttonDisplay?.let {
+            theme?.let {
                 labelStyle = it.buttonStyle.labelStyle
             }
         }
         var descriptionStyle: String? = button.buttonStyle?.descriptionStyle
         if (null == descriptionStyle) {
-            buttonDisplay?.let {
+            theme?.let {
                 it.buttonStyle.descriptionStyle?.let { ds ->
                     descriptionStyle = ds
                 }
@@ -151,7 +151,7 @@ class Buttons(
         }
         var dateStyle: String? = button.buttonStyle?.dateStyle
         if (null == dateStyle) {
-            buttonDisplay?.let {
+            theme?.let {
                 it.buttonStyle.dateStyle?.let { dts ->
                     dateStyle = dts
                 }
@@ -159,7 +159,7 @@ class Buttons(
         }
         var typeStyle: String? = button.buttonStyle?.typeStyle
         if (null == typeStyle) {
-            buttonDisplay?.let {
+            theme?.let {
                 it.buttonStyle.typeStyle?.let { ts ->
                     typeStyle = ts
                 }
@@ -167,7 +167,7 @@ class Buttons(
         }
         var authorStyle: String? = button.buttonStyle?.authorStyle
         if (null == authorStyle) {
-            buttonDisplay?.let {
+            theme?.let {
                 it.buttonStyle.authorStyle?.let { ast ->
                     authorStyle = ast
                 }
@@ -217,7 +217,7 @@ class Buttons(
         return LocalDate.parse(date, formatter)
     }
     private fun sort() {
-        buttonDisplay?.let {
+        theme?.let {
             when (it.sortBy.sort) {
                 ButtonSortBy.LABEL -> {
                     if (it.sortBy.direction == SortDirection.DESCENDING) {
