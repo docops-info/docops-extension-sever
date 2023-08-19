@@ -60,12 +60,16 @@ class TimelineMaker(val useDark: Boolean) {
         }
     }
     private fun odd(index: Int, entry: Entry, color: String, chars: String): String {
+        var textColor = "#000000"
+        if(useDark) {
+            textColor = "#fcfcfc"
+        }
         var x = 80
         if(index>0)
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd", 14)
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd", 14, "#fcfcfc")
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
@@ -74,7 +78,7 @@ class TimelineMaker(val useDark: Boolean) {
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
-        ${dateTotSpan(entry.date,0,14)}    
+        ${dateTotSpan(entry.date,0,14, textColor)}    
         </text>
         <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx="5"/>
         $text
@@ -92,12 +96,16 @@ class TimelineMaker(val useDark: Boolean) {
         """.trimIndent()
     }
     private fun even(index: Int, entry: Entry, color: String, chars: String): String {
+        var textColor = "#000000"
+        if(useDark) {
+            textColor = "#fcfcfc"
+        }
         var x = 80
         if(index>0)
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even", dy=14)
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even", dy=14, "#fcfcfc")
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
@@ -106,7 +114,7 @@ class TimelineMaker(val useDark: Boolean) {
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
-        ${dateTotSpan(entry.date,0,14)}
+        ${dateTotSpan(entry.date,0,14, textColor)}
         </text>
         <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx='5'/>
         $text
@@ -124,11 +132,11 @@ class TimelineMaker(val useDark: Boolean) {
     
         """.trimIndent()
     }
-    private fun dateTotSpan(date: String, x: Int, dy: Int) : String {
+    private fun dateTotSpan(date: String, x: Int, dy: Int, textColor: String) : String {
         val sp = date.split(" ")
         val sb=StringBuilder()
         sp.forEach {
-            sb.append("""<tspan x="$x" dy="$dy">${it.escapeXml()}</tspan>""")
+            sb.append("""<tspan x="$x" dy="$dy" fill="$textColor">${it.escapeXml()}</tspan>""")
         }
         return sb.toString()
     }

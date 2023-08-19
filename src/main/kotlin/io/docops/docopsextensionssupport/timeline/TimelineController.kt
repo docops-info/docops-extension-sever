@@ -38,7 +38,7 @@ class TimelineController {
         if(numChars == null || numChars.isEmpty()) {
             chars = "24"
         }
-        val tm = TimelineMaker(false)
+        val tm = TimelineMaker(true)
         val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

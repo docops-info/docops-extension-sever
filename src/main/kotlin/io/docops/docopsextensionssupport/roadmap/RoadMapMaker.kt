@@ -73,7 +73,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             sb.append(now)
             var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines, 12, 2)
+            val spans = linesToMultiLineText(lines, 12, 2, null)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -82,7 +82,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             sb.append(next)
             var text = """<text x="212" y="2" class="secondaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines, 12, 212)
+            val spans = linesToMultiLineText(lines, 12, 212, null)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -98,7 +98,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             sb.append(later)
             var text = """<text x="422" y="2" class="tertiaryRoad">"""
             val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
-            val spans = linesToMultiLineText(lines, 12, 422)
+            val spans = linesToMultiLineText(lines, 12, 422, null)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -263,10 +263,14 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
     }
     return newLines
 }
-fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int): String {
+fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String? ): String {
+    var fill = ""
+    fillColor?.let {
+        fill = "fill='$fillColor'"
+    }
     val text = StringBuilder()
     lines.forEach {
-        text.append("""<tspan x="$x" dy="$dy" fill="#fcfcfc">$it</tspan>""")
+        text.append("""<tspan x="$x" dy="$dy" $fill>$it</tspan>""")
     }
     return text.toString()
 }
