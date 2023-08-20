@@ -35,7 +35,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             if(lines.trim().isEmpty()) {
                 button.embeddedImage?.let {
                     linesOrImage= """
-            <image x="0" y="0" width="150" height="140" href="${it.ref}"/>"""
+            <image x="0" y="35" width="150" height="90" href="${it.ref}"/>"""
                 }
             }
             val title = linesToMultiLineText(button.buttonStyle?.labelStyle,wrapText(button.label.escapeXml(), 15f), 12, 75)
