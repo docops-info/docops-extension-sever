@@ -14,42 +14,57 @@ class RegularTheme : RoadMapTheme() {
     override fun titleColor() = "#fcfcfc"
 }
 
-class DarkTheme: RoadMapTheme() {
+class DarkTheme : RoadMapTheme() {
     override fun displayText() = "#fcfcfc"
     override fun titleColor(): String = "#FCE6F4"
     override fun paperColor(): String = "#3A2152"
 }
+
 class RoadMapMaker(val useDark: Boolean = false) {
 
     fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
         val roadmaps = RoadMapParser().parse(source)
         return draw(roadmaps, scale, title, numChars)
     }
+
     private fun draw(roadmaps: RoadMaps, scale: String, title: String, numChars: String): String {
         val sb = StringBuilder()
-        sb.append(head(roadmaps, scale.toFloat()))
+        val head = head(roadmaps, scale.toFloat())
+        sb.append(head.first)
         sb.append(defs())
         var roadMapTheme: RoadMapTheme = RegularTheme()
-        if(useDark) {
+        if (useDark) {
             roadMapTheme = DarkTheme()
         }
         sb.append("<g transform='scale($scale)'>")
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
         sb.append(makeNow())
-        repeat(roadmaps.maxLength()) {
-            index -> sb.append(row(index, roadmaps, numChars))
+        repeat(roadmaps.maxLength()) { index ->
+            sb.append(row(index, roadmaps, numChars))
         }
-        sb.append("""
+        sb.append(
+            """
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
          <rect x="0" y="0" stroke-width="0" fill="url(#blackPurple2)"  height="80" width="100%" opacity="1.0"/>
-        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">$title</text>
-        """.trimIndent())
+        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
+        """.trimIndent()
+        )
+        if (roadmaps.done.isNotEmpty()) {
+            sb.append(
+                """
+                <rect x="26" y="${head.second}" height="25" width="600" fill="url(#blackPurple2)" opacity="1.0" stroke-width="0"/>
+                <text x="306" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
+            """.trimIndent()
+            )
+            sb.append(doDone(done = roadmaps.done, numChars = numChars, roadmaps = roadmaps, startingY = head.second))
+        }
         sb.append("</g>")
         sb.append(tail())
         return joinXmlLines(sb.toString())
     }
+
     private fun joinXmlLines(str: String): String {
         val sb = StringBuilder()
         str.lines().forEach {
@@ -57,36 +72,113 @@ class RoadMapMaker(val useDark: Boolean = false) {
         }
         return sb.toString()
     }
-    private fun head(roadmaps: RoadMaps, scale: Float) : String {
-        val width = 662 * scale
-        val height = ((roadmaps.maxLength() * 105) + 106) * scale
-        //val height = 791 * scale
-        return """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height" viewBox="0 0 $width $height">"""
+
+    private fun doDone(
+        done: MutableList<MutableList<String>>,
+        numChars: String,
+        roadmaps: RoadMaps,
+        startingY: Int
+    ): String {
+        val doneChunks = done.chunked(3)
+        val sb = StringBuilder()
+        var c = startingY + 40
+        doneChunks.forEach { mutableLists ->
+            sb.append("""<g transform="translate(26,$c)">""")
+            mutableLists.forEachIndexed { index, item ->
+                if (index == 0) {
+                    sb.append("""<rect x="0" y="0" fill="#421A56" class="doneBox" height="100" width="184"/>""")
+                    var text = """<text x="2" y="2" class="doneRoad" fill="#421A56">"""
+                    val lines =
+                        linesToUrlIfExist(
+                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            roadmaps.urlMap
+                        )
+                    val spans = linesToMultiLineText(lines, 12, 2, null)
+                    text += spans
+                    text += "</text>"
+                    sb.append(text)
+                }
+                if (index == 1) {
+                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
+                    var text = """<text x="212" y="2" class="doneRoad" fill="#421A56">"""
+                    val lines =
+                        linesToUrlIfExist(
+                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            roadmaps.urlMap
+                        )
+                    val spans = linesToMultiLineText(lines, 12, 212, null)
+                    text += spans
+                    text += "</text>"
+                    sb.append(text)
+                }
+                if (index == 2) {
+                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
+                    var text = """<text x="422" y="2" class="doneRoad" fill="#421A56">"""
+                    val lines =
+                        linesToUrlIfExist(
+                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            roadmaps.urlMap
+                        )
+                    val spans = linesToMultiLineText(lines, 12, 422, null)
+                    text += spans
+                    text += "</text>"
+                    sb.append(text)
+                }
+            }
+            sb.append("</g>")
+            c += 106
+        }
+        return sb.toString()
     }
 
-    private fun row(index: Int, roadmaps: RoadMaps, numChars: String) : String {
-        var sb = StringBuilder("""<g transform="translate(26,${105 * (index+1)})">""")
+    private fun head(roadmaps: RoadMaps, scale: Float): Pair<String, Int> {
+        val width = 662 * scale
+        val originalHeight = (roadmaps.maxLength() * 105) + 106
+        var totalHeight = originalHeight
+        if (roadmaps.done.isNotEmpty()) {
+            val remain = roadmaps.done.size % 3
+            var rows = roadmaps.done.size / 3
+            if (remain > 0) {
+                rows++
+            }
+            totalHeight += (105 * rows) + 40
+        }
+        val height = totalHeight * scale
+        //val height = 791 * scale
+        val str =
+            """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height" viewBox="0 0 $width $height">"""
+        return Pair(str, originalHeight)
+    }
+
+    private fun row(index: Int, roadmaps: RoadMaps, numChars: String): String {
+        val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1)})">""")
         val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184"/>"""
         val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184"/>"""
         val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
-        if(roadmaps.now.size-1 >= index ){
+        if (roadmaps.now.size - 1 >= index) {
             sb.append(now)
             var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(
+                wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()),
+                roadmaps.urlMap
+            )
             val spans = linesToMultiLineText(lines, 12, 2, null)
             text += spans
             text += "</text>"
             sb.append(text)
         }
-        if(roadmaps.next.size-1 >= index ){
+        if (roadmaps.next.size - 1 >= index) {
             sb.append(next)
             var text = """<text x="212" y="2" class="secondaryRoad">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(
+                wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()),
+                roadmaps.urlMap
+            )
             val spans = linesToMultiLineText(lines, 12, 212, null)
             text += spans
             text += "</text>"
             sb.append(text)
-            if(index==0) {
+            if (index == 0) {
                 sb.append(
                     """
                 <line x1="186" y1="50" x2="200" y2="50" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)" />
@@ -94,15 +186,18 @@ class RoadMapMaker(val useDark: Boolean = false) {
                 )
             }
         }
-        if(roadmaps.later.size-1 >= index ){
+        if (roadmaps.later.size - 1 >= index) {
             sb.append(later)
             var text = """<text x="422" y="2" class="tertiaryRoad">"""
-            val lines = linesToUrlIfExist(wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()), roadmaps.urlMap)
+            val lines = linesToUrlIfExist(
+                wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()),
+                roadmaps.urlMap
+            )
             val spans = linesToMultiLineText(lines, 12, 422, null)
             text += spans
             text += "</text>"
             sb.append(text)
-            if(index==0) {
+            if (index == 0) {
                 sb.append(
                     """
                 <line x1="396" y1="50" x2="410" y2="50" stroke="#e56516" stroke-width="8" marker-end="url(#arrowhead2)" />
@@ -115,9 +210,10 @@ class RoadMapMaker(val useDark: Boolean = false) {
     }
 
 
-    private fun makeNow() : String {
+    private fun makeNow(): String {
         return ""
     }
+
     private fun tail() = "</svg>"
 
     //language=html
@@ -165,9 +261,12 @@ class RoadMapMaker(val useDark: Boolean = false) {
         .nextBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; }
         .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
         .laterBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
+        .doneBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff; }
         .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #45a98f; }
         .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e0349c; }
         .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e56516; }
+        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #4076ff; }
+        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; }
         .rmLink { fill: blue; text-decoration: underline; }
         .glass:after, .glass:before {
         content: "";
@@ -228,24 +327,25 @@ class RoadMapMaker(val useDark: Boolean = false) {
 }
 
 
-fun wrapText(text: String, width: Float) : MutableList<String> {
+fun wrapText(text: String, width: Float): MutableList<String> {
     val words = text.trim().escapeXml().split(" ")
     var rowText = ""
     val lines = mutableListOf<String>()
     words.forEachIndexed { index, s ->
-        if(rowText.length + s.length > width) {
+        if (rowText.length + s.length > width) {
             lines.add(rowText)
             rowText = s.trim()
         } else {
             rowText += " ${s.trim()}"
         }
     }
-    if(rowText.trim().isNotEmpty()) {
+    if (rowText.trim().isNotEmpty()) {
         lines.add(rowText)
     }
     return lines
 
 }
+
 fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, String>): MutableList<String> {
     val newLines = mutableListOf<String>()
     lines.forEach { input ->
@@ -263,7 +363,8 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
     }
     return newLines
 }
-fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String? ): String {
+
+fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String?): String {
     var fill = ""
     fillColor?.let {
         fill = "fill='$fillColor'"
@@ -274,6 +375,7 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor:
     }
     return text.toString()
 }
+
 fun main() {
     val str = """
  - now
@@ -286,10 +388,22 @@ analyze Form Property Service for their dependencies - Patrick analyze cusomter 
 take these Form Property Service feature and customer inquiry service to governance
 - next
 start iBob process, Surekha for both application
-- next
+- done
 dockerize Form property service
 build spring boot 3 version of application
 analyze black duck results
+- done
+image embed rectangle
+- now
+image embed slim
+- next
+color background roadmap
+- done
+remove car from release strategy
+- done
+pass in theme (light,dark)
+- later
+refactor displayConfigUrl to displayTheme
 
     """.trimIndent()
     val rm = RoadMapMaker(true)

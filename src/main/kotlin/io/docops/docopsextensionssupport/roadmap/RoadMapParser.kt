@@ -14,6 +14,7 @@ class RoadMapParser {
         val now = mutableListOf<MutableList<String>>()
         val next = mutableListOf<MutableList<String>>()
         val later = mutableListOf<MutableList<String>>()
+        val done = mutableListOf<MutableList<String>>()
         var newList: MutableList<String> = mutableListOf()
         val urlMap = mutableMapOf<String,String>()
         content.lines().forEachIndexed { index, input ->
@@ -42,6 +43,10 @@ class RoadMapParser {
                 newList = mutableListOf()
                 later.add(newList)
             }
+            else if(s.trim().startsWith("- done")) {
+                newList = mutableListOf()
+                done.add(newList)
+            }
             else {
                 newList.add(s)
             }
@@ -50,10 +55,17 @@ class RoadMapParser {
             now = now,
             next = next,
             later = later,
+            done=done,
             urlMap= urlMap)
     }
 }
-data class RoadMaps(val now: MutableList<MutableList<String>>, val next: MutableList<MutableList<String>>, val later: MutableList<MutableList<String>>, val urlMap: MutableMap<String, String>)
+data class RoadMaps(
+    val now: MutableList<MutableList<String>>,
+    val next: MutableList<MutableList<String>>,
+    val later: MutableList<MutableList<String>>,
+    val urlMap: MutableMap<String, String>,
+    val done: MutableList<MutableList<String>>
+)
 
 fun RoadMaps.maxLength() : Int {
     return max(now.size, max(next.size,later.size))
