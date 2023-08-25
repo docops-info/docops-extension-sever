@@ -171,6 +171,13 @@ class MainController() {
     fun buttonFromJson(model: Model): String {
         return "buttons/fromjson"
     }
+
+    @GetMapping("/scorecard/index.html")
+    @Timed(value = "docops.scorecard.index.html", histogram = true, percentiles = [0.5, 0.95])
+    fun scorecard(model: Model): String {
+        return "scorecard/score"
+    }
+
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

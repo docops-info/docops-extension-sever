@@ -1,0 +1,183 @@
+package io.docops.docopsextensionssupport.scorecard
+
+import io.docops.asciidoc.utils.escapeXml
+
+import java.awt.Color
+import java.io.File
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+class ScoreCardMaker {
+
+    fun make(scoreCard: ScoreCard): String {
+        val sb = StringBuilder()
+        sb.append(head(scoreCard))
+        val styles = StringBuilder()
+        styles.append(workItem())
+        styles.append(glass())
+        styles.append(raise())
+        sb.append(defs(styles = styles.toString()))
+        sb.append(startWrapper(scoreCard))
+        sb.append(background(590 * scoreCard.scale, 685 * scoreCard.scale))
+        sb.append(titles(scoreCard))
+        sb.append(arrowLine())
+        sb.append(left(scoreCard))
+        sb.append(right(scoreCard))
+        sb.append(endWrapper(scoreCard))
+        sb.append(tail())
+        return sb.toString()
+    }
+    fun head(scoreCard: ScoreCard): String {
+        val height = 590
+        val width = 685
+        return """<svg xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
+     viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
+"""
+    }
+    fun tail() = "</svg>"
+    fun defs(styles: String): String {
+        return """
+            <defs>
+            ${arrowHead()}
+            ${gradientBackGround()}
+            ${buildGradientDef("#fc4141", "leftScoreBox")}
+            ${buildGradientDef("#7149c6", "rightScoreBox")}
+            ${buildGradientDef("#fcfcfc", "rightItem")}
+            ${buildGradientDef("#fcfcfc", "leftItem")}
+            <style>
+            $styles
+            </style>
+            </defs>
+            
+        """.trimIndent()
+    }
+    fun arrowHead() = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
+            <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
+        </marker>"""
+    private fun gradientBackGround(): String {
+        return buildGradientDef("#111111", "backgroundScore")
+    }
+    private fun workItem() = """
+        .workitem {
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+            }
+            .workitem :hover {
+                opacity: 0.5;
+                stroke-opacity: 1.7;
+                stroke-width: 3;
+                stroke: #bd5d5d;
+            }
+            """
+    fun glass () = """.glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}"""
+
+    fun raise (strokeColor: String = "gold", opacity: Float = 0.9f) = """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};}"""
+
+    //<rect width="100%" height="100%" fill="url(#backgroundScore)" opacity="1.0" ry="18" rx="18"/>
+    fun background(h: Float, w: Float) = """
+        <path d="${generateRectPathData(width = w, height = h, 16.0f,16.0f,16.0f,16.0f)}" 
+        fill="url(#backgroundScore)"  />
+         """.trimIndent()
+
+    fun titles(scoreCard: ScoreCard): String {
+        return """
+    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #5f57ff; letter-spacing: normal;font-weight: bold;font-variant: small-caps;">${scoreCard.title}</text>
+    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #df1c41; letter-spacing: normal;font-weight: bold;font-variant: small-caps;">${scoreCard.initiativeTitle}</text>
+    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2563eb; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" >${scoreCard.outcomeTitle}</text>
+   
+        """.trimIndent()
+    }
+    fun left(scoreCard: ScoreCard): String {
+        val sb = StringBuilder()
+        var startY = 50
+        val inc = 35
+
+        scoreCard.initiativeItems.forEach {
+            sb.append("""
+    <g transform="translate(10, $startY)">
+    <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer"/>
+        <rect x="5" y="5" class="workitem raise" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
+        <text x="11" y="19" fill="#000000" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
+            <tspan x="30" dy="12" style="font-variant: small-caps;fill:#000000;">${it.escapeXml()}</tspan>
+        </text>
+    </g>
+            """.trimIndent())
+            startY += inc
+        }
+        return sb.toString()
+    }
+    fun right(scoreCard: ScoreCard): String {
+        val sb = StringBuilder()
+        var startY = 50
+        val inc = 35
+        scoreCard.outcomeItems.forEach {
+            sb.append("""
+    <g transform="translate(350, $startY)" >
+        <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer"/>
+        <rect x="5" y="5" class="workitem raise" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
+        <text x="11" y="19" fill="#000000" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
+            <tspan x="30" dy="12" style="font-variant: small-caps; fill:#000000;">${it.escapeXml()}</tspan>
+        </text>
+    </g>
+            """.trimIndent())
+            startY += inc
+        }
+        return sb.toString()
+    }
+    private fun arrowLine() = """<line x1="330" y1="35" x2="354" y2="35" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
+
+    private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
+    private fun endWrapper(scoreCard: ScoreCard) = "</g>"
+}
+
+fun buildGradientDef(color: String, id: String): String {
+    val m = gradientFromColor(color)
+    return """
+           <linearGradient id="$id" x2="0" y2="0" x1="0" y1="1">
+            <stop class="stop1" offset="0%" stop-color="${m["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${m["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${m["color3"]}"/>
+            </linearGradient> 
+        """
+}
+fun gradientFromColor(color: String): Map<String, String> {
+    val decoded = Color.decode(color)
+    val tinted1 = tint(decoded, 0.5)
+    val tinted2 = tint(decoded, 0.25)
+    return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
+}
+
+private fun shade(color: Color): String {
+    val rs: Double = color.red * 0.50
+    val gs = color.green * 0.50
+    val bs = color.blue * 0.50
+    return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
+}
+
+private fun tint(color: Color, factor: Double): String {
+    val rs = color.red + (factor * (255 - color.red))
+    val gs = color.green + (factor * (255 - color.green))
+    val bs = color.blue + (factor * (255 - color.blue))
+    return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
+}
+
+fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRightRound:Float, bottomRightRound:Float, bottomLeftRound:Float): String {
+    return """M 0 $topLetRound A $topLetRound $topLetRound 0 0 1 $topLetRound 0 L ${(width - topRightRound)} 0 A $topRightRound $topRightRound 0 0 1 $width $topRightRound L $width ${(height - bottomRightRound)} A $bottomRightRound $bottomRightRound 0 0 1 ${(width - bottomRightRound)} $height L $bottomLeftRound $height A $bottomLeftRound $bottomLeftRound 0 0 1 0 ${(height - bottomLeftRound)} Z"""
+}
+fun main() {
+    val sm = ScoreCardMaker()
+    val sc = ScoreCard("Digital Policy Service", "PCF to EKS", "TMVS++",
+        initiativeItems = mutableListOf("Spring Boot 2.7 on Pcf Platform", "Redis used for storing circuit breaker data", "MySql for storing zipkin traces", "RabbitMQ for sendign zipkin traces"),
+        outcomeItems = mutableListOf("Docker Containerized Spring Boot 3.x on EKS", "Okta used for Authentication",
+            "PVC used for storing circuit breaker data", "Open Search for zipkin trace storage",
+            "IBOB guidelines compliance", "Flight check completed", "Blue/Green/Canary deployments supported",
+            "Documented Local Setup for building & debugging", "Production Support Guidelines documented",
+            "Splunk queries documented", "Actuator Endpoints validated"),
+        scale = 1.3f
+    )
+    val svg = sm.make(sc)
+    val outfile = File("gen/score1.svg")
+    println(Json.encodeToString(sc))
+    outfile.writeBytes(svg.toByteArray())
+}
