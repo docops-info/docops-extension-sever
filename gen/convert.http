@@ -1,46 +1,95 @@
-PUT https://roach.gy/extension/api/panel/convert/
+PUT {{protocol}}{{host}}:{{port}}/api/panel/convert/
 Accept: */*
 Content-Type: text/plain
 
  panels {
     theme {
+        scale=1.2f
         layout {
-            columns = 4
-            groupBy = Grouping.TITLE
+            columns=4
             groupOrder = GroupingOrder.ASCENDING
         }
         font = font {
-            color = "#ffffff"
+            color = "#000000"
+            size="10px"
         }
-        dropShadow = 2
         colorMap{
-            color("#ff6385")
-            color("#36a3eb")
-            color("#9966ff")
-            color("#ffcf56")
-            color("#4bc0c0")
-            color("#FDCBF1")
+            color("#A43B3B")
+            color("#01FF90")
+            color("#FF6F36")
+            color("#EAA213")
+            color("#F7E67A")
+            color("#45618E")
+            color("#FFD373")
+            color("#FFAF10")
+            color("#FF7F00")
+            color("#6D4F98")
         }
-        newWin = false
+        legendOn = false
+        gradientStyle = DarkTheme
     }
-    panel {
+    slim {
         link = "https://www.google.com"
         label = "Google"
+        type = "Advertising"
+        description = "Google is is an American multinational technology company that specializes in Internet-related services and products "
+        author("Sergey Brin")
+        author("Larry Page")
+        date ="07/30/1998"
     }
-    panel {
+    slim {
         link = "https://www.apple.com"
         label = "Apple"
+        type = "Personal Devices"
+        description = "Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. "
+        author("Steve Jobs")
+        author("Steve Wozniak")
+        date ="01/30/1977"
     }
-    panel {
+    slim {
         link = "https://www.microsoft.com"
         label = "Microsoft"
+        type = "Software"
+        description = "Microsoft Corporation is an American multinational technology corporation which produces computer software, consumer electronics, personal computers, and related services."
+        author("Bill Gates")
     }
-    panel {
+    slim {
         link = "https://www.amazon.com"
         label = "Amazon"
+        type = "Super Store"
+        description = "Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence"
+        author("Jeff Bezos")
     }
-    panel {
+    slim {
         link = "https://www.netflix.com"
         label = "Netflix"
+        type = "Movie Theater"
+        description = "Netflix, Inc. is an American subscription streaming service and production company."
+        author("Reed")
+        author("Marc")
+    }
+    slim {
+        link = "https://www.facebook.com"
+        label = "Facebook"
+        type = "Social Butterfly"
+        description = "Facebook is an American online social media and social networking service owned by Meta Platforms."
+        author("Mark Zukerberg")
+    }
+    slim {
+        link = "https://www.instagram.com"
+        label = "Instagram"
+        type = "Beach"
+        description = "Instagram is an American photo and video sharing social networking service. "
+        author("Kevin")
+        author("Mike")
+    }
+    slim {
+        link = "#[link-server]#[app]"
+        label = "DocOps.io"
+        type = "Documentation"
+        description = "Sharing documentation experience for developers to extend with AsciiDoctor"
+        author("Steve Roach")
+        author("Ian Rose")
     }
 }
+

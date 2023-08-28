@@ -25,16 +25,16 @@ class ButtonController {
     private fun fromRequestParameter(payload: String): ResponseEntity<ByteArray> {
         try {
             val buttons = Json.decodeFromString<Buttons>(payload)
-            return createResponse(buttons, true)
+            return createResponse(buttons, true, "SVG")
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }
     }
 
-    private fun createResponse(buttons: Buttons, useDark: Boolean): ResponseEntity<ByteArray> {
+    private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
         buttons.useDark = useDark
-            val imgSrc = buttons.createSVGShape()
+            val imgSrc = buttons.createSVGShape(type)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
@@ -46,7 +46,7 @@ class ButtonController {
     @ResponseBody
     fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
         try {
-            return createResponse(buttons, true)
+            return createResponse(buttons, true, "SVG")
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
@@ -55,13 +55,16 @@ class ButtonController {
 
     @GetMapping("/buttons")
     @ResponseBody
-    fun getButtons(@RequestParam(name = "payload") payload: String, @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean): ResponseEntity<ByteArray> {
+    fun getButtons(@RequestParam(name = "payload") payload: String,
+                   @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean,
+                   @RequestParam(name="type", defaultValue = "SVG") type: String): ResponseEntity<ByteArray> {
+        var data = ""
         try {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            log.info("Data received after uncompressed: -> $data")
+            data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val content = Json.decodeFromString<Buttons>(data)
-            return createResponse(content, useDark)
+            return createResponse(content, useDark, type)
         } catch (e: Exception) {
+            log.info("Data received after uncompressed: -> $data")
             e.printStackTrace()
             throw e
         }

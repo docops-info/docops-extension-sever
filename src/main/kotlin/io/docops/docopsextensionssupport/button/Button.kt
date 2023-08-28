@@ -188,7 +188,7 @@ class Buttons(
         )
     }
 
-    fun createSVGShape(): String {
+    fun createSVGShape(type: String = "SVG"): String {
         val creator: ButtonShape = when (buttonType) {
             ButtonType.REGULAR -> {
                 Regular(this)
@@ -214,7 +214,7 @@ class Buttons(
                 Slim(this)
             }
         }
-        return creator.drawShape()
+        return creator.drawShape(type)
     }
 
     private fun dateFromStr(date: String): LocalDate {

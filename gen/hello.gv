@@ -1,0 +1,77 @@
+digraph git_basics {
+    graph [
+        label = "Basic git concepts and operations\n\n"
+        labelloc = t
+        fontname = "Helvetica,Arial,sans-serif"
+        fontsize = 20
+        layout = dot
+        rankdir = LR
+        newrank = true
+    ]
+    node [
+        style = filled
+        shape = rect
+        pencolor = "#00000044" // frames color
+                    fontname = "Helvetica,Arial,sans-serif"
+        shape = plaintext
+    ]
+    edge [
+        arrowsize = 0.5
+        fontname = "Helvetica,Arial,sans-serif"
+        labeldistance = 3
+        labelfontcolor = "#00000080"
+        penwidth = 2
+        style = dotted // dotted style symbolizes data transfer
+    ]
+
+
+    staging -> HEAD : push [label = "git commit" weight = 1000 color = "#88000088"]
+
+    stash_push [
+        label = "git stash [push]"
+        style =""
+        shape = plain
+        color = "#00008844"
+    ]
+    {
+        edge [arrowhead = none color = "#00008844"]
+        changes ->  stash_push
+        stash_push -> staging
+    }
+    changes -> stash [
+        dir= back
+        xlabel = "git stash pop"
+        color = "#00000088" weight =0]
+        stash_push -> stash [xdir = back color= "#00008844" minlen = 0]
+        HEAD [
+        fillcolor ="#88ff0022"
+        shape = plain
+    ]
+    remote [
+        label ="remote branch"
+        shape = box
+        color = "#00000022"
+        fillcolor = "#00ff0022"
+    ]
+
+        HEAD : push -> remote [label = "git push" color = "#88000088"]
+        HEAD : pull -> remote [dir = back label = "git pull" color = "#00440088"]
+        branches [
+        fillcolor = "#00888822"
+        label = <<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+        shape =plain
+    ]
+        changes -> staging [label = "git add ...    \ngit reset      " color= "#88000088"]
+        discard [shape = plaintext style =""]
+        changes -> discard [label = "git restore ..." color= "#88000088"]
+        {rank = same changes discard}
+        // UML style aggregation
+            HEAD : switch -> branches [
+        dir = back
+        style= ""
+        penwidth = 1
+        arrowtail = odiamond
+        arrowhead =none
+        color = "#00000088"
+    ]
+}

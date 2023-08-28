@@ -7,7 +7,7 @@ import io.docops.docopsextensionssupport.button.Buttons
 
 open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
-    override fun createShape(): String {
+    override fun createShape(type: String): String {
         val sb = StringBuilder()
         sb.append(start())
         sb.append(defs())
@@ -43,14 +43,15 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
         buttonList.forEach { button: Button ->
+            var filter = "url(#Bevel2)"
+            if(isPdf) {
+                filter = ""
+            }
             btns.append(
                 """
         <g transform="translate($startX,$startY)" cursor="pointer">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-            <rect x="0" y="0" fill="${button.color}" width="300" height="30" class="raise btn_${button.id}_cls" filter="url(#Bevel2)" rx="10" ry="10"/>
-            <text class="category" visibility="hidden">${button.type?.escapeXml()}</text>
-            <text class="author" visibility="hidden">${button.author?.firstOrNull()}</text>
-            <text class="date" visibility="hidden">${button.date?.escapeXml()}</text>
+            <rect x="0" y="0" fill="${button.color}" width="300" height="30" class="raise btn_${button.id}_cls" filter="$filter" rx="10" ry="10"/>
             <text x="150" y="20" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             </a>
         </g>

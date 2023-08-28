@@ -35,7 +35,7 @@ class PanelToController {
         contentsButtons.buttons.forEach {
             sb.append(buttonToJson(it) +",")
         }
-        val str = buttons(removeDelimiter(sb.toString())!!)
+        val str = buttons(removeDelimiter(sb.toString())!!, contentsButtons.buttonType.toString())
         writer.print(
             """
               $str
@@ -61,12 +61,12 @@ class PanelToController {
         }
     }
 
-    fun buttons(str: String) : String
+    fun buttons(str: String, type: String) : String
     {
         return  """
             {
                 "buttons": [$str],
-                "buttonType": "REGULAR",
+                "buttonType": "$type",
                 "theme": {
   "colors": [
     "#45618E",
@@ -128,7 +128,13 @@ class PanelToController {
 
             ButtonType.ROUND -> TODO()
             ButtonType.LARGE_CARD -> TODO()
-            ButtonType.SLIM_CARD -> TODO()
+            ButtonType.SLIM_CARD -> {
+                btnType = io.docops.docopsextensionssupport.button.ButtonType.SLIM
+                panels.slimButtons.forEach {
+                    val button = Button(label = it.label, link = it.link, description = it.description, author = it.authors, date = it.date)
+                    btns.add(button)
+                }
+            }
             ButtonType.RECTANGLE -> TODO()
             ButtonType.PILL -> TODO()
         }

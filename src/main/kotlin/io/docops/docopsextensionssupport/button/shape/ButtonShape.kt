@@ -5,12 +5,16 @@ import io.docops.docopsextensionssupport.button.Buttons
 
 interface ButtonShape {
 
-    fun drawShape(): String
+    fun drawShape(type: String = "SVG"): String
 }
 
 abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
-    override fun drawShape(): String {
-        return joinXmlLines(createShape())
+    protected var isPdf = false
+    override fun drawShape(type: String): String {
+        if("PDF".equals(type, true)) {
+            isPdf = true
+        }
+        return joinXmlLines(createShape(type))
     }
 
     private fun joinXmlLines(str: String): String {
@@ -20,7 +24,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         }
         return sb.toString()
     }
-    abstract fun createShape(): String
+    abstract fun createShape(type: String): String
 
     open fun height(): Float {
         val size = toRows().size

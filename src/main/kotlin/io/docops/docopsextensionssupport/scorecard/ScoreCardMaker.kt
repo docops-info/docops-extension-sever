@@ -6,19 +6,23 @@ import java.awt.Color
 import java.io.File
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlin.math.max
 
 class ScoreCardMaker {
 
     fun make(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
-        sb.append(head(scoreCard))
+        val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
+        val headerHeight : Float = 50.0f
+        val height = numOfRowsHeight+ headerHeight
+        sb.append(head(scoreCard, height))
         val styles = StringBuilder()
         styles.append(workItem())
         styles.append(glass())
         styles.append(raise())
         sb.append(defs(styles = styles.toString()))
         sb.append(startWrapper(scoreCard))
-        sb.append(background(590 * scoreCard.scale, 685 * scoreCard.scale))
+        sb.append(background(height * scoreCard.scale, 685 * scoreCard.scale))
         sb.append(titles(scoreCard))
         sb.append(arrowLine())
         sb.append(left(scoreCard))
@@ -27,8 +31,8 @@ class ScoreCardMaker {
         sb.append(tail())
         return sb.toString()
     }
-    fun head(scoreCard: ScoreCard): String {
-        val height = 590
+    fun head(scoreCard: ScoreCard, height: Float): String {
+        //50 top, 35.1 each row
         val width = 685
         return """<svg xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
      viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -36,6 +40,7 @@ class ScoreCardMaker {
     }
     fun tail() = "</svg>"
     fun defs(styles: String): String {
+
         return """
             <defs>
             ${arrowHead()}
@@ -55,7 +60,7 @@ class ScoreCardMaker {
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
         </marker>"""
     private fun gradientBackGround(): String {
-        return buildGradientDef("#111111", "backgroundScore")
+        return buildGradientDef("#2c445a", "backgroundScore")
     }
     private fun workItem() = """
         .workitem {
@@ -75,14 +80,14 @@ class ScoreCardMaker {
     //<rect width="100%" height="100%" fill="url(#backgroundScore)" opacity="1.0" ry="18" rx="18"/>
     fun background(h: Float, w: Float) = """
         <path d="${generateRectPathData(width = w, height = h, 16.0f,16.0f,16.0f,16.0f)}" 
-        fill="none"  />
+        fill="url(#backgroundScore)"  />
          """.trimIndent()
 
     fun titles(scoreCard: ScoreCard): String {
         return """
-    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #5f57ff; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
-    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #df1c41; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2563eb; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
+    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #eeeded; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
+    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #d8d8d8; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
+    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #efefef; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
    
         """.trimIndent()
     }
@@ -95,8 +100,8 @@ class ScoreCardMaker {
             sb.append("""
     <g transform="translate(10, $startY)">
     <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer"/>
-        <rect x="5" y="5" class="workitem raise" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#000000" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
+        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
             <tspan x="30" dy="12" style="font-variant: small-caps;fill:#000000;">${it.escapeXml()}</tspan>
         </text>
@@ -114,8 +119,8 @@ class ScoreCardMaker {
             sb.append("""
     <g transform="translate(350, $startY)" >
         <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer"/>
-        <rect x="5" y="5" class="workitem raise" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#000000" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
+        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
             <tspan x="30" dy="12" style="font-variant: small-caps; fill:#000000;">${it.escapeXml()}</tspan>
         </text>
@@ -161,6 +166,7 @@ private fun tint(color: Color, factor: Double): String {
     val bs = color.blue + (factor * (255 - color.blue))
     return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
 }
+
 
 fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRightRound:Float, bottomRightRound:Float, bottomLeftRound:Float): String {
     return """M 0 $topLetRound A $topLetRound $topLetRound 0 0 1 $topLetRound 0 L ${(width - topRightRound)} 0 A $topRightRound $topRightRound 0 0 1 $width $topRightRound L $width ${(height - bottomRightRound)} A $bottomRightRound $bottomRightRound 0 0 1 ${(width - bottomRightRound)} $height L $bottomLeftRound $height A $bottomLeftRound $bottomLeftRound 0 0 1 0 ${(height - bottomLeftRound)} Z"""
