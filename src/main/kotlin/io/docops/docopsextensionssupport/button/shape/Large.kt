@@ -55,14 +55,12 @@ class Large(buttons: Buttons) : Regular(buttons) {
             """.trimMargin()
         } else {
             return """
-            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)"
-                style="fill: ${button.color}; font: bold ${button.cardLine1.size} Arial, Helvetica, sans-serif;">${button.cardLine1.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)" style="fill: ${button.color}; font: bold ${button.cardLine1.size} Arial, Helvetica, sans-serif;">${button.cardLine1.line.escapeXml()}
             </text>
             <g transform="translate(0,95.5)">
             <use xlink:href="#bottomTextBox" stroke="${button.color}" fill="url(#btn_${button.id})"/>
 
-            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)"
-                  style="fill: #ffffff; font: bold ${button.cardLine2.size} Arial, Helvetica, sans-serif;" >${button.cardLine2.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)" style="fill: #ffffff; font: bold ${button.cardLine2.size} Arial, Helvetica, sans-serif;" >${button.cardLine2.line.escapeXml()}
             </text>
         </g>
             """.trimIndent()

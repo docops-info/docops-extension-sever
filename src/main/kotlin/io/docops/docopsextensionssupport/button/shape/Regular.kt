@@ -43,7 +43,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
         buttonList.forEach { button: Button ->
-            var filter = "url(#Bevel2)"
+            var filter = "filter=\"url(#Bevel2)\""
             if(isPdf) {
                 filter = ""
             }
@@ -51,7 +51,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                 """
         <g transform="translate($startX,$startY)" cursor="pointer">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-            <rect x="0" y="0" fill="${button.color}" width="300" height="30" class="raise btn_${button.id}_cls" filter="$filter" rx="10" ry="10"/>
+            <rect x="0" y="0" fill="${button.color}" width="300" height="30" class="raise btn_${button.id}_cls" $filter rx="10" ry="10"/>
             <text x="150" y="20" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             </a>
         </g>
@@ -75,12 +75,8 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         buttons.theme?.let {
             strokeColor = it.strokeColor
         }
-        return """
-            <defs>
-            ${filters()}
-            ${gradient()}
-            ${uses()}
-            <style>
+        var style = """
+             <style>
             ${glass()}
             ${raise(strokeColor = strokeColor)}
             ${baseCard()}
@@ -89,6 +85,17 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${keyFrame()}
             ${linkText()}
             </style>
+        """.trimIndent()
+        if(isPdf) {
+            style = ""
+        }
+
+        return """
+            <defs>
+            ${filters()}
+            ${gradient()}
+            ${uses()}
+           $style
             </defs>
         """.trimIndent()
     }

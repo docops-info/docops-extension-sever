@@ -188,7 +188,7 @@ class Buttons(
         )
     }
 
-    fun createSVGShape(type: String = "SVG"): String {
+    fun createSVGShape() : ButtonShape {
         val creator: ButtonShape = when (buttonType) {
             ButtonType.REGULAR -> {
                 Regular(this)
@@ -214,6 +214,9 @@ class Buttons(
                 Slim(this)
             }
         }
+        return creator
+    }
+    fun create(creator: ButtonShape, type: String = "SVG"): String {
         return creator.drawShape(type)
     }
 

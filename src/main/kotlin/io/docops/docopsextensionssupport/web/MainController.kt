@@ -172,6 +172,11 @@ class MainController() {
         return "buttons/fromjson"
     }
 
+    @GetMapping("/button/fromJsonToPng.html")
+    @Timed(value = "docops.button.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    fun buttonFromJsonToPng(model: Model): String {
+        return "buttons/formjsontopng"
+    }
     @GetMapping("/scorecard/index.html")
     @Timed(value = "docops.scorecard.index.html", histogram = true, percentiles = [0.5, 0.95])
     fun scorecard(model: Model): String {

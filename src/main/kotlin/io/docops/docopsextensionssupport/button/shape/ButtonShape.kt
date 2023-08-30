@@ -6,6 +6,10 @@ import io.docops.docopsextensionssupport.button.Buttons
 interface ButtonShape {
 
     fun drawShape(type: String = "SVG"): String
+
+    fun height () : Float
+
+    fun width () : Float
 }
 
 abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
@@ -26,7 +30,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     }
     abstract fun createShape(type: String): String
 
-    open fun height(): Float {
+    override fun height(): Float {
         val size = toRows().size
         var scale = 1.0f
         buttons.theme?.let {
@@ -39,7 +43,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         return h * scale
     }
 
-    open fun width(): Float {
+    override fun width(): Float {
         var columns = 3
         var scale = 1.0f
         buttons.theme?.let {
