@@ -60,8 +60,9 @@ class ScoreCardMaker {
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
         </marker>"""
     private fun gradientBackGround(): String {
-        return buildGradientDef("#2c445a", "backgroundScore")
+        return buildGradientDef("#fcfcfc", "backgroundScore")
     }
+
     private fun workItem() = """
         .workitem {
                 filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
@@ -85,9 +86,9 @@ class ScoreCardMaker {
 
     fun titles(scoreCard: ScoreCard): String {
         return """
-    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #eeeded; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
-    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #d8d8d8; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #efefef; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
+    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
+    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
+    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
    
         """.trimIndent()
     }
@@ -99,11 +100,13 @@ class ScoreCardMaker {
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer"/>
+    <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer">
+    <title>${it.description}</title>
+    </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
-            <tspan x="30" dy="12" style="font-variant: small-caps;fill:#000000;">${it.escapeXml()}</tspan>
+            <tspan x="30" dy="12" style="font-variant: small-caps;fill:#000000;">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
             """.trimIndent())
@@ -118,11 +121,13 @@ class ScoreCardMaker {
         scoreCard.outcomeItems.forEach {
             sb.append("""
     <g transform="translate(350, $startY)" >
-        <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer"/>
+        <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer">
+        `<title>${it.description}</title>
+        </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.first()}</text>
+        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
-            <tspan x="30" dy="12" style="font-variant: small-caps; fill:#000000;">${it.escapeXml()}</tspan>
+            <tspan x="30" dy="12" style="font-variant: small-caps; fill:#000000;">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
             """.trimIndent())
@@ -174,13 +179,23 @@ fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRigh
 fun main() {
     val sm = ScoreCardMaker()
     val sc = ScoreCard("Digital Policy Service", "PCF to EKS", "TMVS++",
-        initiativeItems = mutableListOf("Spring Boot 2.7 on Pcf Platform", "Redis used for storing circuit breaker data", "MySql for storing zipkin traces", "RabbitMQ for sendign zipkin traces"),
-        outcomeItems = mutableListOf("Docker Containerized Spring Boot 3.x on EKS", "Okta used for Authentication",
-            "PVC used for storing circuit breaker data", "Open Search for zipkin trace storage",
-            "IBOB guidelines compliance", "Flight check completed", "Blue/Green/Canary deployments supported",
-            "Documented Local Setup for building & debugging", "Production Support Guidelines documented",
-            "Splunk queries documented", "Actuator Endpoints validated"),
-        scale = 1.3f
+        initiativeItems = mutableListOf(
+            ScoreCardItem("Spring Boot 2.7 on Pcf Platform", "Spring Boot microservice framework"),
+            ScoreCardItem("Redis used for storing circuit breaker data", "Redis is a distributed caching layer"),
+        ScoreCardItem("MySql for storing zipkin traces"),
+        ScoreCardItem("RabbitMQ for sending zipkin traces")),
+        outcomeItems = mutableListOf(
+            ScoreCardItem("Docker Containerized Spring Boot 3.x on EKS"),
+            ScoreCardItem("Okta used for Authentication"),
+            ScoreCardItem("PVC used for storing circuit breaker data"),
+            ScoreCardItem("Open Search for zipkin trace storage"),
+            ScoreCardItem("IBOB guidelines compliance"),
+            ScoreCardItem("Flight check completed"),
+            ScoreCardItem("Blue/Green/Canary deployments supported"),
+            ScoreCardItem("Documented Local Setup for building & debugging"),
+            ScoreCardItem("Production Support Guidelines documented"),
+            ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")),
+        scale = 1.0f
     )
     val svg = sm.make(sc)
     val outfile = File("gen/score1.svg")
