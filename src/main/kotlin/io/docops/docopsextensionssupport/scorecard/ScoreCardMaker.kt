@@ -60,7 +60,7 @@ class ScoreCardMaker {
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
         </marker>"""
     private fun gradientBackGround(): String {
-        return buildGradientDef("#fcfcfc", "backgroundScore")
+        return buildGradientDef("#E7D6B7", "backgroundScore")
     }
 
     private fun workItem() = """
