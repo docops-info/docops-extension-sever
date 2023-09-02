@@ -10,6 +10,9 @@ import kotlin.math.max
 
 class ScoreCardMaker {
 
+    companion object {
+        const val WIDTH : Float= 715.0f
+    }
     fun make(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
         val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
@@ -22,7 +25,7 @@ class ScoreCardMaker {
         styles.append(raise())
         sb.append(defs(styles = styles.toString()))
         sb.append(startWrapper(scoreCard))
-        sb.append(background(height * scoreCard.scale, 685 * scoreCard.scale))
+        sb.append(background(height * scoreCard.scale, WIDTH * scoreCard.scale))
         sb.append(titles(scoreCard))
         sb.append(arrowLine())
         sb.append(left(scoreCard))
@@ -33,7 +36,7 @@ class ScoreCardMaker {
     }
     fun head(scoreCard: ScoreCard, height: Float): String {
         //50 top, 35.1 each row
-        val width = 685
+        val width = WIDTH
         return """<svg xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
      viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
 """
@@ -88,7 +91,7 @@ class ScoreCardMaker {
         return """
     <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
     <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="500" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
+    <text x="530" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
    
         """.trimIndent()
     }
@@ -100,7 +103,7 @@ class ScoreCardMaker {
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer">
+    <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer">
     <title>${it.description}</title>
     </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
@@ -120,9 +123,9 @@ class ScoreCardMaker {
         val inc = 35
         scoreCard.outcomeItems.forEach {
             sb.append("""
-    <g transform="translate(350, $startY)" >
-        <path d="${generateRectPathData(width = 325f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer">
-        `<title>${it.description}</title>
+    <g transform="translate(365, $startY)" >
+        <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer">
+        <title>${it.description}</title>
         </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
@@ -135,7 +138,7 @@ class ScoreCardMaker {
         }
         return sb.toString()
     }
-    private fun arrowLine() = """<line x1="330" y1="35" x2="354" y2="35" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
+    private fun arrowLine() = """<line x1="345" y1="35" x2="369" y2="35" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
     private fun endWrapper(scoreCard: ScoreCard) = "</g>"
