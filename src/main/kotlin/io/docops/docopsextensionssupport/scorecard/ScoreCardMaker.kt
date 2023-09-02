@@ -16,21 +16,21 @@ class ScoreCardMaker {
     fun make(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
         val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
-        val headerHeight : Float = 50.0f
+        val headerHeight = 50.0f
         val height = numOfRowsHeight+ headerHeight
         sb.append(head(scoreCard, height))
         val styles = StringBuilder()
         styles.append(workItem())
         styles.append(glass())
         styles.append(raise())
-        sb.append(defs(styles = styles.toString()))
+        sb.append(defs(styles = styles.toString(), scoreCard= scoreCard))
         sb.append(startWrapper(scoreCard))
         sb.append(background(height * scoreCard.scale, WIDTH * scoreCard.scale))
         sb.append(titles(scoreCard))
-        sb.append(arrowLine())
+        sb.append(arrowLine(scoreCard))
         sb.append(left(scoreCard))
         sb.append(right(scoreCard))
-        sb.append(endWrapper(scoreCard))
+        sb.append(endWrapper())
         sb.append(tail())
         return sb.toString()
     }
@@ -42,16 +42,16 @@ class ScoreCardMaker {
 """
     }
     fun tail() = "</svg>"
-    fun defs(styles: String): String {
+    fun defs(styles: String, scoreCard: ScoreCard): String {
 
         return """
             <defs>
-            ${arrowHead()}
-            ${gradientBackGround()}
+            ${arrowHead(scoreCard)}
+            ${gradientBackGround(scoreCard)}
             ${buildGradientDef("#fc4141", "leftScoreBox")}
             ${buildGradientDef("#7149c6", "rightScoreBox")}
-            ${buildGradientDef("#fcfcfc", "rightItem")}
-            ${buildGradientDef("#fcfcfc", "leftItem")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
             <style>
             $styles
             </style>
@@ -59,11 +59,11 @@ class ScoreCardMaker {
             
         """.trimIndent()
     }
-    fun arrowHead() = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
-            <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
+    fun arrowHead(scoreCard: ScoreCard) = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
+            <polygon points="0 0, 1 1.5, 0 3" fill="${scoreCard.scoreCardTheme.arrowColor}"/>
         </marker>"""
-    private fun gradientBackGround(): String {
-        return buildGradientDef("#E7D6B7", "backgroundScore")
+    private fun gradientBackGround(scoreCard: ScoreCard): String {
+        return buildGradientDef(scoreCard.scoreCardTheme.backgroundColor, "backgroundScore")
     }
 
     private fun workItem() = """
@@ -87,11 +87,11 @@ class ScoreCardMaker {
         fill="url(#backgroundScore)"  />
          """.trimIndent()
 
-    fun titles(scoreCard: ScoreCard): String {
+    private fun titles(scoreCard: ScoreCard): String {
         return """
-    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
-    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="530" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: #2c445a; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
+    <text x="340" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
+    <text x="150" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
+    <text x="530" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
    
         """.trimIndent()
     }
@@ -109,7 +109,7 @@ class ScoreCardMaker {
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
-            <tspan x="30" dy="12" style="font-variant: small-caps;fill:#000000;">${it.displayText.escapeXml()}</tspan>
+            <tspan x="30" dy="12" style="font-variant: small-caps;fill:${scoreCard.scoreCardTheme.initiativeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
             """.trimIndent())
@@ -130,7 +130,7 @@ class ScoreCardMaker {
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
-            <tspan x="30" dy="12" style="font-variant: small-caps; fill:#000000;">${it.displayText.escapeXml()}</tspan>
+            <tspan x="30" dy="12" style="font-variant: small-caps; fill:${scoreCard.scoreCardTheme.outcomeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
             """.trimIndent())
@@ -138,10 +138,10 @@ class ScoreCardMaker {
         }
         return sb.toString()
     }
-    private fun arrowLine() = """<line x1="345" y1="35" x2="369" y2="35" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
+    private fun arrowLine(scoreCard: ScoreCard) = """<line x1="345" y1="35" x2="369" y2="35" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
-    private fun endWrapper(scoreCard: ScoreCard) = "</g>"
+    private fun endWrapper() = "</g>"
 }
 
 fun buildGradientDef(color: String, id: String): String {
@@ -159,13 +159,6 @@ fun gradientFromColor(color: String): Map<String, String> {
     val tinted1 = tint(decoded, 0.5)
     val tinted2 = tint(decoded, 0.25)
     return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
-}
-
-private fun shade(color: Color): String {
-    val rs: Double = color.red * 0.50
-    val gs = color.green * 0.50
-    val bs = color.blue * 0.50
-    return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
 }
 
 private fun tint(color: Color, factor: Double): String {
