@@ -7,7 +7,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#E7D6B7"
+    open fun paperColor() = "#fffcec"
 }
 
 class RegularTheme : RoadMapTheme() {
@@ -17,7 +17,7 @@ class RegularTheme : RoadMapTheme() {
 class DarkTheme : RoadMapTheme() {
     override fun displayText() = "#fcfcfc"
     override fun titleColor(): String = "#FCE6F4"
-    override fun paperColor(): String = "#3A2152"
+    override fun paperColor(): String = "#17242b"
 }
 
 class RoadMapMaker(val useDark: Boolean = false) {
@@ -33,8 +33,10 @@ class RoadMapMaker(val useDark: Boolean = false) {
         sb.append(head.first)
         sb.append(defs())
         var roadMapTheme: RoadMapTheme = RegularTheme()
+        var headerColor = "headerLight"
         if (useDark) {
             roadMapTheme = DarkTheme()
+            headerColor = "headerDark"
         }
         sb.append("<g transform='scale($scale)'>")
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
@@ -47,14 +49,14 @@ class RoadMapMaker(val useDark: Boolean = false) {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#blackPurple2)"  height="80" width="100%" opacity="1.0"/>
+         <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="100%" opacity="1.0"/>
         <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
             sb.append(
                 """
-                <rect x="26" y="${head.second}" height="25" width="600" fill="url(#blackPurple2)" opacity="1.0" stroke-width="0"/>
+                <rect x="26" y="${head.second}" height="25" width="600" fill="url(#$headerColor)" opacity="1.0" stroke-width="0"/>
                 <text x="306" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
             """.trimIndent()
             )
@@ -234,10 +236,15 @@ class RoadMapMaker(val useDark: Boolean = false) {
             <stop id="stop4623" style="stop-color:#45a98f;stop-opacity:1" offset="1"/>
         </linearGradient>
         <linearGradient id="blackPurple" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse"><stop class="stop1" stop-color="#ffffff" offset="0"></stop><stop class="stop3" offset="1" stop-color="#6b587d"></stop></linearGradient>
-        <linearGradient id="blackPurple2" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="#9c90a8"/>
-            <stop class="stop2" offset="50%" stop-color="#6b587d"/>
-            <stop class="stop3" offset="100%" stop-color="#3A2152"/>
+        <linearGradient id="headerDark" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#8b9195"/>
+            <stop class="stop2" offset="50%" stop-color="#515a60"/>
+            <stop class="stop3" offset="100%" stop-color="#17242b"/>
+        </linearGradient>
+        <linearGradient id="headerLight" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#ffebcc"/>
+            <stop class="stop2" offset="50%" stop-color="#ffe1b3"/>
+            <stop class="stop3" offset="100%" stop-color="#ffd79a"/>
         </linearGradient>
         <marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
@@ -383,7 +390,7 @@ Determine consuming applications for Form Property Service & Customer inquiry Se
 - later
 Use common docker image to streamline the process.
 - now
-analyze Form Property Service for their dependencies - Patrick analyze cusomter inquiry search for cloud dependencies.
+analyze Form Property Service for their dependencies - Patrick analyze customer inquiry search for cloud dependencies.
 - next
 take these Form Property Service feature and customer inquiry service to governance
 - next

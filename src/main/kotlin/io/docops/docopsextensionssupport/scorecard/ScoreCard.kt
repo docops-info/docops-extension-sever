@@ -1,9 +1,11 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import kotlinx.serialization.Serializable
+import java.util.*
 
 @Serializable
-class ScoreCard (val title: String, val initiativeTitle: String,
+class ScoreCard (val id: String = UUID.randomUUID().toString(),
+                 val title: String, val initiativeTitle: String,
                  val outcomeTitle: String,
                  val initiativeItems: MutableList<ScoreCardItem>,
                  val outcomeItems: MutableList<ScoreCardItem>,

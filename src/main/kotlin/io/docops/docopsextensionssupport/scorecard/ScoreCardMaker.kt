@@ -6,6 +6,7 @@ import java.awt.Color
 import java.io.File
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.UUID
 import kotlin.math.max
 
 class ScoreCardMaker {
@@ -14,13 +15,14 @@ class ScoreCardMaker {
         const val WIDTH : Float= 715.0f
     }
     fun make(scoreCard: ScoreCard): String {
+        val id = scoreCard.id
         val sb = StringBuilder()
         val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
         val headerHeight = 50.0f
         val height = numOfRowsHeight+ headerHeight
-        sb.append(head(scoreCard, height))
+        sb.append(head(scoreCard, height, id))
         val styles = StringBuilder()
-        styles.append(workItem())
+        styles.append(workItem(id))
         styles.append(glass())
         styles.append(raise())
         sb.append(defs(styles = styles.toString(), scoreCard= scoreCard))
@@ -34,10 +36,10 @@ class ScoreCardMaker {
         sb.append(tail())
         return sb.toString()
     }
-    fun head(scoreCard: ScoreCard, height: Float): String {
+    fun head(scoreCard: ScoreCard, height: Float, id: String): String {
         //50 top, 35.1 each row
         val width = WIDTH
-        return """<svg xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
+        return """<svg id="$id" xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
      viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
 """
     }
@@ -54,23 +56,29 @@ class ScoreCardMaker {
             ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
             <style>
             $styles
+            .left_${scoreCard.id} {
+                fill: url(#leftItem);
+            }
+            .right_${scoreCard.id} {
+                fill: url(#rightItem);
+            }
             </style>
             </defs>
             
         """.trimIndent()
     }
-    fun arrowHead(scoreCard: ScoreCard) = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
+    private fun arrowHead(scoreCard: ScoreCard) = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
             <polygon points="0 0, 1 1.5, 0 3" fill="${scoreCard.scoreCardTheme.arrowColor}"/>
         </marker>"""
     private fun gradientBackGround(scoreCard: ScoreCard): String {
         return buildGradientDef(scoreCard.scoreCardTheme.backgroundColor, "backgroundScore")
     }
 
-    private fun workItem() = """
-        .workitem {
+    private fun workItem(id: String) = """
+        #$id .workitem {
                 filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
             }
-            .workitem :hover {
+         #$id .workitem :hover {
                 opacity: 0.5;
                 stroke-opacity: 1.7;
                 stroke-width: 3;
@@ -103,7 +111,7 @@ class ScoreCardMaker {
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" fill="url(#leftItem)" stroke="gold" cursor="pointer">
+    <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" class="left_${scoreCard.id}" stroke="gold" cursor="pointer">
     <title>${it.description}</title>
     </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
@@ -124,7 +132,7 @@ class ScoreCardMaker {
         scoreCard.outcomeItems.forEach {
             sb.append("""
     <g transform="translate(365, $startY)" >
-        <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" fill="url(#rightItem)" stroke="gold" cursor="pointer">
+        <path d="${generateRectPathData(width = 340f, height = 30f, 12f,12f,12f,12f)}" class="right_${scoreCard.id}" stroke="gold" cursor="pointer">
         <title>${it.description}</title>
         </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
@@ -174,7 +182,7 @@ fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRigh
 }
 fun main() {
     val sm = ScoreCardMaker()
-    val sc = ScoreCard("Digital Policy Service", "PCF to EKS", "TMVS++",
+    val sc = ScoreCard(title="Digital Policy Service", initiativeTitle =  "PCF to EKS", outcomeTitle = "TMVS++",
         initiativeItems = mutableListOf(
             ScoreCardItem("Spring Boot 2.7 on Pcf Platform", "Spring Boot microservice framework"),
             ScoreCardItem("Redis used for storing circuit breaker data", "Redis is a distributed caching layer"),
@@ -191,10 +199,11 @@ fun main() {
             ScoreCardItem("Documented Local Setup for building & debugging"),
             ScoreCardItem("Production Support Guidelines documented"),
             ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")),
+        scoreCardTheme = ScoreCardTheme(initiativeBackgroundColor = "#111111", initiativeDisplayTextColor = "#fcfcfc", outcomeBackgroundColor = "#31AD18", outcomeDisplayTextColor = "#fcfcfc"),
         scale = 1.0f
     )
     val svg = sm.make(sc)
-    val outfile = File("gen/score1.svg")
+    val outfile = File("gen/score2.svg")
     println(Json.encodeToString(sc))
     outfile.writeBytes(svg.toByteArray())
 }
