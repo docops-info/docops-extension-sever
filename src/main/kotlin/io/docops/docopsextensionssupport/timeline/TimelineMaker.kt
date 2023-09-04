@@ -35,7 +35,7 @@ class TimelineMaker(val useDark: Boolean) {
         }
         sb.append("<g transform=\"scale($scale)\">")
         if(useDark) {
-            sb.append("<rect width='100%' height='100%' fill='#2A1E36'/>")
+            sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
         }
         sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24)">""")
@@ -73,16 +73,16 @@ class TimelineMaker(val useDark: Boolean) {
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
-        <circle cx="0" cy="0" r="20" fill="#fcfcfc" class="cricleedge"/>
-        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
+        <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
+        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" />
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14, textColor)}    
         </text>
-        <rect x="-70" y="30" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx="5"/>
+        <rect x="-70" y="30" width="170" height="150" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx="5"/>
         $text
-        <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
+        <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5"  fill="$color" class=""/>
 
         <rect id="buttongrad" x="-71" y="21" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
         <text id="label" x="-51.5" y="35" text-anchor="middle" font-size="14px" fill="#fcfcfc">${entry.index}</text>
@@ -109,16 +109,16 @@ class TimelineMaker(val useDark: Boolean) {
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
-        <circle cx="0" cy="0" r="20" fill="#fcfcfc" class="cricleedge"/>
-        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" class="cricleedge"/>
+        <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
+        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" />
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14, textColor)}
         </text>
-        <rect x="-70" y="-180" width="170" height="150" class="edge" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx='5'/>
+        <rect x="-70" y="-180" width="170" height="150" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx='5'/>
         $text
-        <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5" filter="url(#buttonBlur)" fill="$color" class="edge"/>
+        <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5"  fill="$color" class=""/>
 
         <rect id="buttongrad" x="-71" y="-189" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
         <text id="label" x="-51.5" y="-175" text-anchor="middle" font-size="14px" fill="#fcfcfc">${entry.index}</text>
