@@ -19,11 +19,17 @@
         <div class="pure-1-2">
             <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now
-01/01/2024 First entry
-- next
-01/02/2024 Second entry
+Audit Log Streaming
+- now
+Fork the repository to Support Search
 - later
-do this later
+API versioning (GA)
+- next
+Kotlin Coroutines support
+- done
+JSON schema definition
+- later
+code scanning and app scanning
             </textarea>
         </div>
     </fieldset>
