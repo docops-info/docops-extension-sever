@@ -21,7 +21,7 @@
 - now
 01/01/2024 First entry
 - next
-01/02/2024 Second entr
+01/02/2024 Second entry
 - later
 do this later
             </textarea>

@@ -27,7 +27,7 @@ class ScoreCardMaker {
         styles.append(raise())
         sb.append(defs(styles = styles.toString(), scoreCard= scoreCard))
         sb.append(startWrapper(scoreCard))
-        sb.append(background(height * scoreCard.scale, WIDTH * scoreCard.scale))
+        sb.append(background(height , WIDTH ))
         sb.append(titles(scoreCard))
         sb.append(arrowLine(scoreCard))
         sb.append(left(scoreCard))

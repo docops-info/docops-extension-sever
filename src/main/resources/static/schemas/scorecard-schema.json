@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DocOps Scorecard Generator Schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "initiativeTitle": {
+      "type": "string"
+    },
+    "outcomeTitle": {
+      "type": "string"
+    },
+    "initiativeItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "displayText": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "displayText"
+        ]
+      }
+    },
+    "outcomeItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "displayText": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "displayText"
+        ]
+      }
+    },
+    "scale": {
+      "type": "number"
+    },
+    "scoreCardTheme": {
+      "type": "object",
+      "properties": {
+        "titleColor": {
+          "type": "string"
+        },
+        "initiativeTitleColor": {
+          "type": "string"
+        },
+        "outcomeTitleColor": {
+          "type": "string"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "initiativeBackgroundColor": {
+          "type": "string"
+        },
+        "outcomeBackgroundColor": {
+          "type": "string"
+        },
+        "initiativeDisplayTextColor": {
+          "type": "string"
+        },
+        "outcomeDisplayTextColor": {
+          "type": "string"
+        },
+        "arrowColor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "titleColor",
+        "initiativeTitleColor",
+        "outcomeTitleColor",
+        "backgroundColor",
+        "initiativeBackgroundColor",
+        "outcomeBackgroundColor",
+        "initiativeDisplayTextColor",
+        "outcomeDisplayTextColor",
+        "arrowColor"
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "initiativeTitle",
+    "outcomeTitle",
+    "initiativeItems",
+    "outcomeItems",
+    "scale"
+  ]
+}

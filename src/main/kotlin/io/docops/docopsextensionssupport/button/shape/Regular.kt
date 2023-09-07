@@ -99,5 +99,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             </defs>
         """.trimIndent()
     }
-
+    companion object {
+        const val BUTTON_PADDING = 10
+    }
 }
