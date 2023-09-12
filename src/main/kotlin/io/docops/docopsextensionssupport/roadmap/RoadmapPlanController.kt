@@ -35,7 +35,8 @@ class RoadmapPlanController {
         if(numChars == null || numChars.isEmpty()) {
             chars = "32"
         }
-        val rmm = RoadMapMaker(false)
+        val useDarkInput = httpServletRequest.getParameter("useDark")
+        val rmm = RoadMapMaker("on".equals(useDarkInput))
         val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

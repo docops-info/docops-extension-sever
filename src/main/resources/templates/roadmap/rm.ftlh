@@ -16,6 +16,9 @@
             <input type="number" id="numChars" name="numChars" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
                    value="32" step="1" max="60" min="10" class="pure-u-1-4">
         </div>
+        <label for="useDark">Use Dark Mode</label>
+        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
+               checked>
         <div class="pure-1-2">
             <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now

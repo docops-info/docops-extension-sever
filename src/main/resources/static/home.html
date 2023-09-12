@@ -3,9 +3,53 @@
 <head>
     <title>DocOps Extension Server</title>
     <link rel="icon" href="images/favicon.svg" />
-    <script src="https://unpkg.com/htmx.org@1.9.0"></script>
-    <link rel="stylesheet" href="https://the.missing.style/v1.0.0/missing.min.css">
-    <link rel="stylesheet" href="https://the.missing.style/v1.0.0/missing-prism.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <style>
+        nav {
+            background: #efefef;
+            padding: 6px;
+            text-align: center;
+            font-size: 1.15em;
+        }
+        nav > a {
+            padding: 1rem;
+        }
+        nav ul {
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline-block;
+        }
+        nav ul li:hover ul {
+            display: block;
+        }
+        nav ul li a {
+            display: block;
+            padding: 0 1rem;
+            text-decoration: none;
+        }
+        nav ul li ul {
+            display: none;
+            position: absolute;
+            z-index: 500;
+            padding: 0.5em 1.15em;
+            background: #efefef;
+        }
+        nav ul li ul li {
+            display: block;
+            text-align: left;
+            float: none;
+            padding: 0.3em 0.2em;
+        }
+        nav ul li ul a {
+            display: inline;
+            padding: 0;
+            font-size: 0.9em;
+        }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
@@ -15,7 +59,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/kotlin.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
     <script src="editor/js/theme.js"></script>
@@ -24,30 +68,38 @@
 </head>
 <body>
 
-<div class="sidebar-layout">
-    <header>
-        <button class="button" onclick="window.open('http://docops.io');">DocOps.io</button>
-        <ul role="list">
-            <li><a data-hx-get="buttongenerator.html" data-hx-target="#bod">Panel Generator</a></li>
-            <li><a data-hx-get="panelimagebuilder.html" data-hx-target="#bod">Panel Image Builder</a></li>
-            <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
-            <li><a data-hx-get="panelseditor.html" data-hx-target="#bod">Editor</a></li>
-            <li><a data-hx-get="chart.html" data-hx-target="#bod">Chart</a></li>
-            <li><a data-hx-get="treechart.html" data-hx-target="#bod">Tree Chart</a></li>
-            <li><a data-hx-get="stacked.html" data-hx-target="#bod">Stacked</a></li>
-            <li><a data-hx-get="mychart.html" data-hx-target="#bod">My Custom EChart</a></li>
-            <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
-            <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
-        </ul>
-    </header>
+<nav>
+    <ul>
+        <li><a href="https://docops.io">DocOps</a></li>
+        <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
+        <li>
+            <a data-hx-get="button/fromJson.html" data-hx-target="#bod">Buttons</a>
+            <ul>
+                <li><a data-hx-get="button/fromJson.html" data-hx-target="#bod">Regular</a></li>
+                <li><a data-hx-get="button/fromJsonToPng.html" data-hx-target="#bod">To PNG from JSON</a></li>
+            </ul>
+        </li>
+        <li><a data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
+        <li><a data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
+        <li><a data-hx-get="timeline.html" data-hx-target="#bod">Timeline</a></li>
+        <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
+        <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
+        <li><a data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
+        <li><a data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
+        <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
+    </ul>
+</nav>
 
-    <div class="col-2">
-        <main>
-            <div id="bod"><h3>Welcome to Extension UI Service</h3></div>
-        </main>
+<div class="container">
+    <div class="left-container">
+    </div>
+    <div class="middle-container">
+        <div id="bod"><h3>Welcome to Extension UI Service</h3></div>
+    </div>
+    <div class="right-container">
+        <div id="statusPanel"></div>
     </div>
 </div>
-
 
 
 <script>
