@@ -3,7 +3,8 @@
 <head>
     <title>DocOps Extension Server</title>
     <link rel="icon" href="images/favicon.svg" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">-->
 
     <style>
         nav {
@@ -68,15 +69,23 @@
 </head>
 <body>
 
+<div id="main">
+
 <nav>
     <ul>
         <li><a href="https://docops.io">DocOps</a></li>
+        <li><a data-hx-get="theme.html?state=dark" data-hx-target="#bod">DocOps</a></li>
         <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
         <li>
             <a data-hx-get="button/fromJson.html" data-hx-target="#bod">Buttons</a>
             <ul>
-                <li><a data-hx-get="button/fromJson.html" data-hx-target="#bod">Regular</a></li>
-                <li><a data-hx-get="button/fromJsonToPng.html" data-hx-target="#bod">To PNG from JSON</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod">Large</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod">Pill</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod">Rectangle</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod">Regular</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod">Round</a></li>
+                <li><a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod">Slim</a></li>
+                <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod">To PNG from JSON</a></li>
             </ul>
         </li>
         <li><a data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
@@ -144,5 +153,6 @@
     });
 
 </script>
+</div>
 </body>
 </html>

@@ -5,16 +5,19 @@ import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 
 
 @Controller
 @Observed(name = "main.controller")
-class MainController() {
+class MainController @Autowired constructor(private val applicationContext: ApplicationContext) {
 
 
     @GetMapping("/panels.html", produces = [MediaType.TEXT_HTML_VALUE])
@@ -168,7 +171,19 @@ class MainController() {
     }
     @GetMapping("/button/fromJson.html")
     @Timed(value = "docops.button.from.json.html", histogram = true, percentiles = [0.5, 0.95])
-    fun buttonFromJson(model: Model): String {
+    fun buttonFromJson(model: Model, @RequestParam(name = "type", defaultValue = "REGULAR") type: String): String {
+        val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
+       json?.let {
+            model.addAttribute("json", String(json.readAllBytes()))
+       }
+        val themeList = applicationContext.getResources("classpath:static/buttondisplay/*.json")
+        val themeFiles = mutableListOf<String>()
+        themeList.forEach {
+            themeFiles.add(it.filename!!)
+        }
+        model.addAttribute("themes", themeFiles)
+        model.addAttribute("themeBox", "")
+        model.addAttribute("contentBox", "")
         return "buttons/fromjson"
     }
 
