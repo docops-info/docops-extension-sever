@@ -5,13 +5,13 @@
 <div>
 <h1>Create SVG Buttons from JSON</h1>
 
-<form class="pure-form pure-form-stacked" data-hx-put="api/buttons/form" data-hx-target="#contentBox" >
+<form data-hx-put="api/buttons/form" data-hx-target="#contentBox" >
 
 <fieldset id="response-div" >
-    <legend>JSON</legend>
-    <div class="pure-1-2">
-        <label for="payload">Insert content here</label>
-        <textarea id="payload" name="payload"  class="textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox">
+    <legend>User created JSON</legend>
+    <div class="join">
+        <label for="payload" class="btn join-item">Insert JSON here</label>
+        <textarea id="payload" name="payload"  class="join-item textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox">
         ${json}
         </textarea>
     </div>
@@ -21,7 +21,7 @@
     <button class="btn btn-primary">Submit</button>
 </fieldset>
 <fieldset>
-    <legend>List of available Themes</legend>
+    <legend>List of Predefined Themes</legend>
     <div class="row">
         <label for="theme">Theme</label>
         <select name="theme" id="theme" class="select select-primary w-full max-w-xs" data-hx-put="api/buttons/form" data-hx-target="#contentBox">

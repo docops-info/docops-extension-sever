@@ -1,8 +1,8 @@
 <h1>Charts Editor</h1>
 
-<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<button class="btn btn-success"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="btn btn-secondary" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="btn btn-secondary" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 <br/>
 <br/>
 <div class="pure-g">
@@ -54,5 +54,5 @@
 </script>
 <br/>
 <#include "chartcommon.ftlh">
-<@chartCommon chart = "pure-button-primary pure-button-active" treechart = "" stacked = "" mychart = ""/>
+<@chartCommon chart = "btn btn-active" treechart = "" stacked = "" mychart = ""/>
 

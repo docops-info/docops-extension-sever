@@ -46,9 +46,9 @@
     <tbody>
     <tr>
         <td>
-            <div class="pure-u-1 pure-u-md-1-2">
+            <div>
                 <select id="metrics" name="metrics"
-                        class="pure-input-1-2" onchange="getMetrics()">
+                        class="select select-primary" onchange="getMetrics()">
                     <option>Select</option>
                 </select>
             </div>

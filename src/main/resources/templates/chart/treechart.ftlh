@@ -1,7 +1,7 @@
-<h1>Tree Chart  Editor</h1>
-<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<h1>Tree Chart Editor</h1>
+<button class="btn btn-primary"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="btn btn-secondary" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="btn btn-secondary" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 <br/>
 <br/>
 <div class="pure-g">
@@ -57,4 +57,4 @@
     editor.on("input", showHTMLInIFrame);
 </script>
 <#include "chartcommon.ftlh">
-<@chartCommon chart = "" treechart = "pure-button-primary pure-button-active" stacked = "" mychart = ""/>
+<@chartCommon chart = "" treechart = "btn btn-active" stacked = "" mychart = ""/>

@@ -9,57 +9,70 @@
 <fieldset id="response-div" >
     <legend>Release Strategy</legend>
     <div class="pure-g">
-        <div class="pure-u-1-1">
-            <div class="pure-u-1">
-                <label for="title">Title</label>
+
+        <div>
+            <div class="join">
+                <label for="title" class="btn join-item">Title</label>
                 <input type="text" id="title" name="title" data-hx-put="api/release/build"
-                       value="${releaseStrategy.title}"  class="select select-primary w-full max-w-xs">
+                       value="${releaseStrategy.title}" class="join-item input input-bordered input-primary w-full max-w-xs">
             </div>
-            <div class="pure-u-1">
-                <label for="style">Display Style</label>
+        </div>
+        <div>
+            <div class="join">
+                <label for="style" class="btn join-item">Display Style</label>
                 <select id="style" name="style" data-hx-put="api/release/build"
-                        class="select select-primary w-full max-w-xs">
+                        class="join-item select select-primary w-full max-w-xs">
                     <#list styles?keys as style>
                         <#if releaseStrategy.style == style>
-                        <option value="${style}" selected>${styles[style]}</option>
+                            <option value="${style}" selected>${styles[style]}</option>
                         <#else>
                             <option value="${style}">${styles[style]}</option>
                         </#if>
                     </#list>
                 </select>
             </div>
+        </div>
             <#list releaseStrategy.releases as release>
-                <div class="pure-u-1">
-                    <label for="type_${release_index}">Type</label>
-                    <select id="type_${release_index}" name="type_${release_index}" data-hx-put="api/release/build"
-                            class="select select-primary w-full max-w-xs">
-                        <#list releaseTypes as rel>
-                            <#if rel == release.type>
-                                <option value="${rel}" selected>${rel}</option>
-                            <#else>
-                                <option value="${rel}">${rel}</option>
-                            </#if>
-                        </#list>
-                    </select>
+                <div>
+                    <div class="join">
+                        <label for="type_${release_index}" class="btn join-item">Type</label>
+                        <select id="type_${release_index}" name="type_${release_index}" data-hx-put="api/release/build"
+                                class="join-item select select-primary w-full max-w-xs">
+                            <#list releaseTypes as rel>
+                                <#if rel == release.type>
+                                    <option value="${rel}" selected>${rel}</option>
+                                <#else>
+                                    <option value="${rel}">${rel}</option>
+                                </#if>
+                            </#list>
+                        </select>
+                    </div>
                 </div>
-                <div class="pure-u-1">
-                    <label for="date_${release_index}">Goal</label>
-                    <input type="text" id="goal_${release_index}" name="goal_${release_index}"
-                           value="${release.goal}"  class="select select-primary w-full max-w-xs">
+                <div>
+                    <div class="join">
+                        <label for="date_${release_index}" class="btn join-item">Goal</label>
+                        <input type="text" id="goal_${release_index}" name="goal_${release_index}"
+                               value="${release.goal}" class="join-item input input-bordered input-primary w-full max-w-xs">
+                    </div>
                 </div>
-                <div class="pure-u-1-2">
-                    <label for="date_${release_index}">Target Date</label>
-                    <input type="text" id="date_${release_index}" name="date_${release_index}"
-                           value="${release.date}"  class="select select-primary w-full max-w-xs">
+                <div>
+                    <div class="join">
+                        <label for="date_${release_index}" class="btn join-item">Target Date</label>
+                        <input type="text" id="date_${release_index}" name="date_${release_index}"
+                               value="${release.date}" class="join-item input input-bordered input-primary w-full max-w-xs">
+                    </div>
                 </div>
-                <div class="pure-g">
-                <div class="pure-u-1-2">
+                <div >
+                <div class="join">
+                    <label class="btn join-item">Reason Line</label>
                     <#list release.lines as line>
                         <input type="text" id="line_${release_index}" name="line_${release_index}"
-                               value="${line}"  class="select select-primary w-full max-w-xs">
+                               value="${line}"  class="join-item input input-bordered input-primary w-full max-w-xs">
                     </#list>
                 </div>
-                <div class="pure-u-1-2">
+                </div>
+                <div>
+                <div >
                     <button class="btn btn-outline" type="submit" name="addLine" value="line_${release_index}">+ New Line</button>
                 </div>
                 </div>
@@ -73,7 +86,7 @@
                     <button class="btn btn-success" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     <button class="btn btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVGAsText('${bsvg}')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
                 </div>
-            </div>
+
 
         </div>
         <div class="pure-u-1-1">
