@@ -38,7 +38,7 @@ class TimelineMaker(val useDark: Boolean) {
             sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
         }
         sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
-        sb.append("""<g transform="translate(0,24)">""")
+        sb.append("""<g transform="translate(0,24) scale($scale">""")
 
         sb.append(buildRoad(head.second-100))
         entries.forEachIndexed { index, entry ->
