@@ -9,14 +9,14 @@
                 <div class="pure-u-1">
                     <label for="title">Title</label>
                     <input type="text" id="title" name="title" data-hx-put="api/release/build"
-                           value="Release Strategy Builder"  class="pure-u-23-24">
+                           value="Release Strategy Builder"  class="input input-bordered input-primary w-full max-w-xs">
                 </div>
 
                 <div class="pure-u-1">
                     <label for="style">Display Style</label>
                     <select id="style" name="style" data-hx-put="api/release/build"
-                            class="pure-input-1-2">
-                        <option value="TL">Timeline</option>
+                            class="select select-primary w-full max-w-xs">
+                        <option value="TLS">Timeline Summary</option>
                         <option value="R">Roadmap</option>
                         <option value="TLG">Timeline Grouped</option>
                     </select>
@@ -24,7 +24,7 @@
                 <div class="pure-u-1">
                     <label for="type_0">Type</label>
                     <select id="type_0" name="type_0" data-hx-put="api/release/build"
-                            class="pure-input-1-2">
+                            class="select select-primary w-full max-w-xs">
                         <option value="M1">Milestone 1</option>
                         <option value="RC1">Release Candidate 1</option>
                         <option value="GA">General Availability</option>
@@ -33,22 +33,22 @@
                 <div class="pure-u-1">
                     <label for="date_0">Goal</label>
                     <input type="text" id="goal_0" name="goal_0"
-                           value="Our goal is to ..."  class="pure-u-23-24">
+                           value="Our goal is to ..."  class="input input-bordered input-primary w-full max-w-xs">
                 </div>
                 <div class="pure-u-1">
                     <label for="date_0">Target Date</label>
                     <input type="text" id="date_0" name="date_0"
-                           value="TBD"  class="pure-u-23-24">
+                           value="TBD"  class="input input-bordered input-primary w-full max-w-xs">
                 </div>
                 <div class="pure-u-1">
                     <label for="line_0">Line</label>
                     <input type="text" id="line_0" name="line_0" data-hx-put="api/release/build"
-                           value="Reason for "  class="pure-u-23-24">
+                           value="Reason for "  class="input input-bordered input-primary w-full max-w-xs">
                 </div>
                 <div class="pure-u-1">
                     <label for="logo">Build</label>
                     <div class="pure-g">
-                        <button class="button-success pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
+                        <button class="btn btn-primary" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="pure-u-1-1">
                 <div class="pure-u-1-2">
                     <div id="contentBox"></div>
-                    <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(badgeSource);"
+                    <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(badgeSource);"
                            value="Copy Badge As AsciiDoc">
                 </div>
             </div>
@@ -65,4 +65,4 @@
 </form>
 </div>
 <#include "stratcommon.ftlh">
-<@stratMacro builder = "pure-button-primary pure-button-active" fromJson= ""/>
+<@stratMacro builder = "btn btn-primary" fromJson= ""/>

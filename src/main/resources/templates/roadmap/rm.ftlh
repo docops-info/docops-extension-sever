@@ -4,23 +4,23 @@
         <div class="pure-1-2">
             <label for="title">Scale</label>
             <input type="text" id="title" name="title" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="planner"  class="pure-u-1-4">
+                   value="planner"  class="input input-bordered input-primary w-full max-w-xs">
         </div>
-        <div class="pure-1-2">
+        <div>
             <label for="scale">Scale</label>
             <input type="number" id="scale" name="scale" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
+                   value="1.0" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
         </div>
-        <div class="pure-1-2">
+        <div>
             <label for="numChars">Number of Characters per Line</label>
             <input type="number" id="numChars" name="numChars" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="32" step="1" max="60" min="10" class="pure-u-1-4">
+                   value="32" step="1" max="60" min="10" class="input input-bordered input-primary w-full max-w-xs">
         </div>
         <label for="useDark">Use Dark Mode</label>
         <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-               checked>
-        <div class="pure-1-2">
-            <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
+               checked class="toggle toggle-primary">
+        <div >
+            <textarea class="textarea textarea-primary" id="content" name="content" class="pure-input-1" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now
 Audit Log Streaming
 - now
@@ -37,8 +37,8 @@ code scanning and app scanning
         </div>
     </fieldset>
     <fieldset>
-        <button class="button-success pure-button">Submit</button>
-        <button class="button-secondary pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
+        <button class="btn btn-active btn-primary">Submit</button>
+        <button class="btn btn-active btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
     </fieldset>
 </form>
 <div id="contentBox" class="contentBox"></div>

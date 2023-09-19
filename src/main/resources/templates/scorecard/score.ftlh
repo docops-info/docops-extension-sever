@@ -7,7 +7,7 @@
             <legend>JSON</legend>
             <div class="pure-1-2">
                 <label for="payload">Insert content here</label>
-            <textarea id="payload" name="payload" class="pure-input-1" rows="20" placeholder="" data-hx-target="#contentBox">
+            <textarea id="payload" name="payload" class="textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox">
             {
   "title": "Release Strategies",
   "initiativeTitle": "Initiative",
@@ -61,9 +61,11 @@
             </div>
         </fieldset>
         <fieldset>
-            <button class="button-success pure-button">Submit</button>
-            <button class="button-secondary pure-button" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'scorecard.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
+            <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'scorecard.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
         </fieldset>
     </form>
 </div>
-<div id="contentBox" class="contentBox"></div>
+<div class="carousel rounded-box">
+<div id="contentBox" class="contentBox carousel-item"></div>
+</div>

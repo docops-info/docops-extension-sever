@@ -1,18 +1,19 @@
 <form class="pure-form pure-form-stacked" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 <fieldset id="response-div" >
     <legend>Timeline Builder</legend>
-    <div class="pure-1-2">
-        <label for="scale">Scale</label>
+    <div class="join">
+        <label for="scale" class="btn join-item">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
                value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
     </div>
-    <div class="pure-1-2">
-        <label for="numChars">Number of Characters per Line</label>
+    <div class="join">
+        <label for="numChars" class="btn join-item">Number of Characters per Line</label>
         <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="24" step="1" max="60" min="10" class="pure-u-1-4">
+               value="24" step="1" max="60" min="10" class="input input-bordered input-primary w-full max-w-xs">
     </div>
-        <div class="pure-1-2">
-            <textarea id="content" name="content" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
+
+    <div class="pure-1-2">
+            <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
 date: 1891
 text: Mailbox, invented by Phillip Downing
@@ -51,8 +52,8 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
         </div>
 </fieldset>
 <fieldset>
-    <button class="button-success pure-button">Submit</button>
-    <input class="button-secondary pure-button" type="button" onclick="copyTextToClipboard(adrSource);"
+    <button class="btn btn-primary">Submit</button>
+    <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
            value="Copy Source As AsciiDoc">
 </fieldset>
 </form>

@@ -6,7 +6,7 @@
 <fieldset id="response-div" >
     <legend>JSON</legend>
     <div class="pure-1-2">
-        <label for="payload">Insert content here</label><textarea id="payload" name="payload" class="pure-input-1" rows="20" placeholder="" data-hx-put="api/release/prefill" data-hx-target="#contentBox">
+        <label for="payload">Insert content here</label><textarea id="payload" name="payload" class="pure-input-1" rows="20" cols="90" placeholder="" data-hx-put="api/release/prefill" data-hx-target="#contentBox">
             </textarea>
     </div>
 </fieldset>
@@ -16,4 +16,4 @@
 </form>
 </div>
 <#include "stratcommon.ftlh">
-<@stratMacro builder = "" fromJson= "pure-button-primary pure-button-active"/>
+<@stratMacro builder = "" fromJson= "btn btn-primary btn-active"/>
