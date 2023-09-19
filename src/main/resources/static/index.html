@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="autumn">
 <head>
     <title>DocOps Extension Server</title>
     <link rel="icon" href="images/favicon.svg" />
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.5/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">-->
 
+
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/modal.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/kotlin.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
     <script src="editor/js/theme.js"></script>
@@ -24,77 +26,91 @@
     <script src="js/ext/json-enc.js"></script>
 </head>
 <body>
-<div id="layout" class="content pure-g">
-    <div id="nav" class="pure-u">
-        <a href="#" id="menuLink" class="nav-menu-button">Menu</a>
 
-        <div class="nav-inner">
-            <button class="primary-button pure-button" onclick="window.open('http://docops.io');">DocOps.io</button>
-
-            <div class="pure-menu">
-                <ul class="pure-menu-list">
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="button/fromJson.html" data-hx-target="#bod">Buttons</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="button/fromJsonToPng.html" data-hx-target="#bod">Buttons PNG</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="timeline.html" data-hx-target="#bod">Timeline Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="roadmap.html" data-hx-target="#bod">Work Planner</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="simpleicons.html" data-hx-target="#bod">Simple Icons</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
+<div class="join join-vertical lg:join-horizontal">
+    <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+        <li><a href="https://docops.io">DocOps</a></li>
+        <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
+        <li>
+            <details>
+                <summary>Buttons</summary>
+                <ul>
+                    <li><a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod">Large</a></li>
+                    <li><a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod">Pill</a></li>
+                    <li><a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod">Rectangle</a></li>
+                    <li><a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod">Regular</a></li>
+                    <li><a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod">Round</a></li>
+                    <li><a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod">Slim</a></li>
+                    <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod">To PNG from JSON</a></li>
                 </ul>
-            </div>
+            </details>
+        </li>
+        <li><a data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
+        <li><a data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
+        <li><a data-hx-get="timeline.html" data-hx-target="#bod">Timeline</a></li>
+        <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
+        <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
+        <li><a data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
+        <li><a data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
+        <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
+    </ul>
+</div>
+<div id="main">
+
+    <div class="container">
+        <div class="left-container">
+        </div>
+        <div class="middle-container">
+            <div id="bod"><h3>Welcome to Extension UI Service</h3></div>
+        </div>
+        <div class="right-container">
+            <div id="statusPanel"></div>
         </div>
     </div>
 
-    <div id="main" class="pure-u-1">
-        <div id="bod"><h3>Welcome to Extension UI Service</h3></div>
-    </div>
-</div>
-<script>
-    document.body.addEventListener("showFrame", function (evt){
-        if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
-    });
-    let downloadBlob = function (FileName) {
-        saveData(FileName);
-    }
-    var saveData = (function () {
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        return function (fileName) {
-            var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
-                url = window.URL.createObjectURL(blob);
-            a.href = url;
-            a.download = fileName;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        };
-    }());
 
-    document.body.addEventListener('htmx:beforeSwap', function(evt) {
-        if(evt.detail.xhr.status === 404){
-            // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
-            alert("Error: Could Not Find Resource");
-        } else if(evt.detail.xhr.status === 422){
-            // allow 422 responses to swap as we are using this as a signal that
-            // a form was submitted with bad data and want to rerender with the
-            // errors
-            //
-            // set isError to false to avoid error logging in console
-            evt.detail.shouldSwap = true;
-            evt.detail.isError = false;
-        } else if(evt.detail.xhr.status === 400){
-            // if the response code 418 (I'm a teapot) is returned, retarget the
-            // content of the response to the element with the id `teapot`
-            evt.detail.shouldSwap = true;
-            evt.detail.target = htmx.find("#errormessages");
+    <script>
+        document.body.addEventListener("showFrame", function (evt){
+            if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
+        });
+        let downloadBlob = function (FileName) {
+            saveData(FileName);
         }
-    });
+        var saveData = (function () {
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            return function (fileName) {
+                var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
+                    url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
 
-</script>
+        document.body.addEventListener('htmx:beforeSwap', function(evt) {
+            if(evt.detail.xhr.status === 404){
+                // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
+                alert("Error: Could Not Find Resource");
+            } else if(evt.detail.xhr.status === 422){
+                // allow 422 responses to swap as we are using this as a signal that
+                // a form was submitted with bad data and want to rerender with the
+                // errors
+                //
+                // set isError to false to avoid error logging in console
+                evt.detail.shouldSwap = true;
+                evt.detail.isError = false;
+            } else if(evt.detail.xhr.status === 400){
+                // if the response code 418 (I'm a teapot) is returned, retarget the
+                // content of the response to the element with the id `teapot`
+                evt.detail.shouldSwap = true;
+                evt.detail.target = htmx.find("#errormessages");
+            }
+        });
+
+    </script>
+</div>
 </body>
 </html>
