@@ -11,20 +11,20 @@
     <legend>JSON</legend>
     <div class="pure-1-2">
         <label for="payload">Insert content here</label>
-        <textarea id="payload" name="payload" class="pure-input-1" rows="20" placeholder="" data-hx-target="#contentBox">
+        <textarea id="payload" name="payload"  class="textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox">
         ${json}
         </textarea>
     </div>
 
 </fieldset>
 <fieldset>
-    <button class="button-success pure-button">Submit</button>
+    <button class="btn btn-primary">Submit</button>
 </fieldset>
 <fieldset>
     <legend>List of available Themes</legend>
     <div class="row">
         <label for="theme">Theme</label>
-        <select name="theme" id="theme" data-hx-put="api/buttons/form" data-hx-target="#contentBox">
+        <select name="theme" id="theme" class="select select-primary w-full max-w-xs" data-hx-put="api/buttons/form" data-hx-target="#contentBox">
             <option value="">Select</option>
             <#list themes as themeItem>
                 <option value="${themeItem}">${themeItem}</option>

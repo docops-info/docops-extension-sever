@@ -1,55 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="winter">
 <head>
     <title>DocOps Extension Server</title>
     <link rel="icon" href="images/favicon.svg" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.5/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">-->
 
-    <style>
-        nav {
-            background: #efefef;
-            padding: 6px;
-            text-align: center;
-            font-size: 1.15em;
-        }
-        nav > a {
-            padding: 1rem;
-        }
-        nav ul {
-            margin: 0;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline-block;
-        }
-        nav ul li:hover ul {
-            display: block;
-        }
-        nav ul li a {
-            display: block;
-            padding: 0 1rem;
-            text-decoration: none;
-        }
-        nav ul li ul {
-            display: none;
-            position: absolute;
-            z-index: 500;
-            padding: 0.5em 1.15em;
-            background: #efefef;
-        }
-        nav ul li ul li {
-            display: block;
-            text-align: left;
-            float: none;
-            padding: 0.3em 0.2em;
-        }
-        nav ul li ul a {
-            display: inline;
-            padding: 0;
-            font-size: 0.9em;
-        }
-    </style>
+
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
@@ -69,35 +27,35 @@
 </head>
 <body>
 
+<div class="join join-vertical lg:join-horizontal">
+<ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+    <li><a href="https://docops.io">DocOps</a></li>
+    <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
+    <li>
+        <details>
+            <summary>Buttons</summary>
+        <ul>
+            <li><a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod">Large</a></li>
+            <li><a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod">Pill</a></li>
+            <li><a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod">Rectangle</a></li>
+            <li><a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod">Regular</a></li>
+            <li><a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod">Round</a></li>
+            <li><a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod">Slim</a></li>
+            <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod">To PNG from JSON</a></li>
+        </ul>
+        </details>
+    </li>
+    <li><a data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
+    <li><a data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
+    <li><a data-hx-get="timeline.html" data-hx-target="#bod">Timeline</a></li>
+    <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
+    <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
+    <li><a data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
+    <li><a data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
+    <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
+</ul>
+</div>
 <div id="main">
-
-<nav>
-    <ul>
-        <li><a href="https://docops.io">DocOps</a></li>
-        <li><a data-hx-get="theme.html?state=dark" data-hx-target="#bod">DocOps</a></li>
-        <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
-        <li>
-            <a data-hx-get="button/fromJson.html" data-hx-target="#bod">Buttons</a>
-            <ul>
-                <li><a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod">Large</a></li>
-                <li><a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod">Pill</a></li>
-                <li><a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod">Rectangle</a></li>
-                <li><a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod">Regular</a></li>
-                <li><a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod">Round</a></li>
-                <li><a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod">Slim</a></li>
-                <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod">To PNG from JSON</a></li>
-            </ul>
-        </li>
-        <li><a data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
-        <li><a data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
-        <li><a data-hx-get="timeline.html" data-hx-target="#bod">Timeline</a></li>
-        <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
-        <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
-        <li><a data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
-        <li><a data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
-        <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
-    </ul>
-</nav>
 
 <div class="container">
     <div class="left-container">
