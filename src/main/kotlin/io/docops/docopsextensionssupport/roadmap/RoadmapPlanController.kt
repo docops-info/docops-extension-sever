@@ -14,6 +14,7 @@ import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
 import java.nio.charset.Charset
+import kotlin.system.measureTimeMillis
 
 @Controller
 @RequestMapping("/api/roadmap")
@@ -24,30 +25,38 @@ class RoadmapPlanController {
     @ResponseBody
     @Timed(value = "docops.roadmap.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
-        var contents = httpServletRequest.getParameter("content")
-        if(contents.isNullOrEmpty()) {
-            contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
-        }
-        val scale = httpServletRequest.getParameter("scale")
-        val title = httpServletRequest.getParameter("title")
-        val numChars = httpServletRequest.getParameter("numChars")
-        var chars = numChars
-        if(numChars == null || numChars.isEmpty()) {
-            chars = "32"
-        }
-        val useDarkInput = httpServletRequest.getParameter("useDark")
-        val rmm = RoadMapMaker("on".equals(useDarkInput))
-        val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
+        var div = ""
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("text/html")
-        val div = """
+        var timing = measureTimeMillis {
+            var contents = httpServletRequest.getParameter("content")
+            if (contents.isNullOrEmpty()) {
+                contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
+            }
+            val scale = httpServletRequest.getParameter("scale")
+            val title = httpServletRequest.getParameter("title")
+            val numChars = httpServletRequest.getParameter("numChars")
+            var chars = numChars
+            if (numChars == null || numChars.isEmpty()) {
+                chars = "32"
+            }
+            val useDarkInput = httpServletRequest.getParameter("useDark")
+            val rmm = RoadMapMaker("on".equals(useDarkInput))
+            val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
+
+            div = """
             <div>$svg</div>
-            <div class="pure-u-1">
-                Copy Url: <a href="api/roadmap/?payload=${compressString(contents)}&title=$title&numChars=$numChars&scale=$scale&type=svg" target="_blank">Open Url</a>
+            <div class="divider"></div> 
+            <div>
+               <a class="btn btn-outline" href="api/roadmap/?payload=${compressString(contents)}&title=$title&numChars=$numChars&scale=$scale&type=svg" target="_blank">Open Url</a>
             </div>
         """.trimIndent()
-        return ResponseEntity(div.toByteArray(),headers,HttpStatus.OK)
+        }
+
+        log.info("putRoadmapPlan executed in ${timing}ms ")
+            return ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+
     }
 
     @GetMapping("/")

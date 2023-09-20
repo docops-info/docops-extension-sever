@@ -45,4 +45,5 @@
         hljs.highlightElement(el);
     });
 </script>
+<div class="divider"></div>
 <div id="contentBox" class="contentBox"></div>

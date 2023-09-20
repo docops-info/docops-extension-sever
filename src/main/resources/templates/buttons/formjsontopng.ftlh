@@ -15,4 +15,5 @@
         </fieldset>
     </form>
 </div>
+<div class="divider"></div>
 <div id="contentBox" class="contentBox"></div>

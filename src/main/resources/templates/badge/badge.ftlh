@@ -70,6 +70,8 @@
         </div>
     </fieldset>
 </form>
+
+<div class="divider"></div>
 <div id="contentBox"></div>
 <div id="simpleicons"></div>
 

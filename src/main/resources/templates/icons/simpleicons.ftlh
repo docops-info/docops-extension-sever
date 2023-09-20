@@ -124,4 +124,5 @@
     <div class="pure-u-1-2" id="placeholder"></div>
 </div>
 
+<div class="divider"></div>
 <div id="content"></div>

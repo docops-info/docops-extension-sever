@@ -66,6 +66,6 @@
         </fieldset>
     </form>
 </div>
-<div class="carousel rounded-box">
-<div id="contentBox" class="contentBox carousel-item"></div>
-</div>
+
+<div class="divider"></div>
+<div id="contentBox" class="contentBox"></div>

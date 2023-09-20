@@ -65,4 +65,5 @@ Development will have to cope with differences between Unix variants, particular
 
     </fieldset>
 </form>
+<div class="divider"></div>
 <div id="contentBox" class="contentBox"></div>

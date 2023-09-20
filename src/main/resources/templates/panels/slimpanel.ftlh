@@ -46,4 +46,4 @@
 </div>
 
 <#include "panelcommon.ftlh">
-<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "" slimpanel="pure-button-primary pure-button-active"/>
+<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "" slimpanel="btn btn-outline btn-active"/>

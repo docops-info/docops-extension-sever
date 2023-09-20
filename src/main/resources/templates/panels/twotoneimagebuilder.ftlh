@@ -74,4 +74,4 @@
 </script>
 
 <#include "panelcommon.ftlh">
-<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "pure-button-primary pure-button-active" panelseditor= "" slimpanel=""/>
+<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "btn btn-outline btn-active" panelseditor= "" slimpanel=""/>

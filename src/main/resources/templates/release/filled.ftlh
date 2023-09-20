@@ -4,9 +4,9 @@
 <#-- @ftlvariable name="releaseStrategy" type="io.docops.docopsextensionssupport.releasestrategy.ReleaseStrategy" -->
 <h1>Release Strategy Builder</h1>
 
-<form class="pure-form pure-form-stacked" data-hx-put="api/release/build" data-hx-target="#response-div">
+<form data-hx-put="api/release/build" data-hx-target="#response-div">
 
-<fieldset id="response-div" >
+<fieldset>
     <legend>Release Strategy</legend>
     <div class="pure-g">
 
@@ -63,11 +63,13 @@
                     </div>
                 </div>
                 <div >
-                <div class="join">
                     <label class="btn join-item">Reason Line</label>
+                <div >
                     <#list release.lines as line>
+                        <div>
                         <input type="text" id="line_${release_index}" name="line_${release_index}"
-                               value="${line}"  class="join-item input input-bordered input-primary w-full max-w-xs">
+                               value="${line}"  class="input input-bordered input-primary w-full max-w-xs">
+                        </div>
                     </#list>
                 </div>
                 </div>
@@ -77,12 +79,12 @@
                 </div>
                 </div>
             </#list>
-            <div class="pure-u-1">
+            <div>
                 <div><br/>
                     <button class="btn btn-outline" type="submit" name="addType" value="increase">+ New Milestone</button>
                 </div>
                 <label for="logo">Build</label>
-                <div class="pure-g">
+                <div>
                     <button class="btn btn-success" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     <button class="btn btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVGAsText('${bsvg}')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
                 </div>
@@ -94,24 +96,26 @@
         </div>
         <div class="pure-u-1-1">
             <#noautoesc>
-                <div id="contentBox"> ${svg}</div>
+                <div class="divider"></div>
+                <div id="contentBox">${svg}</div>
             </#noautoesc>
         </div>
-        <div class="pure-u-1-1">
-            <div class="pure-u-1-2">
+        <div>
+            <div>
                     <pre>
                         <code>
                         <#noautoesc>
+                            <div class="divider"></div>
 ${sourceJson}
                         </#noautoesc>
                         </code>
                     </pre>
 
             </div>
-            <div class="pure-u-1">
-                Copy Url: <a href="${getUrl}" target="_blank">${getUrl}</a>
+            <div>
+                Copy Url: <a class="btn btn-outline" href="${getUrl}" target="_blank">${getUrl}</a>
             </div>
-            <div class="pure-u-1">
+            <div>
                 <button class="btn btn-primary" data-hx-indicator="#spinner" data-hx-target="#response-div"  data-hx-get="${prefill}">Prefill <img class="htmx-indicator" src="images/bars.svg"/></button>
             </div>
         </div>

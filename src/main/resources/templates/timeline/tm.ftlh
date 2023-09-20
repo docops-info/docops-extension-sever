@@ -4,15 +4,20 @@
     <div class="join">
         <label for="scale" class="btn join-item">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="1.0" step=".10" max="5" min=".1" class="pure-u-1-4">
+               value="1.0" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
     </div>
     <div class="join">
         <label for="numChars" class="btn join-item">Number of Characters per Line</label>
         <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
                value="24" step="1" max="60" min="10" class="input input-bordered input-primary w-full max-w-xs">
     </div>
-
-    <div class="pure-1-2">
+<div>
+    <div class="join">
+        <label for="useDark" class="join-item">Use Dark Mode</label>
+        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               checked class="join-item toggle toggle-primary"></div>
+</div>
+    <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
 date: 1891
@@ -57,4 +62,5 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
            value="Copy Source As AsciiDoc">
 </fieldset>
 </form>
+<div class="divider"></div>
 <div id="contentBox" class="contentBox"></div>

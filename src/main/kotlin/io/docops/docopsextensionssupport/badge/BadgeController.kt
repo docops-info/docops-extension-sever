@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
+import kotlin.math.log
 
 
 @Controller
@@ -33,13 +34,17 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
         if (null == fillColor) {
             fillColor = "GREEN"
         }
-        val svg = docOpsBadgeGenerator.createBadge(badge.label, badge.message, badge.labelColor!!, badge.messageColor!!, "", "", "")
+        var logo = ""
+        if(badge.logo != null) {
+            logo = badge.logo
+        }
+        val svg = docOpsBadgeGenerator.createBadge(badge.label, badge.message, badge.labelColor!!, badge.messageColor!!, "", logo, "")
         //val src = badgeAgain(formBadge = badge, type = "SVG")
         val badgeSource =
             """
 [badge]
 ----
-${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}
+${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}|#eeeeee|
 ----
 """.trimIndent()
         val contents = makeBadgeAndSource(badgeSource, svg)

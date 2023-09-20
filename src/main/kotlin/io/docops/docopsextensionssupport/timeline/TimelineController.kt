@@ -38,7 +38,8 @@ class TimelineController {
         if(numChars == null || numChars.isEmpty()) {
             chars = "24"
         }
-        val tm = TimelineMaker(true)
+        val useDarkInput = httpServletRequest.getParameter("useDark")
+        val tm = TimelineMaker("on".equals(useDarkInput))
         val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

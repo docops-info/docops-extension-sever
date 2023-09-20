@@ -1,7 +1,7 @@
 <h1>Panels</h1>
-<button class="button-success pure-button"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
-<button class="button-secondary pure-button" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
-<button class="button-secondary pure-button" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
+<button class="btn btn-success"   onclick="copyTextToClipboard(editor.getValue());">Copy</button>
+<button class="btn btn-primary" onclick="copyTextToClipboard(makeAdoc(editor.getValue()))">Copy as AsciiDoc</button>
+<button class="btn btn-primary" onclick="downloadBlob('snippet.kts')">Download Snippet</button>
 <br/>
 <br/>
 <div id="editor">
@@ -87,4 +87,4 @@
 <h3>Preview</h3>
 <div id="results"></div>
 <#include "panelcommon.ftlh">
-<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "pure-button-primary pure-button-active" slimpanel=""/>
+<@panelsMacro panelgenerator = "" panelimagebuilder= "" twotoneimagebuilder= "" panelseditor= "btn btn-outline btn-active" slimpanel=""/>
