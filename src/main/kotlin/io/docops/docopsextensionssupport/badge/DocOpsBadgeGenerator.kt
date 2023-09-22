@@ -57,11 +57,13 @@ class DocOpsBadgeGenerator {
             messageLink = """<a href='$href'>$message</a>"""
         }
         var startX = 50
+        var textWidth = 0
         var img = ""
         if (icon.isNotEmpty()) {
             val logo = getBadgeLogo(icon)
             startX += 127
             labelWidth += 100
+            textWidth = 49
             img = """<image x='30' y='49' width='100' height='100' xlink:href='$logo'/>"""
         }
         //language=SVG
@@ -110,7 +112,7 @@ class DocOpsBadgeGenerator {
             </g>
             <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif'
                font-size='110' filter="url(#Bevel2)">
-                <text x='$startX' y='138' textLength='${labelWidth - 60}'  fill="$fontColor" >$labelLink</text>
+                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}'  fill="$fontColor" >$labelLink</text>
                 <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" >$messageLink</text>
             </g>
             $img

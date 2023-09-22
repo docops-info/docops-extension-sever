@@ -48,6 +48,15 @@
 
                 </div>
             </div>
+            <div>
+                <div class="join">
+                    <label for="fontColor" class="btn join-item">Font Color</label>
+                    <input type="text" id="fontColor" name="fontColor" data-hx-put="api/badge/item"
+                           data-hx-target="#contentBox'"
+                           value="#000000" class="join-item input input-bordered input-primary w-full max-w-xs">
+
+                </div>
+            </div>
                 <div>
                     <span>A simpleicon with '&lt; &gt;' around the name or an url like(https://docops.io/images/docops.svg) to an SVG image</span>
                     <div>

@@ -38,13 +38,13 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
         if(badge.logo != null) {
             logo = badge.logo
         }
-        val svg = docOpsBadgeGenerator.createBadge(badge.label, badge.message, badge.labelColor!!, badge.messageColor!!, "", logo, "")
+        val svg = docOpsBadgeGenerator.createBadge(badge.label, badge.message, badge.labelColor!!, badge.messageColor!!, "", logo, badge.fontColor!!)
         //val src = badgeAgain(formBadge = badge, type = "SVG")
         val badgeSource =
             """
 [badge]
 ----
-${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}|#eeeeee|
+${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}|${badge.fontColor}|
 ----
 """.trimIndent()
         val contents = makeBadgeAndSource(badgeSource, svg)
