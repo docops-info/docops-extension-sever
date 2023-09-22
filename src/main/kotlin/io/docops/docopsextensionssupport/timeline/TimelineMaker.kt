@@ -36,6 +36,8 @@ class TimelineMaker(val useDark: Boolean) {
         sb.append("<g transform=\"scale($scale)\">")
         if(useDark) {
             sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
+        } else {
+            sb.append("<rect width='100%' height='100%' fill='#fcfcfc'/>")
         }
         sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24) scale($scale)">""")
@@ -171,6 +173,10 @@ class TimelineMaker(val useDark: Boolean) {
 
     private fun defs(entries: MutableList<Entry>, isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
         val colors = mutableMapOf<Int, String>()
+        var linkColor = "#0000bb"
+        if(useDark) {
+            linkColor = "#7dc4e6"
+        }
         val sb = StringBuilder()
         entries.forEachIndexed { index, entry ->
             val color = if(index>9) {
@@ -198,7 +204,7 @@ class TimelineMaker(val useDark: Boolean) {
     .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
     .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
     .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
-    .rmLink { fill: blue; text-decoration: underline; }
+    .rmLink { fill: $linkColor; text-decoration: underline; }
 </style>
         """.trimIndent()
         if(isPdf) {
