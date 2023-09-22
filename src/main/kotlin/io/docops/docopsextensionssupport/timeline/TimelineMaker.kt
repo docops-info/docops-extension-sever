@@ -40,7 +40,7 @@ class TimelineMaker(val useDark: Boolean) {
             sb.append("<rect width='100%' height='100%' fill='#fcfcfc'/>")
         }
         sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
-        sb.append("""<g transform="translate(0,24) scale($scale)">""")
+        sb.append("""<g transform="translate(0,24) scale(1.0)">""")
 
         sb.append(buildRoad(head.second-100))
         val gradIndex = (0 until entries.size).random()
@@ -296,7 +296,7 @@ date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
     val maker = TimelineMaker(true)
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", false, "24")
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false, "24")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }
