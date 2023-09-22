@@ -38,12 +38,14 @@ class TimelineMaker(val useDark: Boolean) {
             sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
         }
         sb.append("""<text x="${head.second/2}" y="24" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif;" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
-        sb.append("""<g transform="translate(0,24) scale($scale">""")
+        sb.append("""<g transform="translate(0,24) scale($scale)">""")
 
         sb.append(buildRoad(head.second-100))
+        val gradIndex = (0 until entries.size).random()
+
         entries.forEachIndexed { index, entry ->
-            val color = colors[index]!!
-            sb.append(makeEntry(index, entry, color, chars))
+            val color = DEFAULT_COLORS[gradIndex]
+            sb.append(makeEntry(index, entry, color, chars, gradIndex))
 
         }
         sb.append("</g>")
@@ -52,14 +54,14 @@ class TimelineMaker(val useDark: Boolean) {
         return sb.toString()
     }
 
-    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String): String {
+    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
         return if(index % 2 == 0) {
-            odd(index,entry, color, chars)
+            odd(index,entry, color, chars, gradIndex)
         } else{
-            even(index, entry, color, chars)
+            even(index, entry, color, chars, gradIndex)
         }
     }
-    private fun odd(index: Int, entry: Entry, color: String, chars: String): String {
+    private fun odd(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
         var textColor = "#000000"
         if(useDark) {
             textColor = "#fcfcfc"
@@ -69,18 +71,19 @@ class TimelineMaker(val useDark: Boolean) {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd", 14, "#fcfcfc")
+
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, 42, "odd", 14, textColor)
         //language=svg
         return """
       <g transform="translate($x,200)" class="odd">
         <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" />
+        <circle cx="0" cy="0" r="17" fill="url(#grad$gradIndex)" />
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14, textColor)}    
         </text>
-        <rect x="-70" y="30" width="170" height="150" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx="5"/>
+        <rect x="-70" y="30" width="170" height="150" fill="none" stroke="$color" stroke-width="2"  rx="5"/>
         $text
         <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5"  fill="$color" class=""/>
 
@@ -95,7 +98,7 @@ class TimelineMaker(val useDark: Boolean) {
     
         """.trimIndent()
     }
-    private fun even(index: Int, entry: Entry, color: String, chars: String): String {
+    private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
         var textColor = "#000000"
         if(useDark) {
             textColor = "#fcfcfc"
@@ -105,18 +108,18 @@ class TimelineMaker(val useDark: Boolean) {
         {
             x = 140 * index + 80
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even", dy=14, "#fcfcfc")
+        val text = entry.toTextWithSpan(chars.toFloat(), -68, -168, "even", dy=14, textColor)
         //language=svg
         return """
         <g transform="translate($x,200)" class="even">
         <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-        <circle cx="0" cy="0" r="17" fill="url(#grad$index)" />
+        <circle cx="0" cy="0" r="17" fill="url(#grad$gradIndex)" />
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
         ${dateTotSpan(entry.date,0,14, textColor)}
         </text>
-        <rect x="-70" y="-180" width="170" height="150" fill="url(#panelBack)" stroke="$color" stroke-width="2"  rx='5'/>
+        <rect x="-70" y="-180" width="170" height="150" fill="none" stroke="$color" stroke-width="2"  rx='5'/>
         $text
         <rect id="button" x="-71" y="-189" width="40" height="20" ry="5" rx="5"  fill="$color" class=""/>
 
@@ -287,7 +290,7 @@ date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
     val maker = TimelineMaker(true)
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false, "35")
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", false, "24")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }
