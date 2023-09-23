@@ -112,8 +112,8 @@ class DocOpsBadgeGenerator {
             </g>
             <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif'
                font-size='110' filter="url(#Bevel2)">
-                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}'  fill="$fontColor" >$labelLink</text>
-                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" >$messageLink</text>
+                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$labelLink</text>
+                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$messageLink</text>
             </g>
             $img
              </svg>
