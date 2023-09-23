@@ -29,7 +29,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#fffcec"
+    open fun paperColor() = "#e4e5f1"
 }
 
 /**
@@ -287,10 +287,9 @@ class RoadMapMaker(val useDark: Boolean = false) {
             <stop class="stop2" offset="50%" stop-color="#515a60"/>
             <stop class="stop3" offset="100%" stop-color="#17242b"/>
         </linearGradient>
-        <linearGradient id="headerLight" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="#ffebcc"/>
-            <stop class="stop2" offset="50%" stop-color="#ffe1b3"/>
-            <stop class="stop3" offset="100%" stop-color="#ffd79a"/>
+        <linearGradient id="headerLight" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#E4E4E4"/>
+            <stop class="stop2" offset="100%" stop-color="#DBD8E3"/>
         </linearGradient>
         <marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
             <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
@@ -459,7 +458,7 @@ pass in theme (light,dark)
 refactor displayConfigUrl to displayTheme
 
     """.trimIndent()
-    val rm = RoadMapMaker(true)
+    val rm = RoadMapMaker(false)
     val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
     val f = File("gen/roadmapout2.svg")
     f.writeBytes(output.toByteArray())
