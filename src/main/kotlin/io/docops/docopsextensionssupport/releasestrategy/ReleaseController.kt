@@ -22,6 +22,11 @@ import java.util.*
 import kotlin.time.measureTimedValue
 
 
+/**
+ * The ReleaseController class handles requests related to releases.
+ *
+ * @property freeMarkerConfigurer The FreeMarkerConfigurer used for generating HTML templates.
+ */
 @Controller
 @RequestMapping("/api/release")
 @Observed(name = "release.controller")
@@ -29,7 +34,16 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     private val log = LogFactory.getLog(ReleaseController::class.java)
 
-    //support for pdf png file type
+    /**
+     * Retrieves the release in the specified format.
+     *
+     * @param payload the payload string
+     * @param type the type of release (PDF, XLS)
+     * @param animate whether to animate the release (ON, OFF)
+     * @param useDark whether to use dark mode (true, false)
+     * @return a ResponseEntity containing the release in the requested format
+     */
+//support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
     @Timed(value = "docops.release.get.html", histogram = true, percentiles = [0.5, 0.95])
     fun getRelease(@RequestParam(name = "payload") payload: String,
@@ -77,6 +91,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     }
 
 
+    /**
+     * Retrieves prefill data and generates a filled view based on the release strategy.
+     *
+     * @param model the ModelMap object containing the prefill data for the view
+     * @param payload the payload string containing the prefill data
+     * @param type the type of the filled view (optional, default value is "PDF")
+     * @return the generated filled view as a string
+     */
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.release.get.prefill.html", histogram = true, percentiles = [0.5, 0.95])
@@ -90,6 +112,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         return timing.value
     }
 
+    /**
+     * Fills the given ModelMap with data from a JSON payload and returns the result as a String.
+     *
+     * @param model The ModelMap to fill with data.
+     * @param payload The JSON payload containing the data to fill the ModelMap with.
+     * @param type The type of the payload. Default value is "PDF".
+     * @return The result of filling the ModelMap with the data from the JSON payload as a String.
+     */
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.release.put.json.html", histogram = true, percentiles = [0.5, 0.95])
@@ -102,6 +132,12 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         return timing.value
     }
 
+    /**
+     * Updates the strategy for releasing a resource.
+     *
+     * @param releaseStrategy The release strategy to be updated.
+     * @return The SVG representation of the updated release strategy.
+     */
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     @Timed(value = "docops.release.put.html", histogram = true, percentiles = [0.5, 0.95])
@@ -135,6 +171,15 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     }
 
 
+    /**
+     * Creates a strategy based on the provided title, style, and servlet request.
+     *
+     * @param model The model map used for rendering the view.
+     * @param title The title of the strategy.
+     * @param style The style of the strategy.
+     * @param servletRequest The current HTTP servlet request.
+     * @return The rendered view as a string.
+     */
     @PutMapping("/build", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.release.put.build.html", histogram = true, percentiles = [0.5, 0.95])

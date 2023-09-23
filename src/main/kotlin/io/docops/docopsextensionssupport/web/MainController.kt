@@ -15,6 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 
 
+/**
+ * This class represents the main controller for the application.
+ *
+ * It handles various HTTP GET requests and returns the corresponding HTML views.
+ * The controller is responsible for rendering views related to panels, charts, badges, icons, statistics, and more.
+ *
+ * The class also includes a ping endpoint that returns "OK" when called.
+ *
+ * @property applicationContext The application context used for dependency injection.
+ */
 @Controller
 @Observed(name = "main.controller")
 class MainController @Autowired constructor(private val applicationContext: ApplicationContext) {

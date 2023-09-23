@@ -20,12 +20,25 @@ import javax.xml.xpath.*
 import kotlin.math.log
 
 
+/**
+ * Controller class for managing badges.
+ * This class handles the creation and retrieval of badges in various formats (SVG, PNG).
+ * It contains methods for creating badges from form data, retrieving badge parameters, and creating multiple badges.
+ *
+ * @property docOpsBadgeGenerator An instance of the DocOpsBadgeGenerator class for generating badges.
+ */
 @Controller
 @RequestMapping("/api")
 @Observed(name = "badge.controller")
 class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
 
 
+    /**
+     * Retrieves a badge based on the provided form data and sends it as a response.
+     *
+     * @param badge The form data containing the badge details.
+     * @param servletResponse The HTTP servlet response object used to send the badge as a response.
+     */
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
     @Timed(value = "docops.badge.put", histogram = true, percentiles = [0.5, 0.95])

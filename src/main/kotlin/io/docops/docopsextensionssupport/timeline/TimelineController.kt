@@ -19,11 +19,22 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 import kotlin.time.measureTimedValue
 
+/**
+ * The TimelineController class handles HTTP requests for timeline-related operations.
+ *
+ * @constructor Creates a new instance of TimelineController.
+ */
 @Controller
 @RequestMapping("/api/timeline")
 @Observed(name = "timeline.controller")
 class TimelineController {
     private val log = LogFactory.getLog(TimelineController::class.java)
+    /**
+     * Updates the timeline based on the provided request data.
+     *
+     * @param httpServletRequest The HttpServletRequest object containing the request data.
+     * @return The ResponseEntity object containing the updated timeline in the response body.
+     */
     @PutMapping("/")
     @ResponseBody
     @Timed(value = "docops.timeline.put.html", histogram = true, percentiles = [0.5, 0.95])
@@ -73,6 +84,17 @@ class TimelineController {
         return timing.value
     }
 
+    /**
+     * Retrieves a timeline based on the provided parameters.
+     *
+     * @param payload The timeline data as a compressed string.
+     * @param title The title of the timeline.
+     * @param scale The scale of the timeline.
+     * @param type The type of the output, defaults to "SVG".
+     * @param numChars The number of characters displayed on the timeline, defaults to 35.
+     * @param useDark Indicates whether to use a dark theme for the timeline, defaults to false.
+     * @return A ResponseEntity containing the timeline data, either as an SVG image or a PNG image if the type is "PDF".
+     */
     @GetMapping("/")
     @ResponseBody
     @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])
@@ -106,6 +128,13 @@ class TimelineController {
         return timing.value
     }
 
+    /**
+     * Generate a timeline table based on the provided payload and title.
+     *
+     * @param payload The encoded and compressed string representing the timeline data.
+     * @param title The title of the timeline table.
+     * @return A ResponseEntity containing the generated timeline table as a byte array.
+     */
     @GetMapping("/table")
     @ResponseBody
     @Timed(value = "docops.roadmap.table.data.html", histogram = true, percentiles = [0.5, 0.95])

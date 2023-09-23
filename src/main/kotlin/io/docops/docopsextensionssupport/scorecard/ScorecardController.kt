@@ -11,10 +11,23 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
+/**
+ * Controller class responsible for handling scorecard-related API requests.
+ *
+ * This class provides methods to retrieve and update scorecards as SVG image files.
+ */
 @Controller
 @RequestMapping("/api/scorecard")
 class ScorecardController {
-    val log = LogFactory.getLog(ScorecardController::class.java)
+    private val log = LogFactory.getLog(ScorecardController::class.java)
+    /**
+     * Retrieves a scorecard as an SVG image file based on the provided payload.
+     *
+     * @param payload The encoded payload containing the data to generate the score card.
+     * @param useDark Determines whether to use dark mode for the score card. Defaults to false.
+     * @return A ResponseEntity object containing the generated score card as an SVG image file.
+     * @throws Exception If an error occurs during the retrieval or generation of the score card.
+     */
     @GetMapping("/")
     @ResponseBody
     fun getScoreCard(@RequestParam(name = "payload") payload: String, @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean): ResponseEntity<ByteArray> {
@@ -38,6 +51,13 @@ class ScorecardController {
         }
     }
 
+    /**
+     * Updates the scorecard by generating an SVG image based on the given scorecard data.
+     *
+     * @param scoreCard The scorecard object containing the data for generating the SVG image.
+     * @return The response entity containing the generated SVG image as a byte array.
+     * @throws Exception if an error occurs while generating the SVG image.
+     */
     @PutMapping("/")
     @ResponseBody
     fun putScorecard(@RequestBody scoreCard: ScoreCard): ResponseEntity<ByteArray> {
@@ -57,6 +77,12 @@ class ScorecardController {
             throw e
         }
     }
+    /**
+     * Converts the JSON payload from Request Parameter to a Scorecard object.
+     *
+     * @param payload The JSON payload as a String.
+     * @return A ResponseEntity containing the Scorecard object as ByteArray.
+     */
     @PutMapping("/form")
     @ResponseBody
     fun fromJsonToScorecard(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {

@@ -16,6 +16,10 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 
 
+/**
+ * Controller class for converting JSON data to SVG image.
+ * Exposes API endpoints for converting JSON to SVG image and retrieving the image.
+ */
 @RestController
 @RequestMapping("/api", produces = ["image/svg+xml"])
 class StatsJsonToImageController {

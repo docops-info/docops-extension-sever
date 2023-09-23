@@ -17,11 +17,20 @@ import java.nio.charset.Charset
 import kotlin.system.measureTimeMillis
 import kotlin.time.measureTimedValue
 
+/**
+ * Controller class for managing roadmap plans.
+ */
 @Controller
 @RequestMapping("/api/roadmap")
 @Observed(name = "roadmap.controller")
 class RoadmapPlanController {
     val log = LogFactory.getLog(RoadmapPlanController::class.java)
+    /**
+     * Generates a roadmap plan based on the provided parameters and saves it to the database.
+     *
+     * @param httpServletRequest The HttpServletRequest object that contains the request parameters.
+     * @return A ResponseEntity object with the binary representation of the generated roadmap plan and the appropriate headers.
+     */
     @PutMapping("/")
     @ResponseBody
     @Timed(value = "docops.roadmap.put.html", histogram = true, percentiles = [0.5, 0.95])
@@ -61,6 +70,18 @@ class RoadmapPlanController {
 
     }
 
+    /**
+     * Retrieves a road map image based on the provided parameters.
+     *
+     * @param payload The compressed payload data representing the road map. (required)
+     * @param scale The scale of the road map image. (required)
+     * @param type The type of the road map image. Defaults to "SVG" if not provided. (optional)
+     * @param title The title of the road map image. (optional)
+     * @param numChars The number of characters to display in the road map image. Defaults to 30 if not provided. (optional)
+     * @param useDark Determines whether to use a dark theme for the road map image. Defaults to false. (optional)
+     *
+     * @return The road map image as a byte array wrapped in a ResponseEntity.
+     */
     @GetMapping("/")
     @ResponseBody
     @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])

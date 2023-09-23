@@ -14,12 +14,43 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+/**
+ * Represents a card line.
+ *
+ * @property line The content of the card line.
+ * @property size The size of the card line.
+ */
 @Serializable
 class CardLines(val line: String = "", val size: String = "50px")
 
+/**
+ * Represents an embedded image.
+ *
+ * @property ref The reference of the image.
+ * @property type The type of the image. Default value is "image/png".
+ */
 @Serializable
 class EmbeddedImage(val ref: String, val type: String = "image/png")
 
+/**
+ * Represents a button that can be used in an application's user interface.
+ *
+ * @property id A unique identifier for the button. If not specified, a random UUID will be generated.
+ * @property label The text that appears on the button.
+ * @property link The destination URL or action associated with the button.
+ * @property description An optional description for the button.
+ * @property date An optional date associated with the button.
+ * @property type An optional type of the button.
+ * @property author An optional list of authors associated with the button.
+ * @property cardLine1 An optional CardLines object representing the first line of a card associated with the button.
+ * @property cardLine2 An optional CardLines object representing the second line of a card associated with the button.
+ * @property links An optional list of Link objects associated with the button.
+ * @property color The color of the button.
+ * @property gradient The gradient of the button.
+ * @property buttonGradientStyle The gradient style of the button.
+ * @property buttonStyle The style of the button.
+ * @property embeddedImage The embedded image associated with the button.
+ */
 @Serializable
 class Button(
     var id: String = UUID.randomUUID().toString(),
@@ -39,6 +70,15 @@ class Button(
     var embeddedImage: EmbeddedImage? = null
 )
 
+/**
+ * Represents the style configuration for a button.
+ *
+ * @property labelStyle The style for the label text of the button.
+ * @property descriptionStyle The style for the description text of the button.
+ * @property dateStyle The style for the date text of the button.
+ * @property typeStyle The style for the type text of the button.
+ * @property authorStyle The style for the author text of the button.
+ */
 @Serializable
 class ButtonStyle(
     val labelStyle: String? = null,
@@ -48,6 +88,10 @@ class ButtonStyle(
     val authorStyle: String? = null
 )
 
+/**
+ * An enum class representing different types of buttons.
+ * These types can be used to define the appearance and behavior of buttons in a user interface.
+ */
 @Serializable
 enum class ButtonType {
     LARGE,
@@ -58,19 +102,94 @@ enum class ButtonType {
     SLIM
 }
 
+/**
+ * Represents the sorting options for a button.
+ *
+ * This enum class defines the available sorting options for a button.
+ * The sorting options include type, label, date, author, and order.
+ *
+ * Usage:
+ *
+ * ```
+ * val sortBy = ButtonSortBy.TYPE
+ * ```
+ */
 @Serializable
 enum class ButtonSortBy {
-    TYPE, LABEL, DATE, AUTHOR, ORDER
+    /**
+     * Represents a type.
+     *
+     * This class is used to represent a type in a software system.
+     *
+     * Usage:
+     *
+     * ```
+     * val type = Type()
+     **/
+    TYPE, /**
+     * Represents a label.
+     *
+     * Labels are used to display text in a user interface.
+     */
+    LABEL, /**
+     * This class represents a date.
+     *
+     * @property day The day of the date.
+     * @property month The month of the date.
+     * @property year The year of the date.
+     */
+    DATE, /**
+     *  This class represents the details of an author.
+     *
+     *  @property name The name of the author.
+     *  @property email The email address of the author.
+     *  @property bio A brief description of the author's background.
+     */
+    AUTHOR, /**
+     * The `ORDER` class represents an order placed by a customer.
+     *
+     * This class provides methods to add items to the order, calculate the total price,
+     * and generate a summary of the order.
+     *
+     * @constructor Creates a new instance of the `ORDER` class.
+     *
+     * @property items The list of items in the order.
+     */
+    ORDER
 }
 
+/**
+ * Represents the sorting direction for a list or array.
+ *
+ * This enumeration class is used to define the sorting direction as either
+ * ascending or descending.
+ */
 @Serializable
 enum class SortDirection {
     ASCENDING, DESCENDING
 }
 
+/**
+ * Represents a configuration for sorting.
+ *
+ * @property sort The field to sort by.
+ * @property direction The direction of sorting.
+ */
 @Serializable
 class Sort(val sort: ButtonSortBy = ButtonSortBy.LABEL, val direction: SortDirection = SortDirection.ASCENDING)
 
+/**
+ * Represents the display settings for a button.
+ *
+ * @property colors The list of colors to use for the button.
+ * @property scale The scale factor of the button.
+ * @property columns The number of columns to display the buttons.
+ * @property newWin Indicates if the button should open in a new window when clicked.
+ * @property useDark Indicates if dark theme should be used for the button.
+ * @property strokeColor The color of the button stroke.
+ * @property sortBy The sort order for the buttons.
+ * @property buttonStyle The style settings for the button label.
+ */
 @Serializable
 class ButtonDisplay(
     val colors: List<String> = DARK1(),
@@ -83,6 +202,18 @@ class ButtonDisplay(
     val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;")
 )
 
+/**
+ * Class representing a collection of buttons.
+ *
+ * @property buttons The list of buttons.
+ * @property buttonType The type of buttons in the collection.
+ * @property theme The display theme for the buttons.
+ * @property themeUrl The URL for the theme.
+ * @property useDark Flag indicating if the dark theme should be used.
+ * @property id The unique identifier for the button collection.
+ * @property typeMap A map of button types and their corresponding colors.
+ * @constructor Creates a Buttons instance.
+ */
 @Serializable
 class Buttons(
     val buttons: MutableList<Button>,
@@ -268,6 +399,12 @@ class Buttons(
 }
 
 
+/**
+ * Represents a link with a label and a URL.
+ *
+ * @property label The label of the link.
+ * @property href The URL of the link.
+ */
 @Serializable
 class Link(val label: String, val href: String)
 

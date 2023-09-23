@@ -16,6 +16,10 @@ import java.lang.IllegalArgumentException
 import java.nio.charset.Charset
 
 
+/**
+ * This class represents the ChartRoute controller which handles various chart-related requests.
+ * It provides methods for generating different types of charts using the provided data.
+ */
 @Controller
 @RequestMapping("/api")
 @Observed(name = "chart.controller")

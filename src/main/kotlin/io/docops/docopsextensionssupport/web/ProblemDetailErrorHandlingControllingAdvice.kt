@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import java.lang.IllegalArgumentException
 
+/**
+ * Global error handling controller advice class for handling exceptions and returning appropriate problem details.
+ */
 @ControllerAdvice
 class ProblemDetailErrorHandlingControllingAdvice {
 

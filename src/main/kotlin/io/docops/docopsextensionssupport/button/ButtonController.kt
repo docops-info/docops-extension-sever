@@ -35,6 +35,13 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
             }
         }
     }
+    /**
+     * Converts a JSON payload and theme query parameter to a ButtonForm object.
+     *
+     * @param payload The JSON payload string.
+     * @param theme (Optional) The theme query parameter.
+     * @return The ResponseEntity containing the converted ButtonForm object.
+     */
     @PutMapping("/buttons/form")
     @ResponseBody
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme", required = false) theme: String): ResponseEntity<ByteArray> {
@@ -94,6 +101,12 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
 
     }
 
+    /**
+     * Converts the given Buttons object from JSON format to a Button object.
+     *
+     * @param buttons The Buttons object in JSON format.
+     * @return The ResponseEntity containing the generated SVG representation as a ByteArray.
+     */
     @PutMapping("/buttons")
     @ResponseBody
     fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
@@ -105,6 +118,15 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
         }
     }
 
+    /**
+     * Retrieves buttons based on the provided payload, useDark parameter, and type.
+     *
+     * @param payload The payload string to be processed.
+     * @param useDark A boolean indicating whether to use dark mode.
+     * @param type The type of buttons to retrieve.
+     * @return A ResponseEntity object containing the retrieved buttons as a byte array.
+     * @throws Exception if an error occurs while retrieving the buttons.
+     */
     @GetMapping("/buttons")
     @ResponseBody
     fun getButtons(
@@ -124,6 +146,15 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
         }
     }
 
+    /**
+     * Retrieves a PNG image of buttons based on the given payload data.
+     *
+     * @param payload The data string representing the buttons.
+     * @param useDark Indicates whether to use dark mode for the buttons. Default is false.
+     * @param type The type of the PNG image. Default is "PDF".
+     * @return ResponseEntity The response entity containing the PNG image.
+     * @throws Exception If there is an error in processing the request.
+     */
     @GetMapping("/buttons/png")
     @ResponseBody
     fun getButtonsPng(
@@ -150,6 +181,12 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
             throw e
         }
     }
+    /**
+     * Converts a JSON payload into a PNG image of a button form.
+     *
+     * @param payload The JSON payload representing the button form.
+     * @return The response entity containing the PNG image.
+     */
     @PutMapping("/buttons/form/png")
     @ResponseBody
     fun fromJsonToButtonFormPng(@RequestParam(name = "payload") payload: String): ResponseEntity<String> {
@@ -175,6 +212,13 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
         }
 
     }
+    /**
+     * Updates the theme of a button item.
+     *
+     * @param payload The payload string containing the button item.
+     * @param theme The theme to be applied to the button item.
+     * @return A ResponseEntity containing the updated button item JSON string.
+     */
     @PutMapping("button/theme")
     fun themeItem(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme") theme: String): ResponseEntity<String> {
         val buttons = Json.decodeFromString<Buttons>(payload)

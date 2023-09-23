@@ -14,15 +14,32 @@ import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import java.nio.charset.StandardCharsets
 
+/**
+ * This class is responsible for handling HTTP requests related to ADR (Architectural Decision Records).
+ * It provides methods to create and retrieve ADRs.
+ *
+ * @property adrText The text content of the ADR.
+ * @property svg The SVG content of the ADR.
+ * @property config The configuration options for parsing and rendering the ADR.
+ */
 @Controller
 @RequestMapping("/api")
 @Observed(name="adr.controller")
 class AdrController() {
 
 
+    /**
+     * Handles the HTTP PUT request for creating an Architecture Decision Record (ADR).
+     *
+     * @param title        The title of the ADR.
+     * @param date         The date of the ADR.
+     * @param status       The status of the ADR.
+     * @param decision     The decision made in the ADR.
+     * @param consequences The consequences of the decision in the ADR.
+     * @param participants The participants involved in the ADR.
+     * @param context      The*/
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-
     @Timed(value = "docops.adr", histogram = true, percentiles = [0.5, 0.95])
     @Observed(name = "AdrController.adr",
         contextualName = "creating-adr",
@@ -91,6 +108,18 @@ Participants: $participants
     """.trimIndent()
     }
 
+    /**
+     * Retrieves the ADR (Adverse Drug Reaction) data in SVG format.
+     *
+     * @param data The compressed ADR data.
+     * @param type The type of ADR data.
+     * @param width The increase in width of the ADR.
+     *      Default value: "0"
+     * @param scale The scale of the ADR.
+     *      Default value: "1.0"
+     * @param servletResponse The servlet response object.
+     * @return The ADR data in SVG format as a byte array.
+     */
     @GetMapping("/adr")
     @ResponseBody
     @Timed(value = "docops.adr.get", histogram = true, percentiles = [0.5, 0.95])

@@ -13,10 +13,26 @@ import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
+/**
+ * This class is responsible for generating badges using DocOps theme.
+ */
 @Service
 class DocOpsBadgeGenerator {
 
 
+    /**
+     * Creates an SVG badge with the specified label and message.
+     *
+     * @param iLabel The label text for the badge.
+     * @param iMessage The message text for the badge.
+     * @param labelColor The color of the label background. Default is #999999.
+     * @param messageColor The color of the message background. Default is #ececec.
+     * @param href The URL to link the label and message to. Default is empty string.
+     * @param icon The icon image URL to display on the badge. Default is empty string.
+     * @param fontColor The color of the label and message text. Default is #000000.
+     *
+     * @return The SVG representation of the badge.
+     */
     fun createBadge(
         iLabel: String,
         iMessage: String,
