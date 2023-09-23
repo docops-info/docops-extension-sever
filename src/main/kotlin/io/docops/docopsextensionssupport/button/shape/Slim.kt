@@ -6,8 +6,20 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * The Slim class represents a slim version of a button display. It extends the Regular class.
+ *
+ * @property buttons The buttons object that provides the buttons to be displayed.
+ */
 class Slim(buttons: Buttons) : Regular(buttons) {
 
+    /**
+     * Draws a button on the screen with the given index and list of buttons.
+     *
+     * @param index the index of the button
+     * @param buttonList the list of buttons
+     * @return a string representing the SVG code for the button
+     */
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"

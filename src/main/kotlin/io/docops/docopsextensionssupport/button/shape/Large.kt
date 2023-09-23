@@ -7,9 +7,21 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * Represents a class that extends the Regular class and implements additional functionality for drawing large buttons.
+ *
+ * @property buttons The Buttons instance to be used for drawing buttons.
+ */
 class Large(buttons: Buttons) : Regular(buttons) {
 
 
+    /**
+     * Draws a button based on provided index and button list.
+     *
+     * @param index The index of the button in the list.
+     * @param buttonList The list of buttons to draw.
+     * @return The HTML representation of the drawn buttons.
+     */
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"

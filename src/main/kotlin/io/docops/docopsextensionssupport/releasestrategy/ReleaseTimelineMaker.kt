@@ -4,8 +4,20 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.util.UUID
 
+/**
+ * The ReleaseTimelineMaker class is responsible for creating a release timeline SVG based on a given release strategy.
+ * It provides methods to build the SVG document with the necessary elements and attributes.
+ */
 open class ReleaseTimelineMaker {
 
+    /**
+     * Generates a formatted string representation of a release.
+     *
+     * @param releaseStrategy The release strategy to generate the string for.
+     * @param isPdf Indicates whether the output is intended for PDF generation.
+     *
+     * @return The generated string representation of the release.
+     */
     open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()

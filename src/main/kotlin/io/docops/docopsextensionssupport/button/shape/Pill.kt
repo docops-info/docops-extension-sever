@@ -4,9 +4,22 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * The Pill class represents a type of button that has a pill-shaped appearance.
+ * It inherits from the Regular class.
+ *
+ * @param buttons The Buttons object that contains the theme and other properties for the button.
+ */
 class Pill(buttons: Buttons) : Regular(buttons) {
 
 
+    /**
+     * Generates the SVG code for rendering a list of buttons.
+     *
+     * @param index The index of the first button.
+     * @param buttonList The list of buttons to be rendered.
+     * @return The SVG code for rendering the buttons.
+     */
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"

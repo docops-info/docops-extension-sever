@@ -3,8 +3,18 @@ package io.docops.docopsextensionssupport.roadmap
 import kotlin.math.max
 
 
+/**
+ * The RoadMapParser class is responsible for parsing the content of a road map and
+ * grouping the items into different categories.
+ */
 class RoadMapParser {
 
+    /**
+     * Parses the given content and returns a RoadMaps object.
+     *
+     * @param content the content to parse
+     * @return a RoadMaps object representing the parsed content
+     */
     fun parse(content: String): RoadMaps {
         return group(content = content)
 

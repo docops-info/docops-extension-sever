@@ -9,11 +9,20 @@ import kotlinx.serialization.json.Json
 import java.util.UUID
 import kotlin.math.max
 
+/**
+ * This class is responsible for generating a scorecard SVG representation based on the given ScoreCard object.
+ */
 class ScoreCardMaker {
 
     companion object {
         const val WIDTH : Float= 1045.0f
     }
+    /**
+     * Generates a string representing a formatted scorecard HTML.
+     *
+     * @param scoreCard the scorecard object containing the data to be used in generating the HTML
+     * @return a string representing the formatted scorecard HTML
+     */
     fun make(scoreCard: ScoreCard): String {
         val id = scoreCard.id
         val sb = StringBuilder()

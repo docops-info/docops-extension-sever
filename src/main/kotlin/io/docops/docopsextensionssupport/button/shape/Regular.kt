@@ -5,8 +5,19 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * Regular class is responsible for creating regular buttons shape.
+ *
+ * @param buttons The Buttons object containing the theme and button data.
+ */
 open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
+    /**
+     * Creates a shape based on the given type.
+     *
+     * @param type the type of shape to create
+     * @return the shape as a string representation
+     */
     override fun createShape(type: String): String {
         val sb = StringBuilder()
         sb.append(start())

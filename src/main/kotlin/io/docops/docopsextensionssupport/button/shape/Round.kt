@@ -5,7 +5,20 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * The `Round` class is a subclass of the `Regular` class and represents a round button layout.
+ * It provides the functionality to draw round buttons based on the given data.
+ *
+ * @property buttons The `Buttons` object containing the button data.
+ */
 class Round(buttons: Buttons) : Regular(buttons) {
+    /**
+     * Draws a series of buttons based on the given index and list of buttons.
+     *
+     * @param index The starting index.
+     * @param buttonList The list of buttons.
+     * @return The HTML code representing the buttons.
+     */
     override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"

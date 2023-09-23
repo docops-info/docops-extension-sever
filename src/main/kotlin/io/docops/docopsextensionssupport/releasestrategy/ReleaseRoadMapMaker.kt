@@ -5,8 +5,19 @@ import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import java.util.*
 
+/**
+ * ReleaseRoadMapMaker is a class that creates a release roadmap SVG image based on a given release strategy.
+ */
 class ReleaseRoadMapMaker {
 
+    /**
+     * Creates a string representing an SVG image using the provided release strategy, PDF flag, and animation type.
+     *
+     * @param releaseStrategy The release strategy to use.
+     * @param isPdf True if the SVG image should be in PDF format, false otherwise.
+     * @param animate The type of animation to include in the SVG image.
+     * @return A string representing the SVG image.
+     */
     fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean, animate: String): String {
         return createSvg(releaseStrategy, isPdf, animate)
     }

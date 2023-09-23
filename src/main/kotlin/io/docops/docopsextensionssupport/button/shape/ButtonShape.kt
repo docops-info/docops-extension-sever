@@ -3,6 +3,9 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
+/**
+ * Represents a shape for a button.
+ */
 interface ButtonShape {
 
     fun drawShape(type: String = "SVG"): String
@@ -12,6 +15,12 @@ interface ButtonShape {
     fun width () : Float
 }
 
+/**
+ * AbstractButtonShape is an abstract class that implements the ButtonShape interface. It provides common functionality for drawing button shapes.
+ *
+ * @property buttons The Buttons instance associated with the button shape.
+ * @property isPdf A flag indicating whether the shape is being drawn for a PDF.
+ */
 abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     protected var isPdf = false
     override fun drawShape(type: String): String {

@@ -3,6 +3,12 @@ package io.docops.docopsextensionssupport.roadmap
 import io.docops.asciidoc.utils.escapeXml
 import java.io.File
 
+/**
+ * RoadMapTheme is an abstract class that represents a theme for a road map.
+ * It provides methods to define the colors used for displaying text, title, and paper on the road map.
+ *
+ * To create a custom theme, you can extend this class and override the relevant methods to provide the desired colors.
+ */
 abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
@@ -10,18 +16,42 @@ abstract class RoadMapTheme {
     open fun paperColor() = "#fffcec"
 }
 
+/**
+ * This class represents a regular theme for a road map.
+ *
+ * @constructor Creates an instance of RegularTheme.
+ */
 class RegularTheme : RoadMapTheme() {
     override fun titleColor() = "#fcfcfc"
 }
 
+/**
+ * This class represents a dark theme for a road map.
+ *
+ * @constructor Creates a new instance of DarkTheme.
+ */
 class DarkTheme : RoadMapTheme() {
     override fun displayText() = "#fcfcfc"
     override fun titleColor(): String = "#FCE6F4"
     override fun paperColor(): String = "#17242b"
 }
 
+/**
+ * The RoadMapMaker class is responsible for generating a road map image based on a given input source.
+ * @property useDark  A boolean flag indicating whether to use dark theme or not. Default is false.
+ * @constructor Creates a new instance of the RoadMapMaker class.
+ */
 class RoadMapMaker(val useDark: Boolean = false) {
 
+    /**
+     * Generates a road map image based on the provided source, scale, title, and number of characters.
+     *
+     * @param source the source of the road map data
+     * @param scale the scale to be applied to the road map image
+     * @param title the title of the road map image
+     * @param numChars the number of characters to be displayed on the road map image
+     * @return the generated road map image as a string
+     */
     fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
         val roadmaps = RoadMapParser().parse(source)
         return draw(roadmaps, scale, title, numChars)

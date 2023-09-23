@@ -2,8 +2,19 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import java.util.*
 
+/**
+ * This class is responsible for generating a release timeline grouped by certain criteria.
+ * It provides methods to build the SVG representation of the timeline.
+ */
 open class ReleaseTimelineGroupedMaker {
 
+    /**
+     * Generates an SVG string representation based on the provided release strategy and PDF preference.
+     *
+     * @param releaseStrategy The release strategy used for generating the SVG.
+     * @param isPdf Indicates whether the generated SVG is intended for PDF usage.
+     * @return The SVG string representation.
+     */
     open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val id = UUID.randomUUID().toString()
         val width = determineWidth(releaseStrategy = releaseStrategy)

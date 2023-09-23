@@ -6,6 +6,11 @@ import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 
+/**
+ * The `TimelineMaker` class is used to create a SVG timeline based on the provided parameters.
+ * @constructor Creates a new instance of the `TimelineMaker` class.
+ * @param useDark A boolean value indicating whether to use the dark theme.
+ */
 class TimelineMaker(val useDark: Boolean) {
 
     companion object {
@@ -21,6 +26,17 @@ class TimelineMaker(val useDark: Boolean) {
              "#FF7F00",
              "#6D4F98")
     }
+
+    /**
+     * Generates an SVG timeline for the given source.
+     *
+     * @param source The timeline source.
+     * @param title The title of the timeline.
+     * @param scale The scale of the timeline.
+     * @param isPdf Indicates whether the timeline is for PDF output.
+     * @param chars The character set to be used.
+     * @return The SVG representation of the timeline.
+     */
     fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String) : String {
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()

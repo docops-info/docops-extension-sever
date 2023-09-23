@@ -2,8 +2,17 @@ package io.docops.docopsextensionssupport.timeline
 
 import java.util.*
 
+/**
+ * The TimelineParser class is responsible for parsing a content string and returning a list of entries.
+ */
 class TimelineParser {
 
+    /**
+     * Parses the content string and returns a list of entries.
+     *
+     * @param content The content string to be parsed.
+     * @return A mutable list of Entry objects.
+     */
     fun parse(content: String): MutableList<Entry> {
         val entries = mutableListOf<Entry>()
         val m = mutableMapOf<String, MutableList<String>>()

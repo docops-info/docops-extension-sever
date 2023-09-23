@@ -5,8 +5,26 @@ import io.docops.docopsextensionssupport.roadmap.linesToMultiLineText
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
 
+/**
+ * Represents an entry with a specific date, index, and text.
+ *
+ * @property date The date of the entry.
+ * @property index The index of the entry.
+ * @property text The text of the entry.
+ */
 class Entry (val date: String, val index: Int, val text: String)
 
+/**
+ * Converts the given Entry to a text with spans.
+ *
+ * @param numChars The maximum number of characters per line.
+ * @param x The x-coordinate for the text.
+ * @param y The y-coordinate for the text.
+ * @param clazz The CSS class for the text.
+ * @param dy The line height adjustment for the text.
+ * @param fillColor The fill color for the text.
+ * @return The HTML text string with spans.
+ */
 fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int, fillColor: String): String {
     val urlMap = mutableMapOf<String,String>()
     var s = text.escapeXml()

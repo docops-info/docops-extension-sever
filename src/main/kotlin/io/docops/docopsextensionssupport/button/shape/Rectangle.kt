@@ -6,8 +6,17 @@ import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.EmbeddedImage
 import io.docops.docopsextensionssupport.button.Link
 
+/**
+ * This class represents a rectangle shape that consists of buttons.
+ * It extends the Regular class and inherits its properties and methods.
+ */
 class Rectangle(buttons: Buttons) : Regular(buttons) {
 
+    /**
+     * Draws the buttons using the specified theme scale and returns the generated SVG code as a string.
+     *
+     * @return The SVG code representing the buttons.
+     */
     override fun draw() : String{
         var scale = 1.0f
         buttons.theme?.let {
@@ -24,7 +33,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         sb.append("</g>")
         return sb.toString()
     }
-    fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): String {
+    private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {

@@ -5,8 +5,21 @@ import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import java.util.*
 
+/**
+ * This class represents a Release Timeline Summary Maker.
+ * It extends the ReleaseTimelineMaker class.
+ * The ReleaseTimelineSummaryMaker class is responsible for generating a summary of the release timeline
+ * based on the given release strategy.
+ */
 class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
+     /**
+      * Generates a SVG string representation of a document using the given release strategy.
+      *
+      * @param releaseStrategy The release strategy to use for generating the document.
+      * @param isPdf Specifies whether the document format is PDF.
+      * @return The SVG string representation of the generated document.
+      */
      override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
