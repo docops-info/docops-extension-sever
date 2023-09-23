@@ -116,7 +116,7 @@ class ScoreCardMaker {
     </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
-        <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
+        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
             <tspan x="30" dy="12" style="font-variant: small-caps;fill:${scoreCard.scoreCardTheme.initiativeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
@@ -137,7 +137,7 @@ class ScoreCardMaker {
         </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
-        <text x="30" y="7" style="font-family: arial;  font-size: 12px;">
+        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
             <tspan x="30" dy="12" style="font-variant: small-caps; fill:${scoreCard.scoreCardTheme.outcomeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>

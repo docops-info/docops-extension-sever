@@ -194,7 +194,11 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     }
     @GetMapping("/scorecard/index.html")
     @Timed(value = "docops.scorecard.index.html", histogram = true, percentiles = [0.5, 0.95])
-    fun scorecard(model: Model): String {
+    fun scorecard(model: Model, @RequestParam(name = "type", defaultValue = "score1") type: String): String {
+        val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
+        json?.let {
+            model.addAttribute("json", String(json.readAllBytes()))
+        }
         return "scorecard/score"
     }
 

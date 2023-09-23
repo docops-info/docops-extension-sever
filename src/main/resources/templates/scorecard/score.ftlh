@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="json" type="java.lang.String" -->
 <div>
     <h1>Create Scorecard from JSON</h1>
 
@@ -8,55 +9,7 @@
             <div class="pure-1-2">
                 <label for="payload">Insert content here</label>
             <textarea id="payload" name="payload" class="textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox">
-{
-  "title": "Initiative",
-  "initiativeTitle": "Journey Starts",
-  "outcomeTitle": "Outcomes Since",
-  "initiativeItems": [
-    {
-      "displayText": "API Versioning",
-      "description": "Host API versioning"
-    },
-    {
-      "displayText": "Network Switch",
-      "description": "Migrate IBM Websphere to Liberty Server with RHEL 8 and JSESSION ID fix with Application cache busting and versioning"
-    },
-    {
-      "displayText": "MFA",
-      "description": "Enabling single signon from server sign-in page"
-    },
-    {
-      "displayText": "Product Elimination - from system"
-    }
-  ],
-  "outcomeItems": [
-    {
-      "displayText": "API Versioning changes with backwards compatibility"
-    },
-    {
-      "displayText": "Network Mark-In/Mark-Out Servers"
-    },
-    {
-      "displayText": "Phased Rollout, Milestones and Release Candidate"
-    },
-
-    {
-      "displayText": "Software toggle to Enable/Disable OAuth Server"
-    }
-  ],
-  "scale": 1.0,
-  "scoreCardTheme": {
-    "titleColor": "#fcfcfc",
-    "initiativeTitleColor": "#fcfcfc",
-    "outcomeTitleColor":"#fcfcfc",
-    "backgroundColor": "#413F42",
-    "initiativeBackgroundColor": "#16003B",
-    "outcomeBackgroundColor": "#16003B",
-    "initiativeDisplayTextColor": "#fcfcfc",
-    "outcomeDisplayTextColor":"#fcfcfc",
-    "arrowColor": "#ee00ee"
-  }
-}
+${json}
             </textarea>
             </div>
         </fieldset>
