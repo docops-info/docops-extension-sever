@@ -1,3 +1,4 @@
+
 package io.docops.docopsextensionssupport
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
