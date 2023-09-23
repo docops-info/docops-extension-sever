@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import kotlin.system.measureTimeMillis
+import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api/roadmap")
@@ -25,11 +26,11 @@ class RoadmapPlanController {
     @ResponseBody
     @Timed(value = "docops.roadmap.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
-        var div = ""
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("text/html")
-        var timing = measureTimeMillis {
+        val timing = measureTimedValue {
+            var div = ""
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
             var contents = httpServletRequest.getParameter("content")
             if (contents.isNullOrEmpty()) {
                 contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
@@ -52,10 +53,11 @@ class RoadmapPlanController {
                <a class="btn btn-outline" href="api/roadmap/?payload=${compressString(contents)}&title=$title&numChars=$numChars&scale=$scale&type=svg" target="_blank">Open Url</a>
             </div>
         """.trimIndent()
+            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
 
-        log.info("putRoadmapPlan executed in ${timing}ms ")
-            return ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+        log.info("putRoadmapPlan executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
 
     }
 
