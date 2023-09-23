@@ -72,23 +72,28 @@ class RoadmapPlanController {
                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean
     )
                         : ResponseEntity<ByteArray> {
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val rmm = RoadMapMaker(useDark)
-        val isPdf = "PDF" == type
-        val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
-        return if(isPdf) {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidth(svg)
-            val baos = SvgToPng().toPngFromSvg(svg, res)
-            ResponseEntity(baos, headers, HttpStatus.OK)
-        } else {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            ResponseEntity(svg.toByteArray(),headers, HttpStatus.OK)
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val rmm = RoadMapMaker(useDark)
+            val isPdf = "PDF" == type
+            val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+            if (isPdf) {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType.IMAGE_PNG
+                val res = findHeightWidth(svg)
+                val baos = SvgToPng().toPngFromSvg(svg, res)
+                ResponseEntity(baos, headers, HttpStatus.OK)
+            } else {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType.parseMediaType("image/svg+xml")
+                ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+            }
         }
+        log.info("getRoadMap executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
+
 
 }

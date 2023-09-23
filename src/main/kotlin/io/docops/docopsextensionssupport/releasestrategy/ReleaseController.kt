@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -18,12 +19,15 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import java.io.StringWriter
 import java.net.URLDecoder
 import java.util.*
+import kotlin.time.measureTimedValue
 
 
 @Controller
 @RequestMapping("/api/release")
 @Observed(name = "release.controller")
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
+
+    private val log = LogFactory.getLog(ReleaseController::class.java)
 
     //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
@@ -32,36 +36,44 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                    @RequestParam("type", required = false, defaultValue = "PDF") type: String,
                    @RequestParam("animate", required = false, defaultValue = "ON") animate: String,
                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean) : ResponseEntity<ByteArray> {
-        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val release = Json.decodeFromString<ReleaseStrategy>(data)
-        release.useDark = useDark
-        val isPdf = "PDF" == type
-        var output = ""
-        when (release.style) {
-            "TL" -> {
-                output = createTimelineSvg(release, isPdf)
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val release = Json.decodeFromString<ReleaseStrategy>(data)
+            release.useDark = useDark
+            val isPdf = "PDF" == type
+            var output = ""
+            when (release.style) {
+                "TL" -> {
+                    output = createTimelineSvg(release, isPdf)
+                }
+
+                "TLS" -> {
+                    output = createTimelineSummarySvg(release, isPdf)
+                }
+
+                "R" -> {
+                    output = createRoadMap(release, isPdf, animate)
+                }
+
+                "TLG" -> {
+                    output = createTimelineGrouped(release, isPdf)
+                }
             }
-            "TLS" -> {
-                output = createTimelineSummarySvg(release, isPdf)
-            }
-            "R" -> {
-                output = createRoadMap(release, isPdf, animate)
-            }
-            "TLG" -> {
-                output = createTimelineGrouped(release, isPdf)
+            if ("XLS".equals(type, true)) {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType =
+                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                ResponseEntity(release.excel(output), headers, HttpStatus.OK)
+            } else {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType.parseMediaType("image/svg+xml")
+                ResponseEntity(output.toByteArray(), headers, HttpStatus.OK)
             }
         }
-        return if ("XLS".equals(type,true)) {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            ResponseEntity(release.excel(output),headers, HttpStatus.OK)
-         } else {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            ResponseEntity(output.toByteArray(),headers,HttpStatus.OK)
-        }
+        log.info("getRelease executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
 
@@ -69,39 +81,57 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
     @ResponseBody
     @Timed(value = "docops.release.get.prefill.html", histogram = true, percentiles = [0.5, 0.95])
     fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
-        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val release = Json.decodeFromString<ReleaseStrategy>(data)
-        return makeFilledView(model = model, releaseStrategy = release)
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val release = Json.decodeFromString<ReleaseStrategy>(data)
+            makeFilledView(model = model, releaseStrategy = release)
+        }
+        log.info("prefill executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.release.put.json.html", histogram = true, percentiles = [0.5, 0.95])
     fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
-        val release = Json.decodeFromString<ReleaseStrategy>(payload)
-        return makeFilledView(model = model, releaseStrategy = release)
+        val timing = measureTimedValue {
+            val release = Json.decodeFromString<ReleaseStrategy>(payload)
+            makeFilledView(model = model, releaseStrategy = release)
+        }
+        log.info("prefillFromJson executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     @Timed(value = "docops.release.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
-        when (releaseStrategy.style) {
-            "TL" -> {
-                return createTimelineSvg(releaseStrategy)
-            }
-            "TLS" -> {
-                return createTimelineSummarySvg(releaseStrategy)
-            }
-            "R" -> {
-                return  createRoadMap(releaseStrategy, animate = "ON")
-            }
-            "TLG" -> {
-                return  createTimelineGrouped(releaseStrategy)
+        val timing = measureTimedValue {
+            when (releaseStrategy.style) {
+                "TL" -> {
+                    createTimelineSvg(releaseStrategy)
+                }
+
+                "TLS" -> {
+                    createTimelineSummarySvg(releaseStrategy)
+                }
+
+                "R" -> {
+                     createRoadMap(releaseStrategy, animate = "ON")
+                }
+
+                "TLG" -> {
+                     createTimelineGrouped(releaseStrategy)
+                }
+
+                else -> {
+                    val pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"Unknown Release Strategy style ${releaseStrategy.style}")
+                    throw ErrorResponseException(HttpStatus.BAD_REQUEST,pb, null)
+                }
             }
         }
-        val pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"Unknown Release Strategy style ${releaseStrategy.style}")
-        throw ErrorResponseException(HttpStatus.BAD_REQUEST,pb, null)
+        log.info("putStrategy executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
 
@@ -112,12 +142,15 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                        @RequestParam("title") title: String,
                        @RequestParam("style") style: String,
                        servletRequest: HttpServletRequest): String {
-        getReleaseTypes(servletRequest)
-        val releases = getReleaseTypes(servletRequest)
+        val timing = measureTimedValue {
+            getReleaseTypes(servletRequest)
+            val releases = getReleaseTypes(servletRequest)
 
-        val releaseStrategy = ReleaseStrategy(title, releases, style)
-        return makeFilledView(model=model, releaseStrategy =  releaseStrategy)
-
+            val releaseStrategy = ReleaseStrategy(title, releases, style)
+            makeFilledView(model = model, releaseStrategy = releaseStrategy)
+        }
+        log.info("createStrategy executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
     private fun makeFilledView(model: ModelMap, releaseStrategy: ReleaseStrategy): String {

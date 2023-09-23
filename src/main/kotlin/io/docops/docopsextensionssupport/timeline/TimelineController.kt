@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
+import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
@@ -16,35 +17,37 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import java.net.URLDecoder
 import java.nio.charset.Charset
+import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api/timeline")
 @Observed(name = "timeline.controller")
 class TimelineController {
-
+    private val log = LogFactory.getLog(TimelineController::class.java)
     @PutMapping("/")
     @ResponseBody
     @Timed(value = "docops.timeline.put.html", histogram = true, percentiles = [0.5, 0.95])
     fun putTimeline(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
-        var title = "title"
-        var contents = httpServletRequest.getParameter("content")
-        if(contents.isNullOrEmpty()) {
-            contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
-             title = httpServletRequest.getParameter("title")
-        }
-        val scale = httpServletRequest.getParameter("scale")
-        val numChars = httpServletRequest.getParameter("numChars")
-        var chars = numChars
-        if(numChars == null || numChars.isEmpty()) {
-            chars = "24"
-        }
-        val useDarkInput = httpServletRequest.getParameter("useDark")
-        val tm = TimelineMaker("on".equals(useDarkInput))
-        val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("text/html")
-        val div = """
+        val timing = measureTimedValue {
+            var title = "title"
+            var contents = httpServletRequest.getParameter("content")
+            if (contents.isNullOrEmpty()) {
+                contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
+                title = httpServletRequest.getParameter("title")
+            }
+            val scale = httpServletRequest.getParameter("scale")
+            val numChars = httpServletRequest.getParameter("numChars")
+            var chars = numChars
+            if (numChars == null || numChars.isEmpty()) {
+                chars = "24"
+            }
+            val useDarkInput = httpServletRequest.getParameter("useDark")
+            val tm = TimelineMaker("on".equals(useDarkInput))
+            val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
+            val div = """
         <div id='imageblock'>
         $svg
         </div>
@@ -64,7 +67,10 @@ class TimelineController {
         });
         </script>
         """.trimIndent()
-        return ResponseEntity(div.toByteArray(),headers,HttpStatus.OK)
+            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+        }
+        log.info("putTimeline executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
     @GetMapping("/")
@@ -77,44 +83,52 @@ class TimelineController {
                     @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
                     @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean
                     ): ResponseEntity<ByteArray> {
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val tm = TimelineMaker(useDark=useDark)
-        val isPdf = "PDF" == type
-        val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
-        return if(isPdf) {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidth(svg)
-            val baos = SvgToPng().toPngFromSvg(svg, res)
-            ResponseEntity(baos, headers, HttpStatus.OK)
-        } else {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            ResponseEntity(svg.toByteArray(),headers,HttpStatus.OK)
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val tm = TimelineMaker(useDark = useDark)
+            val isPdf = "PDF" == type
+            val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
+            if (isPdf) {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType.IMAGE_PNG
+                val res = findHeightWidth(svg)
+                val baos = SvgToPng().toPngFromSvg(svg, res)
+                ResponseEntity(baos, headers, HttpStatus.OK)
+            } else {
+                val headers = HttpHeaders()
+                headers.cacheControl = CacheControl.noCache().headerValue
+                headers.contentType = MediaType.parseMediaType("image/svg+xml")
+                ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+            }
         }
+        log.info("getTimeLine executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 
     @GetMapping("/table")
     @ResponseBody
     @Timed(value = "docops.roadmap.table.data.html", histogram = true, percentiles = [0.5, 0.95])
     fun getTimeLineTable(@RequestParam(name = "payload") payload: String, @RequestParam(name="title") title: String): ResponseEntity<ByteArray> {
-        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val tm = TimelineParser()
-        val entries = tm.parse(data)
-        val sb = StringBuilder(".$title\n")
-        sb.append("[%header,cols=\"1,2\",stripes=even]\n")
-        sb.append("!===\n")
-        sb.append("|Date |Event\n")
-        entries.forEach {
-            sb.append("a|${it.date} |${it.text}\n")
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val tm = TimelineParser()
+            val entries = tm.parse(data)
+            val sb = StringBuilder(".$title\n")
+            sb.append("[%header,cols=\"1,2\",stripes=even]\n")
+            sb.append("!===\n")
+            sb.append("|Date |Event\n")
+            entries.forEach {
+                sb.append("a|${it.date} |${it.text}\n")
+            }
+            sb.append("!===")
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.TEXT_PLAIN
+            ResponseEntity(sb.toString().toByteArray(), headers, HttpStatus.OK)
         }
-        sb.append("!===")
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.TEXT_PLAIN
-        return ResponseEntity(sb.toString().toByteArray(),headers,HttpStatus.OK)
+        log.info("getTimeLineTable executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
     }
 }
 
