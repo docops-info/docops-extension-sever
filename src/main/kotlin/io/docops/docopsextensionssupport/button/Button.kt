@@ -162,10 +162,9 @@ enum class ButtonSortBy {
      *  @property bio A brief description of the author's background.
      */
     AUTHOR, /**
-     * The `ORDER` class represents an order placed by a customer.
+     * The `ORDER` class represents the insertion order of a button.
      *
-     * This class provides methods to add items to the order, calculate the total price,
-     * and generate a summary of the order.
+     * This class provides means to sort buttons by their inseertion order,
      *
      * @constructor Creates a new instance of the `ORDER` class.
      *

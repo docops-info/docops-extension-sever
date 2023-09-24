@@ -29,7 +29,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#e4e5f1"
+    open fun paperColor() = "#f5f5f5"
 }
 
 /**
@@ -281,7 +281,8 @@ class RoadMapMaker(val useDark: Boolean = false) {
             <stop id="stop4621" style="stop-color:#ffffff;stop-opacity:1" offset="0"/>
             <stop id="stop4623" style="stop-color:#45a98f;stop-opacity:1" offset="1"/>
         </linearGradient>
-        <linearGradient id="blackPurple" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse"><stop class="stop1" stop-color="#ffffff" offset="0"></stop><stop class="stop3" offset="1" stop-color="#6b587d"></stop></linearGradient>
+        <linearGradient id="blackPurple" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse">
+        <stop class="stop1" stop-color="#ffffff" offset="0"/><stop class="stop3" offset="1" stop-color="#6b587d"/></linearGradient>
         <linearGradient id="headerDark" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
             <stop class="stop1" offset="0%" stop-color="#8b9195"/>
             <stop class="stop2" offset="50%" stop-color="#515a60"/>
