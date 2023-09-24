@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.button
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
+import io.docops.docopsextensionssupport.web.MainController
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.observation.annotation.Observed
 import kotlinx.serialization.decodeFromString
@@ -252,4 +253,5 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
 
         return ResponseEntity(json, headers, HttpStatus.OK)
     }
+
 }
