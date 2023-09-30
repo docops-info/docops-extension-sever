@@ -68,8 +68,9 @@ class TimelineController {
             if (numChars == null || numChars.isEmpty()) {
                 chars = "24"
             }
+            val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val tm = TimelineMaker("on".equals(useDarkInput))
+            val tm = TimelineMaker("on".equals(useDarkInput), outlineColor)
             val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -119,11 +120,13 @@ class TimelineController {
                     @RequestParam(name="scale") scale: String,
                     @RequestParam("type", required = false, defaultValue = "SVG") type: String,
                     @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
-                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean
+                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean,
+                    @RequestParam(name="outlineColot", defaultValue = "#37cdbe") outlineColor: String
+
                     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(useDark = useDark)
+            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
             val isPdf = "PDF" == type
             val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
             if (isPdf) {

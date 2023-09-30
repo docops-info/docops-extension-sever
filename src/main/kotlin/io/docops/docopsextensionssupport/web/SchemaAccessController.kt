@@ -36,7 +36,7 @@ class SchemaAccessController @Autowired constructor(private val applicationConte
     fun schema(@RequestParam(name = "name", required = true) name: String): ResponseEntity<String> {
         try {
             val json =  applicationContext.getResource("classpath:static/schemas/$name.json")
-
+            //language=html
             return ResponseEntity("""<div>
                     Url: <a class="link link-info" href="schemas/$name.json" target="_blank">schemas/$name.json</a>
                     <pre><code id="dataView">${json.getContentAsString(Charset.defaultCharset())}</code></pre>

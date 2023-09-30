@@ -27,8 +27,13 @@ import java.io.File
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean) {
-
+class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
+    private var textColor: String = "#000000"
+    init {
+        if(useDark) {
+            textColor = "#fcfcfc"
+        }
+    }
     companion object {
          val DEFAULT_COLORS = mutableListOf(
              "#45618E",
@@ -78,8 +83,11 @@ class TimelineMaker(val useDark: Boolean) {
         val gradIndex = (0 until entries.size).random()
 
         entries.forEachIndexed { index, entry ->
-            val color = DEFAULT_COLORS[gradIndex]
-            sb.append(makeEntry(index, entry, color, chars, gradIndex))
+            val color  = outlineColor.ifBlank {
+                DEFAULT_COLORS[gradIndex]
+            }
+
+            sb.append(makeEntry(index, entry, color= color, chars = chars, gradIndex =gradIndex))
 
         }
         sb.append("</g>")
@@ -96,10 +104,7 @@ class TimelineMaker(val useDark: Boolean) {
         }
     }
     private fun odd(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
-        var textColor = "#000000"
-        if(useDark) {
-            textColor = "#fcfcfc"
-        }
+
         var x = 80
         if(index>0)
         {
@@ -111,7 +116,7 @@ class TimelineMaker(val useDark: Boolean) {
         return """
       <g transform="translate($x,200)" class="odd">
         <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-        <circle cx="0" cy="0" r="17" fill="url(#grad$gradIndex)" />
+        <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
         <line x1="0" x2="0" y1="-20" y2="-80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="-80" r="3" fill="$color" />
         <text x="-36" y="-128" font-size="14px" fill='#000000' text-anchor='middle'>
@@ -133,10 +138,6 @@ class TimelineMaker(val useDark: Boolean) {
         """.trimIndent()
     }
     private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
-        var textColor = "#000000"
-        if(useDark) {
-            textColor = "#fcfcfc"
-        }
         var x = 80
         if(index>0)
         {
@@ -147,7 +148,7 @@ class TimelineMaker(val useDark: Boolean) {
         return """
         <g transform="translate($x,200)" class="even">
         <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-        <circle cx="0" cy="0" r="17" fill="url(#grad$gradIndex)" />
+        <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
         <line x1="0" x2="0" y1="20" y2="80" stroke="$color" stroke-width="2"/>
         <circle cx="0" cy="80" r="3" fill="$color" />
         <text x="-30" y="96" font-size="14px" fill='#000000' text-anchor='middle'>
@@ -210,7 +211,7 @@ class TimelineMaker(val useDark: Boolean) {
             linkColor = "#7dc4e6"
         }
         val sb = StringBuilder()
-        entries.forEachIndexed { index, entry ->
+        entries.forEachIndexed { index, _ ->
             val color = if(index>9) {
                 getRandomColorHex()
             } else {
@@ -230,6 +231,11 @@ class TimelineMaker(val useDark: Boolean) {
         </linearGradient>
             """.trimIndent())
         }
+        val colorMap = gradientFromColor(outlineColor)
+        sb.append("""<radialGradient id="outlineGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
+            <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
+            <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
+        </radialGradient>""")
         var style = """
 <style>
     .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
@@ -327,7 +333,7 @@ and plugin the controller.
 date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
-    val maker = TimelineMaker(true)
+    val maker = TimelineMaker(false, "#6D4F98")
     val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.5", false, "24")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())

@@ -81,7 +81,7 @@ class DocOpsBadgeGenerator {
             </linearGradient> 
         """.trimIndent()
         var labelWidth = measureText(iLabel) * 100.0F
-        var messageWidth = measureText(iMessage) * 100.0F
+        val messageWidth = measureText(iMessage) * 100.0F
         var labelLink = label
         var messageLink = message
         if (href.isNotEmpty()) {

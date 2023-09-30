@@ -15,7 +15,13 @@
     <div class="join">
         <label for="useDark" class="join-item">Use Dark Mode</label>
         <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               checked class="join-item toggle toggle-primary"></div>
+               checked class="join-item toggle toggle-primary">
+    </div>
+    <div class="join">
+        <label for="outline" class="join-item">Outline Color</label>
+        <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               checked class="join-item input input-bordered input-primary w-full max-w-x">
+    </div>
 </div>
     <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
