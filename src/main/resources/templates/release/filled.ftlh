@@ -80,10 +80,11 @@
                 </div>
             </#list>
             <div>
-                <div><br/>
+                <div>
                     <button class="btn btn-outline" type="submit" name="addType" value="increase">+ New Milestone</button>
                 </div>
-                <label for="logo">Build</label>
+                <div class="divider"></div>
+
                 <div>
                     <button class="btn btn-success" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     <button class="btn btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVGAsText('${bsvg}')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>

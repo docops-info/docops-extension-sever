@@ -57,8 +57,8 @@
                 </div>
             </div>
             <div>
-                <div class="join">
-                    <label for="logo" class="btn join-item">Build</label>
+                <div class="divider"></div>
+                <div>
                     <div>
                         <button class="btn btn-primary" data-hx-indicator="#spinner" data-hx-target="#response-div">Submit <img class="htmx-indicator" src="images/bars.svg"/></button>
                     </div>
