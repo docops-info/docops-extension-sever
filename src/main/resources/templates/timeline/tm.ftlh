@@ -20,7 +20,7 @@
     <div class="join">
         <label for="outline" class="join-item">Outline Color</label>
         <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               checked class="join-item input input-bordered input-primary w-full max-w-x">
+               class="join-item input input-bordered input-primary w-full max-w-x" value="#E9A6A6">
     </div>
 </div>
     <div class="join">
