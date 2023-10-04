@@ -64,7 +64,7 @@ class ScoreCardMaker {
     fun head(scoreCard: ScoreCard, height: Float, id: String): String {
         //50 top, 35.1 each row
         val width = WIDTH
-        return """<svg id="$id" xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
+        return """<svg id="d$id" xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
      viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
 """
     }
@@ -88,6 +88,15 @@ class ScoreCardMaker {
                 fill: url(#rightItem);
             }
             </style>
+            <script>
+                var reveal = function () {
+                    var elems = document.querySelectorAll('#d${scoreCard.id} [display="none"]');
+                    if(elems.length > 0) {
+                        var item = elems[0];
+                        item.setAttribute("display", "block");
+                    }
+                }
+            </script>
             </defs>
             
         """.trimIndent()
@@ -121,10 +130,14 @@ class ScoreCardMaker {
          """.trimIndent()
 
     private fun titles(scoreCard: ScoreCard): String {
+        var reveal = ""
+        if(scoreCard.slideShow) {
+            reveal = """onclick="reveal();" cursor="pointer""""
+        }
         return """
     <text x="522.5" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
     <text x="255" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.outcomeTitle}</text>
+    <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText" $reveal>${scoreCard.outcomeTitle}</text>
    
         """.trimIndent()
     }
@@ -154,9 +167,13 @@ class ScoreCardMaker {
         val sb = StringBuilder()
         var startY = 50
         val inc = 35
+        var display = """display="block""""
+        if(scoreCard.slideShow) {
+            display = """display="none""""
+        }
         scoreCard.outcomeItems.forEach {
             sb.append("""
-    <g transform="translate(525, $startY)" >
+    <g transform="translate(525, $startY)" $display>
         <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="right_${scoreCard.id}" stroke="gold">
         <title>${it.description}</title>
         </path>
@@ -225,7 +242,8 @@ fun main() {
             ScoreCardItem("Production Support Guidelines documented"),
             ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")),
         scoreCardTheme = ScoreCardTheme(initiativeBackgroundColor = "#111111", initiativeDisplayTextColor = "#fcfcfc", outcomeBackgroundColor = "#31AD18", outcomeDisplayTextColor = "#fcfcfc"),
-        scale = 1.0f
+        scale = 1.0f,
+        slideShow = true
     )
     val svg = sm.make(sc)
     val outfile = File("gen/score2.svg")

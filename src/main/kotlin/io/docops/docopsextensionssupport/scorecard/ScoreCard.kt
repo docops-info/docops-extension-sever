@@ -37,7 +37,7 @@ class ScoreCard (val id: String = UUID.randomUUID().toString(),
                  val outcomeTitle: String,
                  val initiativeItems: MutableList<ScoreCardItem>,
                  val outcomeItems: MutableList<ScoreCardItem>,
-    val scale: Float = 1.0f, val scoreCardTheme: ScoreCardTheme = ScoreCardTheme()
+    val scale: Float = 1.0f, val scoreCardTheme: ScoreCardTheme = ScoreCardTheme(), val slideShow: Boolean = false
 )
 
 /**
