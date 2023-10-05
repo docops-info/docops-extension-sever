@@ -81,13 +81,11 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         <rect x="0" y="0" fill="#fcfcfc" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="#000000" class="btn_${button.id}_cls raise">
             <title>${button.label.escapeXml()}</title>
         </rect>
-        <path filter="url(#buttonBlur)" class="btn_${button.id}_cls"  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
         <path fill="url(#overlayGrad)" class="btn_${button.id}_cls"  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
         <text text-anchor="middle" x="75" y="8" class="glass">
             $title
         </text>
         $linesOrImage
-        <path class="btn_${button.id}_cls" transform="translate(0,125)" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 150.0 0 A 0.0 0.0 0 0 1 150.0 0.0 L 150.0 20.0 A 5.0 5.0 0 0 1 144.0 25.0 L 5.0 25.0 A 5.0 5.0 0 0 1 0 20.0 Z"/>
         <text x="145" y="135" text-anchor="end">${authors}</text>
         <text x="145" y="145" style="${button.buttonStyle?.dateStyle}" text-anchor="end">${btnDate}</text>
         </a>
