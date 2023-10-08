@@ -134,7 +134,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             sb.append("""<g transform="translate(26,$c)">""")
             mutableLists.forEachIndexed { index, item ->
                 if (index == 0) {
-                    sb.append("""<rect x="0" y="0" fill="#421A56" class="doneBox" height="100" width="184"/>""")
+                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
                     var text = """<text x="2" y="2" class="doneRoad" fill="#421A56">"""
                     val lines =
                         linesToUrlIfExist(
