@@ -16,12 +16,10 @@
 
 package io.docops.docopsextensionssupport.support
 
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.accepted
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
@@ -37,7 +35,53 @@ class ColorToGradientController  {
         return accepted().body(gradientFromColor(color))
     }
 
-
+    @PutMapping("/grad")
+    fun putColors(httpServletRequest: HttpServletRequest): ResponseEntity<String> {
+        val color = httpServletRequest.getParameter("gradColor")
+        val gradient = gradientFromColor(color)
+        return accepted().body("""
+            <div>
+        <svg width="200" height="200" viewBox="0 0 200.0 200.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Color Gradient" >
+    <defs>
+        <linearGradient id="grad1" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>
+        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="100%" height="50%" fill="url(#grad1)"/>
+    <rect x="00" y="100" width="100%" height="50%" fill="url(#grad2)"/>
+</svg>    
+</div>
+<div class="divider"></div>
+<div>
+<pre>
+    <code class="xml">
+        &lt;linearGradient id="grad1" x2="0%" y2="100%"&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/&gt;
+        &lt;/linearGradient&gt;
+        &lt;linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%"&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/&gt;
+        &lt;/linearGradient&gt;
+    </code>
+</pre>
+</div>
+<script>
+document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+});
+</script>
+        """.trimIndent())
+    }
     @GetMapping("/grad/svg/{color}")
     fun svgLinearGradient(@PathVariable("color") color: String): ResponseEntity<String> {
         val gradient = gradientFromColor(color)

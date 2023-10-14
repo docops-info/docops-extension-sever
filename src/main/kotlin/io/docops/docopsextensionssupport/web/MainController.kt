@@ -228,6 +228,11 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         return "scorecard/score"
     }
 
+    @GetMapping("/color/grad.html")
+    @Timed(value = "docops.button.from.color.grad.html", histogram = true, percentiles = [0.5, 0.95])
+    fun grad(model: Model): String {
+        return "color/gradhelp"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

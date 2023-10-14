@@ -143,11 +143,12 @@ Participants: $participants
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
         @RequestParam("increaseWidth", required = false, defaultValue = "0") width: String,
+        @RequestParam("lineSize", required = false, defaultValue = "80") lineSize: String,
         @RequestParam("scale", required = false, defaultValue = "1.0") scale: String,
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray>{
         val contents = uncompressString(data)
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 90, increaseWidthBy = width.toInt(), scale = scale.toFloat())
+        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = lineSize.toInt(), increaseWidthBy = width.toInt(), scale = scale.toFloat())
         val adr = ADRParser().parse(contents, config)
         var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
         adr.urlMap.forEach { (t, u) ->
