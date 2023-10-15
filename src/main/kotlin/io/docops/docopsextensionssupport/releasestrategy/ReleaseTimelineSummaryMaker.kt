@@ -97,7 +97,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         }
         var completed = ""
         if(release.completed) {
-            completed = "<use xlink:href=\"#completedCheck\" x=\"425\" y=\"60\" width=\"24\" height=\"24\"/>"
+            completed = "<use xlink:href=\"#completedCheck\" x=\"405\" y=\"65\" width=\"24\" height=\"24\"/>"
         }
         //language=svg
         return """

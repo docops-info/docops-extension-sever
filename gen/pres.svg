@@ -1,131 +1,363 @@
-<svg width="1096.0" height="388.0" viewBox="0 0 1096.0 388.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Release Strategy" id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878">
+<!--
+  - Copyright (c) 2023. The DocOps Consortium
+  -
+  -   Licensed under the Apache License, Version 2.0 (the "License");
+  -   you may not use this file except in compliance with the License.
+  -   You may obtain a copy of the License at
+  -
+  -       http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -   Unless required by applicable law or agreed to in writing, software
+  -   distributed under the License is distributed on an "AS IS" BASIS,
+  -   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -   See the License for the specific language governing permissions and
+  -   limitations under the License.
+  -->
+
+<svg width="1096.0" height="388.0" viewBox="0 0 1096.0 388.0" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Release Strategy"
+     id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878">
     <desc>https://docops.io/extension</desc>
-    <title>Release Strategy Builder</title>             <defs>
-    <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"></feGaussianBlur>
-        <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
-            <fePointLight x="-5000" y="-10000" z="0000"></fePointLight>
-        </feSpecularLighting>
-        <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"></feComposite>
-        <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"></feComposite>
-    </filter>
-    <linearGradient id="ID0756d7d2-2648-4a67-89af-c133b3a8d4c9" x2="1" y2="1">
-        <stop class="stop1" offset="0%" stop-color="#a48bdb">
-            <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s" repeatCount="indefinite">
-            </animate>
-        </stop>
-        <stop class="stop2" offset="50%" stop-color="#7651c9">
-            <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s" repeatCount="indefinite">
-            </animate>
-        </stop>
-        <stop class="stop3" offset="100%" stop-color="#4918B8">
-            <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s" repeatCount="indefinite">
-            </animate>
-        </stop>
-        <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5" dur="10s" repeatCount="indefinite"></animateTransform>
-    </linearGradient>
-    <svg id="doneCheckMark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100">
-        <path d="M 7.6885391,404.6142 C 7.6885391,404.6142 122.85389,534.30185 145.88696,587.27791 L 244.92916,587.27791 C 286.38869,460.59602 447.62018,158.16034 585.8186,52.208207 C 614.45182,15.394067 542.5208,0.19798715 484.4731,24.568517 C 396.98668,61.298507 231.98485,341.73657 201.16633,409.22081 C 157.4035,420.73735 111.33735,335.51499 111.33735,335.51499 L 7.6885391,404.6142 z" style="fill:#00bb00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
-    </svg>
-    <svg id="completedCheck" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"></path></svg>
+    <title>Release Strategy Builder</title>
+    <defs>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"></feGaussianBlur>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
+                                lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"></fePointLight>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"></feComposite>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"></feComposite>
+        </filter>
+        <linearGradient id="ID0756d7d2-2648-4a67-89af-c133b3a8d4c9" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#a48bdb">
+                <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s"
+                         repeatCount="indefinite">
+                </animate>
+            </stop>
+            <stop class="stop2" offset="50%" stop-color="#7651c9">
+                <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s"
+                         repeatCount="indefinite">
+                </animate>
+            </stop>
+            <stop class="stop3" offset="100%" stop-color="#4918B8">
+                <animate attributeName="stop-color" values="#a48bdb;#7651c9;#4918B8;#a48bdb;#7651c9;#4918B8;" dur="20s"
+                         repeatCount="indefinite">
+                </animate>
+            </stop>
+            <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5" dur="10s"
+                              repeatCount="indefinite"></animateTransform>
+        </linearGradient>
+        <svg id="doneCheckMark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100">
+            <path d="M 7.6885391,404.6142 C 7.6885391,404.6142 122.85389,534.30185 145.88696,587.27791 L 244.92916,587.27791 C 286.38869,460.59602 447.62018,158.16034 585.8186,52.208207 C 614.45182,15.394067 542.5208,0.19798715 484.4731,24.568517 C 396.98668,61.298507 231.98485,341.73657 201.16633,409.22081 C 157.4035,420.73735 111.33735,335.51499 111.33735,335.51499 L 7.6885391,404.6142 z"
+                  style="fill:#00bb00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"></path>
+        </svg>
+        <svg id="completedCheck" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
+             enable-background="new 0 0 64 64">
+            <path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z"
+                  fill="#43a047"></path>
+        </svg>
 
 
-    <linearGradient id="shadM_rect" x2="0%" y2="100%">
-        <stop class="stop1" offset="0%" stop-color="#ffb79a"></stop>
-        <stop class="stop2" offset="50%" stop-color="#ff9368"></stop>
-        <stop class="stop3" offset="100%" stop-color="#FF6F36"></stop>
-    </linearGradient>
-    <linearGradient id="shadR_rect" x2="0%" y2="100%">
-        <stop class="stop1" offset="0%" stop-color="#f4d089"></stop>
-        <stop class="stop2" offset="50%" stop-color="#efb94e"></stop>
-        <stop class="stop3" offset="100%" stop-color="#EAA213"></stop>
-    </linearGradient>
-    <linearGradient id="shadG_rect" x2="0%" y2="100%">
-        <stop class="stop1" offset="0%" stop-color="#80ffc7"></stop>
-        <stop class="stop2" offset="50%" stop-color="#40ffab"></stop>
-        <stop class="stop3" offset="100%" stop-color="#01FF90"></stop>
-    </linearGradient>
-    <style>
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadM { fill: #FF6F36; filter: drop-shadow(0 1mm 1mm #FF6F36); }
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadR { fill: #EAA213; filter: drop-shadow(0 1mm 1mm #EAA213); }
-
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadG { fill: #01FF90; filter: drop-shadow(0 1mm 1mm #01FF90); }
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .lines { font-size: 10px; }
-
-        #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .milestoneTL &gt; .entry { text-anchor: start; font-weight: normal; }
-        .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4)); }
-
-        .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
-
-    </style>
-    <script>
-        function strategyShowItem(item) {
-            var elem = document.querySelector("#"+item);
-            var display = elem.getAttribute("visibility");
-            if("hidden" === display) {
-                elem.setAttribute("visibility", "")
-            } else {
-                elem.setAttribute("visibility", "hidden")
+        <linearGradient id="shadM_rect" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#ffb79a"></stop>
+            <stop class="stop2" offset="50%" stop-color="#ff9368"></stop>
+            <stop class="stop3" offset="100%" stop-color="#FF6F36"></stop>
+        </linearGradient>
+        <linearGradient id="shadR_rect" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#f4d089"></stop>
+            <stop class="stop2" offset="50%" stop-color="#efb94e"></stop>
+            <stop class="stop3" offset="100%" stop-color="#EAA213"></stop>
+        </linearGradient>
+        <linearGradient id="shadG_rect" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#80ffc7"></stop>
+            <stop class="stop2" offset="50%" stop-color="#40ffab"></stop>
+            <stop class="stop3" offset="100%" stop-color="#01FF90"></stop>
+        </linearGradient>
+        <style>
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadM {
+                fill: #FF6F36;
+                filter: drop-shadow(0 1mm 1mm #FF6F36);
             }
-        }
-    </script>
-</defs>
-    <g transform="scale(0.8)" id="GID405ea13b-35ec-46a0-8acf-b2a446ce0878"><text x="548.0" y="18" fill="#000000" text-anchor="middle" font-size="20px" font-family="Arial, Helvetica, sans-serif">Release Strategy Builder</text> <g transform="translate(10,60)" class="shadM">
-        <text text-anchor="middle" x="250" y="-12" class="milestoneTL">July 30th, 2023</text>
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#FF6F36" fill="url(#shadM_rect)"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadM_rect)" stroke="#FF6F36"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">M1</text>
-        <use xlink:href="#completedCheck" x="405" y="-100" width="24" height="24"></use>
-        <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_0')">
-            <rect x="0" y="0" height="200" width="300" fill="url(#shadM_rect)" class="raise"></rect>
-            <text text-anchor="middle" x="150" y="40" class="milestoneTL lines" font-size="10px" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
-                <tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal"> Our goal is to</tspan><tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">Establish the Liberty</tspan><tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">infrastructure with</tspan><tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">Okta enabled</tspan>
-            </text>
-        </g>
-    </g>      <g transform="translate(10,275)" class="shadM" visibility="hidden" id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_0">
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#FF6F36" fill="#fcfcfc"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadM_rect)" stroke="#FF6F36"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">M1</text>
-        <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px" font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
-            <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will deploy to application server current production code</tspan><tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS proxy</tspan><tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark out websphere servers and mark in liberty servers</tspan><tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate Okta changes on Liberty</tspan><tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated team will mark out liberty servers and mark in websphere servers</tspan><tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will validate Production is still working</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will record all observations</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan>
-        </text>
-    </g> <g transform="translate(420,60)" class="shadR">
-        <text text-anchor="middle" x="250" y="-12" class="milestoneTL">TBD</text>
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#EAA213" fill="url(#shadR_rect)"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadR_rect)" stroke="#EAA213"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">RC1</text>
-        <use xlink:href="#completedCheck" x="425" y="60" width="24" height="24"></use>
-        <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_1')">
-            <rect x="0" y="0" height="200" width="300" fill="url(#shadR_rect)" class="raise"></rect>
-            <text text-anchor="middle" x="150" y="76" class="milestoneTL lines" font-size="10px" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
-                <tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal"> Our goal is ...</tspan>
-            </text>
-        </g>
-    </g>      <g transform="translate(420,275)" class="shadR" visibility="hidden" id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_1">
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#EAA213" fill="#fcfcfc"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadR_rect)" stroke="#EAA213"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">RC1</text>
-        <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px" font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
-            <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will deploy to application server current production code</tspan><tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS proxy</tspan><tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark out websphere servers and mark in liberty servers</tspan><tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate Okta changes on Liberty</tspan><tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated team will mark out liberty servers and mark in websphere servers</tspan><tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will validate Production is still working</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will record all observations</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan>
-        </text>
-    </g> <g transform="translate(830,60)" class="shadG">
-        <text text-anchor="middle" x="250" y="-12" class="milestoneTL">September 20th</text>
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#01FF90" fill="url(#shadG_rect)"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadG_rect)" stroke="#01FF90"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">GA</text>
 
-        <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_2')">
-            <rect x="0" y="0" height="200" width="300" fill="url(#shadG_rect)" class="raise"></rect>
-            <text text-anchor="middle" x="150" y="76" class="milestoneTL lines" font-size="10px" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
-                <tspan x="150" dy="24" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal"> Our goal is ...</tspan>
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadR {
+                fill: #EAA213;
+                filter: drop-shadow(0 1mm 1mm #EAA213);
+            }
+
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .shadG {
+                fill: #01FF90;
+                filter: drop-shadow(0 1mm 1mm #01FF90);
+            }
+
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .milestoneTL {
+                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                font-weight: bold;
+            }
+
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .lines {
+                font-size: 10px;
+            }
+
+            #ID405ea13b-35ec-46a0-8acf-b2a446ce0878 .milestoneTL &gt; .entry {
+                text-anchor: start;
+                font-weight: normal;
+            }
+
+            .raise {
+                pointer-events: bounding-box;
+                opacity: 1;
+                filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4));
+            }
+
+            .raise:hover {
+                stroke: gold;
+                stroke-width: 3px;
+                opacity: 0.9;
+            }
+
+        </style>
+        <script>
+            function strategyShowItem(item) {
+                var elem = document.querySelector("#" + item);
+                var display = elem.getAttribute("visibility");
+                if ("hidden" === display) {
+                    elem.setAttribute("visibility", "")
+                } else {
+                    elem.setAttribute("visibility", "hidden")
+                }
+            }
+        </script>
+    </defs>
+    <g transform="scale(0.8)" id="GID405ea13b-35ec-46a0-8acf-b2a446ce0878">
+        <text x="548.0" y="18" fill="#000000" text-anchor="middle" font-size="20px"
+              font-family="Arial, Helvetica, sans-serif">Release Strategy Builder
+        </text>
+        <g transform="translate(10,60)" class="shadM">
+            <text text-anchor="middle" x="250" y="-12" class="milestoneTL">July 30th, 2023</text>
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#FF6F36" fill="url(#shadM_rect)"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadM_rect)" stroke="#FF6F36"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">M1</text>
+            <use xlink:href="#completedCheck" x="405" y="-100" width="24" height="24"></use>
+            <g transform="translate(100,0)" cursor="pointer"
+               onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_0')">
+                <rect x="0" y="0" height="200" width="300" fill="url(#shadM_rect)" class="raise"></rect>
+                <text text-anchor="middle" x="150" y="40" class="milestoneTL lines" font-size="10px"
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">Our goal is to
+                    </tspan>
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">Establish the Liberty
+                    </tspan>
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">infrastructure with
+                    </tspan>
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">Okta enabled
+                    </tspan>
+                </text>
+            </g>
+        </g>
+        <g transform="translate(10,275)" class="shadM" visibility="hidden"
+           id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_0">
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#FF6F36" fill="#fcfcfc"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadM_rect)" stroke="#FF6F36"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">M1</text>
+            <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px"
+                  font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
+                <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    deploy to application server current production code
+                </tspan>
+                <tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS
+                    proxy
+                </tspan>
+                <tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark
+                    out websphere servers and mark in liberty servers
+                </tspan>
+                <tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate Okta changes on Liberty
+                </tspan>
+                <tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated
+                    team will mark out liberty servers and mark in websphere servers
+                </tspan>
+                <tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will
+                    validate Production is still working
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    record all observations
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
             </text>
         </g>
-    </g>      <g transform="translate(830,275)" class="shadG" visibility="hidden" id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_2">
-        <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#01FF90" fill="#fcfcfc"></path>
-        <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadG_rect)" stroke="#01FF90"></path>
-        <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">GA</text>
-        <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px" font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
-            <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will deploy to application server current production code</tspan><tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS proxy</tspan><tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark out websphere servers and mark in liberty servers</tspan><tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate Okta changes on Liberty</tspan><tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated team will mark out liberty servers and mark in websphere servers</tspan><tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will validate Production is still working</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will record all observations</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan><tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will validate logs and record observations as well</tspan>
-        </text>
-    </g></g></svg>
+        <g transform="translate(420,60)" class="shadR">
+            <text text-anchor="middle" x="250" y="-12" class="milestoneTL">TBD</text>
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#EAA213" fill="url(#shadR_rect)"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadR_rect)" stroke="#EAA213"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">RC1</text>
+            <use xlink:href="#completedCheck" x="425" y="60" width="24" height="24"></use>
+            <g transform="translate(100,0)" cursor="pointer"
+               onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_1')">
+                <rect x="0" y="0" height="200" width="300" fill="url(#shadR_rect)" class="raise"></rect>
+                <text text-anchor="middle" x="150" y="76" class="milestoneTL lines" font-size="10px"
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">Our goal is ...
+                    </tspan>
+                </text>
+            </g>
+        </g>
+        <g transform="translate(420,275)" class="shadR" visibility="hidden"
+           id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_1">
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#EAA213" fill="#fcfcfc"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadR_rect)" stroke="#EAA213"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">RC1</text>
+            <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px"
+                  font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
+                <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    deploy to application server current production code
+                </tspan>
+                <tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS
+                    proxy
+                </tspan>
+                <tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark
+                    out websphere servers and mark in liberty servers
+                </tspan>
+                <tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate Okta changes on Liberty
+                </tspan>
+                <tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated
+                    team will mark out liberty servers and mark in websphere servers
+                </tspan>
+                <tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will
+                    validate Production is still working
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    record all observations
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+            </text>
+        </g>
+        <g transform="translate(830,60)" class="shadG">
+            <text text-anchor="middle" x="250" y="-12" class="milestoneTL">September 20th</text>
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#01FF90" fill="url(#shadG_rect)"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadG_rect)" stroke="#01FF90"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#000000">GA</text>
+
+            <g transform="translate(100,0)" cursor="pointer"
+               onclick="strategyShowItem('ID405ea13b-35ec-46a0-8acf-b2a446ce0878_2')">
+                <rect x="0" y="0" height="200" width="300" fill="url(#shadG_rect)" class="raise"></rect>
+                <text text-anchor="middle" x="150" y="76" class="milestoneTL lines" font-size="10px"
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#000000">
+                    <tspan x="150" dy="24" text-anchor="middle"
+                           font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24"
+                           font-weight="normal">Our goal is ...
+                    </tspan>
+                </text>
+            </g>
+        </g>
+        <g transform="translate(830,275)" class="shadG" visibility="hidden"
+           id="ID405ea13b-35ec-46a0-8acf-b2a446ce0878_2">
+            <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="#01FF90" fill="#fcfcfc"></path>
+            <path d="m 400,0 v 200 l 100,-100 z" fill="url(#shadG_rect)" stroke="#01FF90"></path>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">GA</text>
+            <text text-anchor="middle" x="200" y="12" class="milestoneTL lines" font-size="10px"
+                  font-family="Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif" font-weight="bold">
+                <tspan x="25" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    deploy to application server current production code
+                </tspan>
+                <tspan x="35" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Setup IHS
+                    proxy
+                </tspan>
+                <tspan x="45" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will Mark
+                    out websphere servers and mark in liberty servers
+                </tspan>
+                <tspan x="55" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate Okta changes on Liberty
+                </tspan>
+                <tspan x="65" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Once validated
+                    team will mark out liberty servers and mark in websphere servers
+                </tspan>
+                <tspan x="75" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- QA will
+                    validate Production is still working
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    record all observations
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="105" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="95" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+                <tspan x="85" dy="10" class="entry" font-size="10px" font-weight="normal"
+                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- Team will
+                    validate logs and record observations as well
+                </tspan>
+            </text>
+        </g>
+    </g>
+</svg>

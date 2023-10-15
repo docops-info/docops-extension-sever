@@ -88,7 +88,7 @@ class ReleaseRoadMapMaker {
         val startTextY = 300 - (lines.size * 12)
         var completed = ""
         if(release.completed) {
-            completed = "<use xlink:href=\"#completedCheck\" x=\"310\" y=\"335\" fill=\"#fcfcfc\" width=\"24\" height=\"24\"/>"
+            completed = "<use xlink:href=\"#completedCheck\" x=\"300\" y=\"315\" fill=\"#fcfcfc\" width=\"24\" height=\"24\"/>"
         }
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
@@ -187,7 +187,7 @@ class ReleaseRoadMapMaker {
                         <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
                     </filter>
                     <path id="curve" fill="transparent" d="M267,317a56,56 0 1,0 112,0a56,56 0 1,0 -112,0" />
-                    <svg id="completedCheck" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z" fill="#43a047"/></svg>
+                    <polyline id="completedCheck" points="10 25 22 37 45 15" fill="none" stroke="#0f0" stroke-width="6"/>
 
                     $colors
                     $style
