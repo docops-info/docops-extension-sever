@@ -461,6 +461,6 @@ refactor displayConfigUrl to displayTheme
     """.trimIndent()
     val rm = RoadMapMaker(false)
     val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
-    val f = File("gen/roadmapout2.svg")
+    val f = File("gen/roadmap.svg")
     f.writeBytes(output.toByteArray())
 }

@@ -198,7 +198,15 @@ open class ReleaseTimelineMaker {
                  <animateTransform attributeName="gradientTransform" type="rotate" values="360 .5 .5;0 .5 .5"
                                    dur="10s" repeatCount="indefinite" />
              </linearGradient>
-            <polyline id="completedCheck" points="10 25 22 37 45 15" fill="none" stroke="#0f0" stroke-width="6"/>
+             <linearGradient id="circlecheck" x2="1" y2="1">
+                <stop class="stop1" offset="0%" stop-color="#a9d99a"/>
+                <stop class="stop2" offset="50%" stop-color="#7ec667"/>
+                <stop class="stop3" offset="100%" stop-color="#54B435"/>
+            </linearGradient>
+            <g id="completedCheck">
+                <circle id="myCircle" cx="30" cy="30" r="30" class="card" stroke="url(#circlecheck)" stroke-width="1" fill="url(#circlecheck)" fill-opacity="0.3"/>
+                <polyline points="10 25 22 40 50 10" fill="none" stroke="url(#circlecheck)" stroke-width="6"/>
+            </g>
 
              $colors
              $style
