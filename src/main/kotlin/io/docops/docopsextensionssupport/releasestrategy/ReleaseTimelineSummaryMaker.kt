@@ -77,7 +77,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
+                <tspan x="$lineStart" dy="10" class="entry" font-size="12px" font-weight="normal"
                    font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
             """.trimIndent()
             )
@@ -109,7 +109,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             $completed
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
                 <rect x="0" y="0" height="200" width="300" fill="url(#${shadeColor(release)}_rect)" class="raise"/>
-                <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="10px"
+                <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="12px"
                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="${releaseStrategy.displayConfig.fontColor}">
                    $spans
                 </text>
@@ -127,14 +127,14 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             release.lines.forEachIndexed { index, s ->
                 lineText.append(
                     """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
+                <tspan x="$lineStart" dy="12" class="entry" font-size="12px" font-weight="normal"
                    font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
             """.trimIndent()
                 )
-                if (index <= 7) {
-                    lineStart += 10
+                if (index <= 6) {
+                    lineStart += 12
                 } else {
-                    lineStart -= 10
+                    lineStart -= 12
                 }
             }
             var x = 200
@@ -153,7 +153,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${fishTailColor(release, releaseStrategy)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="url(#${shadeColor(release)}_rect)" stroke="${fishTailColor(release, releaseStrategy)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">${release.type}</text>
-            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
+            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
                 $lineText
             </text>
         </g>

@@ -21,7 +21,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 
 
-@SpringBootApplication()
+@SpringBootApplication
 @EnableAspectJAutoProxy
 class DocopsExtensionsSupportApplication
 

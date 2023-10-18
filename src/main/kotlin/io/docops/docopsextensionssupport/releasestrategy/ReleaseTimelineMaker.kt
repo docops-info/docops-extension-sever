@@ -204,7 +204,6 @@ open class ReleaseTimelineMaker {
                 <stop class="stop3" offset="100%" stop-color="#54B435"/>
             </linearGradient>
             <g id="completedCheck">
-                <circle id="myCircle" cx="30" cy="30" r="30" class="card" stroke="url(#circlecheck)" stroke-width="1" fill="url(#circlecheck)" fill-opacity="0.3"/>
                 <polyline points="10 25 22 40 50 10" fill="none" stroke="url(#circlecheck)" stroke-width="6"/>
             </g>
 

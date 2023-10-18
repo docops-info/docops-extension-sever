@@ -82,7 +82,7 @@ open class ReleaseTimelineGroupedMaker {
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
+                <tspan x="$lineStart" dy="10" class="entry" font-size="12px" font-weight="normal"
                    font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- $s</tspan>
             """.trimIndent()
             )
@@ -110,7 +110,7 @@ open class ReleaseTimelineGroupedMaker {
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTLG" font-size="36px" fill="#fcfcfc">${release.type}</text>
             $completed
-            <text $anchor x="$x" y="12" class="milestoneTLG lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
+            <text $anchor x="$x" y="12" class="milestoneTLG lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
                 $lineText
             </text>
         </g>

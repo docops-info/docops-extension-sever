@@ -77,7 +77,7 @@ class ReleaseRoadMapMaker {
         }
         val str = StringBuilder(
             """<g id="detail_${id}_$index" transform="translate(-1000,0)">
-                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="12px" fill="${releaseStrategy.displayConfig.fontColor}">""".trimIndent()
+                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="16px" fill="${releaseStrategy.displayConfig.fontColor}">""".trimIndent()
         )
         release.lines.forEach {
             str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
@@ -193,7 +193,6 @@ class ReleaseRoadMapMaker {
                     </filter>
                     <path id="curve" fill="transparent" d="M267,317a56,56 0 1,0 112,0a56,56 0 1,0 -112,0" />
                     <g id="completedCheck">
-                        <circle id="myCircle" cx="30" cy="30" r="30" class="card" stroke="url(#circlecheck)" stroke-width="1" fill="url(#circlecheck)" fill-opacity="0.3"/>
                         <polyline points="10 25 22 40 50 10" fill="none" stroke="url(#circlecheck)" stroke-width="6"/>
                     </g>
                     $colors
