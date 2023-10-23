@@ -30,10 +30,8 @@ import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.*
-import kotlin.math.log
 
 
 /**
@@ -109,6 +107,37 @@ $txt
     @ResponseBody
     fun textLen(@PathVariable(required = true) text: String): Float {
         return docOpsBadgeGenerator.measureText(text) * 100F
+    }
+
+    @GetMapping("/text/box/{text}", produces = ["image/svg+xml"])
+    @ResponseBody
+    fun textBox(@PathVariable(required = true) text: String): String {
+        val len = docOpsBadgeGenerator.measureText(text) * 100F + 10
+        //language=svg
+        val svg = """
+            <svg xmlns="http://www.w3.org/2000/svg" width="$len" height="120"
+     viewBox="0 0 $len 120" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <defs>
+     <filter id="filter">
+            <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
+            <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
+        </filter>
+        <style>
+            .filtered {
+                filter: url(#filter);
+                fill: black;
+                font-family: 'Ultra', serif;
+                font-size: 100px;
+            }
+        </style>
+     </defs>
+     <g transform="translate(0,0)" cursor="pointer" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
+        <rect x="0" y="0" width="$len" height="110" fill="#000000" rx="18" ry="18" stroke="green" stroke-width="5"/>
+        <text text-anchor="middle" fill="#ffffff" x="${len/2}" y="90"   textLength="${len-10}">$text</text>
+    </g>
+     </svg>
+        """.trimIndent()
+        return svg
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])

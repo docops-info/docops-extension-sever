@@ -1,0 +1,96 @@
+<!--
+  - Copyright (c) 2023. The DocOps Consortium
+  -
+  -   Licensed under the Apache License, Version 2.0 (the "License");
+  -   you may not use this file except in compliance with the License.
+  -   You may obtain a copy of the License at
+  -
+  -       http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -   Unless required by applicable law or agreed to in writing, software
+  -   distributed under the License is distributed on an "AS IS" BASIS,
+  -   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -   See the License for the specific language governing permissions and
+  -   limitations under the License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="908" height="512"
+     viewBox="0 0 908 512" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter id="MyFilter" height="220%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant=".75"
+                                specularExponent="30" lighting-color="white"
+                                result="specOut">
+                <fePointLight x="100" y="75" z="200"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+            <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic"
+                         k1="1" k2="1" k3="0" k4="0"/>
+
+        </filter>
+        <filter id="inset-shadow">
+            <feComponentTransfer in="SourceAlpha">
+                <feFuncA type="table" tableValues="1 0" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="5" />
+            <feOffset in="offsetblur2" dy="10" result="offsetblur" />
+            <feOffset dy="-10" result="offsetblur2" />
+            <feFlood flood-color="#" result="color" />
+            <feComposite in2="offsetblur" operator="in" />
+            <feComposite in2="SourceAlpha" operator="in" />
+            <feMerge>
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode />
+            </feMerge>
+        </filter>
+        <filter id="bev50">
+            <!--We create a heightmap by blurring the source: -->
+
+            <feGaussianBlur stdDeviation="5" in="SourceAlpha" result="BLUR"/>
+
+            <!-- We then define a lighting effect with a point light that is positioned at virtual 3D coordinates x: 40px, y: -30px, z: 200px: -->
+
+            <feSpecularLighting surfaceScale="6" specularConstant="1" specularExponent="30" lighting-color="#white" in="BLUR" result="SPECULAR">
+                <fePointLight x="40" y="-30" z="200" />
+            </feSpecularLighting>
+
+            <!-- We cut off the parts that overlap the source graphic… -->
+
+            <feComposite operator="in" in="SPECULAR" in2="SourceAlpha" result="COMPOSITE"/>
+
+            <!-- … and then merge source graphic and lighting effect: -->
+
+            <feMerge>
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode in="COMPOSITE"/>
+            </feMerge>
+
+        </filter>
+
+        <filter id="filter">
+            <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
+            <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
+        </filter>
+
+        <linearGradient id="grad1" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#ffebd4"/>
+            <stop class="stop2" offset="50%" stop-color="#ffe1be"/>
+            <stop class="stop3" offset="100%" stop-color="#FFD8A9"/>
+        </linearGradient>
+        <style>
+            .filtered {
+                filter: url(#filter);
+                fill: black;
+                font-family: 'Ultra', serif;
+                font-size: 100px;
+            }
+        </style>
+    </defs>
+
+    <g>
+        <rect x="51" y="25" width="90%" height="90%" fill="url(#grad1)" ry="18" rx="18" />
+        <text x="60" y="450" textLength="800" style="font-size:72px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" class="filtered" >What&apos;s Going On?</text>
+        <image x="1" y="45" width="100%" height="275" href="layers.svg" />
+    </g>
+</svg>
