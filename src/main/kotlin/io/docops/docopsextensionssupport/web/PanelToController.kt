@@ -26,12 +26,10 @@ import io.docops.docopsextensionssupport.support.sourceToPanel
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import kotlinx.serialization.encodeToString
 import org.springframework.stereotype.Controller
-import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import java.nio.charset.Charset
+import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 @RequestMapping("/api/panel/convert")
@@ -39,25 +37,260 @@ class PanelToController {
     private val scriptLoader = ScriptLoader()
     @PutMapping("/")
     @Timed(value = "docops.PanelToController.put", histogram = true, percentiles = [0.5, 0.95])
+    @ResponseBody
     fun convert(httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse){
-        val contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
-        val imgSrc = contentsToButtons(contents, scriptLoader, false)
+        val contents = httpServletRequest.getParameter("payload")
         servletResponse.contentType = "text/html"
         servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
         val writer = servletResponse.writer
-        val contentsButtons = contentsToButtons(contents, scriptLoader, false)
-        val sb = StringBuilder()
-        contentsButtons.buttons.forEach {
-            sb.append(buttonToJson(it) +",")
-        }
-        val str = buttons(removeDelimiter(sb.toString())!!, contentsButtons.buttonType.toString())
-        writer.print(
-            """
-              $str
-                """
-        )
+        val buttonContent=  getPanels(contents, scriptLoader)
+        val resp = """
+            <div>
+            <pre>
+                <code class="json">
+                   ${panelToButtons(buttonContent)}
+                </code>
+            </pre>
+            </div>
+            <script>
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+            </script>
+        """.trimIndent()
+        writer.println(resp)
         writer.flush()
+    }
+    private fun getPanels(
+        contents: String,
+        scriptLoader: ScriptLoader
+    ): Panels {
+        return sourceToPanel(contents, scriptLoader)
+    }
+    fun panelToButtons(pans: Panels): String {
+        var dark = "#000000"
+        val str = StringBuilder("{")
+        if(pans.buttonType == ButtonType.BUTTON) {
+            val btns = pans.panelButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "description": "${pb.description}",
+                            "type": "${pb.type}"
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "REGULAR", """)
+            dark = "#fcfcfc"
+        }
+        else if (pans.buttonType == ButtonType.SLIM_CARD) {
+            dark = "#fcfcfc"
+            val btns = pans.slimButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                val authors = StringBuilder("[")
+                if(pb.authors.isNotEmpty())
+                {
+                    pb.authors.forEach {
+                        authors.append(""" "$it",""")
+                    }
+                }
+                val aidx = authors.lastIndexOf(",")
+                if(-1 != aidx) {
+                    authors.deleteCharAt(aidx)
+                }
+                authors.append("]")
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "description": "${pb.description}",
+                            "type": "${pb.type}",
+                            "author": $authors
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "SLIM", """)
+        }
+        else if(pans.buttonType == ButtonType.LARGE_CARD) {
+            val btns = pans.largeButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                val authors = StringBuilder("[")
+                if(pb.authors.isNotEmpty())
+                {
+                    pb.authors.forEach {
+                        authors.append(""" "$it",""")
+                    }
+                }
+                val aidx = authors.lastIndexOf(",")
+                if(-1 != aidx) {
+                    authors.deleteCharAt(aidx)
+                }
+                authors.append("]")
+                val line1 = StringBuilder("")
+                pb.line1?.let {
+                    line1.append("""
+                    "cardLine1": {
+                        "line": "${it.line}",
+                        "size": "${it.size}"
+                      },
+                """.trimIndent())
+                }
+                val line2 =   StringBuilder()
+                pb.line2?.let {
+                    line2.append("""
+                    "cardLine2": {
+                        "line": "${it.line}",
+                        "size": "${it.size}"
+                      },
+                """.trimIndent())
+                }
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "description": "${pb.description}",
+                            "type": "${pb.type}",
+                            $line1
+                            $line2
+                            "author": $authors
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "LARGE", """)
+        }
+        else if(pans.buttonType == ButtonType.RECTANGLE) {
+            val btns = pans.rectangleButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                val links = StringBuilder("[")
+                if(pb.links.isNotEmpty())
+                {
+                    pb.links.forEach {
+                        links.append(""" {"label": "${it.label}", "href": "${it.href}"},""")
+                    }
+                }
+                val aidx = links.lastIndexOf(",")
+                if(-1 != aidx) {
+                    links.deleteCharAt(aidx)
+                }
+                links.append("]")
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "description": "${pb.description}",
+                            "type": "${pb.type}",
+                            "links": $links
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "RECTANGLE", """)
+        }
+        else if(pans.buttonType == ButtonType.PILL) {
+            val btns = pans.panelButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "description": "${pb.description}",
+                            "type": "${pb.type}"
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "PILL", """)
+            dark = "#fcfcfc"
+        }
+        else if(pans.buttonType == ButtonType.ROUND) {
+            val btns = pans.roundButtons
+            str.append(""" "buttons": [""")
+            btns.forEach {
+                    pb ->
+                //language=json
+                str.append("""
+                        {
+                            "link": "${pb.link}",
+                            "label": "${pb.label}",
+                            "type": "${pb.type}"
+                        },
+                    """.trimIndent())
+
+            }
+            val idx = str.lastIndexOf(",")
+            if(-1 != idx) {
+                str.deleteCharAt(idx)
+            }
+            str.append("],")
+            str.append(""" "buttonType": "ROUND", """)
+            dark = "#fcfcfc"
+        }
+        str.append("""
+  "theme": {
+    "colors": [
+      "#FF9898", "#CF455C", "#971549", "#470031", "#F70776", "#C3195D", "#680747", "#872341"
+    ],
+    "columns": 3,
+    "sortBy": {"sort": "LABEL"},
+    "buttonStyle": {
+      "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: $dark; letter-spacing: normal;font-weight: bold;",
+      "dateStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;font-weight: normal;",
+      "descriptionStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 10px; fill: $dark; letter-spacing: normal;font-weight: normal;",
+      "typeStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 12px; letter-spacing: normal;font-weight: bold; font-style: italic;",
+      "authorStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 12px;  fill: $dark; letter-spacing: normal;font-weight: normal; font-style: italic;"
+    },
+    "scale": 1.0
+  }
+    """.trimIndent())
+
+        str.append("}")
+        return str.toString()
     }
     private fun contentsToButtons(
         contents: String,
