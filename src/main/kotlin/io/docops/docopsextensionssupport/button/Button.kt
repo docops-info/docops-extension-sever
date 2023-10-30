@@ -101,7 +101,8 @@ class ButtonStyle(
     val descriptionStyle: String? = null,
     val dateStyle: String? = null,
     val typeStyle: String? = null,
-    val authorStyle: String? = null
+    val authorStyle: String? = null,
+    val linkStyle: String? = null
 )
 
 /**
@@ -324,13 +325,22 @@ class Buttons(
                 }
             }
         }
+        var linkStyle: String? = button.buttonStyle?.linkStyle
+        if(null == linkStyle) {
+            theme?.let {
+                it.buttonStyle.linkStyle?.let {
+                    ls -> linkStyle = ls
+                }
+            }
+        }
 
         return ButtonStyle(
             labelStyle = labelStyle,
             descriptionStyle = descriptionStyle,
             dateStyle = dateStyle,
             typeStyle = typeStyle,
-            authorStyle = authorStyle
+            authorStyle = authorStyle,
+            linkStyle = linkStyle
         )
     }
 

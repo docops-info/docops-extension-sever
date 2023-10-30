@@ -92,7 +92,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             <a xlink:href="${button.link}" class="linkText" target="$win"> 
             $imageOrLabel
             </a>
-            ${linksToText(button.links)}
+            ${linksToText(button.links, button.buttonStyle?.linkStyle)}
         </g>
         """.trimIndent()
             )
@@ -108,7 +108,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             <image x="10" y="10" width="98" height="98" href="${buttonImage.ref}"/>""".trimIndent()
 
     }
-    private fun linksToText(links: MutableList<Link>?): String {
+    private fun linksToText(links: MutableList<Link>?, style: String?): String {
         val sb = StringBuilder("""<text x="115" y="20">""")
         var linkText = "linkText"
         buttons.theme?.let {
@@ -120,7 +120,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             it.forEach { link ->
                 sb.append("""
             <tspan x="115" dy="14">
-                <a xlink:href="${link.href}" class="$linkText" target="_blank">${link.label.escapeXml()}</a>
+                <a xlink:href="${link.href}" class="$linkText" style="$style" target="_blank">${link.label.escapeXml()}</a>
             </tspan>
                 """.trimIndent())
             }
