@@ -73,6 +73,10 @@ class RoadMapMaker(val useDark: Boolean = false) {
         return draw(roadmaps, scale, title, numChars)
     }
 
+    fun parseToRoadMap(source: String, scale: String, title: String, numChars: String): RoadMaps {
+        return RoadMapParser().parse(source)
+
+    }
     private fun draw(roadmaps: RoadMaps, scale: String, title: String, numChars: String): String {
         val sb = StringBuilder()
         val head = head(roadmaps, scale.toFloat())
