@@ -5,7 +5,7 @@
 <div>
 <h1>Create SVG Buttons from JSON</h1>
 
-<form data-hx-put="api/buttons/form" data-hx-target="#contentBox" >
+<form data-hx-put="api/buttons/form" data-hx-target="#contentBox" hx-trigger="submit, load">
 
 <fieldset id="response-div" >
     <legend>User created JSON</legend>

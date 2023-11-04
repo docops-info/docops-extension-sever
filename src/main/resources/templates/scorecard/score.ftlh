@@ -2,7 +2,7 @@
 <div>
     <h1>Create Scorecard from JSON</h1>
 
-    <form class="pure-form pure-form-stacked" data-hx-put="api/scorecard/form" data-hx-target="#contentBox">
+    <form class="pure-form pure-form-stacked" data-hx-put="api/scorecard/form" data-hx-target="#contentBox" hx-trigger="submit, load">
 
         <fieldset id="response-div" >
             <legend>JSON</legend>

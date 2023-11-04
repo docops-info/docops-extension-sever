@@ -1,4 +1,4 @@
-<form class="pure-form pure-form-stacked" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
+<form class="pure-form pure-form-stacked" data-hx-put="api/roadmap/" data-hx-target="#contentBox" hx-trigger="submit, load">
     <fieldset id="response-div" >
         <legend>Timeline Builder</legend>
         <div class="join">
