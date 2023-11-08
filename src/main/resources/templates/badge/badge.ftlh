@@ -3,7 +3,7 @@
 <div>
     <p>Welcome to badge creator UI. It will help you create a badge and provide the asciidoctor syntax to use.</p>
 </div>
-<form class="pure-form pure-form-stacked" data-hx-put="api/badge/item" data-hx-target="#contentBox" data-hx-ext="json-enc">
+<form class="pure-form pure-form-stacked" data-hx-put="api/badge/item" data-hx-target="#contentBox" data-hx-ext="json-enc" hx-trigger="submit, load">
     <fieldset>
         <legend>Create Badge</legend>
         <div>

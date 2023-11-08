@@ -1,5 +1,9 @@
 <H1>ADR Builder</H1>
-<form class="pure-form pure-form-stacked" data-hx-put="api/adr" data-hx-target="#contentBox">
+
+<div id="contentBox" class="contentBox"></div>
+<div class="divider"></div>
+
+<form class="pure-form pure-form-stacked" data-hx-put="api/adr" data-hx-target="#contentBox" hx-trigger="submit, load">
     <fieldset>
         <legend>Architecture Decision Record</legend>
         <div>
@@ -65,5 +69,3 @@ Development will have to cope with differences between Unix variants, particular
 
     </fieldset>
 </form>
-<div class="divider"></div>
-<div id="contentBox" class="contentBox"></div>

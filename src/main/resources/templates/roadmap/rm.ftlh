@@ -1,3 +1,6 @@
+<div id="contentBox" class="contentBox"></div>
+<div class="divider"></div>
+
 <form class="pure-form pure-form-stacked" data-hx-put="api/roadmap/" data-hx-target="#contentBox" hx-trigger="submit, load">
     <fieldset id="response-div" >
         <legend>Timeline Builder</legend>
@@ -41,6 +44,5 @@ code scanning and app scanning
         <button class="btn btn-active btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
     </fieldset>
 </form>
-<div class="divider"></div>
-<div id="contentBox" class="contentBox"></div>
+
 

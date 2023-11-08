@@ -41,7 +41,7 @@ import kotlin.time.measureTimedValue
 class RoadmapPlanController {
     val log = LogFactory.getLog(RoadmapPlanController::class.java)
     /**
-     * Generates a roadmap plan based on the provided parameters and saves it to the database.
+     * Generates a roadmap plan based on the provided parameters.
      *
      * @param httpServletRequest The HttpServletRequest object that contains the request parameters.
      * @return A ResponseEntity object with the binary representation of the generated roadmap plan and the appropriate headers.

@@ -102,25 +102,42 @@ Participants: $participants
 
     }
     fun makeAdrSource(txt: String, svg: String): String {
+        //language=html
         return """
-        <div id='imageblock'>
-        $svg
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title text-xl font-small">
+                Image
+            </div>
+            <div class="collapse-content">
+                <div id='imageblock'>
+                $svg
+                </div>
+            </div>
         </div>
-        <br/>
-        <h3>Adr Source</h3>
-        <div class='pure-u-1 pure-u-md-20-24'>
-        <pre>
-        <code class="kotlin">
-        $txt
-        </code>
-        </pre>
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title text-xl font-small">
+                Click to View Source
+            </div>
+            <div class="collapse-content">
+                <h3>Adr Source</h3>
+                <div>
+                <pre>
+                <code class="kotlin">
+                $txt
+                </code>
+                </pre>
+                </div>
+                <script>
+                var adrSource = `[adr]\n----\n${txt}\n----`;
+                document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+                });
+                </script>
+            </div>
         </div>
-        <script>
-        var adrSource = `[adr]\n----\n${txt}\n----`;
-        document.querySelectorAll('pre code').forEach((el) => {
-            hljs.highlightElement(el);
-        });
-        </script>
+
     """.trimIndent()
     }
 

@@ -23,6 +23,7 @@
                class="join-item input input-bordered input-primary w-full max-w-x" value="#E9A6A6">
     </div>
 </div>
+
     <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -

@@ -4,7 +4,8 @@
 
 <div>
 <h1>Create SVG Buttons from JSON</h1>
-
+<div id="contentBox" ></div>
+<div class="divider"></div>
 <form data-hx-put="api/buttons/form" data-hx-target="#contentBox" hx-trigger="submit, load">
 
 <fieldset id="response-div" >
@@ -45,5 +46,4 @@
         hljs.highlightElement(el);
     });
 </script>
-<div class="divider"></div>
-<div id="contentBox" class="contentBox"></div>
+
