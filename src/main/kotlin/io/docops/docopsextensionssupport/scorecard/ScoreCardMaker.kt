@@ -17,12 +17,10 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.asciidoc.utils.escapeXml
-
-import java.awt.Color
-import java.io.File
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.UUID
+import java.awt.Color
+import java.io.File
 import kotlin.math.max
 
 /**
@@ -65,7 +63,9 @@ class ScoreCardMaker {
         //50 top, 35.1 each row
         val width = WIDTH
         return """<svg id="d$id" xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
-     viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}" xmlns:xlink="http://www.w3.org/1999/xlink">
+     viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}"
+     preserveAspectRatio="xMidYMin slice"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
 """
     }
     fun tail() = "</svg>"
@@ -188,7 +188,15 @@ class ScoreCardMaker {
         }
         return sb.toString()
     }
-    private fun arrowLine(scoreCard: ScoreCard) = """<line x1="490" y1="35" x2="539" y2="35" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="8" marker-end="url(#arrowhead1)"/>"""
+    private fun arrowLine(scoreCard: ScoreCard) = """
+        <g transform="translate(480,25)" class="raiseText">
+            <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" />
+            <g transform="translate(50,7.5)">
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="3"
+                         />
+            </g>
+        </g>
+        """.trimIndent()
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
     private fun endWrapper() = "</g>"

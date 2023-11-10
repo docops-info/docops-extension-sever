@@ -197,7 +197,9 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         val scaleF = scale.toFloat()
         val height = 424 * scale.toFloat()
         return Pair("""
-        <svg width="${width * scaleF}" height="$height" viewBox="0 0 ${width * scaleF} $height" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg width="${width * scaleF}" height="$height" viewBox="0 0 ${width * scaleF} $height"
+        preserveAspectRatio="xMidYMin slice"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <desc>https://docops.io/extension</desc>
     """.trimIndent(),width)
     }

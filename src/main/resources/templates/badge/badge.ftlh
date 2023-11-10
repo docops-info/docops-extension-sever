@@ -53,7 +53,7 @@
                     <label for="fontColor" class="btn join-item">Font Color</label>
                     <input type="text" id="fontColor" name="fontColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
-                           value="#000000" class="join-item input input-bordered input-primary w-full max-w-xs">
+                           value="#fcfcfc" class="join-item input input-bordered input-primary w-full max-w-xs">
 
                 </div>
             </div>
