@@ -75,8 +75,9 @@ class ScoreCardMaker {
             <defs>
             ${arrowHead(scoreCard)}
             ${gradientBackGround(scoreCard)}
-            ${buildGradientDef("#fc4141", "leftScoreBox")}
-            ${buildGradientDef("#7149c6", "rightScoreBox")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor")}
+            ${buildGradientDef("#D36B00", "leftScoreBox")}
+            ${buildGradientDef("#5D9C59", "rightScoreBox")}
             ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem")}
             ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
             <style>
@@ -126,7 +127,7 @@ class ScoreCardMaker {
     //<rect width="100%" height="100%" fill="url(#backgroundScore)" opacity="1.0" ry="18" rx="18"/>
     fun background(h: Float, w: Float) = """
         <path d="${generateRectPathData(width = w, height = h, 16.0f,16.0f,16.0f,16.0f)}" 
-        fill="url(#backgroundScore)"  />
+        fill="#fcfcfc" stroke="#5b5b5b"  />
          """.trimIndent()
 
     private fun titles(scoreCard: ScoreCard): String {
@@ -149,7 +150,7 @@ class ScoreCardMaker {
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="left_${scoreCard.id}" stroke="gold" >
+    <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="left_${scoreCard.id}">
     <title>${it.description}</title>
     </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
@@ -174,7 +175,7 @@ class ScoreCardMaker {
         scoreCard.outcomeItems.forEach {
             sb.append("""
     <g transform="translate(525, $startY)" $display>
-        <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="right_${scoreCard.id}" stroke="gold">
+        <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="right_${scoreCard.id}">
         <title>${it.description}</title>
         </path>
         <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
@@ -190,10 +191,10 @@ class ScoreCardMaker {
     }
     private fun arrowLine(scoreCard: ScoreCard) = """
         <g transform="translate(480,25)" class="raiseText">
-            <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" />
+            <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             <g transform="translate(50,7.5)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="3"
-                         />
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="3"
+                         fill="url(#arrowColor)"/>
             </g>
         </g>
         """.trimIndent()
@@ -205,7 +206,7 @@ class ScoreCardMaker {
 fun buildGradientDef(color: String, id: String): String {
     val m = gradientFromColor(color)
     return """
-           <linearGradient id="$id" x2="0" y2="0" x1="0" y1="1">
+           <linearGradient id="$id" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${m["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${m["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${m["color3"]}"/>
