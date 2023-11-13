@@ -124,13 +124,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
             <line x1="0" x2="0" y1="-20" y2="-95" stroke="$color" stroke-width="2"/>
                 <g transform="translate(-2.5,-92),rotate(-90)">
-                    <polygon points="0,5 0,0 5,2.5" fill="$color"/>
+                    <polygon points="0,5 0,0 5,2.5" fill="url(#arrowColor)" stroke-width="3" stroke="url(#arrowColor)"/>
                 </g>
         </g>
-        <rect x="10" y="150" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"
-                  />
-            <rect x="10" y="150" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"
-                  />
+        <rect x="10" y="150" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="150" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
         <text x="125" y="180" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
@@ -157,7 +155,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
             <line x1="0" x2="0" y1="20" y2="95" stroke="$color" stroke-width="2"/>
             <g transform="translate(2.5,92),rotate(90)">
-                <polygon points="0,5 0,0 5,2.5" fill="$color"/>
+                <polygon points="0,5 0,0 5,2.5" fill="url(#arrowColor)" stroke-width="3" stroke="url(#arrowColor)"/>
             </g>
         </g>
         
@@ -293,9 +291,9 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             <stop class="stop3" offset="100%" stop-color="#282828"/>
         </linearGradient>
         <linearGradient id="arrowColor" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#c9c9d2"/>
-            <stop class="stop2" offset="50%" stop-color="#aeaebb"/>
-            <stop class="stop3" offset="100%" stop-color="#9394a5"/>
+            <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${colorMap["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${colorMap["color3"]}"/>
         </linearGradient>
         <linearGradient id="topBar" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
