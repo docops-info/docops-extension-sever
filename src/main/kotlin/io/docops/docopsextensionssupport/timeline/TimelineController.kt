@@ -70,30 +70,45 @@ class TimelineController {
             }
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val tm = TimelineMaker("on".equals(useDarkInput), outlineColor)
+            val tm = TimelineMaker("on" == useDarkInput, outlineColor)
             val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
             val div = """
-        <div id='imageblock'>
-        $svg
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title text-xl font-small">
+                Image
+            </div>
+            <div class="collapse-content">
+                <div id='imageblock'>
+                $svg
+                </div>
+            </div>
         </div>
-        <br/>
-        <h3>Timeline Source</h3>
-        <div class='pure-u-1 pure-u-md-20-24'>
-        <pre>
-        <code class="kotlin">
-        $contents
-        </code>
-        </pre>
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title text-xl font-small">
+                Click to View Source
+            </div>
+            <div class="collapse-content">
+                <h3>Adr Source</h3>
+                <div>
+                <pre>
+                <code class="kotlin">
+                 $contents
+                </code>
+                </pre>
+                </div>
+                <script>
+                var adrSource = `[timeline,title="Demo timeline Builder by docops.io",scale="0.7",role="center"]\n----\n${contents}\n----`;
+                document.querySelectorAll('pre code').forEach((el) => {
+                    hljs.highlightElement(el);
+                });
+                </script>
+            </div>
         </div>
-        <script>
-        var adrSource = `[timeline,title="Demo timeline Builder by docops.io",scale="0.7",role="center"]\n----\n${contents}\n----`;
-        document.querySelectorAll('pre code').forEach((el) => {
-            hljs.highlightElement(el);
-        });
-        </script>
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
@@ -129,15 +144,14 @@ class TimelineController {
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
             val isPdf = "PDF" == type
             val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
+            val headers = HttpHeaders()
             if (isPdf) {
-                val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType.IMAGE_PNG
                 val res = findHeightWidth(svg)
                 val baos = SvgToPng().toPngFromSvg(svg, res)
                 ResponseEntity(baos, headers, HttpStatus.OK)
             } else {
-                val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType.parseMediaType("image/svg+xml")
                 ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)

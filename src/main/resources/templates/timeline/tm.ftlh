@@ -1,3 +1,7 @@
+<div>
+    <h1>Create Timeline</h1>
+    <div id="contentBox" ></div>
+    <div class="divider"></div>
 <form class="pure-form pure-form-stacked" data-hx-put="api/timeline/" data-hx-target="#contentBox" hx-trigger="submit, load">
 <fieldset id="response-div" >
     <legend>Timeline Builder</legend>
@@ -69,5 +73,4 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
            value="Copy Source As AsciiDoc">
 </fieldset>
 </form>
-<div class="divider"></div>
-<div id="contentBox" class="contentBox"></div>
+</div>

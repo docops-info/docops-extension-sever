@@ -129,7 +129,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         </g>
         <rect x="10" y="150" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
         <rect x="10" y="150" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
-        <text x="125" y="180" fill='#000000' text-anchor='middle'
+        <text x="125" y="175" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                   ${entry.date}
