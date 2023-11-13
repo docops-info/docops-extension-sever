@@ -88,8 +88,8 @@ class RoadMapMaker(val useDark: Boolean = false) {
             roadMapTheme = DarkTheme()
             headerColor = "headerDark"
         }
-        sb.append("<g transform='scale($scale)'>")
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
+        sb.append("<g transform='scale($scale)'>")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
             sb.append(row(index, roadmaps, numChars))
@@ -99,7 +99,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="100%" opacity="1.0"/>
+         <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="662" opacity="1.0"/>
         <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
         """.trimIndent()
         )

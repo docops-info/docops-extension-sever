@@ -1,0 +1,229 @@
+<svg width="1590.0" height="1000" viewBox="0 0 1590.0 1000.0"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <defs>
+        <filter id="buttonBlur">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+            <feOffset in="blur" dy="2" result="offsetBlur"/>
+            <feMerge>
+                <feMergeNode in="offsetBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
+            <stop offset="0" stop-color="#000000" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="topshineBlur">
+            <feGaussianBlur stdDeviation="0.93"/>
+        </filter>
+
+        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="bottomshine">
+            <feGaussianBlur stdDeviation="0.95"/>
+        </filter>
+        <radialGradient id="grad0" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
+            <stop offset="30%" style="stop-color:#a2b0c6; stop-opacity:1"/>
+            <stop offset="60%" style="stop-color:#45618E; stop-opacity:1"/>
+        </radialGradient>
+        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
+            <stop offset="30%" style="stop-color:#d19d9d; stop-opacity:1"/>
+            <stop offset="60%" style="stop-color:#A43B3B; stop-opacity:1"/>
+        </radialGradient>
+        <linearGradient id="arrowColor" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#c9c9d2"/>
+            <stop class="stop2" offset="50%" stop-color="#aeaebb"/>
+            <stop class="stop3" offset="100%" stop-color="#9394a5"/>
+        </linearGradient>
+        <linearGradient id="topBar" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#a3a5b4"/>
+            <stop class="stop2" offset="50%" stop-color="#75788f"/>
+            <stop class="stop3" offset="100%" stop-color="#484b6a"/>
+        </linearGradient>
+        <style>
+            .glass:after, .glass:before {
+                content: "";
+                display: block;
+                position: absolute
+            }
+
+            .glass {
+                overflow: hidden;
+                color: #fff;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
+                background-image: radial-gradient(circle at center, rgba(0, 167, 225, .25), rgba(0, 110, 149, .5));
+                box-shadow: 0 5px 10px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2);
+                position: relative
+            }
+
+            .glass:after {
+                background: rgba(0, 167, 225, .2);
+                z-index: 0;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                backdrop-filter: blur(3px) saturate(400%);
+                -webkit-backdrop-filter: blur(3px) saturate(400%)
+            }
+
+            .glass:before {
+                width: calc(100% - 4px);
+                height: 35px;
+                background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
+                top: 2px;
+                left: 2px;
+                border-radius: 30px 30px 200px 200px;
+                opacity: .7
+            }
+
+            .glass:hover {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, .9)
+            }
+
+            .glass:hover:before {
+                opacity: 1
+            }
+
+            .glass:active {
+                text-shadow: 0 0 2px rgba(0, 0, 0, .9);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2)
+            }
+
+            .glass:active:before {
+                height: 25px
+            }
+
+            .raise {
+                pointer-events: bounding-box;
+                opacity: 1;
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+            }
+
+            .raiseText {
+                pointer-events: bounding-box;
+                opacity: 1;
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+            }
+        </style>
+    </defs>
+    <g transform="scale(1)">
+        <g transform="translate(30,500)">
+            <path d="M0,0 h960" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor)" class="raise"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="10" y1="0" x2="950" y2="0" stroke="#fcfcfc"
+                  stroke-width="10" fill="#ffffff" stroke-dasharray="24 24 24" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <g transform="translate(972,-2)">
+                <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="35" fill="url(#arrowColor)"
+                />
+            </g>
+        </g>
+        <g transform="translate(0,0)">
+            <g transform="translate(125,500)">
+                <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
+                <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
+                <line x1="0" x2="0" y1="-20" y2="-95" stroke="#6D4F98" stroke-width="2"/>
+                <g transform="translate(-2.5,-92),rotate(-90)">
+                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+                </g>
+            </g>
+            <rect x="10" y="100" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"
+                  />
+            <rect x="10" y="100" width="225" height="40" fill="url(#topBar)" stroke="#6D4F98" stroke-width="2" rx="5"
+                  />
+
+            <text x="125" y="130" fill='#000000' text-anchor='middle'
+                  style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
+                  class="glass raiseText">
+                July 23rd, 2023
+            </text>
+            <text x="120" y="150">
+                <tspan x="20" dy="14" fill='#000000'>DocOps extension Server</tspan>
+                <tspan x="20" dy="14" fill='#000000'>releases a new feature,</tspan>
+                <tspan x="20" dy="14" fill='#000000'>Timeline Maker for</tspan>
+                <tspan x="20" dy="14" fill='#000000'><a xlink:href="https://github.com/asciidoctor/asciidoctorj"
+                                                        target="_blank" class="rmLink">asciidoctorj</a>. With a
+                </tspan>
+                <tspan x="20" dy="14" fill='#000000'>simple text markup block</tspan>
+                <tspan x="20" dy="14" fill='#000000'>you can create very</tspan>
+                <tspan x="20" dy="14" fill='#000000'>powerful timeline images.</tspan>
+                <tspan x="20" dy="14" fill='#000000'>Enjoy!</tspan>
+            </text>
+            <rect id="button" x="-71" y="21" width="40" height="20" ry="5" rx="5" fill="#6D4F98"/>
+
+            <rect id="buttongrad" x="-71" y="21" width="40" height="20" ry="5" rx="5" fill="url(#overlayGrad)"/>
+            <text id="label" x="-51.5" y="35" text-anchor="middle" font-size="14px" fill="#fcfcfc">1</text>
+
+            <rect id="buttontop" x="-69" y="22" width="36" height="5" ry="5" rx="5" fill="url(#topshineGrad)"
+                  filter="url(#topshineBlur)"/>
+            <rect id="buttonbottom" x="-69" y="35" width="36" height="3" fill="#ffffff" ry="5" rx="5"
+                  fill-opacity="0.3" filter="url(#bottomshine)"/>
+        </g>
+        <g transform="translate(125,0)">
+            <g transform="translate(125,500)">
+                <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
+                <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
+                <line x1="0" x2="0" y1="20" y2="95" stroke="#6D4F98" stroke-width="2"/>
+                <g transform="translate(2.5,92),rotate(90)">
+                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+                </g>
+            </g>
+            <rect x="10" y="600" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"/>
+            <rect x="10" y="600" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
+
+            <text x="125" y="630" fill='#000000' text-anchor='middle'
+                  style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
+                  class="glass raiseText">
+                August 15, 2023
+            </text>
+            <text x="135" y="650" class="even">
+                <tspan x="20" dy="14" fill='#000000'>DocOps.io revamping</tspan>
+                <tspan x="20" dy="14" fill='#000000'>website with updated</tspan>
+                <tspan x="20" dy="14" fill='#000000'>documentation. All our</tspan>
+                <tspan x="20" dy="14" fill='#000000'>work will be updated with</tspan>
+                <tspan x="20" dy="14" fill='#000000'>latest documentation for</tspan>
+                <tspan x="20" dy="14" fill='#000000'>Panels, for extension</tspan>
+                <tspan x="20" dy="14" fill='#000000'>server are the various</tspan>
+                <tspan x="20" dy="14" fill='#000000'>plug-ing for</tspan>
+                <tspan x="20" dy="14" fill='#000000'>asciidoctorj.</tspan>
+            </text>
+        </g>
+        <g transform="translate(250,0)">
+            <g transform="translate(125,500)">
+                <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
+                <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
+                <line x1="0" x2="0" y1="-20" y2="-92" stroke="#6D4F98" stroke-width="2"/>
+                <g transform="translate(-2.5,-92),rotate(-90)">
+                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+                </g>
+            </g>
+            <rect x="10" y="100" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"/>
+            <rect x="10" y="100" width="225" height="40" fill="url(#topBar)" stroke="#6D4F98" stroke-width="2" rx="5"/>
+            <text x="123" y="130" fill='#000000' text-anchor='middle'
+                  style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
+                  class="glass raiseText">
+                September 1st, 2023
+            </text>
+            <text x="120" y="150">
+                <tspan x="20" dy="14" fill='#000000'>DocOps extension Server</tspan>
+                <tspan x="20" dy="14" fill='#000000'>releases a new feature,</tspan>
+                <tspan x="20" dy="14" fill='#000000'>Timeline Maker for</tspan>
+                <tspan x="20" dy="14" fill='#000000'><a xlink:href="https://github.com/asciidoctor/asciidoctorj"
+                                                        target="_blank" class="rmLink">asciidoctorj</a>. With a
+                </tspan>
+                <tspan x="20" dy="14" fill='#000000'>simple text markup block</tspan>
+                <tspan x="20" dy="14" fill='#000000'>you can create very</tspan>
+                <tspan x="20" dy="14" fill='#000000'>powerful timeline images.</tspan>
+                <tspan x="20" dy="14" fill='#000000'>Enjoy!</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
