@@ -148,7 +148,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             x += 125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 600, "even", dy=14, textColor)
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 650, "even", dy=14, textColor)
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
@@ -161,10 +161,10 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             </g>
         </g>
         
-        <rect x="10" y="550" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="550" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
+        <rect x="10" y="600" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="600" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
         
-        <text x="125" y="580" fill='#000000' text-anchor='middle'
+        <text x="125" y="625" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                   ${entry.date}
