@@ -16,16 +16,90 @@
 
 package io.docops.docopsextensionssupport.diagram
 
+import io.micrometer.core.annotation.Counted
+import io.micrometer.core.annotation.Timed
+import jakarta.servlet.http.HttpServletRequest
+import org.apache.commons.logging.LogFactory
+import org.springframework.http.CacheControl
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import java.nio.charset.Charset
+import kotlin.time.measureTimedValue
 
 @Controller
-@RequestMapping("/api/boxy")
+@RequestMapping("/api/connector")
 class BoxyController {
 
+    private val log = LogFactory.getLog(BoxyController::class.java)
+
+    @PutMapping("/")
+    @ResponseBody
+    @Counted()
+    @Timed(value = "docops.boxy.put.html", histogram = true, percentiles = [0.5, 0.95])
+    fun makeDiag(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
+        val timings = measureTimedValue {
+            var contents = httpServletRequest.getParameter("content")
+            var title = "title"
+            if (contents.isNullOrEmpty()) {
+                contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
+                title = httpServletRequest.getParameter("title")
+            }
+            val scale = httpServletRequest.getParameter("scale")
+            val parser = ConnectorParser()
+            val connectors = parser.parse(contents)
+            val maker = ConnectorMaker(connectors = connectors)
+            val svg = maker.makeConnectorImage(scale = scale.toFloat())
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
+            val div = """
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title text-xl font-small">
+                Image
+            </div>
+            <div class="collapse-content">
+                <div id='imageblock'>
+                $svg
+                </div>
+            </div>
+        </div>
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title text-xl font-small">
+                Click to View Source
+            </div>
+            <div class="collapse-content">
+                <h3>Adr Source</h3>
+                <div>
+                <pre>
+                <code class="kotlin">
+                 $contents
+                </code>
+                </pre>
+                </div>
+                <script>
+                var adrSource = `[diag,scale="0.7",role="center"]\n----\n${contents}\n----`;
+                document.querySelectorAll('pre code').forEach((el) => {
+                    hljs.highlightElement(el);
+                });
+                </script>
+            </div>
+        </div>
+        """.trimIndent()
+            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+        }
+        log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
+        return timings.value
+    }
     @GetMapping("/static", produces = ["image/svg+xml"])
     @ResponseBody
     fun getBoxy(): ResponseEntity<String> {

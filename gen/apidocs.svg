@@ -87,7 +87,6 @@
 
             }
 
-
             .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
             1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
             center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
@@ -99,33 +98,52 @@
             rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
             3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
             rgba(0,129,174,.2)}.glass:active:before{height:25px}
+
+            .boxText {
+                font-size:24px;
+                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-variant: small-caps;
+                font-weight: bold;
+            }
         </style>
-    </defs>
+        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
+        <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
+        <path id="hconnector" d="M-40.0,50.0 L5.0,50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <line  x1="-40" y1="50" x2="-6" y2="50" stroke="#E14D2A" stroke-width="3" fill="url(#grad0)" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+        </defs>
+
     <g>
         <g transform="translate(0,0)" >
-            <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad0)" ry="18" rx="18"  />
-            <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Developer</text>
+            <use href="#bbox" x="10" y="10" fill="url(#grad0)"/>
+            <text x="135" y="65" text-anchor="middle" class="filtered glass boxText">Developer</text>
         </g>
 
         <g transform="translate(300,0)" >
-            <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad4)" ry="18" rx="18"  />
-            <line marker-end="url(#arrowhead)" x1="-40" y1="50" x2="-20" y2="50" stroke="#E14D2A" stroke-width="3" fill="url(#grad0)"/>
-            <line marker-end="url(#arrowhead)" x1="135" y1="100" x2="135" y2="120" stroke="#FEC260" stroke-width="3" fill="url(#grad0)"/>
-            <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Unit Tests</text>
+            <use href="#bbox" x="10" y="10" fill="url(#grad4)"/>
+            <use href="#hconnector" stroke="#E14D2A" fill="url(#grad0)"/>
+            <use href="#vconnector" stroke="#FEC260" fill="url(#grad0)"/>
+            <text x="135" y="65" text-anchor="middle"  class="filtered glass boxText">Unit Tests</text>
+            <g transform="translate(-2,47)"><use href="#ppoint" fill="url(#grad0)" stroke-width="7" stroke="url(#grad0)"/></g>
+            <g transform="translate(137.5,137),rotate(90)"><use href="#ppoint" fill="url(#grad0)" stroke-width="7" stroke="url(#grad4)"/></g>
+
         </g>
         <g transform="translate(600,0)" >
             <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad6)" ry="18" rx="18" />
-            <line marker-end="url(#arrowhead)" x1="-40" y1="50" x2="-20" y2="50" stroke="#FEC260" stroke-width="3" fill="url(#grad5)"/>
-            <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Microsoft  Excel</text>
+            <use href="#hconnector" stroke="#FEC260" fill="url(#grad5)"/>
+            <text x="135" y="65" text-anchor="middle" class="filtered glass boxText">Microsoft  Excel</text>
+            <g transform="translate(-2,47)"><use href="#ppoint" fill="url(#grad4)" stroke-width="7" stroke="url(#grad4)"/></g>
         </g>
         <g transform="translate(300,140)" >
-            <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad5)" ry="18" rx="18" />
-            <line marker-end="url(#arrowhead)" x1="135" y1="100" x2="135" y2="120" stroke="#e9d3ff" stroke-width="3" fill="url(#grad0)"/>
-            <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Test Engine</text>
+            <use href="#bbox" x="10" y="10" fill="url(#grad5)"/>
+            <use href="#vconnector" stroke="#e9d3ff" fill="url(#grad5)"/>
+            <text x="135" y="65" text-anchor="middle" class="filtered glass boxText">Test Engine</text>
+            <g transform="translate(137.5,137),rotate(90)"><use href="#ppoint" fill="url(#grad5)" stroke-width="7" stroke="url(#grad5)" /></g>
         </g>
         <g transform="translate(300,280)" >
-            <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad2)" ry="18" rx="18" />
-            <text x="135" y="45" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">
+            <use href="#bbox" x="10" y="10" fill="url(#grad2)"/>
+            <text x="135" y="45" text-anchor="middle" class="filtered glass boxText">
                 <tspan x="135">API</tspan>
                 <tspan x="135" dy="24">Documentation</tspan>
             </text>
