@@ -20,13 +20,32 @@
 
     <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/connector/" data-hx-target="#contentBox">
-Engineer
-Unit Tests
-Microsoft Excel
+{
+  "connectors": [
+    {
+      "text": "Engineer"
+    },
+    {
+      "text": "Unit Tests"
+    },
+    {
+      "text": "Microsoft Excel"
+    },
+    {
+      "text": "GitHub"
+    },
+    {
+      "text": "Test Engine"
+    },
+    {
+      "text": "GitHub"
+    },
+    {
+      "text": "API Documentation"
+    }
+  ]
+}
 
-GitHub
-Test Engine
-API Documentation
             </textarea>
         </div>
 </fieldset>

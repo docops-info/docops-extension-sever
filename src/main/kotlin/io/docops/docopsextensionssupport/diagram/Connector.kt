@@ -23,3 +23,6 @@ class Connector (val text: String, val baseColor: String? = "#E14D2A") {
         return lines
     }
 }
+
+@Serializable
+data class Connectors(val connectors: MutableList<Connector>)
