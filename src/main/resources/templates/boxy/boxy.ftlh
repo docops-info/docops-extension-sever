@@ -20,14 +20,13 @@
 
     <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/connector/" data-hx-target="#contentBox">
-Developer
-                Advocate
-                Engineer
+Engineer
+Unit Tests
+Microsoft Excel
 
-                Quality Engineer
-                Performance
-
-
+GitHub
+Test Engine
+API Documentation
             </textarea>
         </div>
 </fieldset>

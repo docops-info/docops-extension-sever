@@ -9,6 +9,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>) {
     private val alphabets = CharRange('A','Z').toMutableList()
     private val colors = mutableListOf<String>()
 
+    private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
     fun makeConnectorImage(scale: Float = 1.0f): String {
 
         val sb = StringBuilder()
@@ -30,18 +31,28 @@ class ConnectorMaker(val connectors: MutableList<Connector>) {
     private fun defs() : String {
 
         val grad= StringBuilder()
-        for (i in 0 .. connectors.size) {
-            val randomColor = getRandomColorHex()
-            colors.add(randomColor)
-            val gradient = gradientFromColor(randomColor)
-            grad.append("""
-           <linearGradient id="grad${i}" x2="1" y2="1">
+
+            for (i in 0..connectors.size) {
+                var choiceColor = ""
+                if(i>6) {
+                    choiceColor = getRandomColorHex()
+                } else {
+                    choiceColor = baseColors[i]
+                }
+                colors.add(choiceColor)
+
+                val gradient = gradientFromColor(choiceColor)
+                grad.append(
+                    """
+           <linearGradient id="grad${i}" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
             </linearGradient> 
-            """.trimIndent())
-        }
+            """.trimIndent()
+                )
+            }
+
 
         //language=svg
         return """
