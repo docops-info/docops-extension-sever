@@ -5,18 +5,24 @@ import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 
 
-class ConnectorMaker(val connectors: MutableList<Connector>) {
+class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false) {
     private val alphabets = CharRange('A','Z').toMutableList()
     private val colors = mutableListOf<String>()
 
+    private var bgColor = "#fcfcfc"
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
     fun makeConnectorImage(scale: Float = 1.0f): String {
-
+        if(useDark) {
+            bgColor = "#111111"
+        }
         val sb = StringBuilder()
         val width: Float = (connectors.size * 250).toFloat() + (connectors.size * 46).toFloat()
         sb.append(head(110.0f, width = width, scale))
         sb.append(defs())
+        sb.append("<g>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
         sb.append(makeBody())
+        sb.append("</g>")
         sb.append(tail())
         return sb.toString()
     }
@@ -173,7 +179,7 @@ fun main() {
     val collectors = mutableListOf<Connector>(Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
         Connector("Test Engine"), Connector("API Documentation Output")
     )
-    val conn= ConnectorMaker(collectors)
+    val conn= ConnectorMaker(collectors, true)
     val svg = conn.makeConnectorImage(1.5f)
     val f = File("gen/connector.svg")
     f.writeText(svg)

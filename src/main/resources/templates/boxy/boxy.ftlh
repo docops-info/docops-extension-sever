@@ -1,5 +1,5 @@
 <div>
-    <h1>Create Connector Diagra </h1>
+    <h1>Create Connector Diagrams</h1>
     <div id="contentBox" ></div>
     <div class="divider"></div>
 <form class="pure-form pure-form-stacked" data-hx-put="api/connector/" data-hx-target="#contentBox" hx-trigger="submit, load">
@@ -8,7 +8,7 @@
     <div class="join">
         <label for="scale" class="btn join-item">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/connector/" data-hx-target="#contentBox"
-               value="1.0" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
+               value="0.5" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
     </div>
 <div>
     <div class="join">

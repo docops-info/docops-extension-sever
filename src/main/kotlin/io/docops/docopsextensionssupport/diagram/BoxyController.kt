@@ -67,7 +67,8 @@ class BoxyController {
                 title = httpServletRequest.getParameter("title")
             }
             val scale = httpServletRequest.getParameter("scale")
-            val svg = fromRequestToConnector(contents, scale.toFloat())
+            val useDarkInput = httpServletRequest.getParameter("useDark")
+            val svg = fromRequestToConnector(contents = contents, scale =  scale.toFloat(), useDark = "on" == useDarkInput)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -112,9 +113,9 @@ class BoxyController {
         return timings.value
     }
 
-    fun fromRequestToConnector(contents: String, scale: Float): String {
+    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
         val connectors = Json.decodeFromString<Connectors>(contents)
-        val maker = ConnectorMaker(connectors = connectors.connectors)
+        val maker = ConnectorMaker(connectors = connectors.connectors, useDark = useDark)
         val svg = maker.makeConnectorImage(scale = scale)
         return svg
     }
@@ -140,7 +141,7 @@ class BoxyController {
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val svg = fromRequestToConnector(data, scale = scale.toFloat())
+            val svg = fromRequestToConnector(data, scale = scale.toFloat(), useDark = useDark)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
