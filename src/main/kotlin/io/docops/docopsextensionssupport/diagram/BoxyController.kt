@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -30,16 +31,27 @@ import org.springframework.util.StreamUtils
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.net.URLDecoder
 import java.nio.charset.Charset
 import kotlin.time.measureTimedValue
 
+/**
+ * The BoxyController class handles HTTP requests related to boxy connectors and images.
+ */
 @Controller
 @RequestMapping("/api/connector")
 class BoxyController {
 
     private val log = LogFactory.getLog(BoxyController::class.java)
 
+    /**
+     * Generates a diagnostic image and returns it as a response entity.
+     *
+     * @param httpServletRequest The HttpServletRequest containing the request parameters.
+     * @return A ResponseEntity containing the diagnostic image as a byte array.
+     */
     @PutMapping("/")
     @ResponseBody
     @Counted()
@@ -100,12 +112,49 @@ class BoxyController {
         log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
         return timings.value
     }
+
+    /**
+     * Retrieves the connector based on the provided payload, scale, type, useDark, and outlineColor parameters.
+     *
+     * @param payload The encoded payload string.
+     * @param scale The scale value used to determine the size of the connector image.
+     * @param type The type of the connector image. Default value is "SVG".
+     * @param useDark A flag indicating whether to use a dark theme for the connector image. Default value is false.
+     * @param outlineColor The color of the connector outline. Default value is "#37cdbe".
+     * @return A ResponseEntity containing the byte array representation of the connector image.
+     */
+    @GetMapping("/")
+    @ResponseBody
+    @Timed(value = "docops.connector.get", histogram = true, percentiles = [0.5, 0.95])
+    fun getConnector(
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "scale") scale: String,
+        @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+        @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
+        @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String
+    ): ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val parser = ConnectorParser()
+            val connectors = parser.parse(data)
+            val maker = ConnectorMaker(connectors = connectors)
+            val svg = maker.makeConnectorImage(scale = scale.toFloat())
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+
+        }
+        log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
+    }
+
     @GetMapping("/static", produces = ["image/svg+xml"])
     @ResponseBody
     fun getBoxy(): ResponseEntity<String> {
         //language=svg
         return ResponseEntity.ok(
-        """
+            """
 <svg xmlns="http://www.w3.org/2000/svg" width="580" height="550"
      viewBox="0 0 580 550" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -222,6 +271,7 @@ class BoxyController {
 
     </g>
 </svg>
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }

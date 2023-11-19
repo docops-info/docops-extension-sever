@@ -136,7 +136,7 @@ class TimelineController {
                     @RequestParam("type", required = false, defaultValue = "SVG") type: String,
                     @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
                     @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean,
-                    @RequestParam(name="outlineColot", defaultValue = "#37cdbe") outlineColor: String
+                    @RequestParam(name="outlineColor", defaultValue = "#37cdbe") outlineColor: String
 
                     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
