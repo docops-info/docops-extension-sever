@@ -48,7 +48,7 @@ class RoadmapPlanController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Timed(value = "docops.roadmap.put.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.roadmap.put.html")
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             var div = ""
@@ -99,7 +99,7 @@ class RoadmapPlanController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.roadmap.get.html")
     fun getRoadMap(@RequestParam(name = "payload") payload: String,
                    @RequestParam(name="scale") scale: String,
                    @RequestParam("type", required = false, defaultValue = "SVG") type: String,

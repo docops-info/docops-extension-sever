@@ -61,7 +61,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
 //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
-    @Timed(value = "docops.release.get.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.get.html")
     fun getRelease(@RequestParam(name = "payload") payload: String,
                    @RequestParam("type", required = false, defaultValue = "PDF") type: String,
                    @RequestParam("animate", required = false, defaultValue = "ON") animate: String,
@@ -117,7 +117,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.release.get.prefill.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.get.prefill.html")
     fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
@@ -138,7 +138,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.release.put.json.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.put.json.html")
     fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val timing = measureTimedValue {
             val release = Json.decodeFromString<ReleaseStrategy>(payload)
@@ -156,7 +156,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
-    @Timed(value = "docops.release.put.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.put.html")
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
         val timing = measureTimedValue {
             when (releaseStrategy.style) {
@@ -198,7 +198,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("/build", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.release.put.build.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.put.build.html")
     fun createStrategy(@ModelAttribute model: ModelMap,
                        @RequestParam("title") title: String,
                        @RequestParam("style") style: String,

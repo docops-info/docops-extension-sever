@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Timed
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
@@ -46,6 +47,7 @@ class ScorecardController {
      */
     @GetMapping("/")
     @ResponseBody
+    @Timed(value="docops.getScoreCard")
     fun getScoreCard(@RequestParam(name = "payload") payload: String, @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean): ResponseEntity<ByteArray> {
 
         try {
@@ -76,6 +78,7 @@ class ScorecardController {
      */
     @PutMapping("/")
     @ResponseBody
+    @Timed(value="docops.putScorecard")
     fun putScorecard(@RequestBody scoreCard: ScoreCard): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {

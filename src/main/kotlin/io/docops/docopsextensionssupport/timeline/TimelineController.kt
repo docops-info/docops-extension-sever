@@ -53,7 +53,7 @@ class TimelineController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Timed(value = "docops.timeline.put.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.timeline.put.html")
     fun putTimeline(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             var title = "title"
@@ -129,7 +129,7 @@ class TimelineController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value = "docops.roadmap.get.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.roadmap.get.html")
     fun getTimeLine(@RequestParam(name = "payload") payload: String,
                     @RequestParam(name="title") title: String,
                     @RequestParam(name="scale") scale: String,
@@ -170,7 +170,7 @@ class TimelineController {
      */
     @GetMapping("/table")
     @ResponseBody
-    @Timed(value = "docops.roadmap.table.data.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.roadmap.table.data.html")
     fun getTimeLineTable(@RequestParam(name = "payload") payload: String, @RequestParam(name="title") title: String): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))

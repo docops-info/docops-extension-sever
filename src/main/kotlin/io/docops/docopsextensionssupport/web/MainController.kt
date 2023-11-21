@@ -49,40 +49,40 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/panels.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Counted
-    @Timed(value = "docops.panels.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panels.html")
     fun getPanelsView(model: Model): String {
         return "panels/panels"
     }
 
     @GetMapping("/panelgenerator.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Counted
-    @Timed(value = "docops.panel.generator.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.generator.html")
     fun getPanelGenerator(model: Model): String {
         return "panels/panelgenerator"
     }
 
     @GetMapping("/panelimagebuilder.html")
     @Counted
-    @Timed(value = "docops.panel.image.builder.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.image.builder.html")
     fun getPanelImageBuilder(): String {
         return "panels/panelimagebuilder"
     }
 
     @GetMapping("/slimpanel.html")
     @Counted
-    @Timed(value = "docops.panel.slim.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.slim.html")
     fun getSlimPanelEditor(): String {
         return "panels/slimpanel"
     }
     @GetMapping("/twotoneimagebuilder.html")
     @Counted
-    @Timed(value = "docops.twotoneimagebuilder.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.twotoneimagebuilder.html")
     fun getTwoTone(): String {
         return "panels/twotoneimagebuilder"
     }
     @GetMapping("/panelseditor.html")
     @Counted
-    @Timed(value = "docops.panel.editor.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.editor.html")
     fun panelsEditor(): String {
         return "panels/panelseditor"
     }
@@ -90,21 +90,21 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/charts.html", produces = [MediaType.TEXT_HTML_VALUE])
     @Counted
-    @Timed(value = "docops.charts.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.charts.html")
     fun getChartsView(model: Model): String {
         return "chart/charts"
     }
 
     @GetMapping("/badge.html")
     @Counted
-    @Timed(value = "docops.badge.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badge.html")
     fun getBadge(): String {
         return "badge/badge"
     }
 
     @GetMapping("/chart.html")
     @Counted
-    @Timed(value = "docops.chart.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.chart.html")
     fun getChart(model: Model): String {
         return "chart/chart"
 
@@ -112,7 +112,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/mychart.html")
     @Counted
-    @Timed(value = "docops.mychart.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.mychart.html")
     fun mychart(model: Model): String {
         return "chart/customchart"
     }
@@ -121,21 +121,21 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/treechart.html")
     @Counted
-    @Timed(value = "docops.treechart.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.treechart.html")
     fun treeChart(): String {
         return "chart/treechart"
     }
 
     @GetMapping("/stacked.html")
     @Counted
-    @Timed(value = "docops.stacked.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.stacked.html")
     fun stacked(): String {
         return "chart/stacked"
     }
 
     @GetMapping("/adrbuilder.html")
     @Counted
-    @Timed(value = "docops.panel.image.builder.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.image.builder.html")
     fun getAdr(model: Model): String {
         return "adr/adrbuilder"
     }
@@ -143,7 +143,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/simpleicons.html")
     @Counted
-    @Timed(value = "docops.simpleicons.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.simpleicons.html")
     fun getSimpleIcons(): String {
         return "icons/simpleicons"
     }
@@ -151,7 +151,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/stats.html")
     @Counted
-    @Timed(value = "docops.panel.stats.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.panel.stats.html")
     fun getStats(): String {
         return "stats/stats"
     }
@@ -159,7 +159,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/api/ping")
     @ResponseBody
     @Counted
-    @Timed(value = "docops.api.ping", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.api.ping")
     fun ping(servletResponse: HttpServletResponse) {
         servletResponse.contentType = "text/html"
         servletResponse.characterEncoding = "UTF-8"
@@ -189,45 +189,45 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/strat.html")
     @Counted
-    @Timed(value = "docops.release.strategy.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.strategy.html")
     fun stratForm(model: Model): String {
         return "release/strat"
     }
 
     @GetMapping("/fromJson.html")
     @Counted
-    @Timed(value = "docops.release.strategy.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.strategy.from.json.html")
     fun stratFromJson(model: Model): String {
         return "release/fromjson"
     }
     @GetMapping("/builder.html")
     @Counted
-    @Timed(value = "docops.release.strategy.builder.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.release.strategy.builder.html")
     fun stratBuilder(model: Model): String {
         return "release/releasebuilder"
     }
     @GetMapping("/timeline.html")
     @Counted
-    @Timed(value = "docops.timeline.strategy.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.timeline.strategy.html")
     fun timeline(model: Model): String {
         return "timeline/tm"
     }
 
     @GetMapping("/boxy.html")
     @Counted
-    @Timed(value = "docops.boxy.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.boxy.html")
     fun boxy(model: Model): String {
         return "boxy/boxy"
     }
     @GetMapping("/roadmap.html")
     @Counted
-    @Timed(value = "docops.roadmap.plan.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.roadmap.plan.html")
     fun roadmap(model: Model): String {
         return "roadmap/rm"
     }
     @GetMapping("/button/fromJson.html")
     @Counted
-    @Timed(value = "docops.button.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.button.from.json.html")
     fun buttonFromJson(model: Model, @RequestParam(name = "type", defaultValue = "REGULAR") type: String): String {
         val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
        json?.let {
@@ -246,13 +246,13 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/button/fromJsonToPng.html")
     @Counted
-    @Timed(value = "docops.button.from.json.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.button.from.json.html")
     fun buttonFromJsonToPng(model: Model): String {
         return "buttons/formjsontopng"
     }
     @GetMapping("/scorecard/index.html")
     @Counted
-    @Timed(value = "docops.scorecard.index.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.scorecard.index.html")
     fun scorecard(model: Model, @RequestParam(name = "type", defaultValue = "score1") type: String): String {
         val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
         json?.let {
@@ -263,14 +263,14 @@ class MainController @Autowired constructor(private val applicationContext: Appl
 
     @GetMapping("/color/grad.html")
     @Counted
-    @Timed(value = "docops.button.from.color.grad.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.button.from.color.grad.html")
     fun grad(model: Model): String {
         return "color/gradhelp"
     }
 
     @GetMapping("/button/convert.html")
     @Counted
-    @Timed(value = "docops.button.convert.html", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.button.convert.html")
     fun convertPanels(model: Model): String {
         return "buttons/convert"
     }

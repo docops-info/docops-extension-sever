@@ -56,7 +56,7 @@ class AdrController() {
      * @param context      The*/
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.adr", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.adr")
     @Observed(name = "AdrController.adr",
         contextualName = "creating-adr",
         lowCardinalityKeyValues = ["decision", "status"])
@@ -155,7 +155,7 @@ Participants: $participants
      */
     @GetMapping("/adr")
     @ResponseBody
-    @Timed(value = "docops.adr.get", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.adr.get")
     fun getAdr(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,

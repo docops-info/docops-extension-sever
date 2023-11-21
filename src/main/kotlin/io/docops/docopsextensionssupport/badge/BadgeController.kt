@@ -55,7 +55,7 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
      */
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
-    @Timed(value = "docops.badge.put", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badge.put")
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         var fillColor = badge.messageColor
         if (null == fillColor) {
@@ -141,7 +141,7 @@ $txt
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
-    @Timed(value = "docops.badge.get", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badge.get")
     fun getBadgeParams(
         @RequestParam(name = "payload") payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
@@ -201,7 +201,7 @@ $txt
 
 
     @PostMapping("/badges", consumes = [MediaType.ALL_VALUE], produces = ["image/svg+xml", "image/png"])
-    @Timed(value = "docops.badges.post", histogram = true, percentiles = [0.5, 0.95])
+    @Timed(value = "docops.badges.post")
     fun badges(
         @RequestBody payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String
