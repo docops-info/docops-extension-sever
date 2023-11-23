@@ -18,8 +18,8 @@ package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
@@ -43,7 +43,6 @@ import javax.xml.xpath.*
  */
 @Controller
 @RequestMapping("/api")
-@Observed(name = "badge.controller")
 class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
 
 
@@ -55,7 +54,8 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
      */
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
-    @Timed(value = "docops.badge.put")
+    @Counted(value = "docops.badge.put", description= "Number of times create a badge using put method")
+    @Timed(value = "docops.badge.put", description= "Time taken to create a badge using put method", percentiles=[0.5, 0.9])
     fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
         var fillColor = badge.messageColor
         if (null == fillColor) {
@@ -141,7 +141,8 @@ $txt
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
-    @Timed(value = "docops.badge.get")
+    @Counted(value = "docops.badge.get", description= "Number of times create a badge using get method")
+    @Timed(value = "docops.badge.get", description= "Time taken to create a badge using get method", percentiles=[0.5, 0.9])
     fun getBadgeParams(
         @RequestParam(name = "payload") payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
