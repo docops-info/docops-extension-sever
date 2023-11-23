@@ -59,8 +59,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param theme (Optional) The theme query parameter.
      * @return The ResponseEntity containing the converted ButtonForm object.
      */
-    @Timed(value="Docops.ButtonController.put.fromJsonToButtonForm.time", description="Creating a Button using Form Submission")
-    @Counted(value="Docops.ButtonController.put.fromJsonToButtonForm.count", description="Success Fail count of fromJsonToButtonForm")
+    @Timed(value="docops.button.put.fromJsonToButtonForm.time", description="Creating a Button using Form Submission", percentiles=[0.5,0.9])
+    @Counted(value="docops.button.put.fromJsonToButtonForm.count", description="Success Fail count of fromJsonToButtonForm", extraTags=["buttons"])
     @PutMapping("/buttons/form")
     @ResponseBody
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme", required = false) theme: String): ResponseEntity<ByteArray> {
@@ -156,8 +156,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @return A ResponseEntity object containing the retrieved buttons as a byte array.
      * @throws Exception if an error occurs while retrieving the buttons.
      */
-    @Timed(value="Docops.ButtonController.get.getButtons.time", description="Creating a Button using http get")
-    @Counted(value="Docops.ButtonController.get.getButtons.count", description="Success Fail count of getButtons")
+    @Timed(value="docops.button.get.getButtons.time", description="Creating a Button using http get", percentiles=[0.5, 0.9])
+    @Counted(value="docops.button.get.getButtons.count", description="Success Fail count of getButtons", extraTags = ["GetButtons"])
     @GetMapping("/buttons")
     @ResponseBody
     fun getButtons(
@@ -190,8 +190,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @return ResponseEntity The response entity containing the PNG image.
      * @throws Exception If there is an error in processing the request.
      */
-    @Timed(value="Docops.ButtonController.get.getButtonsPng.time", description="Creating a Button as PNG using http get")
-    @Counted(value="Docops.ButtonController.get.getButtonsPng.count", description="Success Fail count of getButtonsPng")
+    @Timed(value="docops.button.get.getButtonsPng.time", description="Creating a Button as PNG using http get")
+    @Counted(value="docops.button.get.getButtonsPng.count", description="Success Fail count of getButtonsPng")
     @GetMapping("/buttons/png")
     @ResponseBody
     fun getButtonsPng(
@@ -230,8 +230,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param payload The JSON payload representing the button form.
      * @return The response entity containing the PNG image.
      */
-    @Timed(value="Docops.ButtonController.put.fromJsonToButtonFormPng.time", description="Creating a Button as PNG using http put")
-    @Counted(value="Docops.ButtonController.put.fromJsonToButtonFormPng.count", description="Success Fail count of fromJsonToButtonFormPng")
+    @Timed(value="docops.button.put.fromJsonToButtonFormPng.time", description="Creating a Button as PNG using http put")
+    @Counted(value="docops.button.put.fromJsonToButtonFormPng.count", description="Success Fail count of fromJsonToButtonFormPng")
     @PutMapping("/buttons/form/png")
     @ResponseBody
     fun fromJsonToButtonFormPng(@RequestParam(name = "payload") payload: String): ResponseEntity<String> {
@@ -270,8 +270,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param theme The theme to be applied to the button item.
      * @return A ResponseEntity containing the updated button item JSON string.
      */
-    @Timed(value="Docops.ButtonController.put.themeItem.time", description="Updating button theme using http put")
-    @Counted(value="Docops.ButtonController.put.themeItem.count", description="Success Fail count of themeItem")
+    @Timed(value="docops.button.put.themeItem.time", description="Updating button theme using http put")
+    @Counted(value="docops.button.put.themeItem.count", description="Success Fail count of themeItem")
     @OptIn(ExperimentalSerializationApi::class)
     @PutMapping("button/theme")
     fun themeItem(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme") theme: String): ResponseEntity<String> {

@@ -56,8 +56,8 @@ class BoxyController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Counted()
-    @Timed(value = "docops.boxy.put.html")
+    @Counted(value="docops.boxy.put")
+    @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
     fun makeDiag(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             var contents = httpServletRequest.getParameter("content")
@@ -131,7 +131,7 @@ class BoxyController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value = "docops.connector.get")
+    @Timed(value = "docops.connector.get", description="Creating a connector diagram using http get", percentiles=[0.5, 0.9])
     fun getConnector(
         @RequestParam(name = "payload") payload: String,
         @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
