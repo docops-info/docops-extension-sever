@@ -22,11 +22,7 @@ import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import io.micrometer.core.instrument.Counter
-import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.core.instrument.Timer
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
@@ -43,8 +39,7 @@ import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api")
-class ButtonController @Autowired constructor(private val applicationContext: ApplicationContext, private val objectMapper: ObjectMapper,
-                                              private val meterRegistry: MeterRegistry){
+class ButtonController @Autowired constructor(private val applicationContext: ApplicationContext, private val objectMapper: ObjectMapper){
     private val log = LoggerFactory.getLogger(ButtonController::class.java)
     private val themeMap = mutableMapOf<String, String>()
 
@@ -63,29 +58,21 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param theme (Optional) The theme query parameter.
      * @return The ResponseEntity containing the converted ButtonForm object.
      */
+    @Timed(value="docops.button.put.fromJsonToButtonForm.time", description="Creating a Button using Form Submission", percentiles=[0.5,0.9])
+    @Counted(value="docops.button.put.fromJsonToButtonForm.count", description="Success Fail count of fromJsonToButtonForm")
     @PutMapping("/buttons/form")
     @ResponseBody
     fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme", required = false) theme: String): ResponseEntity<ByteArray> {
-        val timer = Timer.start(meterRegistry);
-
-        val counter = Counter.builder("button_fromJsonToButtonForm").tag("theme", theme).description("Success Fail count of fromJsonToButtonForm").register(meterRegistry)
         val timing = measureTimedValue {
              fromRequestParameter(payload, theme)
         }
         log.info("fromJsonToButtonForm executed in ${timing.duration.inWholeMilliseconds}ms ")
-        timer.stop(Timer.builder("button_fromJsonToButtonForm")
-            .description("creating button time")
-            .publishPercentiles(0.5, 0.9)
-            .publishPercentileHistogram(true)
-            .register(meterRegistry))
-        counter.increment()
         return timing.value
     }
 
     private fun fromRequestParameter(payload: String, theme: String?): ResponseEntity<ByteArray> {
         try {
 
-            val jsonObject = Json.parseToJsonElement(payload)
             var newPayload = "{}"
             var themeStr = ""
             theme?.let {
