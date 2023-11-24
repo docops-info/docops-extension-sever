@@ -155,7 +155,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @throws Exception if an error occurs while retrieving the buttons.
      */
     @Timed(value="docops.button.get.getButtons.time", description="Creating a Button using http get", percentiles=[0.5, 0.9])
-    @Counted(value="docops.button.get.getButtons.count", description="Success Fail count of getButtons", extraTags = ["GetButtons"])
+    @Counted(value="docops.button.get.getButtons.count", description="Success Fail count of getButtons")
     @GetMapping("/buttons")
     @ResponseBody
     fun getButtons(
