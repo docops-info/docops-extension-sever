@@ -56,10 +56,7 @@ class AdrController() {
      * @param context      The*/
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.adr")
-    @Observed(name = "AdrController.adr",
-        contextualName = "creating-adr",
-        lowCardinalityKeyValues = ["decision", "status"])
+    @Timed(value = "docops.adr.put",description = "Creating adr from web form")
     fun adr(@RequestParam("title") title: String,
             @RequestParam("date") date: String,
             @RequestParam("status") status: String,
@@ -155,7 +152,7 @@ Participants: $participants
      */
     @GetMapping("/adr")
     @ResponseBody
-    @Timed(value = "docops.adr.get")
+    @Timed(value = "docops.adr.get", description="docops adr from asciidoctor plugin")
     fun getAdr(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
