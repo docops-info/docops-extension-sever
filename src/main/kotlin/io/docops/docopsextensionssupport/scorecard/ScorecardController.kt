@@ -17,8 +17,8 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
@@ -47,7 +47,8 @@ class ScorecardController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value="docops.getScoreCard")
+    @Timed(value="docops.getScoreCard", description="docops asciidoctorj plugin", percentiles=[0.5, 0.9])
+    @Counted(value="docops.getScoreCard", description="docops asciidoctorj plugin")
     fun getScoreCard(@RequestParam(name = "payload") payload: String, @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean): ResponseEntity<ByteArray> {
 
         try {
@@ -78,7 +79,8 @@ class ScorecardController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Timed(value="docops.putScorecard")
+    @Timed(value="docops.putScorecard", description="creating a scorecard from a web form", percentiles=[0.5, 0.9])
+    @Counted(value="docops.putScorecard", description="creating a scorecard from a web form")
     fun putScorecard(@RequestBody scoreCard: ScoreCard): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
@@ -104,6 +106,8 @@ class ScorecardController {
      */
     @PutMapping("/form")
     @ResponseBody
+    @Timed(value="docops.putScorecardForm", description="creating a scorecard from a web form with json", percentiles=[0.5, 0.9])
+    @Counted(value="docops.putScorecardForm", description="creating a scorecard from a web form with json")
     fun fromJsonToScorecard(@RequestParam(name = "payload") payload: String): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             fromRequestParameter(payload)
