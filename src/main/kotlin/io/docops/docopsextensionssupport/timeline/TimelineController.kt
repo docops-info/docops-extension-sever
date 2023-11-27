@@ -19,8 +19,8 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
@@ -42,7 +42,6 @@ import kotlin.time.measureTimedValue
  */
 @Controller
 @RequestMapping("/api/timeline")
-@Observed(name = "timeline.controller")
 class TimelineController {
     private val log = LogFactory.getLog(TimelineController::class.java)
     /**
@@ -53,7 +52,8 @@ class TimelineController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Timed(value = "docops.timeline.put.html")
+    @Timed(value = "docops.timeline.put", description="docops create timeline from web form", percentiles=[0.5, 0.9])
+    @Counted(value = "docops.timeline.put", description="docops create timeline from web form")
     fun putTimeline(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             var title = "title"
@@ -129,7 +129,8 @@ class TimelineController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value = "docops.roadmap.get.html")
+    @Timed(value = "docops.roadmap.get", description = "docops create timeline from asciidoctorj plugin", percentiles=[0.5, 0.9])
+    @Counted(value = "docops.roadmap.get", description = "docops create timeline from asciidoctorj plugin")
     fun getTimeLine(@RequestParam(name = "payload") payload: String,
                     @RequestParam(name="title") title: String,
                     @RequestParam(name="scale") scale: String,

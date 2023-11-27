@@ -20,8 +20,8 @@ import io.docops.asciidoctorj.extension.adr.ADRParser
 import io.docops.asciidoctorj.extension.adr.AdrMakerNext
 import io.docops.asciidoctorj.extension.adr.AdrParserConfig
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.*
@@ -40,7 +40,6 @@ import java.nio.charset.StandardCharsets
  */
 @Controller
 @RequestMapping("/api")
-@Observed(name="adr.controller")
 class AdrController() {
 
 
@@ -56,7 +55,8 @@ class AdrController() {
      * @param context      The*/
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Timed(value = "docops.adr.put",description = "Creating adr from web form")
+    @Timed(value = "docops.adr.put", description = "Creating adr from web form", percentiles=[0.5, 0.9])
+    @Counted(value = "docops.adr.put", description = "Creating adr from web form")
     fun adr(@RequestParam("title") title: String,
             @RequestParam("date") date: String,
             @RequestParam("status") status: String,
@@ -152,7 +152,8 @@ Participants: $participants
      */
     @GetMapping("/adr")
     @ResponseBody
-    @Timed(value = "docops.adr.get", description="docops adr from asciidoctor plugin")
+    @Timed(value = "docops.adr.get", description="docops adr from asciidoctor plugin", percentiles=[0.5, 0.9])
+    @Counted(value = "docops.adr.get", description="docops adr from asciidoctor plugin")
     fun getAdr(
         @RequestParam("data") data: String,
         @RequestParam("type") type: String,
