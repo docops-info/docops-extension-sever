@@ -16,11 +16,12 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             bgColor = "#111111"
         }
         val sb = StringBuilder()
-        val width: Float = (connectors.size * 250).toFloat() + (connectors.size * 46).toFloat()
-        sb.append(head(110.0f, width = width, scale))
+        val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
+        val height = connectors.chunked(5).size * 110.0f
+        sb.append(head(height, width = width, scale))
         sb.append(defs())
-        sb.append("<g>")
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+        sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
         sb.append(tail())
@@ -131,10 +132,13 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun makeBody(): String {
         val sb = StringBuilder()
         var x = 0
+        var y = 0
         connectors.forEachIndexed {
             i, conn ->
             val lines= conn.textToLines()
             val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" class="filtered glass boxText">""")
+            var newLine = false
+
             lines.forEachIndexed {
                 j, content ->
                 var dy=""
@@ -144,31 +148,49 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 str.append("""<tspan x="135" $dy>$content</tspan>""")
             }
             str.append("</text>")
+
             if(i == connectors.lastIndex) {
                 //language=svg
                 sb.append("""
-             <g transform="translate($x,0)" >
+             <g transform="translate($x,$y)" >
                 <use href="#bbox" x="10" y="10" fill="url(#grad$i)"/>
                 $str
             </g>
                 """.trimIndent())
             }
             else {
+                if((i + 1) % 5 == 0) {
+                    newLine = true
+                }
                 //language=svg
                 sb.append(
                     """
-            <g transform="translate($x,0)" >
+            <g transform="translate($x,$y)" >
                 <use href="#bbox" x="10" y="10" fill="url(#grad$i)"/>
                 $str
                 <use href="#hconnector" stroke="${colors[i]}" fill="url(#grad$i)"/>
                 <g transform="translate(297,47)"><use href="#ppoint" fill="url(#grad$i)" stroke-width="7" stroke="url(#grad$i)"/></g>
                 <rect x="270" y="13" height="24" width="24" fill="url(#grad$i)" rx="5" ry="5"/>
                 <text x="282" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
-            </g>
-
             """.trimIndent()
                 )
+                if(newLine) {
+                    sb.append("""
+                <g transform="translate(260,50)">
+                    <path d="M0,0 L60,0" fill="#111111" stroke-width="3" stroke="${colors[i]}"/>
+                    <line x1="60" x2="60" y1="0" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="60" x2="-1480" y1="60" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="-1480" x2="-1480" y1="110" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="-1480" x2="-1400" y1="110" y2="110" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <g transform="translate(-1460,107)"><use href="#ppoint" fill="url(#grad$i)" stroke-width="7" stroke="url(#grad$i)"/></g>
+                </g>
+                """.trimIndent())
+                    x = 0
+                    y += 110
+                }
+                sb.append("</g>")
             }
+            if(!newLine)
             x += 300
         }
         return sb.toString()
@@ -177,10 +199,11 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
 fun main() {
     val collectors = mutableListOf<Connector>(Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
-        Connector("Test Engine"), Connector("API Documentation Output")
+        Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub"), Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
+        Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub")
     )
-    val conn= ConnectorMaker(collectors, true)
-    val svg = conn.makeConnectorImage(1.5f)
+    val conn= ConnectorMaker(collectors, false)
+    val svg = conn.makeConnectorImage(0.8f)
     val f = File("gen/connector.svg")
     f.writeText(svg)
 

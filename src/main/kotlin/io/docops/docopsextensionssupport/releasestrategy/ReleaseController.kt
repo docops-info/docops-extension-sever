@@ -20,9 +20,7 @@ import io.docops.asciidoctorj.extension.adr.compressString
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
-import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
@@ -46,7 +44,6 @@ import kotlin.time.measureTimedValue
  */
 @Controller
 @RequestMapping("/api/release")
-@Observed(name = "release.controller")
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
 
     private val log = LogFactory.getLog(ReleaseController::class.java)
@@ -62,7 +59,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
 //support for pdf png file type
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
-    @Counted(value="docops.release.get")
+    @Counted(value="docops.release.get", description="Creating a release diagram using http get")
     @Timed(value = "docops.release.get", description="Creating a release diagram using http get", percentiles=[0.5, 0.9])
     fun getRelease(@RequestParam(name = "payload") payload: String,
                    @RequestParam("type", required = false, defaultValue = "PDF") type: String,
@@ -119,7 +116,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Counted(value="docops.release.get.prefill")
+    @Counted(value="docops.release.get.prefill", description="Creating a release diagram from prefilled data using http get")
     @Timed(value = "docops.release.get.prefill", description="Creating a release diagram from prefilled data using http get", percentiles=[0.5, 0.9])
     fun prefill(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val timing = measureTimedValue {
@@ -141,7 +138,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Counted(value = "docops.release.put.json")
+    @Counted(value = "docops.release.put.json", description="Creating a release diagram from prefilled data using http put")
     @Timed(value = "docops.release.put.json", description="Creating a release diagram from prefilled data using http put", percentiles=[0.5, 0.9])
     fun prefillFromJson(@ModelAttribute model: ModelMap, @RequestParam(name = "payload") payload: String, @RequestParam("type", required = false, defaultValue = "PDF") type: String): String {
         val timing = measureTimedValue {
@@ -160,7 +157,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
-    @Counted("docops.release.put")
+    @Counted("docops.release.put", description="Creating a release diagram using http put")
     @Timed(value = "docops.release.put", description="Creating a release diagram using http put", percentiles=[0.5, 0.9])
     fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
         val timing = measureTimedValue {
@@ -203,8 +200,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      */
     @PutMapping("/build", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
-    @Counted("docops.release.put.build")
-    @Timed(value = "docops.release.put.build", description="Creating a release strategy diagram using http put", percentiles=[0.5, 0.9])
+    @Counted("docops.release.put.build", description="Creating a release strategy builder diagram using http put")
+    @Timed(value = "docops.release.put.build", description="Creating a release strategy buildeer diagram using http put", percentiles=[0.5, 0.9])
     fun createStrategy(@ModelAttribute model: ModelMap,
                        @RequestParam("title") title: String,
                        @RequestParam("style") style: String,

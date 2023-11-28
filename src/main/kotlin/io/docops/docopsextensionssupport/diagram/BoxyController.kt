@@ -20,21 +20,12 @@ import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import kotlin.time.measureTimedValue
@@ -56,7 +47,7 @@ class BoxyController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Counted(value="docops.boxy.put")
+    @Counted(value="docops.boxy.put", description="Creating a Button using http put")
     @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
     fun makeDiag(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
@@ -131,6 +122,7 @@ class BoxyController {
      */
     @GetMapping("/")
     @ResponseBody
+    @Counted(value = "docops.connector.get", description="Creating a connector diagram using http get")
     @Timed(value = "docops.connector.get", description="Creating a connector diagram using http get", percentiles=[0.5, 0.9])
     fun getConnector(
         @RequestParam(name = "payload") payload: String,
