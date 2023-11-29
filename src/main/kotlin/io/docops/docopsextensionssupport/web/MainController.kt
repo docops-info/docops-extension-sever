@@ -219,6 +219,14 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun boxy(model: Model): String {
         return "boxy/boxy"
     }
+
+    @GetMapping("/pm.html")
+    @Counted
+    @Timed(value = "docops.pm.html")
+    fun pm(model: Model): String {
+        return "boxy/pm"
+    }
+
     @GetMapping("/roadmap.html")
     @Counted
     @Timed(value = "docops.roadmap.plan.html")

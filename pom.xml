@@ -47,8 +47,7 @@
         <maven-scm-provider.version>2.0.0-M1</maven-scm-provider.version>
         <nexus-staging.version>1.6.7</nexus-staging.version>
         <maven-gpg.version>3.0.1</maven-gpg.version>
-        <dokka.version>1.6.21</dokka.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
     </properties>
 
@@ -248,6 +247,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <mainClass>io.docops.docopsextensionssupport.DocopsExtensionsSupportApplicationKt</mainClass>
                     <requiresUnpack>
@@ -303,7 +303,6 @@
                         <arg>-Xjsr305=strict</arg>
                     </args>
                     <compilerPlugins>
-                        <plugin>all-open</plugin>
                         <plugin>spring</plugin>
                         <plugin>kotlinx-serialization</plugin>
                     </compilerPlugins>
@@ -359,21 +358,6 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jetbrains.dokka</groupId>
-                <artifactId>dokka-maven-plugin</artifactId>
-                <version>${dokka.version}</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>dokka</goal>
-                            <goal>javadoc</goal>
-                            <goal>javadocJar</goal>
                         </goals>
                     </execution>
                 </executions>

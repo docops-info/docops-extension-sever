@@ -5,6 +5,16 @@ import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 
 
+/**
+ * Represents a ConnectorMaker that creates connector images.
+ *
+ * @property connectors A list of connectors to be included in the image.
+ * @property useDark Indicates whether to use a dark background.
+ * @property alphabets A list of alphabets from A to Z.
+ * @property colors A list of colors for the connectors.
+ * @property bgColor The background color of the image.
+ * @property baseColors A list of base colors for the connectors.
+ */
 class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false) {
     private val alphabets = CharRange('A','Z').toMutableList()
     private val colors = mutableListOf<String>()
