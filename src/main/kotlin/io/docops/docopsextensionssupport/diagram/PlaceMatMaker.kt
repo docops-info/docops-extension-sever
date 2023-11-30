@@ -1,25 +1,27 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.support.getRandomColorHex
+import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 
-class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean = false, val config: PlaceMatConfig= PlaceMatConfig()) {
+class PlaceMatMaker(val placeMatRequest: PlaceMatRequest) {
 
+    private val docOpsBadgeGenerator = DocOpsBadgeGenerator()
     private var bgColor = "#fcfcfc"
     private val colors = mutableListOf<String>()
     fun makePlacerMat(scale: Float = 1.0f): String {
-        if(useDark) {
+        if(placeMatRequest.useDark) {
             bgColor = "#111111"
         }
-        val width: Float = (placeMats.chunked(5)[0].size * 250).toFloat() + 60
-        val height = placeMats.chunked(5).size * 110.0f
+        val width: Float = (placeMatRequest.placeMats.chunked(5)[0].size * 250).toFloat() + 60
+        val height = placeMatRequest.placeMats.chunked(5).size * 110.0f
         val sb = StringBuilder()
-        sb.append(head(height, width = width, scale))
+        sb.append(head(height+60, width = width, scale))
         sb.append(defs())
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
         sb.append("<g transform=\"translate(0,0)\">")
         sb.append(makeBody())
+        sb.append(makeLegend(height + 20))
         sb.append("</g>")
         sb.append(tail())
         return sb.toString()
@@ -29,7 +31,7 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
         val sb = StringBuilder()
         var x = 0
         var y = 0
-        placeMats.forEachIndexed {
+        placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
             val lines= conn.textToLines()
             val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
@@ -44,17 +46,6 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
                 str.append("""<tspan x="135" $dy>$content</tspan>""")
             }
             str.append("</text>")
-
-            if(i == placeMats.lastIndex) {
-                //language=svg
-                sb.append("""
-             <g transform="translate($x,$y)" >
-                <use href="#bbox" x="10" y="10" fill="url(#grad${conn.colorIndex})"/>
-                $str
-            </g>
-                """.trimIndent())
-            }
-            else {
                 if((i + 1) % 5 == 0) {
                     newLine = true
                 }
@@ -62,7 +53,7 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use href="#bbox" x="10" y="10" fill="url(#grad${conn.colorIndex})"/>
+                <use href="#bbox" x="10" y="10" fill="url(#grad_${conn.legend})"/>
                 $str
             """.trimIndent()
                 )
@@ -71,7 +62,7 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
                     y += 110
                 }
                 sb.append("</g>")
-            }
+
             if(!newLine)
                 x += 260
         }
@@ -88,18 +79,14 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
 
         val grad= StringBuilder()
 
-        for (i in 0..placeMats.size) {
-            val choiceColor: String =  if(i>config.baseColors.size-1) {
-                getRandomColorHex()
-            } else {
-                config.baseColors[i]
-            }
+        placeMatRequest.config.legend.forEach {
+            item ->
+            val choiceColor = item.color
             colors.add(choiceColor)
-
             val gradient = gradientFromColor(choiceColor)
             grad.append(
                 """
-           <linearGradient id="grad${i}" x2="0%" y2="100%">
+           <linearGradient id="grad_${item.legend}" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
@@ -107,6 +94,7 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
             """.trimIndent()
             )
         }
+
 
         //language=svg
         return """
@@ -176,21 +164,38 @@ class PlaceMatMaker(val placeMats: MutableList<PlaceMat>, val useDark: Boolean =
         </defs>
         """.trimIndent()
     }
+    private fun makeLegend(y: Float): String {
+        val sb = StringBuilder("""<g transform="translate(0,$y),scale(0.15)">""")
+        sb.append("""<text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps">Legend</text>""")
+        var start = 10.0
+        placeMatRequest.config.legend.forEach{
+            item ->
+                val textLen = docOpsBadgeGenerator.measureText(item.legend) * 100F
+            sb.append("""
+            <g transform="translate($start,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
+                <rect x="0" y="0" width="$textLen" height="110" fill="url(#grad_${item.legend})" />
+                <text text-anchor="middle" style="${item.style}" x="${textLen/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
+            </g>
+            """.trimIndent())
+            start += (textLen + 40)
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
 }
 
 fun main() {
-    val pmm = PlaceMatMaker(mutableListOf(PlaceMat("SUI", colorIndex = 1), PlaceMat("Contact View", colorIndex = 2),
-        PlaceMat("Contact Management", colorIndex = 2),
-        PlaceMat("CDE Wrapper", colorIndex = 1),
-        PlaceMat("Live Publish", colorIndex = 1),
-        PlaceMat("Policy Quote Search", colorIndex = 3),
-        PlaceMat("NXT3", colorIndex = 1)
-    ),config= PlaceMatConfig(baseColors = mutableListOf(
-        "#CDF5FD",
-        "#9AD0C2",
-        "#FFEBD8",
-        "#9EB8D9"))
-    )
+    val pmm = PlaceMatMaker(PlaceMatRequest(mutableListOf(PlaceMat("SUI", legend = "Vendor"), PlaceMat("Contact View", legend = "Both"),
+        PlaceMat("Contact Management", legend = "Company"),
+        PlaceMat("CDE Wrapper", legend = "Vendor"),
+        PlaceMat("Live Publish", legend = "Vendor"),
+        PlaceMat("Policy Quote Search", legend = "Both"),
+        PlaceMat("NXT3", legend = "Vendor")
+    ),config= PlaceMatConfig(legend = mutableListOf(
+        ColorLegendConfig("#CDF5FD","Company"),
+        ColorLegendConfig("#9AD0C2","Vendor"),
+        ColorLegendConfig("#FFEBD8", "Both"))
+    )))
     val svg = pmm.makePlacerMat(1.0f)
     val f = File("gen/place.svg")
     f.writeText(svg)

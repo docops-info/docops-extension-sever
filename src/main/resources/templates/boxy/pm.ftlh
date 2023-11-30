@@ -21,49 +21,62 @@
     <div class="join">
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/placemat/" data-hx-target="#contentBox">
 {
-  "placemats": [
+  "placeMats": [
     {
-      "name": "Engineer",
-      "colorIndex": 1
+      "name": "SUI",
+      "legend": "Vendor",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "Unit Tests",
-      "colorIndex": 1
+      "name": "Contact View",
+      "legend": "Both",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "Microsoft Excel",
-      "colorIndex": 2
+      "name": "Contact Management",
+      "legend": "Company",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "GitHub",
-      "colorIndex": 4
+      "name": "CDE Wrapper",
+      "legend": "Vendor",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "Test Engine",
-      "colorIndex": 3
+      "name": "Live Publish",
+      "legend": "Vendor",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "GitHub",
-      "colorIndex": 6
+      "name": "Policy Quote Search",
+      "legend": "Both",
+      "style": "font-size: 1em;"
     },
     {
-      "name": "API Documentation",
-      "colorIndex": 5
+      "name": "NXT3",
+      "legend": "Vendor",
+      "style": "font-size: 1em;"
     }
   ],
+  "useDark": false,
   "config": {
-    "baseColors": [
-      "#CDF5FD",
-      "#9AD0C2",
-      "#FFEBD8",
-      "#9EB8D9",
-      "#E14D2A",
-      "#82CD47",
-      "#687EFF",
-      "#C02739",
-      "#FEC260",
-      "#e9d3ff",
-      "#7fc0b7"
+    "style": "font-size: 1em;",
+    "legend": [
+      {
+        "color": "#FFB07F",
+        "legend": "Company",
+        "style":"fill:#111111"
+      },
+      {
+        "color": "#009FBD",
+        "legend": "Vendor",
+        "style":"fill:#fcfcfc"
+      },
+      {
+        "color": "#40128B",
+        "legend": "Both",
+        "style":"fill:#fcfcfc"
+      }
     ]
   }
 }

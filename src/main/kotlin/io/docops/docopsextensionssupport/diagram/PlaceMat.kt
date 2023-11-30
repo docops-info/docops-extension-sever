@@ -3,7 +3,7 @@ package io.docops.docopsextensionssupport.diagram
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PlaceMat(val name: String, val colorIndex: Int = 0, val style: String = "font-size: 1em;")
+class PlaceMat(val name: String, val legend: String = "", val style: String = "font-size: 1em;")
 
 fun PlaceMat.textToLines(): Pair<MutableList<String>, Int> {
     val lines = mutableListOf<String>()
@@ -26,7 +26,13 @@ fun PlaceMat.textToLines(): Pair<MutableList<String>, Int> {
 }
 
 @Serializable
-class PlaceMatConfig(val style: String = "font-size: 1em;", val baseColors: MutableList<String> = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7"))
+class ColorLegendConfig(val color: String = "#E14D2A", val legend: String = "", val style : String ="fill:#fcfcfc;")
+
+@Serializable
+class PlaceMatConfig(val style: String = "font-size: 1em;", val legend: MutableList<ColorLegendConfig> = mutableListOf(ColorLegendConfig(color= "#E14D2A",legend = "Company"), ColorLegendConfig(color = "#82CD47",legend = "Vendor"), ColorLegendConfig(color = "#687EFF",legend = "Both")))
 
 @Serializable
 data class PlaceMats(val placemats: MutableList<PlaceMat>, val config: PlaceMatConfig = PlaceMatConfig())
+
+@Serializable
+data class PlaceMatRequest(val placeMats: MutableList<PlaceMat>, var useDark: Boolean = false, val config: PlaceMatConfig= PlaceMatConfig())

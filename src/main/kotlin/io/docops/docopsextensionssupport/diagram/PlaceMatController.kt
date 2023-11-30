@@ -1,10 +1,12 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
@@ -16,7 +18,7 @@ import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api/placemat")
-class PlaceMatController {
+class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
     private val log = LogFactory.getLog(PlaceMatController::class.java)
     @PutMapping("/")
     @ResponseBody
@@ -78,8 +80,9 @@ class PlaceMatController {
     }
 
     fun fromRequestToPlaceMat(contents: String, scale: Float, useDark: Boolean): String {
-        val pms = Json.decodeFromString<PlaceMats>(contents)
-        val maker = PlaceMatMaker(placeMats = pms.placemats, useDark = useDark)
+        val pms = Json.decodeFromString<PlaceMatRequest>(contents)
+        pms.useDark = useDark
+        val maker = PlaceMatMaker(placeMatRequest = pms)
         return maker.makePlacerMat(scale = scale)
     }
 }
