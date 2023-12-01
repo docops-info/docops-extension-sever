@@ -32,9 +32,8 @@ class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator
                 contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
                 title = httpServletRequest.getParameter("title")
             }
-            val scale = httpServletRequest.getParameter("scale")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val svg = fromRequestToPlaceMat(contents = contents, scale =  scale.toFloat(), useDark = "on" == useDarkInput)
+            val svg = fromRequestToPlaceMat(contents = contents, useDark = "on" == useDarkInput)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -79,10 +78,10 @@ class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator
         return timings.value
     }
 
-    fun fromRequestToPlaceMat(contents: String, scale: Float, useDark: Boolean): String {
+    fun fromRequestToPlaceMat(contents: String, useDark: Boolean): String {
         val pms = Json.decodeFromString<PlaceMatRequest>(contents)
         pms.useDark = useDark
         val maker = PlaceMatMaker(placeMatRequest = pms)
-        return maker.makePlacerMat(scale = scale)
+        return maker.makePlacerMat()
     }
 }

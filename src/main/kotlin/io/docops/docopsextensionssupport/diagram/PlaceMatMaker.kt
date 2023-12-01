@@ -8,20 +8,27 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest) {
 
     private val docOpsBadgeGenerator = DocOpsBadgeGenerator()
     private var bgColor = "#fcfcfc"
+    private var fgColor = "#111111"
     private val colors = mutableListOf<String>()
-    fun makePlacerMat(scale: Float = 1.0f): String {
+    fun makePlacerMat(): String {
         if(placeMatRequest.useDark) {
             bgColor = "#111111"
+            fgColor = "#fcfcfc"
         }
         val width: Float = (placeMatRequest.placeMats.chunked(5)[0].size * 250).toFloat() + 60
-        val height = placeMatRequest.placeMats.chunked(5).size * 110.0f
+        val height = placeMatRequest.placeMats.chunked(5).size * 110.0f + 50
         val sb = StringBuilder()
-        sb.append(head(height+60, width = width, scale))
+        sb.append(head(height+60, width = width, placeMatRequest.scale))
         sb.append(defs())
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\" stroke=\"#111111\" stroke-width=\"3\"/>")
         sb.append("<g transform=\"translate(0,0)\">")
+        sb.append("""<g transform="translate(0,0)">
+            <text x="20" y="24" text-anchor="start" font-size="24" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">${placeMatRequest.title}</text>
+        </g>
+        <g transform="translate(0,50)">""")
         sb.append(makeBody())
-        sb.append(makeLegend(height + 20))
+        sb.append(makeLegend(height + 20 - 50))
+        sb.append("</g>")
         sb.append("</g>")
         sb.append(tail())
         return sb.toString()
@@ -53,7 +60,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest) {
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use href="#bbox" x="10" y="10" fill="url(#grad_${conn.legend})"/>
+                <use href="#bbox" x="10" y="10" fill="url(#grad_${conn.legendAsStyle()})"/>
                 $str
             """.trimIndent()
                 )
@@ -86,7 +93,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest) {
             val gradient = gradientFromColor(choiceColor)
             grad.append(
                 """
-           <linearGradient id="grad_${item.legend}" x2="0%" y2="100%">
+           <linearGradient id="grad_${item.legendAsStyle()}" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
@@ -165,15 +172,15 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest) {
         """.trimIndent()
     }
     private fun makeLegend(y: Float): String {
-        val sb = StringBuilder("""<g transform="translate(0,$y),scale(0.15)">""")
-        sb.append("""<text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps">Legend</text>""")
+        val sb = StringBuilder("""<g transform="translate(20,$y),scale(0.15)">""")
+        sb.append("""<text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">Legend</text>""")
         var start = 10.0
         placeMatRequest.config.legend.forEach{
             item ->
                 val textLen = docOpsBadgeGenerator.measureText(item.legend) * 100F
             sb.append("""
             <g transform="translate($start,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
-                <rect x="0" y="0" width="$textLen" height="110" fill="url(#grad_${item.legend})" />
+                <rect x="0" y="0" width="$textLen" height="110" fill="url(#grad_${item.legendAsStyle()})" />
                 <text text-anchor="middle" style="${item.style}" x="${textLen/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
             </g>
             """.trimIndent())
@@ -195,8 +202,8 @@ fun main() {
         ColorLegendConfig("#CDF5FD","Company"),
         ColorLegendConfig("#9AD0C2","Vendor"),
         ColorLegendConfig("#FFEBD8", "Both"))
-    )))
-    val svg = pmm.makePlacerMat(1.0f)
+    ), title = "Impacted Applications - Internal"))
+    val svg = pmm.makePlacerMat()
     val f = File("gen/place.svg")
     f.writeText(svg)
 }
