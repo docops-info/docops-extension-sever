@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.ShapeResponse
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
@@ -15,13 +16,14 @@ import java.io.File
  * @property bgColor The background color of the image.
  * @property baseColors A list of base colors for the connectors.
  */
-class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false) {
+class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String) {
     private val alphabets = CharRange('A','Z').toMutableList()
     private val colors = mutableListOf<String>()
+    private var useGrad = true
 
     private var bgColor = "#fcfcfc"
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
-    fun makeConnectorImage(scale: Float = 1.0f): String {
+    fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
         if(useDark) {
             bgColor = "#111111"
         }
@@ -29,13 +31,26 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
         val height = connectors.chunked(5).size * 110.0f
         sb.append(head(height, width = width, scale))
-        sb.append(defs())
+        initColors()
+        if("PDF" != type) {
+            sb.append(defs())
+        } else {
+            useGrad = false
+            sb.append("""
+       <defs>
+        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
+        <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
+        <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+       </defs>
+            """.trimIndent())
+        }
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
         sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
         sb.append(tail())
-        return sb.toString()
+        return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
     }
 
     private fun head(height: Float, width: Float, scale: Float = 1.0f)  = """
@@ -45,30 +60,35 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
     private fun tail() = "</svg>"
 
+    private fun initColors() {
+        for (i in 0..connectors.size) {
+            var choiceColor = ""
+            if(i>6) {
+                choiceColor = getRandomColorHex()
+            } else {
+                choiceColor = baseColors[i]
+            }
+            colors.add(choiceColor)
+        }
+    }
     private fun defs() : String {
 
         val grad= StringBuilder()
 
-            for (i in 0..connectors.size) {
-                var choiceColor = ""
-                if(i>6) {
-                    choiceColor = getRandomColorHex()
-                } else {
-                    choiceColor = baseColors[i]
-                }
-                colors.add(choiceColor)
-
-                val gradient = gradientFromColor(choiceColor)
-                grad.append(
-                    """
+        colors.forEachIndexed {
+            i, choiceColor ->
+            val gradient = gradientFromColor(choiceColor)
+            grad.append(
+                """
            <linearGradient id="grad${i}" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
             </linearGradient> 
             """.trimIndent()
-                )
-            }
+            )
+        }
+
 
 
         //language=svg
@@ -135,7 +155,6 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
         <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <rect />
         </defs>
         """.trimIndent()
     }
@@ -145,6 +164,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         var y = 0
         connectors.forEachIndexed {
             i, conn ->
+            var grad = "url(#grad$i)"
+            if(!useGrad) {
+                grad = colors[i]
+            }
             val lines= conn.textToLines()
             val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" class="filtered glass boxText">""")
             var newLine = false
@@ -163,7 +186,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 //language=svg
                 sb.append("""
              <g transform="translate($x,$y)" >
-                <use href="#bbox" x="10" y="10" fill="url(#grad$i)"/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$grad"/>
                 $str
             </g>
                 """.trimIndent())
@@ -176,11 +199,11 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use href="#bbox" x="10" y="10" fill="url(#grad$i)"/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$grad" stroke="${colors[i]}"/>
                 $str
-                <use href="#hconnector" stroke="${colors[i]}" fill="url(#grad$i)"/>
-                <g transform="translate(297,47)"><use href="#ppoint" fill="url(#grad$i)" stroke-width="7" stroke="url(#grad$i)"/></g>
-                <rect x="270" y="13" height="24" width="24" fill="url(#grad$i)" rx="5" ry="5"/>
+                <use xlink:href="#hconnector" stroke="${colors[i]}" fill="$grad"/>
+                <g transform="translate(297,47)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
+                <rect x="270" y="13" height="24" width="24" fill="$grad" rx="5" ry="5"/>
                 <text x="282" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
             """.trimIndent()
                 )
@@ -192,7 +215,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                     <line x1="60" x2="-1480" y1="60" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
                     <line x1="-1480" x2="-1480" y1="110" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
                     <line x1="-1480" x2="-1400" y1="110" y2="110" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <g transform="translate(-1460,107)"><use href="#ppoint" fill="url(#grad$i)" stroke-width="7" stroke="url(#grad$i)"/></g>
+                    <g transform="translate(-1460,107)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
                 </g>
                 """.trimIndent())
                     x = 0
@@ -212,9 +235,13 @@ fun main() {
         Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub"), Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
         Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub")
     )
-    val conn= ConnectorMaker(collectors, false)
+    val conn= ConnectorMaker(collectors, false, "SVG")
     val svg = conn.makeConnectorImage(0.8f)
     val f = File("gen/connector.svg")
-    f.writeText(svg)
+    f.writeText(svg.shapeSvg)
+    val conn2 = ConnectorMaker(collectors, false, "PDF")
+    val svg2 = conn2.makeConnectorImage(0.8f)
+    val f2 = File("gen/connector2.svg")
+    f2.writeText(svg2.shapeSvg)
 
 }

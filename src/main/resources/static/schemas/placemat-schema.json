@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "scale": {
+      "type": "number"
+    },
+    "placeMats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "legend": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "legend"
+        ]
+      }
+    },
+    "useDark": {
+      "type": "boolean"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "type": "string"
+        },
+        "legend": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "legend": {
+                "type": "string"
+              },
+              "style": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "color",
+              "legend",
+              "style"
+            ]
+          }
+        }
+      },
+      "required": [
+        "style",
+        "legend"
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "scale",
+    "placeMats",
+    "useDark",
+    "config"
+  ]
+}

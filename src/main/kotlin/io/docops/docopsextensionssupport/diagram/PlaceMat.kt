@@ -38,6 +38,14 @@ fun ColorLegendConfig.legendAsStyle(): String {
 @Serializable
 class PlaceMatConfig(val style: String = "font-size: 1em;", val legend: MutableList<ColorLegendConfig> = mutableListOf(ColorLegendConfig(color= "#E14D2A",legend = "Company"), ColorLegendConfig(color = "#82CD47",legend = "Vendor"), ColorLegendConfig(color = "#687EFF",legend = "Both")))
 
+fun PlaceMatConfig.colorFromLegendName(name : String): ColorLegendConfig {
+    legend.forEach{
+        if(name == it.legend) {
+            return it
+        }
+    }
+    throw RuntimeException("Input Name[$name] not found")
+}
 @Serializable
 data class PlaceMats(val placemats: MutableList<PlaceMat>, val config: PlaceMatConfig = PlaceMatConfig())
 

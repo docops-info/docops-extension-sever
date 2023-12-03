@@ -18,7 +18,7 @@
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/placemat/" data-hx-target="#contentBox">
 {
   "title": "Observability",
-  "scale": 0.5
+  "scale": 0.8,
   "placeMats": [
     {
       "name": "Audit",
@@ -30,11 +30,11 @@
     },
     {
       "name": "Subscription",
-      "legend": "Business Capability"
+      "legend": "Both"
     },
     {
       "name": "Automation",
-      "legend": "Business Capability"
+      "legend": "Both"
     },
     {
       "name": "Metrics",
@@ -47,6 +47,30 @@
     {
       "name": "Monitoring",
       "legend": "Engineering"
+    },
+    {
+      "name": "Flakiness",
+      "legend": "Engineering"
+    },
+    {
+      "name": "Performance Regression",
+      "legend": "Engineering"
+    },
+    {
+      "name": "Misconfigurations",
+      "legend": "Engineering"
+    },
+    {
+      "name": "MTTR",
+      "legend": "Both"
+    },
+    {
+      "name": "Change Failure Rate",
+      "legend": "Both"
+    },
+    {
+      "name": "Deployment Frequency",
+      "legend": "Both"
     }
   ],
   "useDark": false,
@@ -54,17 +78,17 @@
     "style": "font-size: 1em;",
     "legend": [
       {
-        "color": "#FFB07F",
+        "color": "#D62AD0",
         "legend": "Business Capability",
-        "style":"fill:#111111"
+        "style":"fill:#fcfcfc"
       },
       {
-        "color": "#009FBD",
+        "color": "#7FBCD2",
         "legend": "Engineering",
-        "style":"fill:#111111"
+        "style":"fill:#fcfcfc"
       },
       {
-        "color": "#40128B",
+        "color": "#289672",
         "legend": "Both",
         "style":"fill:#fcfcfc"
       }

@@ -106,9 +106,9 @@ class BoxyController {
 
     fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
         val connectors = Json.decodeFromString<Connectors>(contents)
-        val maker = ConnectorMaker(connectors = connectors.connectors, useDark = useDark)
+        val maker = ConnectorMaker(connectors = connectors.connectors, useDark = useDark, "SVG")
         val svg = maker.makeConnectorImage(scale = scale)
-        return svg
+        return svg.shapeSvg
     }
     /**
      * Retrieves the connector based on the provided payload, scale, type, useDark, and outlineColor parameters.
