@@ -29,7 +29,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#f5f5f5"
+    open fun paperColor() = "#fcfcfc"
 }
 
 /**
@@ -89,7 +89,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             headerColor = "headerDark"
         }
         sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
-        sb.append("<g transform='scale($scale)'>")
+        sb.append("<g transform='scale($scale)' class=\"shadowed\">")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
             sb.append(row(index, roadmaps, numChars))
@@ -99,7 +99,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-         <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="662" opacity="1.0"/>
+        <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="662" opacity="1.0"/>
         <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
         """.trimIndent()
         )
@@ -233,7 +233,10 @@ class RoadMapMaker(val useDark: Boolean = false) {
             if (index == 0) {
                 sb.append(
                     """
-                <line x1="186" y1="50" x2="200" y2="50" stroke="#e0349c" stroke-width="8" marker-end="url(#arrowhead1)" />
+            <g transform="translate(200,47)">
+                <use href="#ppoint" fill="url(#grad0)" stroke-width="5" stroke="#e0349c"/>
+            </g>        
+                <line x1="186" y1="50" x2="200" y2="50" stroke="#e0349c" stroke-width="8" />
             """.trimIndent()
                 )
             }
@@ -252,7 +255,10 @@ class RoadMapMaker(val useDark: Boolean = false) {
             if (index == 0) {
                 sb.append(
                     """
-                <line x1="396" y1="50" x2="410" y2="50" stroke="#e56516" stroke-width="8" marker-end="url(#arrowhead2)" />
+                 <g transform="translate(410,47)">
+                <use href="#ppoint" fill="url(#grad0)" stroke-width="5" stroke="#e56516"/>
+                </g>        
+                <line x1="396" y1="50" x2="410" y2="50" stroke="#e56516" stroke-width="8" />
             """.trimIndent()
                 )
             }
@@ -292,24 +298,12 @@ class RoadMapMaker(val useDark: Boolean = false) {
             <stop class="stop2" offset="50%" stop-color="#515a60"/>
             <stop class="stop3" offset="100%" stop-color="#17242b"/>
         </linearGradient>
-        <linearGradient id="headerLight" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="#E4E4E4"/>
-            <stop class="stop2" offset="100%" stop-color="#DBD8E3"/>
+        <linearGradient id="headerLight" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#ddd1bf"/>
+            <stop class="stop2" offset="50%" stop-color="#ccba9f"/>
+            <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
-        <marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
-            <polygon points="0 0, 1 1.5, 0 3" fill="#e0349c"/>
-        </marker>
-        <marker id="arrowhead2" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
-            <polygon points="0 0, 1 1.5, 0 3" fill="#e56516"/>
-        </marker>
-        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
-            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
-                <fePointLight x="-5000" y="-10000" z="0000"/>
-            </feSpecularLighting>
-            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
-        </filter>
+        
     
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
@@ -377,7 +371,12 @@ class RoadMapMaker(val useDark: Boolean = false) {
     .glass:active:before {
         height: 25px
     }
+     .shadowed {
+            -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+            filter: drop-shadow(6px 6px 5px rgba(0, 0, 0, .3));
+        }
     </style>
+    <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
     </defs>
     """.trimIndent()
 

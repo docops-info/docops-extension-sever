@@ -29,9 +29,11 @@ import kotlin.math.max
 class ScoreCardMaker {
 
     companion object {
-        const val WIDTH : Float= 1045.0f
+        const val WIDTH: Float = 1045.0f
     }
+
     private var isPdf = false
+
     /**
      * Generates a string representing a formatted scorecard HTML.
      *
@@ -44,23 +46,17 @@ class ScoreCardMaker {
         val sb = StringBuilder()
         val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
         val headerHeight = 50.0f
-        val height = numOfRowsHeight+ headerHeight
+        val height = numOfRowsHeight + headerHeight
         sb.append(head(scoreCard, height, id))
         val styles = StringBuilder()
         styles.append(workItem(id))
         styles.append(glass())
         styles.append(raise())
-        if(!isPdf) {
-            sb.append(defs(styles = styles.toString(), scoreCard = scoreCard))
-        } else {
-            sb.append("""
-            <defs>
-                ${arrowHead(scoreCard)}
-            </defs>
-            """.trimIndent())
-        }
+
+        sb.append(defs(styles = styles.toString(), scoreCard = scoreCard))
+
         sb.append(startWrapper(scoreCard))
-        sb.append(background(height , WIDTH ))
+        sb.append(background(height, WIDTH))
         sb.append(titles(scoreCard))
         sb.append(arrowLine(scoreCard))
         sb.append(left(scoreCard))
@@ -69,6 +65,7 @@ class ScoreCardMaker {
         sb.append(tail())
         return sb.toString()
     }
+
     fun head(scoreCard: ScoreCard, height: Float, id: String): String {
         //50 top, 35.1 each row
         val width = WIDTH
@@ -78,18 +75,11 @@ class ScoreCardMaker {
      xmlns:xlink="http://www.w3.org/1999/xlink">
 """
     }
+
     fun tail() = "</svg>"
     fun defs(styles: String, scoreCard: ScoreCard): String {
 
-        return """
-            <defs>
-            ${arrowHead(scoreCard)}
-            ${gradientBackGround(scoreCard)}
-            ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor")}
-            ${buildGradientDef("#D36B00", "leftScoreBox")}
-            ${buildGradientDef("#5D9C59", "rightScoreBox")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
+        var style = """
             <style>
             $styles
             .left_${scoreCard.id} {
@@ -108,13 +98,30 @@ class ScoreCardMaker {
                     }
                 }
             </script>
+        """.trimIndent()
+        if (isPdf) {
+            style = ""
+        }
+        return """
+            <defs>
+            ${arrowHead(scoreCard)}
+            ${gradientBackGround(scoreCard)}
+            ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor")}
+            ${buildGradientDef("#D36B00", "leftScoreBox")}
+            ${buildGradientDef("#5D9C59", "rightScoreBox")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
+            $style
             </defs>
             
         """.trimIndent()
     }
-    private fun arrowHead(scoreCard: ScoreCard) = """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
+
+    private fun arrowHead(scoreCard: ScoreCard) =
+        """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
             <polygon points="0 0, 1 1.5, 0 3" fill="${scoreCard.scoreCardTheme.arrowColor}"/>
         </marker>"""
+
     private fun gradientBackGround(scoreCard: ScoreCard): String {
         return buildGradientDef(scoreCard.scoreCardTheme.backgroundColor, "backgroundScore")
     }
@@ -130,19 +137,22 @@ class ScoreCardMaker {
                 stroke: #bd5d5d;
             }
             """
-    fun glass () = """.glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}"""
 
-    fun raise (strokeColor: String = "gold", opacity: Float = 0.9f) = """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};} .raiseText {pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }"""
+    fun glass() =
+        """.glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}"""
+
+    fun raise(strokeColor: String = "gold", opacity: Float = 0.9f) =
+        """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};} .raiseText {pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }"""
 
     //<rect width="100%" height="100%" fill="url(#backgroundScore)" opacity="1.0" ry="18" rx="18"/>
     fun background(h: Float, w: Float) = """
-        <path d="${generateRectPathData(width = w, height = h, 16.0f,16.0f,16.0f,16.0f)}" 
+        <path d="${generateRectPathData(width = w, height = h, 0.0f, 0.0f, 0.0f, 0.0f)}" 
         fill="#fcfcfc" stroke="#5b5b5b"  />
          """.trimIndent()
 
     private fun titles(scoreCard: ScoreCard): String {
         var reveal = ""
-        if(scoreCard.slideShow) {
+        if (scoreCard.slideShow) {
             reveal = """onclick="reveal();" cursor="pointer""""
         }
         return """
@@ -152,21 +162,23 @@ class ScoreCardMaker {
    
         """.trimIndent()
     }
+
     fun left(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
         var startY = 50
         val inc = 35
 
         var grad = "url(#leftScoreBox)"
-        var fill = "class=\"left_${scoreCard.id}\""
-        if(isPdf) {
+        var fill = "fill=\"url(#leftItem)\""
+        if (isPdf) {
             grad = "#D36B00"
-            fill = "fill=\"${scoreCard.scoreCardTheme.initiativeBackgroundColor}\""
+
         }
         scoreCard.initiativeItems.forEach {
-            sb.append("""
+            sb.append(
+                """
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" $fill>
+    <path d="${generateRectPathData(width = 500f, height = 30f, 0f, 0f, 0f, 0f)}" $fill>
     <title>${it.description}</title>
     </path>
         <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
@@ -175,29 +187,31 @@ class ScoreCardMaker {
             <tspan x="30" dy="12" style="font-variant: small-caps;fill:${scoreCard.scoreCardTheme.initiativeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
-            """.trimIndent())
+            """.trimIndent()
+            )
             startY += inc
         }
         return sb.toString()
     }
+
     fun right(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
         var startY = 50
         val inc = 35
         var display = """display="block""""
-        if(scoreCard.slideShow) {
+        if (scoreCard.slideShow) {
             display = """display="none""""
         }
         var grad = "url(#rightScoreBox)"
-        var fill = "class=\"right_${scoreCard.id}\""
-        if(isPdf) {
+        val fill = "fill=\"url(#rightItem)\""
+        if (isPdf) {
             grad = "#5D9C59"
-            fill = "fill=\"${scoreCard.scoreCardTheme.outcomeBackgroundColor}\""
         }
         scoreCard.outcomeItems.forEach {
-            sb.append("""
+            sb.append(
+                """
     <g transform="translate(525, $startY)" $display>
-        <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" $fill >
+        <path d="${generateRectPathData(width = 500f, height = 30f, 0f, 0f, 0f, 0f)}" $fill >
         <title>${it.description}</title>
         </path>
         <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
@@ -206,14 +220,16 @@ class ScoreCardMaker {
             <tspan x="30" dy="12" style="font-variant: small-caps; fill:${scoreCard.scoreCardTheme.outcomeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
         </text>
     </g>
-            """.trimIndent())
+            """.trimIndent()
+            )
             startY += inc
         }
         return sb.toString()
     }
+
     private fun arrowLine(scoreCard: ScoreCard): String {
         var grad = "url(#arrowColor)"
-        if(isPdf) {
+        if (isPdf) {
             grad = scoreCard.scoreCardTheme.arrowColor
         }
         return """
@@ -241,6 +257,7 @@ fun buildGradientDef(color: String, id: String): String {
             </linearGradient> 
         """
 }
+
 fun gradientFromColor(color: String): Map<String, String> {
     val decoded = Color.decode(color)
     val tinted1 = tint(decoded, 0.5)
@@ -256,17 +273,27 @@ private fun tint(color: Color, factor: Double): String {
 }
 
 
-fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRightRound:Float, bottomRightRound:Float, bottomLeftRound:Float): String {
+fun generateRectPathData(
+    width: Float,
+    height: Float,
+    topLetRound: Float,
+    topRightRound: Float,
+    bottomRightRound: Float,
+    bottomLeftRound: Float
+): String {
     return """M 0 $topLetRound A $topLetRound $topLetRound 0 0 1 $topLetRound 0 L ${(width - topRightRound)} 0 A $topRightRound $topRightRound 0 0 1 $width $topRightRound L $width ${(height - bottomRightRound)} A $bottomRightRound $bottomRightRound 0 0 1 ${(width - bottomRightRound)} $height L $bottomLeftRound $height A $bottomLeftRound $bottomLeftRound 0 0 1 0 ${(height - bottomLeftRound)} Z"""
 }
+
 fun main() {
     val sm = ScoreCardMaker()
-    val sc = ScoreCard(title="Digital Policy Service", initiativeTitle =  "PCF to EKS", outcomeTitle = "TMVS++",
+    val sc = ScoreCard(
+        title = "Digital Policy Service", initiativeTitle = "PCF to EKS", outcomeTitle = "TMVS++",
         initiativeItems = mutableListOf(
             ScoreCardItem("Spring Boot 2.7 on Pcf Platform", "Spring Boot microservice framework"),
             ScoreCardItem("Redis used for storing circuit breaker data", "Redis is a distributed caching layer"),
-        ScoreCardItem("MySql for storing zipkin traces"),
-        ScoreCardItem("RabbitMQ for sending zipkin traces")),
+            ScoreCardItem("MySql for storing zipkin traces"),
+            ScoreCardItem("RabbitMQ for sending zipkin traces")
+        ),
         outcomeItems = mutableListOf(
             ScoreCardItem("Docker Containerized Spring Boot 3.x on EKS"),
             ScoreCardItem("Okta used for Authentication"),
@@ -277,16 +304,24 @@ fun main() {
             ScoreCardItem("Blue/Green/Canary deployments supported"),
             ScoreCardItem("Documented Local Setup for building & debugging"),
             ScoreCardItem("Production Support Guidelines documented"),
-            ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")),
-        scoreCardTheme = ScoreCardTheme(initiativeBackgroundColor = "#111111", initiativeDisplayTextColor = "#fcfcfc", outcomeBackgroundColor = "#3081D0", outcomeDisplayTextColor = "#fcfcfc", arrowColor = "#FF6C22"),
+            ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")
+        ),
+        scoreCardTheme = ScoreCardTheme(
+            initiativeBackgroundColor = "#111111",
+            initiativeDisplayTextColor = "#fcfcfc",
+            outcomeBackgroundColor = "#3081D0",
+            outcomeDisplayTextColor = "#fcfcfc",
+            arrowColor = "#FF6C22"
+        ),
         scale = 1.0f,
         slideShow = false
     )
-    val svg = sm.make(sc,false)
+    val svg = sm.make(sc, false)
     val outfile = File("gen/score1.svg")
     outfile.writeBytes(svg.toByteArray())
 
-    val scoreCard = Json.decodeFromString<ScoreCard>("""
+    val scoreCard = Json.decodeFromString<ScoreCard>(
+        """
         {
   "title": "Initiative",
   "initiativeTitle": "Journey Starts",
@@ -338,7 +373,8 @@ fun main() {
 }
 
             
-    """.trimIndent())
+    """.trimIndent()
+    )
     val scoreCardMaker = ScoreCardMaker()
     val svg2 = scoreCardMaker.make(scoreCard, true)
     val outfile2 = File("gen/score2.svg")

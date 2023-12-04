@@ -21,9 +21,10 @@ import org.apache.batik.transcoder.TranscoderOutput
 import org.apache.batik.transcoder.image.JPEGTranscoder
 import org.apache.batik.transcoder.image.PNGTranscoder
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.OutputStream
 import java.io.StringReader
-
+import java.nio.file.Files
 
 
 class SvgToPng {
@@ -51,4 +52,13 @@ class SvgToPng {
         val converter = JPEGTranscoder()
         converter.transcode(input, output)
     }
+}
+
+fun main() {
+    val svg = File("gen/score2.svg")
+    val content = Files.readAllBytes(svg.toPath())
+    //width="1254.0" height="228.48"
+    val output = SvgToPng().toPngFromSvg(String(content), Pair("228.48", "1254.0"))
+    val f = File("gen/score1.png")
+    f.writeBytes(output)
 }
