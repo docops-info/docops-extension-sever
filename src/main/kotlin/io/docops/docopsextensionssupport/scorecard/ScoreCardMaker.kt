@@ -31,13 +31,15 @@ class ScoreCardMaker {
     companion object {
         const val WIDTH : Float= 1045.0f
     }
+    private var isPdf = false
     /**
      * Generates a string representing a formatted scorecard HTML.
      *
      * @param scoreCard the scorecard object containing the data to be used in generating the HTML
      * @return a string representing the formatted scorecard HTML
      */
-    fun make(scoreCard: ScoreCard): String {
+    fun make(scoreCard: ScoreCard, isPdf: Boolean = false): String {
+        this.isPdf = isPdf
         val id = scoreCard.id
         val sb = StringBuilder()
         val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
@@ -48,7 +50,15 @@ class ScoreCardMaker {
         styles.append(workItem(id))
         styles.append(glass())
         styles.append(raise())
-        sb.append(defs(styles = styles.toString(), scoreCard= scoreCard))
+        if(!isPdf) {
+            sb.append(defs(styles = styles.toString(), scoreCard = scoreCard))
+        } else {
+            sb.append("""
+            <defs>
+                ${arrowHead(scoreCard)}
+            </defs>
+            """.trimIndent())
+        }
         sb.append(startWrapper(scoreCard))
         sb.append(background(height , WIDTH ))
         sb.append(titles(scoreCard))
@@ -147,13 +157,19 @@ class ScoreCardMaker {
         var startY = 50
         val inc = 35
 
+        var grad = "url(#leftScoreBox)"
+        var fill = "class=\"left_${scoreCard.id}\""
+        if(isPdf) {
+            grad = "#D36B00"
+            fill = "fill=\"${scoreCard.scoreCardTheme.initiativeBackgroundColor}\""
+        }
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
     <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="left_${scoreCard.id}">
     <title>${it.description}</title>
     </path>
-        <rect x="5" y="5" height="20" width="20" fill="url(#leftScoreBox)" rx="5" ry="5"/>
+        <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
             <tspan x="30" dy="12" style="font-variant: small-caps;fill:${scoreCard.scoreCardTheme.initiativeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
@@ -172,13 +188,19 @@ class ScoreCardMaker {
         if(scoreCard.slideShow) {
             display = """display="none""""
         }
+        var grad = "url(#rightScoreBox)"
+        var fill = "class=\"right_${scoreCard.id}\""
+        if(isPdf) {
+            grad = "#5D9C59"
+            fill = "fill=\"${scoreCard.scoreCardTheme.outcomeBackgroundColor}\""
+        }
         scoreCard.outcomeItems.forEach {
             sb.append("""
     <g transform="translate(525, $startY)" $display>
-        <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="right_${scoreCard.id}">
+        <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" $fill >
         <title>${it.description}</title>
         </path>
-        <rect x="5" y="5" height="20" width="20" fill="url(#rightScoreBox)" rx="5" ry="5"/>
+        <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
         <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
             <tspan x="30" dy="12" style="font-variant: small-caps; fill:${scoreCard.scoreCardTheme.outcomeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
@@ -189,15 +211,21 @@ class ScoreCardMaker {
         }
         return sb.toString()
     }
-    private fun arrowLine(scoreCard: ScoreCard) = """
+    private fun arrowLine(scoreCard: ScoreCard): String {
+        var grad = "url(#arrowColor)"
+        if(isPdf) {
+            grad = scoreCard.scoreCardTheme.arrowColor
+        }
+        return """
         <g transform="translate(480,25)" class="raiseText">
             <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             <g transform="translate(50,7.5)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="3"
-                         fill="url(#arrowColor)"/>
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="$grad" stroke-width="3"
+                         fill="$grad"/>
             </g>
         </g>
         """.trimIndent()
+    }
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
     private fun endWrapper() = "</g>"
@@ -250,11 +278,11 @@ fun main() {
             ScoreCardItem("Documented Local Setup for building & debugging"),
             ScoreCardItem("Production Support Guidelines documented"),
             ScoreCardItem("Splunk queries documented", "Actuator Endpoints validated")),
-        scoreCardTheme = ScoreCardTheme(initiativeBackgroundColor = "#111111", initiativeDisplayTextColor = "#fcfcfc", outcomeBackgroundColor = "#31AD18", outcomeDisplayTextColor = "#fcfcfc"),
+        scoreCardTheme = ScoreCardTheme(initiativeBackgroundColor = "#111111", initiativeDisplayTextColor = "#fcfcfc", outcomeBackgroundColor = "#3081D0", outcomeDisplayTextColor = "#fcfcfc", arrowColor = "#FF6C22"),
         scale = 1.0f,
-        slideShow = true
+        slideShow = false
     )
-    val svg = sm.make(sc)
+    val svg = sm.make(sc,false)
     val outfile = File("gen/score2.svg")
     println(Json.encodeToString(sc))
     outfile.writeBytes(svg.toByteArray())
