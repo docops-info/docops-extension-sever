@@ -166,7 +166,7 @@ class ScoreCardMaker {
         scoreCard.initiativeItems.forEach {
             sb.append("""
     <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" class="left_${scoreCard.id}">
+    <path d="${generateRectPathData(width = 500f, height = 30f, 12f,12f,12f,12f)}" $fill>
     <title>${it.description}</title>
     </path>
         <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
@@ -283,7 +283,64 @@ fun main() {
         slideShow = false
     )
     val svg = sm.make(sc,false)
-    val outfile = File("gen/score2.svg")
-    println(Json.encodeToString(sc))
+    val outfile = File("gen/score1.svg")
     outfile.writeBytes(svg.toByteArray())
+
+    val scoreCard = Json.decodeFromString<ScoreCard>("""
+        {
+  "title": "Initiative",
+  "initiativeTitle": "Journey Starts",
+  "outcomeTitle": "Outcomes Since",
+  "initiativeItems": [
+    {
+      "displayText": "API Versioning",
+      "description": "Host API versioning"
+    },
+    {
+      "displayText": "Network Switch",
+      "description": "Migrate IBM Websphere to Liberty Server with RHEL 8 and JSESSION ID fix with Application cache busting and versioning"
+    },
+    {
+      "displayText": "MFA",
+      "description": "Enabling single signon from server sign-in page"
+    },
+    {
+      "displayText": "Product Elimination - from system"
+    }
+  ],
+  "outcomeItems": [
+    {
+      "displayText": "API Versioning changes with backwards compatibility"
+    },
+    {
+      "displayText": "Network Mark-In/Mark-Out Servers"
+    },
+    {
+      "displayText": "Phased Rollout, Milestones and Release Candidate"
+    },
+    {
+      "displayText": "Software toggle to Enable/Disable OAuth Server"
+    }
+  ],
+  "slideShow": false,
+  "scale": 1.2,
+  "scoreCardTheme": {
+    "titleColor": "#27005D",
+    "initiativeTitleColor": "#27005D",
+    "outcomeTitleColor": "#27005D",
+    "backgroundColor": "#FF74B1",
+    "initiativeBackgroundColor": "#FFDDD2",
+    "outcomeBackgroundColor": "#FFDDD2",
+    "initiativeDisplayTextColor": "#27005D",
+    "outcomeDisplayTextColor": "#27005D",
+    "arrowColor": "#FF008E"
+  }
+}
+
+            
+    """.trimIndent())
+    val scoreCardMaker = ScoreCardMaker()
+    val svg2 = scoreCardMaker.make(scoreCard, true)
+    val outfile2 = File("gen/score2.svg")
+    outfile2.writeBytes(svg2.toByteArray())
 }

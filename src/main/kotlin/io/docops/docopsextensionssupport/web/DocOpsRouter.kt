@@ -7,6 +7,7 @@ import io.docops.docopsextensionssupport.diagram.Connectors
 import io.docops.docopsextensionssupport.diagram.PlaceMatMaker
 import io.docops.docopsextensionssupport.diagram.PlaceMatRequest
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
+import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.web.panel.uncompressString
@@ -70,8 +71,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             }
             log.info("getPlacemat executed in ${timing.duration.inWholeMilliseconds}ms ")
             connectorSvgCounter.increment()
-            placematSvgCounter.increment()
-            timelineSvgCounter.increment()
+
             return timing.value
         }
         else if("placemat".equals(kind, true)) {
@@ -79,6 +79,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = PlacematHandler()
                 handler.handleSVG(payload=payload, type = type)
             }
+            placematSvgCounter.increment()
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
@@ -87,7 +88,15 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = TimelineHandler()
                 handler.handleSVG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
             }
+            timelineSvgCounter.increment()
             log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        } else if("scorecard".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ScorecardHandler()
+                handler.handleSVG(payload)
+            }
+            log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
         return ResponseEntity("Not Found".toByteArray(), HttpStatus.NOT_FOUND)
@@ -115,8 +124,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             }
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
             connectorPngCounter.increment()
-            placematPngCounter.increment()
-            timelinePngCounter.increment()
             return timing.value
         }
         else if("placemat".equals(kind, true)) {
@@ -124,6 +131,8 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = PlacematHandler()
                 handler.handlePNG(payload, type)
             }
+            placematPngCounter.increment()
+
             log.info("getPlacemat executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
@@ -133,6 +142,15 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handlePNG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
             }
             log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms ")
+            timelinePngCounter.increment()
+            return timing.value
+        }
+        else if("scorecard".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ScorecardHandler()
+                handler.handlePNG(payload)
+            }
+            log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
         return ResponseEntity("Not Found".toByteArray(), HttpStatus.NOT_FOUND)
