@@ -22,10 +22,13 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private var useGrad = true
 
     private var bgColor = "#fcfcfc"
+    private var fill = ""
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
         if(useDark) {
             bgColor = "#111111"
+        } else {
+            useGrad = false
         }
         val sb = StringBuilder()
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
@@ -165,7 +168,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         connectors.forEachIndexed {
             i, conn ->
             var grad = "url(#grad$i)"
+            fill = grad
             if(!useGrad) {
+                fill = "none"
                 grad = colors[i]
             }
             val lines= conn.textToLines()
@@ -186,7 +191,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 //language=svg
                 sb.append("""
              <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$grad"/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="${colors[i]}"/>
                 $str
             </g>
                 """.trimIndent())
@@ -199,7 +204,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$grad" stroke="${colors[i]}"/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="${colors[i]}"/>
                 $str
                 <use xlink:href="#hconnector" stroke="${colors[i]}" fill="$grad"/>
                 <g transform="translate(297,47)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
@@ -214,7 +219,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                     <line x1="60" x2="60" y1="0" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
                     <line x1="60" x2="-1480" y1="60" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
                     <line x1="-1480" x2="-1480" y1="110" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="-1480" x2="-1400" y1="110" y2="110" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="-1480" x2="-1460" y1="110" y2="110" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
                     <g transform="translate(-1460,107)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
                 </g>
                 """.trimIndent())
