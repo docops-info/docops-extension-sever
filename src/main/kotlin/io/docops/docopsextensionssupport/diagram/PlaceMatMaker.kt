@@ -62,6 +62,11 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(!useGrad) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
             }
+            var strokeWidth = 1
+            if(!placeMatRequest.fill) {
+                grad = "none"
+                strokeWidth = 5
+            }
             val lines= conn.textToLines()
             val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
             var newLine = false
@@ -82,7 +87,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$grad"/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$grad" stroke="${placeMatRequest.config.colorFromLegendName(conn.legend).color}" stroke-width='$strokeWidth'/>
                 $str
             """.trimIndent()
                 )
@@ -229,10 +234,10 @@ fun main() {
         PlaceMat("Policy Quote Search", legend = "Both"),
         PlaceMat("NXT3", legend = "Vendor")
     ),config= PlaceMatConfig(legend = mutableListOf(
-        ColorLegendConfig("#CDF5FD","Company"),
-        ColorLegendConfig("#9AD0C2","Vendor"),
-        ColorLegendConfig("#FFEBD8", "Both"))
-    ), title = "Impacted Applications - Internal"), "SVG")
+        ColorLegendConfig("#c9d7e4","Company"),
+        ColorLegendConfig("#F34F1C","Vendor"),
+        ColorLegendConfig("#01A6F0", "Both"))
+    ), title = "Impacted Applications - Internal", fill = true, useDark = true), "SVG")
     val svg = pmm.makePlacerMat()
     val f = File("gen/place.svg")
     f.writeText(svg.shapeSvg)
