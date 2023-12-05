@@ -67,6 +67,9 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 grad = "none"
                 strokeWidth = 5
             }
+            if(placeMatRequest.useDark && !placeMatRequest.fill ) {
+                grad = "#fcfcfc"
+            }
             val lines= conn.textToLines()
             val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
             var newLine = false
