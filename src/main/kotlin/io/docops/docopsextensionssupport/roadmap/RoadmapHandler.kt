@@ -38,7 +38,12 @@ class RoadmapHandler {
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.IMAGE_PNG
             val res = findHeightWidth(svg)
-            val baos = SvgToPng().toPngFromSvg(svg, res)
+            val baos = try {
+            SvgToPng().toPngFromSvg(svg, res)
+        } catch (e: Exception) {
+                println(svg)
+            throw e
+        }
             ResponseEntity(baos, headers, HttpStatus.OK)
         }
         log.info("getRoadMap executed in ${timing.duration.inWholeMilliseconds}ms ")

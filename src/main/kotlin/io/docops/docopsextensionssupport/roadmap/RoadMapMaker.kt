@@ -234,7 +234,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
                 sb.append(
                     """
             <g transform="translate(200,47)">
-                <use href="#ppoint" fill="url(#grad0)" stroke-width="5" stroke="#e0349c"/>
+                <use xlink:href="#ppoint" stroke-width="5" stroke="#e0349c"/>
             </g>        
                 <line x1="186" y1="50" x2="200" y2="50" stroke="#e0349c" stroke-width="8" />
             """.trimIndent()
@@ -256,7 +256,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
                 sb.append(
                     """
                  <g transform="translate(410,47)">
-                <use href="#ppoint" fill="url(#grad0)" stroke-width="5" stroke="#e56516"/>
+                <use xlink:href="#ppoint" stroke-width="5" stroke="#e56516"/>
                 </g>        
                 <line x1="396" y1="50" x2="410" y2="50" stroke="#e56516" stroke-width="8" />
             """.trimIndent()

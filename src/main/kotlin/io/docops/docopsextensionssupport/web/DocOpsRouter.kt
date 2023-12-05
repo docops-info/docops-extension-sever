@@ -49,7 +49,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                @RequestParam(name = "payload") payload: String,
                @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
                @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-               @RequestParam("title", required = false, defaultValue = "title") title: String,
+               @RequestParam("title", required = false, defaultValue = "") title: String,
                @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
                @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
                @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String
@@ -135,7 +135,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         if ("connector".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ConnectorHandler()
-                handler.handlePNG(payload = payload, type, scale = scale, useDark = useDark)
+                handler.handlePNG(payload = payload, "PDF", scale = scale, useDark = useDark)
             }
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
             connectorPngCounter.increment()
@@ -144,7 +144,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("placemat".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = PlacematHandler()
-                handler.handlePNG(payload, type)
+                handler.handlePNG(payload, "PDF")
             }
             placematPngCounter.increment()
 
