@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.ShapeResponse
+import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File

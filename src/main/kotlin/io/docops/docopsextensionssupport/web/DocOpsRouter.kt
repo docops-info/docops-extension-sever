@@ -1,17 +1,12 @@
 package io.docops.docopsextensionssupport.web
 
-import io.docops.docopsextensionssupport.ShapeResponse
+import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
-import io.docops.docopsextensionssupport.diagram.ConnectorMaker
-import io.docops.docopsextensionssupport.diagram.Connectors
-import io.docops.docopsextensionssupport.diagram.PlaceMatMaker
-import io.docops.docopsextensionssupport.diagram.PlaceMatRequest
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
-import io.docops.docopsextensionssupport.web.panel.uncompressString
-import io.micrometer.core.annotation.Counted
+import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import kotlin.time.measureTimedValue
-import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
@@ -28,7 +22,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 @Controller
@@ -98,8 +91,30 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             }
             log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
+        } else if("roadmap".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = RoadmapHandler()
+                handler.handleSVG(payload, useDark = useDark, type = type, title = title, scale = scale, numChars = numChars)
+            }
+            log.info("roadmap executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }else if ("buttons".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ButtonHandler()
+                handler.handleSVG(payload, useDark = useDark, type = type)
+            }
+            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }else if ("release".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ReleaseHandler()
+                handler.handleSVG(payload, useDark = useDark)
+            }
+            log.info("release executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
         }
-        return ResponseEntity("Not Found".toByteArray(), HttpStatus.NOT_FOUND)
+
+        return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
     }
 
 
@@ -153,7 +168,30 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
-        return ResponseEntity("Not Found".toByteArray(), HttpStatus.NOT_FOUND)
+        else if("roadmap".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = RoadmapHandler()
+                handler.handlePNG(payload, useDark = useDark, type = type, title = title, scale = scale, numChars = numChars)
+            }
+            log.info("roadmap executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }
+        else if ("buttons".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ButtonHandler()
+                handler.handlePNG(payload, useDark = useDark, type = type)
+            }
+            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }else if ("release".equals(kind, true)) {
+            val timing = measureTimedValue {
+                val handler = ReleaseHandler()
+                handler.handlePNG(payload, useDark = useDark)
+            }
+            log.info("release executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }
+         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
     }
 
 }

@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.ShapeResponse
+import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
@@ -49,7 +49,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         sb.append("</g>")
         sb.append("</g>")
         sb.append(tail())
-        return ShapeResponse(sb.toString(), height = height + 60, width= width)
+        return ShapeResponse(sb.toString(), height = height + 60, width = width)
     }
 
     private fun makeBody(): String {
