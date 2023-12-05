@@ -52,14 +52,19 @@ class Pill(buttons: Buttons) : Regular(buttons) {
             startY = index * BUTTON_HEIGHT + (index * 10)
         }
         buttonList.forEach { button: Button ->
-
+            var fill = "class=\"btn_${button.id}_cls\""
+            var overlay = "url(#overlayGrad)"
+            if(isPdf) {
+                fill = "fill='url(#btn_${button.id})'"
+                overlay = "url(#btn_${button.id})"
+            }
             btns.append(
                 """
                 <a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">
                 <g role="button" cursor="pointer" transform="translate($startX, $startY)">
-                    <rect id="button" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" class="btn_${button.id}_cls" filter="url(#buttonBlur)" />
+                    <rect id="button" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" $fill filter="url(#buttonBlur)" />
             
-                    <rect id="buttongrad" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="url(#overlayGrad)"/>
+                    <rect id="buttongrad" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="$overlay"/>
                     <text id="label" x="150" y="43" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             
                     <rect id="buttontop" x="15" y="10.5" width="280" height="25" ry="24" rx="24" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>

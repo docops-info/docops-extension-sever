@@ -71,14 +71,16 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         buttonList.forEach { button: Button ->
             var filter = "filter=\"url(#Bevel2)\""
+            var fill = "${button.color}"
             if(isPdf) {
                 filter = ""
+                fill = "url(#btn_${button.id})"
             }
             btns.append(
                 """
         <g transform="translate($startX,$startY)" cursor="pointer">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-            <rect x="0" y="0" fill="${button.color}" width="300" height="30" class="raise btn_${button.id}_cls" $filter rx="10" ry="10"/>
+            <rect x="0" y="0" fill="$fill" width="300" height="30" class="raise btn_${button.id}_cls" $filter rx="10" ry="10"/>
             <text x="150" y="20" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             </a>
         </g>
@@ -114,7 +116,9 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             </style>
         """.trimIndent()
         if(isPdf) {
-            style = ""
+            style = """
+                
+            """.trimIndent()
         }
 
         return """

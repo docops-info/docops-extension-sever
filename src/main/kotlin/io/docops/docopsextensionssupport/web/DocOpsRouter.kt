@@ -179,7 +179,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if ("buttons".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ButtonHandler()
-                handler.handlePNG(payload, useDark = useDark, type = type)
+                handler.handlePNG(payload)
             }
             log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
