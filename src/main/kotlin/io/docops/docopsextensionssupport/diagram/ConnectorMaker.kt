@@ -17,7 +17,7 @@ import java.io.File
  * @property baseColors A list of base colors for the connectors.
  */
 class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String) {
-    private val alphabets = CharRange('A','Z').toMutableList()
+    private val alphabets = ('A'..'Z') + ('a'..'z') + ('0'..'9').toMutableList()
     private val colors = mutableListOf<String>()
     private var useGrad = true
 
@@ -33,7 +33,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val sb = StringBuilder()
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
         val height = connectors.chunked(5).size * 110.0f
-        sb.append(head(height, width = width, scale))
+        val descriptionHeight = (connectors.size * 26) + 140
+        sb.append(head(height + descriptionHeight, width = width, scale))
         initColors()
         if("PDF" != type) {
             sb.append(defs())
@@ -52,10 +53,30 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
+        sb.append(descriptions(height))
         sb.append(tail())
         return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
     }
 
+    private fun descriptions(start: Float): String {
+        val sb = StringBuilder("<g transform='translate(100,$start)'>")
+        var y = 0
+        connectors.forEachIndexed {
+            i, item ->
+            sb.append("""
+                <g transform="translate(0,$y)">
+                    <rect x="0" y="13" height="24" width="24" fill="url(#grad$i)" rx="5" ry="5"/>
+                    <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
+                    <text x="42" y="29" fill="#111111" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        ${item.description}
+                    </text>
+                </g>
+            """.trimIndent())
+            y += 26
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
     private fun head(height: Float, width: Float, scale: Float = 1.0f)  = """
         <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}"
      viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag">
@@ -238,9 +259,19 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 }
 
 fun main() {
-    val collectors = mutableListOf<Connector>(Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
-        Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub"), Connector("Developer"), Connector("Unit Tests"), Connector("Microsoft Excel"),
-        Connector("Test Engine"), Connector("API Documentation Output"), Connector("GitHub")
+    val collectors = mutableListOf<Connector>(
+        Connector("Developer", description = "Writes unit tests"),
+        Connector("Unit Tests", description = "Unit tests produces excel"),
+        Connector("Microsoft Excel", description = "Excel is stored in test engine"),
+        Connector("Test Engine", description = "Test Engine write documentation"),
+        Connector("API Documentation Output", description = "Documentation is committed"),
+        Connector("GitHub", description ="Triggers a webhook"),
+        Connector("Developer", description ="Developer consumes git content"),
+        Connector("Unit Tests", description = "Unit tests produces excel"),
+        Connector("Microsoft Excel", description = "Excel is stored in test engine"),
+        Connector("Test Engine", description = "Test Engine write documentation"),
+        Connector("API Documentation Output", description = "Documentation is committed"),
+        Connector("GitHub", description ="Triggers a webhook")
     )
     val conn= ConnectorMaker(collectors, false, "SVG")
     val svg = conn.makeConnectorImage(0.8f)

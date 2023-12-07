@@ -32,7 +32,7 @@ class Large(buttons: Buttons) : Regular(buttons) {
 
 
     /**
-     * Draws a button based on provided index and button list.
+     * Draws a button based on the provided index and button list.
      *
      * @param index The index of the button in the list.
      * @param buttonList The list of buttons to draw.

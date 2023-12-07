@@ -3,7 +3,7 @@ package io.docops.docopsextensionssupport.diagram
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Connector (val text: String, val baseColor: String? = "#E14D2A", val errorHandling: String? = "", val timeout: Int? = 0, val security: String? = "", val versioning: String? ="N/A") {
+class Connector (val text: String, val baseColor: String? = "#E14D2A", val description: String = "") {
 
      var start = 0
 
