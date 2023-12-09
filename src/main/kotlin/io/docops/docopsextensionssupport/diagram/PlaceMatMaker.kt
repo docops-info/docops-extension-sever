@@ -16,7 +16,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
     fun makePlacerMat(): ShapeResponse {
         if(placeMatRequest.useDark) {
-            bgColor = "#111111"
+            bgColor = "#17242b"
             fgColor = "#fcfcfc"
         }
 
