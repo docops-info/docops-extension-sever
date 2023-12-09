@@ -26,7 +26,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
         if(useDark) {
-            bgColor = "#111111"
+            bgColor = "#17242b"
         } else {
             useGrad = false
         }
@@ -55,7 +55,14 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         sb.append("</g>")
         sb.append(descriptions(height))
         sb.append(tail())
-        return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
+        return ShapeResponse(shapeSvg = joinXmlLines(sb.toString()), height = height, width = width)
+    }
+    private fun joinXmlLines(str: String): String {
+        val sb = StringBuilder()
+        str.lines().forEach {
+            sb.append(it.trim())
+        }
+        return sb.toString()
     }
 
     private fun descriptions(start: Float): String {
@@ -82,8 +89,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         return sb.toString()
     }
     private fun head(height: Float, width: Float, scale: Float = 1.0f)  = """
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}"
-     viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag">
     """.trimIndent()
 
     private fun tail() = "</svg>"
@@ -132,12 +138,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
         </filter>
         <filter id="shadow2">
-            <feDropShadow
-                    dx="-0.8"
-                    dy="-0.8"
-                    stdDeviation="0"
-                    flood-color="pink"
-                    flood-opacity="0.5" />
+            <feDropShadow dx="-0.8" dy="-0.8" stdDeviation="0" flood-color="pink" flood-opacity="0.5" />
         </filter>
         <style>
             .shadowed {
@@ -159,17 +160,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
             }
 
-            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
-            1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
-            center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
-            rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px)
-            saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% -
-            4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px
-            30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px
-            rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
-            3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2)}.glass:active:before{height:25px}
+            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}
 
             .boxText {
                 font-size:24px;
@@ -226,6 +217,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 if((i + 1) % 5 == 0) {
                     newLine = true
                 }
+                var arrow = """<g transform="translate(297,47)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>"""
+                if(newLine) {
+                    arrow=""
+                }
                 //language=svg
                 sb.append(
                     """
@@ -233,7 +228,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="${colors[i]}" stroke-width='$strokeWidth'/>
                 $str
                 <use xlink:href="#hconnector" stroke="${colors[i]}" fill="$grad"/>
-                <g transform="translate(297,47)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
+                $arrow
                 <rect x="270" y="13" height="24" width="24" fill="$grad" rx="5" ry="5"/>
                 <text x="282" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
             """.trimIndent()
@@ -280,7 +275,7 @@ fun main() {
     val svg = conn.makeConnectorImage(0.8f)
     val f = File("gen/connector.svg")
     f.writeText(svg.shapeSvg)
-    val conn2 = ConnectorMaker(collectors, true, "PDF")
+    val conn2 = ConnectorMaker(collectors, false, "PDF")
     val svg2 = conn2.makeConnectorImage(0.8f)
     val f2 = File("gen/connector2.svg")
     f2.writeText(svg2.shapeSvg)
