@@ -23,29 +23,34 @@
 {
   "connectors": [
     {
-      "text": "Engineer"
+      "text": "Engineer",
+      "description": "Creates tests"
     },
     {
-      "text": "Unit Tests"
+      "text": "Unit Tests",
+      "description": "Run Unit Tests"
     },
     {
-      "text": "Microsoft Excel"
+      "text": "Microsoft Excel",
+      "description": "Add test cases to excel"
     },
     {
-      "text": "GitHub"
+      "text": "GitHub",
+      "description": "Upload to Github"
     },
     {
-      "text": "Test Engine"
+      "text": "Test Engine",
+      "description": "GitHub webhook plugged into engine"
     },
     {
-      "text": "GitHub"
+      "text": "GitHub",
+      "description": "Results stored in Github and triggers webhook for documentation"
     },
     {
       "text": "API Documentation"
     }
   ]
 }
-
             </textarea>
         </div>
 </fieldset>

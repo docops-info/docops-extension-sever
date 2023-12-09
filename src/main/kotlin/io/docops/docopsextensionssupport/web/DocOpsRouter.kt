@@ -62,7 +62,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = ConnectorHandler()
                 handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
             }
-            log.info("getPlacemat executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms ")
             connectorSvgCounter.increment()
 
             return timing.value
@@ -141,14 +141,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             connectorPngCounter.increment()
             return timing.value
         }
-        else if("placemat".equals(kind, true)) {
+        else if("placeMat".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = PlacematHandler()
                 handler.handlePNG(payload, "PDF")
             }
             placematPngCounter.increment()
 
-            log.info("getPlacemat executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
         }
         else if("timeline".equals(kind, true)) {

@@ -61,13 +61,17 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")
         var y = 0
+        var fill = "#111111"
+        if(useDark) {
+            fill = "#fcfcfc"
+        }
         connectors.forEachIndexed {
             i, item ->
             sb.append("""
                 <g transform="translate(0,$y)">
                     <rect x="0" y="13" height="24" width="24" fill="url(#grad$i)" rx="5" ry="5"/>
                     <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
-                    <text x="42" y="29" fill="#111111" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    <text x="42" y="29" fill="$fill" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
                         ${item.description}
                     </text>
                 </g>
@@ -106,8 +110,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 """
            <linearGradient id="grad${i}" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+            <stop class="stop2" offset="100%" stop-color="${gradient["color2"]}"/>
             </linearGradient> 
             """.trimIndent()
             )
@@ -273,11 +276,11 @@ fun main() {
         Connector("API Documentation Output", description = "Documentation is committed"),
         Connector("GitHub", description ="Triggers a webhook")
     )
-    val conn= ConnectorMaker(collectors, false, "SVG")
+    val conn= ConnectorMaker(collectors, true, "SVG")
     val svg = conn.makeConnectorImage(0.8f)
     val f = File("gen/connector.svg")
     f.writeText(svg.shapeSvg)
-    val conn2 = ConnectorMaker(collectors, false, "PDF")
+    val conn2 = ConnectorMaker(collectors, true, "PDF")
     val svg2 = conn2.makeConnectorImage(0.8f)
     val f2 = File("gen/connector2.svg")
     f2.writeText(svg2.shapeSvg)

@@ -61,6 +61,30 @@
             <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
             <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
         </filter>
+        <linearGradient id="headerLight1" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#dc8875"/>
+            <stop class="stop3" offset="100%" stop-color="#b5304c"/>
+        </linearGradient>
+        <linearGradient id="headerLight2" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#aa7398"/>
+            <stop class="stop3" offset="100%" stop-color="#602d5f"/>
+        </linearGradient>
+        <linearGradient id="headerLight3" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#eddcd2"/>
+            <stop class="stop3" offset="100%" stop-color="#cb997e"/>
+        </linearGradient>
+        <linearGradient id="headerLight4" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#b7b7a4"/>
+            <stop class="stop3" offset="100%" stop-color="#847e70"/>
+        </linearGradient>
+        <linearGradient id="headerLight5" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#c77dff"/>
+            <stop class="stop3" offset="100%" stop-color="#7b2cbf"/>
+        </linearGradient>
+        <linearGradient id="headerLight6" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#98c1d9"/>
+            <stop class="stop3" offset="100%" stop-color="#3d5a80"/>
+        </linearGradient>
         <filter id="shadow2">
             <feDropShadow
                     dx="-0.8"
@@ -94,42 +118,64 @@
             3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
             rgba(0,129,174,.2)}.glass:active:before{height:25px}
         </style>
+        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
     </defs>
     <g transform="translate(0,0)" >
-        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad0)" ry="5" rx="5"  />
-        <line marker-end="url(#arrowhead)" x1="220" y1="100" x2="220" y2="120" stroke="#E14D2A" stroke-width="3" fill="url(#grad0)"/>
+        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight1)" ry="5" rx="5"  />
+        <line  x1="220" y1="100" x2="220" y2="134" stroke="#dc8875" stroke-width="3" class="shadowed"/>
+        <g transform="translate(222,137),rotate(90)">
+            <use xlink:href="#ppoint" fill="#dc8875" stroke-width="7" stroke="#dc8875" class="shadowed"/>
+        </g>
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">User</text>
+        <line x1="260" y1="50" x2="294" y2="50" stroke="#dc8875" stroke-width="3" class="shadowed"/>
+        <g transform="translate(297,47)">
+            <use xlink:href="#ppoint" fill="#E14D2A" stroke-width="7" stroke="#dc8875" class="shadowed"/>
+        </g>
     </g>
     <g transform="translate(0,140)" >
-        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad1)" ry="5" rx="5" />
-        <line marker-end="url(#arrowhead)" x1="220" y1="100" x2="220" y2="120" stroke="#82CD47" stroke-width="3" fill="url(#grad1)"/>
-        <line marker-end="url(#arrowhead)" x1="50" y1="10" x2="50" y2="-10" stroke="#82CD47" stroke-width="3" fill="url(#grad1)"/>
+        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight2)" ry="5" rx="5" />
+        <line  x1="220" y1="100" x2="220" y2="134.5" stroke="#aa7398" stroke-width="3"/>
+        <g transform="translate(222.5,137),rotate(90)">
+            <use xlink:href="#ppoint" fill="#aa7398" stroke-width="7" stroke="#aa7398" class="shadowed"/>
+        </g>
+        <line  x1="50" y1="10" x2="50" y2="-25" stroke="#aa7398" stroke-width="3" class="shadowed"/>
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Application</text>
-
+        <g transform="translate(48,-27),rotate(-90)">
+            <use xlink:href="#ppoint" fill="#aa7398" stroke-width="7" stroke="#aa7398" class="shadowed"/>
+        </g>
     </g>
 
     <g transform="translate(0,280)">
-        <rect  class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad2)" ry="5" rx="5" />
-        <line marker-end="url(#arrowhead)" x1="220" y1="100" x2="220" y2="120" stroke="#687EFF" stroke-width="3" fill="url(#grad2)"/>
-        <line marker-end="url(#arrowhead)" x1="50" y1="10" x2="50" y2="-10" stroke="#687EFF" stroke-width="3" fill="url(#grad2)"/>
+        <rect  class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight3)" ry="5" rx="5" />
+        <line  x1="220" y1="100" x2="220" y2="134" stroke="#eddcd2" stroke-width="3" class="shadowed"/>
+        <g transform="translate(222.5,137),rotate(90)">
+            <use xlink:href="#ppoint" stroke-width="7" stroke="#eddcd2" class="shadowed"/>
+        </g>
+        <line  x1="50" y1="10" x2="50" y2="-25" stroke="#eddcd2" stroke-width="3" class="shadowed"/>
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Operating System</text>
-
+        <g transform="translate(48,-27),rotate(-90)">
+            <use xlink:href="#ppoint" stroke-width="7" stroke="#eddcd2" class="shadowed"/>
+        </g>
     </g>
     <g transform="translate(0,420)" >
-        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad3)" ry="5" rx="5" />
-        <line marker-end="url(#arrowhead)" x1="50" y1="10" x2="50" y2="-10" stroke="#C02739" stroke-width="3" fill="url(#grad3)"/>
+        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight4)" ry="5" rx="5" />
+        <line x1="50" y1="10" x2="50" y2="-25" stroke="#b7b7a4" stroke-width="3" class="shadowed"/>
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps; fill: #fcfcfc" font-weight="bold" class="filtered glass">Hardware</text>
+        <g transform="translate(47.5,-27),rotate(-90)">
+            <use xlink:href="#ppoint" stroke-width="7" stroke="#b7b7a4" class="shadowed"/>
+        </g>
     </g>
     <g transform="translate(300,0)" >
-        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad4)" ry="5" rx="5"  />
-        <line marker-end="url(#arrowhead)" x1="-40" y1="50" x2="-20" y2="50" stroke="#E14D2A" stroke-width="3" fill="url(#grad4)"/>
+        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight5)" ry="5" rx="5"  />
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Chrome</text>
     </g>
     <g transform="translate(300,140)" >
-        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#grad5)" ry="5" rx="5" />
+        <rect class="shadowed" x="10" y="10" width="250" height="90" fill="url(#headerLight6)" ry="5" rx="5" />
         <line marker-end="url(#arrowhead)" x1="220" y1="100" x2="220" y2="120" stroke="#e9d3ff" stroke-width="3" fill="url(#grad5)"/>
-        <line marker-end="url(#arrowhead)" x1="50" y1="10" x2="50" y2="-10" stroke="#e9d3ff" stroke-width="3" fill="url(#grad5)"/>
+        <line x1="50" y1="10" x2="50" y2="-25" stroke="#98c1d9" stroke-width="3" fill="url(#grad5)"/>
         <text x="135" y="65" text-anchor="middle" style="font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps" font-weight="bold" class="filtered glass">Interactive UI</text>
-
+        <g transform="translate(48,-27),rotate(-90)">
+            <use xlink:href="#ppoint" stroke-width="7" stroke="#98c1d9" class="shadowed"/>
+        </g>
     </g>
 </svg>
