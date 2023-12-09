@@ -47,7 +47,8 @@
       "description": "Results stored in Github and triggers webhook for documentation"
     },
     {
-      "text": "API Documentation"
+      "text": "API Documentation",
+      "description": "API documentation ready for consumption"
     }
   ]
 }

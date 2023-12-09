@@ -78,17 +78,17 @@
     "style": "font-size: 1em;",
     "legend": [
       {
-        "color": "#c9d7e4",
+        "color": "#b7b7a4",
         "legend": "Business Capability",
         "style":"fill:#111"
       },
       {
-        "color": "#F34F1C",
+        "color": "#c77dff",
         "legend": "Engineering",
         "style":"fill:#111"
       },
       {
-        "color": "#01A6F0",
+        "color": "#98c1d9",
         "legend": "Both",
         "style":"fill:#111"
       }
