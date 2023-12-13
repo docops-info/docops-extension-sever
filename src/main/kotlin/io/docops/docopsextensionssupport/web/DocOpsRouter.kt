@@ -28,20 +28,13 @@ import java.nio.charset.StandardCharsets
 @RequestMapping("/api/docops")
 class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegistry) {
 
-    private val connectorSvgCounter: Counter
-    private val placematSvgCounter: Counter
-    private val timelineSvgCounter: Counter
-    private val connectorPngCounter: Counter
-    private val placematPngCounter: Counter
-    private val timelinePngCounter: Counter
-    init {
-        connectorSvgCounter = Counter.builder("connector.svg.counter").tag("connector", "svg").description("Count Number of times a Connector was created with SVG").register(meterRegistry)
-        placematSvgCounter = Counter.builder("placemat.svg.counter").tag("placemat", "svg").description("Count Number of times a placemat was created with SVG").register(meterRegistry)
-        timelineSvgCounter = Counter.builder("timeline.svg.counter").tag("timeline", "svg").description("Count Number of times a timeline was created with SVG").register(meterRegistry)
-        connectorPngCounter = Counter.builder("connector.png.counter").tag("connector", "png").description("Count Number of times a Connector was created with PNG").register(meterRegistry)
-        placematPngCounter = Counter.builder("placemat.png.counter").tag("placemat", "png").description("Count Number of times a placemat was created with PNG").register(meterRegistry)
-        timelinePngCounter = Counter.builder("timeline.png.counter").tag("timeline", "png").description("Count Number of times a timeline was created with PNG").register(meterRegistry)
-    }
+    private val connectorSvgCounter: Counter =  Counter.builder("connector.svg.counter").tag("connector", "svg").description("Count Number of times a Connector was created with SVG").register(meterRegistry)
+    private val placematSvgCounter: Counter = Counter.builder("placemat.svg.counter").tag("placemat", "svg").description("Count Number of times a placemat was created with SVG").register(meterRegistry)
+    private val timelineSvgCounter: Counter =  Counter.builder("timeline.svg.counter").tag("timeline", "svg").description("Count Number of times a timeline was created with SVG").register(meterRegistry)
+    private val connectorPngCounter: Counter =  Counter.builder("connector.png.counter").tag("connector", "png").description("Count Number of times a Connector was created with PNG").register(meterRegistry)
+    private val placematPngCounter: Counter  = Counter.builder("placemat.png.counter").tag("placemat", "png").description("Count Number of times a placemat was created with PNG").register(meterRegistry)
+    private val timelinePngCounter: Counter = Counter.builder("timeline.png.counter").tag("timeline", "png").description("Count Number of times a timeline was created with PNG").register(meterRegistry)
+
     private val log = LogFactory.getLog(DocOpsRouter::class.java)
     @GetMapping("/svg")
     @Timed(value = "docops.router.svg", description="Creating a docops visual using http get", percentiles=[0.5, 0.9])

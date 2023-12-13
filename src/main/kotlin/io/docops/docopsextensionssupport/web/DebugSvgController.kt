@@ -20,6 +20,7 @@ import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import java.nio.charset.StandardCharsets
 
 @Controller
@@ -51,5 +52,20 @@ class DebugSvgController {
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/twograd")
+    fun genTwoGrad(@RequestParam grad: String) : ResponseEntity<ByteArray>{
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.TEXT_PLAIN
+        val str = grad.split("|")
+        return ResponseEntity("""
+        <linearGradient id="headerLight9" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#${str[0]}"/>
+            <stop class="stop3" offset="100%" stop-color="#${str[1]}"/>
+        </linearGradient>
+        """.trimIndent().toByteArray(), headers, HttpStatus.OK)
+
     }
 }

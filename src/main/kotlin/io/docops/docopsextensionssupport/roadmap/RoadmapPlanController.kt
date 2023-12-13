@@ -67,7 +67,8 @@ class RoadmapPlanController {
                 chars = "32"
             }
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val rmm = RoadMapMaker("on".equals(useDarkInput))
+            val index = httpServletRequest.getParameter("index")
+            val rmm = RoadMapMaker("on".equals(useDarkInput), index = index.toInt())
             val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
 
             div = """

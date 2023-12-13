@@ -19,9 +19,12 @@
             <input type="number" id="numChars" name="numChars" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
                    value="32" step="1" max="60" min="10" class="join-item input input-bordered input-primary w-full max-w-xs">
         </div>
-        <div class="join"><label for="useDark" class="join-item">Use Dark Mode</label>
-            <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   checked class="join-item toggle toggle-primary"></div>
+        <div class="join">
+            <label for="index" class="btn join-item">Color</label>
+            <input type="number" id="index" name="index" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
+                   value="0" step="1" max="25" min="0" class="join-item input input-bordered input-primary w-full max-w-xs">
+        </div>
+
         <div >
             <textarea class="join-item  textarea textarea-primary" id="content" name="content" class="pure-input-1" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now

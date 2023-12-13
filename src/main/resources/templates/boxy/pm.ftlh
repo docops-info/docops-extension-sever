@@ -3,18 +3,17 @@
     <div id="contentBox" ></div>
     <div class="divider"></div>
   <button class="btn btn-active btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('imageblock', 'placemat.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
-<form class="pure-form pure-form-stacked" data-hx-put="api/placemat/" data-hx-target="#contentBox" hx-trigger="submit, load">
-<fieldset id="response-div" >
-    <legend>Place Mat Builder</legend>
+<form class="grid grid-cols-2 gap-4" data-hx-put="api/placemat/" data-hx-target="#contentBox" hx-trigger="submit, load">
 <div>
-    <div class="join">
-        <label for="useDark" class="join-item">Use Dark Mode</label>
-        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/placemat/" data-hx-target="#contentBox"
-               checked class="join-item toggle toggle-primary">
-    </div>
+  <div class="flex flex-col">
+    <label for="useDark" class="mb-2">Toggle Dark Mode</label>
+    <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/placemat/" data-hx-target="#contentBox"
+           checked class="toggle toggle-primary">
+  </div>
 </div>
 
-    <div class="join">
+  <div class="flex flex-col col-span-2">
+    <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/placemat/" data-hx-target="#contentBox">
 {
   "title": "Observability",
@@ -98,11 +97,12 @@
 
             </textarea>
         </div>
-</fieldset>
-<fieldset>
+  <div class="flex flex-col">
     <button class="btn btn-primary">Submit</button>
+  </div>
+  <div class="flex flex-col">
     <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
            value="Copy Source As AsciiDoc">
-</fieldset>
+  </div>
 </form>
 </div>

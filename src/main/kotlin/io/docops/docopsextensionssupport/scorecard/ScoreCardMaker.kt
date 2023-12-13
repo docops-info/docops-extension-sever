@@ -252,7 +252,6 @@ fun buildGradientDef(color: String, id: String): String {
     return """
            <linearGradient id="$id" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${m["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${m["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${m["color3"]}"/>
             </linearGradient> 
         """

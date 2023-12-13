@@ -2,23 +2,20 @@
     <h1>Create Connector Diagrams</h1>
     <div id="contentBox" ></div>
     <div class="divider"></div>
-<form class="pure-form pure-form-stacked" data-hx-put="api/connector/" data-hx-target="#contentBox" hx-trigger="submit, load">
-<fieldset id="response-div" >
-    <legend>Connector Builder</legend>
-    <div class="join">
-        <label for="scale" class="btn join-item">Scale</label>
-        <input type="number" id="scale" name="scale" data-hx-put="api/connector/" data-hx-target="#contentBox"
-               value="0.5" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
-    </div>
-<div>
-    <div class="join">
-        <label for="useDark" class="join-item">Use Dark Mode</label>
-        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/connector/" data-hx-target="#contentBox"
-               checked class="join-item toggle toggle-primary">
-    </div>
-</div>
 
-    <div class="join">
+    <form class="grid grid-cols-2 gap-4" data-hx-put="api/connector/" data-hx-target="#contentBox" hx-trigger="submit, load">
+        <div class="flex flex-col">
+            <label for="scale" class="mb-2">Scale</label>
+            <input type="number" id="scale" name="scale" data-hx-put="api/connector/" data-hx-target="#contentBox"
+                   value="0.5" step=".10" max="5" min=".1" class="p-2 border rounded-md">
+        </div>
+        <div class="flex flex-col">
+            <label for="useDark" class="mb-2">Toggle Dark Mode</label>
+            <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/connector/" data-hx-target="#contentBox"
+                   checked class="toggle toggle-primary">
+        </div>
+        <div class="flex flex-col col-span-2">
+            <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/connector/" data-hx-target="#contentBox">
 {
   "connectors": [
@@ -54,11 +51,11 @@
 }
             </textarea>
         </div>
-</fieldset>
-<fieldset>
-    <button class="btn btn-primary">Submit</button>
-    <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
-           value="Copy Source As AsciiDoc">
-</fieldset>
-</form>
+        <div class="flex flex-col">
+            <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
+        </div>
+        <div class="flex flex-col">
+            <input type="button" class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
+        </div>
+    </form>
 </div>

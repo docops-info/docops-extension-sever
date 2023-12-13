@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.diagram.allGradients
 import java.io.File
 
 /**
@@ -57,7 +58,7 @@ class DarkTheme : RoadMapTheme() {
  * @property useDark  A boolean flag indicating whether to use dark theme or not. Default is false.
  * @constructor Creates a new instance of the RoadMapMaker class.
  */
-class RoadMapMaker(val useDark: Boolean = false) {
+class RoadMapMaker(val useDark: Boolean = false, val index: Int = 25) {
 
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
@@ -88,7 +89,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             roadMapTheme = DarkTheme()
             headerColor = "headerDark"
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"url(#grad${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
         sb.append("<g transform='scale($scale)' class=\"shadowed\">")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
@@ -99,14 +100,13 @@ class RoadMapMaker(val useDark: Boolean = false) {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-        <rect x="0" y="0" stroke-width="0" fill="url(#$headerColor)"  height="80" width="662" opacity="1.0"/>
+        <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
         <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
             sb.append(
                 """
-                <rect x="26" y="${head.second}" height="25" width="600" fill="url(#$headerColor)" opacity="1.0" stroke-width="0"/>
                 <text x="306" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
             """.trimIndent()
             )
@@ -304,6 +304,7 @@ class RoadMapMaker(val useDark: Boolean = false) {
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
         
+        ${allGradients().elementAt(index)}
     
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
@@ -462,7 +463,7 @@ pass in theme (light,dark)
 refactor displayConfigUrl to displayTheme
 
     """.trimIndent()
-    val rm = RoadMapMaker(false)
+    val rm = RoadMapMaker(false, 9)
     val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
     val f = File("gen/roadmap.svg")
     f.writeBytes(output.toByteArray())

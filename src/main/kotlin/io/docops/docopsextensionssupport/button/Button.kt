@@ -437,9 +437,8 @@ fun buildGradientDef(color: String, id: String): String {
     val m = gradientFromColor(color)
     return """
            <linearGradient id="btn_${id}" x2="1" y2="1">
-            <stop class="stop1" offset="0%" stop-color="${m["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${m["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${m["color3"]}"/>
+            <stop class="stop1" offset="0%" stop-color="${m["color2"]}"/>
+            <stop class="stop2" offset="100%" stop-color="${m["color3"]}"/>
             </linearGradient> 
         """
 }

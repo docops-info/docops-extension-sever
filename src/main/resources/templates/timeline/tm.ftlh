@@ -2,33 +2,33 @@
     <h1>Create Timeline</h1>
     <div id="contentBox" ></div>
     <div class="divider"></div>
-<form class="pure-form pure-form-stacked" data-hx-put="api/timeline/" data-hx-target="#contentBox" hx-trigger="submit, load">
-<fieldset id="response-div" >
-    <legend>Timeline Builder</legend>
-    <div class="join">
-        <label for="scale" class="btn join-item">Scale</label>
-        <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="1.0" step=".10" max="5" min=".1" class="input input-bordered input-primary w-full max-w-xs">
-    </div>
-    <div class="join">
-        <label for="numChars" class="btn join-item">Number of Characters per Line</label>
-        <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="24" step="1" max="60" min="10" class="input input-bordered input-primary w-full max-w-xs">
-    </div>
-<div>
-    <div class="join">
-        <label for="useDark" class="join-item">Use Dark Mode</label>
-        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               checked class="join-item toggle toggle-primary">
-    </div>
-    <div class="join">
-        <label for="outline" class="join-item">Outline Color</label>
-        <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               class="join-item input input-bordered input-primary w-full max-w-x" value="#1363DF">
-    </div>
-</div>
+<form class="grid grid-cols-2 gap-4" data-hx-put="api/timeline/" data-hx-target="#contentBox" hx-trigger="submit, load">
 
-    <div class="join">
+    <div class="flex flex-col">
+        <label for="scale" class="mb-2">Scale</label>
+        <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               value="0.4" step=".10" max="5" min=".1" class="p-2 border rounded-md">
+    </div>
+    <div class="flex flex-col">
+        <label for="numChars" class="mb-2">Number of Characters per Line</label>
+        <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               value="24" step="1" max="60" min="10" class="p-2 border rounded-md">
+    </div>
+
+    <div class="flex flex-col">
+        <label for="useDark" class="mb-2">Toggle Dark Mode</label>
+        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               checked class="toggle toggle-primary">
+    </div>
+    <div class="flex flex-col">
+        <label for="outline" class="mb-2">Outline Color</label>
+        <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               class="p-2 border rounded-md" value="#1363DF">
+    </div>
+
+
+    <div class="flex flex-col col-span-2">
+        <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
 date: 1891
@@ -66,11 +66,13 @@ date: 01/01/2024
 text: First entry where we show text is wrapping or not and the [[https://roach.gy roach.gy]] aligning properly
             </textarea>
         </div>
-</fieldset>
-<fieldset>
-    <button class="btn btn-primary">Submit</button>
-    <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
-           value="Copy Source As AsciiDoc">
-</fieldset>
+
+    <div class="flex flex-col">
+        <button class="btn btn-primary">Submit</button>
+    </div>
+    <div class="flex flex-col">
+        <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
+               value="Copy Source As AsciiDoc">
+    </div>
 </form>
 </div>
