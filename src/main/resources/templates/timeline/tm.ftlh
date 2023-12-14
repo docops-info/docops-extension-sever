@@ -68,10 +68,10 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
         </div>
 
     <div class="flex flex-col">
-        <button class="btn btn-primary">Submit</button>
+        <button class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
     </div>
     <div class="flex flex-col">
-        <input class="btn btn-secondary" type="button" onclick="copyTextToClipboard(adrSource);"
+        <input class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" type="button" onclick="copyTextToClipboard(adrSource);"
                value="Copy Source As AsciiDoc">
     </div>
 </form>

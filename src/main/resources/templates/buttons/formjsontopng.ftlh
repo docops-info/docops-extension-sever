@@ -1,18 +1,15 @@
 <div>
     <h1>Create Buttons from JSON</h1>
 
-    <form class="pure-form pure-form-stacked" data-hx-put="api/buttons/form/png" data-hx-target="#contentBox" >
+    <form class="grid grid-cols-2 gap-4" data-hx-put="api/buttons/form/png" data-hx-target="#contentBox" >
 
-        <fieldset id="response-div" >
-            <legend>JSON</legend>
-            <div class="join">
-                <label for="payload" class="btn join-item">Insert JSON here</label>
-                <textarea id="payload" name="payload" class="join-item textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox"></textarea>
-            </div>
-        </fieldset>
-        <fieldset>
-            <button class="btn btn-primary">Submit</button>
-        </fieldset>
+        <div class="flex flex-col col-span-2">
+        <label for="payload" class="mb-2">JSON</label>
+        <textarea id="payload" name="payload" class="join-item textarea textarea-primary" rows="20" cols="90" placeholder="" data-hx-target="#contentBox"></textarea>
+        </div>
+        <div class="flex flex-col">
+            <button class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
+        </div>
     </form>
 </div>
 <div class="divider"></div>

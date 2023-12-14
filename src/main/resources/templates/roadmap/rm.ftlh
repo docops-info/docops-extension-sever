@@ -1,32 +1,31 @@
 <div id="contentBox" class="contentBox"></div>
 <div class="divider"></div>
 
-<form class="pure-form pure-form-stacked" data-hx-put="api/roadmap/" data-hx-target="#contentBox" hx-trigger="submit, load">
-    <fieldset id="response-div" >
-        <legend>Timeline Builder</legend>
-        <div class="join">
-            <label for="title" class="btn join-item">Title</label>
+<form class="grid grid-cols-2 gap-4" data-hx-put="api/roadmap/" data-hx-target="#contentBox" hx-trigger="submit, load">
+        <div class="flex flex-col col-span-2">
+            <label for="title" class="mb-2">Title</label>
             <input type="text" id="title" name="title" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="planner"  class="input input-bordered input-primary w-full max-w-xs">
+                   value="planner" class="p-2 border rounded-md">
         </div>
-        <div class="join">
-            <label for="scale" class="btn join-item">Scale</label>
+        <div class="flex flex-col">
+            <label for="scale" class="mb-2">Scale</label>
             <input type="number" id="scale" name="scale" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="1.0" step=".10" max="5" min=".1" class="join-item input input-bordered input-primary w-full max-w-xs">
+                   value="1.0" step=".10" max="5" min=".1" class="p-2 border rounded-md">
         </div>
-        <div class="join">
-            <label for="numChars" class="btn join-item">Number of Characters per Line</label>
+        <div class="flex flex-col">
+            <label for="numChars" class="mb-2">Number of Characters per Line</label>
             <input type="number" id="numChars" name="numChars" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="32" step="1" max="60" min="10" class="join-item input input-bordered input-primary w-full max-w-xs">
+                   value="32" step="1" max="60" min="10" class="p-2 border rounded-md">
         </div>
-        <div class="join">
-            <label for="index" class="btn join-item">Color</label>
+        <div class="flex flex-col">
+            <label for="index" class="mb-2">Color Index (Max 25)</label>
             <input type="number" id="index" name="index" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="0" step="1" max="25" min="0" class="join-item input input-bordered input-primary w-full max-w-xs">
+                   value="0" step="1" max="25" min="0" class="p-2 border rounded-md">
         </div>
 
-        <div >
-            <textarea class="join-item  textarea textarea-primary" id="content" name="content" class="pure-input-1" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
+    <div class="flex flex-col col-span-2">
+        <label for="content" class="mb-2">JSON</label>
+            <textarea class="textarea textarea-primary" id="content" name="content" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now
 Audit Log Streaming
 - now
@@ -41,11 +40,12 @@ JSON schema definition
 code scanning and app scanning
             </textarea>
         </div>
-    </fieldset>
-    <fieldset>
-        <button class="btn btn-active btn-primary">Submit</button>
-        <button class="btn btn-active btn-secondary" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')">Download <img class="htmx-indicator" src="images/bars.svg"/></button>
-    </fieldset>
+    <div class="flex flex-col">
+        <button class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
+    </div>
+    <div class="flex flex-col">
+        <input class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" data-hx-indicator="#spinner" data-hx-target="#response-div" type="button" onclick="downloadSVG('contentBox', 'roadmap.svg')" value="Download "><img class="htmx-indicator" src="images/bars.svg"/></input>
+    </div>
 </form>
 
 
