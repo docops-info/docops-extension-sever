@@ -28,7 +28,7 @@
 
 
     <div class="flex flex-col col-span-2">
-        <label for="content" class="mb-2">JSON</label>
+        <label for="content" class="mb-2">DSL</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
 date: 1891

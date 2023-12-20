@@ -1,4 +1,4 @@
-<svg width="1590.0" height="1000" viewBox="0 0 1590.0 1000.0"
+<svg width="1590.0" height="640" viewBox="0 0 1590.0 640.0"
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -29,13 +29,17 @@
         <filter id="bottomshine">
             <feGaussianBlur stdDeviation="0.95"/>
         </filter>
+        <linearGradient id="headerLight25" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <stop class="stop1" offset="0%" stop-color="#aa076b"/>
+            <stop class="stop3" offset="100%" stop-color="#61045f"/>
+        </linearGradient>
         <radialGradient id="grad0" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
             <stop offset="30%" style="stop-color:#a2b0c6; stop-opacity:1"/>
             <stop offset="60%" style="stop-color:#45618E; stop-opacity:1"/>
         </radialGradient>
         <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#d19d9d; stop-opacity:1"/>
-            <stop offset="60%" style="stop-color:#A43B3B; stop-opacity:1"/>
+            <stop offset="30%" style="stop-color:#aa076b; stop-opacity:1"/>
+            <stop offset="60%" style="stop-color:#61045f; stop-opacity:1"/>
         </radialGradient>
         <linearGradient id="arrowColor" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="#c9c9d2"/>
@@ -113,13 +117,18 @@
                 filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
             }
         </style>
+
+        <path id="vconnector" d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
     </defs>
     <g transform="scale(1)">
-        <g transform="translate(30,500)">
+        <g transform="translate(30,320)">
             <path d="M0,0 h960" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor)" class="raise"
                   stroke-linecap="round" stroke-linejoin="round"/>
+
+
             <line x1="10" y1="0" x2="950" y2="0" stroke="#fcfcfc"
-                  stroke-width="10" fill="#ffffff" stroke-dasharray="24 24 24" stroke-linecap="round"
+                  stroke-width="14" fill="#ffffff" stroke-dasharray="24 24 24" stroke-linecap="round"
                   stroke-linejoin="round"/>
             <g transform="translate(972,-2)">
                 <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="35" fill="url(#arrowColor)"
@@ -127,25 +136,28 @@
             </g>
         </g>
         <g transform="translate(0,0)">
-            <g transform="translate(125,500)">
+            <g transform="translate(125,320)">
                 <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
                 <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
-                <line x1="0" x2="0" y1="-20" y2="-95" stroke="#6D4F98" stroke-width="2"/>
-                <g transform="translate(-2.5,-92),rotate(-90)">
-                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+
+                <g transform="translate(-135,-182)">
+                    <use xlink:href="#vconnector" stroke="url(#headerLight25)"/>
+                </g>
+                <g transform="translate(-3,-86),rotate(-90)">
+                    <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#headerLight25)"/>
                 </g>
             </g>
-            <rect x="10" y="100" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"
+            <rect x="10" y="20" width="225" height="200" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"
                   />
-            <rect x="10" y="100" width="225" height="40" fill="url(#topBar)" stroke="#6D4F98" stroke-width="2" rx="5"
+            <rect x="10" y="20" width="225" height="40" fill="url(#headerLight25)" stroke="#6D4F98" stroke-width="2" rx="5"
                   />
 
-            <text x="125" y="130" fill='#000000' text-anchor='middle'
+            <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                 July 23rd, 2023
             </text>
-            <text x="120" y="150">
+            <text x="120" y="70">
                 <tspan x="20" dy="14" fill='#000000'>DocOps extension Server</tspan>
                 <tspan x="20" dy="14" fill='#000000'>releases a new feature,</tspan>
                 <tspan x="20" dy="14" fill='#000000'>Timeline Maker for</tspan>
@@ -168,23 +180,26 @@
                   fill-opacity="0.3" filter="url(#bottomshine)"/>
         </g>
         <g transform="translate(125,0)">
-            <g transform="translate(125,500)">
+            <g transform="translate(125,320)">
                 <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
                 <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
-                <line x1="0" x2="0" y1="20" y2="95" stroke="#6D4F98" stroke-width="2"/>
-                <g transform="translate(2.5,92),rotate(90)">
-                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+                <g transform="translate(-134,-80)">
+                    <use xlink:href="#vconnector" stroke="url(#headerLight25)"/>
                 </g>
-            </g>
-            <rect x="10" y="600" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"/>
-            <rect x="10" y="600" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
+                <g transform="translate(3,86),rotate(90)">
+                    <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#headerLight25)"/>
+                </g>
 
-            <text x="125" y="630" fill='#000000' text-anchor='middle'
+            </g>
+            <rect x="10" y="420" width="225" height="200" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"/>
+            <rect x="10" y="420" width="225" height="40" fill="url(#headerLight25)" stroke-width="2" rx="5" />
+
+            <text x="125" y="450" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                 August 15, 2023
             </text>
-            <text x="135" y="650" class="even">
+            <text x="135" y="470" class="even">
                 <tspan x="20" dy="14" fill='#000000'>DocOps.io revamping</tspan>
                 <tspan x="20" dy="14" fill='#000000'>website with updated</tspan>
                 <tspan x="20" dy="14" fill='#000000'>documentation. All our</tspan>
@@ -197,22 +212,25 @@
             </text>
         </g>
         <g transform="translate(250,0)">
-            <g transform="translate(125,500)">
+            <g transform="translate(125,320)">
                 <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
                 <circle cx="0" cy="0" r="17" fill="url(#grad1)"/>
-                <line x1="0" x2="0" y1="-20" y2="-92" stroke="#6D4F98" stroke-width="2"/>
-                <g transform="translate(-2.5,-92),rotate(-90)">
-                    <polygon points="0,5 0,0 5,2.5" fill="#000000"/>
+                <g transform="translate(-135,-182)">
+                    <use xlink:href="#vconnector" stroke="url(#headerLight25)"/>
                 </g>
+                <g transform="translate(-3,-86),rotate(-90)">
+                    <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#headerLight25)"/>
+                </g>
+
             </g>
-            <rect x="10" y="100" width="225" height="300" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" rx="5"/>
-            <rect x="10" y="100" width="225" height="40" fill="url(#topBar)" stroke="#6D4F98" stroke-width="2" rx="5"/>
-            <text x="123" y="130" fill='#000000' text-anchor='middle'
+            <rect x="10" y="20" width="225" height="200" fill="#fcfcfc" stroke="#6D4F98" stroke-width="2" />
+            <rect x="10" y="20" width="225" height="40" fill="url(#headerLight25)" stroke="#6D4F98" stroke-width="2" />
+            <text x="123" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                 September 1st, 2023
             </text>
-            <text x="120" y="150">
+            <text x="120" y="70">
                 <tspan x="20" dy="14" fill='#000000'>DocOps extension Server</tspan>
                 <tspan x="20" dy="14" fill='#000000'>releases a new feature,</tspan>
                 <tspan x="20" dy="14" fill='#000000'>Timeline Maker for</tspan>

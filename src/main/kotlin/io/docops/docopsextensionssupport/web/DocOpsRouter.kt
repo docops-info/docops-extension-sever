@@ -43,9 +43,9 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
                @RequestParam("type", required = false, defaultValue = "SVG") type: String,
                @RequestParam("title", required = false, defaultValue = "") title: String,
-               @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
-               @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
-               @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String
+               @RequestParam("numChars", required = false, defaultValue = "24") numChars: String,
+               @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
+               @RequestParam("outlineColor", defaultValue = "#37cdbe") outlineColor: String
     ) : ResponseEntity<ByteArray> {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

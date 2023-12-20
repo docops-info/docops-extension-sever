@@ -29,11 +29,13 @@ import java.io.File
  */
 class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
     private var textColor: String = "#000000"
-    private var fillColor = "#fcfcfc"
+    private var fillColor = ""
     init {
         if(useDark) {
             textColor = "#fcfcfc"
             fillColor ="#17242b"
+        } else {
+            fillColor = "#fcfcfc"
         }
     }
     companion object {
@@ -48,7 +50,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
              "#FFAF10",
              "#FF7F00",
              "#6D4F98")
-        val DEFAULT_HEIGHT: Float = 1000.0F
+        val DEFAULT_HEIGHT: Float = 660.0F
     }
 
     /**
@@ -76,11 +78,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         if(useDark) {
             sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
         } else {
-            sb.append("<rect width='100%' height='100%' fill='#fcfcfc'/>")
+            sb.append("<rect width='100%' height='100%' fill='#f1f5f8'/>")
         }
         sb.append("<g transform=\"scale($scale)\">")
 
-        sb.append("""<text x="${head.second/2}" y="40" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
+        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24) scale(1.0)">""")
 
         sb.append(buildRoad(head.second-100))
@@ -115,21 +117,23 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             x +=  125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 200, "odd", 14, textColor)
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, textColor)
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
-        <g transform="translate(125,500)">
+        <g transform="translate(125,320)">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
-            <line x1="0" x2="0" y1="-20" y2="-95" stroke="$color" stroke-width="2"/>
-                <g transform="translate(-2.5,-92),rotate(-90)">
-                    <polygon points="0,5 0,0 5,2.5" fill="url(#arrowColor)" stroke-width="3" stroke="url(#arrowColor)"/>
-                </g>
+             <g transform="translate(-135,-182)">
+                <use xlink:href="#vconnector" stroke="$outlineColor"/>
+            </g>
+            <g transform="translate(-3,-86),rotate(-90)">
+                <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
+            </g>
         </g>
-        <rect x="10" y="150" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="150" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
-        <text x="125" y="175" fill='#000000' text-anchor='middle'
+        <rect x="10" y="20" width="225" height="200" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
+        <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                   ${entry.date}
@@ -146,23 +150,25 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             x += 125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 650, "even", dy=14, textColor)
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, textColor)
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
-        <g transform="translate(125,500)">
+        <g transform="translate(125,320)">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
-            <line x1="0" x2="0" y1="20" y2="95" stroke="$color" stroke-width="2"/>
-            <g transform="translate(2.5,92),rotate(90)">
-                <polygon points="0,5 0,0 5,2.5" fill="url(#arrowColor)" stroke-width="3" stroke="url(#arrowColor)"/>
+             <g transform="translate(-134,-80)">
+                <use xlink:href="#vconnector" stroke="$outlineColor"/>
+            </g>
+            <g transform="translate(3,86),rotate(90)">
+                <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
             </g>
         </g>
         
-        <rect x="10" y="600" width="225" height="250" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="600" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
+        <rect x="10" y="420" width="225" height="200" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
         
-        <text x="125" y="625" fill='#000000' text-anchor='middle'
+        <text x="125" y="450" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
                   ${entry.date}
@@ -182,7 +188,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
     }
     private fun buildRoad(width: Int): String {
         return """
-            <g transform="translate(30,500)">
+            <g transform="translate(30,320)">
             <path d="M0,0 h$width" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor)" class="raise"
                   stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="10" y1="0" x2="$width" y2="0" stroke="#fcfcfc"
@@ -313,6 +319,9 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
          </marker>   
         $sb
         $style
+        <path id="vconnector" d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
+
     </defs>
     
     """.trimIndent(),colors)
@@ -352,7 +361,7 @@ and plugin the controller.
 date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
-    val maker = TimelineMaker(true, "#0096FF")
+    val maker = TimelineMaker(false, "#a1d975")
     val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", false, "30")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())

@@ -67,17 +67,7 @@ class AdrController() {
         servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
 
             try {
-                val adrText = """
-                
-Title: $title
-Date: $date
-Status: $status
-Context: $context
-Decision: $decision
-Consequences: $consequences
-Participants: $participants 
-
-        """.trimIndent()
+                val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
                 val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 75, increaseWidthBy = 10)
                 val adr = ADRParser().parse(adrText, config)
                 var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
@@ -98,6 +88,28 @@ Participants: $participants
             }
 
     }
+
+    private fun adrFromTemplate(
+        title: String,
+        date: String,
+        status: String,
+        context: String,
+        decision: String,
+        consequences: String,
+        participants: String
+    ): String {
+        val adrText = """
+    Title: $title
+    Date: $date
+    Status: $status
+    Context: $context
+    Decision: $decision
+    Consequences: $consequences
+    Participants: $participants 
+            """.trimIndent()
+        return adrText
+    }
+
     fun makeAdrSource(txt: String, svg: String): String {
         //language=html
         return """
