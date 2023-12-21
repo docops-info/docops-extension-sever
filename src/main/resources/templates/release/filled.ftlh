@@ -45,7 +45,7 @@
                     <div class="flex flex-col  col-span-2">
                         <label for="date_${release_index}" class="mb-2">Target Date</label>
                         <input type="text" id="date_${release_index}" name="date_${release_index}"
-                               value="${release.date}" class="join-item input input-bordered input-primary w-full max-w-xs">
+                               value="${release.date}" class="p-2 border rounded-md">
                     </div>
                 <div class="flex flex-col  col-span-2">
                     <label class="mb-2">Reason Line</label>
