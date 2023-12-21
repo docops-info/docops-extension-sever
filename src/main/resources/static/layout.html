@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocOps Extension Server</title>
+    <link rel="icon" href="images/favicon.svg" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/kotlin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
+    <script src="editor/js/theme.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/ext/json-enc.js"></script>
+    <style>
+        .forestxmas {
+            background-image: url(images/forest.svg);
+            height: 200px;
+        }
+    </style>
+</head>
+<body class="h-screen bg-gray-200 p-6">
+<div class="h-full grid grid-cols-12 gap-6">
+    <!-- Left column for Menu -->
+    <div class="col-span-2 bg-white rounded box p-4">
+        <h2 class="text-xl mb-6">Menu</h2>
+        <div class="col-span-1">
+        <div class="join join-vertical lg:join-horizontal">
+        <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+            <li><a href="https://docops.io">DocOps</a></li>
+            <li><a data-hx-get="roadmap.html" data-hx-target="#bod">Roadmap Builder</a></li>
+            <li>
+                <details>
+                    <summary>Buttons</summary>
+                    <ul>
+                        <li><a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod">Large</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod">Pill</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod">Rectangle</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod">Regular</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=REGULAR-LABEL" data-hx-target="#bod">Regular-Label Sort</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod">Round</a></li>
+                        <li><a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod">Slim</a></li>
+                        <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod">To PNG from JSON</a></li>
+                        <li><a data-hx-get="json/schema?name=buttons-schema" data-hx-target="#bod">Schema JSON</a></li>
+                        <li><a data-hx-get="button/convert.html" data-hx-target="#bod">Convert from Panel</a></li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <details>
+                    <summary>Release Strategy</summary>
+                    <ul>
+                        <li><a data-hx-get="builder.html" data-hx-target="#bod">Builder</a></li>
+                        <li><a data-hx-get="json/schema?name=release-strategy-schema" data-hx-target="#bod">Schema JSON</a></li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <details>
+                    <summary>Scorecard</summary>
+                    <ul>
+                        <li><a data-hx-get="scorecard/index.html?type=score1" data-hx-target="#bod">Dark Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score2" data-hx-target="#bod">Light Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-purple" data-hx-target="#bod">Purple Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-green" data-hx-target="#bod">Green Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-red" data-hx-target="#bod">Red Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-blue" data-hx-target="#bod">Blue Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-yellow" data-hx-target="#bod">Yellow Theme</a></li>
+                        <li><a data-hx-get="scorecard/index.html?type=score-pink" data-hx-target="#bod">Pink Theme</a></li>
+                        <li><a data-hx-get="json/schema?name=scorecard-schema" data-hx-target="#bod">Schema JSON</a></li>
+                    </ul>
+                </details>
+            </li>
+            <li><a data-hx-get="timeline.html" data-hx-target="#bod">Timeline</a></li>
+            <li>
+                <details>
+                    <summary>DocOps Draw</summary>
+                    <ul>
+                        <li><a data-hx-get="boxy.html" data-hx-target="#bod">Connector</a></li>
+                        <li><a data-hx-get="pm.html" data-hx-target="#bod">Place Mat</a></li>
+                        <li><a data-hx-get="json/schema?name=connector-schema" data-hx-target="#bod">Connector Schema</a></li>
+                        <li><a data-hx-get="json/schema?name=placemat-schema" data-hx-target="#bod">PlaceMat Schema</a></li>
+                    </ul>
+                </details>
+            </li>
+            <li><a data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
+            <li><a data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
+            <li><a data-hx-get="color/grad.html" data-hx-target="#bod">Color Gradient</a></li>
+            <li><a data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
+            <li><a data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
+        </ul>
+        </div>
+        </div>
+    </div>
+    <!-- Middle column for Main Content -->
+    <div class="col-span-9 bg-white rounded box p-4">
+        <h2 class="text-xl mb-6">Welcome to DocOps Extension</h2>
+        <div id="bod"></div>
+    </div>
+    <!-- Right column for Status -->
+    <div class="col-span-1 bg-white rounded box p-4">
+        <h2 class="text-xl mb-6">Status</h2>
+        <div id="statusPanel" class="dropdown">
+                <label tabindex="0" class="btn m-1">Theme</label>
+                <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52" data-choose-theme=""><li><a data-set-theme="masum">Masum</a></li><li><a data-set-theme="emerald">emerald</a></li><li><a data-set-theme="light">light</a></li><li><a data-set-theme="dark">dark</a></li><li><a data-set-theme="cupcake">cupcake</a></li><li><a data-set-theme="bumblebee">bumblebee</a></li><li><a data-set-theme="aqua">aqua</a></li><li><a data-set-theme="corporate">corporate</a></li><li><a data-set-theme="synthwave">synthwave</a></li><li><a data-set-theme="retro">retro</a></li><li><a data-set-theme="cyberpunk">cyberpunk</a></li><li><a data-set-theme="valentine">valentine</a></li><li><a data-set-theme="halloween">halloween</a></li><li><a data-set-theme="garden">garden</a></li><li><a data-set-theme="forest">forest</a></li><li><a data-set-theme="lofi">lofi</a></li><li><a data-set-theme="pastel">pastel</a></li><li><a data-set-theme="fantasy">fantasy</a></li><li><a data-set-theme="wireframe">wireframe</a></li><li><a data-set-theme="black">black</a></li><li><a data-set-theme="luxury">luxury</a></li><li><a data-set-theme="dracula">dracula</a></li><li><a data-set-theme="cmyk">cmyk</a></li></ul>
+
+        </div>
+    </div>
+</div>
+<script>
+    document.body.addEventListener("showFrame", function (evt){
+        if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
+    });
+    let downloadBlob = function (FileName) {
+        saveData(FileName);
+    }
+    var saveData = (function () {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        return function (fileName) {
+            var blob = new Blob([editor.getValue()], {type: "octet/stream"}),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    }());
+
+    document.body.addEventListener('htmx:beforeSwap', function(evt) {
+        if(evt.detail.xhr.status === 404){
+            // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
+            alert("Error: Could Not Find Resource");
+        } else if(evt.detail.xhr.status === 422){
+            // allow 422 responses to swap as we are using this as a signal that
+            // a form was submitted with bad data and want to rerender with the
+            // errors
+            //
+            // set isError to false to avoid error logging in console
+            evt.detail.shouldSwap = true;
+            evt.detail.isError = false;
+        } else if(evt.detail.xhr.status === 400){
+            // if the response code 418 (I'm a teapot) is returned, retarget the
+            // content of the response to the element with the id `teapot`
+            evt.detail.shouldSwap = true;
+            evt.detail.target = htmx.find("#errormessages");
+        }
+    });
+    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const d = new Date();
+    let name = month[d.getMonth()];
+    if("December" === name) {
+        var elem = document.getElementById("adv");
+        if(elem) {elem.setAttribute("class", "forestxmas");}
+    }
+</script>
+</body>
+</html>
