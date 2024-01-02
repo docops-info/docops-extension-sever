@@ -76,7 +76,9 @@ class Large(buttons: Buttons) : Regular(buttons) {
     private fun determineLineText(button: Button): String {
         if(button.embeddedImage != null) {
             val img = button.embeddedImage
-            return """<image x="0" y="0" width="300" height="191" xlink:href="${img?.ref}" href="${img?.ref}" clip-path="inset(1px round 18px 18px 0px 0px)"/>"""
+            return """
+                <use xlink:href="#singleBox"  fill="url(#btn_${button.id})"/>
+                <image x="0" y="0" width="300" height="191" xlink:href="${img?.ref}" href="${img?.ref}" clip-path="inset(1px round 18px 18px 0px 0px)"/>""".trimIndent()
         }
         else if ((button.cardLine1 == null) || (button.cardLine2 == null)) {
             return """<use xlink:href="#singleBox"  fill="url(#btn_${button.id})"/>
