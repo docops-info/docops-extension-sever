@@ -30,7 +30,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#fcfcfc"
+    open fun paperColor() = "#f1f5f8"
 }
 
 /**
@@ -58,7 +58,7 @@ class DarkTheme : RoadMapTheme() {
  * @property useDark  A boolean flag indicating whether to use dark theme or not. Default is false.
  * @constructor Creates a new instance of the RoadMapMaker class.
  */
-class RoadMapMaker(val useDark: Boolean = false, val index: Int = 25) {
+class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
 
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
@@ -89,8 +89,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 25) {
             roadMapTheme = DarkTheme()
             headerColor = "headerDark"
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"url(#grad${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
-        sb.append("<g transform='scale($scale)' class=\"shadowed\">")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
+        sb.append("<g transform='scale($scale)' >")
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
             sb.append(row(index, roadmaps, numChars))
