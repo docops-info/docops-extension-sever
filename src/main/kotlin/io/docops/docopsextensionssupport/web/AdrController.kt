@@ -16,9 +16,9 @@
 
 package io.docops.docopsextensionssupport.web
 
-import io.docops.asciidoctorj.extension.adr.ADRParser
-import io.docops.asciidoctorj.extension.adr.AdrMakerNext
-import io.docops.asciidoctorj.extension.adr.AdrParserConfig
+import io.docops.docopsextensionssupport.adr.ADRParser
+import io.docops.docopsextensionssupport.adr.AdrMakerNext
+import io.docops.docopsextensionssupport.adr.AdrParserConfig
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
