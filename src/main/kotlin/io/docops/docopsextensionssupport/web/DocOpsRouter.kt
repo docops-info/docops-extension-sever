@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.web
 
+import io.docops.docopsextensionssupport.adr.AdrHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
@@ -55,7 +56,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = ConnectorHandler()
                 handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
             }
-            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms")
             connectorSvgCounter.increment()
 
             return timing.value
@@ -66,7 +67,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handleSVG(payload=payload, type = type)
             }
             placematSvgCounter.increment()
-            log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
         else if("timeline".equals(kind, true)) {
@@ -75,35 +76,43 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handleSVG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
             }
             timelineSvgCounter.increment()
-            log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         } else if("scorecard".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ScorecardHandler()
                 handler.handleSVG(payload)
             }
-            log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         } else if("roadmap".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = RoadmapHandler()
                 handler.handleSVG(payload, useDark = useDark, type = type, title = title, scale = scale, numChars = numChars)
             }
-            log.info("roadmap executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("roadmap executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }else if ("buttons".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ButtonHandler()
                 handler.handleSVG(payload, useDark = useDark, type = type)
             }
-            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }else if ("release".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ReleaseHandler()
                 handler.handleSVG(payload, useDark = useDark)
             }
-            log.info("release executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info("release executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
+        else if("adr".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = AdrHandler()
+                handler.handleSVG(payload = payload, scale = scale)
+            }
+            log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
 
@@ -182,6 +191,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handlePNG(payload, useDark = useDark)
             }
             log.info("release executed in ${timing.duration.inWholeMilliseconds}ms ")
+            return timing.value
+        }
+        else if("adr".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = AdrHandler()
+                handler.handlePNG(payload = payload, scale = scale)
+            }
+            log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
          return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)

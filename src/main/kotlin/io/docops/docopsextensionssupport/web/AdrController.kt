@@ -28,6 +28,7 @@ import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
+import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 /**
@@ -184,5 +185,17 @@ class AdrController() {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/adr/summary/table")
+    @ResponseBody
+    fun getAdrRow(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 80, increaseWidthBy = 0, scale = 1.0f)
+        val adr = ADRParser().parse(data, config)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.TEXT_PLAIN
+        return ResponseEntity("${adr.title}~${adr.participantAsStr()}~${adr.date}".toByteArray(), headers, HttpStatus.OK)
     }
 }
