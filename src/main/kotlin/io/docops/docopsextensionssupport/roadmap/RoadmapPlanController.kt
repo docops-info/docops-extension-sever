@@ -16,7 +16,7 @@
 
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.asciidoctorj.extension.adr.compressString
+import io.docops.asciidoctorj.extension.panels.compressString
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString

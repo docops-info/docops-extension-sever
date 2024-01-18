@@ -16,7 +16,7 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.asciidoctorj.extension.adr.compressString
+import io.docops.asciidoctorj.extension.panels.compressString
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
