@@ -424,7 +424,9 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
 fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String?): String {
     var fill = ""
     fillColor?.let {
-        fill = "fill='$fillColor'"
+        if(fill.isNotEmpty()) {
+            fill = "fill='$fillColor'"
+        }
     }
     val text = StringBuilder()
     lines.forEach {

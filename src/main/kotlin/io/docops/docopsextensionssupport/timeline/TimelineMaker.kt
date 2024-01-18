@@ -71,18 +71,13 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         val defs = defs(entries, isPdf)
         val colors = defs.second
         sb.append(defs.first)
-        var titleFill = "#000000"
-        if(useDark) {
-            titleFill = "#fcfcfc"
-        }
-        if(useDark) {
-            sb.append("<rect width='100%' height='100%' fill='#17242b'/>")
-        } else {
-            sb.append("<rect width='100%' height='100%' fill='#f1f5f8'/>")
-        }
+
+
+        sb.append("<rect class='main_pane' width='100%' height='100%'/>")
+
         sb.append("<g transform=\"scale($scale)\">")
 
-        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge" fill="$titleFill">${title.escapeXml()}</text>""")
+        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge tm_title" >${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24) scale(1.0)">""")
 
         sb.append(buildRoad(head.second-100))
@@ -117,7 +112,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             x +=  125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, textColor)
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14,"")
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
@@ -131,7 +126,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
                 <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
             </g>
         </g>
-        <rect x="10" y="20" width="225" height="200" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="20" width="225" height="200" class="each_tm" stroke="$color" stroke-width="2" rx="5"/>
         <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
         <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
@@ -150,7 +145,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             x += 125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, textColor)
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "")
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
@@ -165,7 +160,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             </g>
         </g>
         
-        <rect x="10" y="420" width="225" height="200" fill="$fillColor" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="420" width="225" height="200" class="each_tm" stroke="$color" stroke-width="2" rx="5"/>
         <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
         
         <text x="125" y="450" fill='#000000' text-anchor='middle'
@@ -258,6 +253,28 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
     .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
     .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
     .rmLink { fill: $linkColor; text-decoration: underline; }
+    .main_pane {
+            fill: #f1f5f8;
+        }
+
+        .each_tm {
+            fill: #fcfcfc;
+        }
+        .tm_title {
+            fill: rgba(0, 0, 0, 0.96);
+        }
+        @media (prefers-color-scheme: dark) {
+            .main_pane {
+                fill: #06133b;
+            }
+            .each_tm {
+                fill: #06133b;
+            }
+            .tm_title {fill: #fcfcfc; }
+            .odd { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+            .even { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+            .rmLink {fill: #00bb9f;text-decoration: underline;}
+     }
 </style>
         """.trimIndent()
         if(isPdf) {

@@ -16,11 +16,6 @@
     </div>
 
     <div class="flex flex-col">
-        <label for="useDark" class="mb-2">Toggle Dark Mode</label>
-        <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               checked class="toggle toggle-primary">
-    </div>
-    <div class="flex flex-col">
         <label for="outline" class="mb-2">Outline Color</label>
         <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
                class="p-2 border rounded-md" value="#1363DF">
