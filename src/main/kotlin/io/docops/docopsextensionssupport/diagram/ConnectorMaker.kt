@@ -48,8 +48,12 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
        </defs>
             """.trimIndent())
+            sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+        if("PDF" != type) {
+            sb.append("<rect width=\"100%\" height=\"100%\" class='connector_back'/>")
+        }
         sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
@@ -68,17 +72,19 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")
         var y = 0
-        var fill = "#111111"
-        if(useDark) {
-            fill = "#fcfcfc"
-        }
+
+
         connectors.forEachIndexed {
             i, item ->
+            var fill = "fill=\"${colors[i]}\""
+            if("PDF" != type) {
+                fill = "fill=\"url(#grad$i)\""
+            }
             sb.append("""
                 <g transform="translate(0,$y)">
-                    <rect x="0" y="13" height="24" width="24" fill="url(#grad$i)" rx="5" ry="5"/>
+                    <rect x="0" y="13" height="24" width="24" $fill rx="5" ry="5"/>
                     <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
-                    <text x="42" y="29" fill="$fill" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    <text x="42" y="29" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;" class="desc_txt">
                         ${item.description}
                     </text>
                 </g>
@@ -173,6 +179,12 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 font-variant: small-caps;
                 font-weight: bold;
             }
+            .connector_back {fill: #fcfcfc;}
+            .desc_txt {fill: #111111;}
+            @media (prefers-color-scheme: dark) {
+                .connector_back {fill: #17242b;}
+                .desc_txt {fill: #fcfcfc;}
+            }
         </style>
         <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
         <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
@@ -190,13 +202,15 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             var grad = "url(#grad$i)"
             var strokeWidth = 1
             fill = grad
+            var style = ""
             if(!useGrad) {
                 fill = "none"
                 strokeWidth = 5
                 grad = colors[i]
+                style = """style="font-size: 24px; font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps; font-weight: bold;""""
             }
             val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" class="filtered glass boxText">""")
+            val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" class="filtered glass boxText" $style> """)
             var newLine = false
 
             lines.forEachIndexed {

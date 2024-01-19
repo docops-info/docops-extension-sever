@@ -33,6 +33,7 @@ class ConnectorHandler {
             useDark = useDark,
             type = type
         )
+        //println(svg.shapeSvg)
         val png = SvgToPng().toPngFromSvg(
             svg.shapeSvg,
             Pair(svg.height.toString(), svg.width.toString())

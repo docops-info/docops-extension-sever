@@ -47,7 +47,7 @@ class TimelineHandler {
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
+            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, true)
             val svg = tm.makeTimelineSvg(source = data, title = title, scale = scale, isPdf = true, chars = numChars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

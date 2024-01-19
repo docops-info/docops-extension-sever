@@ -27,7 +27,7 @@ import java.io.File
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boolean = false) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     init {
@@ -111,8 +111,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         {
             x +=  125 * index
         }
-
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14,"")
+        var fill = ""
+        if(pdf){
+            fill = "#fcfcfc"
+        }
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14,"$fill")
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
@@ -144,8 +147,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
         {
             x += 125 * index
         }
-
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "")
+        var fill = ""
+        if(pdf){
+            fill = "#fcfcfc"
+        }
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "$fill")
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
@@ -216,10 +222,6 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
 
     private fun defs(entries: MutableList<Entry>, isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
         val colors = mutableMapOf<Int, String>()
-        var linkColor = "#0000bb"
-        if(useDark) {
-            linkColor = "#7dc4e6"
-        }
         val sb = StringBuilder()
         entries.forEachIndexed { index, _ ->
             val color = if(index>9) {
@@ -246,36 +248,26 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String) {
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
         </radialGradient>""")
+        //language=html
         var style = """
-<style>
-    .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
-    .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-    .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
-    .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
-    .rmLink { fill: $linkColor; text-decoration: underline; }
-    .main_pane {
-            fill: #f1f5f8;
-        }
-
-        .each_tm {
-            fill: #fcfcfc;
-        }
-        .tm_title {
-            fill: rgba(0, 0, 0, 0.96);
-        }
-        @media (prefers-color-scheme: dark) {
-            .main_pane {
-                fill: #06133b;
+        <style>
+            .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
+            .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
+            .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
+            .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
+            .rmLink { fill: #0000bb; text-decoration: underline; }
+            .main_pane { fill: #f1f5f8; }
+            .each_tm { fill: #fcfcfc; }
+            .tm_title { fill: rgba(0, 0, 0, 0.96); }
+            @media (prefers-color-scheme: dark) {
+                .main_pane {fill: #06133b;}
+                .each_tm {fill: #06133b;}
+                .tm_title {fill: #fcfcfc; }
+                .odd { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+                .even { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
+                .rmLink {fill: #00bb9f;text-decoration: underline;}
             }
-            .each_tm {
-                fill: #06133b;
-            }
-            .tm_title {fill: #fcfcfc; }
-            .odd { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
-            .even { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
-            .rmLink {fill: #00bb9f;text-decoration: underline;}
-     }
-</style>
+        </style>
         """.trimIndent()
         if(isPdf) {
             style = ""
