@@ -12,7 +12,23 @@ import org.springframework.http.ResponseEntity
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+
+/**
+ * ConnectorHandler class is responsible for handling requests related to SVG and PNG images.
+ */
 class ConnectorHandler {
+
+
+
+    /**
+     * Handles the SVG request and returns the SVG image as a byte array.
+     *
+     * @param payload The compressed and encoded SVG payload.
+     * @param type The type of the SVG image.
+     * @param scale The scale of the SVG image.
+     * @param useDark A boolean indicating whether to use dark mode for the SVG image.
+     * @return The ResponseEntity containing the SVG image as a byte array.
+     */
     fun handleSVG(payload: String, type: String, scale: String, useDark: Boolean): ResponseEntity<ByteArray> {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
@@ -23,29 +39,52 @@ class ConnectorHandler {
     }
 
     fun handlePNG(payload: String, type: String, scale: String, useDark: Boolean): ResponseEntity<ByteArray> {
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = fromRequestToConnector(
-            data,
-            scale = scale.toFloat(),
-            useDark = useDark,
-            type = type
-        )
-        //println(svg.shapeSvg)
-        val png = SvgToPng().toPngFromSvg(
-            svg.shapeSvg,
-            Pair(svg.height.toString(), svg.width.toString())
-        )
+        val headers = createHeaders()
+        val decodedPayload = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+        val svg = getSvgFromPayload(decodedPayload, scale.toFloat(), useDark, type)
+        val converter = SvgPngConverter()
+        val png = converter.toPngFromSvg(svg.shapeSvg, Pair(svg.height.toString(), svg.width.toString()))
         return ResponseEntity(png, headers, HttpStatus.OK)
     }
 
-    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
-        val connectors = Json.decodeFromString<Connectors>(contents)
-        val maker = ConnectorMaker(connectors = connectors.connectors, useDark = useDark, type)
-        val svg = maker.makeConnectorImage(scale = scale)
-        return svg
+    private fun createHeaders(): HttpHeaders {
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
+        return headers
+    }
+
+    private fun getSvgFromPayload(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
+        return fromRequestToConnector(contents, scale, useDark, type)
+    }
+
+    private class SvgPngConverter {
+        fun toPngFromSvg(svg: String, dimensionSize: Pair<String, String>): ByteArray {
+            val converter = SvgToPng()
+            return converter.toPngFromSvg(svg, dimensionSize)
+        }
+    }
+
+    private fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
+        val connectors = decodeFromJson(contents)
+        val maker = createConnectorMaker(connectors.connectors, useDark, type)
+        return makeConnectorImage(maker, scale)
+    }
+
+    private fun decodeFromJson(contents: String): Connectors {
+        return Json.decodeFromString<Connectors>(contents)
+    }
+
+    private fun createConnectorMaker(
+        connectors: MutableList<Connector>,
+        useDark: Boolean,
+        type: String
+    ): ConnectorMaker {
+        return ConnectorMaker(connectors, useDark, type)
+    }
+
+    private fun makeConnectorImage(maker: ConnectorMaker, scale: Float): ShapeResponse {
+        return maker.makeConnectorImage(scale)
     }
 
 }
