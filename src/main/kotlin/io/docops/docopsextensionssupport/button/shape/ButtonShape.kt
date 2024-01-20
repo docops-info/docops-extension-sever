@@ -111,7 +111,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     companion object {
         const val BUTTON_HEIGHT: Int = 30
         const val BUTTON_WIDTH = 300
-        const val BUTTON_PADDING = 5
+        const val BUTTON_PADDING = 10
         const val  BUTTON_SPACING = 10
     }
 

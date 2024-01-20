@@ -78,7 +78,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
             btns.append(
                 """
-        <g transform="translate($startX,$startY)" cursor="pointer">
+        <g transform="translate($startX,$startY)">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
             <rect x="0" y="0" fill="$fill" width="300" height="30" class="raise btn_${button.id}_cls" $filter rx="10" ry="10"/>
             <text x="150" y="20" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
@@ -99,7 +99,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     protected fun end() = """</svg>"""
-    protected fun defs() : String{
+    protected open fun defs() : String{
         var strokeColor: String = "gold"
         buttons.theme?.let {
             strokeColor = it.strokeColor

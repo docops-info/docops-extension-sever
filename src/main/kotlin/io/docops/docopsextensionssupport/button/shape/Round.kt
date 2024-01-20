@@ -28,6 +28,25 @@ import io.docops.docopsextensionssupport.button.Buttons
  * @property buttons The `Buttons` object containing the button data.
  */
 class Round(buttons: Buttons) : Regular(buttons) {
+    class ItemCount(var counter: Int) {
+        fun inc() {
+            counter++
+        }
+    }
+    override fun draw() : String{
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val rows = toRows()
+        var itemNumber = ItemCount(0)
+        rows.forEachIndexed { index, buttons ->
+            sb.append(drawButtons(index, buttons, itemNumber))
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
     /**
      * Draws a series of buttons based on the given index and list of buttons.
      *
@@ -35,7 +54,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
      * @param buttonList The list of buttons.
      * @return The HTML code representing the buttons.
      */
-    override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
+     fun drawButtons(index: Int, buttonList: MutableList<Button>, itemNumber: ItemCount): String {
         val btns = StringBuilder()
         var win = "_top"
         var strokeColor = "gold"
@@ -49,10 +68,10 @@ class Round(buttons: Buttons) : Regular(buttons) {
 
         var startY = 65
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 55
+            startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60
         }
 
-        buttonList.forEach { button: Button ->
+        buttonList.forEach {button: Button ->
             val lines = wrapText(button.label.escapeXml(), 15f)
             var lineY = 0
             if(lines.size > 0) {
@@ -66,24 +85,23 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 filter = ""
                 fill = "url(#btn_${button.id})"
             }
-            btns.append(
-                """
-        <g transform="translate($startX,$startY)" cursor="pointer">
-        <a xlink:href="${button.link}" target="$win">
-            <use x="0" y="0" xlink:href="#myCircle" class="raise btn_${button.id}_cls" fill="$fill" stroke-width="2" stroke="$strokeColor" stroke-dasharray="2000" stroke-dashoffset="2000">
-                <animate id="p2" attributeName="stroke-dashoffset" begin="mouseover" end="mouseout" values="2037;0;2037" dur="5.5s" calcMode="linear" repeatCount="indefinite" />
+            btns.append("""
+            <g transform="translate($startX,$startY)" cursor="pointer">
+            <a xlink:href="${button.link}" target="$win">
+            <g stroke-width="16" stroke="url(#nnneon-grad${itemNumber.counter})" fill="none" cursor="pointer" class="raise">
                 <title class="description">${button.description?.escapeXml()}</title>
-            </use>
-            <text $filter x="0" y="$lineY" text-anchor="middle">
+                <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
+                <circle r="55" cx="0" cy="0"/>
+            </g>
+            <text  x="0" y="$lineY" text-anchor="middle">
                 $title
             </text>
-        </a>
-    </g>
-     
-        """.trimIndent()
-            )
+            </a>
+            </g>
+            """.trimIndent())
 
-            startX += BUTTON_WIDTH + BUTTON_PADDING
+            startX += BUTTON_WIDTH + BUTTON_PADDING + 5
+            itemNumber.inc()
 
         }
         return btns.toString()
@@ -95,7 +113,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
         val size = toRows().size
-        return ((size * 125) +(size * 5)) * scale
+        return (((size * 125) + (size * 5)) + size * 5) * scale
     }
 
     override fun width(): Float {
@@ -105,11 +123,57 @@ class Round(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
             cols = it.columns
         }
-        return ((cols * 125) +(cols * 7)) * scale
+        return (((cols * 125)+ (cols * 5)) + (cols * 7)) * scale
     }
     companion object {
         const val BUTTON_HEIGHT: Int = 125
         const val BUTTON_WIDTH = 125
         const val BUTTON_PADDING = 0
+    }
+    override fun defs() : String {
+        var strokeColor: String = "gold"
+        buttons.theme?.let {
+            strokeColor = it.strokeColor
+        }
+        val linGrad = StringBuilder()
+        buttons.buttons.forEachIndexed {
+            i, b ->
+           linGrad.append("""
+         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="nnneon-grad$i">
+            <stop stop-color="${b.color}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="#d0dceb" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+           """.trimIndent())
+        }
+        var style = """
+             <style>
+            .raise {
+                pointer-events: bounding-box;
+                opacity: 1;
+                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+            }
+
+            .raise:hover {
+                stroke: gold;
+                stroke-width: 3px;
+                opacity: 0.9;
+            }
+            </style>
+        """.trimIndent()
+        if(isPdf) {
+            style = ""
+        }
+        return """
+            <defs>
+                <filter id="nnneon-filter" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/>
+                </filter>
+                <filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feGaussianBlur stdDeviation="10 17" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/>
+                </filter>
+                $linGrad
+           $style
+            </defs>
+        """.trimIndent()
     }
 }
