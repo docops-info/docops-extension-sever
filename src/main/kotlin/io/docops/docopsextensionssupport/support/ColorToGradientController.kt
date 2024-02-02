@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.*
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 
 @RestController
 @RequestMapping("/api")
-class ColorToGradientController  {
+class ColorToGradientController {
 
     @GetMapping("/grad/{color}")
     fun colors(@PathVariable("color") color: String): ResponseEntity<Map<String, String>> {
@@ -39,7 +40,9 @@ class ColorToGradientController  {
     fun putColors(httpServletRequest: HttpServletRequest): ResponseEntity<String> {
         val color = httpServletRequest.getParameter("gradColor")
         val gradient = gradientFromColor(color)
-        return accepted().body("""
+        val hsl = hexToHsl(color)
+        return accepted().body(
+            """
             <div>
         <svg width="200" height="200" viewBox="0 0 200.0 200.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Color Gradient" >
     <defs>
@@ -53,9 +56,14 @@ class ColorToGradientController  {
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
         </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="grad3">
+            <stop stop-color="${gradient["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+        </linearGradient>
     </defs>
-    <rect x="0" y="0" width="100%" height="50%" fill="url(#grad1)"/>
-    <rect x="00" y="100" width="100%" height="50%" fill="url(#grad2)"/>
+    <rect x="0" y="0" width="100%" height="33%" fill="url(#grad1)"/>
+    <rect x="0" y="66.667" width="100%" height="33%" fill="url(#grad2)"/>
+    <rect x="0" y="133.333" width="100%" height="33%" fill="url(#grad3)"/>
 </svg>    
 </div>
 <div class="divider"></div>
@@ -72,6 +80,10 @@ class ColorToGradientController  {
             &lt;stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/&gt;
             &lt;stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/&gt;
         &lt;/linearGradient&gt;
+        &lt;linearGradient x2="0%" y2="100%" id="grad3"&gt;
+            &lt;stop stop-color="${gradient["color1"]}" stop-opacity="1" offset="0%"/&gt;
+            &lt;stop stop-color="$hsl" stop-opacity="1" offset="100%"/&gt;
+        &lt;/linearGradient&gt;
     </code>
 </pre>
 </div>
@@ -80,21 +92,70 @@ document.querySelectorAll('pre code').forEach((el) => {
     hljs.highlightElement(el);
 });
 </script>
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
+
     @GetMapping("/grad/svg/{color}")
     fun svgLinearGradient(@PathVariable("color") color: String): ResponseEntity<String> {
         val gradient = gradientFromColor(color)
-        return accepted().body("""
+        return accepted().body(
+            """
         <linearGradient id="headerGreen" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
         </linearGradient>
-        """.trimIndent())
+        """.trimIndent()
+        )
         //#e56516
     }
 
+}
+
+fun rgbToHSL(r: Int, g: Int, b: Int): String {
+    // Make r, g, and b fractions of 1
+    var rf = r / 255.0
+    var gf = g / 255.0
+    var bf = b / 255.0
+    // Find greatest and smallest channel values
+    val cmin = minOf(rf, gf, bf)
+    val cmax = maxOf(rf, gf, bf)
+    val delta = cmax - cmin
+    var h = 0.0
+    var s: Double
+    var l: Double
+    // Calculate hue
+    // No difference
+    if (delta == 0.0) {
+        h = 0.0
+        // Red is max
+    } else if (cmax == rf) {
+        h = ((gf - bf) / delta) % 6
+        // Green is max
+    } else if (cmax == gf) {
+        h = (bf - rf) / delta + 2
+        // Blue is max
+    } else {
+        h = (rf - gf) / delta + 4
+    }
+    h = (h * 60).roundToInt().toDouble()
+    // Make negative hues positive behind 360°
+    if (h < 0)
+        h += 360
+    // Calculate lightness
+    l = (cmax + cmin) / 2
+    // Calculate saturation
+    s = if (delta == 0.0) 0.0 else delta / (1 - Math.abs(2 * l - 1))
+    // Multiply l and s by 100 and round to 1 decimal place
+    s = (s * 100).toBigDecimal().setScale(1, java.math.RoundingMode.HALF_EVEN).toDouble()
+    l = (l * 100).toBigDecimal().setScale(1, java.math.RoundingMode.HALF_EVEN).toDouble()
+    return "hsl($h,${s}%,${l}%)"
+}
+
+fun hexToHsl(hex: String): String {
+    val c = Color.decode(hex)
+    return rgbToHSL(c.red, c.green, c.blue)
 }
 
 fun colorLuminance(hexValue: String, lumValue: Double): String {
@@ -113,6 +174,7 @@ fun colorLuminance(hexValue: String, lumValue: Double): String {
     }
     return rgb
 }
+
 fun RandomColorDark(offset: Int): Color {
     val maxValue = 256 - offset
     val ran = Random(maxValue)

@@ -20,6 +20,7 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
 
 /**
@@ -231,19 +232,21 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
             }
             colors[index] = color
             val colorMap = gradientFromColor(color)
+            val hsl = hexToHsl(color)
+
             sb.append("""
          <radialGradient id="grad$index" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
-            <stop offset="60%" style="stop-color:$color; stop-opacity:1" />
+            <stop offset="60%" style="stop-color:$hsl; stop-opacity:1" />
         </radialGradient>
         <linearGradient id="headerTimeline$index" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${colorMap["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${colorMap["color3"]}"/>
+            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
             """.trimIndent())
         }
         val colorMap = gradientFromColor(outlineColor)
+        val hsl = hexToHsl(outlineColor)
         sb.append("""<radialGradient id="outlineGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
@@ -306,14 +309,12 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
             <stop class="stop3" offset="100%" stop-color="#282828"/>
         </linearGradient>
         <linearGradient id="arrowColor" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${colorMap["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${colorMap["color3"]}"/>
+            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
         <linearGradient id="topBar" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${colorMap["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${colorMap["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${colorMap["color3"]}"/>
+            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
         <marker
                 id="triangle"
@@ -335,6 +336,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
     
     """.trimIndent(),colors)
     }
+
 }
 
 fun main() {

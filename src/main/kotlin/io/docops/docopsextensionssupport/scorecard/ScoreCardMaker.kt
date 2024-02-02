@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.support.hexToHsl
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.awt.Color
@@ -249,12 +250,13 @@ class ScoreCardMaker {
 
 fun buildGradientDef(color: String, id: String): String {
     val m = gradientFromColor(color)
+    val hsl = hexToHsl(color)
     return """
-           <linearGradient id="$id" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${m["color1"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${m["color3"]}"/>
-            </linearGradient> 
-        """
+        <linearGradient x2="0%" y2="100%" id="$id">
+            <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+    """.trimIndent()
 }
 
 fun gradientFromColor(color: String): Map<String, String> {

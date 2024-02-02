@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.support.hexToHsl
 import java.util.UUID
 
 /**
@@ -167,7 +168,7 @@ open class ReleaseTimelineMaker {
         val colors = StringBuilder()
         val shades = mutableMapOf<Int, String>(0 to "M", 1 to "R", 2 to "G")
         releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
-            colors.append(gradientColorFromColor(s, "shad${shades[index]}_rect"))
+            colors.append(buildGradientHslDef(s, "shad${shades[index]}_rect"))
         }
         return """
              <defs>
@@ -255,4 +256,15 @@ fun gradientColorFromColor(color: String, id: String): String {
             <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
             <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
         </linearGradient>"""
+}
+
+fun buildGradientHslDef(color: String, id: String): String {
+    val m = gradientFromColor(color)
+    val hsl = hexToHsl(color)
+    return """
+        <linearGradient x2="0%" y2="100%" id="$id">
+            <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+    """.trimIndent()
 }

@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.button.shape.*
+import io.docops.docopsextensionssupport.support.hexToHsl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -255,7 +256,7 @@ class Buttons(
             it.color = determineButtonColor(it)
             it.buttonStyle = determineStyle(it)
             if (color.isNotEmpty()) {
-                it.gradient = buildGradientDef(color, it.id)
+                it.gradient = buildGradientHslDef(color, it.id)
             }
             it.buttonGradientStyle = """.btn_${it.id}_cls { fill: url(#btn_${it.id}); }"""
         }
@@ -441,6 +442,16 @@ fun buildGradientDef(color: String, id: String): String {
             <stop class="stop2" offset="100%" stop-color="${m["color3"]}"/>
             </linearGradient> 
         """
+}
+fun buildGradientHslDef(color: String, id: String): String {
+    val m = gradientFromColor(color)
+    val hsl = hexToHsl(color)
+    return """
+        <linearGradient x2="0%" y2="100%" id="btn_${id}">
+            <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+    """.trimIndent()
 }
 
 fun getResourceFromUrl(url: String): String {
