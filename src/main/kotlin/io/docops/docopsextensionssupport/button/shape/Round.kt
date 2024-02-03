@@ -170,7 +170,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 <feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/>
                 </filter>
                 <filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feGaussianBlur stdDeviation="10 17" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/>
+                   
                 </filter>
                 $linGrad
            $style
