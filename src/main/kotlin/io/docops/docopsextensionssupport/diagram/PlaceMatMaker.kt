@@ -3,7 +3,9 @@ package io.docops.docopsextensionssupport.diagram
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
+import java.util.UUID
 
 class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG") {
 
@@ -23,10 +25,11 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val width: Float = (placeMatRequest.placeMats.chunked(5)[0].size * 250).toFloat() + 60
         val height = placeMatRequest.placeMats.chunked(5).size * 110.0f + 50
         val sb = StringBuilder()
-        sb.append(head(height+60, width = width, placeMatRequest.scale))
+        val id = UUID.randomUUID().toString()
+        sb.append(head(height+60, width = width, placeMatRequest.scale, id))
         initColors()
         if("PDF" != type) {
-            sb.append(defs())
+            sb.append(defs(id))
         } else {
             useGrad = false
             sb.append("""
@@ -44,21 +47,21 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             <text x="20" y="24" text-anchor="start" font-size="24" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">${placeMatRequest.title}</text>
         </g>
         <g transform="translate(0,50)">""")
-        sb.append(makeBody())
-        sb.append(makeLegend(height + 20 - 50))
+        sb.append(makeBody(id))
+        sb.append(makeLegend(height + 20 - 50, id))
         sb.append("</g>")
         sb.append("</g>")
         sb.append(tail())
         return ShapeResponse(sb.toString(), height = height + 60, width = width)
     }
 
-    private fun makeBody(): String {
+    private fun makeBody(id: String): String {
         val sb = StringBuilder()
         var x = 0
         var y = 0
         placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
-            var grad = "url(#grad_${conn.legendAsStyle()})"
+            var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
             if(!useGrad) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
             }
@@ -90,7 +93,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$grad" stroke="${placeMatRequest.config.colorFromLegendName(conn.legend).color}" stroke-width='$strokeWidth'/>
+                <use xlink:href="#bbox" x="10" y="10" fill="${grad}" stroke="${placeMatRequest.config.colorFromLegendName(conn.legend).color}" stroke-width='$strokeWidth'/>
                 $str
             """.trimIndent()
                 )
@@ -105,9 +108,9 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         }
         return sb.toString()
     }
-    private fun head(height: Float, width: Float, scale: Float = 1.0f)  = """
+    private fun head(height: Float, width: Float, scale: Float = 1.0f, id: String)  = """
         <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}"
-     viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag">
+     viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id">
     """.trimIndent()
 
     private fun tail() = "</svg>"
@@ -119,18 +122,19 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             colors.add(choiceColor)
         }
     }
-    private fun defs() : String {
+    private fun defs(id: String) : String {
 
         val grad= StringBuilder()
 
         placeMatRequest.config.legend.forEach {
             item ->
             val gradient = gradientFromColor(item.color)
+            val hsl = hexToHsl(item.color)
             grad.append(
                 """
-           <linearGradient id="grad_${item.legendAsStyle()}" x2="0%" y2="100%">
+           <linearGradient id="grad_${item.legendAsStyle()}_$id" x2="0%" y2="100%">
             <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="100%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop2" offset="100%" stop-color="$hsl"/>
             </linearGradient> 
             """.trimIndent()
             )
@@ -159,18 +163,18 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                     flood-opacity="0.5" />
         </filter>
         <style>
-            .shadowed {
+            #diag_$id .shadowed {
                 -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
                 filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
             }
-            .filtered {
+            #diag_$id  .filtered {
                 filter: url(#filter);
                 fill: black;
                 font-family: 'Ultra', serif;
                 font-size: 100px;
 
             }
-            .filtered-small {
+            #diag_$id  .filtered-small {
                 filter: url(#filter);
                 fill: black;
                 font-family: 'Ultra', serif;
@@ -190,7 +194,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
             rgba(0,129,174,.2)}.glass:active:before{height:25px}
 
-            .boxText {
+            #diag_$id  .boxText {
                 font-size:24px;
                 font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-variant: small-caps;
@@ -204,13 +208,13 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         </defs>
         """.trimIndent()
     }
-    private fun makeLegend(y: Float): String {
+    private fun makeLegend(y: Float, id: String): String {
         val sb = StringBuilder("""<g transform="translate(20,$y),scale(0.15)">""")
         sb.append("""<text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">Legend</text>""")
         var start = 10.0
         placeMatRequest.config.legend.forEach{
             item ->
-            var grad = "url(#grad_${item.legendAsStyle()})"
+            var grad = "url(#grad_${item.legendAsStyle()}_$id)"
             if(!useGrad) {
                 grad = item.color
             }

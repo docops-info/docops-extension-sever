@@ -84,10 +84,10 @@ class ScoreCardMaker {
             <style>
             $styles
             .left_${scoreCard.id} {
-                fill: url(#leftItem);
+                fill: url(#leftItem_${scoreCard.id});
             }
             .right_${scoreCard.id} {
-                fill: url(#rightItem);
+                fill: url(#rightItem_${scoreCard.id});
             }
             </style>
             <script>
@@ -110,8 +110,8 @@ class ScoreCardMaker {
             ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor")}
             ${buildGradientDef("#D36B00", "leftScoreBox")}
             ${buildGradientDef("#5D9C59", "rightScoreBox")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem_${scoreCard.id}")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem_${scoreCard.id}")}
             $style
             </defs>
             
@@ -170,7 +170,7 @@ class ScoreCardMaker {
         val inc = 35
 
         var grad = "url(#leftScoreBox)"
-        var fill = "fill=\"url(#leftItem)\""
+        var fill = "fill=\"url(#leftItem_${scoreCard.id})\""
         if (isPdf) {
             grad = "#D36B00"
 
@@ -204,7 +204,7 @@ class ScoreCardMaker {
             display = """display="none""""
         }
         var grad = "url(#rightScoreBox)"
-        val fill = "fill=\"url(#rightItem)\""
+        val fill = "fill=\"url(#rightItem_${scoreCard.id})\""
         if (isPdf) {
             grad = "#5D9C59"
         }
