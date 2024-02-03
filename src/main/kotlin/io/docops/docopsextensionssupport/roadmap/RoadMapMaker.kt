@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradients
+import io.docops.docopsextensionssupport.diagram.defLineGradMap
 import java.io.File
 
 /**
@@ -304,7 +305,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
         
-        ${allGradients().elementAt(index)}
+        ${defLineGradMap().elementAt(index)}
     
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }

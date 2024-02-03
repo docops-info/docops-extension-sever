@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.badge
 
 import io.docops.asciidoc.buttons.theme.theme
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.support.hexToHsl
 import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
@@ -67,17 +68,18 @@ class DocOpsBadgeGenerator {
         val clrMap = t.gradientFromColor(labelColor)
         val mMap = t.gradientFromColor(messageColor)
         val maskId = UUID.randomUUID().toString()
-
+        val hsl = hexToHsl(clrMap["color3"]!!)
+        val hsl2 = hexToHsl(mMap["color3"]!!)
         val grad = """
             <linearGradient id="label_${maskId}" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
                 <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
-                <stop class="stop3" offset="100%" stop-color="${clrMap["color3"]}"/>
+                <stop class="stop3"  stop-color="$hsl" stop-opacity="1" offset="100%"/>
             </linearGradient> 
             <linearGradient id="message_${maskId}" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
                 <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
-                <stop class="stop3" offset="100%" stop-color="${mMap["color3"]}"/>
+                <stop class="stop3"  stop-color="$hsl2" stop-opacity="1" offset="100%"/>
             </linearGradient> 
         """.trimIndent()
         var labelWidth = measureText(iLabel) * 100.0F
