@@ -138,6 +138,21 @@ class ReleaseStrategy (val title: String, val releases: MutableList<Release>, va
 
 fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "TLS" to "Timeline Summary",  "R" to "Roadmap", "TLG" to "Timeline Grouped")
 
+fun ReleaseStrategy.asciidocTable(): String {
+    val header = """
+.Release Strategy $title
+[%header]
+!===
+|Date |Type |Goal |Content
+      
+""".trimIndent()
+val sb = StringBuilder(header)
+    releases.forEachIndexed { index, release ->
+sb.append("a|${release.date} |${release.type} |${release.goal} |${release.lines.joinToString()}")
+    }
+sb.append("!===")
+return sb.toString()
+}
 fun ReleaseStrategy.excel(output: String): ByteArray {
     val workbook = XSSFWorkbook()
     val sheet = workbook.createSheet("Release Strategy $title")

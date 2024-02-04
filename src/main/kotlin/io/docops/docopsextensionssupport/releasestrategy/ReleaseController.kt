@@ -92,8 +92,8 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType =
-                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ResponseEntity(release.excel(output), headers, HttpStatus.OK)
+                    MediaType.parseMediaType("text/plain")
+                ResponseEntity(release.asciidocTable().toByteArray(), headers, HttpStatus.OK)
             } else {
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
