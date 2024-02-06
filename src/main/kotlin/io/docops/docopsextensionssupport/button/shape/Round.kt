@@ -69,7 +69,11 @@ class Round(buttons: Buttons) : Regular(buttons) {
 
         var startY = 65
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60
+            if(index == 1) {
+                startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60
+            } else {
+                startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60 + (index * 5)
+            }
         }
 
         buttonList.forEach {button: Button ->
