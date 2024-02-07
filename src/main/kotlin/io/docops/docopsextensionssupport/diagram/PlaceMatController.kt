@@ -6,7 +6,9 @@ import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.json.Json
+import net.logstash.logback.argument.StructuredArguments.kv
 import org.apache.commons.logging.LogFactory
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -23,7 +25,7 @@ import java.net.URLDecoder
 @Controller
 @RequestMapping("/api/placemat")
 class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
-    private val log = LogFactory.getLog(PlaceMatController::class.java)
+    private val log = LoggerFactory.getLogger(PlaceMatController::class.java)
     @PutMapping("/")
     @ResponseBody
     @Counted(value="docops.placemat.put", description="Creating a Placemat using http put")
@@ -78,7 +80,8 @@ class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
+        log.info("{} executed in {}", kv("operation", "makeDiag"), kv("durationMs", timings.duration.inWholeMilliseconds))
+
         return timings.value
     }
 

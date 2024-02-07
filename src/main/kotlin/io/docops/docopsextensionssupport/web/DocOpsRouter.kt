@@ -11,12 +11,14 @@ import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
+import net.logstash.logback.argument.StructuredArguments.kv
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import kotlin.time.measureTimedValue
 import org.apache.commons.logging.LogFactory
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
@@ -36,7 +38,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
     private val placematPngCounter: Counter  = Counter.builder("placemat.png.counter").tag("placemat", "png").description("Count Number of times a placemat was created with PNG").register(meterRegistry)
     private val timelinePngCounter: Counter = Counter.builder("timeline.png.counter").tag("timeline", "png").description("Count Number of times a timeline was created with PNG").register(meterRegistry)
 
-    private val log = LogFactory.getLog(DocOpsRouter::class.java)
+    private val log = LoggerFactory.getLogger(DocOpsRouter::class.java)
     @GetMapping("/svg")
     @Timed(value = "docops.router.svg", description="Creating a docops visual using http get", percentiles=[0.5, 0.9])
     fun getSvg(@RequestParam(value = "kind", required = true) kind: String,
@@ -56,7 +58,8 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = ConnectorHandler()
                 handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
             }
-            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms")
+
+            log.info("{} executed in {}", kv("operation", "getPlacemat"), kv("durationMs", timing.duration.inWholeMilliseconds))
             connectorSvgCounter.increment()
 
             return timing.value
