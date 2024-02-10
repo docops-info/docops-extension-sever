@@ -28,7 +28,7 @@ import java.io.File
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boolean = false) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boolean = false) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     init {
@@ -65,6 +65,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
      * @return The SVG representation of the timeline.
      */
     fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String) : String {
+        this.pdf = isPdf
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val head = head(entries, scale)
@@ -232,7 +233,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
             }
             colors[index] = color
             val colorMap = gradientFromColor(color)
-            val hsl = hexToHsl(color)
+            val hsl = hexToHsl(color, pdf)
 
             sb.append("""
          <radialGradient id="grad$index" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
@@ -246,7 +247,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, val pdf: Boo
             """.trimIndent())
         }
         val colorMap = gradientFromColor(outlineColor)
-        val hsl = hexToHsl(outlineColor)
+        val hsl = hexToHsl(outlineColor, pdf)
         sb.append("""<radialGradient id="outlineGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />

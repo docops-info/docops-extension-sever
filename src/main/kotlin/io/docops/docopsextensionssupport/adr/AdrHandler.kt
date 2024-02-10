@@ -25,7 +25,7 @@ class AdrHandler {
 
     fun handlePNG(payload: String, scale: String): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 80, increaseWidthBy = 0, scale = scale.toFloat())
+        val config = AdrParserConfig(newWin = true, isPdf = true, lineSize = 80, increaseWidthBy = 0, scale = scale.toFloat())
         val adr = ADRParser().parse(data, config)
         var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
         adr.urlMap.forEach { (t, u) ->

@@ -27,6 +27,7 @@ import java.util.UUID
  */
 open class ReleaseTimelineMaker {
 
+    protected var isPdf = false
     /**
      * Generates a formatted string representation of a release.
      *
@@ -36,6 +37,7 @@ open class ReleaseTimelineMaker {
      * @return The generated string representation of the release.
      */
     open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
+        this.isPdf = isPdf
         val width = determineWidth(releaseStrategy = releaseStrategy)
         val id = UUID.randomUUID().toString()
         val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
@@ -215,7 +217,16 @@ open class ReleaseTimelineMaker {
          """.trimIndent()
     }
 
-
+    fun buildGradientHslDef(color: String, id: String): String {
+        val m = gradientFromColor(color)
+        val hsl = hexToHsl(color, isPdf)
+        return """
+        <linearGradient x2="0%" y2="100%" id="$id">
+            <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+    """.trimIndent()
+    }
 }
 fun strokeColor(release: Release): String = when {
     release.type.toString().startsWith("M") -> {
@@ -258,13 +269,3 @@ fun gradientColorFromColor(color: String, id: String): String {
         </linearGradient>"""
 }
 
-fun buildGradientHslDef(color: String, id: String): String {
-    val m = gradientFromColor(color)
-    val hsl = hexToHsl(color)
-    return """
-        <linearGradient x2="0%" y2="100%" id="$id">
-            <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-    """.trimIndent()
-}
