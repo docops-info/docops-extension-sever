@@ -33,7 +33,13 @@ class RoadmapHandler {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val rmm = RoadMapMaker(useDark)
-            val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+            val svg = rmm.makeRoadMapImage(
+                data,
+                scale,
+                title,
+                numChars,
+                isPdf = true
+            )
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.IMAGE_PNG

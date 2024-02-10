@@ -96,7 +96,7 @@ class AdrMakerNext {
     fun svg(body: String, iHeight: Int = 550, iWidth: Int, adr: Adr, config: AdrParserConfig): String {
         val height = maxOf(iHeight, 500)
         val width = 800
-        val prop = hexToHsl("#2986cc")
+        val prop = hexToHsl("#2986cc", config.isPdf)
         //language=svg
         return """
 <?xml version="1.0" standalone="no"?>
@@ -105,24 +105,24 @@ class AdrMakerNext {
      >
     <defs>
         <linearGradient xmlns="http://www.w3.org/2000/svg" id="Proposed-gradient" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="${hexToHsl("#5ea4d8")}"/>
+            <stop offset="0%" stop-color="${hexToHsl("#5ea4d8", config.isPdf)}"/>
             <stop offset="100%" stop-color="$prop"/>
         </linearGradient>
         <linearGradient xmlns="http://www.w3.org/2000/svg" id="Accepted-gradient" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="${hexToHsl("#699855")}"/>
-            <stop offset="100%" stop-color="${hexToHsl("#38761d")}"/>
+            <stop offset="0%" stop-color="${hexToHsl("#699855", config.isPdf)}"/>
+            <stop offset="100%" stop-color="${hexToHsl("#38761d", config.isPdf)}"/>
         </linearGradient>
         <linearGradient xmlns="http://www.w3.org/2000/svg" id="Superseded-gradient" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="${hexToHsl("#f7d272")}"/>
-            <stop offset="100%" stop-color="${hexToHsl("#F5C344")}"/>
+            <stop offset="0%" stop-color="${hexToHsl("#f7d272", config.isPdf)}"/>
+            <stop offset="100%" stop-color="${hexToHsl("#F5C344", config.isPdf)}"/>
         </linearGradient>        
         <linearGradient xmlns="http://www.w3.org/2000/svg" id="Deprecated-gradient" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="${hexToHsl("#efb2b2")}"/>
-            <stop offset="100%" stop-color="${hexToHsl("#EA9999")}"/>
+            <stop offset="0%" stop-color="${hexToHsl("#efb2b2", config.isPdf)}"/>
+            <stop offset="100%" stop-color="${hexToHsl("#EA9999", config.isPdf)}"/>
         </linearGradient>        
         <linearGradient xmlns="http://www.w3.org/2000/svg" id="Rejected-gradient" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="${hexToHsl("#d87277")}"/>
-            <stop offset="100%" stop-color="${hexToHsl("#CB444A")}"/>
+            <stop offset="0%" stop-color="${hexToHsl("#d87277", config.isPdf)}"/>
+            <stop offset="100%" stop-color="${hexToHsl("#CB444A", config.isPdf)}"/>
         </linearGradient>
         <filter id="dropshadow" height="130%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> <!-- stdDeviation is how much to blur -->

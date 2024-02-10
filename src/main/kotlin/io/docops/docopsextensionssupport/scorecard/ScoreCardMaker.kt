@@ -18,7 +18,6 @@ package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.hexToHsl
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.awt.Color
 import java.io.File
@@ -246,31 +245,32 @@ class ScoreCardMaker {
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
     private fun endWrapper() = "</g>"
-}
-
-fun buildGradientDef(color: String, id: String): String {
-    val m = gradientFromColor(color)
-    val hsl = hexToHsl(color)
-    return """
+    fun buildGradientDef(color: String, id: String): String {
+        val m = gradientFromColor(color)
+        val hsl = hexToHsl(color, isPdf)
+        return """
         <linearGradient x2="0%" y2="100%" id="$id">
             <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
     """.trimIndent()
-}
+    }
 
-fun gradientFromColor(color: String): Map<String, String> {
-    val decoded = Color.decode(color)
-    val tinted1 = tint(decoded, 0.5)
-    val tinted2 = tint(decoded, 0.25)
-    return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
-}
+    fun gradientFromColor(color: String): Map<String, String> {
+        val decoded = Color.decode(color)
+        val tinted1 = tint(decoded, 0.5)
+        val tinted2 = tint(decoded, 0.25)
+        return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
+    }
 
-private fun tint(color: Color, factor: Double): String {
-    val rs = color.red + (factor * (255 - color.red))
-    val gs = color.green + (factor * (255 - color.green))
-    val bs = color.blue + (factor * (255 - color.blue))
-    return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
+    private fun tint(color: Color, factor: Double): String {
+        val rs = color.red + (factor * (255 - color.red))
+        val gs = color.green + (factor * (255 - color.green))
+        val bs = color.blue + (factor * (255 - color.blue))
+        return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
+    }
+
+
 }
 
 

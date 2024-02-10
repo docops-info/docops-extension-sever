@@ -181,7 +181,10 @@ fun gradientMapToHsl(): Map<String, String> {
     }
     return gradMap
 }
-fun defLineGradMap(): MutableCollection<String> {
+fun defLineGradMap(isPdf : Boolean): MutableCollection<String> {
+    if(isPdf) {
+        return allGradients()
+    }
     val gradMap = mutableMapOf<String,String>()
     var count = 0
     gradients.forEach{

@@ -153,7 +153,10 @@ fun rgbToHSL(r: Int, g: Int, b: Int): String {
     return "hsl($h,${s}%,${l}%)"
 }
 
-fun hexToHsl(hex: String): String {
+fun hexToHsl(hex: String, isPdf: Boolean = false): String {
+    if(isPdf) {
+        return hex
+    }
     val c = Color.decode(hex)
     return rgbToHSL(c.red, c.green, c.blue)
 }

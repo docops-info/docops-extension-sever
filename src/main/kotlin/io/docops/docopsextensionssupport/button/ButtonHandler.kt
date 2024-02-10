@@ -35,7 +35,6 @@ class ButtonHandler {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
-            println(imgSrc)
             val png = SvgToPng().toPngFromSvg(
                 imgSrc,
                 Pair(buttonShape.height().toString(), buttonShape.width().toString())

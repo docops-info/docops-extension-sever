@@ -145,8 +145,8 @@ class Round(buttons: Buttons) : Regular(buttons) {
             i, b ->
            linGrad.append("""
          <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="nnneon-grad$i-${buttons.id}">
-            <stop stop-color="${hexToHsl(b.color!!)}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="${hexToHsl("#d0dceb")}" stop-opacity="1" offset="100%"/>
+            <stop stop-color="${hexToHsl(b.color!!, isPdf)}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="${hexToHsl("#d0dceb", isPdf)}" stop-opacity="1" offset="100%"/>
         </linearGradient>
            """.trimIndent())
         }

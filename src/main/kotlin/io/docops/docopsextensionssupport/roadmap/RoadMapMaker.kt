@@ -61,6 +61,7 @@ class DarkTheme : RoadMapTheme() {
  */
 class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
 
+    private var isPdf = false
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
      *
@@ -70,7 +71,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
      * @param numChars the number of characters to be displayed on the road map image
      * @return the generated road map image as a string
      */
-    fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String): String {
+    fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String, isPdf: Boolean = false): String {
+        this.isPdf = isPdf
         val roadmaps = RoadMapParser().parse(source)
         return draw(roadmaps, scale, title, numChars)
     }
@@ -305,7 +307,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
         
-        ${defLineGradMap().elementAt(index)}
+        ${defLineGradMap(isPdf).elementAt(index)}
     
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
