@@ -16,16 +16,15 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.docopsextensionssupport.roadmap.wrapText
 import kotlinx.serialization.Serializable
 import org.apache.poi.hssf.util.HSSFColor
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.Workbook
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor
-import org.apache.poi.xssf.usermodel.XSSFDrawing
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.ByteArrayOutputStream
+import kotlin.math.max
 
 
 /**
@@ -121,7 +120,7 @@ class Release(
  * @property carColors The list of colors to be used for cars in the display. Defaults to ["#fcfcfc", "#000000", "#ff0000"].
  */
 @Serializable
-class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"))
+class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#5f57ff", "#2563eb", "#7149c6"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"))
 /**
  * Represents a release strategy.
  *
@@ -133,10 +132,41 @@ class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: Stri
  * @param displayConfig The display configuration for the strategy.
  * @param useDark Specifies if the dark theme should be used. Default value is false.
  */
+open class LineType(val text: String)
+class BulletLine(text: String): LineType(text)
+class PlainLine(text: String): LineType(text)
 @Serializable
 class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35, val displayConfig: DisplayConfig = DisplayConfig(), var useDark: Boolean = false)
 
 fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "TLS" to "Timeline Summary",  "R" to "Roadmap", "TLG" to "Timeline Grouped")
+
+fun ReleaseStrategy.releaseLinesToDisplay(lines: MutableList<String>): MutableList<LineType> {
+    val newLines = mutableListOf<LineType>()
+    lines.forEachIndexed { index, line ->
+        if(line.isNotBlank()) {
+            val l = wrapText(line, 60f)
+            val bLine = BulletLine(l[0])
+            newLines.add(bLine)
+            l.forEachIndexed { i, iLine ->
+                if (i > 0) {
+                    val pLine: PlainLine = PlainLine(iLine)
+                    newLines.add(pLine)
+                }
+            }
+        }
+    }
+    return newLines
+}
+fun ReleaseStrategy.maxLinesForHeight(): Int {
+    var maxSize = releaseLinesToDisplay(releases[0].lines).size
+    releases.forEach {
+        val current = releaseLinesToDisplay(it.lines).size
+        if(current > maxSize){
+            maxSize = current
+        }
+    }
+    return (maxSize + 3) * 12
+}
 
 fun ReleaseStrategy.asciidocTable(): String {
     val header = """
