@@ -161,9 +161,13 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         if(currentIndex>0) {
             positionX += currentIndex * 5
         }
+        var visibility = """visibility="hidden""""
+        if(isPdf) {
+            visibility = ""
+        }
             //language=svg
             return """
-         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" visibility="hidden" id="ID${id}_${currentIndex}">
+         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" $visibility id="ID${id}_${currentIndex}">
             <rect width='400' height='$height' stroke="${fishTailColor(release, releaseStrategy)}" fill="#fcfcfc"/>
             <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
                 $lineText
