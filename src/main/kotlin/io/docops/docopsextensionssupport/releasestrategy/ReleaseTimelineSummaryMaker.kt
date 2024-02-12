@@ -161,7 +161,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         if(currentIndex>0) {
             positionX += currentIndex * 5
         }
-        var visibility = """visibility="hidden""""
+        var visibility = """"""
         if(isPdf) {
             visibility = ""
         }
