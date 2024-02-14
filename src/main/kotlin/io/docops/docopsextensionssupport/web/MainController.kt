@@ -282,6 +282,12 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun convertPanels(model: Model): String {
         return "buttons/convert"
     }
+    @GetMapping("/search/index.html")
+    @Counted
+    @Timed(value = "docops.search.html")
+    fun convertPanels(): String {
+        return "search/search"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

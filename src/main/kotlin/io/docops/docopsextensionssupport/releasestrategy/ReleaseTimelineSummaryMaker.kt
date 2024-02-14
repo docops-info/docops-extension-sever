@@ -206,7 +206,7 @@ fun main() {
                     ],
                     "date": "TBD",
                     "selected": true,
-                    "goal": "Our goal is to build a better cog..."
+                    "goal": "Our goal is to release Spring Boot 3.3.0 version with these improvements."
                 },
                 {
                     "type": "RC1",
@@ -271,7 +271,7 @@ fun main() {
             "style": "TLS",
             "displayConfig": {
              "colors": [ "#5f57ff", "#2563eb", "#7149c6"],
-              "fontColor": "#000000"
+              "fontColor": "#fcfcfc"
             }
         }
     """.trimIndent()
