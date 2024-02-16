@@ -46,7 +46,15 @@ class Round(buttons: Buttons) : Regular(buttons) {
             sb.append(drawButtons(index, buttons, itemNumber))
         }
         sb.append("</g>")
-        return sb.toString()
+        if(buttons.useDark) {
+            val rect = StringBuilder("""
+                <rect width="100%" height="100%" fill="#111111"/>
+                ${sb.toString()}
+            """.trimIndent())
+            return rect.toString()
+        } else {
+            return sb.toString()
+        }
     }
     /**
      * Draws a series of buttons based on the given index and list of buttons.
@@ -145,7 +153,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             i, b ->
            linGrad.append("""
          <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="nnneon-grad$i-${buttons.id}">
-            <stop stop-color="${hexToHsl(b.color!!, isPdf)}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="${hexToHsl(b.color!!, isPdf)}" stop-opacity="1" offset="50%"/>
             <stop stop-color="${hexToHsl("#d0dceb", isPdf)}" stop-opacity="1" offset="100%"/>
         </linearGradient>
            """.trimIndent())

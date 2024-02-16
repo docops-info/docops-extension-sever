@@ -30,7 +30,7 @@ class ButtonHandler {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val buttons = Json.decodeFromString<Buttons>(data)
             val buttonShape = buttons.createSVGShape()
-            buttons.useDark = true
+
             val imgSrc = buttonShape.drawShape("PDF")
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -46,7 +46,6 @@ class ButtonHandler {
     }
 
     private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
-        buttons.useDark = useDark
         val buttonShape = buttons.createSVGShape()
         val imgSrc = buttonShape.drawShape(type)
         val headers = HttpHeaders()
