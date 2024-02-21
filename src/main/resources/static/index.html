@@ -2,21 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.css" rel="stylesheet" type="text/css" />
+    <title>Docops Extension Server</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.5.1/css/pro.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
-    <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/modal.css" />
-    <link rel="stylesheet" type="text/css" href="css/layout.css">
-    <title>DocOps Extension Server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon"/>
-    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
-    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/kotlin.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
@@ -30,188 +26,140 @@
             height: 200px;
         }
     </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="bg-gray-100">
-<!-- start navbar -->
-<div class="md:fixed md:w-full md:top-0 md:z-20 flex flex-row flex-wrap items-center bg-white p-6 border-b border-gray-300">
-
-    <div class="flex-none w-56 flex flex-row items-center">
-
-        <button id="sliderBtn" class="flex-none text-right text-gray-900 hidden md:block">
-            <i class="fad fa-list-ul"></i>
-        </button>
-    </div>
-
-    <button id="navbarToggle" class="hidden md:block md:fixed right-0 mr-6">
-        <i class="fad fa-chevron-double-down"></i>
-    </button>
-    <div id="navbar" class="animated md:hidden md:fixed md:top-0 md:w-full md:left-0 md:mt-16 md:border-t md:border-b md:border-gray-200 md:p-10 md:bg-white flex-1 pl-3 flex flex-row flex-wrap justify-between items-center md:flex-col md:items-center">
-        <div class="text-gray-600 md:w-full md:flex md:flex-row md:justify-evenly md:pb-10 md:mb-10 md:border-b md:border-gray-200"></div>
-
-        <div class="flex flex-row-reverse items-center">
-
-            <div class="dropdown relative md:static">
-
-                <button class="menu-btn focus:outline-none focus:shadow-outline flex flex-wrap items-center">
-
-                </button>
-
-            </div>
-
-            <div class="dropdown relative mr-5 md:static">
-                <a data-hx-get="adrbuilder.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-house-building text-xs mr-2"></i> ADR
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="timeline.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fa fa-timeline text-xs mr-2"></i> Timeline
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="roadmap.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-road text-xs mr-2"></i> Planner
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="badge.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-badge text-xs mr-2"></i> Badges
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="color/grad.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-palette text-xs mr-2"></i> Color Gradient
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="charts.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-chart-pie text-xs mr-2"></i> Charts
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="stats.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-list-numeric text-xs mr-2"></i> Stats
-                </a>
-                <span style="border-left: 2px solid #d2dad2;height: 18px; padding-right: 2px;"> </span>
-                <a data-hx-get="search/index.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                    <i class="fad fa-search text-xs mr-2"></i> Search
-                </a>
-                <div class="menu hidden rounded bg-white md:right-0 md:w-full shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster">
-                </div>
-            </div>
-            <div class="dropdown relative mr-5 md:static">
-                <div class="menu hidden md:w-full md:right-0 rounded bg-white shadow-md absolute z-20 right-0 w-84 mt-5 py-2 animated faster"></div>
+<body>
+<div class="navbar bg-base-300">
+    <div class="navbar-start">
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
             </div>
         </div>
+        <a class="btn btn-ghost text-xl">DocOps Extension</a>
+        <label class="flex cursor-pointer gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+            <input type="checkbox" value="corporate" class="toggle theme-controller"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </label>
     </div>
-</div>
-<div class="h-screen flex flex-row flex-wrap">
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
 
-    <div id="sideBar" class="relative flex flex-col flex-wrap bg-white border-r border-gray-300 p-6 flex-none w-84 md:-ml-64 md:fixed md:top-0 md:z-30 md:h-screen md:shadow-xl animated faster">
-        <div class="flex flex-col">
-
-            <ul class="menu">
-                <li>
-                    <details>
-                        <summary class="uppercase text-xs text-gray-600 mb-4 tracking-wider">Buttons</summary>
-                        <ul>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-tablet-button text-xs mr-2"></i> Regular
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-circle text-xs mr-2"></i> Round
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+            <li>
+                <details>
+                    <summary>Buttons</summary>
+                    <ul class="p-2 absolute z-20">
+                        <li class="dropdown">
+                            <a data-hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-tablet-button text-xs mr-2"></i> Regular
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a data-hx-get="button/fromJson.html?type=ROUND" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-circle text-xs mr-2"></i> Round
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="button/fromJson.html?type=LARGE" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
                                 <i class="fad fa-square text-xs mr-2"></i> Large
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-pills text-xs mr-2"></i> Pill
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-rectangle-wide text-xs mr-2"></i> Rectangle
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-watch-fitness text-xs mr-2"></i> Slim
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="button/fromJson.html?type=REGULAR-LABEL" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-tablet-button text-xs mr-2"></i> Regular-Label Sorted
-                                </a>
-                            </li>
-                            <li>
-                                <details open>
-                                    <summary>Utilities</summary>
-                                    <ul>
-                                        <li><a data-hx-get="json/schema?name=buttons-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                            <i class="fad fa-curling text-xs mr-2"></i> JSON Schema
-                                        </a></li>
-                                        <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                            <i class="fad fa-curling text-xs mr-2"></i> Convert To PNG
-                                        </a></li>
-                                        <li><a data-hx-get="button/convert.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                            <i class="fad fa-truck-moving text-xs mr-2"></i> Convert from Panel
-                                        </a>
-                                        </li>
-                                    </ul>
-                                </details>
-                            </li>
-                        </ul>
-                    </details>
-                </li>
-                <li>
-                    <details>
-                        <summary class="uppercase text-xs text-gray-600 mb-4 tracking-wider">DocOps Draw</summary>
-                        <ul>
-                            <li>
-                                <a data-hx-get="boxy.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="button/fromJson.html?type=PILL" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-pills text-xs mr-2"></i> Pill
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-rectangle-wide text-xs mr-2"></i> Rectangle
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="button/fromJson.html?type=SLIM" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-watch-fitness text-xs mr-2"></i> Slim
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="button/fromJson.html?type=REGULAR-LABEL" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-tablet-button text-xs mr-2"></i> Regular-Label Sorted
+                            </a>
+                        </li>
+                        <li>
+                            <details open>
+                                <summary>Utilities</summary>
+                                <ul>
+                                    <li><a data-hx-get="json/schema?name=buttons-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                        <i class="fad fa-curling text-xs mr-2"></i> JSON Schema
+                                    </a></li>
+                                    <li><a data-hx-get="button/fromJsonToPng.html?TYPE=REGULAR" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                        <i class="fad fa-curling text-xs mr-2"></i> Convert To PNG
+                                    </a></li>
+                                    <li><a data-hx-get="button/convert.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                        <i class="fad fa-truck-moving text-xs mr-2"></i> Convert from Panel
+                                    </a>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+
+            <li>
+                <details>
+                    <summary>DocOps Draw</summary>
+                    <ul class="p-2 absolute z-20">
+                        <li>
+                            <a data-hx-get="boxy.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
                                 <i class="fad fa-link text-xs mr-2"></i> Connector
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="pm.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-table text-xs mr-2"></i> Placemat
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="json/schema?name=connector-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-link text-xs mr-2"></i> JSON Schema - Connector
-                                </a>
-                            </li>
-                            <li>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="pm.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-table text-xs mr-2"></i> Placemat
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="json/schema?name=connector-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-link text-xs mr-2"></i> JSON Schema - Connector
+                            </a>
+                        </li>
+                        <li>
                             <a data-hx-get="json/schema?name=placemat-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
                                 <i class="fad fa-table text-xs mr-2"></i> JSON Schema - Placemat
                             </a>
-                            </li>
-                        </ul>
-                    </details>
-                </li>
-                <li>
-                    <details>
-                        <summary class="uppercase text-xs text-gray-600 mb-4 tracking-wider">Release Strategy</summary>
-                        <ul>
-                            <li>
-                                <a data-hx-get="builder.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-house-building text-xs mr-2"></i> Builder
-                                </a>
-                            </li>
-                            <li>
-                                <a data-hx-get="json/schema?name=release-strategy-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
-                                    <i class="fad fa-house-building text-xs mr-2"></i> Schema JSON
-                                </a>
-                            </li>
-                        </ul>
-                    </details>
-                </li>
-                <li>
-                    <details>
-                        <summary class="uppercase text-xs text-gray-600 mb-4 tracking-wider">Scorecard</summary>
-                    <ul>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <a data-hx-get="roadmap.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                    <i class="fad fa-road text-xs mr-2"></i> Planner
+                </a>
+            </li>
+            <li>
+                <details>
+                    <summary>Release Strategy</summary>
+                    <ul class="p-2 absolute z-20">
+                        <li>
+                            <a data-hx-get="builder.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-house-building text-xs mr-2"></i> Builder
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="json/schema?name=release-strategy-schema" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-house-building text-xs mr-2"></i> Schema JSON
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <details>
+                    <summary>Scorecard</summary>
+                    <ul class="p-2 absolute z-20">
                         <li>
                             <a data-hx-get="scorecard/index.html?type=score2" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
                                 <i class="fad fa-circle-half-stroke text-xs mr-2"></i> Light Theme
@@ -258,32 +206,49 @@
                             </a>
                         </li>
                     </ul>
-                    </details>
-                </li>
-
-            </ul>
-        </div>
+                </details>
+            </li>
+            <li>
+                <a data-hx-get="timeline.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                    <i class="fa fa-timeline text-xs mr-2"></i> Timeline
+                </a>
+            </li>
+            <li>
+                <details>
+                    <summary>Utilities</summary>
+                    <ul class="p-2 absolute z-20">
+                        <li>
+                            <a data-hx-get="adrbuilder.html" data-hx-target="#bod"><i class="fad fa-house-building text-xs mr-2"></i> ADR</a>
+                        </li>
+                        <li>
+                            <a data-hx-get="badge.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-badge text-xs mr-2"></i> Badges
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="charts.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-chart-pie text-xs mr-2"></i> Charts
+                            </a>
+                        </li>
+                        <li>
+                            <a data-hx-get="color/grad.html" data-hx-target="#bod" class="mb-3 capitalize font-medium text-sm hover:text-teal-600 transition ease-in-out duration-500">
+                                <i class="fad fa-palette text-xs mr-2"></i> Color Gradient
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
     </div>
-    <div class="bg-gray-100 flex-1 p-6 md:mt-16">
-        <div class="grid grid-cols-4 gap-6 xl:grid-cols-1">
-            <h2 class="text-xl mb-6">Welcome to DocOps Extension</h2>
-        </div>
-        <div class="card mt-6">
-            <div class="card-header flex flex-row justify-between">
-                <div class="flex flex-row justify-center items-center">
-                    <div id="adv"></div>
-                </div>
-            </div>
-            <div class="card-body grid grid-cols-1 gap-6 lg:grid-cols-1">
-                <div class="">
-                    <div id="bod"></div>
-                </div>
-            </div>
-        </div>
+    <div class="navbar-end">
+        <a class="btn">S</a>
     </div>
-
 </div>
-<!-- end wrapper -->
+<div class="bg-white flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+    <div class="border-b border-gray-900/10 pb-12">
+        <div id="bod"></div>
+    </div>
+</div>
 <script>
     document.body.addEventListener("showFrame", function (evt){
         if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
@@ -331,6 +296,16 @@
         var elem = document.getElementById("adv");
         if(elem) {elem.setAttribute("class", "forestxmas");}
     }
+    window.addEventListener('click', function(e) {
+        document.querySelectorAll('.dropdown').forEach(function(dropdown) {
+            if (!dropdown.contains(e.target)) {
+                // Click was outside the dropdown, close it
+                dropdown.open = false;
+            }
+        });
+    });
 </script>
 </body>
 </html>
+
+
