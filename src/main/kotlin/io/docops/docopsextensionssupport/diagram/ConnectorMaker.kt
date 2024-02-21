@@ -28,8 +28,6 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
         if(useDark) {
             bgColor = "#17242b"
-        } else {
-            useGrad = false
         }
         val sb = StringBuilder()
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
@@ -52,9 +50,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
 
         }
-        if("PDF" != type) {
-            sb.append("<rect width=\"100%\" height=\"100%\" class='connector_back'/>")
-        }
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
         sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
@@ -78,9 +74,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         connectors.forEachIndexed {
             i, item ->
             var fill = "fill=\"${colors[i]}\""
-            if("PDF" != type) {
+            /*if("PDF" != type) {
                 fill = "fill=\"url(#grad$i)\""
-            }
+            }*/
             sb.append("""
                 <g transform="translate(0,$y)">
                     <rect x="0" y="13" height="24" width="24" $fill rx="5" ry="5"/>
@@ -181,12 +177,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 font-variant: small-caps;
                 font-weight: bold;
             }
-            .connector_back {fill: #fcfcfc;}
-            .desc_txt {fill: #111111;}
-            @media (prefers-color-scheme: dark) {
-                .connector_back {fill: #17242b;}
-                .desc_txt {fill: #fcfcfc;}
-            }
+            
         </style>
         <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
         <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
@@ -202,8 +193,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         connectors.forEachIndexed {
             i, conn ->
             var grad = "url(#grad$i)"
-            var strokeWidth = 1
-            fill = grad
+            var strokeWidth = 3
+            fill = "none"
             var style = ""
             if(!useGrad) {
                 fill = "none"
