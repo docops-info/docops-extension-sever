@@ -172,7 +172,7 @@ fun gradientMapToHsl(): Map<String, String> {
             k, v ->
         val hsl = hexToHsl(k)
         gradMap[k] = """
-            <linearGradient id="grad$count" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
+            <linearGradient id="grad$count" x2="0%" y2="100%">
             <stop stop-color="$k" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
@@ -181,7 +181,7 @@ fun gradientMapToHsl(): Map<String, String> {
     }
     return gradMap
 }
-fun defLineGradMap(isPdf : Boolean): MutableCollection<String> {
+fun defLineGradMap(isPdf : Boolean, stopOp: Float = 0.8f): MutableCollection<String> {
     if(isPdf) {
         return allGradients()
     }
@@ -191,14 +191,17 @@ fun defLineGradMap(isPdf : Boolean): MutableCollection<String> {
         k, v ->
         val hsl = hexToHsl(k)
         gradMap[k] = """
-            <linearGradient id="grad$count" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="$k"/>
-            <stop class="stop3" offset="100%" stop-color="$hsl"/>
+            <linearGradient id="grad$count" x2="0%" y2="100%">
+            <stop stop-color="$k" stop-opacity="$stopOp" offset="0%"/>
+            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
         """.trimIndent()
         count++
     }
     return gradMap.values
+}
+fun allGradientsKeys(): MutableSet<String> {
+    return gradients.keys
 }
 fun allGradients(): MutableCollection<String> {
     return gradients.values

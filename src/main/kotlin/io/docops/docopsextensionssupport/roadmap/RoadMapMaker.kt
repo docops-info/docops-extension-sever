@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradients
+import io.docops.docopsextensionssupport.diagram.allGradientsKeys
 import io.docops.docopsextensionssupport.diagram.defLineGradMap
 import java.io.File
 
@@ -31,7 +32,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#f1f5f8"
+    open fun paperColor() = "#fcfcfc"
 }
 
 /**
@@ -92,8 +93,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             roadMapTheme = DarkTheme()
             headerColor = "headerDark"
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"/>")
+        val strokeColor = allGradientsKeys().elementAt(index)
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\" class='shadowed' stroke=\"$strokeColor\" stroke-width=\"5\"/>")
         sb.append("<g transform='scale($scale)' >")
+
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
             sb.append(row(index, roadmaps, numChars))
@@ -198,7 +201,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             }
             totalHeight += (105 * rows) + 40
         }
-        val height = totalHeight * scale
+        val height = totalHeight * scale + 30
         //val height = 791 * scale
         val str =
             """<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="$width" height="$height" viewBox="0 0 $width $height">"""
@@ -307,7 +310,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
         
-        ${defLineGradMap(isPdf).elementAt(index)}
+        ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
     
         <style>
         .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
@@ -376,8 +379,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         height: 25px
     }
      .shadowed {
-            -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
-            filter: drop-shadow(6px 6px 5px rgba(0, 0, 0, .3));
+            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
         }
     </style>
     <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
@@ -468,8 +471,8 @@ pass in theme (light,dark)
 refactor displayConfigUrl to displayTheme
 
     """.trimIndent()
-    val rm = RoadMapMaker(false, 9)
-    val output = rm.makeRoadMapImage(str, "1.5", "OKTA Progress", "30")
+    val rm = RoadMapMaker(false, 21)
+    val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
     val f = File("gen/roadmap.svg")
     f.writeBytes(output.toByteArray())
 }
