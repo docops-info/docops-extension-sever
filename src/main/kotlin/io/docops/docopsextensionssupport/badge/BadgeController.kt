@@ -200,6 +200,22 @@ $txt
     }
 
 
+    @GetMapping("/badge/plain", produces = ["image/svg+xml"])
+    @ResponseBody
+    fun getBadgeItemPlain(
+        @RequestParam(name = "label") label: String,
+        @RequestParam(name = "message") message: String,
+        @RequestParam(name = "color") color: String,
+        @RequestParam(name = "messageColor") messageColor: String,
+        @RequestParam(name = "icon", required = false) icon: String = "",
+        @RequestParam(name = "fontColor", required = false) fontColor: String = "#000000"
+    ): ResponseEntity<ByteArray> {
+        val output = docOpsBadgeGenerator.createBadge(label, message, color, messageColor, "", icon, fontColor)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+        return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
 
     @PostMapping("/badges", consumes = [MediaType.ALL_VALUE], produces = ["image/svg+xml", "image/png"])
     @Timed(value = "docops.badges.post")

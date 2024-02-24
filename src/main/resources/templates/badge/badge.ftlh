@@ -7,13 +7,13 @@
                 <div class="flex flex-col col-span-2">
                     <label for="label" class="mb-2">Label</label>
                     <input type="text" id="label" name="label" data-hx-put="api/badge/item" data-hx-target="#contentBox"
-                           value="Build" class="p-2 border rounded-md">
+                           value="Powered By" class="p-2 border rounded-md">
                 </div>
                 <div class="flex flex-col col-span-2">
                     <label for="message" class="mb-2">Message</label>
                     <input type="text" id="message" name="message" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox"
-                           value="Failed" class="p-2 border rounded-md">
+                           value="Kotlin" class="p-2 border rounded-md">
                 </div>
                 <div class="flex flex-col">
                     <label for="url" class="mb-2">Url</label>
@@ -32,14 +32,14 @@
 
                     <input type="text" id="labelColor" name="labelColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox"
-                           value="#000000" class="p-2 border rounded-md">
+                           value="#008800" class="p-2 border rounded-md">
 
                 </div>
                 <div class="flex flex-col">
                     <label for="messageColor" class="mb-2">Message Color</label>
                     <input type="text" id="messageColor" name="messageColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
-                           value="#000000" class="p-2 border rounded-md">
+                           value="#00dd00" class="p-2 border rounded-md">
 
                 </div>
                 <div class="flex flex-col col-span-2">
@@ -47,7 +47,7 @@
                         <div class="flex flex-col">
                             <label for="logo" class="mb-2">Logo</label>
                             <input type="text" id="logo" name="logo" data-hx-put="api/badge/item" data-hx-target="#contentBox"
-                                   value="<Tekton>"  class="p-2 border rounded-md">
+                                   value="<Kotlin>"  class="p-2 border rounded-md">
 
                         </div>
                         <div class="flex flex-col">
@@ -67,9 +67,9 @@
 
 <script>
     $("#messageColor").spectrum({
-        color: "#c90076"
+        color: "#00dd00"
     });
     $("#labelColor").spectrum({
-        color: "#d9d2e9"
+        color: "#008800"
     });
 </script>
