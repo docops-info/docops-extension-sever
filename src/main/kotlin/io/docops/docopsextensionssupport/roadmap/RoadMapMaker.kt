@@ -94,8 +94,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             headerColor = "headerDark"
         }
         val strokeColor = allGradientsKeys().elementAt(index)
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\" class='shadowed' stroke=\"$strokeColor\" stroke-width=\"5\"/>")
-        sb.append("<g transform='scale($scale)' >")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\" class='dark-shadowed' stroke=\"$strokeColor\" stroke-width=\"5\"/>")
+        sb.append("<g transform='scale($scale)' class='shadowed'>")
 
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
@@ -107,7 +107,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
         <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
-        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
+        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
@@ -379,8 +379,12 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         height: 25px
     }
      .shadowed {
-            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
-            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
+            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
+        }
+        .dark-shadowed {
+             -webkit-filter: drop-shadow( 0px 3px 2px rgba(0, 0, 0, .7));
+            filter: drop-shadow( 0px 3px 2px rgba(0, 0, 0, .7));
         }
     </style>
     <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>

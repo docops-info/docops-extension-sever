@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
+import java.util.UUID
 
 
 /**
@@ -33,10 +34,11 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
         val height = connectors.chunked(5).size * 110.0f
         val descriptionHeight = (connectors.size * 26) + 140
-        sb.append(head(height + descriptionHeight, width = width, scale))
+        val id = UUID.randomUUID().toString()
+        sb.append(head(height + descriptionHeight, width = width, scale, id))
         initColors()
         if("PDF" != type) {
-            sb.append(defs())
+            sb.append(defs(id))
         } else {
             useGrad = false
             sb.append("""
@@ -91,8 +93,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         sb.append("</g>")
         return sb.toString()
     }
-    private fun head(height: Float, width: Float, scale: Float = 1.0f)  = """
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag">
+    private fun head(height: Float, width: Float, scale: Float = 1.0f, id: String)  = """
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width*scale}" height="${height*scale}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id">
     """.trimIndent()
 
     private fun tail() = "</svg>"
@@ -108,7 +110,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             colors.add(choiceColor)
         }
     }
-    private fun defs() : String {
+    private fun defs(id: String) : String {
 
         val grad= StringBuilder()
 
@@ -150,18 +152,18 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             <feDropShadow dx="-0.8" dy="-0.8" stdDeviation="0" flood-color="pink" flood-opacity="0.5" />
         </filter>
         <style>
-            .shadowed {
+            #diag_$id .shadowed {
                 -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
                 filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
             }
-            .filtered {
+            #diag_$id .filtered {
                 filter: url(#filter);
                 fill: black;
                 font-family: 'Ultra', serif;
                 font-size: 100px;
 
             }
-            .filtered-small {
+            #diag_$id .filtered-small {
                 filter: url(#filter);
                 fill: black;
                 font-family: 'Ultra', serif;
@@ -169,9 +171,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
             }
 
-            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}
+            #diag_$id .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}
 
-            .boxText {
+            #diag_$id .boxText {
                 font-size:24px;
                 font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-variant: small-caps;
