@@ -8,7 +8,7 @@
   <div class="flex flex-col">
     <label for="useDark" class="mb-2">Toggle Dark Mode</label>
     <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/placemat/" data-hx-target="#contentBox"
-           checked class="toggle toggle-primary">
+           class="toggle toggle-primary">
   </div>
 </div>
 
