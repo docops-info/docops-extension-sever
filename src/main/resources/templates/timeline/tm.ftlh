@@ -18,7 +18,7 @@
     <div class="flex flex-col">
         <label for="outline" class="mb-2">Outline Color</label>
         <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               class="p-2 border rounded-md" value="#1363DF">
+               class="p-2 border rounded-md" value="#9BCF53">
     </div>
 
 
