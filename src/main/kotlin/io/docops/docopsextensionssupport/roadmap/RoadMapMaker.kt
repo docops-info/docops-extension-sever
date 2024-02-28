@@ -309,22 +309,28 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <stop class="stop2" offset="50%" stop-color="#ccba9f"/>
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
+        <filter id="dark-shadow" x="0" y="0" width="200%" height="200%">
+            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />
+        </filter>
+        <filter id="shadow" x="0" y="0" width="200%" height="200%">
+            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="0.4" />
+        </filter>
         
         ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
     
         <style>
-        .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; }
-        .nowBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; }
-        .next { fill: #e0349c; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; }
-        .nextBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; }
-        .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
-        .laterBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; }
-        .doneBox { fill: none; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff; }
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #45a98f; }
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e0349c; }
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e56516; }
-        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #4076ff; }
-        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; }
+        .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; filter: url(#shadow);}
+        .next { fill: #e0349c; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
+        .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
+        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff; filter: url(#shadow);}
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #45a98f; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e0349c; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e56516; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #4076ff; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
         .rmLink { fill: blue; text-decoration: underline; }
         .glass:after, .glass:before {
         content: "";
