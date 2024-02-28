@@ -288,6 +288,31 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun convertPanels(): String {
         return "search/search"
     }
+
+    @GetMapping("/buttons.html")
+    @Counted
+    @Timed(value = "docops.buttons.html")
+    fun btns(model: Model): String {
+        return "buttons/buttons"
+    }
+    @GetMapping("/draw.html")
+    @Counted
+    @Timed(value = "docops.draw")
+    fun draw(model: Model): String {
+        return "boxy/draw"
+    }
+    @GetMapping("/release.html")
+    @Counted
+    @Timed(value = "docops.release")
+    fun release(model: Model): String {
+        return "release/release"
+    }
+    @GetMapping("/scorecard.html")
+    @Counted
+    @Timed(value = "docops.scorecard")
+    fun score(model: Model): String {
+        return "scorecard/menu"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

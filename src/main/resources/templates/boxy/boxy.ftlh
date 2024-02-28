@@ -12,7 +12,7 @@
         <div class="flex flex-col">
             <label for="useDark" class="mb-2">Toggle Dark Mode</label>
             <input type="checkbox" id="useDark" name="useDark" data-hx-put="api/connector/" data-hx-target="#contentBox"
-                   checked class="toggle toggle-primary">
+                   class="toggle toggle-primary">
         </div>
         <div class="flex flex-col col-span-2">
             <label for="content" class="mb-2">JSON</label>
