@@ -107,13 +107,13 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
         <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
-        <text x="306" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle">${title.escapeXml()}</text> 
+        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
             sb.append(
                 """
-                <text x="306" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
+                <text x="331" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
             """.trimIndent()
             )
             sb.append(doDone(done = roadmaps.done, numChars = numChars, roadmaps = roadmaps, startingY = head.second))
@@ -240,9 +240,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
                 sb.append(
                     """
             <g transform="translate(200,47)">
-                <use xlink:href="#ppoint" stroke-width="5" stroke="#e0349c"/>
+                <use xlink:href="#ppoint" stroke-width="5" stroke="#D63484"/>
             </g>        
-                <line x1="186" y1="50" x2="200" y2="50" stroke="#e0349c" stroke-width="8" />
+                <line x1="186" y1="50" x2="200" y2="50" stroke="#D63484" stroke-width="8" />
             """.trimIndent()
                 )
             }
@@ -262,9 +262,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
                 sb.append(
                     """
                  <g transform="translate(410,47)">
-                <use xlink:href="#ppoint" stroke-width="5" stroke="#e56516"/>
+                <use xlink:href="#ppoint" stroke-width="5" stroke="#5F0F40"/>
                 </g>        
-                <line x1="396" y1="50" x2="410" y2="50" stroke="#e56516" stroke-width="8" />
+                <line x1="396" y1="50" x2="410" y2="50" stroke="#5F0F40" stroke-width="8" />
             """.trimIndent()
                 )
             }
@@ -313,23 +313,23 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />
         </filter>
         <filter id="shadow" x="0" y="0" width="200%" height="200%">
-            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="0.4" />
+            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="0.2" />
         </filter>
         
         ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
     
         <style>
-        .now { fill: #45a98f; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #45a98f; filter: url(#shadow);}
-        .next { fill: #e0349c; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #e0349c; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
-        .later { fill: #e56516; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #e56516; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
-        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff; filter: url(#shadow);}
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #45a98f; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e0349c; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #e56516; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #4076ff; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; filter: url(#shadow);}
+        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
+        .later { fill: #5F0F40; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
+        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; filter: url(#shadow);}
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #5F0F40; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
         .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
         .rmLink { fill: blue; text-decoration: underline; }
         .glass:after, .glass:before {
