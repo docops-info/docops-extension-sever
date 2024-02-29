@@ -144,7 +144,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             sb.append("""<g transform="translate(26,$c)">""")
             mutableLists.forEachIndexed { index, item ->
                 if (index == 0) {
-                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
+                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
                     var text = """<text x="2" y="2" class="doneRoad" fill="#421A56">"""
                     val lines =
                         linesToUrlIfExist(
@@ -157,7 +157,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
                     sb.append(text)
                 }
                 if (index == 1) {
-                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
+                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
                     var text = """<text x="212" y="2" class="doneRoad" fill="#421A56">"""
                     val lines =
                         linesToUrlIfExist(
@@ -170,7 +170,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
                     sb.append(text)
                 }
                 if (index == 2) {
-                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184"/>""")
+                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
                     var text = """<text x="422" y="2" class="doneRoad" fill="#421A56">"""
                     val lines =
                         linesToUrlIfExist(
@@ -210,9 +210,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
 
     private fun row(index: Int, roadmaps: RoadMaps, numChars: String): String {
         val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1)})">""")
-        val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184"/>"""
-        val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184"/>"""
-        val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184"/>"""
+        val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184" rx="5" ry="5"/>"""
+        val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184" rx="5" ry="5"/>"""
+        val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184" rx="5" ry="5"/>"""
         if (roadmaps.now.size - 1 >= index) {
             sb.append(now)
             var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
