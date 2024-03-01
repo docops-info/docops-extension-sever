@@ -55,10 +55,10 @@ class SvgToPng {
 }
 
 fun main() {
-    val svg = File("gen/slim.svg")
+    val svg = File("gen/roadmap.svg")
     val content = Files.readAllBytes(svg.toPath())
     //width="1254.0" height="228.48"
-    val output = SvgToPng().toPngFromSvg(String(content), Pair("234", "476"))
-    val f = File("gen/slim.png")
+    val output = SvgToPng().toPngFromSvg(String(content), Pair("701", "662"))
+    val f = File("gen/roadmap.png")
     f.writeBytes(output)
 }
