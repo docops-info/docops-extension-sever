@@ -7,7 +7,7 @@
         <div class="flex flex-col">
             <label for="scale" class="mb-2">Scale</label>
             <input type="number" id="scale" name="scale" data-hx-put="api/connector/" data-hx-target="#contentBox"
-                   value="0.5" step=".10" max="5" min=".1" class="p-2 border rounded-md">
+                   value="0.5" step=".10" max="5" min=".1" class="range border rounded-md">
         </div>
         <div class="flex flex-col">
             <label for="useDark" class="mb-2">Toggle Dark Mode</label>

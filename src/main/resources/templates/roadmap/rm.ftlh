@@ -10,17 +10,17 @@
         <div class="flex flex-col">
             <label for="scale" class="mb-2">Scale</label>
             <input type="number" id="scale" name="scale" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="1.0" step=".10" max="5" min=".1" class="p-2 border rounded-md">
+                   value="1.0" step=".10" max="5" min=".1" class="range border rounded-md">
         </div>
         <div class="flex flex-col">
             <label for="numChars" class="mb-2">Number of Characters per Line</label>
             <input type="number" id="numChars" name="numChars" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="32" step="1" max="60" min="10" class="p-2 border rounded-md">
+                   value="32" step="1" max="60" min="10" class="range border rounded-md">
         </div>
         <div class="flex flex-col">
             <label for="index" class="mb-2">Color Index (Max 25)</label>
             <input type="number" id="index" name="index" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
-                   value="0" step="1" max="25" min="0" class="p-2 border rounded-md">
+                   value="0" step="1" max="25" min="0" class="range border rounded-md">
         </div>
 
     <div class="flex flex-col col-span-2">

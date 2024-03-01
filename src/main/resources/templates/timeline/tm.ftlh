@@ -7,12 +7,12 @@
     <div class="flex flex-col">
         <label for="scale" class="mb-2">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="0.4" step=".10" max="5" min=".1" class="p-2 border rounded-md">
+               value="0.6" step=".10" max="5" min=".1" class="range border rounded-md">
     </div>
     <div class="flex flex-col">
         <label for="numChars" class="mb-2">Number of Characters per Line</label>
         <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="24" step="1" max="60" min="10" class="p-2 border rounded-md">
+               value="24" step="1" max="60" min="10" class="range border rounded-md">
     </div>
 
     <div class="flex flex-col">
