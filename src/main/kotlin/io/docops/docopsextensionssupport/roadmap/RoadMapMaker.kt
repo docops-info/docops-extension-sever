@@ -63,6 +63,10 @@ class DarkTheme : RoadMapTheme() {
 class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
 
     private var isPdf = false
+    private var darkFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 1.0));"""
+    private var lightDropShadow = """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
+    private var darkDropShadow = """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
+    private var lightFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));"""
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
      *
@@ -75,6 +79,12 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
     fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String, isPdf: Boolean = false): String {
         this.isPdf = isPdf
         val roadmaps = RoadMapParser().parse(source)
+        if(isPdf) {
+            darkFilter = ""
+            lightFilter = ""
+            darkDropShadow = ""
+            lightDropShadow = ""
+        }
         return draw(roadmaps, scale, title, numChars)
     }
 
@@ -310,27 +320,27 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
         </linearGradient>
         <filter id="dark-shadow" x="0" y="0" width="200%" height="200%">
-            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />
+            $darkDropShadow
         </filter>
         <filter id="shadow" x="0" y="0" width="200%" height="200%">
-            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="0.2" />
+            $lightDropShadow
         </filter>
         
         ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
     
         <style>
-        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; filter: url(#shadow);}
-        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
-        .later { fill: #5F0F40; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; text-anchor: middle; font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; filter: url(#shadow);}
-        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; filter: url(#shadow);}
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #5F0F40; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
-        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));}
+        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; $lightFilter}
+        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; $lightFilter}
+        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold; $lightFilter}
+        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; $darkFilter}
+        .later { fill: #5F0F40; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; text-anchor: middle; font-weight: bold; $lightFilter}
+        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; $darkFilter}
+        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; $lightFilter}
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; $lightFilter}
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; $lightFilter}
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #5F0F40; $lightFilter}
+        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; $lightFilter}
+        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; $lightFilter}
         .rmLink { fill: blue; text-decoration: underline; }
         .glass:after, .glass:before {
         content: "";
@@ -386,11 +396,11 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
     }
      .shadowed {
             -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
-            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
+            $lightFilter
         }
         .dark-shadowed {
              -webkit-filter: drop-shadow( 0px 3px 2px rgba(0, 0, 0, .7));
-            filter: drop-shadow( 0px 3px 2px rgba(0, 0, 0, .7));
+            $darkFilter
         }
     </style>
     <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
