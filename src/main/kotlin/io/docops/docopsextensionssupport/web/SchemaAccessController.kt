@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.web
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -35,6 +36,8 @@ class SchemaAccessController @Autowired constructor(private val applicationConte
     @GetMapping("", produces = [MediaType.TEXT_HTML_VALUE])
     fun schema(@RequestParam(name = "name", required = true) name: String): ResponseEntity<String> {
         try {
+            val headers = HttpHeaders()
+            headers.set("HX-Trigger", """{"button-click": {"element": "$name"}}""")
             val json =  applicationContext.getResource("classpath:static/schemas/$name.json")
             //language=html
             return ResponseEntity("""<div>
@@ -47,7 +50,7 @@ class SchemaAccessController @Autowired constructor(private val applicationConte
                     hljs.highlightElement(el);
                 });
                 </script>
-                """.trimMargin(), HttpStatus.OK)
+                """.trimMargin(), headers, HttpStatus.OK)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e

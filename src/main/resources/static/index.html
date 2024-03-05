@@ -25,6 +25,14 @@
             background-image: url(images/forest.svg);
             height: 200px;
         }
+
+        #bod.htmx-added {
+            opacity: 0;
+        }
+        #bod {
+            opacity: 1;
+            transition: opacity 4s ease-out;
+        }
     </style>
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">
 </head>
@@ -171,6 +179,16 @@
             }
         });
     });
+    document.body.addEventListener("button-click", function (evt){
+        let elems = document.querySelectorAll(".btnMenu");
+        if(elems !== null) {
+            [].forEach.call(elems, function(el) {
+                el.classList.remove("tab-active");
+            });
+            let target = document.querySelector("." + evt.detail.element);
+            target.classList.add("tab-active");
+        }
+    })
 </script>
 </body>
 </html>

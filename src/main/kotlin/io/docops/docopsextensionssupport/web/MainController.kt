@@ -236,7 +236,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/button/fromJson.html")
     @Counted
     @Timed(value = "docops.button.from.json.html")
-    fun buttonFromJson(model: Model, @RequestParam(name = "type", defaultValue = "REGULAR") type: String): String {
+    fun buttonFromJson(model: Model, @RequestParam(name = "type", defaultValue = "REGULAR") type: String,  response: HttpServletResponse): String {
         val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
        json?.let {
             model.addAttribute("json", String(json.readAllBytes()))
@@ -249,13 +249,15 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         model.addAttribute("themes", themeFiles)
         model.addAttribute("themeBox", "")
         model.addAttribute("contentBox", "")
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "$type"}}""")
         return "buttons/fromjson"
     }
 
     @GetMapping("/button/fromJsonToPng.html")
     @Counted
     @Timed(value = "docops.button.from.json.html")
-    fun buttonFromJsonToPng(model: Model): String {
+    fun buttonFromJsonToPng(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "PNG"}}""")
         return "buttons/formjsontopng"
     }
     @GetMapping("/scorecard/index.html")
@@ -279,7 +281,8 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/button/convert.html")
     @Counted
     @Timed(value = "docops.button.convert.html")
-    fun convertPanels(model: Model): String {
+    fun convertPanels(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "panel"}}""")
         return "buttons/convert"
     }
     @GetMapping("/search/index.html")
