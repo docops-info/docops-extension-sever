@@ -105,7 +105,8 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/chart.html")
     @Counted
     @Timed(value = "docops.chart.html")
-    fun getChart(model: Model): String {
+    fun getChart(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "bar"}}""")
         return "chart/chart"
 
     }
@@ -113,7 +114,8 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/mychart.html")
     @Counted
     @Timed(value = "docops.mychart.html")
-    fun mychart(model: Model): String {
+    fun mychart(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "mychart"}}""")
         return "chart/customchart"
     }
 
@@ -122,14 +124,16 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/treechart.html")
     @Counted
     @Timed(value = "docops.treechart.html")
-    fun treeChart(): String {
+    fun treeChart(response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "tree"}}""")
         return "chart/treechart"
     }
 
     @GetMapping("/stacked.html")
     @Counted
     @Timed(value = "docops.stacked.html")
-    fun stacked(): String {
+    fun stacked(response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "stacked"}}""")
         return "chart/stacked"
     }
 
@@ -190,14 +194,16 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/strat.html")
     @Counted
     @Timed(value = "docops.release.strategy.html")
-    fun stratForm(model: Model): String {
+    fun stratForm(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "strat"}}""")
         return "release/strat"
     }
 
     @GetMapping("/fromJson.html")
     @Counted
     @Timed(value = "docops.release.strategy.from.json.html")
-    fun stratFromJson(model: Model): String {
+    fun stratFromJson(model: Model,  response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "fromJson"}}""")
         return "release/fromjson"
     }
     @GetMapping("/builder.html")
@@ -216,14 +222,16 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/boxy.html")
     @Counted
     @Timed(value = "docops.boxy.html")
-    fun boxy(model: Model): String {
+    fun boxy(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "boxy"}}""")
         return "boxy/boxy"
     }
 
     @GetMapping("/pm.html")
     @Counted
     @Timed(value = "docops.pm.html")
-    fun pm(model: Model): String {
+    fun pm(model: Model,  response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "pm"}}""")
         return "boxy/pm"
     }
 
