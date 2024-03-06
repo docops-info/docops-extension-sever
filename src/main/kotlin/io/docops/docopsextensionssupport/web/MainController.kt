@@ -263,11 +263,12 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @GetMapping("/scorecard/index.html")
     @Counted
     @Timed(value = "docops.scorecard.index.html")
-    fun scorecard(model: Model, @RequestParam(name = "type", defaultValue = "score1") type: String): String {
+    fun scorecard(model: Model, @RequestParam(name = "type", defaultValue = "score1", ) type: String, response: HttpServletResponse): String {
         val json = MainController::class.java.classLoader.getResourceAsStream("samples/$type.json")
         json?.let {
             model.addAttribute("json", String(json.readAllBytes()))
         }
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "$type"}}""")
         return "scorecard/score"
     }
 
