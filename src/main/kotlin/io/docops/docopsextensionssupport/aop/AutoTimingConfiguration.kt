@@ -46,11 +46,23 @@ import java.util.concurrent.*
 @Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
 class AutoTimingConfiguration {
+    /**
+     * Creates an instance of TimedAspect with the provided MeterRegistry.
+     *
+     * @param registry the MeterRegistry instance used by TimedAspect
+     * @return an instance of TimedAspect
+     */
     @Bean
     fun timedAspect(registry: MeterRegistry): TimedAspect {
         return TimedAspect(registry)
     }
 
+    /**
+     * Creates an instance of ObservedAspect with the provided ObservationRegistry.
+     *
+     * @param observationRegistry the ObservationRegistry instance used by ObservedAspect
+     * @return an instance of ObservedAspect
+     */
     @Bean
     fun observedAspect(observationRegistry: ObservationRegistry?): ObservedAspect? {
         return ObservedAspect(observationRegistry!!)

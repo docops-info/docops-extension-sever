@@ -44,7 +44,7 @@ class ScoreCardMaker {
         this.isPdf = isPdf
         val id = scoreCard.id
         val sb = StringBuilder()
-        val numOfRowsHeight = max(scoreCard.initiativeItems.size, scoreCard.outcomeItems.size) * 35.1f
+        val numOfRowsHeight = scoreCard.scoreCardHeight(numChars = 85, factor = 40.1F)
         val headerHeight = 50.0f
         val height = numOfRowsHeight + headerHeight
         sb.append(head(scoreCard, height, id))
@@ -165,8 +165,8 @@ class ScoreCardMaker {
 
     fun left(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
-        var startY = 50
-        val inc = 35
+        var startY = 50f
+        val inc = 5
 
         var grad = "url(#leftScoreBox)"
         var fill = "fill=\"url(#leftItem_${scoreCard.id})\""
@@ -175,29 +175,39 @@ class ScoreCardMaker {
 
         }
         scoreCard.initiativeItems.forEach {
+            val items = it.displayTextToList(70)
+            val h = 12+ items.size * 12f
             sb.append(
                 """
-    <g transform="translate(10, $startY)">
-    <path d="${generateRectPathData(width = 500f, height = 30f, 0f, 0f, 0f, 0f)}" $fill>
-    <title>${it.description}</title>
-    </path>
-        <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
-        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
-            <tspan x="30" dy="12" style="font-variant: small-caps;fill:${scoreCard.scoreCardTheme.initiativeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
-        </text>
-    </g>
+                <g transform="translate(10, $startY)">
+                <path d="${generateRectPathData(width = 500f, height = h, 0f, 0f, 0f, 0f)}" $fill>
+                <title>${it.description}</title>
+                </path>
+                    <text x="10" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
+                        ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor)}
+                    </text>
+                </g>
             """.trimIndent()
             )
-            startY += inc
+            startY += h + inc
         }
+        return sb.toString()
+    }
+
+    fun itemsToSpan(items: MutableList<String>, color: String): String {
+        var sb = StringBuilder()
+        items.forEach {
+        sb.append("""
+            <tspan x="10" dy="12" style="font-variant: small-caps;fill:${color};">${it.escapeXml()}</tspan>
+        """.trimIndent())
+            }
         return sb.toString()
     }
 
     fun right(scoreCard: ScoreCard): String {
         val sb = StringBuilder()
-        var startY = 50
-        val inc = 35
+        var startY = 50f
+        val inc = 5f
         var display = """display="block""""
         if (scoreCard.slideShow) {
             display = """display="none""""
@@ -208,21 +218,21 @@ class ScoreCardMaker {
             grad = "#5D9C59"
         }
         scoreCard.outcomeItems.forEach {
+            val items = it.displayTextToList(70)
+            val h = 12+ items.size * 12f
             sb.append(
                 """
     <g transform="translate(525, $startY)" $display>
-        <path d="${generateRectPathData(width = 500f, height = 30f, 0f, 0f, 0f, 0f)}" $fill >
+        <path d="${generateRectPathData(width = 500f, height = h, 0f, 0f, 0f, 0f)}" $fill >
         <title>${it.description}</title>
         </path>
-        <rect x="5" y="5" height="20" width="20" fill="$grad" rx="5" ry="5"/>
-        <text x="11" y="19" fill="#efefef" style="font-family: arial;  font-size: 12px; font-weight:bold;">${it.displayText.first()}</text>
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
-            <tspan x="30" dy="12" style="font-variant: small-caps; fill:${scoreCard.scoreCardTheme.outcomeDisplayTextColor};">${it.displayText.escapeXml()}</tspan>
+            ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor)}
         </text>
     </g>
             """.trimIndent()
             )
-            startY += inc
+            startY += h + inc
         }
         return sb.toString()
     }
@@ -329,24 +339,24 @@ fun main() {
   "outcomeTitle": "Outcomes Since",
   "initiativeItems": [
     {
-      "displayText": "API Versioning",
+      "displayText": "Introduced API Versioning at the strategic integration level. Partnering with ETS for consensus. API versioning is the process of managing and tracking changes to an API. It also involves communicating those changes to the API consumers.",
       "description": "Host API versioning"
     },
     {
-      "displayText": "Network Switch",
+      "displayText": "Network Switch. Change is a natural part of API development. Sometimes, developers have to update their API's code to fix security vulnerabilities, while other changes introduce new features or functionality.",
       "description": "Migrate IBM Websphere to Liberty Server with RHEL 8 and JSESSION ID fix with Application cache busting and versioning"
     },
     {
-      "displayText": "MFA",
+      "displayText": "MFA. ome changes do not affect consumers at all, while others, which are known as breaking changes, lead to backward-compatibility issues, such as unexpected errors and data corruption",
       "description": "Enabling single signon from server sign-in page"
     },
     {
-      "displayText": "Product Elimination - from system"
+      "displayText": "Product Elimination - from system. API versioning ensures that these changes are rolled out successfully in order to preserve consumer trust while keeping the API secure, bug-free, and highly performant."
     }
   ],
   "outcomeItems": [
     {
-      "displayText": "API Versioning changes with backwards compatibility"
+      "displayText": "API Versioning changes with backwards compatibility. Here, we'll review the benefits of API versioning and discuss several scenarios in which it is necessary. We'll also explore some of the most common approaches to API versioning, provide five steps for successfully versioning an API, and highlight some best practices for API versioning."
     },
     {
       "displayText": "Network Mark-In/Mark-Out Servers"
@@ -359,7 +369,7 @@ fun main() {
     }
   ],
   "slideShow": false,
-  "scale": 1.2,
+  "scale": 1.0,
   "scoreCardTheme": {
     "titleColor": "#27005D",
     "initiativeTitleColor": "#27005D",

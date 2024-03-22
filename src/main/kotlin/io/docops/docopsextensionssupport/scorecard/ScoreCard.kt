@@ -16,8 +16,11 @@
 
 package io.docops.docopsextensionssupport.scorecard
 
+import gen.lib.dotgen.fastgr__c
+import io.docops.docopsextensionssupport.roadmap.wrapText
 import kotlinx.serialization.Serializable
 import java.util.*
+import kotlin.math.max
 
 /**
  * Represents a scorecard for tracking scores and outcomes.
@@ -40,6 +43,17 @@ class ScoreCard (val id: String = UUID.randomUUID().toString(),
     val scale: Float = 1.0f, val scoreCardTheme: ScoreCardTheme = ScoreCardTheme(), val slideShow: Boolean = false
 )
 
+fun ScoreCard.scoreCardHeight(numChars: Int = 40, factor: Float = 35.1f) : Float {
+    var count = 0
+    initiativeItems.forEach {
+        count += it.displayTextToList(numChars).size
+    }
+    var outcomeCount = 0
+    outcomeItems.forEach {
+        outcomeCount += it.displayTextToList(numChars).size
+    }
+    return max(count, outcomeCount) * factor
+}
 /**
  * Represents a scorecard item with display text and an optional description.
  *
@@ -48,6 +62,10 @@ class ScoreCard (val id: String = UUID.randomUUID().toString(),
  */
 @Serializable
 class ScoreCardItem(val displayText: String, val description: String? = "")
+
+fun ScoreCardItem.displayTextToList(size: Int): MutableList<String> {
+    return wrapText(this.displayText, size.toFloat())
+}
 
 /**
  * Represents a scorecard theme.
