@@ -17,9 +17,9 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.diagram.allGradients
 import io.docops.docopsextensionssupport.diagram.allGradientsKeys
 import io.docops.docopsextensionssupport.diagram.defLineGradMap
+import io.docops.docopsextensionssupport.scorecard.generateRectPathData
 import java.io.File
 
 /**
@@ -64,9 +64,12 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
 
     private var isPdf = false
     private var darkFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 1.0));"""
-    private var lightDropShadow = """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
-    private var darkDropShadow = """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
+    private var lightDropShadow =
+        """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
+    private var darkDropShadow =
+        """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
     private var lightFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));"""
+
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
      *
@@ -76,10 +79,16 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
      * @param numChars the number of characters to be displayed on the road map image
      * @return the generated road map image as a string
      */
-    fun makeRoadMapImage(source: String, scale: String, title: String, numChars: String, isPdf: Boolean = false): String {
+    fun makeRoadMapImage(
+        source: String,
+        scale: String,
+        title: String,
+        numChars: String,
+        isPdf: Boolean = false
+    ): String {
         this.isPdf = isPdf
         val roadmaps = RoadMapParser().parse(source)
-        if(isPdf) {
+        if (isPdf) {
             darkFilter = ""
             lightFilter = ""
             darkDropShadow = ""
@@ -92,6 +101,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         return RoadMapParser().parse(source)
 
     }
+
     private fun draw(roadmaps: RoadMaps, scale: String, title: String, numChars: String): String {
         val sb = StringBuilder()
         val head = head(roadmaps, scale.toFloat())
@@ -117,13 +127,13 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
         <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
-        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="46" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
+        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
             sb.append(
                 """
-                <text x="331" y="${head.second+20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
+                <text x="331" y="${head.second + 20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
             """.trimIndent()
             )
             sb.append(doDone(done = roadmaps.done, numChars = numChars, roadmaps = roadmaps, startingY = head.second))
@@ -151,57 +161,64 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         val sb = StringBuilder()
         var c = startingY + 40
         doneChunks.forEach { mutableLists ->
+            val boxTitle = generateRectPathData(184f, 18f,5f,5f,0f,0f)
             sb.append("""<g transform="translate(26,$c)">""")
             mutableLists.forEachIndexed { index, item ->
                 if (index == 0) {
-                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<g transform="translate(0,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
                     var text = """<text x="2" y="2" class="doneRoad" fill="#421A56">"""
+                    text += """<tspan x="2" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
                     val lines =
                         linesToUrlIfExist(
                             wrapText(item.joinToString(separator = " "), numChars.toFloat()),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 2, null)
+                    val spans = linesToMultiLineText(lines, 12, 2, null, 18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
                 }
                 if (index == 1) {
-                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<g transform="translate(210,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
                     var text = """<text x="212" y="2" class="doneRoad" fill="#421A56">"""
+                    text += """<tspan x="2" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
                     val lines =
                         linesToUrlIfExist(
                             wrapText(item.joinToString(separator = " "), numChars.toFloat()),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 212, null)
+                    val spans = linesToMultiLineText(lines, 12, 212, null,18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
                 }
                 if (index == 2) {
-                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="100" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<g transform="translate(420,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
                     var text = """<text x="422" y="2" class="doneRoad" fill="#421A56">"""
+                    text += """<tspan x="2" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
                     val lines =
                         linesToUrlIfExist(
                             wrapText(item.joinToString(separator = " "), numChars.toFloat()),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 422, null)
+                    val spans = linesToMultiLineText(lines, 12, 422, null, 18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
                 }
             }
             sb.append("</g>")
-            c += 106
+            c += 126
         }
         return sb.toString()
     }
 
     private fun head(roadmaps: RoadMaps, scale: Float): Pair<String, Int> {
         val width = 662 * scale
-        val originalHeight = (roadmaps.maxLength() * 105) + 106
+        val originalHeight = (roadmaps.maxLength() * 125) + 106
         var totalHeight = originalHeight
         if (roadmaps.done.isNotEmpty()) {
             val remain = roadmaps.done.size % 3
@@ -209,7 +226,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
             if (remain > 0) {
                 rows++
             }
-            totalHeight += (105 * rows) + 40
+            totalHeight += (125 * rows) + 40
         }
         val height = totalHeight * scale + 30
         //val height = 791 * scale
@@ -219,30 +236,42 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
     }
 
     private fun row(index: Int, roadmaps: RoadMaps, numChars: String): String {
-        val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1)})">""")
-        val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="100" width="184" rx="5" ry="5"/>"""
-        val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="100" width="184" rx="5" ry="5"/>"""
-        val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="100" width="184" rx="5" ry="5"/>"""
+        var inc = 0
+        if(index>0) {
+            inc = 20
+        }
+        val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1) + (inc * index)})">""")
+        val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="120" width="184" rx="5" ry="5"/>"""
+        val boxTitle = generateRectPathData(184f, 18f,5f,5f,0f,0f)
+        val nowTitle = """<path d="$boxTitle"  fill="#0D9276"/>"""
+        val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="120" width="184" rx="5" ry="5"/>"""
+        val nextTitle = """<g transform="translate(210,0)"><path d="$boxTitle" fill="#D63484"/></g>"""
+        val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="120" width="184" rx="5" ry="5"/>"""
+        val laterTitle = """<g transform="translate(420,0)"><path d="$boxTitle"  fill="#5F0F40"/></g>"""
         if (roadmaps.now.size - 1 >= index) {
             sb.append(now)
+            sb.append(nowTitle)
             var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
+            text += """<tspan x="2" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 2, null)
+            val spans = linesToMultiLineText(lines, 12, 2, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
         }
         if (roadmaps.next.size - 1 >= index) {
             sb.append(next)
+            sb.append(nextTitle)
             var text = """<text x="212" y="2" class="secondaryRoad">"""
+            text += """<tspan x="212" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 212, null)
+            val spans = linesToMultiLineText(lines, 12, 212, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -259,12 +288,14 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
         }
         if (roadmaps.later.size - 1 >= index) {
             sb.append(later)
+            sb.append(laterTitle)
             var text = """<text x="422" y="2" class="tertiaryRoad">"""
+            text += """<tspan x="422" dy="12" fill="#fcfcfc">&#xa0;</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 422, null)
+            val spans = linesToMultiLineText(lines, 12, 422, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -447,16 +478,20 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
     return newLines
 }
 
-fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String?): String {
+fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor: String?, initialY: Int = 0): String {
     var fill = ""
     fillColor?.let {
-        if(fill.isNotEmpty()) {
+        if (fill.isNotEmpty()) {
             fill = "fill='$fillColor'"
         }
     }
     val text = StringBuilder()
-    lines.forEach {
-        text.append("""<tspan x="$x" dy="$dy" $fill>$it</tspan>""")
+    lines.forEachIndexed { i, item ->
+            if (i == 0 && initialY > 0) {
+                text.append("""<tspan x="$x" dy="$initialY" $fill>$item</tspan>""")
+            } else {
+                text.append("""<tspan x="$x" dy="$dy" $fill>$item</tspan>""")
+            }
     }
     return text.toString()
 }
