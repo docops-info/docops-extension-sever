@@ -43,12 +43,20 @@ class RoadMapParser {
     }
 
     private fun group(content: String): RoadMaps {
+        val nowTitle = mutableMapOf<Int, String>()
+        val nextTitle = mutableMapOf<Int, String>()
+        val laterTitle = mutableMapOf<Int, String>()
+        val doneTitle = mutableMapOf<Int, String>()
         val now = mutableListOf<MutableList<String>>()
         val next = mutableListOf<MutableList<String>>()
         val later = mutableListOf<MutableList<String>>()
         val done = mutableListOf<MutableList<String>>()
         var newList: MutableList<String> = mutableListOf()
         val urlMap = mutableMapOf<String,String>()
+        var sCounter = 0
+        var nextCounter = 0
+        var laterCounter = 0
+        var doneCounter = 0
         content.lines().forEachIndexed { index, input ->
             var s = input
             if(input.contains("[[") && input.contains("]]")) {
@@ -65,17 +73,33 @@ class RoadMapParser {
                 }
             }
             if (s.trim().startsWith("- now")) {
+                val t = s.split("- now")
+                if(t.size ==2) {
+                    nowTitle[sCounter++] = t[1]
+                }
                 newList = mutableListOf()
                 now.add(newList)
             } else if(s.trim().startsWith("- next")) {
+                val t = s.split("- next")
+                if(t.size ==2) {
+                    nextTitle[nextCounter++] = t[1]
+                }
                 newList = mutableListOf()
                 next.add(newList)
             }
             else if(s.trim().startsWith("- later")) {
+                val t = s.split("- later")
+                if(t.size ==2) {
+                    laterTitle[laterCounter++] = t[1]
+                }
                 newList = mutableListOf()
                 later.add(newList)
             }
             else if(s.trim().startsWith("- done")) {
+                val t = s.split("- done")
+                if(t.size ==2) {
+                    doneTitle[doneCounter++] = t[1]
+                }
                 newList = mutableListOf()
                 done.add(newList)
             }
@@ -88,7 +112,10 @@ class RoadMapParser {
             next = next,
             later = later,
             done=done,
-            urlMap= urlMap)
+            urlMap= urlMap, nowTitle = nowTitle,
+            nextTitle = nextTitle,
+            laterTitle = laterTitle,
+            doneTitle = doneTitle)
     }
 }
 data class RoadMaps(
@@ -96,7 +123,11 @@ data class RoadMaps(
     val next: MutableList<MutableList<String>>,
     val later: MutableList<MutableList<String>>,
     val urlMap: MutableMap<String, String>,
-    val done: MutableList<MutableList<String>>
+    val done: MutableList<MutableList<String>>,
+    val nowTitle: MutableMap<Int, String>,
+    val nextTitle: MutableMap<Int, String>,
+    val laterTitle: MutableMap<Int, String>,
+    val doneTitle: MutableMap<Int, String>,
 ) {
     fun nowList(): MutableList<String> {
         val list = mutableListOf<String>()
