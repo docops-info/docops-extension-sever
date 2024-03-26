@@ -32,7 +32,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#fcfcfc"
+    open fun paperColor() = "#f7ddcd"
 }
 
 /**
@@ -60,7 +60,7 @@ class DarkTheme : RoadMapTheme() {
  * @property useDark  A boolean flag indicating whether to use dark theme or not. Default is false.
  * @constructor Creates a new instance of the RoadMapMaker class.
  */
-class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
+class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
 
     private var isPdf = false
     private var darkFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 1.0));"""
@@ -395,12 +395,12 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 21) {
     
         <style>
         .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; $lightFilter}
-        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; $lightFilter}
+        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; }
         .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold; $lightFilter}
-        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; $darkFilter}
+        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; }
         .later { fill: #5F0F40; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; text-anchor: middle; font-weight: bold; $lightFilter}
-        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; $darkFilter}
-        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; $lightFilter}
+        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; }
+        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; }
         .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; $lightFilter}
         .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; $lightFilter}
         .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #5F0F40; $lightFilter}
@@ -560,7 +560,7 @@ pass in theme (light,dark)
 refactor displayConfigUrl to displayTheme
 
     """.trimIndent()
-    val rm = RoadMapMaker(false, 21)
+    val rm = RoadMapMaker(false, 26)
     val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
     val f = File("gen/roadmap.svg")
     f.writeBytes(output.toByteArray())

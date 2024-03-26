@@ -112,7 +112,7 @@ class RoadmapPlanController {
                         : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val rmm = RoadMapMaker(useDark)
+            val rmm = RoadMapMaker(useDark, 26)
             val isPdf = "PDF" == type
             val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
             if (isPdf) {
