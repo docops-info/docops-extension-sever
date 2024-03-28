@@ -32,7 +32,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#f7ddcd"
+    open fun paperColor() = "#82899D"
 }
 
 /**
@@ -41,7 +41,7 @@ abstract class RoadMapTheme {
  * @constructor Creates an instance of RegularTheme.
  */
 class RegularTheme : RoadMapTheme() {
-    override fun titleColor() = "#fcfcfc"
+    override fun titleColor() = "#000000"
 }
 
 /**
@@ -127,7 +127,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
         <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
-        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" class="glass dark-shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
+        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" class="glass shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {

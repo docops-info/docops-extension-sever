@@ -163,10 +163,10 @@ val gradients = mutableMapOf<String, String>(
             <stop class="stop3" offset="100%" stop-color="#61045f"/>
         </linearGradient>
     """,
-    "#f7ddcd" to """
+    "#82899d" to """
        <linearGradient id="grad26" x2="0%" y2="100%">
-            <stop stop-color="#f7ddcd" stop-opacity="1" offset="0%"/>
-            <stop stop-color="hsl(24.0,72.4%,77.3%)" stop-opacity="1" offset="100%"/>
+            <stop stop-color="#82899d" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(225.0,81.5%,12.7%)" stop-opacity="1" offset="100%"/>
         </linearGradient> 
     """.trimIndent()
 )
