@@ -6,7 +6,6 @@ import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.json.Json
-import net.logstash.logback.argument.StructuredArguments.kv
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
@@ -79,7 +78,6 @@ class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info("{} executed in {}", kv("operation", "makeDiag"), kv("durationMs", timings.duration.inWholeMilliseconds))
 
         return timings.value
     }
