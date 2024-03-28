@@ -11,7 +11,6 @@ import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
-import net.logstash.logback.argument.StructuredArguments.kv
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -59,7 +58,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
             }
 
-            log.info("{} executed in {}", kv("operation", "getPlacemat"), kv("durationMs", timing.duration.inWholeMilliseconds))
             connectorSvgCounter.increment()
 
             return timing.value
