@@ -35,12 +35,19 @@ management:
             requests: true
 
 logging:
+  file:
+    name: docops-extension-service.log
+    path: .
   pattern:
-    level: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}/%X{spanId}] [%thread] %-5level %logger{36} - %msg%n'
-
+    level:
+    console: '%date %green(%level) %yellow([%thread]) %cyan(%logger{10}) [%file : %line] [${spring.application.name:},%X{traceId:-},%X{spanId:-}] - %msg%n'
+    file: '%date %green(%level) %yellow([%thread]) %cyan(%logger{10}) [%file : %line] [${spring.application.name:},%X{traceId:-},%X{spanId:-}] - %msg%n'
 
 
 spring:
+  output:
+    ansi:
+      enabled: detect
   application:
     name: DocopsExtensionsSupportApplication
     admin:
