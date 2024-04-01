@@ -32,7 +32,7 @@ abstract class RoadMapTheme {
     open fun displayText() = "#000000"
     open fun titleColor() = "#45618E"
 
-    open fun paperColor() = "#82899D"
+    open fun paperColor() = "#f8fafb"
 }
 
 /**
