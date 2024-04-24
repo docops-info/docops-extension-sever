@@ -1,7 +1,7 @@
 <div id="response-div">
 <h1>Release Strategy Builder</h1>
 
-<form class="grid grid-cols-2 gap-4" data-hx-put="api/release/build" data-hx-target="#response-div">
+<form class="grid grid-cols-2 gap-4" data-hx-put="api/release/build" data-hx-target="#response-div" data-hx-swap="innerHtml show:top">
                 <div class="flex flex-col col-span-2">
                     <label for="title" class="mb-2">Title</label>
                     <input type="text" id="title" name="title" data-hx-put="api/release/build"

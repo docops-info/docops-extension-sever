@@ -3,7 +3,7 @@
 <div id="contentBox" class="contentBox"></div>
 <div class="divider"></div>
 
-<form class="grid grid-cols-2 gap-4" data-hx-put="api/adr" data-hx-target="#contentBox" hx-trigger="submit, load">
+<form class="grid grid-cols-2 gap-4" data-hx-put="api/adr" data-hx-target="#contentBox" hx-trigger="submit, load" data-hx-swap="innerHtml show:top">
                 <div class="flex flex-col col-span-2">
                     <label for="title" class="mb-2">Title</label>
                     <input type="text" id="title" name="title" data-hx-put="api/adr" data-hx-target="#contentBox"
