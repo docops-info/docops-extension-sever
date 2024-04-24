@@ -44,10 +44,12 @@ class ScoreCardMaker {
         this.isPdf = isPdf
         val id = scoreCard.id
         val sb = StringBuilder()
-        val numOfRowsHeight = scoreCard.scoreCardHeight(numChars = 85, factor = 40.1F)
+        val numOfRowsHeight = scoreCard.scoreCardHeight(numChars = 85, factor = 30.1F)
         val headerHeight = 50.0f
         val height = numOfRowsHeight + headerHeight
-        sb.append(head(scoreCard, height, id))
+        val leftSide = left(scoreCard)
+        val rightSide = right(scoreCard)
+        sb.append(head(scoreCard, max(leftSide.second, rightSide.second), id))
         val styles = StringBuilder()
         styles.append(workItem(id))
         styles.append(glass())
@@ -59,8 +61,8 @@ class ScoreCardMaker {
         sb.append(background(height, WIDTH))
         sb.append(titles(scoreCard))
         sb.append(arrowLine(scoreCard))
-        sb.append(left(scoreCard))
-        sb.append(right(scoreCard))
+        sb.append(leftSide.first)
+        sb.append(rightSide.first)
         sb.append(endWrapper())
         sb.append(tail())
         return sb.toString()
@@ -163,7 +165,7 @@ class ScoreCardMaker {
         """.trimIndent()
     }
 
-    fun left(scoreCard: ScoreCard): String {
+    fun left(scoreCard: ScoreCard): Pair<String, Float> {
         val sb = StringBuilder()
         var startY = 50f
         val inc = 5
@@ -191,7 +193,7 @@ class ScoreCardMaker {
             )
             startY += h + inc
         }
-        return sb.toString()
+        return Pair(sb.toString(), startY)
     }
 
     fun itemsToSpan(items: MutableList<String>, color: String): String {
@@ -204,7 +206,7 @@ class ScoreCardMaker {
         return sb.toString()
     }
 
-    fun right(scoreCard: ScoreCard): String {
+    fun right(scoreCard: ScoreCard): Pair<String, Float> {
         val sb = StringBuilder()
         var startY = 50f
         val inc = 5f
@@ -234,7 +236,7 @@ class ScoreCardMaker {
             )
             startY += h + inc
         }
-        return sb.toString()
+        return Pair(sb.toString(), startY)
     }
 
     private fun arrowLine(scoreCard: ScoreCard): String {
