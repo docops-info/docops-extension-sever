@@ -9,11 +9,11 @@ import java.nio.charset.StandardCharsets
 
 class AdrHandler {
 
-    fun handleSVG(payload: String, scale: String): ResponseEntity<ByteArray> {
+    fun handleSVG(payload: String, scale: String, useDark: Boolean): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 80, increaseWidthBy = 0, scale = scale.toFloat())
+        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 95, increaseWidthBy = 0, scale = scale.toFloat())
         val adr = ADRParser().parse(data, config)
-        var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
+        var svg = AdrMaker().makeAdrSvg(adr, dropShadow = true, config, useDark)
         adr.urlMap.forEach { (t, u) ->
             svg = svg.replace("_${t}_", u)
         }
@@ -23,11 +23,11 @@ class AdrHandler {
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 
-    fun handlePNG(payload: String, scale: String): ResponseEntity<ByteArray> {
+    fun handlePNG(payload: String, scale: String, useDark: Boolean ): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val config = AdrParserConfig(newWin = true, isPdf = true, lineSize = 80, increaseWidthBy = 0, scale = scale.toFloat())
+        val config = AdrParserConfig(newWin = true, isPdf = true, lineSize = 95, increaseWidthBy = 0, scale = scale.toFloat())
         val adr = ADRParser().parse(data, config)
-        var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
+        var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = useDark)
         adr.urlMap.forEach { (t, u) ->
             svg = svg.replace("_${t}_", u)
         }

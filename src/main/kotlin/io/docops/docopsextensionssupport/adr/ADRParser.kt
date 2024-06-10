@@ -271,7 +271,7 @@ fun main() {
         """
         Title:Use Solr for Structured Data Search
 Date: November 24th, 2010
-Status: Superseded
+Status: Deprecated
 Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search
 large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in
 combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured 
@@ -288,7 +288,7 @@ Participants:Roach,Rose,Duffy
         """.trimIndent(),
         config
     )
-    var svg = (AdrMakerNext().makeAdrSvg(adr, false, config))
+    var svg = (AdrMaker().makeAdrSvg(adr, false, config, true))
     adr.urlMap.forEach { (t, u) ->
         svg = svg.replace("_${t}_", u)
     }

@@ -111,7 +111,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("adr".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = AdrHandler()
-                handler.handleSVG(payload = payload, scale = scale)
+                handler.handleSVG(payload = payload, scale = scale, useDark = useDark)
             }
             log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
@@ -197,7 +197,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("adr".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = AdrHandler()
-                handler.handlePNG(payload = payload, scale = scale)
+                handler.handlePNG(payload = payload, scale = scale, useDark = useDark)
             }
             log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value

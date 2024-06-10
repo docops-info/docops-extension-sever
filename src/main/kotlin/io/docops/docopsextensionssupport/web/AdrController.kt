@@ -17,7 +17,7 @@
 package io.docops.docopsextensionssupport.web
 
 import io.docops.docopsextensionssupport.adr.ADRParser
-import io.docops.docopsextensionssupport.adr.AdrMakerNext
+import io.docops.docopsextensionssupport.adr.AdrMaker
 import io.docops.docopsextensionssupport.adr.AdrParserConfig
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
@@ -71,7 +71,7 @@ class AdrController() {
                 val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
                 val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 75, increaseWidthBy = 10)
                 val adr = ADRParser().parse(adrText, config)
-                var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
+                var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = true)
 
                 adr.urlMap.forEach { (t, u) ->
                     svg = svg.replace("_${t}_", u)
@@ -178,7 +178,7 @@ class AdrController() {
         val contents = uncompressString(data)
         val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = lineSize.toInt(), increaseWidthBy = width.toInt(), scale = scale.toFloat())
         val adr = ADRParser().parse(contents, config)
-        var svg = AdrMakerNext().makeAdrSvg(adr, dropShadow = true, config)
+        var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = true)
         adr.urlMap.forEach { (t, u) ->
             svg = svg.replace("_${t}_", u)
         }

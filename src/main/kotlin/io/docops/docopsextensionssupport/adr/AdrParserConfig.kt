@@ -17,7 +17,7 @@
 package io.docops.docopsextensionssupport.adr
 
 data class AdrParserConfig (
-    val lineSize: Int = 110,
+    val lineSize: Int = 130,
     val newWin : Boolean = false,
     val isPdf: Boolean = false,
     val scale: Float = 1.0f,
