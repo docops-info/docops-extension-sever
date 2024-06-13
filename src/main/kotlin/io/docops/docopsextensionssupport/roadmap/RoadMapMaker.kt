@@ -356,16 +356,6 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
     //language=html
     private fun defs() = """
         <defs>
-      
-        <filter id="dark-shadow" x="0" y="0" width="200%" height="200%">
-            $darkDropShadow
-        </filter>
-        <filter id="shadow" x="0" y="0" width="200%" height="200%">
-            $lightDropShadow
-        </filter>
-        
-        ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
-    
         <style>
         .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; }
         .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; }
