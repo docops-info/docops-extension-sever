@@ -52,7 +52,7 @@ class RegularTheme : RoadMapTheme() {
 class DarkTheme : RoadMapTheme() {
     override fun displayText() = "#fcfcfc"
     override fun titleColor(): String = "#FCE6F4"
-    override fun paperColor(): String = "#17242b"
+    override fun paperColor(): String = "#21252B"
 }
 
 /**
@@ -68,7 +68,6 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
     private var darkDropShadow =
         """<feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#000000" flood-opacity="1" />"""
-    private var lightFilter = """filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .2));"""
 
     /**
      * Generates a road map image based on the provided source, scale, title, and number of characters.
@@ -90,7 +89,6 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         val roadmaps = RoadMapParser().parse(source)
         if (isPdf) {
             darkFilter = ""
-            lightFilter = ""
             darkDropShadow = ""
             lightDropShadow = ""
         }
@@ -114,8 +112,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             headerColor = "headerDark"
         }
         val strokeColor = allGradientsKeys().elementAt(index)
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\" class='dark-shadowed' stroke=\"$strokeColor\" stroke-width=\"5\"/>")
-        sb.append("<g transform='scale($scale)' class='shadowed'>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"${roadMapTheme.paperColor()}\" opacity=\"1.0\"  stroke=\"$strokeColor\" stroke-width=\"0\"/>")
+        sb.append("<g transform='scale($scale)'>")
 
         sb.append(makeNow())
         repeat(roadmaps.maxLength()) { index ->
@@ -126,8 +124,8 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         <text x="105" y="100" class="now">NOW</text>
         <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
         <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
-        <rect x="0" y="0" stroke-width="0" fill="url(#grad$index)"  height="80" width="662" opacity="1.0"/>
-        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" class="glass shadowed" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
+        <rect x="0" y="0" stroke-width="0" fill="${roadMapTheme.paperColor()}"  height="80" width="662" opacity="1.0"/>
+        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
@@ -257,7 +255,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="120" width="184" rx="5" ry="5"/>"""
         val nextTitle = """<g transform="translate(210,0)"><path d="$boxTitle" fill="#D63484"/></g>"""
         val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="120" width="184" rx="5" ry="5"/>"""
-        val laterTitle = """<g transform="translate(420,0)"><path d="$boxTitle"  fill="#5F0F40"/></g>"""
+        val laterTitle = """<g transform="translate(420,0)"><path d="$boxTitle"  fill="#FA1E0E"/></g>"""
         if (roadmaps.now.size - 1 >= index) {
             sb.append(now)
             sb.append(nowTitle)
@@ -337,9 +335,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                 sb.append(
                     """
                  <g transform="translate(410,47)">
-                <use xlink:href="#ppoint" stroke-width="5" stroke="#5F0F40"/>
+                <use xlink:href="#ppoint" stroke-width="5" stroke="#FA1E0E"/>
                 </g>        
-                <line x1="396" y1="50" x2="410" y2="50" stroke="#5F0F40" stroke-width="8" />
+                <line x1="396" y1="50" x2="410" y2="50" stroke="#FA1E0E" stroke-width="8" />
             """.trimIndent()
                 )
             }
@@ -358,32 +356,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
     //language=html
     private fun defs() = """
         <defs>
-        <linearGradient id="headerTitleBar" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#f8d8c4"/>
-            <stop class="stop2" offset="50%" stop-color="#f5c5a7"/>
-            <stop class="stop3" offset="100%" stop-color="#f2b28a"/>
-        </linearGradient>
-        <linearGradient id="headerEight" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffb79a"/>
-            <stop class="stop2" offset="50%" stop-color="#ff9368"/>
-            <stop class="stop3" offset="100%" stop-color="#FF6F36"/>
-        </linearGradient>
-        <linearGradient x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" id="linearGradient4619" gradientUnits="userSpaceOnUse">
-            <stop id="stop4621" style="stop-color:#ffffff;stop-opacity:1" offset="0"/>
-            <stop id="stop4623" style="stop-color:#45a98f;stop-opacity:1" offset="1"/>
-        </linearGradient>
-        <linearGradient id="blackPurple" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535" gradientUnits="userSpaceOnUse">
-        <stop class="stop1" stop-color="#ffffff" offset="0"/><stop class="stop3" offset="1" stop-color="#6b587d"/></linearGradient>
-        <linearGradient id="headerDark" x1="62.342285" y1="8.8261719" x2="62.342281" y2="61.276535"  gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="#8b9195"/>
-            <stop class="stop2" offset="50%" stop-color="#515a60"/>
-            <stop class="stop3" offset="100%" stop-color="#17242b"/>
-        </linearGradient>
-        <linearGradient id="headerLight" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
-            <stop class="stop1" offset="0%" stop-color="#ddd1bf"/>
-            <stop class="stop2" offset="50%" stop-color="#ccba9f"/>
-            <stop class="stop3" offset="100%" stop-color="#BCA37F"/>
-        </linearGradient>
+      
         <filter id="dark-shadow" x="0" y="0" width="200%" height="200%">
             $darkDropShadow
         </filter>
@@ -394,79 +367,19 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         ${defLineGradMap(isPdf, 0.5f).elementAt(index)}
     
         <style>
-        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; $lightFilter}
+        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; }
         .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; }
-        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold; $lightFilter}
+        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold;}
         .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; }
-        .later { fill: #5F0F40; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; text-anchor: middle; font-weight: bold; $lightFilter}
-        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #5F0F40; stroke-width: 2; text-anchor: middle; font-weight: bold; }
+        .later { fill: #FA1E0E; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; text-anchor: middle; font-weight: bold; }
+        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; stroke-width: 2; text-anchor: middle; font-weight: bold; }
         .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; }
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; $lightFilter}
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; $lightFilter}
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #5F0F40; $lightFilter}
-        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; $lightFilter}
-        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; $lightFilter}
+        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; }
+        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; }
+        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #FA1E0E; }
+        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; }
+        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; }
         .rmLink { fill: blue; text-decoration: underline; }
-        .glass:after, .glass:before {
-        content: "";
-        display: block;
-        position: absolute
-    }
-
-    .glass {
-        overflow: hidden;
-        color: #fff;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
-        background-image: radial-gradient(circle at center, rgba(0, 167, 225, .25), rgba(0, 110, 149, .5));
-        box-shadow: 0 5px 10px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2);
-        position: relative
-    }
-
-    .glass:after {
-        background: rgba(0, 167, 225, .2);
-        z-index: 0;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        backdrop-filter: blur(3px) saturate(400%);
-        -webkit-backdrop-filter: blur(3px) saturate(400%)
-    }
-
-    .glass:before {
-        width: calc(100% - 4px);
-        height: 35px;
-        background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
-        top: 2px;
-        left: 2px;
-        border-radius: 30px 30px 200px 200px;
-        opacity: .7
-    }
-
-    .glass:hover {
-        text-shadow: 0 1px 2px rgba(0, 0, 0, .9)
-    }
-
-    .glass:hover:before {
-        opacity: 1
-    }
-
-    .glass:active {
-        text-shadow: 0 0 2px rgba(0, 0, 0, .9);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2)
-    }
-
-    .glass:active:before {
-        height: 25px
-    }
-     .shadowed {
-            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .2));
-            $lightFilter
-        }
-        .dark-shadowed {
-             -webkit-filter: drop-shadow( 0px 3px 2px rgba(0, 0, 0, .7));
-            $darkFilter
-        }
     </style>
     <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
     </defs>
