@@ -269,6 +269,7 @@ fun main() {
                 }
             ],
             "style": "TLS",
+            "scale": 0.5,
             "displayConfig": {
              "colors": [ "#5f57ff", "#2563eb", "#7149c6"],
               "fontColor": "#fcfcfc"
