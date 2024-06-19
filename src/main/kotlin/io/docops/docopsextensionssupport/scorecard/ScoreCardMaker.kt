@@ -52,14 +52,12 @@ class ScoreCardMaker {
         sb.append(head(scoreCard, max(leftSide.second, rightSide.second), id))
         val styles = StringBuilder()
         styles.append(workItem(id))
-        styles.append(glass())
-        styles.append(raise())
+        //styles.append(glass())
 
-        sb.append(defs(styles = styles.toString(), scoreCard = scoreCard))
+        sb.append(defs(styles = styles.toString(), scoreCard = scoreCard ))
 
         sb.append(startWrapper(scoreCard))
-        sb.append(background(height, WIDTH))
-        sb.append(titles(scoreCard))
+        sb.append(titles(scoreCard, height = max(leftSide.second, rightSide.second)))
         sb.append(arrowLine(scoreCard))
         sb.append(leftSide.first)
         sb.append(rightSide.first)
@@ -113,9 +111,19 @@ class ScoreCardMaker {
             ${buildGradientDef("#5D9C59", "rightScoreBox")}
             ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem_${scoreCard.id}")}
             ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem_${scoreCard.id}")}
+            <linearGradient id="leftBullet" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#f9b890"/>
+                <stop class="stop2" offset="50%" stop-color="#f69458"/>
+                <stop class="stop3" offset="100%" stop-color="#F37121"/>
+            </linearGradient>
+            <linearGradient id="rightBullet" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#82b09d"/>
+                <stop class="stop2" offset="50%" stop-color="#44896c"/>
+                <stop class="stop3" offset="100%" stop-color="#06623B"/>
+            </linearGradient>
             $style
             </defs>
-            
+            <rect width="100%" height="100%" fill="#F7F7F7"/>
         """.trimIndent()
     }
 
@@ -143,25 +151,18 @@ class ScoreCardMaker {
     fun glass() =
         """.glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}"""
 
-    fun raise(strokeColor: String = "gold", opacity: Float = 0.9f) =
-        """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};} .raiseText {pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }"""
-
     //<rect width="100%" height="100%" fill="url(#backgroundScore)" opacity="1.0" ry="18" rx="18"/>
-    fun background(h: Float, w: Float) = """
-        <path d="${generateRectPathData(width = w, height = h, 0.0f, 0.0f, 0.0f, 0.0f)}" 
-        fill="#fcfcfc" stroke="#5b5b5b"  />
-         """.trimIndent()
 
-    private fun titles(scoreCard: ScoreCard): String {
+    private fun titles(scoreCard: ScoreCard, height: Float): String {
         var reveal = ""
         if (scoreCard.slideShow) {
             reveal = """onclick="reveal();" cursor="pointer""""
         }
         return """
-    <text x="522.5" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.title}</text>
-    <text x="255" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText">${scoreCard.initiativeTitle}</text>
-    <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;font-variant: small-caps;" class="raiseText" $reveal>${scoreCard.outcomeTitle}</text>
-   
+    <text x="522.5" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.title}</text>
+    <text x="255" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.initiativeTitle}</text>
+    <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;"  $reveal>${scoreCard.outcomeTitle}</text>
+   <line x1="522.5" x2="522.5" y1="50" y2="${height-10}" stroke="#cccccc" stroke-dasharray="2"/>
         """.trimIndent()
     }
 
@@ -182,11 +183,12 @@ class ScoreCardMaker {
             sb.append(
                 """
                 <g transform="translate(10, $startY)">
-                <path d="${generateRectPathData(width = 500f, height = h, 0f, 0f, 0f, 0f)}" $fill>
-                <title>${it.description}</title>
-                </path>
-                    <text x="10" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
-                        ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor)}
+                <g transform="translate(8,11)">
+                    <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#leftBullet)" stroke-width="3"
+                             fill="url(#leftBullet)"/>
+                    </g>
+                    <text x="15" y="7" style="font-family: arial;  font-size: 12px;" >
+                        ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
                 </g>
             """.trimIndent()
@@ -196,11 +198,15 @@ class ScoreCardMaker {
         return Pair(sb.toString(), startY)
     }
 
-    fun itemsToSpan(items: MutableList<String>, color: String): String {
+    fun itemsToSpan(items: MutableList<String>, color: String , startX: Int = 25): String {
         var sb = StringBuilder()
-        items.forEach {
+        var indent = startX
+        items.forEachIndexed { i, str ->
+        if(i != 0) {
+            indent = 10
+        }
         sb.append("""
-            <tspan x="10" dy="12" style="font-variant: small-caps;fill:${color};">${it.escapeXml()}</tspan>
+            <tspan x="$indent" dy="12" style="fill:${color};">${str.escapeXml()}</tspan>
         """.trimIndent())
             }
         return sb.toString()
@@ -224,12 +230,13 @@ class ScoreCardMaker {
             val h = 12+ items.size * 12f
             sb.append(
                 """
-    <g transform="translate(525, $startY)" $display>
-        <path d="${generateRectPathData(width = 500f, height = h, 0f, 0f, 0f, 0f)}" $fill >
-        <title>${it.description}</title>
-        </path>
-        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" class="raiseText">
-            ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor)}
+    <g transform="translate(575, $startY)" $display>
+        <g transform="translate(8,12)">
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#rightBullet)" stroke-width="3"
+                         fill="url(#rightBullet)"/>
+        </g>
+        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
+            ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, 25)}
         </text>
     </g>
             """.trimIndent()
@@ -245,13 +252,14 @@ class ScoreCardMaker {
             grad = scoreCard.scoreCardTheme.arrowColor
         }
         return """
-        <g transform="translate(480,25)" class="raiseText">
+        <g transform="translate(490,25)" >
             <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             <g transform="translate(50,7.5)">
                 <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="$grad" stroke-width="3"
                          fill="$grad"/>
             </g>
         </g>
+        
         """.trimIndent()
     }
 
@@ -377,8 +385,8 @@ fun main() {
     "initiativeTitleColor": "#27005D",
     "outcomeTitleColor": "#27005D",
     "backgroundColor": "#FF74B1",
-    "initiativeBackgroundColor": "#FFDDD2",
-    "outcomeBackgroundColor": "#FFDDD2",
+    "initiativeBackgroundColor": "#F7F7F7",
+    "outcomeBackgroundColor": "#F7F7F7",
     "initiativeDisplayTextColor": "#27005D",
     "outcomeDisplayTextColor": "#27005D",
     "arrowColor": "#FF008E"
