@@ -115,22 +115,15 @@ class RoadmapPlanController {
             val rmm = RoadMapMaker(useDark, 26)
             val isPdf = "PDF" == type
             val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+            val headers = HttpHeaders()
             if (isPdf) {
-                val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType.IMAGE_PNG
                 val res = findHeightWidth(svg)
                 val baos = SvgToPng().toPngFromSvg(svg, res)
                 ResponseEntity(baos, headers, HttpStatus.OK)
-            } else if ("XLS" == type){
-                val headers = HttpHeaders()
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType =
-                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ResponseEntity(rmm.parseToRoadMap(data, scale, title, numChars).excel(title), headers, HttpStatus.OK)
             }
             else {
-                val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType.parseMediaType("image/svg+xml")
                 ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
