@@ -16,7 +16,6 @@
 
 package io.docops.docopsextensionssupport.scorecard
 
-import gen.lib.dotgen.fastgr__c
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -85,12 +84,13 @@ fun ScoreCardItem.displayTextToList(size: Int): MutableList<String> {
  * @param arrowColor The color of the arrows used in the scorecard.
  */
 @Serializable
-class ScoreCardTheme(val titleColor: String = "#2c445a",
-                     val backgroundColor: String = "#E7D6B7",
-                     val initiativeTitleColor: String = "#2c445a",
-                     val outcomeTitleColor: String= "#2c445a",
-                     val initiativeDisplayTextColor: String = "#000000",
-                     val outcomeDisplayTextColor: String = "#000000",
-                     val initiativeBackgroundColor: String = "#fcfcfc",
-                     val outcomeBackgroundColor: String = "#fcfcfc",
-                     val arrowColor: String = "#e0349c")
+open class ScoreCardTheme(val titleColor: String = "#2c445a",
+                          val backgroundColor: String = "#E7D6B7",
+                          val initiativeTitleColor: String = "#2c445a",
+                          val outcomeTitleColor: String= "#2c445a",
+                          val initiativeDisplayTextColor: String = "#000000",
+                          val outcomeDisplayTextColor: String = "#000000",
+                          val initiativeBackgroundColor: String = "#fcfcfc",
+                          val outcomeBackgroundColor: String = "#fcfcfc",
+                          val arrowColor: String = "#e0349c")
+

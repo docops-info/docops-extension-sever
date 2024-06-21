@@ -30,6 +30,32 @@ class ScoreCardMaker {
 
     companion object {
         const val WIDTH: Float = 1045.0f
+        const val LEFT_STAR: String = """
+            <g transform="translate(0, 5)" display="block">
+                <svg height="15" width="15" viewBox="0 0 45 45">
+                    <polygon points="23 35 9 43 11 27 0 16 16 14 23 0 29 14 45 16 34 27 36 43" fill="url(#leftBullet)"/>
+                </svg>
+            </g>
+        """
+        const val RIGHT_STAR: String = """
+            <g transform="translate(0, 5)" display="block">
+                <svg height="15" width="15" viewBox="0 0 45 45">
+                    <polygon points="23 35 9 43 11 27 0 16 16 14 23 0 29 14 45 16 34 27 36 43" fill="url(#rightBullet)"/>
+                </svg>
+            </g>
+        """
+        const val LEFT_BULLET = """
+            <g transform="translate(8,11)">
+            <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#leftBullet)" stroke-width="3"
+                     fill="url(#leftBullet)"/>
+            </g>
+        """
+        const val RIGHT_BULLET = """
+            <g transform="translate(8,11)">
+            <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#rightBullet)" stroke-width="3"
+                     fill="url(#rightBullet)"/>
+            </g>
+        """
     }
 
     private var isPdf = false
@@ -183,10 +209,7 @@ class ScoreCardMaker {
             sb.append(
                 """
                 <g transform="translate(10, $startY)">
-                <g transform="translate(8,11)">
-                    <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#leftBullet)" stroke-width="3"
-                             fill="url(#leftBullet)"/>
-                    </g>
+                $LEFT_STAR
                     <text x="15" y="7" style="font-family: arial;  font-size: 12px;" >
                         ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
@@ -206,7 +229,7 @@ class ScoreCardMaker {
             indent = 10
         }
         sb.append("""
-            <tspan x="$indent" dy="12" style="fill:${color};">${str.escapeXml()}</tspan>
+            <tspan x="$indent" dy="12" style="fill:${color};">${str}</tspan>
         """.trimIndent())
             }
         return sb.toString()
@@ -231,10 +254,7 @@ class ScoreCardMaker {
             sb.append(
                 """
     <g transform="translate(575, $startY)" $display>
-        <g transform="translate(8,12)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="url(#rightBullet)" stroke-width="3"
-                         fill="url(#rightBullet)"/>
-        </g>
+        $RIGHT_STAR
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
             ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, 25)}
         </text>
