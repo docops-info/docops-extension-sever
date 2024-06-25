@@ -42,12 +42,8 @@ class Entry (val date: String, val index: Int, val text: String)
  * @return The HTML text string with spans.
  */
 fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int, fillColor: String): String {
-    var fill = ""
-    if(fillColor.isNotBlank()){
-        fill = "fill='#fcfcfc'"
-    }
     val urlMap = mutableMapOf<String,String>()
-    var s = text.escapeXml()
+    var s = text
     if(text.contains("[[") && text.contains("]]")) {
         val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
         val matches = regex.findAll(s)
@@ -60,7 +56,7 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int
             urlMap["[[${display}]]"] = url
         }
     }
-    var text = """<text x="$x" y="$y" class="$clazz" $fill>"""
+    var text = """<text x="$x" y="$y" font-size="14px" font-family="Arial, Helvetica, sans-serif" fill='$fillColor'>"""
     val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
     val spans = linesToMultiLineText(lines,dy, x, fillColor)
     text += spans

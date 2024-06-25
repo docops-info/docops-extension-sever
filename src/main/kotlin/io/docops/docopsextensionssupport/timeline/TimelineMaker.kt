@@ -34,7 +34,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     init {
         if(useDark) {
             textColor = "#fcfcfc"
-            fillColor ="#17242b"
+            fillColor ="#21252B"
         } else {
             fillColor = "#fcfcfc"
         }
@@ -75,11 +75,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         sb.append(defs.first)
 
 
-        sb.append("<rect class='main_pane' width='100%' height='100%'/>")
+        sb.append("<rect fill='$fillColor' width='100%' height='100%'/>")
 
         sb.append("<g transform=\"scale($scale)\">")
 
-        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge tm_title" >${title.escapeXml()}</text>""")
+        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, Helvetica, sans-serif; font-variant:small-caps" class="edge" fill="$textColor" >${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24) scale(1.0)">""")
 
         sb.append(buildRoad(head.second-100))
@@ -113,11 +113,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         {
             x +=  125 * index
         }
-        var fill = ""
-        if(pdf){
-            fill = "#fcfcfc"
-        }
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14,"$fill")
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, "#21252B")
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
@@ -131,7 +127,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
                 <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
             </g>
         </g>
-        <rect x="10" y="20" width="225" height="200" class="each_tm" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
         <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
         <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
@@ -149,11 +145,8 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         {
             x += 125 * index
         }
-        var fill = ""
-        if(pdf){
-            fill = "#fcfcfc"
-        }
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "$fill")
+
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "#21252B")
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
@@ -168,7 +161,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             </g>
         </g>
         
-        <rect x="10" y="420" width="225" height="200" class="each_tm" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
         <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
         
         <text x="125" y="450" fill='#000000' text-anchor='middle'
@@ -257,20 +250,12 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         <style>
             .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
             .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-            .odd { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
-            .even { font-size:14px; font-family: Arial, sans-serif; fill: #000000;}
+            .odd { font-size:14px; font-family: Arial, Helvetica, sans-serif; fill: #000000;}
+            .even { font-size:14px; font-family: Arial, Helvetica, sans-serif; fill: #000000;}
             .rmLink { fill: #0000bb; text-decoration: underline; }
             .main_pane { fill: #f1f5f8; }
             .each_tm { fill: #fcfcfc; }
             .tm_title { fill: rgba(0, 0, 0, 0.96); }
-            @media (prefers-color-scheme: dark) {
-                .main_pane {fill: #06133b;}
-                .each_tm {fill: #06133b;}
-                .tm_title {fill: #fcfcfc; }
-                .odd { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
-                .even { font-size:14px; font-family: Arial, sans-serif; fill: #fcfcfc;}
-                .rmLink {fill: #00bb9f;text-decoration: underline;}
-            }
         </style>
         """.trimIndent()
         if(isPdf) {
@@ -373,8 +358,8 @@ and plugin the controller.
 date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
-    val maker = TimelineMaker(false, "#a1d975")
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1.0", false, "30")
+    val maker = TimelineMaker(true, "#a1d975")
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "0.6", false, "30")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }
