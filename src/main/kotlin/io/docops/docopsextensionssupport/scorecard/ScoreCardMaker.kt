@@ -132,11 +132,11 @@ class ScoreCardMaker {
             <defs>
             ${arrowHead(scoreCard)}
             ${gradientBackGround(scoreCard)}
-            ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor")}
-            ${buildGradientDef("#D36B00", "leftScoreBox")}
-            ${buildGradientDef("#5D9C59", "rightScoreBox")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem_${scoreCard.id}")}
-            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem_${scoreCard.id}")}
+            ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor", scoreCard = scoreCard)}
+            ${buildGradientDef("#D36B00", "leftScoreBox", scoreCard = scoreCard)}
+            ${buildGradientDef("#5D9C59", "rightScoreBox", scoreCard = scoreCard)}
+            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem_${scoreCard.id}", scoreCard = scoreCard)}
+            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem_${scoreCard.id}", scoreCard = scoreCard)}
             <linearGradient id="leftBullet" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f9b890"/>
                 <stop class="stop2" offset="50%" stop-color="#f69458"/>
@@ -159,20 +159,10 @@ class ScoreCardMaker {
         </marker>"""
 
     private fun gradientBackGround(scoreCard: ScoreCard): String {
-        return buildGradientDef(scoreCard.scoreCardTheme.backgroundColor, "backgroundScore")
+        return buildGradientDef(scoreCard.scoreCardTheme.backgroundColor, "backgroundScore", scoreCard = scoreCard)
     }
 
-    private fun workItem(id: String) = """
-        #$id .workitem {
-                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
-            }
-         #$id .workitem :hover {
-                opacity: 0.5;
-                stroke-opacity: 1.7;
-                stroke-width: 3;
-                stroke: #bd5d5d;
-            }
-            """
+    private fun workItem(id: String) = """"""
 
     fun glass() =
         """.glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px) saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% - 4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px 30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0 3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px rgba(0,129,174,.2)}.glass:active:before{height:25px}"""
@@ -256,7 +246,7 @@ class ScoreCardMaker {
     <g transform="translate(575, $startY)" $display>
         $RIGHT_STAR
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
-            ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, 25)}
+            ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
     </g>
             """.trimIndent()
@@ -267,7 +257,7 @@ class ScoreCardMaker {
     }
 
     private fun arrowLine(scoreCard: ScoreCard): String {
-        var grad = "url(#arrowColor)"
+        var grad = "url(#${scoreCard.id}_arrowColor)"
         if (isPdf) {
             grad = scoreCard.scoreCardTheme.arrowColor
         }
@@ -285,11 +275,11 @@ class ScoreCardMaker {
 
     private fun startWrapper(scoreCard: ScoreCard) = """<g transform='scale(${scoreCard.scale})'>"""
     private fun endWrapper() = "</g>"
-    fun buildGradientDef(color: String, id: String): String {
+    fun buildGradientDef(color: String, id: String, scoreCard: ScoreCard): String {
         val m = gradientFromColor(color)
         val hsl = hexToHsl(color, isPdf)
         return """
-        <linearGradient x2="0%" y2="100%" id="$id">
+        <linearGradient x2="0%" y2="100%" id="${scoreCard.id}_$id">
             <stop stop-color="${m["color1"]}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
@@ -349,9 +339,9 @@ fun main() {
         ),
         scoreCardTheme = ScoreCardTheme(
             initiativeBackgroundColor = "#111111",
-            initiativeDisplayTextColor = "#fcfcfc",
+            initiativeDisplayTextColor = "#a1a1a1",
             outcomeBackgroundColor = "#3081D0",
-            outcomeDisplayTextColor = "#fcfcfc",
+            outcomeDisplayTextColor = "#a1a1a1",
             arrowColor = "#FF6C22"
         ),
         scale = 1.0f,
