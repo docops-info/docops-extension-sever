@@ -164,7 +164,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
             //language=svg
             return """
-         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}">
+         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" visibility='hidden'>
             <rect width='400' height='$height' stroke="${fishTailColor(release, releaseStrategy)}" fill="#fcfcfc"/>
             <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
                 $lineText
@@ -206,6 +206,7 @@ fun main() {
                     ],
                     "date": "TBD",
                     "selected": true,
+                    "completed": true,
                     "goal": "Our goal is to release Spring Boot 3.3.0 version with these improvements."
                 },
                 {
