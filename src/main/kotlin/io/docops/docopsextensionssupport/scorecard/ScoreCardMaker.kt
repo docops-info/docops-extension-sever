@@ -76,11 +76,7 @@ class ScoreCardMaker {
         val leftSide = left(scoreCard)
         val rightSide = right(scoreCard)
         sb.append(head(scoreCard, max(leftSide.second, rightSide.second), id))
-        val styles = StringBuilder()
-        styles.append(workItem(id))
-        //styles.append(glass())
-
-        sb.append(defs(styles = styles.toString(), scoreCard = scoreCard ))
+        sb.append(defs(scoreCard = scoreCard ))
 
         sb.append(startWrapper(scoreCard))
         sb.append(titles(scoreCard, height = max(leftSide.second, rightSide.second)))
@@ -103,18 +99,10 @@ class ScoreCardMaker {
     }
 
     fun tail() = "</svg>"
-    fun defs(styles: String, scoreCard: ScoreCard): String {
+    fun defs(scoreCard: ScoreCard): String {
 
         var style = """
-            <style>
-            $styles
-            .left_${scoreCard.id} {
-                fill: url(#leftItem_${scoreCard.id});
-            }
-            .right_${scoreCard.id} {
-                fill: url(#rightItem_${scoreCard.id});
-            }
-            </style>
+            
             <script>
                 var reveal = function () {
                     var elems = document.querySelectorAll('#d${scoreCard.id} [display="none"]');
@@ -131,12 +119,8 @@ class ScoreCardMaker {
         return """
             <defs>
             ${arrowHead(scoreCard)}
-            ${gradientBackGround(scoreCard)}
+            
             ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor", scoreCard = scoreCard)}
-            ${buildGradientDef("#D36B00", "leftScoreBox", scoreCard = scoreCard)}
-            ${buildGradientDef("#5D9C59", "rightScoreBox", scoreCard = scoreCard)}
-            ${buildGradientDef(scoreCard.scoreCardTheme.outcomeBackgroundColor, "rightItem_${scoreCard.id}", scoreCard = scoreCard)}
-            ${buildGradientDef(scoreCard.scoreCardTheme.initiativeBackgroundColor, "leftItem_${scoreCard.id}", scoreCard = scoreCard)}
             <linearGradient id="leftBullet" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f9b890"/>
                 <stop class="stop2" offset="50%" stop-color="#f69458"/>
@@ -198,11 +182,14 @@ class ScoreCardMaker {
             val h = 12+ items.size * 12f
             sb.append(
                 """
+                
                 <g transform="translate(10, $startY)">
+                <rect width="460" height="$h" fill="#fcfcfc"/>
                 $LEFT_STAR
                     <text x="15" y="7" style="font-family: arial;  font-size: 12px;" >
                         ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
+                    <line x1="10" x2="460" y1="$h" y2="$h" stroke="#cccccc" stroke-dasharray="2"/>
                 </g>
             """.trimIndent()
             )
@@ -244,10 +231,12 @@ class ScoreCardMaker {
             sb.append(
                 """
     <g transform="translate(575, $startY)" $display>
+        <rect width="460" height="$h" fill="#fcfcfc"/>
         $RIGHT_STAR
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
             ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
+        <line x1="10" x2="460" y1="$h" y2="$h" stroke="#cccccc" stroke-dasharray="2"/>
     </g>
             """.trimIndent()
             )
