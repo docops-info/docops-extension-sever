@@ -310,5 +310,13 @@ docker run -p 8010:8010 docops-extension-server
 
 ----
 
+.Build AOT
+[source, shellscript]
+----
+java -Djarmode=tools -jar target/docops-extension-server-2023.48.jar extract
 
-ffmpeg -i ailani.mov -crf 23 -preset medium -movflags +faststart -c:a aac ailani.mp4
+java -Dspring.aot.enabled=true -Dspring.context.exit=onRefresh -XX:ArchiveClassesAtExit=docops-extension-server-2023.48/application.jsa -jar docops-extension-server-2023.48/docops-extension-server-2023.48.jar
+
+
+java -Dspring.aot.enabled=true -XX:SharedArchiveFile=docops-extension-server-2023.48/application.jsa -jar docops-extension-server-2023.48/docops-extension-server-2023.48.jar
+----
