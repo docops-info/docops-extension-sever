@@ -232,7 +232,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <mainClass>io.docops.docopsextensionssupport.DocopsExtensionsSupportApplicationKt</mainClass>
                     <requiresUnpack>
@@ -275,6 +275,12 @@
                         <id>build-info</id>
                         <goals>
                             <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>process-aot</id>
+                        <goals>
+                            <goal>process-aot</goal>
                         </goals>
                     </execution>
                 </executions>
