@@ -16,14 +16,44 @@
 
 package io.docops.docopsextensionssupport
 
+import org.springframework.boot.actuate.info.Info
+import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.EnableAspectJAutoProxy
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
+import java.time.Duration
+import java.time.Instant
+import java.util.concurrent.atomic.AtomicReference
 
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
 class DocopsExtensionsSupportApplication
+{
+    companion object {
+        val START  = AtomicReference<Instant>(Instant.now())
+        val STOP  = AtomicReference<Instant>()
+    }
+
+    @Component
+    class StartListener {
+        @EventListener(ApplicationReadyEvent::class)
+        fun ready() {
+            STOP.set(Instant.now())
+        }
+    }
+    @Component
+    class StartupDuration : InfoContributor {
+        override fun contribute(builder: Info.Builder) {
+            val delta = Duration.between(START.get(), STOP.get())
+            builder.withDetail("startupDuration", "${delta.toMillis()} ms")
+        }
+
+    }
+}
 
 fun main(args: Array<String>) {
     runApplication<DocopsExtensionsSupportApplication>(*args)
