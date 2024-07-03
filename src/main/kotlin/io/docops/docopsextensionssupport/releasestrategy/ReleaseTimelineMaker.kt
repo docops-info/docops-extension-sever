@@ -213,7 +213,7 @@ open class ReleaseTimelineMaker {
              $colors
              $style
          </defs>
-         <g transform='scale($scale)' id='GID$id'>
+         
          """.trimIndent()
     }
 

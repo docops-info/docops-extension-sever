@@ -53,7 +53,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
          if(releaseStrategy.useDark) {
              titleFill = "#fcfcfc"
          }
-        str.append(title(releaseStrategy.title, width, titleFill))
+         str.append(title(releaseStrategy.title, width, titleFill))
+         str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID$id'>""")
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, id, releaseStrategy))
             str.append(buildReleaseItemHidden(release,index, isPdf, id, releaseStrategy))
@@ -151,10 +152,12 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
             }
             var x = 200
+            var visibility = "visibility='hidden'"
             var anchor = "text-anchor=\"middle\""
             if (isPdf) {
                 x = 10
                 anchor = ""
+                visibility = ""
             }
         val height = (newLines.size+1) * 12
         var positionX = startX
@@ -164,7 +167,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
             //language=svg
             return """
-         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" visibility='hidden'>
+         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" $visibility>
             <rect width='400' height='$height' stroke="${fishTailColor(release, releaseStrategy)}" fill="#fcfcfc"/>
             <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
                 $lineText
