@@ -245,7 +245,7 @@ class ScoreCardMaker {
             val h = 12+ items.size * 12f
             sb.append(
                 """
-    <g transform="translate(575, $startY)" $display>
+    <g transform="translate(530, $startY)" $display>
         $RIGHT_STAR
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
             ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
