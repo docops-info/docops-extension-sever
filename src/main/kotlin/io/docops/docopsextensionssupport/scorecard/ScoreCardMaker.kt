@@ -118,10 +118,10 @@ class ScoreCardMaker {
         }
         return """
             <defs>
-            <linearGradient id="bevelGradient" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#a1bbe6" stop-opacity="0.3"/>
-            <stop class="stop2" offset="50%" stop-color="#7299da" stop-opacity="0.5"/>
-            <stop class="stop3" offset="100%" stop-color="#4477CE" stop-opacity="0.6"/>
+            <linearGradient id="bevelGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop class="stop3" offset="0%" stop-color="#4477CE" stop-opacity="1"/>
+            <stop class="stop2" offset="50%" stop-color="#7299da" stop-opacity="1"/>
+            <stop class="stop1" offset="100%" stop-color="#a1bbe6" stop-opacity="1"/>
             </linearGradient>
 
             <filter id="bevelFilter" x="-50%" y="-50%" width="200%" height="200%">
@@ -342,9 +342,9 @@ fun main() {
         ),
         scoreCardTheme = ScoreCardTheme(
             initiativeBackgroundColor = "#111111",
-            initiativeDisplayTextColor = "#27005D",
+            initiativeDisplayTextColor = "#FF6C22",
             outcomeBackgroundColor = "#3081D0",
-            outcomeDisplayTextColor = "#27005D",
+            outcomeDisplayTextColor = "#FF6C22",
             arrowColor = "#FF6C22"
         ),
         scale = 1.0f,
@@ -394,9 +394,9 @@ fun main() {
   "slideShow": false,
   "scale": 1.0,
   "scoreCardTheme": {
-    "titleColor": "#27005D",
-    "initiativeTitleColor": "#27005D",
-    "outcomeTitleColor": "#27005D",
+    "titleColor": "#FF008E",
+    "initiativeTitleColor": "#FF008E",
+    "outcomeTitleColor": "#FF008E",
     "backgroundColor": "#FF74B1",
     "initiativeBackgroundColor": "#F7F7F7",
     "outcomeBackgroundColor": "#F7F7F7",
