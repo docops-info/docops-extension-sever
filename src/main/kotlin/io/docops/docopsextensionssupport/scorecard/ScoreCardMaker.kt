@@ -342,9 +342,9 @@ fun main() {
         ),
         scoreCardTheme = ScoreCardTheme(
             initiativeBackgroundColor = "#111111",
-            initiativeDisplayTextColor = "#a1a1a1",
+            initiativeDisplayTextColor = "#27005D",
             outcomeBackgroundColor = "#3081D0",
-            outcomeDisplayTextColor = "#a1a1a1",
+            outcomeDisplayTextColor = "#27005D",
             arrowColor = "#FF6C22"
         ),
         scale = 1.0f,
