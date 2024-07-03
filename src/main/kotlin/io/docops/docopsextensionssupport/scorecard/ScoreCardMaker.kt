@@ -118,6 +118,22 @@ class ScoreCardMaker {
         }
         return """
             <defs>
+            <linearGradient id="bevelGradient" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#a1bbe6" stop-opacity="0.3"/>
+            <stop class="stop2" offset="50%" stop-color="#7299da" stop-opacity="0.5"/>
+            <stop class="stop3" offset="100%" stop-color="#4477CE" stop-opacity="0.6"/>
+            </linearGradient>
+
+            <filter id="bevelFilter" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+                <feOffset in="blur" dx="2" dy="2" result="offsetBlur"/>
+                <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.75" specularExponent="20"
+                                    lighting-color="#bbbbbb" result="specOut">
+                    <fePointLight x="5000" y="-5000" z="20000"/>
+                </feSpecularLighting>
+                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+                <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+            </filter>
             ${arrowHead(scoreCard)}
             
             ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor", scoreCard = scoreCard)}
@@ -133,7 +149,7 @@ class ScoreCardMaker {
             </linearGradient>
             $style
             </defs>
-            <rect width="100%" height="100%" fill="#F7F7F7"/>
+            <rect width="100%" height="100%" fill="url(#bevelGradient)" filter="url(#bevelFilter)"/>
         """.trimIndent()
     }
 
@@ -162,7 +178,7 @@ class ScoreCardMaker {
     <text x="522.5" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.title}</text>
     <text x="255" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.initiativeTitle}</text>
     <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;"  $reveal>${scoreCard.outcomeTitle}</text>
-   <line x1="522.5" x2="522.5" y1="50" y2="${height-10}" stroke="#cccccc" stroke-dasharray="2"/>
+   <line x1="522.5" x2="522.5" y1="50" y2="${height-10}" stroke="#21252B" stroke-dasharray="2"/>
         """.trimIndent()
     }
 
@@ -184,12 +200,11 @@ class ScoreCardMaker {
                 """
                 
                 <g transform="translate(10, $startY)">
-                <rect width="460" height="$h" fill="#fcfcfc"/>
                 $LEFT_STAR
                     <text x="15" y="7" style="font-family: arial;  font-size: 12px;" >
                         ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
-                    <line x1="10" x2="460" y1="$h" y2="$h" stroke="#cccccc" stroke-dasharray="2"/>
+                    <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
                 </g>
             """.trimIndent()
             )
@@ -231,12 +246,11 @@ class ScoreCardMaker {
             sb.append(
                 """
     <g transform="translate(575, $startY)" $display>
-        <rect width="460" height="$h" fill="#fcfcfc"/>
         $RIGHT_STAR
         <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
             ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
-        <line x1="10" x2="460" y1="$h" y2="$h" stroke="#cccccc" stroke-dasharray="2"/>
+        <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
     </g>
             """.trimIndent()
             )

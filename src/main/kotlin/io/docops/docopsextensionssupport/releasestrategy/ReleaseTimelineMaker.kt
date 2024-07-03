@@ -141,14 +141,14 @@ open class ReleaseTimelineMaker {
         if (!isPdf) {
             style = """
                 <style>
-            #ID${id} .shadM { fill: ${releaseStrategy.displayConfig.colors[0]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[0]}); }
-            #ID${id} .shadR { fill: ${releaseStrategy.displayConfig.colors[1]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[1]}); }
+            #ID${id}.shadM { fill: ${releaseStrategy.displayConfig.colors[0]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[0]}); }
+            #ID${id}.shadR { fill: ${releaseStrategy.displayConfig.colors[1]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[1]}); }
 
-            #ID${id} .shadG { fill: ${releaseStrategy.displayConfig.colors[2]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[2]}); }
-            #ID${id} .milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
-            #ID${id} .lines { font-size: 10px; }
+            #ID${id}.shadG { fill: ${releaseStrategy.displayConfig.colors[2]}; filter: drop-shadow(0 1mm 1mm ${releaseStrategy.displayConfig.colors[2]}); }
+            #ID${id}.milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
+            #ID${id}.lines { font-size: 10px; }
 
-            #ID${id} .milestoneTL > .entry { text-anchor: start; font-weight: normal; }
+            #ID${id}.milestoneTL > .entry { text-anchor: start; font-weight: normal; }
             .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4)); }
 
             .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
@@ -170,7 +170,7 @@ open class ReleaseTimelineMaker {
         val colors = StringBuilder()
         val shades = mutableMapOf<Int, String>(0 to "M", 1 to "R", 2 to "G")
         releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
-            colors.append(buildGradientHslDef(s, "shad${shades[index]}_rect"))
+            colors.append(buildGradientHslDef(s, "shad${shades[index]}_rect_$id"))
         }
         return """
              <defs>
