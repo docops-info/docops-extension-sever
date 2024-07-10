@@ -43,8 +43,8 @@ import javax.xml.xpath.*
  */
 @Controller
 @RequestMapping("/api")
-class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
-
+class BadgeController {
+    private var docOpsBadgeGenerator: DocOpsBadgeGenerator = DocOpsBadgeGenerator()
 
     /**
      * Retrieves a badge based on the provided form data and sends it as a response.
@@ -141,13 +141,16 @@ $txt
     }
 
     @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
-    @Counted(value = "docops.badge.get", description= "Number of times create a badge using get method")
-    @Timed(value = "docops.badge.get", description= "Time taken to create a badge using get method", percentiles=[0.5, 0.9])
     fun getBadgeParams(
         @RequestParam(name = "payload") payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
+        @RequestParam(name = "backend", defaultValue = "", required = false) backend: String,
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray> {
+        if(docOpsBadgeGenerator == null)
+        {
+            docOpsBadgeGenerator = DocOpsBadgeGenerator()
+        }
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val split = data.split("|")
         when {
@@ -176,7 +179,16 @@ $txt
                 }
 
                 //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
-                val output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor, split[1], logo, fontColor)
+                val output = docOpsBadgeGenerator.createBadge(
+                    iLabel = label,
+                    iMessage = message,
+                    labelColor = color,
+                    messageColor = mcolor,
+                    href = split[1],
+                    icon = logo,
+                    fontColor = fontColor,
+                    backend = backend
+                )
 
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
