@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.web
 
 import io.docops.docopsextensionssupport.adr.AdrHandler
+import io.docops.docopsextensionssupport.badge.BadgeHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
@@ -11,13 +12,12 @@ import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
+import org.apache.commons.logging.LogFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import kotlin.time.measureTimedValue
-import org.apache.commons.logging.LogFactory
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
@@ -30,14 +30,9 @@ import java.nio.charset.StandardCharsets
 @RequestMapping("/api/docops")
 class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegistry) {
 
-    private val connectorSvgCounter: Counter =  Counter.builder("connector.svg.counter").tag("connector", "svg").description("Count Number of times a Connector was created with SVG").register(meterRegistry)
-    private val placematSvgCounter: Counter = Counter.builder("placemat.svg.counter").tag("placemat", "svg").description("Count Number of times a placemat was created with SVG").register(meterRegistry)
-    private val timelineSvgCounter: Counter =  Counter.builder("timeline.svg.counter").tag("timeline", "svg").description("Count Number of times a timeline was created with SVG").register(meterRegistry)
-    private val connectorPngCounter: Counter =  Counter.builder("connector.png.counter").tag("connector", "png").description("Count Number of times a Connector was created with PNG").register(meterRegistry)
-    private val placematPngCounter: Counter  = Counter.builder("placemat.png.counter").tag("placemat", "png").description("Count Number of times a placemat was created with PNG").register(meterRegistry)
-    private val timelinePngCounter: Counter = Counter.builder("timeline.png.counter").tag("timeline", "png").description("Count Number of times a timeline was created with PNG").register(meterRegistry)
 
-    private val log = LoggerFactory.getLogger(DocOpsRouter::class.java)
+    private var log = LogFactory.getLog(DocOpsRouter::class.java)
+
     @GetMapping("/svg")
     @Timed(value = "docops.router.svg", description="Creating a docops visual using http get", percentiles=[0.5, 0.9])
     fun getSvg(@RequestParam(value = "kind", required = true) kind: String,
@@ -47,9 +42,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                @RequestParam("title", required = false, defaultValue = "") title: String,
                @RequestParam("numChars", required = false, defaultValue = "24") numChars: String,
                @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
-               @RequestParam("outlineColor", defaultValue = "#37cdbe") outlineColor: String
+               @RequestParam("outlineColor", defaultValue = "#37cdbe") outlineColor: String,
+               @RequestParam("backend", required = false, defaultValue = "html") backend: String
     ) : ResponseEntity<ByteArray> {
         val headers = HttpHeaders()
+        if(null == log) {
+            log = LogFactory.getLog(DocOpsRouter::class.java)
+        }
+
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         if("connector".equals(kind, true)) {
@@ -58,7 +58,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
             }
 
-            connectorSvgCounter.increment()
 
             return timing.value
         }
@@ -67,22 +66,20 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = PlacematHandler()
                 handler.handleSVG(payload=payload, type = type)
             }
-            placematSvgCounter.increment()
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
         else if("timeline".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = TimelineHandler()
-                handler.handleSVG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
+                handler.handleSVG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars, backend = backend)
             }
-            timelineSvgCounter.increment()
             log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         } else if("scorecard".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ScorecardHandler()
-                handler.handleSVG(payload)
+                handler.handleSVG(payload, backend)
             }
             log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
@@ -96,14 +93,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         }else if ("buttons".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ButtonHandler()
-                handler.handleSVG(payload, useDark = useDark, type = type)
+                handler.handleSVG(payload, useDark = useDark, type = type, backend = backend)
             }
             log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }else if ("release".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = ReleaseHandler()
-                handler.handleSVG(payload, useDark = useDark)
+                handler.handleSVG(payload, useDark = useDark, backend)
             }
             log.info("release executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
@@ -116,7 +113,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
-
+        else if("badge".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = BadgeHandler()
+                handler.handleSVG(payload=payload, backend = backend)
+            }
+            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
     }
 
@@ -141,7 +145,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handlePNG(payload = payload, "PDF", scale = scale, useDark = useDark)
             }
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
-            connectorPngCounter.increment()
             return timing.value
         }
         else if("placeMat".equals(kind, true)) {
@@ -149,7 +152,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = PlacematHandler()
                 handler.handlePNG(payload, "PDF")
             }
-            placematPngCounter.increment()
 
             log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
@@ -160,7 +162,6 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handlePNG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
             }
             log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms ")
-            timelinePngCounter.increment()
             return timing.value
         }
         else if("scorecard".equals(kind, true)) {
