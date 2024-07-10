@@ -22,7 +22,7 @@ import java.net.URLDecoder
 
 @Controller
 @RequestMapping("/api/placemat")
-class PlaceMatController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
+class PlaceMatController {
     private val log = LoggerFactory.getLogger(PlaceMatController::class.java)
     @PutMapping("/")
     @ResponseBody
