@@ -16,11 +16,11 @@ import kotlin.time.measureTimedValue
 class ButtonHandler {
 
     val log = LogFactory.getLog(ButtonHandler::class.java)
-    fun handleSVG(payload: String, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
+    fun handleSVG(payload: String, useDark: Boolean, type: String , backend: String): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val content = Json.decodeFromString<Buttons>(data)
-            createResponse(content, useDark, type)
+            createResponse(content, useDark, backend)
         }
         log.info("getButton executed in ${timing.duration.inWholeMilliseconds}ms ")
         return timing.value

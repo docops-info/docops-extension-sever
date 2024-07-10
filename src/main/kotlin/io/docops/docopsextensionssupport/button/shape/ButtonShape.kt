@@ -46,13 +46,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         return joinXmlLines(createShape(type))
     }
 
-    private fun joinXmlLines(str: String): String {
-        val sb = StringBuilder()
-        str.lines().forEach {
-            sb.append(it.trim())
-        }
-        return sb.toString()
-    }
+
     abstract fun createShape(type: String): String
 
     override fun height(): Float {
@@ -122,4 +116,11 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         }
         return text.toString()
     }
+}
+fun joinXmlLines(str: String): String {
+    val sb = StringBuilder()
+    str.lines().forEach {
+        sb.append(it.trim())
+    }
+    return sb.toString()
 }

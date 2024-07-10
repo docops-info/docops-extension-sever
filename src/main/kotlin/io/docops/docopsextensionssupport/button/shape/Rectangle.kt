@@ -67,6 +67,10 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
         buttonList.forEach { button: Button ->
             localCount++
+            var link = """<a xlink:href="${button.link}" target="$win" fill="#000000">$localCount</a>"""
+            if(isPdf) {
+                link = "$localCount"
+            }
             var imageOrLabel = """
             <rect x="10" y="10" height="98" width="98"
                                   class="mybox shape btn_${button.id}_cls" rx="18" ry="18" fill="#45618E"/>
@@ -74,7 +78,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
            
             <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
                   font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
-                <a xlink:href="${button.link}" target="$win" fill="#000000">$localCount</a>
+                $link
             </text>
             </g>
             """.trimIndent()
@@ -118,9 +122,13 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         }
         links?.let {
             it.forEach { link ->
+                var linkElement = """<a xlink:href="${link.href}" class="$linkText" style="$style" target="_blank">${link.label.escapeXml()}</a>"""
+                if(isPdf) {
+                    linkElement = link.label.escapeXml()
+                }
                 sb.append("""
             <tspan x="115" dy="14">
-                <a xlink:href="${link.href}" class="$linkText" style="$style" target="_blank">${link.label.escapeXml()}</a>
+                $linkElement
             </tspan>
                 """.trimIndent())
             }

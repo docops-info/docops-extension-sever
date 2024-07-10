@@ -77,9 +77,13 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             }
             var fill = "#fcfcfc"
             var overlay = "url(#overlayGrad)"
+            var clz = "glass"
+            var recClz = "btn_${button.id}_cls"
             if(isPdf) {
-                fill = "url(#btn_${button.id})"
+                fill = "${button.color}"
                 overlay = "url(#btn_${button.id})"
+                clz = ""
+                recClz = "${button.color}"
             }
             btns.append("""
          <g transform="translate($startX,$startY)" cursor="pointer">
@@ -87,8 +91,8 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         <rect x="0" y="0" fill="$fill" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="#000000" class="btn_${button.id}_cls raise">
             <title>${button.label.escapeXml()}</title>
         </rect>
-        <path fill="$overlay" class="btn_${button.id}_cls"  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
-        <text text-anchor="middle" x="75" y="8" class="glass">
+        <path fill="$overlay" class="$recClz"  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
+        <text text-anchor="middle" x="75" y="8" class="$clz">
             $title
         </text>
         $linesOrImage

@@ -94,14 +94,16 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 lines, 12, 0)
             var filter = "filter=\"url(#Bevel2)\""
             var fill = "${button.color}"
+            var stroke = "url(#nnneon-grad${itemNumber.counter}-${buttons.id})"
             if(isPdf) {
                 filter = ""
+                stroke = "${button.color}"
                 fill = "url(#btn_${button.id})"
             }
             btns.append("""
             <g transform="translate($startX,$startY)" cursor="pointer">
             <a xlink:href="${button.link}" target="$win">
-            <g stroke-width="16" stroke="url(#nnneon-grad${itemNumber.counter}-${buttons.id})" fill="none" cursor="pointer" class="raise">
+            <g stroke-width="16" stroke="$stroke" fill="none" cursor="pointer" class="raise">
                 <title class="description">${button.description?.escapeXml()}</title>
                 <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
                 <circle r="55" cx="0" cy="0"/>
