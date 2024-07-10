@@ -114,6 +114,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             x +=  125 * index
         }
         val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, "#21252B")
+        var fill = "url(#topBar)"
+        val colorMap = gradientFromColor(outlineColor)
+        if(pdf) {
+            fill = "${colorMap["color1"]}"
+        }
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
@@ -128,7 +133,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             </g>
         </g>
         <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="5"/>
         <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
@@ -147,6 +152,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         }
 
         val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "#21252B")
+        var fill = "url(#topBar)"
+        val colorMap = gradientFromColor(outlineColor)
+        if(pdf) {
+            fill = "${colorMap["color1"]}"
+        }
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
@@ -162,7 +172,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         </g>
         
         <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5" />
+        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke-width="2" rx="5" />
         
         <text x="125" y="450" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"

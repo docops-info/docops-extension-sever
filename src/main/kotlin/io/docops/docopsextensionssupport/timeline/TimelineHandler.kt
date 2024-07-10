@@ -21,12 +21,14 @@ class TimelineHandler {
         useDark: Boolean,
         outlineColor: String,
         scale: String,
-        numChars: String
+        numChars: String,
+        backend: String
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
+            val isPdf = backend == "pdf"
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
-            val svg = tm.makeTimelineSvg(data, title, scale, isPdf = false, numChars)
+            val svg = tm.makeTimelineSvg(data, title, scale, isPdf = isPdf, numChars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
