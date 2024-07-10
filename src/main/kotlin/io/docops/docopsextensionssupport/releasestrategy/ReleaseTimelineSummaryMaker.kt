@@ -109,16 +109,23 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         if(release.completed) {
             completed = "<use xlink:href=\"#completedCheck\" x=\"405\" y=\"65\" width=\"24\" height=\"24\"/>"
         }
+
+        var fill = "url(#${shadeColor(release)}_rect_$id)"
+        var clz = "raise"
+        if(isPdf) {
+            clz = ""
+            fill =release.fillColor(releaseStrategy)
+        }
         //language=svg
         return """
          <g transform="translate(${positionX+10},60)" class="${shadeColor(release)}">
              <text text-anchor="middle" x="250" y="-12" class="milestoneTL">${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${fishTailColor(release, releaseStrategy)}" fill="url(#${shadeColor(release)}_rect_$id)"/>
-             <path d="m 400,0 v 200 l 100,-100 z" fill="url(#${shadeColor(release)}_rect_$id)" stroke="${fishTailColor(release, releaseStrategy)}" />
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${fishTailColor(release, releaseStrategy)}" fill="$fill"/>
+             <path d="m 400,0 v 200 l 100,-100 z" fill="$fill" stroke="${fishTailColor(release, releaseStrategy)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="${releaseStrategy.displayConfig.fontColor}">${release.type}</text>
             $completed
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
-                <rect x="0" y="0" height="200" width="300" fill="url(#${shadeColor(release)}_rect_$id)" class="raise"/>
+                <rect x="0" y="0" height="200" width="300" fill="$fill" class="$clz"/>
                 <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="12px"
                       font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="${releaseStrategy.displayConfig.fontColor}">
                    $spans
@@ -153,7 +160,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             }
             var x = 200
             var visibility = "visibility='hidden'"
-            var anchor = "text-anchor=\"middle\""
+            var anchor = "text-anchor='middle'"
             if (isPdf) {
                 x = 10
                 anchor = ""

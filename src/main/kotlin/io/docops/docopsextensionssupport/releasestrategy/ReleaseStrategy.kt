@@ -16,6 +16,25 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.GA
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M1
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M2
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M3
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M4
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M5
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M6
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M7
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M8
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M9
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC1
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC2
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC3
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC4
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC5
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC6
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC7
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC8
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC9
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import kotlinx.serialization.Serializable
 import java.io.ByteArrayOutputStream
@@ -105,6 +124,22 @@ class Release(
     val completed: Boolean = false
 )
 
+fun Release.fillColor(releaseStrategy: ReleaseStrategy) : String {
+    val color =  when (this.type) {
+        in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
+            releaseStrategy.displayConfig.colors[0]
+        }
+        in arrayOf(RC1,RC2,RC3,RC4,RC5,RC6,RC7,RC8,RC9) -> {
+            releaseStrategy.displayConfig.colors[1]
+        }
+        GA -> {
+            releaseStrategy.displayConfig.colors[2]
+        }
+
+        else -> "#cccccc"
+    }
+    return color
+}
 /**
  * A class that represents the display configuration for a program.
  *

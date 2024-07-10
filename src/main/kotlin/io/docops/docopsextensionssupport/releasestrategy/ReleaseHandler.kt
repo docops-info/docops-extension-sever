@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -17,27 +16,28 @@ import kotlin.time.measureTimedValue
 
 class ReleaseHandler {
     val log = LogFactory.getLog(ReleaseHandler::class.java)
-    fun handleSVG(payload: String, useDark: Boolean) : ResponseEntity<ByteArray> {
+    fun handleSVG(payload: String, useDark: Boolean, backend: String) : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val release = Json.decodeFromString<ReleaseStrategy>(data)
             release.useDark = useDark
+            val isPdf = backend == "pdf"
             var output = ""
             when (release.style) {
                 "TL" -> {
-                    output = createTimelineSvg(release, false)
+                    output = createTimelineSvg(release, isPdf)
                 }
 
                 "TLS" -> {
-                    output = createTimelineSummarySvg(release, false)
+                    output = createTimelineSummarySvg(release, isPdf)
                 }
 
                 "R" -> {
-                    output = createRoadMap(release, false, "OFF")
+                    output = createRoadMap(release, isPdf, "OFF")
                 }
 
                 "TLG" -> {
-                    output = createTimelineGrouped(release, false)
+                    output = createTimelineGrouped(release, isPdf)
                 }
             }
 
