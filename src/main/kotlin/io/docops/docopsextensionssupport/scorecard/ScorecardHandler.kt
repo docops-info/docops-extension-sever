@@ -17,14 +17,16 @@ import kotlin.time.measureTimedValue
 class ScorecardHandler {
     private val log = LogFactory.getLog(ScorecardController::class.java)
     fun handleSVG(
-        payload: String
+        payload: String,
+        backend: String
     ): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
+                var isPdf = backend == "pdf"
                 val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
                 val content = Json.decodeFromString<ScoreCard>(data)
                 val sm = ScoreCardMaker()
-                val svg = sm.make(scoreCard = content, isPdf = false)
+                val svg = sm.make(scoreCard = content, isPdf = isPdf)
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
