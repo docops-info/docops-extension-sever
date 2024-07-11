@@ -16,9 +16,8 @@
 
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.asciidoc.buttons.theme.theme
 import io.docops.asciidoc.utils.escapeXml
-import net.sourceforge.plantuml.style.SName.label
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.silentsoft.simpleicons.SimpleIcons
 import java.io.ByteArrayInputStream
 import java.net.URI
@@ -36,10 +35,7 @@ class DocOpsBadgeGenerator {
 
 
     fun createBadgeFromList(badges: MutableList<Badge>): Pair<String, Float> {
-        val t = theme {
-            columns = 1
-            dropShadow = 0
-        }
+
         val sb= StringBuilder()
         var x = 0f
         var xPos = 0f
@@ -49,21 +45,10 @@ class DocOpsBadgeGenerator {
         badges.forEachIndexed { i, badge ->
             val label = badge.label.escapeXml()
             val message = badge.message.escapeXml()
-            val clrMap = t.gradientFromColor(badge.labelColor!!)
-            val mMap = t.gradientFromColor(badge.messageColor!!)
+            val clrMap = gradientFromColor(badge.labelColor!!)
+            val mMap = gradientFromColor(badge.messageColor!!)
             val maskId = UUID.randomUUID().toString()
-            val grad = """
-            <linearGradient id="label_${maskId}" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
-                <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
-            </linearGradient> 
-            <linearGradient id="message_${maskId}" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
-                <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
-            </linearGradient> 
-        """.trimIndent()
+            val grad = makeGradient(maskId, clrMap, mMap)
             var labelWidth = measureText(badge.label) * 100.0F
             val messageWidth = measureText(badge.message) * 100.0F
             var labelLink = label
@@ -86,16 +71,7 @@ class DocOpsBadgeGenerator {
             var messageFill = "url(#message_${maskId})"
             var filterText = "url(#Bevel2)"
             var maskText = "url(#a)"
-            var mask = """
-            <mask id='$maskId'>
-                <rect width='${labelWidth + messageWidth + 200}' height='200' rx='30' fill='#FFF'/>
-            </mask>
-            <g mask='url(#$maskId)'>
-                <rect fill='$labelFill' width='${labelWidth + 100}' height='200' filter='$filterText'/>
-                <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
-                <rect width='${labelWidth + messageWidth + 200}' height='200' fill='$maskText' filter='$filterText'/>
-            </g>
-        """.trimIndent()
+            var mask = createMask(maskId, labelWidth, messageWidth, labelFill, filterText, messageFill, maskText)
             if(rowCount > 3) {
                 rowCount = 0
                 rowNum++
@@ -105,11 +81,11 @@ class DocOpsBadgeGenerator {
             }
             sb.append("<g transform='translate($xPos,${rowNum*21})'>")
             if(badge.isPdf) {
-                val b = makeSVGForPDF(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, img)
+                val b = makeSVGForPDF(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, img, label)
                 sb.append(b)
             }
             else {
-                val b = makeSvg(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, grad, mask, filterText, img)
+                val b = makeSvg(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, grad, mask, filterText, img, label)
                 sb.append(b)
             }
             sb.append("</g>")
@@ -119,6 +95,26 @@ class DocOpsBadgeGenerator {
             width = maxOf(width, xPos)
         }
         return Pair(sb.toString(), width)
+    }
+
+    private fun makeGradient(
+        maskId: String,
+        clrMap: Map<String, String>,
+        mMap: Map<String, String>
+    ): String {
+        val grad = """
+                <linearGradient id="label_${maskId}" x2="0%" y2="100%">
+                    <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
+                    <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
+                    <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
+                </linearGradient> 
+                <linearGradient id="message_${maskId}" x2="0%" y2="100%">
+                    <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
+                    <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
+                    <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
+                </linearGradient> 
+            """.trimIndent()
+        return grad
     }
 
     private fun makeSVGForPDF(
@@ -132,7 +128,8 @@ class DocOpsBadgeGenerator {
         message: String,
         messageLink: String,
         labelLink: String,
-        img: String
+        img: String,
+        label : String
     ): String {
         val labelFill = clrMap["color3"]!!
         val messageFill = mMap["color3"]!!
@@ -170,7 +167,8 @@ class DocOpsBadgeGenerator {
         grad: String,
         mask: String,
         filterText: String,
-        img: String
+        img: String,
+        label: String
     ): String {
         //language=SVG
         return """
@@ -242,14 +240,11 @@ class DocOpsBadgeGenerator {
         backend: String = ""
     ): String {
         val isPdf = backend == "pdf"
-        val t = theme {
-            columns = 1
-            dropShadow = 0
-        }
+
         val label = iLabel.escapeXml()
         val message = iMessage.escapeXml()
-        val clrMap = t.gradientFromColor(labelColor)
-        val mMap = t.gradientFromColor(messageColor)
+        val clrMap = gradientFromColor(labelColor)
+        val mMap = gradientFromColor(messageColor)
         val maskId = UUID.randomUUID().toString()
         val grad = """
             <linearGradient id="label_${maskId}" x2="0%" y2="100%">
@@ -285,18 +280,8 @@ class DocOpsBadgeGenerator {
         var messageFill = "url(#message_${maskId})"
         var filterText = "url(#Bevel2)"
         var maskText = "url(#a)"
-        var mask = """
-            <mask id='$maskId'>
-                <rect width='${labelWidth + messageWidth + 200}' height='200' rx='30' fill='#FFF'/>
-            </mask>
-            <g mask='url(#$maskId)'>
-                <rect fill='$labelFill' width='${labelWidth + 100}' height='200' filter='$filterText'/>
-                <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
-                <rect width='${labelWidth + messageWidth + 200}' height='200' fill='$maskText' filter='$filterText'/>
-            </g>
-        """.trimIndent()
+        var mask = createMask(maskId, labelWidth, messageWidth, labelFill, filterText, messageFill, maskText)
         if(isPdf) {
-            println("PDF Backend")
             labelFill = clrMap["color3"]!!
             messageFill = mMap["color3"]!!
             filterText = ""
@@ -365,6 +350,29 @@ class DocOpsBadgeGenerator {
              </svg>
         """.trimIndent()
     }
+
+    private fun createMask(
+        maskId: String,
+        labelWidth: Float,
+        messageWidth: Float,
+        labelFill: String,
+        filterText: String,
+        messageFill: String,
+        maskText: String
+    ): String {
+        var mask = """
+                <mask id='$maskId'>
+                    <rect width='${labelWidth + messageWidth + 200}' height='200' rx='30' fill='#FFF'/>
+                </mask>
+                <g mask='url(#$maskId)'>
+                    <rect fill='$labelFill' width='${labelWidth + 100}' height='200' filter='$filterText'/>
+                    <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
+                    <rect width='${labelWidth + messageWidth + 200}' height='200' fill='$maskText' filter='$filterText'/>
+                </g>
+            """.trimIndent()
+        return mask
+    }
+
     fun measureText(str: String, fontSize : Int = 10): Float {
         var total = 0f
         str.codePoints().forEach {
