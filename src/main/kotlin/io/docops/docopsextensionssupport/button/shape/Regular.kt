@@ -71,10 +71,10 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         buttonList.forEach { button: Button ->
             var filter = "filter=\"url(#Bevel2)\""
-            var fill = "${button.color}"
+            var fill = "url(#btn_${button.id})"
             if(isPdf) {
                 filter = ""
-                fill = "url(#btn_${button.id})"
+                fill = "${button.color}"
             }
             btns.append(
                 """
