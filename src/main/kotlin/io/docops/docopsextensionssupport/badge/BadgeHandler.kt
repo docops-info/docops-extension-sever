@@ -16,7 +16,6 @@ class BadgeHandler {
 
         val docOpsBadgeGenerator = DocOpsBadgeGenerator()
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        println(data)
         val badges = mutableListOf<Badge>()
         val isPdf = backend == "pdf"
 
@@ -25,10 +24,8 @@ class BadgeHandler {
             if(line.isNotEmpty()) {
             when {
                 split.size < 6 -> {
-                    println(line)
                     throw BadgeFormatException("Badge Format invalid, expecting 5 pipe delimited values [$data]")
                 }
-
                 else -> {
                     val message: String = split[1]
                     val label: String = split[0]
