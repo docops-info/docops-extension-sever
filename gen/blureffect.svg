@@ -1,22 +1,103 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="685.39996" height="588.0"
-     viewBox="0 0 685.39996 588.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs>
-    <linearGradient id="backgroundScore" x2="0" y2="0" x1="0" y1="0">
-        <stop class="stop1" offset="50%" stop-color="#e6d1ff"/>
-        <stop class="stop2" offset="100%" stop-color="#39d0ff"/>
-    </linearGradient>
-    <linearGradient id="headerGreen" x2="0%" y2="100%">
-        <stop class="stop1" offset="0%" stop-color="#f2e8ff"/>
-        <stop class="stop2" offset="50%" stop-color="#ecdcff"/>
-        <stop class="stop3" offset="100%" stop-color="#e6d1ff"/>
-    </linearGradient>
-    <filter id="f1" x="0" y="0">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
-    </filter>
-</defs>
-
-    <g cursor="pointer">
-        <rect x="10" y="10" height="400" width="300" fill="url(#headerGreen)" rx="11" ry="11" stroke="gold"/>
-        <rect x="10" y="190" height="210" width="300" fill="#363434" rx="11" ry="11" filter="url(#f1)" opacity="0.3"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960.0" height="90.0" viewBox="0 0 960.0 90.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="b587ff24-36fa-400e-8377-8215c073d583">
+    <defs>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
+        </filter>
+        <filter id="buttonBlur">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+            <feOffset in="blur" dy="2" result="offsetBlur"/>
+            <feMerge>
+                <feMergeNode in="offsetBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
+            <stop offset="0" stop-color="#000000" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="topshineBlur">
+            <feGaussianBlur stdDeviation="0.93"/>
+        </filter>
+        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="bottomshine">
+            <feGaussianBlur stdDeviation="0.95"/>
+        </filter>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
+        </filter>
+        <circle id="myCircle" cx="0" cy="0" r="60" class="card" stroke-width="1"/>
+        <linearGradient x2="0%" y2="100%" id="btn_ec4975cf-d6d1-4b62-afcf-70e72298bf47">
+            <stop stop-color="#80ffc7" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(154.0,100.0%,50.2%)" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="btn_90b24c25-e58b-468d-a00a-d27e9e726963">
+            <stop stop-color="#ffb79a" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(17.0,100.0%,60.6%)" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="btn_00d4fe6e-15ee-4dc2-92d8-8b581e1b3718">
+            <stop stop-color="#f4d089" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(40.0,85.0%,49.6%)" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="btn_b3003d01-6754-43ec-b7d3-8df17a6225cf">
+            <stop stop-color="#fbf2bc" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(52.0,88.7%,72.4%)" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="btn_b4897a5a-6607-4961-90c6-206713bd0357">
+            <stop stop-color="#a2b0c6" stop-opacity="1" offset="0%"/>
+            <stop stop-color="hsl(217.0,34.6%,41.4%)" stop-opacity="1" offset="100%"/>
+        </linearGradient>
+        <path id="outerBox" fill="#ffffff" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 382.0 A 18.0 18.0 0 0 1 282.0 400.0 L 18.0 400.0 A 18.0 18.0 0 0 1 0 382.0 Z">
+            <title>Title</title>
+        </path>
+        <g id="topTextBox">
+            <path fill="#ffffff" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+        </g>
+        <path id="bottomTextBox" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 300.0 0 A 0.0 0.0 0 0 1 300.0 0.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/>
+        <path id="singleBox" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 191.0 A 0.0 0.0 0 0 1 300.0 191.0 L 0.0 191.0 A 0.0 0.0 0 0 1 0 191.0 Z"/>
+    </defs>
+    <g transform="scale(1.0)">
+        <g transform="translate(10,10)">
+            <a xlink:href="https://www.google.com" target="_top" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+                <rect x="0" y="0" fill="#01FF90" width="300" height="30" class="raise btn_ec4975cf-d6d1-4b62-afcf-70e72298bf47_cls" rx="10" ry="10"/>
+                <text x="150" y="20" text-anchor="middle" class="glass" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;">This Is Another Google</text>
+            </a>
+        </g>
+        <g transform="translate(320,10)">
+            <a xlink:href="https://www.apple.com" target="_top" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+                <rect x="0" y="0" fill="#FF6F36" width="300" height="30" class="raise btn_90b24c25-e58b-468d-a00a-d27e9e726963_cls" rx="10" ry="10"/>
+                <text x="150" y="20" text-anchor="middle" class="glass" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;">Apple</text>
+            </a>
+        </g>
+        <g transform="translate(630,10)">
+            <a xlink:href="https://www.microsoft.com" target="_top" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+                <rect x="0" y="0" fill="#EAA213" width="300" height="30" class="raise btn_00d4fe6e-15ee-4dc2-92d8-8b581e1b3718_cls" rx="10" ry="10"/>
+                <text x="150" y="20" text-anchor="middle" class="glass" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;">Microsoft</text>
+            </a>
+        </g>
+        <g transform="translate(10,50)">
+            <a xlink:href="https://www.amazon.com" target="_top" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+                <rect x="0" y="0" fill="#F7E67A" width="300" height="30" class="raise btn_b3003d01-6754-43ec-b7d3-8df17a6225cf_cls" rx="10" ry="10"/>
+                <text x="150" y="20" text-anchor="middle" class="glass" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;">Amazon</text>
+            </a>
+        </g>
+        <g transform="translate(320,50)">
+            <a xlink:href="https://www.netflix.com" target="_top" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+                <rect x="0" y="0" fill="#45618E" width="300" height="30" class="raise btn_b4897a5a-6607-4961-90c6-206713bd0357_cls" rx="10" ry="10"/>
+                <text x="150" y="20" text-anchor="middle" class="glass" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;">Netflix</text>
+            </a>
+        </g>
     </g>
 </svg>
