@@ -7,7 +7,7 @@ import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
 import java.util.UUID
 
-class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG") {
+class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG", val isPdf: Boolean = false) {
 
     private val docOpsBadgeGenerator = DocOpsBadgeGenerator()
     private var bgColor = "#fcfcfc"
@@ -28,7 +28,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val id = UUID.randomUUID().toString()
         sb.append(head(height+60, width = width, placeMatRequest.scale, id))
         initColors()
-        if("PDF" != type) {
+        if(!isPdf) {
             sb.append(defs(id))
         } else {
             useGrad = false
@@ -59,6 +59,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val sb = StringBuilder()
         var x = 0
         var y = 0
+        var textColor = "#111111"
         placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
             var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
@@ -73,8 +74,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(placeMatRequest.useDark && !placeMatRequest.fill ) {
                 grad = "#fcfcfc"
             }
+            if(isPdf && placeMatRequest.useDark) {
+                grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
+                textColor = "#fcfcfc"
+            }
             val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
+            val str = StringBuilder("""<text x="135" fill="$textColor" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
             var newLine = false
 
             lines.first.forEachIndexed {
