@@ -71,7 +71,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")
         var y = 0
-
+        var textColor = "#111111"
+        if(useDark){
+            textColor = "#fcfcfc"
+        }
 
         connectors.forEachIndexed {
             i, item ->
@@ -83,7 +86,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 <g transform="translate(0,$y)">
                     <rect x="0" y="13" height="24" width="24" $fill rx="5" ry="5"/>
                     <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
-                    <text x="42" y="29" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;" class="desc_txt">
+                    <text x="42" y="29" fill="$textColor" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;" class="desc_txt">
                         ${item.description}
                     </text>
                 </g>
@@ -196,7 +199,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             i, conn ->
             var grad = "url(#grad$i)"
             var strokeWidth = 3
-            fill = "none"
+            fill = "#fcfcfc"
             var style = ""
             if(!useGrad) {
                 fill = "none"
@@ -235,6 +238,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 if(newLine) {
                     arrow=""
                 }
+
                 //language=svg
                 sb.append(
                     """
