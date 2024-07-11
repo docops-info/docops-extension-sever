@@ -64,7 +64,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("placemat".equals(kind, true)) {
             val timing = measureTimedValue {
                 val handler = PlacematHandler()
-                handler.handleSVG(payload=payload, type = type)
+                handler.handleSVG(payload=payload, type = type, backend = backend)
             }
             log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
