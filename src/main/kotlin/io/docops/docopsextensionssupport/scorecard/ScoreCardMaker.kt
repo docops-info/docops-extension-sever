@@ -79,10 +79,10 @@ class ScoreCardMaker {
         sb.append(defs(scoreCard = scoreCard ))
 
         sb.append(startWrapper(scoreCard))
-        sb.append(titles(scoreCard, height = max(leftSide.second, rightSide.second)))
         sb.append(arrowLine(scoreCard))
         sb.append(leftSide.first)
         sb.append(rightSide.first)
+        sb.append(titles(scoreCard, height = max(leftSide.second, rightSide.second)))
         sb.append(endWrapper())
         sb.append(tail())
         return sb.toString()
@@ -116,7 +116,7 @@ class ScoreCardMaker {
         if (isPdf) {
             style = ""
         }
-        val gradBevel = gradientFromColor(scoreCard.scoreCardTheme.arrowColor)
+        val gradBevel = gradientFromColor(scoreCard.scoreCardTheme.backgroundColor)
         return """
             <defs>
             <linearGradient id="bevelGradient${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -202,7 +202,7 @@ class ScoreCardMaker {
                 
                 <g transform="translate(10, $startY)">
                 $LEFT_STAR
-                    <text x="15" y="7" style="font-family: arial;  font-size: 12px;" >
+                    <text x="15" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
                         ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
                     <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
@@ -222,7 +222,7 @@ class ScoreCardMaker {
             indent = 10
         }
         sb.append("""
-            <tspan x="$indent" dy="12" style="fill:${color};">${str}</tspan>
+            <tspan x="$indent" dy="12" style="fill:${color};font-family: Arial, Helvetica, sans-serif;">${str}</tspan>
         """.trimIndent())
             }
         return sb.toString()
@@ -248,7 +248,7 @@ class ScoreCardMaker {
                 """
     <g transform="translate(530, $startY)" $display>
         $RIGHT_STAR
-        <text x="30" y="7" style="font-family: arial;  font-size: 12px;" >
+        <text x="30" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
             ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
         <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
