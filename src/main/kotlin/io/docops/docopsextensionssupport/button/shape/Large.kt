@@ -130,7 +130,7 @@ class Large(buttons: Buttons) : Regular(buttons) {
         }
         return """
             <g transform="translate(0,190)" class="title">
-            <text x="10" y="20" style="font: 12px Arial, Helvetica, sans-serif;">
+            <text x="10" y="20" style="font-family: Arial, Helvetica, sans-serif;font-size:12px;">
                 <tspan style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</tspan>
                 $titleList
                 $descList
