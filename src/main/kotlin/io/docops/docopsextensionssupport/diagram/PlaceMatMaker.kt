@@ -63,12 +63,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
             var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
-            if(!useGrad) {
+            /*if(!useGrad) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
-            }
+            }*/
             var strokeWidth = 1
             if(!placeMatRequest.fill) {
-                grad = "none"
+                //grad = "none"
                 strokeWidth = 5
             }
             if(placeMatRequest.useDark && !placeMatRequest.fill ) {
@@ -79,7 +79,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 textColor = "#fcfcfc"
             }
             val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" fill="$textColor" y="${lines.second}" text-anchor="middle" class="filtered glass boxText">""")
+            val str = StringBuilder("""<text x="135" fill="$textColor" y="${lines.second}" text-anchor="middle" class="filtered glass" style="fill:$textColor; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;">""")
             var newLine = false
 
             lines.first.forEachIndexed {
@@ -98,7 +98,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="${grad}" stroke="${placeMatRequest.config.colorFromLegendName(conn.legend).color}" stroke-width='$strokeWidth'/>
+                <rect x="10" y="10" class="shadowed"  width="250" height="90" ry="18" rx="18"  style="fill: ${grad}; stroke: ${placeMatRequest.config.colorFromLegendName(conn.legend).color};stroke-width: $strokeWidth;"/>
                 $str
             """.trimIndent()
                 )
