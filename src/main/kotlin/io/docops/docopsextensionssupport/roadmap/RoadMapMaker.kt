@@ -18,7 +18,6 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradientsKeys
-import io.docops.docopsextensionssupport.diagram.defLineGradMap
 import io.docops.docopsextensionssupport.scorecard.generateRectPathData
 import java.io.File
 
@@ -121,17 +120,17 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         }
         sb.append(
             """
-        <text x="105" y="100" class="now">NOW</text>
-        <text x="324.5" y="100" class="next" text-anchor="middle">NEXT</text>
-        <text x="534.5" y="100" class="later" text-anchor="middle">LATER</text>
+        <text x="105" y="100"  style="fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold;">NOW</text>
+        <text x="324.5" y="100"  text-anchor="middle" style="fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold;">NEXT</text>
+        <text x="534.5" y="100"  text-anchor="middle" style="fill: #FA1E0E; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; text-anchor: middle; font-weight: bold;">LATER</text>
         <rect x="0" y="0" stroke-width="0" fill="${roadMapTheme.paperColor()}"  height="80" width="662" opacity="1.0"/>
-        <text x="331" y="60" font-family=" Arial, Helvetica, sans-serif" font-size="24" fill="${roadMapTheme.titleColor()}" text-anchor="middle" font-variant="small-caps">${title.escapeXml()}</text> 
+        <text x="331" y="60" style="font-family:Arial, Helvetica, sans-serif; font-size:24; fill:${roadMapTheme.titleColor()}; text-anchor:middle; font-variant:small-caps;">${title.escapeXml()}</text> 
         """.trimIndent()
         )
         if (roadmaps.done.isNotEmpty()) {
             sb.append(
                 """
-                <text x="331" y="${head.second + 20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" class="doneTitle" fill="${roadMapTheme.titleColor()}" text-anchor="middle">COMPLETED</text> 
+                <text x="331" y="${head.second + 20}" font-family=" Arial, Helvetica, sans-serif" font-size="20" fill="${roadMapTheme.titleColor()}" text-anchor="middle" style="fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold;">COMPLETED</text> 
             """.trimIndent()
             )
             sb.append(doDone(done = roadmaps.done, numChars = numChars, roadmaps = roadmaps, startingY = head.second))
@@ -173,9 +172,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     }
                 }
                 if (index == 0) {
-                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="0" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2;"/>""")
                     sb.append("""<g transform="translate(0,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
-                    var text = """<text x="2" y="2" class="doneRoad" fill="#421A56">"""
+                    var text = """<text x="2" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0;">"""
                     text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
@@ -188,9 +187,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     sb.append(text)
                 }
                 if (index == 1) {
-                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="210" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; "/>""")
                     sb.append("""<g transform="translate(210,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
-                    var text = """<text x="212" y="2" class="doneRoad" fill="#421A56">"""
+                    var text = """<text x="212" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0;">"""
                     text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
@@ -203,9 +202,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     sb.append(text)
                 }
                 if (index == 2) {
-                    sb.append("""<rect x="420" y="0" fill="#fcfcfc" class="doneBox" height="120" width="184" rx="5" ry="5"/>""")
+                    sb.append("""<rect x="420" y="0" fill="#fcfcfc"  height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; "/>""")
                     sb.append("""<g transform="translate(420,0)"><path d="$boxTitle" fill="#3559E0"/></g>""")
-                    var text = """<text x="422" y="2" class="doneRoad" fill="#421A56">"""
+                    var text = """<text x="422" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0;">"""
                     text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
@@ -249,12 +248,12 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             inc = 20
         }
         val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1) + (inc * index)})">""")
-        val now = """<rect x="0" y="0" fill="#fcfcfc" class="nowBox" height="120" width="184" rx="5" ry="5"/>"""
+        val now = """<rect x="0" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2;"/>"""
         val boxTitle = generateRectPathData(184f, 18f,5f,5f,0f,0f)
         val nowTitle = """<path d="$boxTitle"  fill="#0D9276"/>"""
-        val next = """<rect x="210" y="0" fill="#fcfcfc" class="nextBox" height="120" width="184" rx="5" ry="5"/>"""
+        val next = """<rect x="210" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; "/>"""
         val nextTitle = """<g transform="translate(210,0)"><path d="$boxTitle" fill="#D63484"/></g>"""
-        val later = """<rect x="420" y="0" fill="#fcfcfc" class="laterBox" height="120" width="184" rx="5" ry="5"/>"""
+        val later = """<rect x="420" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; stroke-width: 2; text-anchor: middle; font-weight: bold; "/>"""
         val laterTitle = """<g transform="translate(420,0)"><path d="$boxTitle"  fill="#FA1E0E"/></g>"""
         if (roadmaps.now.size - 1 >= index) {
             sb.append(now)
@@ -267,7 +266,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     t = "&#xa0;"
                 }
             }
-            var text = """<text x="2" y="2" class="primaryRoad" fill="#421A56">"""
+            var text = """<text x="2" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; ">"""
             text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()),
@@ -289,7 +288,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     t = "&#xa0;"
                 }
             }
-            var text = """<text x="212" y="2" class="secondaryRoad">"""
+            var text = """<text x="212" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484;">"""
             text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()),
@@ -321,7 +320,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     t = "&#xa0;"
                 }
             }
-            var text = """<text x="422" y="2" class="tertiaryRoad">"""
+            var text = """<text x="422" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #FA1E0E;">"""
             text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
                 wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()),
@@ -356,25 +355,9 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
     //language=html
     private fun defs() = """
         <defs>
-        <style>
-        .now { fill: #0D9276; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276; text-anchor: middle; font-weight: bold; }
-        .nowBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2; }
-        .next { fill: #D63484; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; text-anchor: middle; font-weight: bold;}
-        .nextBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; }
-        .later { fill: #FA1E0E; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; text-anchor: middle; font-weight: bold; }
-        .laterBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #FA1E0E; stroke-width: 2; text-anchor: middle; font-weight: bold; }
-        .doneBox { fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #3559E0; stroke-width: 2; }
-        .primaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; }
-        .secondaryRoad{ font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484; }
-        .tertiaryRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #FA1E0E; }
-        .doneRoad { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #3559E0; }
-        .doneTitle { fill: #4076ff; font-family: Arial, Helvetica, sans-serif; stroke: #4076ff;  font-weight: bold; }
-        .rmLink { fill: blue; text-decoration: underline; }
-    </style>
-    <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
-    </defs>
+            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="5"/>
+        </defs>
     """.trimIndent()
-
 }
 
 
@@ -406,7 +389,7 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
             val matches = regex.findAll(input)
             matches.forEach {
                 val output = urlMap["[[${it.value}]]"]
-                val url = """<a xlink:href="$output" target="_blank" class="rmLink">${it.value}</a>"""
+                val url = """<a xlink:href="$output" target="_blank" style="fill: blue; text-decoration: underline;">${it.value}</a>"""
                 line = input.replace("[[${it.value}]]", url)
             }
         }
