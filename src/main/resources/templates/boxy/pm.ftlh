@@ -17,7 +17,7 @@
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/placemat/" data-hx-target="#contentBox">
 {
   "title": "Observability",
-  "scale": 0.8,
+  "scale": 1.0,
   "placeMats": [
     {
       "name": "Audit",
@@ -77,19 +77,19 @@
     "style": "font-size: 1em;",
     "legend": [
       {
-        "color": "#b7b7a4",
+        "color": "#FF5BAE",
         "legend": "Business Capability",
-        "style":"fill:#111"
+        "style":"fill:#fcfcfc"
       },
       {
-        "color": "#c77dff",
+        "color": "#003b6b",
         "legend": "Engineering",
-        "style":"fill:#111"
+        "style":"fill:#fcfcfc"
       },
       {
-        "color": "#98c1d9",
+        "color": "#C40C0C",
         "legend": "Both",
-        "style":"fill:#111"
+        "style":"fill:#fcfcfc"
       }
     ]
   }
