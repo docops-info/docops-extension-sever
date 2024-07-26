@@ -73,7 +73,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             }
             var imageOrLabel = """
             <rect x="10" y="10" height="98" width="98"
-                                  class="mybox shape btn_${button.id}_cls" rx="18" ry="18" fill="#45618E"/>
+                                  class="mybox shape btn_${button.id}_cls" rx="18" ry="18" fill="${button.color}"/>
             <g class="glass" transform="translate(10,10)">
            
             <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
@@ -127,7 +127,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
                     linkElement = link.label.escapeXml()
                 }
                 sb.append("""
-            <tspan x="115" dy="14">
+            <tspan x="115" dy="14" style="$style">
                 $linkElement
             </tspan>
                 """.trimIndent())
