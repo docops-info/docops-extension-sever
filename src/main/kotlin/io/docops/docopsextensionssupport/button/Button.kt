@@ -117,6 +117,7 @@ enum class ButtonType {
     RECTANGLE,
     REGULAR,
     ROUND,
+    CIRCLE,
     SLIM
 }
 
@@ -365,6 +366,9 @@ class Buttons(
 
             ButtonType.ROUND -> {
                 Round(this)
+            }
+            ButtonType.CIRCLE -> {
+                Circle(this)
             }
 
             ButtonType.SLIM -> {

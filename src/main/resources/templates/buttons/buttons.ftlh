@@ -2,6 +2,7 @@
 <div role="tablist" class="tabs tabs-boxed">
     <a role="tab" class="tab btnMenu REGULAR" hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#buttonTarget"><i class="fad fa-tablet-button text-xs mr-2"></i> Regular</a>
     <a role="tab" class="tab btnMenu ROUND" hx-get="button/fromJson.html?type=ROUND" data-hx-target="#buttonTarget"><i class="fad fa-circle text-xs mr-2"></i> Round</a>
+    <a role="tab" class="tab btnMenu CIRCLE" hx-get="button/fromJson.html?type=CIRCLE" data-hx-target="#buttonTarget"><i class="fad fa-circle text-xs mr-2"></i> Circle</a>
     <a role="tab" class="tab btnMenu LARGE" hx-get="button/fromJson.html?type=LARGE" data-hx-target="#buttonTarget"><i class="fad fa-square text-xs mr-2"></i> Large</a>
     <a role="tab" class="tab btnMenu PILL" hx-get="button/fromJson.html?type=PILL" data-hx-target="#buttonTarget"><i class="fad fa-pills text-xs mr-2"></i> Pill</a>
     <a role="tab" class="tab btnMenu RECTANGLE" hx-get="button/fromJson.html?type=RECTANGLE" data-hx-target="#buttonTarget"><i class="fad fa-rectangle-wide text-xs mr-2"></i> Rectangle</a>
