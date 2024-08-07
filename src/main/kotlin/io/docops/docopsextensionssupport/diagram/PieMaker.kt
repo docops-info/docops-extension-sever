@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import java.io.File
 
 class PieMaker {
@@ -23,39 +24,31 @@ class PieMaker {
         }
         sb.append(tail())
 
-        return sb.toString()
+        return joinXmlLines(sb.toString())
     }
 
     private fun makeHead(width: Int, pies: Pies) : String {
-        println(pies.maxRows())
         val height = pies.maxRows() * 10 + 40
-        return """<svg xmlns="http://www.w3.org/2000/svg"
-     width="$width" height="$height" viewBox="0 0 $width $height">"""
+        return """<svg xmlns="http://www.w3.org/2000/svg" height="192" width="256" viewBox="0 0 $width $height">
+            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">"""
     }
 
-    private fun tail() = """</svg>"""
+    private fun tail() = """</svg></svg>"""
     private fun makePieSvg(pie: Pie) : String {
         //language=svg
         return """
         <svg width="36" height="36"  style="display: block;margin: 10px auto; max-width: 80%; max-height: 250px;">
-        <path
-              d="M18 2.0845
-          a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none;stroke: url(#pieGrad);stroke-width: 3.8;"
+        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none;stroke: url(#pieGrad);stroke-width: 3.8;"
         />
-        <path
-              stroke-dasharray="${pie.percent}, 100"
-              d="M18 2.0845
-          a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#pieGrad1)" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards;"
+        <path stroke-dasharray="${pie.percent}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#pieGrad1)" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards;"
         />
-        <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;fill: fill: #9cdefc;">${pie.percent}%</text>
+        <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle; fill: #9cdefc;">${pie.percent}%</text>
     </svg>
         """.trimIndent()
     }
     private fun makeLabel(pie: Pie): String {
         val sb = StringBuilder()
-        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;stroke: url(#pieGrad0); ">""")
+        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { index, s ->
             var dy = "10"
@@ -63,7 +56,7 @@ class PieMaker {
                 dy = "0"
             }
             sb.append( """
-            <tspan x="18" dy="$dy">${s.escapeXml()}</tspan>
+            <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif;">${s.escapeXml()}</tspan>
         """.trimIndent())
         }
         sb.append("</text>")
