@@ -48,7 +48,7 @@ class BadgeHandler {
                         message = message,
                         labelColor = color,
                         messageColor = mcolor,
-                        url = split[1],
+                        url = split[2],
                         logo = logo,
                         fontColor = fontColor,
                         isPdf = isPdf
