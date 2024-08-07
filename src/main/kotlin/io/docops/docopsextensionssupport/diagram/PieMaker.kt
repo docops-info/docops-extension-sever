@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.asciidoc.utils.escapeXml
 import java.io.File
 
 class PieMaker {
@@ -40,13 +41,13 @@ class PieMaker {
         <path
               d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none;stroke: #050C9C;stroke-width: 3.8;"
+          a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none;stroke: url(#pieGrad);stroke-width: 3.8;"
         />
         <path
               stroke-dasharray="${pie.percent}, 100"
               d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
-          a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#pieGrad)" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards;"
+          a 15.9155 15.9155 0 0 1 0 -31.831" stroke="url(#pieGrad1)" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards;"
         />
         <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;fill: fill: #9cdefc;">${pie.percent}%</text>
     </svg>
@@ -54,7 +55,7 @@ class PieMaker {
     }
     private fun makeLabel(pie: Pie): String {
         val sb = StringBuilder()
-        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;stroke: url(#pieGrad0); font-variant: small-caps;">""")
+        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;stroke: url(#pieGrad0); ">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { index, s ->
             var dy = "10"
@@ -62,7 +63,7 @@ class PieMaker {
                 dy = "0"
             }
             sb.append( """
-            <tspan x="18" dy="$dy">$s</tspan>
+            <tspan x="18" dy="$dy">${s.escapeXml()}</tspan>
         """.trimIndent())
         }
         sb.append("</text>")
@@ -75,6 +76,10 @@ class PieMaker {
                 <stop class="stop2" offset="50%" stop-color="#6bcefa"/>
                 <stop class="stop3" offset="100%" stop-color="#3ABEF9"/>
             </linearGradient>
+            <linearGradient id="pieGrad1" x2="0%" y2="100%">
+            <stop class="stop2" offset="50%" stop-color="#4348b4"/>
+            <stop class="stop3" offset="100%" stop-color="#050C9C"/>
+        </linearGradient>
         """.trimIndent()
     }
 }
