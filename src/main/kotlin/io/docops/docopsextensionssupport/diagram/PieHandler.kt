@@ -17,7 +17,7 @@ class PieHandler {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val calMaker = PieMaker()
         val pies = Json.decodeFromString<Pies>(data)
-        val svg = calMaker.makePies(pies.pies)
+        val svg = calMaker.makePies(pies)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
