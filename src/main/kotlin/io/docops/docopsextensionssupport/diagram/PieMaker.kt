@@ -48,12 +48,12 @@ class PieMaker {
     }
     private fun makeLabel(pie: Pie): String {
         val sb = StringBuilder()
-        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle;">""")
+        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.3em;text-anchor: middle;">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { index, s ->
-            var dy = "10"
+            var dy = 6
             if(0 == index) {
-                dy = "0"
+                dy = 0
             }
             sb.append( """
             <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif;">${s.escapeXml()}</tspan>
