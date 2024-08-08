@@ -313,6 +313,20 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun draw(model: Model): String {
         return "boxy/draw"
     }
+    @GetMapping("/pie.html")
+    @Counted
+    @Timed(value = "pie.draw")
+    fun pie(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "pie"}}""")
+        return "boxy/pie"
+    }
+    @GetMapping("/cal.html")
+    @Counted
+    @Timed(value = "cal.draw")
+    fun cal(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "cal"}}""")
+        return "boxy/cal"
+    }
     @GetMapping("/release.html")
     @Counted
     @Timed(value = "docops.release")
