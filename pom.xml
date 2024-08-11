@@ -35,9 +35,9 @@
         <kotlin.version>2.0.0</kotlin.version>
         <serialization.version>1.6.2</serialization.version>
         <docops-button-render.version>2023.20</docops-button-render.version>
-        <asciidoctorj-docops-panel.version>2023.37</asciidoctorj-docops-panel.version>
+        <asciidoctorj-docops-panel.version>2024.00</asciidoctorj-docops-panel.version>
 
-
+        <dokka.version>1.9.20</dokka.version>
         <maven-shared-utlis.version>3.3.4</maven-shared-utlis.version>
         <maven-source.version>3.2.1</maven-source.version>
         <maven-compiler.version>3.10.1</maven-compiler.version>
@@ -310,6 +310,19 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>dokka</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
