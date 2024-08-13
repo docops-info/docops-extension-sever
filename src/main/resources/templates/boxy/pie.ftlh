@@ -10,32 +10,24 @@
 {
   "pies": [
 {
-      "percent": 19,
-      "label": "Sales Training"
+      "percent": 40
+      "label": "Mathematics"
     },
     {
-      "percent": 25,
-      "label": "Conventions"
-    },
-
-    {
-      "percent": 18.0,
-      "label": "Publications"
+      "percent": 20,
+      "label": "English"
     },
     {
-      "percent": 12.0,
-      "label": "Print Advertising"
+      "percent": 30,
+      "label": "French"
     },
     {
-      "percent": 17.0,
-      "label": "Catalogues"
-    },
-    {
-      "percent": 10.0,
-      "label": "Online Advertising"
+      "percent": 10,
+      "label": "Science"
     }
-  ]
+  ], "pieDisplay": {"baseColor":  "#03346E", "outlineColor" : "#FF204E"}
 }
+
             </textarea>
         </div>
         <div class="flex flex-col">
