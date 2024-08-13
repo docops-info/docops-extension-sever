@@ -4,9 +4,13 @@ import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
-class Pie (val percent: Float, val label: String = "", val color: String = "#E14D2A")
+class Pie (val percent: Float, val label: String = "")
+
 @Serializable
-data class Pies(val pies: MutableList<Pie>)
+class PieDisplay(val baseColor: String= "#3ABEF9", val outlineColor: String= "#050C9C")
+
+@Serializable
+data class Pies(val pies: MutableList<Pie>, val pieDisplay: PieDisplay = PieDisplay())
 
 fun Pies.maxRows() : Int {
     var maxRows = 1
