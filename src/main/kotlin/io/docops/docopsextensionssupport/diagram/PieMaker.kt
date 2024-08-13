@@ -30,7 +30,9 @@ class PieMaker {
 
     private fun makeHead(width: Int, pies: Pies) : String {
         val height = pies.maxRows() * 10 + 40
-        return """<svg xmlns="http://www.w3.org/2000/svg" height="192" width="256" viewBox="0 0 $width $height">
+        val outerHeight = (1+pies.pieDisplay.scale) * height
+        val outerWidth = (1+pies.pieDisplay.scale) * width
+        return """<svg xmlns="http://www.w3.org/2000/svg" height="$outerHeight" width="$outerWidth" viewBox="0 0 $width $height">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">"""
     }
 
@@ -43,13 +45,13 @@ class PieMaker {
         />
         <path stroke-dasharray="${pie.percent}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="${display.outlineColor}" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards; filter: url(#Bevel3);"
         />
-        <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 0.5em;text-anchor: middle; fill: ${display.outlineColor};">${pie.percent}%</text>
+        <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 7px;text-anchor: middle; fill: ${display.outlineColor};">${pie.percent}%</text>
     </svg>
         """.trimIndent()
     }
     private fun makeLabel(pie: Pie): String {
         val sb = StringBuilder()
-        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 0.3em;text-anchor: middle;">""")
+        sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 6px;text-anchor: middle;">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { index, s ->
             var dy = 6
@@ -89,7 +91,7 @@ class PieMaker {
 fun main() {
     val pieMaker = PieMaker()
     val pies = mutableListOf<Pie>(Pie(40f, "Mathematics"), Pie(20f, "English"), Pie(30f, "French"), Pie(10f, "Science"))
-    val svg = pieMaker.makePies(Pies(pies, PieDisplay(baseColor = "#C5FF95", outlineColor = "#088395")))
+    val svg = pieMaker.makePies(Pies(pies, PieDisplay(baseColor = "#C5FF95", outlineColor = "#088395", scale = 1.5f)))
     val outfile2 = File("gen/pies.svg")
     outfile2.writeBytes(svg.toByteArray())
 }
