@@ -20,7 +20,7 @@ class PieMaker {
             val x = index * 36
             sb.append("""<g transform="translate($x,0)">""")
             sb.append(makePieSvg(pie, pies.pieDisplay))
-            sb.append(makeLabel(pie))
+            sb.append(makeLabel(pie, pies.pieDisplay))
             sb.append("</g>")
         }
         sb.append(tail())
@@ -32,12 +32,19 @@ class PieMaker {
         val height = pies.maxRows() * 10 + 40
         val outerHeight = (1+pies.pieDisplay.scale) * height
         val outerWidth = (1+pies.pieDisplay.scale) * width
+        var backgroundColor = ""
+        if(pies.pieDisplay.useDark) {
+            backgroundColor = """<rect width="100%" height="100%" fill="#1B1A55"/>"""
+        }
         return """<svg xmlns="http://www.w3.org/2000/svg" height="$outerHeight" width="$outerWidth" viewBox="0 0 $width $height">
-            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">"""
+            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">
+            $backgroundColor
+            """
     }
 
     private fun tail() = """</svg></svg>"""
     private fun makePieSvg(pie: Pie, display: PieDisplay) : String {
+
         //language=svg
         return """
         <svg width="36" height="36"  style="display: block;margin: 10px auto; max-width: 80%; max-height: 250px;">
@@ -49,7 +56,11 @@ class PieMaker {
     </svg>
         """.trimIndent()
     }
-    private fun makeLabel(pie: Pie): String {
+    private fun makeLabel(pie: Pie, display: PieDisplay): String {
+        var fill = "#111111"
+        if(display.useDark) {
+            fill = "#B6FFFA"
+        }
         val sb = StringBuilder()
         sb.append("""<text x="18" y="48"  style="font-family: Arial, Helvetica,sans-serif;font-size: 6px;text-anchor: middle;">""")
         val labels = pie.label.split(" ")
@@ -59,7 +70,7 @@ class PieMaker {
                 dy = 0
             }
             sb.append( """
-            <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif;">${s.escapeXml()}</tspan>
+            <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif; fill: $fill;">${s.escapeXml()}</tspan>
         """.trimIndent())
         }
         sb.append("</text>")
@@ -91,7 +102,7 @@ class PieMaker {
 fun main() {
     val pieMaker = PieMaker()
     val pies = mutableListOf<Pie>(Pie(40f, "Mathematics"), Pie(20f, "English"), Pie(30f, "French"), Pie(10f, "Science"))
-    val svg = pieMaker.makePies(Pies(pies, PieDisplay(baseColor = "#C5FF95", outlineColor = "#088395", scale = 1.5f)))
+    val svg = pieMaker.makePies(Pies(pies, PieDisplay(baseColor = "#B9B4C7", outlineColor = "#DA0C81", scale = 2f, useDark = false)))
     val outfile2 = File("gen/pies.svg")
     outfile2.writeBytes(svg.toByteArray())
 }

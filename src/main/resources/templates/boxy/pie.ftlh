@@ -25,7 +25,7 @@
       "percent": 10,
       "label": "Science"
     }
-  ], "pieDisplay": {"baseColor":  "#03346E", "outlineColor" : "#FF204E"}
+  ], "pieDisplay": {"baseColor":  "#B9B4C7", "outlineColor" : "#DA0C81", "useDark": false, "scale": 4}
 }
 
             </textarea>
