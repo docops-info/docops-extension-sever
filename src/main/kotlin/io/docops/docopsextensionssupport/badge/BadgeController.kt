@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
@@ -299,6 +300,28 @@ $txt
         return hw.second.toFloat()
     }
 
+    @GetMapping("/badge")
+    fun  getFormBadge(
+    @RequestParam  label: String,
+    @RequestParam  message: String,
+    @RequestParam(required = false)  url: String? = null,
+    @RequestParam(required = false)  labelColor: String? = "#3C3D37",
+    @RequestParam(required = false)  messageColor: String? = "#982B1C",
+    @RequestParam(required = false) logo: String? = null,
+    @RequestParam(defaultValue = "#fcfcfc") fontColor: String): ResponseEntity<ByteArray> {
+        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(mutableListOf(Badge(label = label, message = message, url= url, labelColor = labelColor, messageColor = messageColor, logo = logo, fontColor = fontColor)))
+        val svg = StringBuilder()
+        //language=svg
+        svg.append("""
+            <svg width='${svgSrc.second}' height='20' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
+        """.trimIndent())
+        svg.append(svgSrc.first)
+        svg.append("</svg>")
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+        return ResponseEntity(joinXmlLines(svg.toString()).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
 }
 
 fun unescape(text: String): String {

@@ -53,10 +53,14 @@ class DocOpsBadgeGenerator {
             val messageWidth = measureText(badge.message) * 100.0F
             var labelLink = label
             var messageLink = message
-            if (badge.url.isNotEmpty() && !badge.isPdf) {
-                labelLink = """<a href='${badge.url}'>$label</a>"""
-                messageLink = """<a href='${badge.url}'>$message</a>"""
+            badge.url?.let {
+                if(it.isNotEmpty() && !badge.isPdf) {
+                    labelLink = """<a href='${badge.url}'>$label</a>"""
+                    messageLink = """<a href='${badge.url}'>$message</a>"""
+                }
             }
+
+
             var startX = 50
             var textWidth = 0
             var img = ""
@@ -140,9 +144,7 @@ class DocOpsBadgeGenerator {
             <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
             """
         //language=svg
-        return """
-            <svg width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200' 
-            xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message'>
+        return """<svg xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message' width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200'  >
              <title>$label: $message</title>
             $mask
             <g text-anchor='start' font-family='Arial,sans-serif' font-size='110'>
@@ -172,8 +174,7 @@ class DocOpsBadgeGenerator {
     ): String {
         //language=SVG
         return """
-            <svg width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200' 
-            xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message'>
+            <svg width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200'  xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message'>
              <title>$label: $message</title>
              <defs>
                 <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
@@ -207,8 +208,7 @@ class DocOpsBadgeGenerator {
             </linearGradient>
             $grad
             $mask
-            <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif'
-               font-size='110' filter='$filterText'>
+            <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif' font-size='110' filter='$filterText'>
                 <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$labelLink</text>
                 <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$messageLink</text>
             </g>

@@ -19,7 +19,7 @@ package io.docops.docopsextensionssupport.badge
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Badge(val  label:String, val message: String, val  url: String, val labelColor: String?, val messageColor: String?, val logo: String?, val fontColor: String = "#fcfcfc", val isPdf: Boolean = false)
+class Badge(val  label:String, val message: String, val  url: String?, val labelColor: String?, val messageColor: String?, val logo: String?, val fontColor: String = "#fcfcfc", val isPdf: Boolean = false)
 
 @Serializable
 class FormBadge(val label:String, val message: String, val  url: String, val labelColor: String?, val messageColor: String?, val logo: String?, val fontColor: String = "#fcfcfc")
