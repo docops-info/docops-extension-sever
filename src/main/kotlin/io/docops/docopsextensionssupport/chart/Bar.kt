@@ -1,15 +1,16 @@
 package io.docops.docopsextensionssupport.chart
 
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 @Serializable
 class Bar(val title: String, val yLabel: String? = "", val xLabel: String? = "", val series: MutableList<Series>, val display: BarDisplay = BarDisplay())
 
 @Serializable
-class Series(val label: String? = "", val value: Float)
+class Series(val label: String? = "", val value: Float, val itemDisplay: BarDisplay? = null)
 
 @Serializable
-class BarDisplay(val showGrid: Boolean = true, val baseColor: String = "#FE7A36", val barFontColor: String = "#111111")
+class BarDisplay(val id: String = UUID.randomUUID().toString(), val showGrid: Boolean = true, val baseColor: String = "#FE7A36", val barFontColor: String = "#111111")
 
 fun Bar.seriesTotal(): Float {
     var sum = 0.0f

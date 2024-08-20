@@ -320,6 +320,15 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         response.addHeader("HX-Trigger", """{"button-click": {"element": "pie"}}""")
         return "boxy/pie"
     }
+
+    @GetMapping("/bar.html")
+    @Counted
+    @Timed(value = "bar.draw")
+    fun bar(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "bar"}}""")
+        return "boxy/bar"
+    }
+
     @GetMapping("/cal.html")
     @Counted
     @Timed(value = "cal.draw")
