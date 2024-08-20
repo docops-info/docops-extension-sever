@@ -8,26 +8,45 @@
             <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/barchart/" data-hx-target="#contentBox">
 {
-"title": "Show Me the Money",
-"yLabel": "Number of Sales",
-"xLabel": "Month",
-"series": [
-{"label": "Jan", "value":5000},
-{"label": "Feb", "value":7000},
-{"label": "Mar", "value":4000},
-{"label": "Apr", "value":15000},
-{"label": "May", "value":5700},
-{"label": "Jun", "value":6400},
-{"label": "Jul", "value":8322},
-{"label": "Aug", "value":4400},
-{"label": "Sept", "value":4520},
-{"label": "Oct", "value":3200},
-{"label": "November", "value":5025},
-{"label": "December", "value":6000}
-],
-"display": {"showGrid": true, "baseColor": "#B80000", "barFontColor": "#fcfcfc"}
+  "title": "Favorite Type of Movies",
+  "yLabel": "People",
+  "xLabel": "Movie Type",
+  "series": [
+    {
+      "label": "Comedy",
+      "value": 4,
+      "itemDisplay": {
+        "baseColor": "#5FBDFF",
+        "barFontColor": "#fcfcfc"
+      }
+    },
+    {
+      "label": "Action",
+      "value": 4
+    },
+    {
+      "label": "Romance",
+      "value": 6
+    },
+    {
+      "label": "Drama",
+      "value": 1,
+      "itemDisplay": {
+        "baseColor": "#B931FC",
+        "barFontColor": "#111111"
+      }
+    },
+    {
+      "label": "SciFi",
+      "value": 4
+    }
+  ],
+  "display": {
+    "showGrid": true,
+    "baseColor": "#C21292",
+    "barFontColor": "#fcfcfc"
+  }
 }
-
             </textarea>
         </div>
         <div class="flex flex-col">
