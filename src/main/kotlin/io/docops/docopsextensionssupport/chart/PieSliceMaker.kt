@@ -6,6 +6,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import kotlin.math.PI
 
 class PieSliceMaker {
 
@@ -101,6 +102,8 @@ class PieSliceMaker {
             <defs/>
         """.trimIndent()
     }
+    fun arc(cummulative: Double, sum: Double) = 2 * PI * (cummulative /sum)
+
 }
 
 fun main() {
