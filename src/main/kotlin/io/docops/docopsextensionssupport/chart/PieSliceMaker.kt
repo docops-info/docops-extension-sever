@@ -105,6 +105,11 @@ class PieSliceMaker {
     fun arc(cummulative: Double, sum: Double) = 2 * PI * (cummulative /sum)
 
 }
+fun Double.round(decimals: Int): Double {
+    var multiplier = 1.0
+    repeat(decimals) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
+}
 
 fun main() {
     val maker= PieSliceMaker()
