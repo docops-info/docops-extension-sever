@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.badge.BadgeHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
+import io.docops.docopsextensionssupport.chart.PieSliceHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PieHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
@@ -135,6 +136,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("pie".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = PieHandler()
+                handler.handleSVG(payload=payload)
+            }
+            log.info("pie handler executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
+        else if("pieslice".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = PieSliceHandler()
                 handler.handleSVG(payload=payload)
             }
             log.info("pie handler executed in ${timing.duration.inWholeMilliseconds}ms")

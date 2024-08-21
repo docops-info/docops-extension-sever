@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.chart
 
-
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -17,20 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import kotlin.time.measureTimedValue
 
-@Controller
-@RequestMapping("/api/barchart")
-class BarController {
-    private val log = LogFactory.getLog(BarController::class.java)
+@Controller()
+@RequestMapping("/api/pieslice")
+class PieSliceController {
+    private val log = LogFactory.getLog(PieSliceController::class.java)
+
     @PutMapping("/")
     @ResponseBody
-    @Counted(value="docops.boxy.put", description="Creating a Button using http put")
-    @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
-    fun makePieChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
+    @Counted(value = "docops.boxy.put", description = "Creating a Button using http put")
+    @Timed(value = "docops.boxy.put", description = "Creating a Button using http put", percentiles = [0.5, 0.9])
+    fun makePieChart(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             var contents = httpServletRequest.getParameter("content")
-            val barMaker = BarMaker()
-            val bars = Json.decodeFromString<Bar>(contents)
-            val svg = barMaker.makeBar(bars)
+            val maker = PieSliceMaker()
+            val slices = Json.decodeFromString<PieSlices>(contents)
+            val svg = maker.makePie(slices)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -71,7 +71,7 @@ class BarController {
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
+        log.info("make pie slices executed in ${timings.duration.inWholeMilliseconds}ms ")
         return timings.value
     }
 }
