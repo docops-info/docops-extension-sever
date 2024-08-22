@@ -44,10 +44,22 @@ class BarMaker {
             displayGradId = barData.itemDisplay.id
             fontColor = barData.itemDisplay.barFontColor
         }
+        var labelY = 0
+        var shape = ""
+        when (bar.display.type) {
+            "C" -> {
+                labelY = 18
+                shape = """<path class="bar" d="M 0,6 a 20,6 0,0,0 40 0 a 20,6 0,0,0 -40 0 l 0,$per a 20,6 0,0,0 40 0 l 0,-$per" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)" style="background: conic-gradient(#655 40%, yellowgreen 0);"/>"""
+            }
+            "R" -> {
+                labelY = 26
+                shape = """<rect x="0" y="0" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)"/>"""
+            }
+        }
         return """
             <g transform="translate($startX,$startY) scale(1.2)">
-                <path class="bar" d="M 0,6 a 20,6 0,0,0 40 0 a 20,6 0,0,0 -40 0 l 0,$per a 20,6 0,0,0 40 0 l 0,-$per" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)" style="background: conic-gradient(#655 40%, yellowgreen 0);"/>
-                <text x="$per" y="18" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
+                $shape
+                <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
                 <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
