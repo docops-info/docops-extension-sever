@@ -37,7 +37,7 @@ class BarMaker {
     }
 
     private fun makeBarItem(index: Int, barData: Series, startX: Int, startY: Int, total: Float, bar: Bar): String {
-        val per = bar.weightedPercentage(barData, 512)
+        val per = bar.weightedPercentage(barData, 512) * 1.8
         var displayGradId =  bar.display.id
         var fontColor = bar.display.barFontColor
         if(barData.itemDisplay != null) {
@@ -45,7 +45,7 @@ class BarMaker {
             fontColor = barData.itemDisplay.barFontColor
         }
         return """
-            <g transform="translate($startX,$startY)">
+            <g transform="translate($startX,$startY) scale(1.2)">
                 <path class="bar" d="M 0,6 a 20,6 0,0,0 40 0 a 20,6 0,0,0 -40 0 l 0,$per a 20,6 0,0,0 40 0 l 0,-$per" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)" style="background: conic-gradient(#655 40%, yellowgreen 0);"/>
                 <text x="$per" y="18" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
                 <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
@@ -74,9 +74,33 @@ class BarMaker {
         </g>"""
     }
     private fun addTitle(bar: Bar) = """<text x="256" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: #111111;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
-    private fun addGrid(bar: Bar) = """<rect width="${bar.calcWidth()}" height="540" fill="url(#grid)"/>"""
+    private fun addGrid(bar: Bar) : String
+    {
+        val maxHeight = 540
+        val maxWidth = bar.calcWidth()
+        val maxData = bar.series.maxOf { it.value } + 100
+        val oneUnit = maxHeight / maxData
+        val xGap = maxWidth / (bar.series.size + 1)
+        val yGap = maxHeight / (bar.series.size + 1)
+        var num = xGap
+        var num2 = yGap
+        val elements = StringBuilder()
+        elements.append("""<rect width='100%' height='100%' fill='url(#grad1)' stroke="#aaaaaa" stroke-width="1"/>""")
+        bar.series.forEach {
+            elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
+            elements.append("""<polyline points="0,$num2 $maxWidth,$num2" style="stroke: #aaaaaa"/>""")
+            num += xGap
+            num2 += yGap
+        }
+        return elements.toString()
+    }
     private fun makeDefs(bar: Bar, gradients: String) : String =
          """<defs>
+                 <linearGradient id="grad1" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
+                <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>
+                <stop class="stop3" offset="100%" stop-color="#EEEDEB"/>
+                </linearGradient>
                    $gradients
                     <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/>
