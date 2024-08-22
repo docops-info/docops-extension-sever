@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.badge.BadgeHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
+import io.docops.docopsextensionssupport.chart.LineHandler
 import io.docops.docopsextensionssupport.chart.PieSliceHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PieHandler
@@ -155,6 +156,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 handler.handleSVG(payload=payload)
             }
             log.info("bar handler executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
+        else if("line".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = LineHandler()
+                handler.handleSVG(payload=payload)
+            }
+            log.info("line handler executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)

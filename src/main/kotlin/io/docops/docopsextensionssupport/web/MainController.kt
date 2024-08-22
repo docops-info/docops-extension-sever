@@ -336,6 +336,14 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         return "boxy/bar"
     }
 
+    @GetMapping("/line.html")
+    @Counted
+    @Timed(value = "line.draw")
+    fun line(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "line"}}""")
+        return "boxy/line"
+    }
+
     @GetMapping("/cal.html")
     @Counted
     @Timed(value = "cal.draw")
