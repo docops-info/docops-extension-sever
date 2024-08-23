@@ -36,8 +36,9 @@ class BarMaker {
         """.trimIndent()
     }
 
-    private fun makeBarItem(index: Int, barData: Series, startX: Int, startY: Int, total: Float, bar: Bar): String {
-        val per = bar.weightedPercentage(barData, 512) * 1.8
+    private fun makeBarItem(index: Int, barData: Series, startX: Int, startY: Int, total: Double, bar: Bar): String {
+       // val per = bar.weightedPercentage(barData, 512)
+        val per = bar.scaleUp(barData.value)
         var displayGradId =  bar.display.id
         var fontColor = bar.display.barFontColor
         if(barData.itemDisplay != null) {
@@ -53,11 +54,12 @@ class BarMaker {
             }
             "R" -> {
                 labelY = 26
-                shape = """<rect x="0" y="0" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)"/>"""
+                shape = """<rect class="bar" x="0" y="0" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)"/>"""
             }
         }
+
         return """
-            <g transform="translate($startX,$startY) scale(1.2)">
+            <g transform="translate($startX,$startY)">
                 $shape
                 <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
                 <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
@@ -176,7 +178,7 @@ fun main() {
     val bar = Bar(title = "Berry Picking by Month 2024",
         yLabel = "Number of Sales",
         xLabel = "Month",
-        series = mutableListOf(Series("Jan", 120.0f), Series("Feb", 334.0f)), display = BarDisplay(showGrid = true, baseColor = "#492E87", barFontColor = "#FFFFFF"))
+        series = mutableListOf(Series("Jan", 120.0), Series("Feb", 334.0)), display = BarDisplay(showGrid = true, baseColor = "#492E87", barFontColor = "#FFFFFF"))
     val svg = BarMaker().makeBar(bar)
     val outfile2 = File("gen/bars.svg")
     outfile2.writeBytes(svg.toByteArray())

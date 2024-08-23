@@ -46,7 +46,7 @@ class PieSliceMaker {
             val x = cos(arc) * 100
             val y = sin(arc) * 100
             val path = """
-            <path d = "M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index)};">
+            <path class="pie" d="M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index)};">
             <title>${pieSlice.label} - ${pieSlice.amount}</title>
             </path>
         """.trimIndent()
@@ -99,7 +99,13 @@ class PieSliceMaker {
     private fun makeDefs(pieSlices: PieSlices) : String {
         //language=svg
         return """
-            <defs/>
+            <defs>
+            <style>
+            .pie:hover {
+                filter: grayscale(100%) sepia(100%);
+            }
+            </style>
+            </defs>
         """.trimIndent()
     }
     fun arc(cummulative: Double, sum: Double) = 2 * PI * (cummulative /sum)
