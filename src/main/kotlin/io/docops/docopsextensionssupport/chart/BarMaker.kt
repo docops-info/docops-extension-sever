@@ -62,32 +62,34 @@ class BarMaker {
             <g transform="translate($startX,$startY)">
                 $shape
                 <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
-                <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
+                <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
     }
 
     private fun addGroupStart(bar: Bar) : String {
         var x = 0
-        var innerx = 20
         if(bar.calcWidth() > 512)
         {
             x = 56
-            innerx = 60
         }
          return """<g transform="translate($x,0)">
-            <g transform="translate($innerx,500) rotate(-90) ">
+            <g transform="translate(${bar.innerX()},500) rotate(-90) ">
         """.trimMargin()
     }
     private fun endGroup(bar: Bar) : String {
+        val center = bar.centerWidth()
         val barY = bar.calcLeftPadding() - 15
         return """
             </g>
-            <text x="-300" y="10" style="font-family: Arial,Helvetica, sans-serif; fill: #111111;text-anchor: middle;" transform="translate($barY, 10) rotate(-90)">${bar.yLabel}</text>
-            <text x="220" y="520" style="font-family: Arial,Helvetica, sans-serif; fill: #111111;text-anchor: middle;">${bar.xLabel}</text>
+            <text x="-300" y="${bar.innerX()}" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle;" transform="translate($barY, 10) rotate(-90)">${bar.yLabel}</text>
+            <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle;">${bar.xLabel}</text>
         </g>"""
     }
-    private fun addTitle(bar: Bar) = """<text x="256" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: #111111;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
+    private fun addTitle(bar: Bar): String {
+        val center = bar.centerWidth()
+        return """<text x="$center" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
+    }
     private fun addGrid(bar: Bar) : String
     {
         val maxHeight = 540
@@ -99,7 +101,7 @@ class BarMaker {
         var num = xGap
         var num2 = yGap
         val elements = StringBuilder()
-        elements.append("""<rect width='100%' height='100%' fill='url(#grad1)' stroke="#aaaaaa" stroke-width="1"/>""")
+        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad3)' stroke="#aaaaaa" stroke-width="1"/>""")
         bar.series.forEach {
             elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
             elements.append("""<polyline points="0,$num2 $maxWidth,$num2" style="stroke: #aaaaaa"/>""")
@@ -110,6 +112,11 @@ class BarMaker {
     }
     private fun makeDefs(bar: Bar, gradients: String) : String =
          """<defs>
+             <linearGradient id="backGrad3" x2="0%" y2="100%">
+                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
+                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
+                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
+            </linearGradient>
                  <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
                 <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>

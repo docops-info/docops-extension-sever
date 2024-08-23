@@ -38,9 +38,9 @@ class LineChartMaker {
         return """
             <defs>
              <linearGradient id="backGrad1" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#f1f1f1"/>
-            <stop class="stop2" offset="50%" stop-color="#eaeaea"/>
-            <stop class="stop3" offset="100%" stop-color="#e3e3e3"/>
+                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
+                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
+                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
             </linearGradient>
             <script>
             function showText(id) {

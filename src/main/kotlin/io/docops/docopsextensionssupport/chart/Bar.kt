@@ -32,7 +32,17 @@ fun Bar.calcWidth(): Int {
         32 + (this.series.size * 60)
     }
 }
+fun Bar.centerWidth() = calcWidth() / 2
 
 fun Bar.calcLeftPadding() : Int {
     return (512 - (this.series.size * 60))/2
+}
+
+fun Bar.innerX(): Int {
+    var innerx = 20
+    if(calcWidth() > 512)
+    {
+        innerx = 80
+    }
+    return innerx
 }
