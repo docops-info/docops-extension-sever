@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.apache.catalina.manager.JspHelper.escapeXml
 import java.io.File
+import kotlin.math.max
+import kotlin.math.min
 
 class BarMaker {
 
@@ -15,12 +17,18 @@ class BarMaker {
             sb.append(addGrid(bar = bar))
         }
         sb.append(addGroupStart(bar))
-        var startX: Int = 20
+        var startX: Int = 1
         var startY: Int = bar.calcLeftPadding()
-        var incY = 60
+        var incY = 28
+        var minY = max(0, startY)
+        if(bar.display.type == "C") {
+            incY = 44
+        }
+        bar.ticks()
         bar.series.forEachIndexed { index, barData ->
             sb.append(makeBarItem(index, barData, startX, startY, bar.seriesTotal(), bar))
             startY += incY
+            minY = min(minY, startY)
         }
         sb.append(endGroup(bar))
         sb.append(addTitle(bar))
@@ -61,8 +69,9 @@ class BarMaker {
         return """
             <g transform="translate($startX,$startY)">
                 $shape
+               
                 <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
-                <text x="15" y="12" transform="rotate(90)" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: middle;" >${escapeXml(barData.label)}</text>
+                <text x="10" y="25"  style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: start;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
     }
@@ -82,9 +91,10 @@ class BarMaker {
         val barY = bar.calcLeftPadding() - 15
         return """
             </g>
-            <text x="-300" y="${bar.innerX()}" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle;" transform="translate($barY, 10) rotate(-90)">${bar.yLabel}</text>
-            <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle;">${bar.xLabel}</text>
-        </g>"""
+        </g>
+        <text x="250" y="-10" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: #fcfcfc;text-anchor: middle;" transform="rotate(90)">${bar.yLabel}</text>
+        <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: #fcfcfc;text-anchor: middle;">${bar.xLabel}</text>
+        """
     }
     private fun addTitle(bar: Bar): String {
         val center = bar.centerWidth()
@@ -102,12 +112,29 @@ class BarMaker {
         var num2 = yGap
         val elements = StringBuilder()
         elements.append("""<rect width='100%' height='100%' fill='url(#backGrad3)' stroke="#aaaaaa" stroke-width="1"/>""")
+
+       /* bar.series.forEach {
+            elements.append("""
+                 <line x1="20" x2="30" y1="${it.value}" y2="${it.value}" stroke-width="3" stroke="gold"/>
+            """)
+            //elements.append("""<text x="20" y="${it-5}" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: middle;">${it.toInt()}</text>""")
+        }*/
         bar.series.forEach {
+            val per = bar.scaleUp(it.value)
+            //ticks
+           /* elements.append("""
+                 <line x1="20" x2="30" y1="${500-per}" y2="${500-per}" stroke-width="3" stroke="gold"/>
+                <text x="20" y="${500-per-5}" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: middle;">${it.valueFmt()}</text>
+            """.trimIndent())*/
             elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
             elements.append("""<polyline points="0,$num2 $maxWidth,$num2" style="stroke: #aaaaaa"/>""")
             num += xGap
             num2 += yGap
         }
+        elements.append("""
+            <line x1="30" x2="${bar.calcWidth()}" y1="500" y2="500" stroke="gold" stroke-width="3"/>
+            <line x1="30" x2="30" y1="12" y2="501" stroke="gold" stroke-width="3"/>
+        """.trimIndent())
         return elements.toString()
     }
     private fun makeDefs(bar: Bar, gradients: String) : String =
@@ -185,7 +212,10 @@ fun main() {
     val bar = Bar(title = "Berry Picking by Month 2024",
         yLabel = "Number of Sales",
         xLabel = "Month",
-        series = mutableListOf(Series("Jan", 120.0), Series("Feb", 334.0)), display = BarDisplay(showGrid = true, baseColor = "#492E87", barFontColor = "#FFFFFF"))
+        series = mutableListOf(Series("Jan", 120.0), Series("Feb", 334.0), Series("Mar", 455.0), Series("Apr", 244.0),
+            Series("May", 256.0), Series("Jun", 223.0), Series("Jul", 345.0), Series("Aug", 356.0), Series("Sep", 467.0),
+            Series("Oct", 345.0), Series("Nov", 356.0), Series("Dec", 467.0)),
+        display = BarDisplay(showGrid = true, baseColor = "#492E87", barFontColor = "#FFFFFF"))
     val svg = BarMaker().makeBar(bar)
     val outfile2 = File("gen/bars.svg")
     outfile2.writeBytes(svg.toByteArray())
