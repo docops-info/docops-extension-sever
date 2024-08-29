@@ -19,6 +19,7 @@ class BarGroupDisplay(
     val id: String = UUID.randomUUID().toString(),
     val baseColor: String = "#D988B9",
     val barSeriesFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px; text-anchor:middle",
+    val barSeriesLabelFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px; text-anchor:start;",
     val barFontValueStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:9px;",
     val titleStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:14px; text-anchor:middle",
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:12px; text-anchor:middle",

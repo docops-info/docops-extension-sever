@@ -39,10 +39,12 @@ class BarGroupMaker {
             val per = barGroup.scaleUp(series.value)
             sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" style="stroke: #fcfcfc;"/>""")
             sb.append("""<text x="${counter+4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
+            sb.append("""<text x="-490" y="${counter+15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
             counter += 26.0
         }
         val textX = startX + (added.series.size / 2 * 26.0)
         sb.append("""<text x="$textX" y="512" style="${barGroup.display.barSeriesFontStyle}">${added.label}</text>""")
+
         return sb.toString()
 
     }
@@ -51,10 +53,10 @@ class BarGroupMaker {
         return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}">${barGroup.title}</text>"""
     }
     private fun makeXLabel(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="526" style="${barGroup.display.titleStyle}">${barGroup.xLabel}</text>"""
+        return """<text x="${barGroup.calcWidth()/2}" y="526" style="${barGroup.display.xLabelStyle}">${barGroup.xLabel}</text>"""
     }
     private fun makeYLabel(barGroup: BarGroup): String {
-        return """<text x="-270" y="18" style="${barGroup.display.titleStyle}" transform="rotate(270)">${barGroup.yLabel}</text>"""
+        return """<text x="-270" y="18" style="${barGroup.display.yLabelStyle}" transform="rotate(270)">${barGroup.yLabel}</text>"""
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
@@ -189,7 +191,7 @@ fun createBarGroupTestData(): BarGroup {
         yLabel = "Sales (USD)",
         xLabel = "Quarters",
         groups = mutableListOf(groupA, groupB, groupC),
-        display = BarGroupDisplay(lineColor = "#FFBB5C", baseColor = "#FF6666", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;")
+        display = BarGroupDisplay(lineColor = "#FFBB5C", baseColor = "#e60049", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;")
     )
 
     return barGroup
