@@ -13,6 +13,8 @@ class BarGroupMaker {
         sb.append(makeDefs(makeGradient(barDisplay = barGroup.display)))
         sb.append(addGrid(barGroup))
         sb.append(makeTitle(barGroup))
+        sb.append(makeXLabel(barGroup))
+        sb.append(makeYLabel(barGroup))
         sb.append(makeXLine(barGroup))
         sb.append(makeYLine(barGroup))
         var startX = 40.0
@@ -47,6 +49,12 @@ class BarGroupMaker {
 
     private fun makeTitle(barGroup: BarGroup): String {
         return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}">${barGroup.title}</text>"""
+    }
+    private fun makeXLabel(barGroup: BarGroup): String {
+        return """<text x="${barGroup.calcWidth()/2}" y="526" style="${barGroup.display.titleStyle}">${barGroup.xLabel}</text>"""
+    }
+    private fun makeYLabel(barGroup: BarGroup): String {
+        return """<text x="-270" y="18" style="${barGroup.display.titleStyle}" transform="rotate(270)">${barGroup.yLabel}</text>"""
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {

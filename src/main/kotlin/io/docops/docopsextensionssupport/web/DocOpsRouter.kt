@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.adr.AdrHandler
 import io.docops.docopsextensionssupport.badge.BadgeHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
+import io.docops.docopsextensionssupport.chart.BarGroupHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
 import io.docops.docopsextensionssupport.chart.LineHandler
 import io.docops.docopsextensionssupport.chart.PieSliceHandler
@@ -153,6 +154,14 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("bar".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = BarHandler()
+                handler.handleSVG(payload=payload)
+            }
+            log.info("bar handler executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
+        else if("bargroup".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = BarGroupHandler()
                 handler.handleSVG(payload=payload)
             }
             log.info("bar handler executed in ${timing.duration.inWholeMilliseconds}ms")
