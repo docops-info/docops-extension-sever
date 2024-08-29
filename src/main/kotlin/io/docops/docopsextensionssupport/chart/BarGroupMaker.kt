@@ -39,29 +39,35 @@ class BarGroupMaker {
             val per = barGroup.scaleUp(series.value)
             sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
-                sb.append(
-                    """<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${
-                        barGroup.valueFmt(
-                            series.value
-                        )
-                    }</text>"""
-                )
+                sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
             }
             sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
             counter += 26.0
         }
         val textX = startX + (added.series.size / 2 * 26.0)
-        sb.append("""<text x="$textX" y="512" style="${barGroup.display.barSeriesFontStyle}">${added.label}</text>""")
+        sb.append(makeSeriesLabel(textX, 500.0, added.label, barGroup))
+        //sb.append("""<text x="$textX" y="512" style="${barGroup.display.barSeriesFontStyle}">${added.label}</text>""")
 
         return sb.toString()
 
+    }
+
+    private fun makeSeriesLabel(x: Double, y: Double, label: String, barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}">""")
+        val str = label.split(" ")
+        str.forEachIndexed { index, s ->
+            sb.append("<tspan x='$x' dy='10' style=\"${barGroup.display.barSeriesFontStyle}\">$s</tspan>")
+        }
+        sb.append("</text>")
+        return sb.toString()
     }
 
     private fun makeTitle(barGroup: BarGroup): String {
         return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}">${barGroup.title}</text>"""
     }
     private fun makeXLabel(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="526" style="${barGroup.display.xLabelStyle}">${barGroup.xLabel}</text>"""
+        return """<text x="${barGroup.calcWidth()/2}" y="536" style="${barGroup.display.xLabelStyle}">${barGroup.xLabel}</text>"""
     }
     private fun makeYLabel(barGroup: BarGroup): String {
         return """<text x="-270" y="18" style="${barGroup.display.yLabelStyle}" transform="rotate(270)">${barGroup.yLabel}</text>"""
