@@ -33,8 +33,8 @@ class Group(val label: String, val series: MutableList<Series>)
 
 fun BarGroup.calcWidth(): Int {
     val count = this.groups.sumOf { it.series.size }
-    val sum = count * 24 + 5 + (3 * count)
-    if (sum <= 512) {
+    val sum = count * 24 + 5 + (21 * (count-1))
+    if (sum <= 400) {
         return 512
     }
     return sum

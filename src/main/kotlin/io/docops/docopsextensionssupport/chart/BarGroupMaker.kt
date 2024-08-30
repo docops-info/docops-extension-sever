@@ -24,7 +24,7 @@ class BarGroupMaker {
             startX += group.series.size * 26.0 + 15
             elements.append(added)
         }
-        sb.append("<g transform='translate(${(470 - startX) / 2},0)'>")
+        sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
         sb.append(elements.toString())
         sb.append("</g>")
         sb.append(end())
@@ -181,10 +181,21 @@ fun createBarGroupTestData(): BarGroup {
     val seriesB3 = Series(label = "Product B Q3", value = 7000.0)
     val seriesB4 = Series(label = "Product B Q4", value = 9000.0)
 
-    val seriesC1 = Series(label = "Product B Q1", value = 6000.0)
-    val seriesC2 = Series(label = "Product B Q2", value = 8000.0)
-    val seriesC3 = Series(label = "Product B Q3", value = 7000.0)
-    val seriesC4 = Series(label = "Product B Q4", value = 9000.0)
+    val seriesC1 = Series(label = "Product C Q1", value = 6000.0)
+    val seriesC2 = Series(label = "Product C Q2", value = 8000.0)
+    val seriesC3 = Series(label = "Product C Q3", value = 7000.0)
+    val seriesC4 = Series(label = "Product C Q4", value = 9000.0)
+
+    val seriesD1 = Series(label = "Product D Q1", value = 6000.0)
+    val seriesD2 = Series(label = "Product D Q2", value = 8000.0)
+    val seriesD3 = Series(label = "Product D Q3", value = 7000.0)
+    val seriesD4 = Series(label = "Product D Q4", value = 9000.0)
+
+    val seriesE1 = Series(label = "Product E Q1", value = 6000.0)
+    val seriesE2 = Series(label = "Product E Q2", value = 8000.0)
+    val seriesE3 = Series(label = "Product E Q3", value = 7000.0)
+    val seriesE4 = Series(label = "Product E Q4", value = 9000.0)
+
 
     val groupA = Group(
         label = "Product A",
@@ -200,11 +211,15 @@ fun createBarGroupTestData(): BarGroup {
         label = "Product C",
         series = mutableListOf(seriesC1, seriesC2, seriesC3, seriesC4)
     )
+
+    val groupD = Group(label = "Product D", series = mutableListOf(seriesD1, seriesD2, seriesD3, seriesD4))
+
+    val groupE = Group(label = "Product E", series = mutableListOf(seriesE1, seriesE2, seriesE3, seriesE4))
     val barGroup = BarGroup(
         title = "Annual Product Sales Report",
         yLabel = "Sales (USD)",
         xLabel = "Quarters",
-        groups = mutableListOf(groupA, groupB, groupC),
+        groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
         display = BarGroupDisplay(lineColor = "#FFBB5C", baseColor = "#e60049", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;")
     )
 
