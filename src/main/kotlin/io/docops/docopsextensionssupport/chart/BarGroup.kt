@@ -7,6 +7,7 @@ import kotlin.math.max
 
 @Serializable
 class BarGroup(
+    val id: String = UUID.randomUUID().toString(),
     val title: String,
     val yLabel: String? = "",
     val xLabel: String? = "",

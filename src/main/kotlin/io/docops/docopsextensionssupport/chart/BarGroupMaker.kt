@@ -10,7 +10,7 @@ class BarGroupMaker {
     fun makeBar(barGroup: BarGroup): String {
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
-        sb.append(makeDefs(makeGradient(barDisplay = barGroup.display)))
+        sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup=barGroup))
         sb.append(addGrid(barGroup))
         sb.append(makeTitle(barGroup))
         sb.append(makeXLabel(barGroup))
@@ -91,9 +91,9 @@ class BarGroupMaker {
         """.trimIndent()
     }
 
-    private fun makeDefs(gradients: String): String =
+    private fun makeDefs(gradients: String, barGroup: BarGroup): String =
         """<defs>
-             <linearGradient id="backGrad3" x2="0%" y2="100%">
+             <linearGradient id="backGrad_${barGroup.id}" x2="0%" y2="100%">
                  <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
                 <stop class="stop2" offset="50%" stop-color="#6d727c"/>
                 <stop class="stop3" offset="100%" stop-color="#3d4451"/>
@@ -148,7 +148,7 @@ class BarGroupMaker {
         var num = xGap
         var num2 = yGap
         val elements = StringBuilder()
-        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad3)' stroke="#aaaaaa" stroke-width="1"/>""")
+        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad_${barGroup.id})' stroke="#aaaaaa" stroke-width="1"/>""")
 
         barGroup.maxGroup().series.forEach {
             elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
