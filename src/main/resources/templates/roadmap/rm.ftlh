@@ -22,9 +22,12 @@
             <input type="number" id="index" name="index" data-hx-put="api/roadmap/" data-hx-target="#contentBox"
                    value="26" step="1" max="26" min="0" class="range border rounded-md">
         </div>
+        <div class="flex flex-col col-span-2">
+            <label class="mb-2">DocOps Ascii Macro [docops, roadmap,title="Steve's Work", useDark=false, role=left]</label>
+        </div>
 
     <div class="flex flex-col col-span-2">
-        <label for="content" class="mb-2">JSON</label>
+        <label for="content" class="mb-2">Simple DSL</label>
             <textarea class="textarea textarea-primary" id="content" name="content" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
 - now
 Audit Log Streaming
