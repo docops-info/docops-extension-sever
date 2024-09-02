@@ -351,6 +351,14 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         response.addHeader("HX-Trigger", """{"button-click": {"element": "cal"}}""")
         return "boxy/cal"
     }
+    @GetMapping("/bargroup.html")
+    @Counted
+    @Timed(value = "cal.draw")
+    fun barGroup(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "bargroup"}}""")
+        return "boxy/bargroup"
+    }
+
     @GetMapping("/release.html")
     @Counted
     @Timed(value = "docops.release")

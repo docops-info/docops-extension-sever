@@ -3,10 +3,10 @@
     <div id="contentBox" ></div>
     <div class="divider"></div>
 
-    <form class="grid grid-cols-2 gap-4" data-hx-put="api/barchart/" data-hx-target="#contentBox" hx-trigger="submit, load">
+    <form class="grid grid-cols-2 gap-4" data-hx-put="api/bar/barchart" data-hx-target="#contentBox" hx-trigger="submit, load">
         <div class="flex flex-col col-span-2">
             <label for="content" class="mb-2">JSON</label>
-            <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/barchart/" data-hx-target="#contentBox">
+            <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/bar/barchart" data-hx-target="#contentBox">
 {
   "title": "Favorite Type of Movies",
   "yLabel": "People",

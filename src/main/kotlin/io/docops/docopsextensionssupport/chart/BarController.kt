@@ -18,19 +18,73 @@ import org.springframework.web.bind.annotation.ResponseBody
 import kotlin.time.measureTimedValue
 
 @Controller
-@RequestMapping("/api/barchart")
+@RequestMapping("/api/bar")
 class BarController {
     private val log = LogFactory.getLog(BarController::class.java)
-    @PutMapping("/")
+    @PutMapping("/barchart")
     @ResponseBody
-    @Counted(value="docops.boxy.put", description="Creating a Button using http put")
-    @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
-    fun makePieChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
+    @Counted(value="docops.barchart.put", description="Creating a barchart using http put")
+    @Timed(value = "docops.barchart.put", description="Creating a barchart using http put", percentiles=[0.5, 0.9])
+    fun makeBarChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             var contents = httpServletRequest.getParameter("content")
             val barMaker = BarMaker()
             val bars = Json.decodeFromString<Bar>(contents)
             val svg = barMaker.makeBar(bars)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
+            val div = """
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title text-xl font-small">
+                Image
+            </div>
+            <div class="collapse-content">
+                <div id='imageblock'>
+                $svg
+                </div>
+            </div>
+        </div>
+        <div class="collapse collapse-arrow border-base-300">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title text-xl font-small">
+                Click to View Source
+            </div>
+            <div class="collapse-content">
+                <h3>Pie Charts Source</h3>
+                <div>
+                <pre>
+                <code class="json">
+                 $contents
+                </code>
+                </pre>
+                </div>
+                <script>
+                var adrSource = `[diag,scale="0.7",role="center"]\n----\n${contents}\n----`;
+                document.querySelectorAll('pre code').forEach((el) => {
+                    hljs.highlightElement(el);
+                });
+                </script>
+            </div>
+        </div>
+        """.trimIndent()
+            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+        }
+        log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
+        return timings.value
+    }
+
+    @PutMapping("/groupbarchart")
+    @ResponseBody
+    @Counted(value="docops.groupbarchart.put", description="Creating a groupbarchart using http put")
+    @Timed(value = "docops.groupbarchart.put", description="Creating a groupbarchart using http put", percentiles=[0.5, 0.9])
+    fun makeBarGroupChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
+        val timings = measureTimedValue {
+            var contents = httpServletRequest.getParameter("content")
+            val maker = BarGroupMaker()
+            val bars = Json.decodeFromString<BarGroup>(contents)
+            val svg = maker.makeBar(bars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
