@@ -116,9 +116,15 @@ class ScoreCardMaker {
         if (isPdf) {
             style = ""
         }
+        val headerGrad = gradientFromColor(scoreCard.scoreCardTheme.headerColor)
         val gradBevel = gradientFromColor(scoreCard.scoreCardTheme.backgroundColor)
         return """
             <defs>
+            <linearGradient id="header_${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop class="stop3" offset="0%" stop-color="${headerGrad["color1"]}" stop-opacity="1"/>
+                <stop class="stop2" offset="50%" stop-color="${headerGrad["color2"]}" stop-opacity="1"/>
+                <stop class="stop1" offset="100%" stop-color="${headerGrad["color3"]}" stop-opacity="1"/>
+            </linearGradient>
             
             <linearGradient id="bevelGradient${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop class="stop3" offset="0%" stop-color="${gradBevel["color1"]}" stop-opacity="1"/>
@@ -152,7 +158,7 @@ class ScoreCardMaker {
             $style
             </defs>
             <rect width="100%" height="100%" fill="url(#bevelGradient${scoreCard.id})" filter="url(#bevelFilter)"/>
-            <rect width="100%" height="50" fill="url(#${scoreCard.id}_arrowColor)"/>
+            <rect width="100%" height="50" fill="url(#header_${scoreCard.id})"/>
             
         """.trimIndent()
     }

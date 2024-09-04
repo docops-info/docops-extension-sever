@@ -92,5 +92,6 @@ open class ScoreCardTheme(val titleColor: String = "#fcfcfc",
                           val outcomeDisplayTextColor: String = "#111111",
                           val initiativeBackgroundColor: String = "#fcfcfc",
                           val outcomeBackgroundColor: String = "#fcfcfc",
+                          val headerColor: String = "#102C57",
                           val arrowColor: String = "#e0349c")
 
