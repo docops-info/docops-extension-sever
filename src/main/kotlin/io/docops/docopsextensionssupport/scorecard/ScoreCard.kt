@@ -84,12 +84,12 @@ fun ScoreCardItem.displayTextToList(size: Int): MutableList<String> {
  * @param arrowColor The color of the arrows used in the scorecard.
  */
 @Serializable
-open class ScoreCardTheme(val titleColor: String = "#2c445a",
-                          val backgroundColor: String = "#E7D6B7",
-                          val initiativeTitleColor: String = "#2c445a",
-                          val outcomeTitleColor: String= "#2c445a",
-                          val initiativeDisplayTextColor: String = "#000000",
-                          val outcomeDisplayTextColor: String = "#000000",
+open class ScoreCardTheme(val titleColor: String = "#fcfcfc",
+                          val backgroundColor: String = "#EEEEEE",
+                          val initiativeTitleColor: String = "#fcfcfc",
+                          val outcomeTitleColor: String= "#fcfcfc",
+                          val initiativeDisplayTextColor: String = "#111111",
+                          val outcomeDisplayTextColor: String = "#111111",
                           val initiativeBackgroundColor: String = "#fcfcfc",
                           val outcomeBackgroundColor: String = "#fcfcfc",
                           val arrowColor: String = "#e0349c")

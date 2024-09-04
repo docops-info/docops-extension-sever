@@ -119,6 +119,7 @@ class ScoreCardMaker {
         val gradBevel = gradientFromColor(scoreCard.scoreCardTheme.backgroundColor)
         return """
             <defs>
+            
             <linearGradient id="bevelGradient${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop class="stop3" offset="0%" stop-color="${gradBevel["color1"]}" stop-opacity="1"/>
             <stop class="stop2" offset="50%" stop-color="${gradBevel["color2"]}" stop-opacity="1"/>
@@ -151,6 +152,8 @@ class ScoreCardMaker {
             $style
             </defs>
             <rect width="100%" height="100%" fill="url(#bevelGradient${scoreCard.id})" filter="url(#bevelFilter)"/>
+            <rect width="100%" height="50" fill="url(#${scoreCard.id}_arrowColor)"/>
+            
         """.trimIndent()
     }
 
@@ -395,15 +398,6 @@ fun main() {
   "slideShow": false,
   "scale": 1.0,
   "scoreCardTheme": {
-    "titleColor": "#FF008E",
-    "initiativeTitleColor": "#FF008E",
-    "outcomeTitleColor": "#FF008E",
-    "backgroundColor": "#FF74B1",
-    "initiativeBackgroundColor": "#F7F7F7",
-    "outcomeBackgroundColor": "#F7F7F7",
-    "initiativeDisplayTextColor": "#27005D",
-    "outcomeDisplayTextColor": "#27005D",
-    "arrowColor": "#FF008E"
   }
 }
 
