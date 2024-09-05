@@ -1,8 +1,9 @@
 <div>
     <h1>Create Bar Charts</h1>
+    <a class="tab btnMenu buttons-schema" hx-get="json/schema?name=bargroup-schema" data-hx-target="#contentBox"><i class="fad fa-curling text-xs mr-2"></i> JSON Schema</a>
+
     <div id="contentBox" ></div>
     <div class="divider"></div>
-
     <form class="grid grid-cols-2 gap-4" data-hx-put="api/bar/groupbarchart" data-hx-target="#contentBox" hx-trigger="submit, load">
         <div class="flex flex-col col-span-2">
             <label for="content" class="mb-2">JSON</label>

@@ -25,7 +25,8 @@ class BarGroupDisplay(
     val titleStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:14px; text-anchor:middle",
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:12px; text-anchor:middle",
     val yLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:12px; text-anchor:middle",
-    val lineColor: String = "#FFBB5C"
+    val lineColor: String = "#FFBB5C",
+    val scale: Double = 1.0
 )
 
 @Serializable

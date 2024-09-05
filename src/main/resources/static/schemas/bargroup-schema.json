@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "yLabel": {
+      "type": "string"
+    },
+    "xLabel": {
+      "type": "string"
+    },
+    "groups": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "series": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "value"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "label",
+            "series"
+          ]
+        }
+      ]
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "baseColor": {
+          "type": "string"
+        },
+        "barSeriesFontStyle": {
+          "type": "string"
+        },
+        "barSeriesLabelFontStyle": {
+          "type": "string"
+        },
+        "barFontValueStyle": {
+          "type": "string"
+        },
+        "titleStyle": {
+          "type": "string"
+        },
+        "xLabelStyle": {
+          "type": "string"
+        },
+        "yLabelStyle": {
+          "type": "string"
+        },
+        "lineColor": {
+          "type": "string"
+        },
+        "scale": {
+          "type": "number"
+        }
+      },
+      "required": [
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "yLabel",
+    "xLabel",
+    "groups"
+  ]
+}
