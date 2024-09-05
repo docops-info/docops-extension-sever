@@ -42,7 +42,7 @@
         <div class="flex flex-col col-span-2">
             <label for="consequences" class="mb-2">Consequences</label>
             <textarea id="consequences" name="consequences" cols="90" class="textarea textarea-primary" placeholder=""
-                      data-hx-put="api/adr" data-hx-target="#contentBox">he tool won't support Windows. Being plain text files, ADRs can be created by hand and edited in any text editor.
+                      data-hx-put="api/adr" data-hx-target="#contentBox">The tool won't support Windows. Being plain text files, ADRs can be created by hand and edited in any text editor.
             This tool just makes the process more convenient.
 
 Development will have to cope with differences between Unix variants, particularly Linux

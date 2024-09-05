@@ -135,12 +135,15 @@ class AdrController() {
                 <div>
                 <pre>
                 <code class="kotlin">
+                [docops,adr]
+                ----
                 $txt
+                ----
                 </code>
                 </pre>
                 </div>
                 <script>
-                var adrSource = `[adr]\n----\n${txt}\n----`;
+                var adrSource = `[docops,adr]\n----\n${txt}\n----`;
                 document.querySelectorAll('pre code').forEach((el) => {
                 hljs.highlightElement(el);
                 });

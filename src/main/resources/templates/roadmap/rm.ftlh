@@ -29,17 +29,17 @@
     <div class="flex flex-col col-span-2">
         <label for="content" class="mb-2">Simple DSL</label>
             <textarea class="textarea textarea-primary" id="content" name="content" rows="20" cols="90" placeholder="" data-hx-put="api/roadmap/" data-hx-target="#contentBox">
-- now
+- now Audit
 Audit Log Streaming
-- now
+- now Repo
 Fork the repository to Support Search
-- later
+- later API
 API versioning (GA)
-- next
+- next Kotlin
 Kotlin Coroutines support
-- done
+- done Schema
 JSON schema definition
-- later
+- later Vulnerability
 code scanning and app scanning
             </textarea>
         </div>

@@ -70,7 +70,7 @@ class BadgeController {
         //val src = badgeAgain(formBadge = badge, type = "SVG")
         val badgeSource =
             """
-[badge]
+[docops,badge]
 ----
 ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}|${badge.fontColor}|
 ----
