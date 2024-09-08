@@ -22,8 +22,11 @@ package io.docops.docopsextensionssupport.adr
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 import java.util.*
+
+private const val SplitLength = 585
 
 class ADRParser {
 
@@ -122,7 +125,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        return list
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        itemArray.add("")
+        return itemArray
     }
 
     private fun mapDecision(
@@ -144,7 +149,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        return list
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        itemArray.add("")
+        return itemArray
     }
 
     private fun mapConsequences(
@@ -166,7 +173,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        return list
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        itemArray.add("")
+        return itemArray
     }
 
     private fun mapParticipants(

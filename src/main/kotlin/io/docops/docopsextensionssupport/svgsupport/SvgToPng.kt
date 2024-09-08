@@ -59,13 +59,40 @@ class SvgToPng {
 
  }
 
-fun SvgToPng.textWidth(fontName: String, size: Int = 12, str: String): Int {
+fun textWidth(fontName: String, size: Int = 12, str: String): Int {
     val font =  Font("Helvetica",Font.PLAIN,size)
     val c = Canvas()
     val fm = c.getFontMetrics(font)
     return fm.stringWidth(str)
 }
 
+fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica"): MutableList<String> {
+    val split = itemText.split(" ")
+    val itemArray = mutableListOf<String>()
+    val width = textWidth("Helvetica", 12, itemText)
+    if(width > maxWidth) {
+        val sb = StringBuilder()
+        split.forEachIndexed { index, s ->
+            val itemWidth =  textWidth(fontName, fontSize, "$sb $s")
+            if(itemWidth < maxWidth) {
+                sb.append("$s ")
+                if(index < itemArray.size - 1) {
+                    sb.append(" ")
+                }
+            } else {
+                itemArray.add("$sb")
+                sb.clear()
+                sb.append("$s ")
+            }
+        }
+        if(sb.isNotEmpty()) {
+            itemArray.add(sb.toString())
+        }
+    } else {
+        itemArray.add(itemText)
+    }
+    return itemArray
+}
 fun main() {
     val svg = File("gen/roadmap.svg")
     val content = Files.readAllBytes(svg.toPath())

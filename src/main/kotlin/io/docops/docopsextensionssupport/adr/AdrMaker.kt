@@ -2,8 +2,6 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
-import io.docops.docopsextensionssupport.svgsupport.textWidth
 
 class AdrMaker {
 
@@ -45,7 +43,7 @@ class AdrMaker {
     fun defs() : String {
         //language=html
         return """
-            <def>
+            <defs>
             <linearGradient id="backGrad2" x2="0%" y2="100%">
                  <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
                 <stop class="stop2" offset="50%" stop-color="#6d727c"/>
@@ -55,7 +53,7 @@ class AdrMaker {
             .adrlink { fill: #5AB2FF; text-decoration: underline; }
             .adrlink:hover, .adrlink:active { outline: dotted 1px #5AB2FF; }
             </style>
-            </def>
+            </defs>
         """.trimIndent()
     }
     fun tail() = "</svg>"

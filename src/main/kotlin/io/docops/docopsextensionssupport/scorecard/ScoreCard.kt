@@ -56,34 +56,7 @@ fun ScoreCard.scoreCardHeight(numChars: Int = 40, factor: Float = 35.1f) : Float
     return max(count, outcomeCount) * factor
 }
 
-fun ScoreCard.itemTextWidth(itemText: String): MutableList<String> {
-    val split = itemText.split(" ")
-    val itemArray = mutableListOf<String>()
-    val width = SvgToPng().textWidth("Helvetica", 12, itemText)
-        //println(width)
-    if(width > 450) {
-        val sb = StringBuilder()
-        split.forEachIndexed { index, s ->
-            val itemWidth =  SvgToPng().textWidth("Helvetica", 12, "$sb $s")
-            if(itemWidth < 450) {
-                sb.append(s + " ")
-                if(index < itemArray.size - 1) {
-                    sb.append(" ")
-                }
-            } else {
-                itemArray.add("$sb")
-                sb.clear()
-                sb.append("$s ")
-            }
-        }
-        if(sb.isNotEmpty()) {
-            itemArray.add(sb.toString())
-        }
-    } else {
-        itemArray.add(itemText)
-    }
-    return itemArray
-}
+
 
 
 /**

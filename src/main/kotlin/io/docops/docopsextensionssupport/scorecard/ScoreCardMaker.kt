@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.awt.Color
 import java.io.File
@@ -204,7 +205,7 @@ class ScoreCardMaker {
 
         }
         scoreCard.initiativeItems.forEach {
-            val itemArray = scoreCard.itemTextWidth(it.displayText)
+            val itemArray = itemTextWidth(it.displayText, 450)
             //val items = it.displayTextToList(70)
             val h = 12+ itemArray.size * 12f
             sb.append(
@@ -252,7 +253,7 @@ class ScoreCardMaker {
             grad = "#5D9C59"
         }
         scoreCard.outcomeItems.forEach {
-            val itemArray = scoreCard.itemTextWidth(it.displayText)
+            val itemArray = itemTextWidth(it.displayText, 450)
                 //val items = it.displayTextToList(70)
             val h = 12+ itemArray.size * 12f
             sb.append(
