@@ -20,6 +20,7 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToMultiLineText
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
 /**
  * Represents an entry with a specific date, index, and text.
@@ -57,7 +58,11 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int
         }
     }
     var text = """<text x="$x" y="$y" font-size="14px" font-family="Arial, Helvetica, sans-serif" fill='$fillColor'>"""
-    val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
+
+    //val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
+    val itemArray = itemTextWidth(s, 220, 14, "Arial")
+    val lines = linesToUrlIfExist(itemArray, urlMap)
+    println(lines)
     val spans = linesToMultiLineText(lines,dy, x, fillColor)
     text += spans
     text += "</text>"

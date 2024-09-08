@@ -22,13 +22,14 @@ import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
+import java.util.UUID
 
 /**
  * The `TimelineMaker` class is used to create a SVG timeline based on the provided parameters.
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boolean = false) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boolean = false, val id: String = UUID.randomUUID().toString()) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     init {
@@ -65,12 +66,13 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
      * @return The SVG representation of the timeline.
      */
     fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String) : String {
+
         this.pdf = isPdf
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val head = head(entries, scale)
         sb.append(head.first)
-        val defs = defs(entries, isPdf)
+        val defs = defs(isPdf)
         val colors = defs.second
         sb.append(defs.first)
 
@@ -90,7 +92,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
                 DEFAULT_COLORS[gradIndex]
             }
 
-            sb.append(makeEntry(index, entry, color= color, chars = chars, gradIndex =gradIndex))
+            sb.append(makeEntry(index, entry, color= color, chars = chars, gradIndex =gradIndex, id= id))
 
         }
         sb.append("</g>")
@@ -99,14 +101,14 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         return sb.toString()
     }
 
-    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
+    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
         return if(index % 2 == 0) {
-            odd(index,entry, color, chars, gradIndex)
+            odd(index,entry, color, chars, gradIndex, id)
         } else{
-            even(index, entry, color, chars, gradIndex)
+            even(index, entry, color, chars, gradIndex, id)
         }
     }
-    private fun odd(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
+    private fun odd(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
 
         var x = 0
         if(index>0)
@@ -114,26 +116,23 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             x +=  125 * index
         }
         val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, "#21252B")
-        var fill = "url(#topBar)"
-        val colorMap = gradientFromColor(outlineColor)
-        if(pdf) {
-            fill = "${colorMap["color1"]}"
-        }
+        var fill = "url(#topBar_$id)"
+
         //language=svg
         return """
       <g transform="translate($x,0)" class="odd">
         <g transform="translate(125,320)">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
+            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
              <g transform="translate(-135,-182)">
-                <use xlink:href="#vconnector" stroke="$outlineColor"/>
+                <path d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
             </g>
             <g transform="translate(-3,-86),rotate(-90)">
-                <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
             </g>
         </g>
-        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="5"/>
+        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" />
+        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" />
         <text x="125" y="50" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
                   class="glass raiseText">
@@ -144,7 +143,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     
         """.trimIndent()
     }
-    private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int): String {
+    private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
         var x = 0
         if(index>0)
         {
@@ -152,27 +151,25 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         }
 
         val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "#21252B")
-        var fill = "url(#topBar)"
-        val colorMap = gradientFromColor(outlineColor)
-        if(pdf) {
-            fill = "${colorMap["color1"]}"
-        }
+        var fill = "url(#topBar_$id)"
+
+
         //language=svg
         return """
         <g transform="translate($x,0)" class="even">
         <g transform="translate(125,320)">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)" />
+            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
              <g transform="translate(-134,-80)">
-                <use xlink:href="#vconnector" stroke="$outlineColor"/>
+                <path d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
             </g>
             <g transform="translate(3,86),rotate(90)">
-                <use xlink:href="#ppoint"  stroke-width="7" stroke="url(#outlineGradient)"/>
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
             </g>
         </g>
         
-        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="5"/>
-        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke-width="2" rx="5" />
+        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" />
+        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke-width="2"/>
         
         <text x="125" y="450" fill='#000000' text-anchor='middle'
                   style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
@@ -195,13 +192,13 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     private fun buildRoad(width: Int): String {
         return """
             <g transform="translate(30,320)">
-            <path d="M0,0 h$width" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor)" class="raise"
+            <path d="M0,0 h$width" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor_$id)" class="raise"
                   stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="10" y1="0" x2="$width" y2="0" stroke="#fcfcfc"
                   stroke-width="10" fill="#ffffff" stroke-dasharray="24 24 24" stroke-linecap="round"
                   stroke-linejoin="round"/>
             <g transform="translate($width,-2)">
-                <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="35" fill="url(#arrowColor)"
+                <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor_$id)" stroke-width="35" fill="url(#arrowColor_$id)"
                 />
             </g>
         </g>
@@ -225,33 +222,13 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
 
     private fun tail() : String = "</svg>"
 
-    private fun defs(entries: MutableList<Entry>, isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
+    private fun defs(isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
-        entries.forEachIndexed { index, _ ->
-            val color = if(index>9) {
-                getRandomColorHex()
-            } else {
-                DEFAULT_COLORS[index]
-            }
-            colors[index] = color
-            val colorMap = gradientFromColor(color)
-            val hsl = hexToHsl(color, pdf)
 
-            sb.append("""
-         <radialGradient id="grad$index" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
-            <stop offset="60%" style="stop-color:$hsl; stop-opacity:1" />
-        </radialGradient>
-        <linearGradient id="headerTimeline$index" x2="0%" y2="100%">
-            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-            """.trimIndent())
-        }
         val colorMap = gradientFromColor(outlineColor)
         val hsl = hexToHsl(outlineColor, pdf)
-        sb.append("""<radialGradient id="outlineGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
+        sb.append("""<radialGradient id="outlineGradient_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
             <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
         </radialGradient>""")
@@ -273,42 +250,17 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         }
         return Pair("""
         <defs>
-        <filter id="buttonBlur">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-            <feOffset in="blur" dy="2" result="offsetBlur"/>
-            <feMerge>
-                <feMergeNode in="offsetBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-
-        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
-            <stop offset="0" stop-color="#000000" stop-opacity="0.5"/>
-            <stop offset="1" stop-color="#000000" stop-opacity="0"/>
-        </linearGradient>
-
-        <filter id="topshineBlur">
-            <feGaussianBlur stdDeviation="0.93"/>
-        </filter>
-
-        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
-            <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
-            <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-        </linearGradient>
-
-        <filter id="bottomshine">
-            <feGaussianBlur stdDeviation="0.95"/>
-        </filter>
+        
         <linearGradient id="panelBack" x2="1" y2="1">
             <stop class="stop1" offset="0%" stop-color="#939393"/>
             <stop class="stop2" offset="50%" stop-color="#5d5d5d"/>
             <stop class="stop3" offset="100%" stop-color="#282828"/>
         </linearGradient>
-        <linearGradient id="arrowColor" x2="0%" y2="100%">
+        <linearGradient id="arrowColor_$id" x2="0%" y2="100%">
             <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
-        <linearGradient id="topBar" x2="0%" y2="100%">
+        <linearGradient id="topBar_$id" x2="0%" y2="100%">
             <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
@@ -337,6 +289,9 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
 
 fun main() {
     val entry = """
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing       
 -
 date: July 23rd, 2023
 text: DocOps extension Server releases a new feature, Timeline Maker
@@ -369,7 +324,7 @@ date: 01/01/2024
 text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
     """.trimIndent()
     val maker = TimelineMaker(true, "#a1d975")
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "0.6", false, "30")
+    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1", false, "30")
     val f = File("gen/one.svg")
     f.writeBytes(svg.toByteArray())
 }

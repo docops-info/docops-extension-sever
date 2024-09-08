@@ -69,7 +69,7 @@ fun textWidth(fontName: String, size: Int = 12, str: String): Int {
 fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica"): MutableList<String> {
     val split = itemText.split(" ")
     val itemArray = mutableListOf<String>()
-    val width = textWidth("Helvetica", 12, itemText)
+    val width = textWidth(fontName, fontSize, itemText)
     if(width > maxWidth) {
         val sb = StringBuilder()
         split.forEachIndexed { index, s ->
