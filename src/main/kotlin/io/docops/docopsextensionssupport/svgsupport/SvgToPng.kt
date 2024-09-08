@@ -20,6 +20,9 @@ import org.apache.batik.transcoder.TranscoderInput
 import org.apache.batik.transcoder.TranscoderOutput
 import org.apache.batik.transcoder.image.JPEGTranscoder
 import org.apache.batik.transcoder.image.PNGTranscoder
+import java.awt.Canvas
+import java.awt.Font
+import java.awt.FontMetrics
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStream
@@ -52,6 +55,15 @@ class SvgToPng {
         val converter = JPEGTranscoder()
         converter.transcode(input, output)
     }
+
+
+ }
+
+fun SvgToPng.textWidth(fontName: String, size: Int = 12, str: String): Int {
+    val font =  Font("Helvetica",Font.PLAIN,size)
+    val c = Canvas()
+    val fm = c.getFontMetrics(font)
+    return fm.stringWidth(str)
 }
 
 fun main() {

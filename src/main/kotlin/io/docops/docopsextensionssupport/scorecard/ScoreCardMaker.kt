@@ -204,15 +204,16 @@ class ScoreCardMaker {
 
         }
         scoreCard.initiativeItems.forEach {
-            val items = it.displayTextToList(70)
-            val h = 12+ items.size * 12f
+            val itemArray = scoreCard.itemTextWidth(it.displayText)
+            //val items = it.displayTextToList(70)
+            val h = 12+ itemArray.size * 12f
             sb.append(
                 """
                 
                 <g transform="translate(10, $startY)">
                 $LEFT_STAR
                     <text x="15" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
-                        ${itemsToSpan(items, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
+                        ${itemsToSpan(itemArray, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
                     <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
                 </g>
@@ -231,7 +232,7 @@ class ScoreCardMaker {
             indent = 10
         }
         sb.append("""
-            <tspan x="$indent" dy="12" style="fill:${color};font-family: Arial, Helvetica, sans-serif;">${str}</tspan>
+            <tspan x="$indent" dy="12" style="fill:${color};font-family: Arial, Helvetica, sans-serif;">${str.escapeXml()}</tspan>
         """.trimIndent())
             }
         return sb.toString()
@@ -251,14 +252,15 @@ class ScoreCardMaker {
             grad = "#5D9C59"
         }
         scoreCard.outcomeItems.forEach {
-            val items = it.displayTextToList(70)
-            val h = 12+ items.size * 12f
+            val itemArray = scoreCard.itemTextWidth(it.displayText)
+                //val items = it.displayTextToList(70)
+            val h = 12+ itemArray.size * 12f
             sb.append(
                 """
     <g transform="translate(530, $startY)" $display>
         $RIGHT_STAR
         <text x="30" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
-            ${itemsToSpan(items, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
+            ${itemsToSpan(itemArray, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
         <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
     </g>
@@ -333,6 +335,7 @@ fun main() {
     val sc = ScoreCard(
         title = "Digital Policy Service", initiativeTitle = "PCF to EKS", outcomeTitle = "TMVS++",
         initiativeItems = mutableListOf(
+            ScoreCardItem("Networking Switch - Migrate IBM Websphere application server to Liberty Server with RHEL 8 and JSESSION ID fix with Application cache busting and versioning. This change is in response to everything IBM."),
             ScoreCardItem("Spring Boot 2.7 on Pcf Platform", "Spring Boot microservice framework"),
             ScoreCardItem("Redis used for storing circuit breaker data", "Redis is a distributed caching layer"),
             ScoreCardItem("MySql for storing zipkin traces"),
@@ -380,7 +383,7 @@ fun main() {
       "description": "Migrate IBM Websphere to Liberty Server with RHEL 8 and JSESSION ID fix with Application cache busting and versioning"
     },
     {
-      "displayText": "MFA. ome changes do not affect consumers at all, while others, which are known as breaking changes, lead to backward-compatibility issues, such as unexpected errors and data corruption",
+      "displayText": "MFA. Some changes do not affect consumers at all, while others, which are known as breaking changes, lead to backward-compatibility issues, such as unexpected errors and data corruption",
       "description": "Enabling single signon from server sign-in page"
     },
     {

@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
+import io.docops.docopsextensionssupport.svgsupport.SvgToPng
+import io.docops.docopsextensionssupport.svgsupport.textWidth
 
 class AdrMaker {
 
