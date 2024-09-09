@@ -413,9 +413,9 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor:
     val text = StringBuilder()
     lines.forEachIndexed { i, item ->
             if (i == 0 && initialY > 0) {
-                text.append("""<tspan x="$x" dy="$initialY" $fill>${item.escapeXml()}</tspan>""")
+                text.append("""<tspan x="$x" dy="$initialY" $fill>${item}</tspan>""")
             } else {
-                text.append("""<tspan x="$x" dy="$dy" $fill>${item.escapeXml()}</tspan>""")
+                text.append("""<tspan x="$x" dy="$dy" $fill>${item}</tspan>""")
             }
     }
     return text.toString()
