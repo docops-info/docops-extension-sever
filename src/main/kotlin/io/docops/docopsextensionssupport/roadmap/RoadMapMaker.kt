@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.roadmap
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradientsKeys
 import io.docops.docopsextensionssupport.scorecard.generateRectPathData
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
 /**
@@ -53,6 +54,10 @@ class DarkTheme : RoadMapTheme() {
     override fun titleColor(): String = "#FCE6F4"
     override fun paperColor(): String = "#21252B"
 }
+
+private const val BoxMaxWidth = 182
+
+private const val BoxFontSize = 12
 
 /**
  * The RoadMapMaker class is responsible for generating a road map image based on a given input source.
@@ -178,10 +183,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 2, null, 18)
+                    val spans = linesToMultiLineText(lines, BoxFontSize, 2, null, 18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
@@ -193,10 +198,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 212, null,18)
+                    val spans = linesToMultiLineText(lines, BoxFontSize, 212, null,18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
@@ -208,10 +213,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            wrapText(item.joinToString(separator = " "), numChars.toFloat()),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
-                    val spans = linesToMultiLineText(lines, 12, 422, null, 18)
+                    val spans = linesToMultiLineText(lines, BoxFontSize, 422, null, 18)
                     text += spans
                     text += "</text>"
                     sb.append(text)
@@ -269,10 +274,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="2" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; ">"""
             text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                wrapText(roadmaps.now[index].joinToString(separator = " "), numChars.toFloat()),
+                itemTextWidth(roadmaps.now[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 2, null, 18)
+            val spans = linesToMultiLineText(lines, BoxFontSize, 2, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -291,10 +296,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="212" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484;">"""
             text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                wrapText(roadmaps.next[index].joinToString(separator = " "), numChars.toFloat()),
+                itemTextWidth(roadmaps.next[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 212, null, 18)
+            val spans = linesToMultiLineText(lines, BoxFontSize, 212, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -323,10 +328,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="422" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #FA1E0E;">"""
             text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                wrapText(roadmaps.later[index].joinToString(separator = " "), numChars.toFloat()),
+                itemTextWidth(roadmaps.later[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
-            val spans = linesToMultiLineText(lines, 12, 422, null, 18)
+            val spans = linesToMultiLineText(lines, BoxFontSize, 422, null, 18)
             text += spans
             text += "</text>"
             sb.append(text)
@@ -408,9 +413,9 @@ fun linesToMultiLineText(lines: MutableList<String>, dy: Int, x: Int, fillColor:
     val text = StringBuilder()
     lines.forEachIndexed { i, item ->
             if (i == 0 && initialY > 0) {
-                text.append("""<tspan x="$x" dy="$initialY" $fill>$item</tspan>""")
+                text.append("""<tspan x="$x" dy="$initialY" $fill>${item.escapeXml()}</tspan>""")
             } else {
-                text.append("""<tspan x="$x" dy="$dy" $fill>$item</tspan>""")
+                text.append("""<tspan x="$x" dy="$dy" $fill>${item.escapeXml()}</tspan>""")
             }
     }
     return text.toString()
