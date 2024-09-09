@@ -62,7 +62,6 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int
     //val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
     val itemArray = itemTextWidth(s, 220, 14, "Arial")
     val lines = linesToUrlIfExist(itemArray, urlMap)
-    println(lines)
     val spans = linesToMultiLineText(lines,dy, x, fillColor)
     text += spans
     text += "</text>"
