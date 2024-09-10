@@ -277,8 +277,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
          </marker>   
         $sb
         $style
-        <path id="vconnector" d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
+        
 
     </defs>
     

@@ -36,6 +36,7 @@ import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC7
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC8
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC9
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
 import java.io.ByteArrayOutputStream
 import kotlin.math.max
@@ -174,7 +175,7 @@ fun ReleaseStrategy.releaseLinesToDisplay(lines: MutableList<String>): MutableLi
     val newLines = mutableListOf<LineType>()
     lines.forEachIndexed { index, line ->
         if(line.isNotBlank()) {
-            val l = wrapText(line, 60f)
+            val l = itemTextWidth(line, 390, 12)
             val bLine = BulletLine(l[0])
             newLines.add(bLine)
             l.forEachIndexed { i, iLine ->

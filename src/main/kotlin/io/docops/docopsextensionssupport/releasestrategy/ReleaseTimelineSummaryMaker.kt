@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.*
@@ -98,7 +99,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             }
         }
         val goals = release.goal.escapeXml()
-        val lines = linesToUrlIfExist(wrapText(goals, 20F), mutableMapOf())
+        val itemArray = itemTextWidth(goals, 290, 24)
+        val lines = linesToUrlIfExist(itemArray, mutableMapOf())
         val spans = linesToSpanText(lines,24, 150)
         val textY = 88 - (lines.size * 12)
         var positionX = startX
