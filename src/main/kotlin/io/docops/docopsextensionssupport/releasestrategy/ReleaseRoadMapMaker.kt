@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.util.*
 
 /**
@@ -83,7 +84,8 @@ class ReleaseRoadMapMaker {
             str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text></g>")
-        val lines = linesToUrlIfExist(wrapText(release.goal, 60F), mutableMapOf())
+        val itemArray = itemTextWidth(release.goal, 900, 24)
+        val lines = linesToUrlIfExist(itemArray, mutableMapOf())
         val tspans = linesToSpanText(lines,24,400)
         val startTextY = 300 - (lines.size * 12)
         var completed = ""
