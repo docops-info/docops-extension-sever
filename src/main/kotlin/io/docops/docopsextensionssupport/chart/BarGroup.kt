@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.chart
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.abs
-import kotlin.math.max
 
 @Serializable
 class BarGroup(
@@ -79,4 +78,13 @@ fun BarGroup.valueFmt(value: Double): String {
         }
     }
     return numberString
+}
+
+fun BarGroup.ticks(): NiceScale {
+    val min = this.groups.minOf { it.series.minOf { it.value } }
+    val max = this.groups.maxOf { it.series.maxOf{it.value} }
+    val nice = NiceScale(min, max)
+    return nice
+
+
 }

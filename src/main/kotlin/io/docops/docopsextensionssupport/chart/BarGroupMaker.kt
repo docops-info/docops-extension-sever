@@ -19,24 +19,32 @@ class BarGroupMaker {
         sb.append(makeYLine(barGroup))
         var startX = 40.0
         val elements = StringBuilder()
+        val tickMap = mutableMapOf<Double, Double>()
         barGroup.groups.forEach { group ->
-            val added = addGroup(barGroup, group, startX)
+            val added = addGroup(barGroup, group, startX, tickMap)
             startX += group.series.size * 26.0 + 15
             elements.append(added)
         }
+
         sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
         sb.append(elements.toString())
         sb.append("</g>")
+        sb.append(addTicks(tickMap, barGroup))
         sb.append(end())
         return sb.toString()
     }
 
-    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double): String {
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, tickMap: MutableMap<Double, Double>): String {
         var displayGradId = barGroup.display.id
         val sb = StringBuilder()
         var counter = startX
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
+
+            if(!tickMap.containsKey(series.value)) {
+                tickMap[series.value] = 500 - per
+            }
+           // println("${series.value} -> $per -> ${500-per}")
             sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
                 sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
@@ -63,6 +71,16 @@ class BarGroupMaker {
         return sb.toString()
     }
 
+    private fun addTicks(tickMap: MutableMap<Double, Double>, barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        tickMap.forEach { (t, u) ->
+            sb.append("""
+     <line x1="40" x2="48" y1="$u" y2="$u" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+    <text x="35" y="${u+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${barGroup.valueFmt(t)}</text>
+            """.trimIndent())
+        }
+        return sb.toString()
+    }
     private fun makeTitle(barGroup: BarGroup): String {
         return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}">${barGroup.title}</text>"""
     }
@@ -161,11 +179,11 @@ class BarGroupMaker {
     }
 
     private fun makeXLine(barGroup: BarGroup): String {
-        return """<line x1="30" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
+        return """<line x1="50" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
     }
 
     private fun makeYLine(barGroup: BarGroup): String {
-        return """<line x1="30" x2="30" y1="12" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
+        return """<line x1="50" x2="50" y1="12" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
     }
 }
 
@@ -220,7 +238,7 @@ fun createBarGroupTestData(): BarGroup {
         yLabel = "Sales (USD)",
         xLabel = "Quarters",
         groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
-        display = BarGroupDisplay(lineColor = "#FFBB5C", baseColor = "#e60049", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;", scale = 1.4)
+        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#921A40", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;", scale = 1.0)
     )
 
     return barGroup
@@ -228,6 +246,7 @@ fun createBarGroupTestData(): BarGroup {
 
 fun main() {
     val barGroupTestData = createBarGroupTestData()
+
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
