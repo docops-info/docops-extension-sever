@@ -19,9 +19,8 @@ class BarGroupMaker {
         sb.append(makeYLine(barGroup))
         var startX = 40.0
         val elements = StringBuilder()
-        val tickMap = mutableMapOf<Double, Double>()
         barGroup.groups.forEach { group ->
-            val added = addGroup(barGroup, group, startX, tickMap)
+            val added = addGroup(barGroup, group, startX)
             startX += group.series.size * 26.0 + 15
             elements.append(added)
         }
@@ -29,22 +28,18 @@ class BarGroupMaker {
         sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
         sb.append(elements.toString())
         sb.append("</g>")
-        sb.append(addTicks(tickMap, barGroup))
+        sb.append(addTicks(barGroup))
         sb.append(end())
         return sb.toString()
     }
 
-    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, tickMap: MutableMap<Double, Double>): String {
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double): String {
         var displayGradId = barGroup.display.id
         val sb = StringBuilder()
         var counter = startX
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
-
-            if(!tickMap.containsKey(series.value)) {
-                tickMap[series.value] = 500 - per
-            }
-           // println("${series.value} -> $per -> ${500-per}")
+           //println("${series.value} -> $per -> ${500-per}")
             sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
                 sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
@@ -71,13 +66,22 @@ class BarGroupMaker {
         return sb.toString()
     }
 
-    private fun addTicks(tickMap: MutableMap<Double, Double>, barGroup: BarGroup): String {
+    private fun addTicks( barGroup: BarGroup): String {
         val sb = StringBuilder()
-        tickMap.forEach { (t, u) ->
+
+        val nice =barGroup.ticks()
+        val minV = nice.getNiceMin()
+        val maxV = nice.getNiceMax()
+        val tickSpacing = nice.getTickSpacing()
+        var i = minV
+        while(i < maxV ) {
+            val y = 500 - barGroup.scaleUp(i)
             sb.append("""
-     <line x1="40" x2="48" y1="$u" y2="$u" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
-    <text x="35" y="${u+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${barGroup.valueFmt(t)}</text>
+     <line x1="40" x2="48" y1="$y" y2="$y" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
             """.trimIndent())
+
+            i+=tickSpacing
         }
         return sb.toString()
     }
