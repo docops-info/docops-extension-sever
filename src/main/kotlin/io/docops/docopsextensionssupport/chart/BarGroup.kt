@@ -85,6 +85,14 @@ fun BarGroup.ticks(): NiceScale {
     val max = this.groups.maxOf { it.series.maxOf{it.value} }
     val nice = NiceScale(min, max)
     return nice
+}
+fun BarGroup.legendLabel(): MutableList<String> {
+    val uniqueLabels = mutableListOf<String>()
+    this.groups.forEach {
+        it.series.forEach { l ->
+            l.label?.let { it1 -> uniqueLabels.add(it1) }
 
-
+        }
+    }
+    return uniqueLabels
 }

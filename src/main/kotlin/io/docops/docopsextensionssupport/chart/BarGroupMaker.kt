@@ -29,7 +29,28 @@ class BarGroupMaker {
         sb.append(elements.toString())
         sb.append("</g>")
         sb.append(addTicks(barGroup))
+        sb.append(addLegend(startX + ((barGroup.calcWidth() - startX)/2), barGroup))
         sb.append(end())
+        return sb.toString()
+    }
+
+    private fun addLegend(d: Double, group: BarGroup): String {
+        val sb = StringBuilder()
+        val distinct = group.legendLabel().distinct()
+        val h = distinct.size * 12
+        val w = group.calcWidth() - d - 10
+        sb.append("""<rect x="${d-10}" y="45" width="$w" height="$h"  fill="#cccccc"/> """)
+        var y = 52
+        distinct.forEachIndexed { index, item ->
+            val color = "url(#defColor_$index)"
+            sb.append("""<rect x="${d-5}" y="$y" width="8" height="8" fill="$color"/>""")
+            y+=10
+        }
+        sb.append("""<text x="$d" y="49" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px;">""")
+        distinct.forEachIndexed{ i, item ->
+            sb.append("""<tspan x="${d+5}" dy="10">$item</tspan>""")
+        }
+        sb.append("</text>")
         return sb.toString()
     }
 
@@ -37,20 +58,21 @@ class BarGroupMaker {
         var displayGradId = barGroup.display.id
         val sb = StringBuilder()
         var counter = startX
+        var count=0
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
+            val color = "url(#defColor_$index)"
            //println("${series.value} -> $per -> ${500-per}")
-            sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" style="stroke: #fcfcfc;"/>""")
+            sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
                 sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
             }
-            sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
+            //sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
             counter += 26.0
         }
         val textX = startX + (added.series.size / 2 * 26.0)
         sb.append(makeSeriesLabel(textX, 500.0, added.label, barGroup))
         //sb.append("""<text x="$textX" y="512" style="${barGroup.display.barSeriesFontStyle}">${added.label}</text>""")
-
         return sb.toString()
 
     }
@@ -113,8 +135,22 @@ class BarGroupMaker {
         """.trimIndent()
     }
 
-    private fun makeDefs(gradients: String, barGroup: BarGroup): String =
-        """<defs>
+    private fun makeDefs(gradients: String, barGroup: BarGroup): String {
+        val defGrad = StringBuilder()
+        DefaultChartColors.forEachIndexed { idx, item->
+            val gradient = gradientFromColor(item)
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>
+            """.trimIndent())
+        }
+
+
+        return """<defs>
+            $defGrad
              <linearGradient id="backGrad_${barGroup.id}" x2="0%" y2="100%">
                  <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
                 <stop class="stop2" offset="50%" stop-color="#6d727c"/>
@@ -159,6 +195,7 @@ class BarGroupMaker {
                     }
                      </style>
                 </defs>"""
+    }
 
     private fun addGrid(barGroup: BarGroup): String {
         val maxHeight = 540
@@ -193,30 +230,30 @@ class BarGroupMaker {
 
 
 fun createBarGroupTestData(): BarGroup {
-    val seriesA1 = Series(label = "Product A Q1", value = 5000.0)
-    val seriesA2 = Series(label = "Product A Q2", value = 7000.0)
-    val seriesA3 = Series(label = "Product A Q3", value = 8000.0)
-    val seriesA4 = Series(label = "Product A Q4", value = 6000.0)
+    val seriesA1 = Series(label = "Q1", value = 5000.0)
+    val seriesA2 = Series(label = "Q2", value = 7000.0)
+    val seriesA3 = Series(label = "Q3", value = 8000.0)
+    val seriesA4 = Series(label = "Q4", value = 6000.0)
 
-    val seriesB1 = Series(label = "Product B Q1", value = 6000.0)
-    val seriesB2 = Series(label = "Product B Q2", value = 8000.0)
-    val seriesB3 = Series(label = "Product B Q3", value = 7000.0)
-    val seriesB4 = Series(label = "Product B Q4", value = 9000.0)
+    val seriesB1 = Series(label = "Q1", value = 6000.0)
+    val seriesB2 = Series(label = "Q2", value = 8000.0)
+    val seriesB3 = Series(label = "Q3", value = 7000.0)
+    val seriesB4 = Series(label = "Q4", value = 9000.0)
 
-    val seriesC1 = Series(label = "Product C Q1", value = 6000.0)
-    val seriesC2 = Series(label = "Product C Q2", value = 8000.0)
-    val seriesC3 = Series(label = "Product C Q3", value = 7000.0)
-    val seriesC4 = Series(label = "Product C Q4", value = 9000.0)
+    val seriesC1 = Series(label = "Q1", value = 6000.0)
+    val seriesC2 = Series(label = "Q2", value = 8000.0)
+    val seriesC3 = Series(label = "Q3", value = 7000.0)
+    val seriesC4 = Series(label = "Q4", value = 9000.0)
 
-    val seriesD1 = Series(label = "Product D Q1", value = 6000.0)
-    val seriesD2 = Series(label = "Product D Q2", value = 8000.0)
-    val seriesD3 = Series(label = "Product D Q3", value = 7000.0)
-    val seriesD4 = Series(label = "Product D Q4", value = 9000.0)
+    val seriesD1 = Series(label = "Q1", value = 6000.0)
+    val seriesD2 = Series(label = "Q2", value = 8000.0)
+    val seriesD3 = Series(label = "Q3", value = 7000.0)
+    val seriesD4 = Series(label = "Q4", value = 9000.0)
 
-    val seriesE1 = Series(label = "Product E Q1", value = 6000.0)
-    val seriesE2 = Series(label = "Product E Q2", value = 8000.0)
-    val seriesE3 = Series(label = "Product E Q3", value = 7000.0)
-    val seriesE4 = Series(label = "Product E Q4", value = 9000.0)
+    val seriesE1 = Series(label = "Q1", value = 6000.0)
+    val seriesE2 = Series(label = "Q2", value = 8000.0)
+    val seriesE3 = Series(label = "Q3", value = 7000.0)
+    val seriesE4 = Series(label = "Q4", value = 9000.0)
 
 
     val groupA = Group(
