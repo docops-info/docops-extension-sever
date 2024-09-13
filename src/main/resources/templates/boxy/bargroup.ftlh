@@ -9,67 +9,100 @@
             <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/bar/groupbarchart" data-hx-target="#contentBox">
 {
-  "title": "Show Me the Money",
-  "yLabel": "Number of Sales",
-  "xLabel": "Month",
+  "title": "New Revenue",
+  "yLabel": "Revenue",
+  "xLabel": "Quarter",
   "groups": [
     {
-      "label": "2024",
+      "label": "2020-Q1",
       "series": [
         {
-          "label": "Jan",
-          "value": 5000
+          "label": "Kent",
+          "value": 44700
         },
         {
-          "label": "Feb",
-          "value": 7000
+          "label": "Lincoln",
+          "value": 52800
         },
         {
-          "label": "Mar",
-          "value": 4000
+          "label": "Mersey",
+          "value": 43500
         },
         {
-          "label": "Apr",
-          "value": 15000
+          "label": "York",
+          "value": 38800
+        }
+      ]
+    },
+    {
+      "label": "2020-Q2",
+      "series": [
+        {
+          "label": "Kent",
+          "value": 45000
         },
         {
-          "label": "May",
-          "value": 5700
+          "label": "Lincoln",
+          "value": 36500
         },
         {
-          "label": "Jun",
-          "value": 6400
+          "label": "Mersey",
+          "value": 41000
         },
         {
-          "label": "Jul",
-          "value": 8322
+          "label": "York",
+          "value": 34100
+        }
+      ]
+    },
+    {
+      "label": "2020-Q3",
+      "series": [
+        {
+          "label": "Kent",
+          "value": 51200
         },
         {
-          "label": "Aug",
-          "value": 4400
+          "label": "Lincoln",
+          "value": 44200
         },
         {
-          "label": "Sept",
-          "value": 4520
+          "label": "Mersey",
+          "value": 39700
         },
         {
-          "label": "Oct",
-          "value": 3200
+          "label": "York",
+          "value": 27000
+        }
+      ]
+    },
+    {
+      "label": "2020-Q4",
+      "series": [
+        {
+          "label": "Kent",
+          "value": 56500
         },
         {
-          "label": "Nov",
-          "value": 5025
+          "label": "Lincoln",
+          "value": 45300
         },
         {
-          "label": "Dec",
-          "value": 6000
+          "label": "Mersey",
+          "value": 41200
+        },
+        {
+          "label": "York",
+          "value": 48900
         }
       ]
     }
   ],
   "display": {
-    "baseColor": "#0bb4ff",
-"barFontValueStyle": "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;"
+    "baseColor": "#00bfa0",
+    "barFontValueStyle": "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;",
+    "scale": 1.0,
+    "lineColor": "#00bfa0"
   }
 }
             </textarea>
