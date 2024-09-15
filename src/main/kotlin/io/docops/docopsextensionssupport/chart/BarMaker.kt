@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.apache.catalina.manager.JspHelper.escapeXml
 import java.io.File
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -19,7 +20,7 @@ class BarMaker {
         sb.append(addGroupStart(bar))
         var startX: Int = 1
         var startY: Int = bar.calcLeftPadding()
-        var incY = 28
+        var incY = 42
         var minY = max(0, startY)
         if(bar.display.type == "C") {
             incY = 44
@@ -32,6 +33,7 @@ class BarMaker {
         }
         sb.append(endGroup(bar))
         sb.append(addTitle(bar))
+        sb.append(addTicks(bar))
         sb.append(end(bar))
         return sb.toString()
     }
@@ -43,7 +45,25 @@ class BarMaker {
             <svg width="${bar.calcWidth()}" height="540" viewBox="0 0 ${bar.calcWidth()} 540" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
+    private fun addTicks( bar: Bar): String {
+        val sb = StringBuilder()
 
+        val nice =bar.ticks()
+        val minV = nice.getNiceMin()
+        val maxV = nice.getNiceMax()
+        val tickSpacing = nice.getTickSpacing()
+        var i = minV
+        while(i < maxV ) {
+            val y = 500 - bar.scaleUp(i)
+            sb.append("""
+     <line x1="24" x2="28" y1="$y" y2="$y" stroke="gold" stroke-width="3"/>
+    <text x="20" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${bar.valueFmt(i)}</text>
+            """.trimIndent())
+
+            i+=tickSpacing
+        }
+        return sb.toString()
+    }
     private fun makeBarItem(index: Int, barData: Series, startX: Int, startY: Int, total: Double, bar: Bar): String {
        // val per = bar.weightedPercentage(barData, 512)
         val per = bar.scaleUp(barData.value)
@@ -61,8 +81,8 @@ class BarMaker {
                 shape = """<path class="bar" d="M 0,6 a 20,6 0,0,0 40 0 a 20,6 0,0,0 -40 0 l 0,$per a 20,6 0,0,0 40 0 l 0,-$per" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)" style="background: conic-gradient(#655 40%, yellowgreen 0);"/>"""
             }
             "R" -> {
-                labelY = 26
-                shape = """<rect class="bar" x="0" y="0" height="$per" width="24" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)"/>"""
+                labelY = 19
+                shape = """<rect class="bar" x="0" y="0" height="$per" width="38" fill="url(#linearGradient_${displayGradId})" transform="translate(0,35) rotate(-90)"/>"""
             }
         }
 
@@ -71,7 +91,7 @@ class BarMaker {
                 $shape
                
                 <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
-                <text x="10" y="25"  style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: start;" >${escapeXml(barData.label)}</text>
+                <text x="10" y="19"  style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: start;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
     }
@@ -207,6 +227,7 @@ class BarMaker {
         """.trimIndent()
     }
 }
+
 
 fun main() {
     val bar = Bar(title = "Berry Picking by Month 2024",

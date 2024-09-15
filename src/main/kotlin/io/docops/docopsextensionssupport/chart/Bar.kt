@@ -56,4 +56,21 @@ fun Bar.ticks(): NiceScale {
 
 
 }
+fun Bar.valueFmt(value: Double): String {
+    var numberString : String = ""
+    numberString = when {
+        abs(value / 1000000) > 1 -> {
+            (value / 1000000).toString() + "m"
+
+        }
+        abs(value / 1000) > 1 -> {
+            (value / 1000).toString() + "k"
+
+        }
+        else -> {
+            value.toInt().toString()
+        }
+    }
+    return numberString
+}
 
