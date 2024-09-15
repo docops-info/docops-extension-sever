@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
@@ -15,9 +16,9 @@ class PieSliceMaker {
         val sb = StringBuilder()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
-        sb.append("<g transform=\"translate(0,20)\">")
+        sb.append("<g transform=\"translate(4,20)\">")
         sb.append("""<text x="100" y="10" text-anchor="middle" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title}</text>""")
-        sb.append("""<g transform="translate(100,120) rotate(-90)" style="stroke: #fcfcfc; stroke-width: 2px;">""")
+        sb.append("""<g transform="translate(100,120) rotate(-90)" style="stroke: #fcfcfc; stroke-width: 3px;">""")
         sb.append(makePaths(pieSlices))
         sb.append("</g>")
         sb.append("</g>")
@@ -97,9 +98,22 @@ class PieSliceMaker {
         return sb.toString()
     }
     private fun makeDefs(pieSlices: PieSlices) : String {
+        val defGrad = StringBuilder()
+        DefaultChartColors.forEachIndexed { idx, item->
+            val gradient = gradientFromColor(item)
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>
+            """.trimIndent())
+        }
         //language=svg
         return """
             <defs>
+           
+            $defGrad
             <style>
             .pie:hover {
                 filter: grayscale(100%) sepia(100%);

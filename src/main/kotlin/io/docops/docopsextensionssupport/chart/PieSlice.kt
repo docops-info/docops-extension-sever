@@ -10,7 +10,7 @@ fun PieSlice.displayColor(index: Int) : String {
     return if(null != itemDisplay?.color) {
         itemDisplay.color
     } else {
-        DefaultChartColors[index]
+        "url(#defColor_$index)"
     }
 }
 
