@@ -59,21 +59,21 @@ class SvgToPng {
 
  }
 
-fun textWidth(fontName: String, size: Int = 12, str: String): Int {
-    val font =  Font("Helvetica",Font.PLAIN,size)
+fun String.textWidth(fontName: String, size: Int = 12): Int {
+    val font =  Font(fontName,Font.PLAIN,size)
     val c = Canvas()
     val fm = c.getFontMetrics(font)
-    return fm.stringWidth(str)
+    return fm.stringWidth(this)
 }
 
 fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica"): MutableList<String> {
     val split = itemText.split(" ")
     val itemArray = mutableListOf<String>()
-    val width = textWidth(fontName, fontSize, itemText)
+    val width = itemText.textWidth(fontName, fontSize)
     if(width > maxWidth) {
         val sb = StringBuilder()
         split.forEachIndexed { index, s ->
-            val itemWidth =  textWidth(fontName, fontSize, "$sb $s")
+            val itemWidth =  "$sb $s".textWidth(fontName, fontSize)
             if(itemWidth < maxWidth) {
                 sb.append("$s ")
                 if(index < itemArray.size - 1) {

@@ -8,20 +8,45 @@ import java.io.File
 class LineChartMaker {
 
     private val maxHeight = 360
+    private val maxGraphHeight = 410
     private val maxWidth = 640
+    private val maxGraphWidth = 730
     fun makeLineChart(lineChart: LineChart): String {
-
         val sb = StringBuilder()
         sb.append(makeHead(lineChart))
         sb.append(makeDefs())
         sb.append("<rect width='100%' height='100%' fill='url(#backGrad1)' stroke='#111111'/>")
+        sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad1)"/>""")
+        sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="#fcfcfc" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         lineChart.points.forEachIndexed { index, mutableList ->
             sb.append("<g>")
             sb.append(makePoints(mutableList, index, lineChart))
             sb.append("</g>")
         }
+        sb.append(legend(lineChart))
         sb.append(end())
         return joinXmlLines(sb.toString())
+    }
+
+    private fun legend(chart: LineChart): String {
+        val sb = StringBuilder()
+        sb.append("""
+  <rect width="100%" height="50" x="0" y="360" fill="url(#backGrad1)"/>
+  <g transform="translate(0, 10)">""")
+        var x = 8
+        var textX = 15
+        chart.points.forEachIndexed { index, mutableList ->
+            sb.append(
+                """<circle r="5" cx="$x" cy="366" fill="${DefaultChartColors[index]}"/>
+    <text x="$textX" y="370" font-family="Arial, Helvetica, sans-serif" font-size="10px" fill="#fcfcfc">${mutableList.label} </text>
+        """.trimIndent()
+            )
+            x += mutableList.textWidth() + 15
+            textX += mutableList.textWidth() + 15
+        }
+        sb.append("</g>")
+        return sb.toString()
+
     }
 
     private fun end() = "</svg>"
@@ -29,7 +54,7 @@ class LineChartMaker {
 
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg height="$maxHeight" width="$maxWidth" viewBox="0 0 $maxWidth $maxHeight" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <svg height="$maxGraphHeight" width="$maxGraphWidth" viewBox="0 0 $maxGraphWidth $maxGraphHeight" id="ID_${lineChart.id}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         """.trimIndent()
     }
 
@@ -38,9 +63,9 @@ class LineChartMaker {
         return """
             <defs>
              <linearGradient id="backGrad1" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
-                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
-                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
+                <stop class="stop1" offset="0%" stop-color="#5c5c5c"/>
+                <stop class="stop2" offset="30%" stop-color="#4c4c4c"/>
+                <stop class="stop3" offset="100%" stop-color="#111111"/>
             </linearGradient>
             <script>
             function showText(id) {
@@ -55,32 +80,30 @@ class LineChartMaker {
             </defs>
         """.trimIndent()
     }
-    private fun makePoints(points: List<Point>, index: Int, lineChart: LineChart): String {
-        val maxData = points.maxOf { it.y } + 100
+    private fun makePoints(points: Points, index: Int, lineChart: LineChart): String {
+        val maxData = points.points.maxOf { it.y } + 100
         val oneUnit = maxHeight / maxData
-        val xGap = maxWidth / (points.size + 1)
-        val yGap = maxHeight / (points.size + 1)
+        val xGap = maxGraphWidth / (points.points.size + 1)
+        val yGap = maxHeight / (points.points.size + 1)
         var num = xGap
         var num2 = yGap
         val str = StringBuilder()
         val sb = StringBuilder()
         val elements = StringBuilder()
-        points.forEachIndexed { itemIndex, item ->
+        points.points.forEachIndexed { itemIndex, item ->
             val y = maxHeight - (item.y * oneUnit)
             if (index == 0) {
                 elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
-                elements.append("""<polyline points="0,$num2 $maxWidth,$num2" style="stroke: #aaaaaa"/>""")
-                elements.append("""<text x="$num" y="12" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold;">${item.label}</text>""")
+                elements.append("""<polyline points="0,$num2 $maxGraphWidth,$num2" style="stroke: #aaaaaa"/>""")
+                elements.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:#fcfcfc;">${item.label}</text>""")
             }
-            elements.append("""<text x="$num" y="${y - 10}" style="font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
-
+            elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:#fcfcfc; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             str.append(" $num,$y")
-            sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
-            str.append(" $num,$y")
-            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: #ffffff; fill: ${DefaultChartColors[index]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: #fcfcfc; fill: ${DefaultChartColors[index]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
             num += xGap
             num2 += yGap
         }
+        sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
         sb.append(elements)
         return sb.toString()
     }
@@ -103,9 +126,12 @@ fun main() {
         Point(label = "Apr", 22.0), Point(label = "May", 160.0), Point(label = "Jun", 94.0),
         Point(label = "Jul", 56.0), Point(label = "Aug", 23.0), Point(label = "Sept", 201.0)
     )
+    val p1 = Points("Sales", points)
+    val p2 = Points("Marketing", points2)
+    val p3 = Points("Development", points3)
     val lc = LineChart(
         title = "Point on graph",
-        points = mutableListOf<MutableList<Point>>(points, points2, points3)
+        points = mutableListOf(p1, p2,p3)
     )
     val svg = maker.makeLineChart(lc)
 

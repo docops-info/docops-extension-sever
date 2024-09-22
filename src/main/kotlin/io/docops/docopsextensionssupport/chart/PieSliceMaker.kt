@@ -46,10 +46,14 @@ class PieSliceMaker {
             val arc = arc(cumulative, sum)
             val x = cos(arc) * 100
             val y = sin(arc) * 100
+            val id = pieSlice.label.lowercase().filterNot{it.isWhitespace()}
             val path = """
-            <path class="pie" d="M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index)};">
+            <path class="pie" id="$id" d="M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index)};">
             <title>${pieSlice.label} - ${pieSlice.amount}</title>
             </path>
+            <text fill='#000000' text-anchor='middle' alignment-baseline='middle' font-size="8" font-family="Arial, Helvetica" stroke='black' stroke-width="0.2">
+                <textPath href="#$id" startOffset="50%" text-anchor="middle">${pieSlice.label}</textPath>
+            </text>
         """.trimIndent()
             sb.append(path)
             prevX = x
@@ -59,7 +63,7 @@ class PieSliceMaker {
         return sb.toString()
     }
     private fun startSvg(pieSlices: PieSlices) : String {
-        val buffer = 80
+        val buffer = 120
         val baseHeight = 200
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
 
@@ -71,7 +75,7 @@ class PieSliceMaker {
 
     private fun makeLabels(pieSlices: PieSlices): String {
         val sb = StringBuilder()
-        sb.append("<g transform='translate(10, 240)'>")
+        sb.append("<g transform='translate(10, 260)'>")
         val chunks = pieSlices.slices.chunked(pieSlices.display.legendRows)
         var startX = 0
         var count = 0
