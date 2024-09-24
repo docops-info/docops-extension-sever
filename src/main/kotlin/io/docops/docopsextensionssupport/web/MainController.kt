@@ -359,6 +359,14 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         return "boxy/bargroup"
     }
 
+    @GetMapping("/comp.html")
+    @Counted
+    @Timed(value = "comp.draw")
+    fun comp(model: Model, response: HttpServletResponse): String {
+        response.addHeader("HX-Trigger", """{"button-click": {"element": "score-comp"}}""")
+        return "scorecard/comp"
+    }
+
     @GetMapping("/release.html")
     @Counted
     @Timed(value = "docops.release")

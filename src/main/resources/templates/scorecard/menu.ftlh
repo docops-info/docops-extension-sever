@@ -9,6 +9,7 @@
     <a role="tab" class="tab btnMenu score-red" hx-get="scorecard/index.html?type=score-red" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Red Theme</a>
     <a role="tab" class="tab btnMenu score-blue" hx-get="scorecard/index.html?type=score-blue" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Blue Theme</a>
     <a role="tab" class="tab btnMenu score-yellow" hx-get="scorecard/index.html?type=score-yellow" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Yellow Theme</a>
+    <a role="tab" class="tab btnMenu score-comp" hx-get="comp.html" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Comparison Chart</a>
     <a role="tab" class="tab btnMenu score1" hx-get="scorecard/index.html?type=score1" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Dark Theme</a>
     <a role="tab" class="tab btnMenu scorecard-schema" hx-get="json/schema?name=scorecard-schema" data-hx-target="#scorecardTarget"><i class="fad fa-curling text-xs mr-2"></i> JSON Schema</a>
 

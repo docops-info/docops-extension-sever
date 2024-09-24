@@ -33,9 +33,19 @@ fun getRandomColorHex(): String {
 
 fun gradientFromColor(color: String): Map<String, String> {
     val decoded = Color.decode(color)
-    val tinted1 = tint(decoded, 0.5)
-    val tinted2 = tint(decoded, 0.25)
+    val tinted1 = tint(decoded, 0.35)
+    val tinted2 = tint(decoded, 0.10)
     return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
+}
+fun svgGradient(color: String, id: String): String {
+    val map = gradientFromColor(color)
+    return """
+        <linearGradient id="$id" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:${map["color1"]}"/>
+            <stop offset="50%" style="stop-color:${map["color2"]}"/>
+            <stop offset="100%" style="stop-color:${map["color3"]}"/>
+        </linearGradient>
+    """.trimIndent()
 }
 private fun shade(color: Color): String {
     val rs: Double = color.red * 0.50

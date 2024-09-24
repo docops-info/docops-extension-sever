@@ -1,5 +1,5 @@
 <div>
-    <h1>Create Small Calendar Image</h1>
+    <h1>Create a Small Calendar Image</h1>
     <div id="contentBox" ></div>
     <div class="divider"></div>
 
