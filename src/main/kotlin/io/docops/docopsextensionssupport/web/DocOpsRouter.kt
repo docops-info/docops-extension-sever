@@ -15,6 +15,8 @@ import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
+import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
+import io.docops.docopsextensionssupport.scorecard.ComparisonChartMaker
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
@@ -175,92 +177,21 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             log.info("line handler executed in ${timing.duration.inWholeMilliseconds}ms")
             return timing.value
         }
+        else if("comp".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = ComparisonChartHandler()
+                handler.handleSVG(payload=payload)
+            }
+            log.info("line handler executed in ${timing.duration.inWholeMilliseconds}ms")
+            return timing.value
+        }
         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
     }
 
 
-
-    @GetMapping("/png")
-    @Timed(value = "docops.router.png", description="Creating a docops visual png using http get", percentiles=[0.5, 0.9])
-    fun getPng(@RequestParam(value = "kind", required = true) kind: String,
-               @RequestParam(name = "payload") payload: String,
-               @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
-               @RequestParam("type", required = false, defaultValue = "PDF") type: String,
-               @RequestParam("title", required = false, defaultValue = "title") title: String,
-               @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
-               @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
-               @RequestParam(name = "outlineColor", required = false,defaultValue = "#37cdbe") outlineColor: String): ResponseEntity<ByteArray> {
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
-        if ("connector".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ConnectorHandler()
-                handler.handlePNG(payload = payload, "PDF", scale = scale, useDark = useDark)
-            }
-            log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if("placeMat".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = PlacematHandler()
-                handler.handlePNG(payload, "PDF")
-            }
-
-            log.info("getPlaceMat executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if("timeline".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = TimelineHandler()
-                handler.handlePNG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars)
-            }
-            log.info("timeline executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if("scorecard".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ScorecardHandler()
-                handler.handlePNG(payload)
-            }
-            log.info("scorecard executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if("roadmap".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = RoadmapHandler()
-                handler.handlePNG(payload, useDark = useDark, type = type, title = title, scale = scale, numChars = numChars)
-            }
-            log.info("roadmap executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if ("buttons".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ButtonHandler()
-                handler.handlePNG(payload)
-            }
-            log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }else if ("release".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ReleaseHandler()
-                handler.handlePNG(payload, useDark = useDark)
-            }
-            log.info("release executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        }
-        else if("adr".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = AdrHandler()
-                handler.handlePNG(payload = payload, scale = scale, useDark = useDark)
-            }
-            log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
-            return timing.value
-        }
-         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
-    }
-
 }
+
+
 
 
 

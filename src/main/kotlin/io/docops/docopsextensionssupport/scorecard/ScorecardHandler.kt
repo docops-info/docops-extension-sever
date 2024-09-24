@@ -40,27 +40,5 @@ class ScorecardHandler {
         }
     }
 
-    fun handlePNG(
-        payload: String
-    ): ResponseEntity<ByteArray> {
-        try {
-            val timing = measureTimedValue {
-                val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-                val content = Json.decodeFromString<ScoreCard>(data)
-                val sm = ScoreCardMaker()
-                val svg = sm.make(scoreCard = content, isPdf = true)
-                val headers = HttpHeaders()
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType = MediaType.IMAGE_PNG
-                val res = findHeightWidth(svg)
-                val baos = SvgToPng().toPngFromSvg(svg, res)
-                ResponseEntity(baos, headers, HttpStatus.OK)
-            }
-            log.info("getScoreCard executed in ${timing.duration.inWholeMilliseconds}ms ")
-            return timing.value
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
-        }
-    }
+
 }
