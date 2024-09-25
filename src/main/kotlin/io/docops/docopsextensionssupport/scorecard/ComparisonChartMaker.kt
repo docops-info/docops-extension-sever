@@ -26,7 +26,7 @@ class ComparisonChartMaker {
     private fun head(comparisonChart: ComparisonChart, lastLine: Int) = """
         <svg id="ID_${comparisonChart.id}"
      xmlns="http://www.w3.org/2000/svg"
-     width="683" height="${lastLine * 0.667}"
+     width="${1024 * comparisonChart.display.scale}" height="${lastLine * comparisonChart.display.scale}"
      viewBox="0 0 1024.0 $lastLine"
      preserveAspectRatio="xMidYMin slice"
      >
@@ -72,6 +72,7 @@ class ComparisonChartMaker {
                     ${comparisonChart.colHeader[1]}
                 </text>
                 </g>
+                <rect y="0" width="100%" height="30" fill="url(#leftCol)" filter="url(#shadow)"/>
                 <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}">${comparisonChart.title}</text>
         """.trimIndent())
         return sb.toString()

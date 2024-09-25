@@ -11,7 +11,7 @@
   "title": "Spring Boot 3 Version Upgrade",
   "colHeader": [
     "Started from the bottom",
-    "Now we are here🎧"
+    "Now we are here 🎧"
   ],
   "rows": [
     {
@@ -40,8 +40,13 @@
       "original": "12 High and 2 Critical",
       "next": "0 High and 0 Critical"
     }
-  ]
+  ], "display": {
+
+             "leftColumnColor":   "#98E4FF",
+             "rightColumnColor":   "#0079FF"
+        }
 }
+
             </textarea>
         </div>
         <div class="flex flex-col">
@@ -51,4 +56,18 @@
             <input type="button" class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
         </div>
     </form>
+</div>
+<div>
+    <h1>List of Display Properties</h1>
+    <div id="adrSource" class="text-sm">
+        <pre><code>
+        "display": {
+             "titleFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
+             "leftColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
+             "rightColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
+             "leftColumnColor":   "#F73D93",
+             "rightColumnColor":   "#03C988"
+        }
+        </code></pre>
+    </div>
 </div>
