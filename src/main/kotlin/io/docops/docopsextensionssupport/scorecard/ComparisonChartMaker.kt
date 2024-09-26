@@ -111,7 +111,7 @@ class ComparisonChartMaker {
             if(idx > 0) {
                 dy =14
             }
-            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.leftColumnFontColor};">$t</tspan>""")
+            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.rightColumnFontColor};">$t</tspan>""")
         }
         sb.append("</text>")
         sb.append("</g>")
