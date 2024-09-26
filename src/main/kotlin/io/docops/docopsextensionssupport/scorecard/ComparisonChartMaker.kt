@@ -16,7 +16,7 @@ class ComparisonChartMaker {
         sb.append(defs(comparisonChart))
         sb.append(headerRow(comparisonChart, lastLine))
         comparisonChart.lines().forEach { key, value ->
-            sb.append(makeRow(key= key, value = value, startY = value.begin))
+            sb.append(makeRow(key= key, value = value, startY = value.begin, display = comparisonChart.display))
         }
         sb.append(tail(comparisonChart))
         return sb.toString()
@@ -77,7 +77,7 @@ class ComparisonChartMaker {
         """.trimIndent())
         return sb.toString()
     }
-    fun makeRow(key: String, value: ColLine, startY: Int) : String {
+    fun makeRow(key: String, value: ColLine, startY: Int, display: ComparisonChartDisplay) : String {
         val sb = StringBuilder()
         //col 1
         //language=svg
@@ -97,7 +97,7 @@ class ComparisonChartMaker {
             if(idx > 0) {
                 dy =14
             }
-            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;">$t</tspan>""")
+            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.leftColumnFontColor};">$t</tspan>""")
         }
         sb.append("</text>")
         sb.append("</g>")
@@ -111,7 +111,7 @@ class ComparisonChartMaker {
             if(idx > 0) {
                 dy =14
             }
-            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;">$t</tspan>""")
+            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.leftColumnFontColor};">$t</tspan>""")
         }
         sb.append("</text>")
         sb.append("</g>")

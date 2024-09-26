@@ -17,7 +17,9 @@ class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
     val leftColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
     val rightColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
     val leftColumnColor: String = "#F73D93",
+    val leftColumnFontColor: String = "#fcfcfc",
     val rightColumnColor: String = "#03C988",
+    val rightColumnFontColor: String = "#fcfcfc",
     val scale: Double = 1.0
         )
 
