@@ -89,8 +89,7 @@ class ComparisonChartMaker {
         sb.append("</g>")
         //language=svg
         sb.append("""<g transform="translate(346,$startY)">""")
-        //language=svg
-        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;" x="0" y="0">""")
+        sb.append("<text style='font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;' x='0' y='0'>")
         var dy = 0
         //language=svg
         value.lines.first.forEachIndexed { idx, t ->
@@ -103,7 +102,6 @@ class ComparisonChartMaker {
         sb.append("</g>")
         //language=svg
         sb.append("""<g transform="translate(686,$startY)">""")
-        //language=svg
         sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;" x="0" y="0">""")
         dy = 0
         //language=svg

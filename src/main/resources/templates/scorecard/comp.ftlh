@@ -3,11 +3,13 @@
     <div id="contentBox" ></div>
     <div class="divider"></div>
 
-    <form class="grid grid-cols-2 gap-4" data-hx-put="api/comp/" data-hx-target="#contentBox" hx-trigger="submit, load">
-        <div class="flex flex-col col-span-2">
-            <label for="content" class="mb-2">JSON</label>
-            <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/comp/" data-hx-target="#contentBox">
-{
+    <form class="grid grid-cols-1 gap-4" data-hx-put="api/comp/" data-hx-target="#contentBox" hx-trigger="submit, load">
+        <div class="mb-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="content">
+                JSON Input
+            </label>
+            <textarea id="content" name="content" rows="16" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="">
+            {
   "title": "Spring Boot 3 Version Upgrade",
   "colHeader": [
     "Started from the bottom",
@@ -46,14 +48,11 @@
              "rightColumnColor":   "#0079FF"
         }
 }
-
-            </textarea>
+        </textarea>
         </div>
-        <div class="flex flex-col">
-            <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
-        </div>
-        <div class="flex flex-col">
-            <input type="button" class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
+        <div class="mb-2 flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+            <input type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
         </div>
     </form>
 </div>
@@ -62,11 +61,14 @@
     <div id="adrSource" class="text-sm">
         <pre><code>
         "display": {
+                "scale": 1,
              "titleFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
              "leftColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
              "rightColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
              "leftColumnColor":   "#F73D93",
-             "rightColumnColor":   "#03C988"
+             "leftColumnFontColor":   "#fcfcfc",
+             "rightColumnColor":   "#03C988",
+             "rightColumnFontColor":   "#fcfcfc"
         }
         </code></pre>
     </div>
