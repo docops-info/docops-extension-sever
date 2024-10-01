@@ -22,6 +22,7 @@ import io.docops.asciidoc.utils.addLinebreaks
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
 /**
  * Represents a class that extends the Regular class and implements additional functionality for drawing large buttons.
@@ -102,9 +103,10 @@ class Large(buttons: Buttons) : Regular(buttons) {
     }
 
     private fun drawText(button: Button): String {
-        var desc = mutableListOf<StringBuilder>()
+        var desc = mutableListOf<String>()
         button.description?.let {
-            desc = addLinebreaks(it, 35)
+            desc= itemTextWidth(itemText = it, maxWidth = 295, fontSize = 12, fontName = "Helvetica")
+           // desc = addLinebreaks(it, 35)
         }
         val descList = StringBuilder()
         desc.forEach {
