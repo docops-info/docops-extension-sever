@@ -454,5 +454,7 @@ refactor displayConfigUrl to displayTheme
     val rm = RoadMapMaker(false, 26)
     val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
     val f = File("gen/roadmap.svg")
+    val d = generateRectPathData(552f, 54f,5f,5f,0f,0f)
+    println(d)
     f.writeBytes(output.toByteArray())
 }

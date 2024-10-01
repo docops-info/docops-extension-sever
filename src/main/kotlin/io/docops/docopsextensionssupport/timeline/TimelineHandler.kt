@@ -38,27 +38,4 @@ class TimelineHandler {
         return timing.value
     }
 
-    fun handlePNG(
-        payload: String,
-        type: String,
-        title: String,
-        useDark: Boolean,
-        outlineColor: String,
-        scale: String,
-        numChars: String
-    ): ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, true)
-            val svg = tm.makeTimelineSvg(source = data, title = title, scale = scale, isPdf = true, chars = numChars)
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidth(svg)
-            val baos = SvgToPng().toPngFromSvg(svg, res)
-            ResponseEntity(baos, headers, HttpStatus.OK)
-        }
-        log.info("getTimeLineTable executed in ${timing.duration.inWholeMilliseconds}ms")
-        return timing.value
-    }
 }

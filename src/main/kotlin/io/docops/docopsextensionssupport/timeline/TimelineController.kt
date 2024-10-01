@@ -44,6 +44,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/timeline")
 class TimelineController {
     private val log = LogFactory.getLog(TimelineController::class.java)
+
     /**
      * Updates the timeline based on the provided request data.
      *
@@ -52,8 +53,12 @@ class TimelineController {
      */
     @PutMapping("/")
     @ResponseBody
-    @Timed(value = "docops.timeline.put", description="docops create timeline from web form", percentiles=[0.5, 0.9])
-    @Counted(value = "docops.timeline.put", description="docops create timeline from web form")
+    @Timed(
+        value = "docops.timeline.put",
+        description = "docops create timeline from web form",
+        percentiles = [0.5, 0.9]
+    )
+    @Counted(value = "docops.timeline.put", description = "docops create timeline from web form")
     fun putTimeline(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             var title = "title"
@@ -129,34 +134,31 @@ class TimelineController {
      */
     @GetMapping("/")
     @ResponseBody
-    @Timed(value = "docops.roadmap.get", description = "docops create timeline from asciidoctorj plugin", percentiles=[0.5, 0.9])
+    @Timed(
+        value = "docops.roadmap.get",
+        description = "docops create timeline from asciidoctorj plugin",
+        percentiles = [0.5, 0.9]
+    )
     @Counted(value = "docops.roadmap.get", description = "docops create timeline from asciidoctorj plugin")
-    fun getTimeLine(@RequestParam(name = "payload") payload: String,
-                    @RequestParam(name="title") title: String,
-                    @RequestParam(name="scale") scale: String,
-                    @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-                    @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
-                    @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean,
-                    @RequestParam(name="outlineColor", defaultValue = "#37cdbe") outlineColor: String
+    fun getTimeLine(
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "title") title: String,
+        @RequestParam(name = "scale") scale: String,
+        @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+        @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
+        @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
+        @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String
 
-                    ): ResponseEntity<ByteArray> {
+    ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
             val isPdf = "PDF" == type
             val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
             val headers = HttpHeaders()
-            if (isPdf) {
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType = MediaType.IMAGE_PNG
-                val res = findHeightWidth(svg)
-                val baos = SvgToPng().toPngFromSvg(svg, res)
-                ResponseEntity(baos, headers, HttpStatus.OK)
-            } else {
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType = MediaType.parseMediaType("image/svg+xml")
-                ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
-            }
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
         }
         log.info("getTimeLine executed in ${timing.duration.inWholeMilliseconds}ms ")
         return timing.value
@@ -172,7 +174,10 @@ class TimelineController {
     @GetMapping("/table")
     @ResponseBody
     @Timed(value = "docops.roadmap.table.data.html")
-    fun getTimeLineTable(@RequestParam(name = "payload") payload: String, @RequestParam(name="title") title: String): ResponseEntity<ByteArray> {
+    fun getTimeLineTable(
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "title") title: String
+    ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineParser()

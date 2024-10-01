@@ -29,30 +29,4 @@ class RoadmapHandler {
         return timing.value
     }
 
-    fun handlePNG(payload: String, useDark: Boolean, type: String, scale: String, numChars: String, title: String): ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val rmm = RoadMapMaker(useDark)
-            val svg = rmm.makeRoadMapImage(
-                data,
-                scale,
-                title,
-                numChars,
-                isPdf = true
-            )
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidth(svg)
-            val baos = try {
-            SvgToPng().toPngFromSvg(svg, res)
-        } catch (e: Exception) {
-                println(svg)
-            throw e
-        }
-            ResponseEntity(baos, headers, HttpStatus.OK)
-        }
-        log.info("getRoadMap executed in ${timing.duration.inWholeMilliseconds}ms ")
-        return timing.value
-    }
 }

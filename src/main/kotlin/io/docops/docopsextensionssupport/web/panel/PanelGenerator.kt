@@ -19,10 +19,8 @@ package io.docops.docopsextensionssupport.web.panel
 import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
-import io.docops.asciidoc.buttons.theme.*
-import io.docops.docopsextensionssupport.badge.findHeightWidthViewBox
+import io.docops.asciidoc.buttons.theme.ButtonType
 import io.docops.docopsextensionssupport.support.*
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.ObservationRegistry
 import io.micrometer.observation.annotation.Observed
@@ -76,19 +74,11 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         if (!isPDF && (width.isNotEmpty() || height.isNotEmpty())) {
             imgSrc = manipulateSVG(xml, width, height)
         }
-        return if (isPDF) {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.IMAGE_PNG
-            val res = findHeightWidthViewBox(imgSrc)
-            val baos = SvgToPng().toPngFromSvg(imgSrc, res)
-            ResponseEntity(baos, headers, HttpStatus.OK)
-        } else {
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
 
-        }
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        return ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+
     }
 
 
@@ -101,9 +91,10 @@ class PanelGenerator(private val observationRegistry: ObservationRegistry) {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.TEXT_PLAIN
-        val lines = panelService.toLines("Panel Links",sourceToPanel(contents, scriptLoader) , server = server)
+        val lines = panelService.toLines("Panel Links", sourceToPanel(contents, scriptLoader), server = server)
         return ResponseEntity(lines.joinToString("\n"), headers, HttpStatus.OK)
     }
+
     @PutMapping("/colorgen")
     @ResponseBody
     @Timed(value = "docops.panel.generator.color", histogram = true, percentiles = [0.5, 0.95])

@@ -16,48 +16,11 @@
 
 package io.docops.docopsextensionssupport.svgsupport
 
-import org.apache.batik.transcoder.TranscoderInput
-import org.apache.batik.transcoder.TranscoderOutput
-import org.apache.batik.transcoder.image.JPEGTranscoder
-import org.apache.batik.transcoder.image.PNGTranscoder
 import java.awt.Canvas
 import java.awt.Font
-import java.awt.FontMetrics
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.OutputStream
-import java.io.StringReader
-import java.nio.file.Files
 
 
-class SvgToPng {
-
-    fun toPngFromSvg(svg: String, res: Pair<String, String>): ByteArray {
-        try {
-            val input = TranscoderInput(StringReader(svg))
-            val baos = ByteArrayOutputStream()
-            val output = TranscoderOutput(baos)
-            val converter = PNGTranscoder()
-            converter.addTranscodingHint(PNGTranscoder.KEY_HEIGHT,  res.first.toFloat())
-            converter.addTranscodingHint(PNGTranscoder.KEY_WIDTH,  res.second.toFloat())
-            converter.addTranscodingHint(PNGTranscoder.KEY_EXECUTE_ONLOAD,  false);
-            converter.addTranscodingHint(PNGTranscoder.KEY_DEFAULT_FONT_FAMILY, "Arial");
-            converter.transcode(input, output)
-            return baos.toByteArray()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
-        }
-    }
-    fun toJpegFromSvg(svg: String, outputStream: OutputStream) {
-        val input = TranscoderInput(StringReader(svg))
-        val output = TranscoderOutput(outputStream)
-        val converter = JPEGTranscoder()
-        converter.transcode(input, output)
-    }
-
-
- }
+class SvgToPng
 
 fun String.textWidth(fontName: String, size: Int = 12): Int {
     val font =  Font(fontName,Font.PLAIN,size)
@@ -92,12 +55,4 @@ fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName:
         itemArray.add(itemText)
     }
     return itemArray
-}
-fun main() {
-    val svg = File("gen/roadmap.svg")
-    val content = Files.readAllBytes(svg.toPath())
-    //width="1254.0" height="228.48"
-    val output = SvgToPng().toPngFromSvg(String(content), Pair("701", "662"))
-    val f = File("gen/roadmap.png")
-    f.writeBytes(output)
 }

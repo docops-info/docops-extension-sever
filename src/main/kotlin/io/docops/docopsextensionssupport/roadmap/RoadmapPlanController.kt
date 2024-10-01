@@ -39,6 +39,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/roadmap")
 class RoadmapPlanController {
     val log = LogFactory.getLog(RoadmapPlanController::class.java)
+
     /**
      * Generates a roadmap plan based on the provided parameters.
      *
@@ -48,7 +49,11 @@ class RoadmapPlanController {
     @PutMapping("/")
     @ResponseBody
     @Counted(value = "docops.roadmap.put.html", description = "Creating a roadmap plan from webform")
-    @Timed(value = "docops.roadmap.put.html", description = "Creating a roadmap plan from webform", percentiles = [0.5, 0.9])
+    @Timed(
+        value = "docops.roadmap.put.html",
+        description = "Creating a roadmap plan from webform",
+        percentiles = [0.5, 0.9]
+    )
     fun putRoadmapPlan(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             var div = ""
@@ -101,33 +106,31 @@ class RoadmapPlanController {
     @GetMapping("/")
     @ResponseBody
     @Counted("docops.roadmap.get.html", description = "Creating a roadmap plan from http get")
-    @Timed(value = "docops.roadmap.get.html", description = "Creating a roadmap plan from http get", percentiles = [0.5, 0.9])
-    fun getRoadMap(@RequestParam(name = "payload") payload: String,
-                   @RequestParam(name="scale") scale: String,
-                   @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-                   @RequestParam("title", required = false) title: String,
-                   @RequestParam("numChars", required = false, defaultValue = "30",) numChars: String,
-                   @RequestParam(name="useDark", defaultValue = "false") useDark: Boolean
+    @Timed(
+        value = "docops.roadmap.get.html",
+        description = "Creating a roadmap plan from http get",
+        percentiles = [0.5, 0.9]
     )
-                        : ResponseEntity<ByteArray> {
+    fun getRoadMap(
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "scale") scale: String,
+        @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+        @RequestParam("title", required = false) title: String,
+        @RequestParam("numChars", required = false, defaultValue = "30") numChars: String,
+        @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean
+    )
+            : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val rmm = RoadMapMaker(useDark, 26)
             val isPdf = "PDF" == type
             val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
             val headers = HttpHeaders()
-            if (isPdf) {
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType = MediaType.IMAGE_PNG
-                val res = findHeightWidth(svg)
-                val baos = SvgToPng().toPngFromSvg(svg, res)
-                ResponseEntity(baos, headers, HttpStatus.OK)
-            }
-            else {
-                headers.cacheControl = CacheControl.noCache().headerValue
-                headers.contentType = MediaType.parseMediaType("image/svg+xml")
-                ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
-            }
+
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+
         }
         log.info("getRoadMap executed in ${timing.duration.inWholeMilliseconds}ms ")
         return timing.value
