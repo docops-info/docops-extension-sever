@@ -141,7 +141,7 @@ $txt
         return svg
     }
 
-    @GetMapping("/badge/item", produces = ["image/svg+xml", "image/png"])
+    @GetMapping("/badge/item", produces = ["image/svg+xml"])
     fun getBadgeParams(
         @RequestParam(name = "payload") payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String,
@@ -194,22 +194,9 @@ $txt
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-                // return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
-                return if ("SVG" == type) {
-                    //val output = Badge.create(label, message, color, mcolor, null, 0, 1)
-                    headers.cacheControl = CacheControl.noCache().headerValue
-                    headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-                    ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
-                } else {
-                    headers.cacheControl = CacheControl.noCache().headerValue
-                    headers.contentType = MediaType.IMAGE_PNG
-                    val res = findHeightWidth(output)
-                    val baos = SvgToPng().toPngFromSvg(output, res)
-                    ResponseEntity(baos, headers, HttpStatus.OK)
-                }
+                return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
             }
         }
-
     }
 
 

@@ -25,25 +25,6 @@ class ButtonHandler {
         log.info("getButton executed in ${timing.duration.inWholeMilliseconds}ms ")
         return timing.value
     }
-    fun handlePNG(payload: String): ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val buttons = Json.decodeFromString<Buttons>(data)
-            val buttonShape = buttons.createSVGShape()
-
-            val imgSrc = buttonShape.drawShape("PDF")
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
-            val png = SvgToPng().toPngFromSvg(
-                imgSrc,
-                Pair(buttonShape.height().toString(), buttonShape.width().toString())
-            )
-            ResponseEntity(png, headers, HttpStatus.OK)
-        }
-        log.info("getButton executed in ${timing.duration.inWholeMilliseconds}ms ")
-        return timing.value
-    }
 
     private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
         val buttonShape = buttons.createSVGShape()

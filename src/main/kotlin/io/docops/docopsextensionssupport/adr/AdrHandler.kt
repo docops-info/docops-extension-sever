@@ -23,19 +23,5 @@ class AdrHandler {
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 
-    fun handlePNG(payload: String, scale: String, useDark: Boolean ): ResponseEntity<ByteArray> {
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val config = AdrParserConfig(newWin = true, isPdf = true, lineSize = 95, increaseWidthBy = 0, scale = scale.toFloat())
-        val adr = ADRParser().parse(data, config)
-        var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = useDark)
-        adr.urlMap.forEach { (t, u) ->
-            svg = svg.replace("_${t}_", u)
-        }
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.IMAGE_PNG
-        val res = findHeightWidth(svg)
-        val baos = SvgToPng().toPngFromSvg(svg, res)
-        return ResponseEntity(baos, headers, HttpStatus.OK)
-    }
+
 }

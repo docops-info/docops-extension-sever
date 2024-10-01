@@ -38,14 +38,6 @@ class ConnectorHandler {
         return ResponseEntity(svg.shapeSvg.toByteArray(), headers, HttpStatus.OK)
     }
 
-    fun handlePNG(payload: String, type: String, scale: String, useDark: Boolean): ResponseEntity<ByteArray> {
-        val headers = createHeaders()
-        val decodedPayload = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = getSvgFromPayload(decodedPayload, scale.toFloat(), useDark, type)
-        val converter = SvgPngConverter()
-        val png = converter.toPngFromSvg(svg.shapeSvg, Pair(svg.height.toString(), svg.width.toString()))
-        return ResponseEntity(png, headers, HttpStatus.OK)
-    }
 
     private fun createHeaders(): HttpHeaders {
         val headers = HttpHeaders()
@@ -58,12 +50,7 @@ class ConnectorHandler {
         return fromRequestToConnector(contents, scale, useDark, type)
     }
 
-    private class SvgPngConverter {
-        fun toPngFromSvg(svg: String, dimensionSize: Pair<String, String>): ByteArray {
-            val converter = SvgToPng()
-            return converter.toPngFromSvg(svg, dimensionSize)
-        }
-    }
+
 
     private fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
         val connectors = decodeFromJson(contents)
