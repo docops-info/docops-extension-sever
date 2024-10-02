@@ -17,8 +17,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoctorj.extension.panels.compressString
-import io.docops.docopsextensionssupport.badge.findHeightWidth
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -73,8 +71,9 @@ class RoadmapPlanController {
             }
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val index = httpServletRequest.getParameter("index")
-            val rmm = RoadMapMaker("on".equals(useDarkInput), index = index.toInt())
-            val svg = rmm.makeRoadMapImage(contents, scale, title, chars)
+            val rmm = PlannerMaker()
+
+            val svg = rmm.makePlannerImage(contents, title)
 
             div = """
             <div>$svg</div>
@@ -122,9 +121,9 @@ class RoadmapPlanController {
             : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val rmm = RoadMapMaker(useDark, 26)
-            val isPdf = "PDF" == type
-            val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+            val rmm = PlannerMaker()
+
+            val svg = rmm.makePlannerImage(data, title)
             val headers = HttpHeaders()
 
             headers.cacheControl = CacheControl.noCache().headerValue

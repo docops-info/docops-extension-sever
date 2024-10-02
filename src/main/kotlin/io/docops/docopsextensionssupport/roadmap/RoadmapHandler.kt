@@ -1,7 +1,5 @@
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.docopsextensionssupport.badge.findHeightWidth
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
@@ -17,9 +15,9 @@ class RoadmapHandler {
     fun handleSVG(payload: String, useDark: Boolean, type: String, scale: String, numChars: String, title: String): ResponseEntity<ByteArray>  {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val rmm = RoadMapMaker(useDark)
+            val rmm = PlannerMaker()
 
-            val svg = rmm.makeRoadMapImage(data, scale, title, numChars)
+            val svg = rmm.makePlannerImage(data, title)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
