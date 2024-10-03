@@ -1,7 +1,5 @@
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
-
 class PlannerParser {
 
 
@@ -14,8 +12,6 @@ class PlannerParser {
         content.lines().forEachIndexed { index, string ->
             if(string.startsWith("- ")) {
                 set.add(string)
-                //string is next what is previous?
-                //cannot use index, need to create counter of header
                 currentType = set[counter]
 
                 if(bodyContent.isNotEmpty()) {
@@ -42,9 +38,19 @@ class PlannerParser {
     private fun parseLine(line: String): PlanItem {
         val sp = line.trim().split(" ")
         var planItem: PlanItem = if(sp.size > 2) {
-            PlanItem(type = sp[1], title = sp.subList(2, sp.size).joinToString(" ") )
+            val remain = sp.subList(2, sp.size)
+            var color: String? = null
+            var title = ""
+            remain.forEach {
+                if(it.startsWith("#")) {
+                    color = it
+                } else {
+                    title += "$it "
+                }
+            }
+            PlanItem(type = sp[1], title = title.trim(), color = color)
         } else {
-            PlanItem(sp[1], null)
+            PlanItem(sp[1], null, null)
         }
         return planItem
     }

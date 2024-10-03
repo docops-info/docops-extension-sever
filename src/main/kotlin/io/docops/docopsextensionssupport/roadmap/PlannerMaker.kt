@@ -28,15 +28,15 @@ class PlannerMaker {
 
 
 
-    private fun makeColumn(key: String, planItems: List<PlanItem>, startY: Int, startX: Int, color: String): String {
+    private fun makeColumn(key: String, planItems: List<PlanItem>, startY: Int, startX: Int, colorIn: String): String {
         val sb = StringBuilder()
+        var color = colorIn
         var y = startY
-        sb.append("""
-            <g transform="translate($startX, 10)">
-            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $color; font-size: 36; stroke: $color; font-weight: bold;">${key.escapeXml().uppercase()}</text>
-            </g>
-            """.trimIndent())
+
         planItems.forEachIndexed { index, planItem ->
+            if(planItem.color != null) {
+                color = planItem.color
+            }
             sb.append("""<g transform="translate($startX, $y)">""")
             sb.append("""
                 <rect x="0" y="0" fill="#fcfcfc" height="360" width="552" rx="5" ry="5"
@@ -61,6 +61,11 @@ class PlannerMaker {
             sb.append("</g>")
             y += 360 +10
         }
+        sb.append("""
+            <g transform="translate($startX, 10)">
+            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $color; font-size: 36; stroke: $color; font-weight: bold;">${key.escapeXml().uppercase()}</text>
+            </g>
+            """.trimIndent())
         return sb.toString()
     }
     private fun makeHead(planItems: PlanItems, title: String): String {
@@ -79,7 +84,7 @@ class PlannerMaker {
 
 fun main() {
     val str = """
-- now Form Property Service
+- now Form Property Service #003b6b
 Determine consuming applications for Form Property Service & Customer inquiry Service
 - next Docker
 Use common docker image to streamline the process.
@@ -97,7 +102,7 @@ analyze black duck results
 image embed rectangle
 - now
 image embed slim
-- next
+- next Another map #005400
 color background roadmap
 - done Car
 remove car from release [[https://roach.gy roach]] strategy

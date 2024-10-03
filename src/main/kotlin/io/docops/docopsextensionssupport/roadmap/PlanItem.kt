@@ -1,8 +1,10 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import kotlinx.serialization.Serializable
 
-class PlanItem(val type: String, val title: String?) {
+@Serializable
+class PlanItem(val type: String, val title: String?, val color: String?) {
      var content: String? =""
     //this field is used for measuring text width
      var shadowContent : String? = null
