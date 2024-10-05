@@ -28,6 +28,8 @@ import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
+private const val BadgePerRow = 5
+
 /**
  * This class is responsible for generating badges using DocOps theme.
  */
@@ -76,7 +78,7 @@ class DocOpsBadgeGenerator {
             var filterText = "url(#Bevel2)"
             var maskText = "url(#a)"
             var mask = createMask(maskId, labelWidth, messageWidth, labelFill, filterText, messageFill, maskText)
-            if(rowCount > 3) {
+            if(rowCount > BadgePerRow) {
                 rowCount = 0
                 rowNum++
                 xPos = 0f
