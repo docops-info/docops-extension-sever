@@ -76,9 +76,10 @@ class AdrController() {
                 adr.urlMap.forEach { (t, u) ->
                     svg = svg.replace("_${t}_", u)
                 }
-                val results = makeAdrSource(adrText, svg)
-                servletResponse.contentType = "text/html";
-                servletResponse.characterEncoding = "UTF-8";
+                val results = makeAdrSource(adrText, svg).lines().joinToString(transform = String::trim, separator = "\n")
+                servletResponse.contentType = "text/html"
+                servletResponse.characterEncoding = "UTF-8"
+                //servletResponse.addHeader("HX-Push-Url", "adrbuilder.html")
                 servletResponse.status = 200
                 val writer = servletResponse.writer
                 writer.print(results)
@@ -114,30 +115,17 @@ class AdrController() {
     fun makeAdrSource(txt: String, svg: String): String {
         //language=html
         return """
-        <div class="collapse collapse-arrow border-base-300">
-            <input type="radio" name="my-accordion-2" checked="checked" />
-            <div class="collapse-title text-xl font-small">
-                Image
-            </div>
-            <div class="collapse-content">
-                <div id='imageblock'>
+            <div id='imageblock'>
                 $svg
-                </div>
-            </div>
-        </div>
-        <div class="collapse collapse-arrow border-base-300">
-            <input type="radio" name="my-accordion-2" />
-            <div class="collapse-title text-xl font-small">
-                Click to View Source
-            </div>
-            <div class="collapse-content">
+             </div>
+            <div class="">
                 <h3>Adr Source</h3>
                 <div>
-                <pre>
-                <code class="kotlin">
+                <pre class='scrollbar-none overflow-x-auto p-6 text-sm leading-snug text-white bg-black bg-opacity-75 kotlin hljs language-kotlin'>
+                <code>
                 [docops,adr]
                 ----
-                $txt
+                ${txt.lines().joinToString(transform = String::trim, separator = "\n")}
                 ----
                 </code>
                 </pre>
@@ -149,9 +137,9 @@ class AdrController() {
                 });
                 </script>
             </div>
-        </div>
+        
 
-    """.trimIndent()
+    """.trimMargin()
     }
 
     /**

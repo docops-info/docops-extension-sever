@@ -56,7 +56,7 @@ class SimpleIconController {
     @Timed(value = "docops.simpleicons", histogram = true, percentiles = [0.5, 0.95])
     fun getByLetter(@RequestParam(name = "SEL") selected : String,  model: Model) : String {
         val list = allClasses.filter { it.beanClassName!!.startsWith("org.silentsoft.simpleicons.icons.$selected") }.map { it.beanClassName?.replace("org.silentsoft.simpleicons.icons.", "") }.map { it?.replace("Icon", "") }
-        model.addAttribute("icons", list.chunked(5))
+        model.addAttribute("icons", list.chunked(7))
         model.addAttribute("letter", selected)
         return "icons/iconsbyletter"
     }

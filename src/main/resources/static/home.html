@@ -2,61 +2,243 @@
 <html lang="en">
 <head>
     <title>DocOps Extension Server</title>
-    <link rel="icon" href="images/favicon.svg" />
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon"/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="stylesheet" href="css/modal.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/kotlin.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
-    <script src="https://ajaxorg.github.io/ace-builds/src/ace.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
-    <script src="editor/js/theme.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/htmx.min.2.0.0.js"></script>
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.5.1/css/pro.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css" defer>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/modal.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+    <script src="js/echarts.5.5.0.js" defer></script>
+    <script src="js/spectrum.min.js" defer></script>
+    <script src="editor/js/theme.js" defer></script>
+    <script src="js/app.js" defer></script>
     <script src="js/ext/json-enc.js"></script>
 </head>
 <body>
-<div id="layout" class="content pure-g">
-    <div id="nav" class="pure-u">
-        <a href="#" id="menuLink" class="nav-menu-button">Menu</a>
 
-        <div class="nav-inner">
-            <button class="primary-button pure-button" onclick="window.open('http://docops.io');">DocOps.io</button>
 
-            <div class="pure-menu">
-                <ul class="pure-menu-list">
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="panels.html" data-hx-target="#bod">Panels</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="button/fromJson.html" data-hx-target="#bod">Buttons</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="button/fromJsonToPng.html" data-hx-target="#bod">Buttons PNG</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="adrbuilder.html" data-hx-target="#bod">ADR Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="charts.html" data-hx-target="#bod">Charts</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="timeline.html" data-hx-target="#bod">Timeline Builder</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="builder.html" data-hx-target="#bod">Release Strategy</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="roadmap.html" data-hx-target="#bod">Work Planner</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="badge.html" data-hx-target="#bod">Badge</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="scorecard/index.html" data-hx-target="#bod">Scorecard</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="simpleicons.html" data-hx-target="#bod">Simple Icons</a></li>
-                    <li class="pure-menu-item"><a class="pure-menu-link" data-hx-get="stats.html" data-hx-target="#bod">Stats</a></li>
-                </ul>
-            </div>
+<div class="bg-white py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:mx-0">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">DocOps Extension Server</h2>
+            <p class="mt-2 text-lg leading-8 text-gray-600">A list of extensions for AsciiDoctorJ.</p>
+        </div>
+        <div id="bod" class="mx-auto max-w-7xl px-6 lg:px-8"></div>
+        <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="adrbuilder.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">ADR</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="adrbuilder.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Architecture Decision Records
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Architecture Decision Records allow you to create the ADR and embeds within the document structure itself. The macro supports a simple text-based dsl.
+                        The macro used for ADR is</p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,adr,useDark=false,role=center]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="badge.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Badges</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="badge.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Badges, Shields
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Badges are an important part of any documentation as they help establish visual callouts to important ideas.
+                        Click on this box for a builder page to learn about the dsl.
+                        The macro used for Badges is: </p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,badge, role=left]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="buttons.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Buttons</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="buttons.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Buttons
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Buttons allow authors to create different shapes and sizes for navigation aids such as cards or circular buttons that can be placed anywhere in a document.
+                        Click on the link for a builder page to learn about the JSON dsl.
+                        The macro used for Buttons is: </p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,button,role=left]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="cal.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Calendar</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="cal.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Calendar Icon
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Badges are an important part of any documentation as they help establish visual callouts to important ideas.
+                        The Calendar macro allows authors to create a simple icon with the month and year. This is sometimes
+                        useful to quick glance of when the document was generated or can be overridden.
+                        Click on this box link for a builder page to learn about the JSON dsl.
+                        The macro used for Calendar Icon is </p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,cal, role=left]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="boxy.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Connectors</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="boxy.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Connectors
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Badges are an important part of any documentation as they help establish visual callouts to important ideas.
+                        The connectors macro creates a set of rectangles connected to create a simple left to right flow of desired activity.
+                        Click on this box link for a builder page to learn about the JSON dsl.
+                        The macro used for Connector is </p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,connector, useDark="false"]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="pm.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Connectors</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="pm.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Placemats
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Badges are an important part of any documentation as they help establish visual callouts to important ideas.
+                        The placemat macro creates a set of rectangles that outlines ideas grouped by color and legend elements.
+                        Click on this box link for a builder page to learn about the JSON dsl.
+                        The macro used for Placemat is</p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,placemat, useDark="false"]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="flex max-w-xl flex-col items-start justify-between">
+                <div class="flex items-center gap-x-4 text-xs">
+                    <time datetime="2020-03-16" class="text-gray-500">October 10, 2024</time>
+                    <a href="#" data-hx-get="pm.html" data-hx-target="#bod" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Connectors</a>
+                </div>
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                        <a href="#" data-hx-get="pm.html" data-hx-target="#bod">
+                            <span class="absolute inset-0"></span>
+                            Placemats
+                        </a>
+                    </h3>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">Badges are an important part of any documentation as they help establish visual callouts to important ideas.
+                        The placemat macro creates a set of rectangles that outlines ideas grouped by color and legend elements.
+                        Click on this box link for a builder page to learn about the JSON dsl.
+                        The macro used for Placemat is</p>
+                </div>
+                <div class="relative mt-8 flex items-center gap-x-4">
+                    <div class="text-sm leading-6">
+                        <p class="font-semibold text-gray-900">
+                            <a href="#">
+                                <span class="absolute inset-0"></span>
+                                [docops,placemat, useDark="false"]
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </article>
         </div>
     </div>
-
-    <div id="main" class="pure-u-1">
-        <div id="bod"><h3>Welcome to Extension UI Service</h3></div>
-    </div>
 </div>
+
+
 <script>
-    document.body.addEventListener("showFrame", function (evt){
-        if(typeof showHTMLInIFrame === "function"){showHTMLInIFrame();}
+    document.body.addEventListener("showFrame", function (evt) {
+        if (typeof showHTMLInIFrame === "function") {
+            showHTMLInIFrame();
+        }
     });
     let downloadBlob = function (FileName) {
         saveData(FileName);
@@ -75,11 +257,11 @@
         };
     }());
 
-    document.body.addEventListener('htmx:beforeSwap', function(evt) {
-        if(evt.detail.xhr.status === 404){
+    document.body.addEventListener('htmx:beforeSwap', function (evt) {
+        if (evt.detail.xhr.status === 404) {
             // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
             alert("Error: Could Not Find Resource");
-        } else if(evt.detail.xhr.status === 422){
+        } else if (evt.detail.xhr.status === 422) {
             // allow 422 responses to swap as we are using this as a signal that
             // a form was submitted with bad data and want to rerender with the
             // errors
@@ -87,7 +269,7 @@
             // set isError to false to avoid error logging in console
             evt.detail.shouldSwap = true;
             evt.detail.isError = false;
-        } else if(evt.detail.xhr.status === 400){
+        } else if (evt.detail.xhr.status === 400) {
             // if the response code 418 (I'm a teapot) is returned, retarget the
             // content of the response to the element with the id `teapot`
             evt.detail.shouldSwap = true;
