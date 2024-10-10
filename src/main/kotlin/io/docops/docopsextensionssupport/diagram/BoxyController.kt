@@ -64,27 +64,14 @@ class BoxyController {
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
             val div = """
-        <div class="collapse collapse-arrow border-base-300">
-            <input type="radio" name="my-accordion-2" checked="checked" />
-            <div class="collapse-title text-xl font-small">
-                Image
-            </div>
-            <div class="collapse-content">
                 <div id='imageblock'>
                 $svg
                 </div>
-            </div>
-        </div>
-        <div class="collapse collapse-arrow border-base-300">
-            <input type="radio" name="my-accordion-2" />
-            <div class="collapse-title text-xl font-small">
-                Click to View Source
-            </div>
             <div class="collapse-content">
                 <h3>Adr Source</h3>
                 <div>
                 <pre>
-                <code class="kotlin">
+                <code class="json">
                  $contents
                 </code>
                 </pre>
@@ -96,8 +83,7 @@ class BoxyController {
                 });
                 </script>
             </div>
-        </div>
-        """.trimIndent()
+        """.lines().joinToString(transform = String::trim, separator = "\n")
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
         log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
