@@ -235,23 +235,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 svg = createTimelineGrouped(releaseStrategy = releaseStrategy)
             }
         }
-        model["svg"] = svg
-        model["bsvg"] = Base64.getEncoder().encodeToString(svg.toByteArray())
-        val selectedStrategy = mutableListOf<SelectedStrategy>()
-        ReleaseEnum.entries.forEach {
-            selectedStrategy.add(SelectedStrategy(it.name, false))
-        }
-        val format = Json { prettyPrint = true }
-        model["releaseTypes"] = ReleaseEnum.entries
-        model["sourceJson"] = format.encodeToString(releaseStrategy)
-        model["styles"] = releaseStrategy.styles()
-        val json = Json.encodeToString(releaseStrategy)
-        model["getUrl"] = "api/release/?payload=${compressString(json)}&type=svg"
-        model["prefill"] = "api/release/prefill?payload=${compressString(json)}&type=svg"
-        val writer = StringWriter()
-        val tpl = freeMarkerConfigurer.configuration.getTemplate("release/filled.ftlh")
-        tpl.process(model, writer)
-        return writer.toString()
+        val div = """
+                <div id='imageblock'>
+                $svg
+                </div>
+            
+        """.lines().joinToString(transform = String::trim, separator = "\n")
+
+        return div
     }
 
     fun createTimelineSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineMaker().make(releaseStrategy, isPdf)

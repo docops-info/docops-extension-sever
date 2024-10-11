@@ -161,7 +161,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
             }
             var x = 200
-            var visibility = "visibility='hidden'"
+            var visibility = "visibility='block'"
             var anchor = "text-anchor='middle'"
             if (isPdf) {
                 x = 10
