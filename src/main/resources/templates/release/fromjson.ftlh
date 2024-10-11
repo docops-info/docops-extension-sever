@@ -10,7 +10,7 @@
   </article>
 </div>
 <div id="contentBox"></div>
-<form data-hx-put="api/release/prefill" data-hx-target="#contentBox" class="max-h-full mx-auto">
+<form data-hx-put="api/release/prefill" data-hx-target="#contentBox" class="max-h-full mx-auto" hx-trigger="submit, load">
     <div class="md-5">
         <label for="payload" class="mb-2">Insert JSON here</label>
         <textarea id="payload" name="payload" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" rows="20" cols="90" placeholder="" data-hx-put="api/release/prefill" data-hx-target="#contentBox">
@@ -82,7 +82,7 @@
   ],
   "style": "TLS",
   "displayConfig": {
-    "colors": ["#77E4C8", "#36C2CE", "#478CCF"],
+    "colors": ["#77CDFF", "#0D92F4", "#2563eb"],
     "fontColor": "#111111"
     }
 }

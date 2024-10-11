@@ -3,12 +3,12 @@
     <div id="contentBox" ></div>
     <div class="divider"></div>
 
-    <form class="grid grid-cols-1 gap-4" data-hx-put="api/comp/" data-hx-target="#contentBox" hx-trigger="submit, load">
+    <form class="max-h-full mx-auto" data-hx-put="api/comp/" data-hx-target="#contentBox" hx-trigger="submit, load">
         <div class="mb-2">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="content">
                 JSON Input
             </label>
-            <textarea id="content" name="content" rows="16" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="">
+            <textarea id="content" name="content" rows="16" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
             {
   "title": "Spring Boot 3 Version Upgrade",
   "colHeader": [
@@ -50,9 +50,9 @@
 }
         </textarea>
         </div>
-        <div class="mb-2 flex items-center justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
-            <input type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
+        <div class="mb-5">
+            <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Submit</button>
+            <input type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" onclick="copyTextToClipboard(adrSource);" value="Copy Source As AsciiDoc"></input>
         </div>
     </form>
 </div>

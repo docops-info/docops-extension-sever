@@ -2,29 +2,24 @@
     <h1>Create Timeline</h1>
     <div id="contentBox" ></div>
     <div class="divider"></div>
-<form class="grid grid-cols-2 gap-4" data-hx-put="api/timeline/" data-hx-target="#contentBox" hx-trigger="submit, load">
+<form class="max-h-full mx-auto" data-hx-put="api/timeline/" data-hx-target="#contentBox" hx-trigger="submit, load">
 
-    <div class="flex flex-col">
+    <div class="mb-5">
         <label for="scale" class="mb-2">Scale</label>
         <input type="number" id="scale" name="scale" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="0.6" step=".10" max="5" min=".1" class="range border rounded-md">
-    </div>
-    <div class="flex flex-col">
-        <label for="numChars" class="mb-2">Number of Characters per Line</label>
-        <input type="number" id="numChars" name="numChars" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               value="24" step="1" max="60" min="10" class="range border rounded-md">
+               value="0.6" step=".10" max="5" min=".1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
 
-    <div class="flex flex-col">
+    <div class="mb-5">
         <label for="outline" class="mb-2">Outline Color</label>
         <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               class="p-2 border rounded-md" value="#9BCF53">
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="#9BCF53">
     </div>
 
 
-    <div class="flex flex-col col-span-2">
+    <div class="mb-5">
         <label for="content" class="mb-2">DSL</label>
-            <textarea id="content" name="content" class="textarea textarea-primary" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
+            <textarea id="content" name="content" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" cols="90" rows="20" placeholder="" data-hx-put="api/timeline/" data-hx-target="#contentBox">
 -
 date: 1891
 text: Mailbox, invented by Phillip Downing
@@ -62,11 +57,11 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
             </textarea>
         </div>
 
-    <div class="flex flex-col">
-        <button class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4">Submit</button>
+    <div class="mb-5">
+        <button class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Submit</button>
     </div>
-    <div class="flex flex-col">
-        <input class="py-2 px-4 bg-blue-500 text-white rounded-md mt-4" type="button" onclick="copyTextToClipboard(adrSource);"
+    <div class="mb-5">
+        <input class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button" onclick="copyTextToClipboard(adrSource);"
                value="Copy Source As AsciiDoc">
     </div>
 </form>
