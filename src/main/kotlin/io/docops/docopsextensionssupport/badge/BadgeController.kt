@@ -91,7 +91,7 @@ ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${ba
         </div>
         <br/>
         <h3>Badge Source</h3>
-        <div class='pure-u-1 pure-u-md-20-24'>
+        <div class='mb-5'>
         <pre>
         <code class="asciidoc">
 $txt

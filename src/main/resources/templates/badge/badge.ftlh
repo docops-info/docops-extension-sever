@@ -8,30 +8,30 @@
 <div class="divider"></div>
 <form class="max-w-sm mx-auto" data-hx-put="api/badge/item" data-hx-target="#contentBox" data-hx-ext="json-enc" hx-trigger="submit, load">
                 <div class="mb-5">
-                    <label for="label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Label</label>
+                    <label for="label" class="mb-2">Label</label>
                     <input type="text" id="label" name="label" data-hx-put="api/badge/item" data-hx-target="#contentBox"
                            value="Powered By" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-5">
-                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                    <label for="message" class="mb-2">Message</label>
                     <input type="text" id="message" name="message" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox"
                            value="Kotlin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="flex flex-col">
-                    <label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Url</label>
+                    <label for="url" class="mb-2">Url</label>
                     <input type="text" id="url" name="url" data-hx-put="api/badge/item" data-hx-target="#contentBox"
                            value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="flex flex-col">
-                    <label for="fontColor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Font Color</label>
+                    <label for="fontColor" class="mb-2">Font Color</label>
                     <input type="text" id="fontColor" name="fontColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
                            value="#fcfcfc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                 </div>
                 <div class="flex flex-col">
-                    <label for="labelColor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Label Color</label>
+                    <label for="labelColor" class="mb-2">Label Color</label>
 
                     <input type="text" id="labelColor" name="labelColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox"
@@ -39,7 +39,7 @@
 
                 </div>
                 <div class="flex flex-col">
-                    <label for="messageColor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message Color</label>
+                    <label for="messageColor" class="mb-2">Message Color</label>
                     <input type="text" id="messageColor" name="messageColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
                            value="#00dd00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -48,7 +48,7 @@
                 <div class="mb-5">
                     <span>Optionally add an icon. <a href="https://simpleicons.org">Simple Icons</a> are supported, use '&lt; &gt;' around the name. Custom icons are supported via url like(https://docops.io/images/docops.svg) to an SVG image</span>
                         <div class="flex flex-col">
-                            <label for="logo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Logo</label>
+                            <label for="logo" class="mb-2">Logo</label>
                             <input type="text" id="logo" name="logo" data-hx-put="api/badge/item" data-hx-target="#contentBox"
                                    value="<Kotlin>"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
