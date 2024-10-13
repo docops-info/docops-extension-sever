@@ -25,24 +25,24 @@
                 </div>
                 <div class="flex flex-col">
                     <label for="fontColor" class="mb-2">Font Color</label>
-                    <input type="text" id="fontColor" name="fontColor" data-hx-put="api/badge/item"
+                    <input type="color" id="fontColor" name="fontColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
-                           value="#fcfcfc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                           value="#fcfcfc" class="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700">
 
                 </div>
                 <div class="flex flex-col">
                     <label for="labelColor" class="mb-2">Label Color</label>
 
-                    <input type="text" id="labelColor" name="labelColor" data-hx-put="api/badge/item"
+                    <input type="color" id="labelColor" name="labelColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox"
-                           value="#5b5b5b" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                           value="#5b5b5b" class="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700">
 
                 </div>
                 <div class="flex flex-col">
                     <label for="messageColor" class="mb-2">Message Color</label>
-                    <input type="text" id="messageColor" name="messageColor" data-hx-put="api/badge/item"
+                    <input type="color" id="messageColor" name="messageColor" data-hx-put="api/badge/item"
                            data-hx-target="#contentBox'"
-                           value="#00dd00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                           value="#00dd00" class="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700">
 
                 </div>
                 <div class="mb-5">
@@ -66,13 +66,3 @@
 
 
 <div id="simpleicons"></div>
-
-
-<script>
-    $("#messageColor").spectrum({
-        color: "#00dd00"
-    });
-    $("#labelColor").spectrum({
-        color: "#008800"
-    });
-</script>

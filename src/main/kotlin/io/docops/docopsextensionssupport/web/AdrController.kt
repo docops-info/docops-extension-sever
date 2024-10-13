@@ -71,7 +71,7 @@ class AdrController() {
                 val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
                 val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 75, increaseWidthBy = 10)
                 val adr = ADRParser().parse(adrText, config)
-                var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = true)
+                var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = false)
 
                 adr.urlMap.forEach { (t, u) ->
                     svg = svg.replace("_${t}_", u)

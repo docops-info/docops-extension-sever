@@ -44,11 +44,6 @@ class AdrMaker {
         //language=html
         return """
             <defs>
-            <linearGradient id="backGrad2" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
-                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
-                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
-            </linearGradient>
             <style>
             .adrlink { fill: #5AB2FF; text-decoration: underline; }
             .adrlink:hover, .adrlink:active { outline: dotted 1px #5AB2FF; }
@@ -58,7 +53,7 @@ class AdrMaker {
     }
     fun tail() = "</svg>"
 
-    fun setBackground(editorColor: EditorColor) = "<rect width=\"100%\" height=\"100%\" fill=\"${editorColor.background}\"/>"
+    fun setBackground(editorColor: EditorColor) = "<rect width=\"100%\" height=\"100%\" fill='${editorColor.background}' stroke=\"${editorColor.lineColor}\" rx='7' ry='7'/>"
     fun title(adr: Adr, editorColor: EditorColor): String {
 
         return """<text x="50%" y="25" text-anchor="middle" fill="${editorColor.titleColor}"
@@ -172,7 +167,7 @@ class AdrMaker {
         <text x="$xIndent" y="$startY"
           style="fill: ${editorColor.textColor};font-weight: normal; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
         """.trimIndent())
-            var y = 0.0f
+            val y = 0.0f
             text.append("""
             <tspan x="$xIndent" dy="$y">${adr.participantAsStr()}</tspan>
         """.trimIndent())
@@ -191,7 +186,7 @@ class AdrMaker {
     }
 }
 
-open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#9b89f4", val textColor: String = "#000000", val titleColor: String = "#000000")
-class EditorLite(background: String = "#F7F7F7", lineColor: String="#9b89f4", textColor: String="#000000", titleColor: String="#000000"): EditorColor(background, lineColor, textColor, titleColor)
-class EditorDark(background: String = "#21252B",  lineColor: String = "#9b89f4",  textColor: String = "#ABB2BF", titleColor: String = "#9b89f4"): EditorColor(background, lineColor, textColor, titleColor)
+open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000")
+class EditorLite(background: String = "#fcfcfc", lineColor: String="#111111", textColor: String="#000000", titleColor: String="#000000"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorDark(background: String = "#21252B",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)

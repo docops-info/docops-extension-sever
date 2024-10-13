@@ -12,8 +12,8 @@
 
     <div class="mb-5">
         <label for="outline" class="mb-2">Outline Color</label>
-        <input type="text" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
-               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="#9BCF53">
+        <input type="color" id="outline" name="outline" data-hx-put="api/timeline/" data-hx-target="#contentBox"
+               class="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700" value="#9BCF53">
     </div>
 
 
