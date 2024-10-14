@@ -49,10 +49,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
        </defs>
             """.trimIndent())
-            sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+            sb.append("<rect width=\"100%\" height=\"100%\" fill=\"none\"/>")
 
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"#fcfcfc\"/>")
         sb.append("<g transform=\"translate(100,0)\">")
         sb.append(makeBody())
         sb.append("</g>")
@@ -71,9 +71,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")
         var y = 0
-        var textColor = "#111111"
+        val textColor = "#111111"
+        var stroke = "#111111"
         if(useDark){
-            textColor = "#fcfcfc"
+            stroke = "#fcfcfc"
         }
 
         connectors.forEachIndexed {
@@ -84,9 +85,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             }*/
             sb.append("""
                 <g transform="translate(0,$y)">
-                    <rect x="0" y="13" height="24" width="24" $fill rx="5" ry="5"/>
-                    <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
-                    <text x="42" y="29" fill="$textColor" text-anchor="start" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;" class="desc_txt">
+                    <rect x="0" y="13" height="24" width="24" $fill stroke="$stroke" rx="5" ry="5"/>
+                    <text x="12" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass" style="font-family: Helvetica, Arial, sans-serif;">${alphabets[i]}</text>
+                    <text x="42" y="29" fill="$textColor" text-anchor="start" style="font-family: Helvetica, Arial, sans-serif;" class="desc_txt">
                         ${item.description}
                     </text>
                 </g>
@@ -162,14 +163,14 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             #diag_$id .filtered {
                 filter: url(#filter);
                 fill: black;
-                font-family: 'Ultra', serif;
+                font-family: Helvetica,Arial, sans-serif;
                 font-size: 100px;
 
             }
             #diag_$id .filtered-small {
                 filter: url(#filter);
                 fill: black;
-                font-family: 'Ultra', serif;
+                font-family: Helvetica,Arial, sans-serif;
                 font-size: 14px;
 
             }
@@ -178,7 +179,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
             #diag_$id .boxText {
                 font-size:24px;
-                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-family: Helvetica,Arial, sans-serif;
                 font-variant: small-caps;
                 font-weight: bold;
             }
@@ -225,7 +226,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 //language=svg
                 sb.append("""
              <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="${colors[i]}" stroke-width='$strokeWidth'/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="#111111" stroke-width='$strokeWidth'/>
                 $str
             </g>
                 """.trimIndent())
@@ -243,9 +244,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="${colors[i]}" stroke-width='$strokeWidth'/>
+                <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="#111111" stroke-width='$strokeWidth'/>
                 $str
-                <use xlink:href="#hconnector" stroke="${colors[i]}" fill="$grad"/>
+                <use xlink:href="#hconnector" stroke="#111111" fill="#111111"/>
                 $arrow
                 <rect x="270" y="13" height="24" width="24" fill="$grad" rx="5" ry="5"/>
                 <text x="282" y="29" fill="#111111" text-anchor="middle" class="filtered-small glass">${alphabets[i]}</text>
@@ -255,10 +256,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                     sb.append("""
                 <g transform="translate(260,50)">
                     <path d="M0,0 L60,0" fill="#111111" stroke-width="3" stroke="${colors[i]}"/>
-                    <line x1="60" x2="60" y1="0" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="60" x2="-1480" y1="60" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="-1480" x2="-1480" y1="110" y2="60" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="-1480" x2="-1460" y1="110" y2="110" stroke-width="3" stroke="${colors[i]}" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="60" x2="60" y1="0" y2="60" stroke-width="3" stroke="#111111" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="60" x2="-1480" y1="60" y2="60" stroke-width="3" stroke="#111111" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="-1480" x2="-1480" y1="110" y2="60" stroke-width="3" stroke="#111111" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="-1480" x2="-1460" y1="110" y2="110" stroke-width="3" stroke="#111111" stroke-linecap="round" stroke-linejoin="round"/>
                     <g transform="translate(-1460,107)"><use xlink:href="#ppoint" fill="$grad" stroke-width="7" stroke="$grad"/></g>
                 </g>
                 """.trimIndent())
