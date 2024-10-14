@@ -34,7 +34,7 @@ class PieMaker {
         val outerWidth = (1+pies.pieDisplay.scale) * width
         var backgroundColor = ""
         if(pies.pieDisplay.useDark) {
-            backgroundColor = """<rect width="100%" height="100%" fill="#1B1A55"/>"""
+            backgroundColor = """<rect width="100%" height="100%" fill="#374151"/>"""
         }
         return """<svg xmlns="http://www.w3.org/2000/svg" height="$outerHeight" width="$outerWidth" viewBox="0 0 $width $height">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">
