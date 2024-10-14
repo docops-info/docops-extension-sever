@@ -42,9 +42,9 @@ class ComparisonChartMaker {
         $left
         $right
         <linearGradient id="leftCol" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#e5e5e5"/>
-            <stop class="stop2" offset="50%" stop-color="#d8d8d8"/>
-            <stop class="stop3" offset="100%" stop-color="#cccccc"/>
+            <stop class="stop1" offset="0%" stop-color="#7d838d"/>
+            <stop class="stop2" offset="50%" stop-color="#4b5462"/>
+            <stop class="stop3" offset="100%" stop-color="#374151"/>
         </linearGradient>
         <filter id="shadow" x="0" y="0" width="200%" height="200%">
             <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1" />
@@ -83,7 +83,7 @@ class ComparisonChartMaker {
         //language=svg
         sb.append("""<g transform="translate(2,$startY)">""")
         //language=svg
-        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;" x="5" y="0">
+        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: #fcfcfc;" x="5" y="0">
             $key
         </text>""")
         sb.append("</g>")

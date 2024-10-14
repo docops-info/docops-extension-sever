@@ -13,7 +13,7 @@ private const val SPLIT_BY = 325
 
 @Serializable
 class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
-    val titleFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
+    val titleFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
     val leftColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
     val rightColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
     val leftColumnColor: String = "#F73D93",

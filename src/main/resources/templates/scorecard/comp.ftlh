@@ -43,9 +43,8 @@
       "next": "0 High and 0 Critical"
     }
   ], "display": {
-
-             "leftColumnColor":   "#98E4FF",
-             "rightColumnColor":   "#0079FF"
+          "leftColumnColor":   "#A67B5B",
+         "rightColumnColor":   "#399918"
         }
 }
         </textarea>
@@ -61,7 +60,7 @@
     <div id="adrSource" class="text-sm">
         <pre><code>
         "display": {
-                "scale": 1,
+             "scale": 1,
              "titleFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
              "leftColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
              "rightColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
