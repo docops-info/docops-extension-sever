@@ -84,21 +84,13 @@ class PlannerMaker {
 
 fun main() {
     val str = """
-- now Form Property Service #003b6b
-Determine consuming applications for Form Property Service & Customer inquiry Service
-- next Docker
+- now Docker
 Use common docker image to streamline the process.
-- later Form Property Service Dep
-analyze Form Property Service for their dependencies - Patrick analyze customer inquiry search for cloud dependencies.
-- next Governance
-take these Form Property Service feature and customer inquiry service to governance
 - next
-start iBob process, Surekha for both application
-- done
-dockerize Form property service
+dockerize API service
 build spring boot 3 version [[https://www.google.com google]] of application
 analyze black duck results
-- done Image
+- later Image
 image embed rectangle
 - now
 image embed slim

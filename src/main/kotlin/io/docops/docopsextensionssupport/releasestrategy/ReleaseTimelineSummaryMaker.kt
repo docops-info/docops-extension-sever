@@ -198,96 +198,57 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
 fun main() {
     val data = """
-        {
-            "title": "Release Strategy Builder",
-            "releases": [
-                {
-                    "type": "M1",
-                    "lines": [
-                        "Reason for ",
-                        "Improve Sanitize Sensitive Values section in reference documentation #39200",
-                        "Update CRaC support status link #39173",
-                        "Fix link to Log4j2's JDK logging adapter documentation #39172",
-                        "Document virtual threads limitations #39169",
-                        "Polish reference documentation #39157",
-                        "Use the term tags in documentation consistently #39152",
-                        "Update links to Micrometer docs in metrics section of reference docs #39150",
-                        "Remove entry for OCI starter as it is no longer maintained #39145",
-                        "Correct the documentation on injecting dependencies into FailureAnalyzer implementations #39101",
-                        "Fix typos #38983"
-                    ],
-                    "date": "TBD",
-                    "selected": true,
-                    "completed": true,
-                    "goal": "Our goal is to release Spring Boot 3.3.0 version with these improvements."
-                },
-                {
-                    "type": "RC1",
-                    "lines": [
-                        "Auto-configure TypeDefinitionConfigurer beans for GraphQL apps #39118",
-                        "Create multiple registrations for beans that implement multiple Servlet API contracts #39056",
-                        "Remove APIs that were deprecated for removal in 3.3 #39039",
-                        "Remove dependency management for Dropwizard Metrics #39034",
-                        "Add configuration property spring.task.execution.pool.shutdown.accept-tasks-after-context-close #38968",
-                        "Autoconfigure Undertow/XNIO for virtual thread support #38819",
-                        "Add client-id and subscription-durable properties for JMS connections #38817",
-                        "Add property for maximum number of reactive sessions #38703",
-                        "Add support for the @SpanTag annotation #38662",
-                        "Add configuration option for path inclusion in DefaultErrorAttributes #38619",
-                        "Add configuration properties for cluster-level failover with Apache Pulsar #38559",
-                        "Change Health.down(Exception) factory method to Health.down(Throwable), aligning with Health.Builder.down(Throwable) #38550",
-                        "Make spring.config.activate.on-cloud-platform=none match when the current cloud platform is null #38510",
-                        "Add ProcessInfoContributor #38371",
-                        "Add possibility to configure a custom ExecutionContextSerializer in BatchAutoConfiguration #38328",
-                        "Remove deprecated support for FailureAnalyzer setter injection #38322",
-                        "Use unknown_service as default application name for OpenTelemetry #38219",
-                        "Auto-configure a JwtAuthenticationConverter #38105",
-                        "Fail configuration property metadata processing when additional metadata has unexpected content #37597",
-                        "Add local and tag correlation fields #37435",
-                        "Use request.requestPath().value() to populate path error attribute with WebFlux #37269",
-                        "Improve log messages to use the singular or plural forms instead of 'noun(s)', #37017",
-                        "Add observation-enabled properties for RabbitMQ #36451",
-                        "Make WebServers' started log messages more consistent #36149",
-                        "Add property to configure the queue size for Tomcat #36087"
-                    ],
-                    "date": "TBD",
-                    "selected": true,
-                    "goal": "Our goal is ..."
-                },
-                {
-                    "type": "GA",
-                    "lines": [
-                        "Even when spring.security.user.name or spring.security.user.password has been configured, user details auto-configuration still backs off when resource server is on the classpath #39239",
-                        "JarEntry.getComment() returns incorrect result from NestedJarFile instances #39226",
-                        "Oracle OJDBC BOM version is flagged not for production use #39225",
-                        "MockRestServiceServerAutoConfiguration with RestTemplate and RestClient together throws incorrect exception #39198",
-                        "SslBundle implementations do not provide useful toString() results #39168",
-                        "Mixing PEM and JKS certificate material in server.ssl properties does not work #39159",
-                        "Containers are not started when using @ImportTestcontainers #39151",
-                        "Having AspectJ and Micrometer on the classpath is not a strong enough signal to enable support for Micrometer observation annotations #39132",
-                        "Actuator endpoints with no operations that use selectors are not accessible when mapped to / #39123",
-                        "spring-boot-maven-plugin repackage uber jar execution fails when jar is put on WSL network drive #39121",
-                        "Spring Boot 3.2 app that uses WebFlux, Security, and Actuator may fail to start due to a missing authentication manager #39117",
-                        "@ConfigurationPropertiesBinding converters that rely on initial CharSequence to String conversion no longer work #39115",
-                        "management.observations.http.server.requests.name no longer has any effect #39106",
-                        "Configuring server.jetty.max-connections has no effect #39080",
-                        "spring.rabbitmq.listener.stream.auto-startup property has no effect #39079",
-                        "Connection leak when using jOOQ and spring.jooq.sql-dialect has not been set #39077",
-                        "Error mark in the log message for PatternParseException is in the wrong place #39076",
-                        "Manifest attributes cannot be resolved with the new loader implementation #39071"
-                    ],
-                    "date": "TBD",
-                    "selected": true,
-                    "goal": "Our goal is ..."
-                }
-            ],
-            "style": "TLS",
-            "scale": 0.5,
-            "displayConfig": {
-             "colors": [ "#5f57ff", "#2563eb", "#7149c6"],
-              "fontColor": "#fcfcfc"
-            }
-        }
+  {
+    "title": "Release Strategy Builder",
+    "releases": [
+      {
+        "type": "M1",
+        "lines": [
+          "Team will deploy application and build out infrastructure with Terraform scripts.",
+          "Team will Apply API gateway pattern to establish API version infrastructure.",
+          "Tream will validate access to the application",
+          "Team will shutdown infrastructure as security is not in place."
+        ],
+        "date": "July 30th, 2023",
+        "selected": true,
+        "goal": "Our Goal is to provision new infrastructure on our cloud EKS platform without enabling production traffic",
+        "completed": true
+      },
+      {
+        "type": "RC1",
+        "lines": [
+          "Team will leverage CICD pipeline to deploy latest code",
+          "Team will enable OAuth security on the API Gateway",
+          "Team will make the application communication private and local to the API Gateway",
+          "Team will enable API throttling at the Gateway layer",
+          "Team will have QA do initial testing."
+        ],
+        "date": "September 20th, 2023",
+        "completed": true
+        "goal": "Our goal is to deplou lastest code along with security applied at the API Layer"
+      },
+      {
+        "type": "GA",
+        "lines": [
+          "Team will deploy latest code.",
+          "QA will test and sign off"
+        ],
+        "date": "September 30th",
+        "selected": true,
+        "goal": "Our goal is to release version 1.0 of API making it generally available to all consumers."
+      }
+    ],
+    "style": "TLS",
+    "scale": 0.5,
+    "displayConfig": {
+      "colors": [
+        "#5f57ff",
+        "#2563eb",
+        "#7149c6"
+      ],
+      "fontColor": "#fcfcfc"
+    }
+  }
     """.trimIndent()
 
     val release = Json.decodeFromString<ReleaseStrategy>(data)
