@@ -1,0 +1,111 @@
+<svg id="adr" xmlns="http://www.w3.org/2000/svg" width='720.0' height='330.0'
+     xmlns:xlink="http://www.w3.org/1999/xlink" font-family="arial"
+     viewBox="0 0 720.0 330.0"
+>
+    <defs>
+
+        <style>
+            .adrlink {
+                fill: #5AB2FF;
+                text-decoration: underline;
+            }
+
+            .adrlink:hover, .adrlink:active {
+                outline: dotted 1px #5AB2FF;
+            }
+        </style>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa" stroke="#111111" rx="7" ry="7"/>
+    <text x="50%" y="25" text-anchor="middle" fill="#111111"
+          style="font-weight: bold; font-size: 24px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji">
+        Use Solr for Structured Data Search
+    </text>
+    <text x="5" y="45" fill="#111111"
+          style="font-size:0.8em; font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji">
+        <tspan font-weight="bold">Status:</tspan>
+        Deprecated <tspan font-weight="bold" dx="40">Date:</tspan> November 24th, 2010
+    </text>
+    <line x1="0" y1="55" x2="725.0" y2="55" stroke="#111111"/>
+    <line x1="90" y1="55" x2="90.0" y2="705" stroke="#111111"/>
+    <text x="5" y="75"
+          style="fill: #111111;font-weight: bold; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-weight: bold;"
+          text-decoration="underline">Context:
+    </text>
+    <text x="95" y="75"
+          style="fill: #111111;font-weight: normal; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
+        <tspan x="95" dy="0.0">Solr and Elasticsearch are both open source search engines. Both can be used to search
+            large amounts of data
+        </tspan>
+        <tspan x="95" dy="15.0">quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a
+            full-text search engine and is
+        </tspan>
+        <tspan x="95" dy="15.0">designed for distributed search and analytics. Elasticsearch also allows for faster
+            indexing and more advanced search
+        </tspan>
+        <tspan x="95" dy="15.0">replicas. Both technologies have strengths and weaknesses and are often used in
+            combination for enterprise-level
+        </tspan>
+        <tspan x="95" dy="15.0">search. There is a need of having an API exposed which can be used to search structured
+            data. The Data currently
+        </tspan>
+        <tspan x="95" dy="15.0">resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS
+            databases since the application
+        </tspan>
+        <tspan x="95" dy="15.0">runs out of the same environment. There are options like
+            <tspan>
+                <a href="https://www.elastic.co" xlink:href="https://www.elastic.co" class="adrlink" target="_top">
+                    ElasticSearch
+                </a>
+            </tspan>
+            and Solr where data can be replicated. These solutions
+        </tspan>
+        <tspan x="95" dy="15.0">provide out of the box capabilities that can be leveraged by developers without needed
+            to build RESTful or GraphQL
+        </tspan>
+        <tspan x="95" dy="15.0">type APIs.</tspan>
+        <tspan x="95" dy="15.0"/>
+    </text>
+    <line x1="0" y1="210.0" x2="725.0" y2="210.0" stroke="#111111"/>
+    <text x="5" y="225.0"
+          style="fill: #111111;font-weight: bold; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-weight: bold;"
+          text-decoration="underline">Decision:
+    </text>
+    <text x="95" y="225.0"
+          style="fill: #111111;font-weight: normal; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
+        <tspan x="95" dy="0.0">Use
+            <tspan>
+                <a href="https://solr.apache.org/" xlink:href="https://solr.apache.org/" class="adrlink" target="_top">
+                    Solr
+                </a>
+            </tspan>
+            for data indexing. This use is because Solr has high performance throughput with large volume of data.
+        </tspan>
+        <tspan x="95" dy="15.0">Unstructured data can also be supported. If this decision does not meet the need then
+            additional PoC will be created.
+        </tspan>
+        <tspan x="95" dy="15.0"/>
+    </text>
+    <line x1="0" y1="255.0" x2="725.0" y2="255.0" stroke="#111111"/>
+    <text x="5" y="270.0"
+          style="fill: #111111;font-weight: bold; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-weight: bold;"
+          text-decoration="underline">Consequences:
+    </text>
+    <text x="95" y="270.0"
+          style="fill: #111111;font-weight: normal; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
+        <tspan x="95" dy="0.0">Data Needs to be replicated across the solr cloud instances. This Solr cloud needs
+            maintenance. Near realtime data
+        </tspan>
+        <tspan x="95" dy="15.0">replication is required Additional Cost of maintaining the Solr Cloud environment.
+        </tspan>
+        <tspan x="95" dy="15.0"></tspan>
+    </text>
+    <line x1="0" y1="300.0" x2="725.0" y2="300.0" stroke="#111111"/>
+    <text x="5" y="315.0"
+          style="fill: #111111;font-weight: bold; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-weight: bold;"
+          text-decoration="underline">Participants:
+    </text>
+    <text x="95" y="315.0"
+          style="fill: #111111;font-weight: normal; font-size: 11px;font-family: font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
+        <tspan x="95" dy="0.0">Roach,Rose,Duffy</tspan>
+    </text>
+</svg>

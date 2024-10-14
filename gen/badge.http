@@ -1,1 +1,92 @@
 GET http://localhost:8010/extension/api/badge/item?payload=H4sIAAAAAAAA_1PwTUxJVQjPLMmo8c4vycnMq6lRTkxKSks2qFE2M7Y0SjapsYFI2NUopyWDIACHpxMNMwAAAA==&type=SVG&backend=pdf&finalname=abc_1720234677122.svg[format=svg,link=""]
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Text.Json.Serialization;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+namespace BadgeHttpService
+{
+    public class Program { public static void Main(string[] args) => CreateHostBuilder(args).Build().Run(); }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+}
+
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+    }
+}
+
+[ApiController]
+[Route("api/[controller]")]
+public class ArticlesController : ControllerBase
+{
+    [HttpPost]
+    public IActionResult Post([FromBody] Article article)
+    {
+        return Ok(article);
+    }
+}
+
+public class Article
+{
+    public string Type { get; set; }
+    public string Id { get; set; }
+    public Attributes Attributes { get; set; }
+    public Relationships Relationships { get; set; }
+}
+
+public class Attributes
+{
+    public string Title { get; set; }
+    public string Body { get; set; }
+}
+
+public class Relationships
+{
+    public Author Author { get; set; }
+}
+
+public class Author
+{
+    public Data Data { get; set; }
+}
+
+public class Data
+{
+    public string Id { get; set; }
+    public string Type { get; set; }
+}
