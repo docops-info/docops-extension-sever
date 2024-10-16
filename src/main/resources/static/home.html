@@ -20,13 +20,13 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
     <script src="js/echarts.5.5.0.js" defer></script>
-    <script src="js/spectrum.min.js" defer></script>
     <script src="editor/js/theme.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/sse.js"></script>
 </head>
 <body>
-
+<div hx-ext="sse" sse-connect="api/stats/docops-stream" sse-swap="message"></div>
 
 <div class="bg-white py-24 sm:py-32" id="app">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">

@@ -10,20 +10,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css" defer>
 
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="css/modal.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" defer></script>
+    <script src="js/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
     <script src="js/echarts.5.5.0.js" defer></script>
-    <script src="js/spectrum.min.js" defer></script>
     <script src="editor/js/theme.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/ext/json-enc.js"></script>
+    <script src="js/jquery.sse.js"></script>
+
+
 </head>
 <body>
 <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
@@ -83,6 +82,7 @@
             <p class="mt-2 text-lg leading-8 text-gray-600">A list of extensions for AsciiDoctorJ.</p>
         </div>
 
+        <div id="stats"></div>
         <div id="bod" class="mx-auto max-w-7xl px-6 lg:px-8"></div>
         <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <article class="flex max-w-xl flex-col items-start justify-between">
@@ -586,6 +586,41 @@
         }
     });
 
+</script>
+<script>
+    console.log('-- START --');
+    var w = $.SSE('api/stats/docops-stream', {
+        onOpen: function (e) {
+            console.log("Open");
+            console.log(e);
+        },
+        onEnd: function (e) {
+            console.log("End");
+            console.log(e);
+        },
+        onError: function (e) {
+            console.log("Could not connect");
+        },
+        onMessage: function (e) {
+            console.log("Message");
+            console.log(e.data);
+            $('#stats').html(e.data);
+        },
+        options: {
+            forceAjax: false
+        },
+        events: {
+            myEvent: function (e) {
+                console.log('Custom Event');
+                console.log(e);
+            }
+        },
+//            headers: {
+//                'Authorization': 'Bearer 000000000000000000000'
+//            }
+    });
+    console.log(w.start());
+    console.log('-- END --');
 </script>
 </body>
 </html>

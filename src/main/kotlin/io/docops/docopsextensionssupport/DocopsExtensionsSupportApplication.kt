@@ -23,6 +23,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
@@ -31,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
+@EnableAsync
 class DocopsExtensionsSupportApplication
 {
     companion object {

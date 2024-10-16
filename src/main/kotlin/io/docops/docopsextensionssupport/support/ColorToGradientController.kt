@@ -39,31 +39,31 @@ class ColorToGradientController {
     @PutMapping("/grad")
     fun putColors(httpServletRequest: HttpServletRequest): ResponseEntity<String> {
         val color = httpServletRequest.getParameter("gradColor")
-        val gradient = gradientFromColor(color)
+        val gradient = generateGradient(color)
         val hsl = hexToHsl(color)
         return accepted().body(
             """
-            <div>
+        <div>
         <svg width="200" height="200" viewBox="0 0 200.0 200.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Color Gradient" >
-    <defs>
-        <linearGradient id="grad1" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-        <linearGradient x2="0%" y2="100%" id="grad3">
-            <stop stop-color="${gradient["color1"]}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-    </defs>
-    <rect x="0" y="0" width="100%" height="33%" fill="url(#grad1)"/>
-    <rect x="0" y="66.667" width="100%" height="33%" fill="url(#grad2)"/>
-    <rect x="0" y="133.333" width="100%" height="33%" fill="url(#grad3)"/>
+        <defs>
+            <linearGradient id="grad1" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
+                <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
+                <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
+            </linearGradient>
+            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
+                <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
+                <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
+            </linearGradient>
+            <linearGradient x2="0%" y2="100%" id="grad3">
+                <stop stop-color="${gradient["lighter"]}" stop-opacity="1" offset="0%"/>
+                <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+            </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100%" height="33%" fill="url(#grad1)"/>
+        <rect x="0" y="66.667" width="100%" height="33%" fill="url(#grad2)"/>
+        <rect x="0" y="133.333" width="100%" height="33%" fill="url(#grad3)"/>
 </svg>    
 </div>
 <div class="divider"></div>
@@ -71,17 +71,17 @@ class ColorToGradientController {
 <pre>
     <code class="xml">
         &lt;linearGradient id="grad1" x2="0%" y2="100%"&gt;
-            &lt;stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/&gt;
-            &lt;stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/&gt;
-            &lt;stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/&gt;
         &lt;/linearGradient&gt;
         &lt;linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%"&gt;
-            &lt;stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/&gt;
-            &lt;stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/&gt;
-            &lt;stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/&gt;
         &lt;/linearGradient&gt;
         &lt;linearGradient x2="0%" y2="100%" id="grad3"&gt;
-            &lt;stop stop-color="${gradient["color1"]}" stop-opacity="1" offset="0%"/&gt;
+            &lt;stop stop-color="${gradient["original"]}" stop-opacity="1" offset="0%"/&gt;
             &lt;stop stop-color="$hsl" stop-opacity="1" offset="100%"/&gt;
         &lt;/linearGradient&gt;
     </code>

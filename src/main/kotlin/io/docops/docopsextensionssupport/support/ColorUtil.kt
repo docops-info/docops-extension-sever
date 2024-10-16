@@ -63,3 +63,36 @@ private fun tint(color: Color, factor: Double): String {
 fun randomColor(): Int {
     return (Math.random() * 16777215).toInt() or (0xFF shl 24)
 }
+
+fun hexToRgb(hex: String): Map<String, Int> {
+    val r = hex.substring(1, 3).toInt(16)
+    val g = hex.substring(3, 5).toInt(16)
+    val b = hex.substring(5, 7).toInt(16)
+    return mapOf("r" to r, "g" to g, "b" to b)
+}
+
+fun rgbToHex(r: Int, g: Int, b: Int): String {
+    return "#" + ((1 shl 24) + (r shl 16) + (g shl 8) + b).toString(16).substring(1)
+}
+fun adjustColor(color: Int, percentage: Double): Int {
+    return (color * (1 + percentage)).toInt().coerceIn(0, 255)
+}
+
+fun generateGradient(hexColor: String): Map<String, String> {
+    val rgbColor = hexToRgb(hexColor)
+    val lighterColor = mapOf(
+        "r" to adjustColor(rgbColor["r"]!!, 0.2),
+        "g" to adjustColor(rgbColor["g"]!!, 0.2),
+        "b" to adjustColor(rgbColor["b"]!!, 0.2)
+    )
+    val darkerColor = mapOf(
+        "r" to adjustColor(rgbColor["r"]!!, -0.2),
+        "g" to adjustColor(rgbColor["g"]!!, -0.2),
+        "b" to adjustColor(rgbColor["b"]!!, -0.2)
+    )
+    return mapOf(
+        "original" to hexColor,
+        "lighter" to rgbToHex(lighterColor["r"]!!, lighterColor["g"]!!, lighterColor["b"]!!),
+        "darker" to rgbToHex(darkerColor["r"]!!, darkerColor["g"]!!, darkerColor["b"]!!)
+    )
+}

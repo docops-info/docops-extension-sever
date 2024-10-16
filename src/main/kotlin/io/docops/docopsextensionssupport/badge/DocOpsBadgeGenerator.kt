@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.silentsoft.simpleicons.SimpleIcons
 import java.io.ByteArrayInputStream
@@ -47,8 +48,8 @@ class DocOpsBadgeGenerator {
         badges.forEachIndexed { i, badge ->
             val label = badge.label.escapeXml()
             val message = badge.message.escapeXml()
-            val clrMap = gradientFromColor(badge.labelColor!!)
-            val mMap = gradientFromColor(badge.messageColor!!)
+            val clrMap = generateGradient(badge.labelColor!!)
+            val mMap = generateGradient(badge.messageColor!!)
             val maskId = UUID.randomUUID().toString()
             val grad = makeGradient(maskId, clrMap, mMap)
             var labelWidth = measureText(badge.label) * 100.0F
@@ -110,14 +111,14 @@ class DocOpsBadgeGenerator {
     ): String {
         val grad = """
                 <linearGradient id="label_${maskId}" x2="0%" y2="100%">
-                    <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
-                    <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
-                    <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
+                    <stop class="stop1" offset="0%" stop-color="${clrMap["lighter"]}"/>
+                    <stop class="stop2" offset="50%" stop-color="${clrMap["original"]}"/>
+                    <stop class="stop3"  stop-color="${clrMap["darker"]}" stop-opacity="1" offset="100%"/>
                 </linearGradient> 
                 <linearGradient id="message_${maskId}" x2="0%" y2="100%">
-                    <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
-                    <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
-                    <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
+                    <stop class="stop1" offset="0%" stop-color="${mMap["lighter"]}"/>
+                    <stop class="stop2" offset="50%" stop-color="${mMap["original"]}"/>
+                    <stop class="stop3"  stop-color="${mMap["darker"]}" stop-opacity="1" offset="100%"/>
                 </linearGradient> 
             """.trimIndent()
         return grad
@@ -137,8 +138,8 @@ class DocOpsBadgeGenerator {
         img: String,
         label : String
     ): String {
-        val labelFill = clrMap["color3"]!!
-        val messageFill = mMap["color3"]!!
+        val labelFill = clrMap["darker"]!!
+        val messageFill = mMap["darker"]!!
         val filterText = ""
         val maskText = ""
         val mask = """
@@ -203,13 +204,14 @@ class DocOpsBadgeGenerator {
                     <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
                     <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
                   </filter>
-            </defs>
+            
             <linearGradient id='a' x2='0' y2='100%'>
                 <stop offset='0' stop-opacity='.1' stop-color='#EEE'/>
                 <stop offset='1' stop-opacity='.1'/>
             </linearGradient>
             $grad
             $mask
+            </defs>
             <g aria-hidden='true'  text-anchor='start' font-family='Arial,DejaVu Sans,sans-serif' font-size='110' filter='$filterText'>
                 <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$labelLink</text>
                 <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}'  fill="$fontColor" style='font-variant: small-caps;'>$messageLink</text>

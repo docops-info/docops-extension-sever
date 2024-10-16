@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.support.generateGradient
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 
 class GradientsTwoTone {
@@ -176,11 +178,12 @@ fun gradientMapToHsl(): Map<String, String> {
     val gradMap = mutableMapOf<String,String>()
     gradients.forEach{
             k, v ->
-        val hsl = hexToHsl(k)
+        val hsl = generateGradient(k)
         gradMap[k] = """
             <linearGradient id="grad$count" x2="0%" y2="100%">
-            <stop stop-color="$k" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
+            <stop stop-color="${hsl["lighter"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="$k" stop-opacity="1" offset="50%"/>
+            <stop stop-color="${hsl["darker"]}" stop-opacity="1" offset="100%"/>
         </linearGradient>
         """.trimIndent()
         count++

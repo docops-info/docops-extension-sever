@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.support.gradientFromColor
@@ -122,13 +123,13 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             i, choiceColor ->
            val res = gradientMapToHsl()[choiceColor]
             if(null == res) {
-                val gradient = gradientFromColor(choiceColor)
-                val hsl = hexToHsl(choiceColor)
+                val gradient = generateGradient(choiceColor)
+                val hsl = generateGradient(choiceColor)
                 grad.append(
                     """
            <linearGradient id="grad${i}" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="100%" stop-color="$hsl"/>
+            <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
+            <stop class="stop2" offset="100%" stop-color=${gradient["darker"]}"/>
             </linearGradient> 
             """.trimIndent()
                 )
