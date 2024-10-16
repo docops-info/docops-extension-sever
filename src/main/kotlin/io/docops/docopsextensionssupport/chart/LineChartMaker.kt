@@ -16,12 +16,19 @@ class LineChartMaker {
         sb.append(makeHead(lineChart))
         sb.append(makeDefs())
         sb.append("<rect width='100%' height='100%' fill='url(#backGrad1)' stroke='#111111'/>")
-        sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad1)"/>""")
         sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="#fcfcfc" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         lineChart.points.forEachIndexed { index, mutableList ->
             sb.append("<g>")
             sb.append(makePoints(mutableList, index, lineChart))
             sb.append("</g>")
+        }
+        sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad1)"/>""")
+        val points = lineChart.points[0]
+        val xGap = maxGraphWidth / (points.points.size + 1)
+        var num = xGap
+        points.points.forEach{  point ->
+            sb.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:#fcfcfc;">${point.label}</text>""")
+            num += xGap
         }
         sb.append(legend(lineChart))
         sb.append(end())

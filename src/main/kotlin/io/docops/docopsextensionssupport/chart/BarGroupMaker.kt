@@ -152,9 +152,9 @@ class BarGroupMaker {
         return """<defs>
             $defGrad
              <linearGradient id="backGrad_${barGroup.id}" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
-                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
-                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
+                 <stop class="stop1" offset="0%" stop-color="#495161"/>
+            <stop class="stop2" offset="50%" stop-color="#3d4451"/>
+            <stop class="stop3" offset="100%" stop-color="#303640"/>
             </linearGradient>
                  <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>

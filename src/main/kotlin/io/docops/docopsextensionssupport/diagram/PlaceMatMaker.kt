@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
+import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
@@ -133,13 +134,13 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         placeMatRequest.config.legend.forEach {
             item ->
-            val gradient = gradientFromColor(item.color)
-            val hsl = hexToHsl(item.color)
+            val gradient = generateGradient(item.color)
             grad.append(
                 """
            <linearGradient id="grad_${item.legendAsStyle()}_$id" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="100%" stop-color="$hsl"/>
+            <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
             </linearGradient> 
             """.trimIndent()
             )

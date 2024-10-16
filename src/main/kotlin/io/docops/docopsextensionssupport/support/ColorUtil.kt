@@ -32,10 +32,8 @@ fun getRandomColorHex(): String {
 }
 
 fun gradientFromColor(color: String): Map<String, String> {
-    val decoded = Color.decode(color)
-    val tinted1 = tint(decoded, 0.35)
-    val tinted2 = tint(decoded, 0.10)
-    return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
+    val m = generateGradient(color)
+    return mapOf("color1" to m["lighter"]!!, "color2" to m["original"]!!, "color3" to m["darker"]!!)
 }
 fun svgGradient(color: String, id: String): String {
     val map = gradientFromColor(color)

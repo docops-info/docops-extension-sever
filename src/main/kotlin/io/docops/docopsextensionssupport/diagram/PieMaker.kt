@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.button.gradientFromColor
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import java.io.File
 
