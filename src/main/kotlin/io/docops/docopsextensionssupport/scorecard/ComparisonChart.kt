@@ -13,13 +13,13 @@ private const val SPLIT_BY = 325
 
 @Serializable
 class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
-    val titleFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
-    val leftColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
-    val rightColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
-    val leftColumnColor: String = "#F73D93",
-    val leftColumnFontColor: String = "#fcfcfc",
-    val rightColumnColor: String = "#03C988",
-    val rightColumnFontColor: String = "#fcfcfc",
+    val titleFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:24px; text-anchor:middle; font-weight: bold;",
+    val leftColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:20px; text-anchor:middle; font-weight: bold;",
+    val rightColumnHeaderFontStyle: String = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:20px; text-anchor:middle; font-weight: bold;",
+    val leftColumnColor: String = "#fcfcfc",
+    val leftColumnFontColor: String = "#111111",
+    val rightColumnColor: String = "#fcfcfc",
+    val rightColumnFontColor: String = "#111111",
     val scale: Double = 1.0
         )
 

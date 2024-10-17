@@ -57,18 +57,18 @@ class ComparisonChartMaker {
         val sb = StringBuilder()
         //language=svg
         sb.append("""
-               <rect x="0" y="0" width="340" height="$lastLine" fill="url(#leftCol)" style="filter: url(#shadow);"/>
+               <rect x="0" y="0" width="100%" height="100%" fill="url(#leftCol)" style="filter: url(#shadow);"/>
                <g transform="translate(342,0)">
-               <rect x="0" y="0" width="340" height="$lastLine" fill="url(#ID_${comparisonChart.display.id}_leftCol)" style="filter: url(#shadow);"/>
-               <rect y="40" width="341" height="26" fill="url(#ID_${comparisonChart.display.id}_leftCol)"/>
-               <text x="170" y="60" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}" >
+               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.leftColumnColor}" style="filter: url(#shadow);"/>
+               <rect y="32" width="341" height="34" fill="url(#leftCol)"/>
+               <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[0]}
                 </text>
                 </g>
                 <g transform="translate(684,0)">
-               <rect x="0" y="0" width="340" height="$lastLine" fill="url(#ID_${comparisonChart.display.id}_rightCol)" style="filter: url(#shadow);"/>
-               <rect y="40" width="341" height="26" fill="url(#ID_${comparisonChart.display.id}_rightCol)"/>
-               <text x="170" y="60" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}" >
+               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.rightColumnColor}" style="filter: url(#shadow);"/>
+               <rect y="32" width="341" height="34" fill="url(#leftCol)"/>
+               <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[1]}
                 </text>
                 </g>
@@ -115,7 +115,7 @@ class ComparisonChartMaker {
         sb.append("</g>")
         val endY = startY + (value.rows() * 14)
         //language=svg
-        sb.append("""<line x1="341" x2="1024" y1="$endY" y2="$endY" stroke="#fcfcfc"/>""")
+        sb.append("""<line x1="341" x2="1024" y1="$endY" y2="$endY" stroke="#a3742c"/>""")
         return sb.toString()
     }
 }
