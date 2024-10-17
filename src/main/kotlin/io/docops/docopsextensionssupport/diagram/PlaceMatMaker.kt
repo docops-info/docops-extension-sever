@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.io.File
 import java.util.UUID
 
@@ -224,14 +225,14 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(!useGrad) {
                 grad = item.color
             }
-                val textLen = docOpsBadgeGenerator.measureText(item.legend) * 100F
+                val textLen = item.legend.textWidth("Helvetica", 110)
             sb.append("""
-            <g transform="translate($start,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
-                <rect x="0" y="0" width="$textLen" height="110" fill="$grad" />
-                <text text-anchor="middle" style="${item.style}" x="${textLen/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
+            <g transform="translate($start,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
+                <rect x="0" y="0" width="${textLen+20}" height="110" fill="$grad" />
+                <text text-anchor="middle" style="${item.style}" x="${(textLen+20)/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
             </g>
             """.trimIndent())
-            start += (textLen + 40)
+            start += (textLen + 60)
         }
         sb.append("</g>")
         return sb.toString()
