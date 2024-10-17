@@ -14,77 +14,52 @@
     <div class="md-5">
         <label for="payload" class="mb-2">Insert JSON here</label>
         <textarea id="payload" name="payload" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" rows="20" cols="90" placeholder="" data-hx-put="api/release/prefill" data-hx-target="#contentBox">
-        {
+{
   "title": "Release Strategy Builder",
-  "scale": 0.6,
+  "scale": 1,
   "releases": [
     {
       "type": "M1",
       "lines": [
-        "Team will deploy to application server current production code",
-        "Setup IHS proxy",
-        "Team will Mark out websphere servers and mark in liberty servers",
-        "Team will validate Okta changes on Liberty",
-        "Once validated team will mark out liberty servers",
-        "and mark in websphere servers",
-        "QA will validate Production is still working",
-        "Team will record all observations",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well"
+        "Team will deploy application and build out infrastructure with Terraform scripts.",
+        "Team will Apply API gateway pattern to establish API version infrastructure.",
+        "Tream will validate access to the application",
+        "Team will shutdown infrastructure as security is not in place."
       ],
       "date": "July 30th, 2023",
       "selected": true,
-        "completed": true,
-      "goal": "Our goal is to Establish the Liberty infrastructure with Okta enabled As this will be an enviroment for shared security model with portal infrastructure."
+      "goal": "Our Goal is to provision new infrastructure on our cloud EKS platform without enabling production traffic",
+        "completed": true
     },
     {
       "type": "RC1",
       "lines": [
-        "Team will deploy to application server current production code",
-        "Setup IHS proxy",
-        "Team will Mark out websphere servers and mark in liberty servers",
-        "Team will validate Okta changes on Liberty",
-        "Once validated team will mark out liberty servers",
-        "and mark in websphere servers",
-        "QA will validate Production is still working",
-        "Team will record all observations",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well"
+        "Team will leverage CICD pipeline to deploy latest code",
+        "Team will enable OAuth security on the API Gateway",
+        "Team will make the application communication private and local to the API Gateway",
+        "Team will enable API throttling at the Gateway layer",
+        "Team will have QA do initial testing."
       ],
-      "date": "TBD",
-      "selected": true,
-      "goal": "Our goal is ..."
+      "date": "September 20th, 2023",
+       "completed": true
+      "goal": "Our goal is to deploy the lastest code along with security patches applied at the API Layer"
     },
     {
       "type": "GA",
       "lines": [
-        "Team will deploy to application server current production code",
-        "Setup IHS proxy",
-        "Team will Mark out websphere servers and mark in liberty servers",
-        "Team will validate Okta changes on Liberty",
-        "Once validated team will mark out liberty servers",
-        "and mark in websphere servers",
-        "QA will validate Production is still working",
-        "Team will record all observations",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well",
-        "Team will validate logs and record observations as well"
+        "Team will deploy latest code.",
+        "QA will test and sign off"
       ],
-      "date": "TBD",
+      "date": "September 30th",
       "selected": true,
-      "goal": "Our goal is ..."
+      "goal": "Our goal is to release version 1.0 of API making it generally available to all consumers."
     }
   ],
   "style": "TLS",
   "displayConfig": {
-    "colors": ["#77CDFF", "#0D92F4", "#2563eb"],
-    "fontColor": "#111111"
-    }
+    "colors": [ "#cc3232", "#e7b416", "#2dc937"],
+    "fontColor": "#fcfcfc"
+  }
 }
         </textarea>
     </div>
