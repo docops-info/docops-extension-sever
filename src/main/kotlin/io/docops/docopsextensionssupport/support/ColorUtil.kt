@@ -94,3 +94,18 @@ fun generateGradient(hexColor: String): Map<String, String> {
         "darker" to rgbToHex(darkerColor["r"]!!, darkerColor["g"]!!, darkerColor["b"]!!)
     )
 }
+
+
+fun calculateLuminance(rgb: Triple<Int, Int, Int>): Double {
+    val (r, g, b) = rgb
+    val rNorm = r / 255.0
+    val gNorm = g / 255.0
+    val bNorm = b / 255.0
+    return 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm
+}
+
+fun determineTextColor(hexColor: String): String {
+    val rgb = hexToRgb(hexColor)
+    val luminance = calculateLuminance(Triple(rgb["r"]!!, rgb["g"]!!, rgb["b"]!!))
+    return if (luminance < 0.5) "#FCFCFC" else "#000000"
+}

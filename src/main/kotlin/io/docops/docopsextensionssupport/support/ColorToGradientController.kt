@@ -41,6 +41,7 @@ class ColorToGradientController {
         val color = httpServletRequest.getParameter("gradColor")
         val gradient = generateGradient(color)
         val hsl = hexToHsl(color)
+        val textColor = determineTextColor(color)
         return accepted().body(
             """
         <div>
@@ -61,9 +62,10 @@ class ColorToGradientController {
                 <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
             </linearGradient>
         </defs>
-        <rect x="0" y="0" width="100%" height="33%" fill="url(#grad1)"/>
-        <rect x="0" y="66.667" width="100%" height="33%" fill="url(#grad2)"/>
-        <rect x="0" y="133.333" width="100%" height="33%" fill="url(#grad3)"/>
+        <rect x="0" y="0" width="100%" height="30%" fill="url(#grad1)"/>
+        <rect x="0" y="60" width="100%" height="30%" fill="url(#grad2)"/>
+        <rect x="0" y="120" width="100%" height="30%" fill="url(#grad3)"/>
+        <text x="100" y="161" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="$textColor">$textColor based on input ${color}</text>
 </svg>    
 </div>
 <div class="divider"></div>

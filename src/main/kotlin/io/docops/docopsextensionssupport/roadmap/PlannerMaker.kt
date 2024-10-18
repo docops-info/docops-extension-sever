@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.chart.DefaultChartColors
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
@@ -11,14 +12,16 @@ class PlannerMaker {
         val parser = PlannerParser()
         val planItems = parser.parse(source)
         val sb = StringBuilder()
-        sb.append(makeHead(planItems, title))
-        sb.append("<g transform=\"translate(0, 60)\">")
         val cols = planItems.toColumns()
+        val grads = planItems.colorDefs(cols)
+
+        sb.append(makeHead(planItems, title, grads))
+        sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
         cols.forEach { key, value ->
             val color = DefaultChartColors.reversed()[column % DefaultChartColors.size]
             val startX = 10 + (column * 562)
-            sb.append(makeColumn( key, value, 60, startX, color))
+            sb.append(makeColumn( key, value, 60, startX, colorIn = "url(#planItem_$column)", color))
             column++
         }
         sb.append("""</g>""")
@@ -28,7 +31,14 @@ class PlannerMaker {
 
 
 
-    private fun makeColumn(key: String, planItems: List<PlanItem>, startY: Int, startX: Int, colorIn: String): String {
+    private fun makeColumn(
+        key: String,
+        planItems: List<PlanItem>,
+        startY: Int,
+        startX: Int,
+        colorIn: String,
+        columnColor: String
+    ): String {
         val sb = StringBuilder()
         var color = colorIn
         var y = startY
@@ -46,7 +56,8 @@ class PlannerMaker {
             """.trimIndent())
 
             planItem.title?.let {
-                sb.append("""<text x="20" y="36" style="font-family: Arial, Helvetica, sans-serif; fill: #fcfcfc; font-size: 36;">${planItem.title}</text>""")
+                val textColor = determineTextColor(columnColor)
+                sb.append("""<text x="20" y="36" style="font-family: Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px;">${planItem.title}</text>""")
             }
             planItem.content?.let {
                 //todo fix url
@@ -68,13 +79,16 @@ class PlannerMaker {
             """.trimIndent())
         return sb.toString()
     }
-    private fun makeHead(planItems: PlanItems, title: String): String {
+    private fun makeHead(planItems: PlanItems, title: String, grads: String): String {
         val width = (552 * planItems.toColumns().size) + (planItems.toColumns().size * 10) + 10
         val height = planItems.maxRows() * 360 + (planItems.maxRows() * 10)+ 120
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="${width * 0.50}" height="${height * 0.50}"
      viewBox="0 0 $width $height">
+     <defs>
+     $grads
+     </defs>
      <text x="${width/2}" y="40" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 36; font-weight: bold;">${title.escapeXml()}</text>
          
         """.trimIndent()

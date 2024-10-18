@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
@@ -61,9 +62,10 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val sb = StringBuilder()
         var x = 0
         var y = 0
-        var textColor = "#111111"
         placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
+            val textColor = determineTextColor(placeMatRequest.config.colorFromLegendName(conn.legend).color)
+
             var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
             /*if(!useGrad) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
@@ -78,10 +80,9 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             }
             if(isPdf && placeMatRequest.useDark) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
-                textColor = "#fcfcfc"
             }
             val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" fill="$textColor" y="${lines.second}" text-anchor="middle" class="filtered glass" style="fill:$textColor; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;">""")
+            val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="glass" style="fill:$textColor; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;">""")
             var newLine = false
 
             lines.first.forEachIndexed {
@@ -225,11 +226,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(!useGrad) {
                 grad = item.color
             }
+            val textColor = determineTextColor(item.color)
                 val textLen = item.legend.textWidth("Helvetica", 110)
             sb.append("""
             <g transform="translate($start,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
-                <rect x="0" y="0" width="${textLen+20}" height="110" fill="$grad" />
-                <text text-anchor="middle" style="${item.style}" x="${(textLen+20)/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
+                <rect x="0" y="0" width="${textLen+20}" height="110" fill="$grad" class="shadowed"/>
+                <text text-anchor="middle" style="fill: $textColor;" x="${(textLen+20)/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
             </g>
             """.trimIndent())
             start += (textLen + 60)
