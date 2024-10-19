@@ -37,7 +37,7 @@ class PlannerParser {
 
     private fun parseLine(line: String): PlanItem {
         val sp = line.trim().split(" ")
-        var planItem: PlanItem = if(sp.size > 2) {
+        val planItem: PlanItem = if(sp.size > 2) {
             val remain = sp.subList(2, sp.size)
             var color: String? = null
             var title = ""
@@ -50,7 +50,7 @@ class PlannerParser {
             }
             PlanItem(type = sp[1], title = title.trim(), color = color)
         } else {
-            PlanItem(sp[1], null, null)
+            PlanItem(type=sp[1], title = null, color= null)
         }
         return planItem
     }

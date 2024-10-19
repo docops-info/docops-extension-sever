@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-class PlanItem(val type: String, val title: String?, val color: String?) {
+class PlanItem(val id: String = UUID.randomUUID().toString(), val type: String, val title: String?, val color: String?) {
      var content: String? =""
     //this field is used for measuring text width
      var shadowContent : String? = null
@@ -21,6 +21,13 @@ class PlanItem(val type: String, val title: String?, val color: String?) {
         shadowContentWithUrl()
     }
 
+    fun colorGradient() : String {
+        color?.let {
+            val grad = svgGradient(color, id)
+            return grad
+        }
+        return ""
+    }
     private fun shadowContentWithUrl()  {
 
         content?.let {
@@ -59,8 +66,8 @@ class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
     fun colorDefs(planItems: Map<String, List<PlanItem>> ): String {
         val sb = StringBuilder()
         var column = 0
-        planItems.forEach { t, u ->
-            val color = DefaultChartColors.reversed()[column % DefaultChartColors.size]
+        planItems.forEach { (t, u) ->
+            val color = DefaultChartColors[column % DefaultChartColors.size]
             val grad = svgGradient(color, "planItem_$column")
             sb.append(grad)
             column++

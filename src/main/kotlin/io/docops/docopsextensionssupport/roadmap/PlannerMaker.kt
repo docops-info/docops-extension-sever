@@ -14,12 +14,12 @@ class PlannerMaker {
         val sb = StringBuilder()
         val cols = planItems.toColumns()
         val grads = planItems.colorDefs(cols)
-
-        sb.append(makeHead(planItems, title, grads))
+        val itemGrad = itemGradient(planItems)
+        sb.append(makeHead(planItems, title, grads, itemGrad))
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
-        cols.forEach { key, value ->
-            val color = DefaultChartColors.reversed()[column % DefaultChartColors.size]
+        cols.forEach { (key, value) ->
+            val color = DefaultChartColors[column % DefaultChartColors.size]
             val startX = 10 + (column * 562)
             sb.append(makeColumn( key, value, 60, startX, colorIn = "url(#planItem_$column)", color))
             column++
@@ -29,7 +29,15 @@ class PlannerMaker {
         return sb.toString()
     }
 
-
+private fun itemGradient(planItems: PlanItems): String {
+    val sb = StringBuilder()
+    planItems.items.forEach {
+        it.color?.let { color ->
+            sb.append(it.colorGradient())
+        }
+    }
+    return sb.toString()
+}
 
     private fun makeColumn(
         key: String,
@@ -43,9 +51,9 @@ class PlannerMaker {
         var color = colorIn
         var y = startY
 
-        planItems.forEachIndexed { index, planItem ->
+        planItems.forEachIndexed { _, planItem ->
             if(planItem.color != null) {
-                color = planItem.color
+                color = "url(#${planItem.id})"
             }
             sb.append("""<g transform="translate($startX, $y)">""")
             sb.append("""
@@ -63,9 +71,9 @@ class PlannerMaker {
                 //todo fix url
                 val contentList = itemTextWidth(planItem.content!!, 542, 24, "Helvetica")
                 val list = linesToUrlIfExist(contentList, planItem.urlMap)
-                sb.append("<text x='20' y='62' style='font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24;'>")
+                sb.append("<text x='20' y='62' style='font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24px;'>")
                 list.forEachIndexed { index, string ->
-                    sb.append("""<tspan x="20" dy="24" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24;">${string}</tspan>""")
+                    sb.append("""<tspan x="20" dy="24" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24px;">${string}</tspan>""")
                 }
                 sb.append("</text>")
             }
@@ -74,12 +82,12 @@ class PlannerMaker {
         }
         sb.append("""
             <g transform="translate($startX, 10)">
-            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $color; font-size: 36; stroke: $color; font-weight: bold;">${key.escapeXml().uppercase()}</text>
+            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $color; font-size: 36px; stroke: $color; font-weight: bold;">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()
     }
-    private fun makeHead(planItems: PlanItems, title: String, grads: String): String {
+    private fun makeHead(planItems: PlanItems, title: String, grads: String, itemGrad:  String): String {
         val width = (552 * planItems.toColumns().size) + (planItems.toColumns().size * 10) + 10
         val height = planItems.maxRows() * 360 + (planItems.maxRows() * 10)+ 120
         return """
@@ -88,8 +96,9 @@ class PlannerMaker {
      viewBox="0 0 $width $height">
      <defs>
      $grads
+     $itemGrad
      </defs>
-     <text x="${width/2}" y="40" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 36; font-weight: bold;">${title.escapeXml()}</text>
+     <text x="${width/2}" y="40" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 36px; font-weight: bold;">${title.escapeXml()}</text>
          
         """.trimIndent()
     }
