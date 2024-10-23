@@ -20,6 +20,7 @@ import io.docops.asciidoc.buttons.wrapText
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 
 /**
@@ -48,8 +49,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
         sb.append("</g>")
         if(buttons.useDark) {
             val rect = StringBuilder("""
-                <rect width="100%" height="100%" fill="#111111"/>
-                ${sb.toString()}
+                $sb
             """.trimIndent())
             return rect.toString()
         } else {
@@ -108,7 +108,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
                 <circle r="55" cx="0" cy="0"/>
             </g>
-            <text  x="0" y="$lineY" text-anchor="middle">
+            <text  x="0" y="$lineY" text-anchor="middle" style="fill: ${button.color}">
                 $title
             </text>
             </a>
@@ -146,19 +146,15 @@ class Round(buttons: Buttons) : Regular(buttons) {
         const val BUTTON_PADDING = 0
     }
     override fun defs() : String {
-        var strokeColor: String = "gold"
+        var strokeColor = "gold"
         buttons.theme?.let {
             strokeColor = it.strokeColor
         }
         val linGrad = StringBuilder()
         buttons.buttons.forEachIndexed {
             i, b ->
-           linGrad.append("""
-         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="nnneon-grad$i-${buttons.id}">
-            <stop stop-color="${hexToHsl(b.color!!, isPdf)}" stop-opacity="1" offset="50%"/>
-            <stop stop-color="${hexToHsl("#d0dceb", isPdf)}" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-           """.trimIndent())
+            val grad =  gradientColorFromColor(b.color!!, "nnneon-grad$i-${buttons.id}")
+           linGrad.append(grad)
         }
         var style = """
              <style>
