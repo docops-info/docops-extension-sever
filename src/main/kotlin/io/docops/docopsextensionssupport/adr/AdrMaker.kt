@@ -187,6 +187,6 @@ class AdrMaker {
 }
 
 open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000")
-class EditorLite(background: String = "#fcfcfc", lineColor: String="#a3742c", textColor: String="#000000", titleColor: String="#000000"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorLite(background: String = "#fcfcfc", lineColor: String="#E4D0D0", textColor: String="#000000", titleColor: String="#000000"): EditorColor(background, lineColor, textColor, titleColor)
 class EditorDark(background: String = "#21252B",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)

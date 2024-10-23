@@ -35,7 +35,7 @@ class LineChartMaker {
         }
         sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="$fontColor" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         sb.append(legend(lineChart))
-        //sb.append(addTicks(lineChart))
+        sb.append(addTicks(lineChart))
         sb.append(end())
         return joinXmlLines(sb.toString())
     }
@@ -68,11 +68,13 @@ class LineChartMaker {
         val maxV = nice.getNiceMax()
         val tickSpacing = nice.getTickSpacing()
         var i = minV
+        val maxData = lineChart.points[0].points.maxOf { it.y } + 100
+        val oneUnit = maxHeight / maxData
         while(i < maxV ) {
-            val y = 600 - lineChart.scaleUp(i)
+            val y = maxHeight - (i * oneUnit)
             sb.append("""
      <line x1="40" x2="48" y1="$y" y2="$y" stroke="$fontColor" stroke-width="3"/>
-    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${lineChart.valueFmt(i)}</text>
+    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor; font-size:10px; text-anchor:end">${lineChart.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
