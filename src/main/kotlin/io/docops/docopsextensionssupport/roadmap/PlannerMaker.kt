@@ -19,7 +19,10 @@ class PlannerMaker {
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
         cols.forEach { (key, value) ->
-            val color = DefaultChartColors[column % DefaultChartColors.size]
+            var color = DefaultChartColors[column % DefaultChartColors.size]
+            if(value[0].color != null) {
+                color = value[0].color!!
+            }
             val startX = 10 + (column * 562)
             sb.append(makeColumn( key, value, 60, startX, colorIn = "url(#planItem_$column)", color))
             column++
@@ -50,11 +53,15 @@ private fun itemGradient(planItems: PlanItems): String {
         val sb = StringBuilder()
         var color = colorIn
         var y = startY
-
+        var parentColor = ""
         planItems.forEachIndexed { _, planItem ->
             if(planItem.color != null) {
                 color = "url(#${planItem.id})"
+                if(planItem.isParent) {
+                    parentColor = color
+                }
             }
+
             sb.append("""<g transform="translate($startX, $y)">""")
             sb.append("""
                 <rect x="0" y="0" fill="#fcfcfc" height="360" width="552" rx="5" ry="5"
@@ -80,9 +87,10 @@ private fun itemGradient(planItems: PlanItems): String {
             sb.append("</g>")
             y += 360 +10
         }
+
         sb.append("""
             <g transform="translate($startX, 10)">
-            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $color; font-size: 36px; stroke: $color; font-weight: bold;">${key.escapeXml().uppercase()}</text>
+            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; stroke: $parentColor; font-weight: bold;">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()

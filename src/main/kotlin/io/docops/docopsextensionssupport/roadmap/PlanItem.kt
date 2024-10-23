@@ -10,7 +10,8 @@ import java.util.UUID
 
 @Serializable
 class PlanItem(val id: String = UUID.randomUUID().toString(), val type: String, val title: String?, val color: String?) {
-     var content: String? =""
+    var isParent: Boolean = false
+    var content: String? =""
     //this field is used for measuring text width
      var shadowContent : String? = null
 
@@ -56,6 +57,14 @@ class PlanItem(val id: String = UUID.randomUUID().toString(), val type: String, 
 
 class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
     fun toColumns(): Map<String, List<PlanItem>> {
+        val cols = items.groupBy { it.type  }
+        cols.forEach { (key, value) ->
+            value.forEachIndexed { index, item ->
+                if(index == 0) {
+                    item.isParent = true
+                }
+            }
+        }
         return items.groupBy { it.type  }
     }
     fun maxRows(): Int {
