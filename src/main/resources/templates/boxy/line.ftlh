@@ -170,7 +170,8 @@
         }
       ]
     }
-  ]
+  ],
+  "display" : {"backgroundColor": "#EDFFFA"}
 }
             </textarea>
         </div>

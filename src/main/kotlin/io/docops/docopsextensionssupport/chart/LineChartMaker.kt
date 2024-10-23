@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.determineTextColor
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -11,10 +13,12 @@ class LineChartMaker {
     private val maxGraphHeight = 410
     private val maxWidth = 640
     private val maxGraphWidth = 730
+    private var fontColor = "#111111"
     fun makeLineChart(lineChart: LineChart): String {
         val sb = StringBuilder()
         sb.append(makeHead(lineChart))
-        sb.append(makeDefs())
+        sb.append(makeDefs(lineChart))
+        fontColor = determineTextColor(lineChart.display.backgroundColor)
         sb.append("<rect width='100%' height='100%' fill='url(#backGrad1)' stroke='#111111'/>")
         lineChart.points.forEachIndexed { index, mutableList ->
             sb.append("<g>")
@@ -26,11 +30,12 @@ class LineChartMaker {
         val xGap = maxGraphWidth / (points.points.size + 1)
         var num = xGap
         points.points.forEach{  point ->
-            sb.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:#fcfcfc;">${point.label}</text>""")
+            sb.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:$fontColor;">${point.label}</text>""")
             num += xGap
         }
-        sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="#fcfcfc" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
+        sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="$fontColor" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         sb.append(legend(lineChart))
+        //sb.append(addTicks(lineChart))
         sb.append(end())
         return joinXmlLines(sb.toString())
     }
@@ -45,7 +50,7 @@ class LineChartMaker {
         chart.points.forEachIndexed { index, mutableList ->
             sb.append(
                 """<circle r="5" cx="$x" cy="366" fill="${DefaultChartColors[index]}"/>
-    <text x="$textX" y="370" font-family="Arial, Helvetica, sans-serif" font-size="10px" fill="#fcfcfc">${mutableList.label} </text>
+    <text x="$textX" y="370" font-family="Arial, Helvetica, sans-serif" font-size="10px" fill="$fontColor">${mutableList.label} </text>
         """.trimIndent()
             )
             x += mutableList.textWidth() + 15
@@ -54,6 +59,25 @@ class LineChartMaker {
         sb.append("</g>")
         return sb.toString()
 
+    }
+    private fun addTicks( lineChart: LineChart): String {
+        val sb = StringBuilder()
+
+        val nice =lineChart.ticks()
+        val minV = nice.getNiceMin()
+        val maxV = nice.getNiceMax()
+        val tickSpacing = nice.getTickSpacing()
+        var i = minV
+        while(i < maxV ) {
+            val y = 600 - lineChart.scaleUp(i)
+            sb.append("""
+     <line x1="40" x2="48" y1="$y" y2="$y" stroke="$fontColor" stroke-width="3"/>
+    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${lineChart.valueFmt(i)}</text>
+            """.trimIndent())
+
+            i+=tickSpacing
+        }
+        return sb.toString()
     }
 
     private fun end() = "</svg>"
@@ -66,14 +90,11 @@ class LineChartMaker {
     }
 
 
-    private fun makeDefs(): String {
+    private fun makeDefs(lineChart: LineChart): String {
+        val clr = gradientColorFromColor(lineChart.display.backgroundColor, "backGrad1")
         return """
             <defs>
-             <linearGradient id="backGrad1" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#5c5c5c"/>
-                <stop class="stop2" offset="30%" stop-color="#4c4c4c"/>
-                <stop class="stop3" offset="100%" stop-color="#111111"/>
-            </linearGradient>
+             $clr
             <script>
             function showText(id) {
                 var tooltip = document.getElementById(id);
@@ -102,11 +123,11 @@ class LineChartMaker {
             if (index == 0) {
                 elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
                 elements.append("""<polyline points="0,$num2 $maxGraphWidth,$num2" style="stroke: #aaaaaa"/>""")
-                elements.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:#fcfcfc;">${item.label}</text>""")
+                elements.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:$fontColor;">${item.label}</text>""")
             }
-            elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:#fcfcfc; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
+            elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             str.append(" $num,$y")
-            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: #fcfcfc; fill: ${DefaultChartColors[index]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${DefaultChartColors[index]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
             num += xGap
             num2 += yGap
         }
@@ -138,7 +159,8 @@ fun main() {
     val p3 = Points("Development", points3)
     val lc = LineChart(
         title = "Point on graph",
-        points = mutableListOf(p1, p2,p3)
+        points = mutableListOf(p1, p2,p3),
+        display = LineChartDisplay(backgroundColor = "#f5f5f5")
     )
     val svg = maker.makeLineChart(lc)
 
