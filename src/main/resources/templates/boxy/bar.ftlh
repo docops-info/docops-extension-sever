@@ -16,8 +16,7 @@
       "label": "Comedy",
       "value": 4,
       "itemDisplay": {
-        "baseColor": "#5FBDFF",
-        "barFontColor": "#fcfcfc"
+        "baseColor": "#5FBDFF"
       }
     },
     {
@@ -32,8 +31,7 @@
       "label": "Drama",
       "value": 1,
       "itemDisplay": {
-        "baseColor": "#B931FC",
-        "barFontColor": "#111111"
+        "baseColor": "#B931FC"
       }
     },
     {
@@ -42,9 +40,7 @@
     }
   ],
   "display": {
-    "showGrid": true,
-    "baseColor": "#C21292",
-    "barFontColor": "#fcfcfc"
+    "baseColor": "#003b6b"
   }
 }
             </textarea>

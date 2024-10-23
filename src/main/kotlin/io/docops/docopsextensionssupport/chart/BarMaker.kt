@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.apache.catalina.manager.JspHelper.escapeXml
 import java.io.File
@@ -9,14 +11,13 @@ import kotlin.math.min
 
 class BarMaker {
 
+    private var fontColor = "#fcfcfc"
     fun makeBar(bar: Bar) : String {
-
+        fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(bar))
         sb.append(makeDefs(bar, itemGradients(bar)))
-        if(bar.display.showGrid) {
-            sb.append(addGrid(bar = bar))
-        }
+        sb.append(addGrid(bar = bar))
         sb.append(addGroupStart(bar))
         var startX: Int = 1
         var startY: Int = bar.calcLeftPadding()
@@ -57,7 +58,7 @@ class BarMaker {
             val y = 500 - bar.scaleUp(i)
             sb.append("""
      <line x1="24" x2="28" y1="$y" y2="$y" stroke="gold" stroke-width="3"/>
-    <text x="20" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${bar.valueFmt(i)}</text>
+    <text x="20" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor; font-size:10px; text-anchor:end">${bar.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -68,10 +69,10 @@ class BarMaker {
        // val per = bar.weightedPercentage(barData, 512)
         val per = bar.scaleUp(barData.value)
         var displayGradId =  bar.display.id
-        var fontColor = bar.display.barFontColor
+        //var fontColor = bar.display.barFontColor
         if(barData.itemDisplay != null) {
             displayGradId = barData.itemDisplay.id
-            fontColor = barData.itemDisplay.barFontColor
+          //  fontColor = barData.itemDisplay.barFontColor
         }
         var labelY = 0
         var shape = ""
@@ -91,7 +92,7 @@ class BarMaker {
                 $shape
                
                 <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:9px;" text-anchor="end" >${barData.value.toInt()}</text>
-                <text x="10" y="19"  style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor: start;" >${escapeXml(barData.label)}</text>
+                <text x="10" y="19"  style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:10px; text-anchor: start;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
     }
@@ -112,13 +113,13 @@ class BarMaker {
         return """
             </g>
         </g>
-        <text x="250" y="-10" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: #fcfcfc;text-anchor: middle;" transform="rotate(90)">${bar.yLabel}</text>
-        <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: #fcfcfc;text-anchor: middle;">${bar.xLabel}</text>
+        <text x="250" y="-10" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill:$fontColor;text-anchor: middle;" transform="rotate(90)">${bar.yLabel}</text>
+        <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: $fontColor;text-anchor: middle;">${bar.xLabel}</text>
         """
     }
     private fun addTitle(bar: Bar): String {
         val center = bar.centerWidth()
-        return """<text x="$center" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
+        return """<text x="$center" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
     }
     private fun addGrid(bar: Bar) : String
     {
@@ -131,7 +132,7 @@ class BarMaker {
         var num = xGap
         var num2 = yGap
         val elements = StringBuilder()
-        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad3)' stroke="#aaaaaa" stroke-width="1"/>""")
+        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad_${bar.display.id})' stroke="#aaaaaa" stroke-width="1"/>""")
 
        /* bar.series.forEach {
             elements.append("""
@@ -157,18 +158,15 @@ class BarMaker {
         """.trimIndent())
         return elements.toString()
     }
-    private fun makeDefs(bar: Bar, gradients: String) : String =
-         """<defs>
-             <linearGradient id="backGrad3" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#9ea1a8"/>
-                <stop class="stop2" offset="50%" stop-color="#6d727c"/>
-                <stop class="stop3" offset="100%" stop-color="#3d4451"/>
-            </linearGradient>
-                 <linearGradient id="grad1" x2="0%" y2="100%">
+    private fun makeDefs(bar: Bar, gradients: String) : String {
+        val backColor = gradientColorFromColor(bar.display.baseColor, "backGrad_${bar.display.id}")
+        return """<defs>
+            $backColor
+             <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
                 <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>
                 <stop class="stop3" offset="100%" stop-color="#EEEDEB"/>
-                </linearGradient>
+            </linearGradient>
                    $gradients
                     <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/>
@@ -203,7 +201,7 @@ class BarMaker {
                     }
                      </style>
                 </defs>"""
-
+    }
 
     private fun itemGradients(bar: Bar): String {
         val sb = StringBuilder()
@@ -236,7 +234,7 @@ fun main() {
         series = mutableListOf(Series("Jan", 120.0), Series("Feb", 334.0), Series("Mar", 455.0), Series("Apr", 244.0),
             Series("May", 256.0), Series("Jun", 223.0), Series("Jul", 345.0), Series("Aug", 356.0), Series("Sep", 467.0),
             Series("Oct", 345.0), Series("Nov", 356.0), Series("Dec", 467.0)),
-        display = BarDisplay(showGrid = true, baseColor = "#492E87", barFontColor = "#FFFFFF"))
+        display = BarDisplay(baseColor = "#492E87"))
     val svg = BarMaker().makeBar(bar)
     val outfile2 = File("gen/bars.svg")
     outfile2.writeBytes(svg.toByteArray())
