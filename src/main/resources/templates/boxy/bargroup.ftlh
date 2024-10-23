@@ -99,8 +99,10 @@
     }
   ],
   "display": {
-    "baseColor": "#00bfa0",
-    "barFontValueStyle": "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;",
+    "baseColor": "#003b6b",
+    "barSeriesFontStyle":"font-family: Arial,Helvetica, sans-serif;  font-size:9px; text-anchor:middle",
+    "barSeriesLabelFontStyle":"font-family: Arial,Helvetica, sans-serif;  font-size:9px; text-anchor:start;",
+    "barFontValueStyle":"font-family: Arial,Helvetica, sans-serif; font-size:9px;",
     "scale": 1.0,
     "lineColor": "#00bfa0"
   }

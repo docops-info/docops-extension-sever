@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -7,7 +9,9 @@ import java.io.File
 
 class BarGroupMaker {
 
+    private var fontColor = "#fcfcfc"
     fun makeBar(barGroup: BarGroup): String {
+        fontColor = determineTextColor(barGroup.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
         sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup=barGroup))
@@ -65,7 +69,7 @@ class BarGroupMaker {
            //println("${series.value} -> $per -> ${500-per}")
             sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
-                sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}">${barGroup.valueFmt(series.value)}</text>""")
+                sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}; fill: $fontColor;">${barGroup.valueFmt(series.value)}</text>""")
             }
             //sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
             counter += 26.0
@@ -79,10 +83,10 @@ class BarGroupMaker {
 
     private fun makeSeriesLabel(x: Double, y: Double, label: String, barGroup: BarGroup): String {
         val sb = StringBuilder()
-        sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}">""")
+        sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}; fill: $fontColor;" >""")
         val str = label.split(" ")
         str.forEachIndexed { index, s ->
-            sb.append("<tspan x='$x' dy='10' style=\"${barGroup.display.barSeriesFontStyle}\">$s</tspan>")
+            sb.append("<tspan x='$x' dy='10' style=\"${barGroup.display.barSeriesFontStyle}; fill: $fontColor;\">$s</tspan>")
         }
         sb.append("</text>")
         return sb.toString()
@@ -100,7 +104,7 @@ class BarGroupMaker {
             val y = 500 - barGroup.scaleUp(i)
             sb.append("""
      <line x1="40" x2="48" y1="$y" y2="$y" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
-    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
+    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -108,13 +112,13 @@ class BarGroupMaker {
         return sb.toString()
     }
     private fun makeTitle(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}">${barGroup.title}</text>"""
+        return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}; fill: $fontColor;">${barGroup.title}</text>"""
     }
     private fun makeXLabel(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="536" style="${barGroup.display.xLabelStyle}">${barGroup.xLabel}</text>"""
+        return """<text x="${barGroup.calcWidth()/2}" y="536" style="${barGroup.display.xLabelStyle}; fill: $fontColor;" >${barGroup.xLabel}</text>"""
     }
     private fun makeYLabel(barGroup: BarGroup): String {
-        return """<text x="-270" y="18" style="${barGroup.display.yLabelStyle}" transform="rotate(270)">${barGroup.yLabel}</text>"""
+        return """<text x="-270" y="18" style="${barGroup.display.yLabelStyle}; fill: $fontColor;" transform="rotate(270)">${barGroup.yLabel}</text>"""
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
@@ -148,14 +152,11 @@ class BarGroupMaker {
             """.trimIndent())
         }
 
+        val backColor = gradientColorFromColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
 
         return """<defs>
             $defGrad
-             <linearGradient id="backGrad_${barGroup.id}" x2="0%" y2="100%">
-                 <stop class="stop1" offset="0%" stop-color="#495161"/>
-            <stop class="stop2" offset="50%" stop-color="#3d4451"/>
-            <stop class="stop3" offset="100%" stop-color="#303640"/>
-            </linearGradient>
+             $backColor
                  <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
                 <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>
@@ -279,7 +280,7 @@ fun createBarGroupTestData(): BarGroup {
         yLabel = "Sales (USD)",
         xLabel = "Quarters",
         groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
-        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#921A40", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; fill: #fcfcfc; font-size:9px;", scale = 1.0)
+        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#F3EDED", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; font-size:9px;", scale = 1.0)
     )
 
     return barGroup
