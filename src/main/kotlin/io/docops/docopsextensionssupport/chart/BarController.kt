@@ -30,7 +30,14 @@ class BarController {
             var contents = httpServletRequest.getParameter("content")
             val barMaker = BarMaker()
             val bars = Json.decodeFromString<Bar>(contents)
-            val svg = barMaker.makeBar(bars)
+            var svg = ""
+            if(bars.display.vBar) {
+                svg = barMaker.makeVerticalBar(bars)
+
+            } else {
+                svg = barMaker.makeHorizontalBar(bars)
+            }
+
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")

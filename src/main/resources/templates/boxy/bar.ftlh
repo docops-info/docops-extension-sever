@@ -8,41 +8,65 @@
             <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" cols="90" rows="20" placeholder="" data-hx-put="api/bar/barchart" data-hx-target="#contentBox">
 {
-  "title": "Favorite Type of Movies",
-  "yLabel": "People",
-  "xLabel": "Movie Type",
-  "series": [
-    {
-      "label": "Comedy",
-      "value": 4,
-      "itemDisplay": {
-        "baseColor": "#5FBDFF"
-      }
-    },
-    {
-      "label": "Action",
-      "value": 4
-    },
-    {
-      "label": "Romance",
-      "value": 6
-    },
-    {
-      "label": "Drama",
-      "value": 1,
-      "itemDisplay": {
-        "baseColor": "#B931FC"
-      }
-    },
-    {
-      "label": "SciFi",
-      "value": 4
-    }
-  ],
+  "title": "Show Me the Money",
+  "yLabel": "Number of Sales",
+  "xLabel": "Month",
+
+      "series": [
+        {
+          "label": "Jan",
+          "value": 5000
+        },
+        {
+          "label": "Feb",
+          "value": 7000
+        },
+        {
+          "label": "Mar",
+          "value": 4000
+        },
+        {
+          "label": "Apr",
+          "value": 15000
+        },
+        {
+          "label": "May",
+          "value": 5700
+        },
+        {
+          "label": "Jun",
+          "value": 6400
+        },
+        {
+          "label": "Jul",
+          "value": 8322
+        },
+        {
+          "label": "Aug",
+          "value": 4400
+        },
+        {
+          "label": "Sept",
+          "value": 4520
+        },
+        {
+          "label": "Oct",
+          "value": 3200
+        },
+        {
+          "label": "Nov",
+          "value": 5025
+        },
+        {
+          "label": "Dec",
+          "value": 6000
+        }
+      ],
   "display": {
-    "baseColor": "#003b6b"
+"baseColor": "#353E55", "vBar": true
   }
 }
+
             </textarea>
         </div>
         <div class="flex flex-col">

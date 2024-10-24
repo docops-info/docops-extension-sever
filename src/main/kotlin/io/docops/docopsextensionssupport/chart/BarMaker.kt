@@ -5,14 +5,13 @@ import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.apache.catalina.manager.JspHelper.escapeXml
 import java.io.File
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 class BarMaker {
 
     private var fontColor = "#fcfcfc"
-    fun makeBar(bar: Bar) : String {
+    fun makeHorizontalBar(bar: Bar) : String {
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(bar))
@@ -38,6 +37,7 @@ class BarMaker {
         sb.append(end(bar))
         return sb.toString()
     }
+
 
     private fun end(bar: Bar) = "</svg>"
     private fun makeHead(bar: Bar): String {
@@ -224,6 +224,11 @@ class BarMaker {
         </linearGradient>
         """.trimIndent()
     }
+
+    fun makeVerticalBar(bar: Bar): String {
+        val vBarMaker = VBarMaker()
+        return vBarMaker.makeVerticalBar(bar)
+    }
 }
 
 
@@ -235,7 +240,7 @@ fun main() {
             Series("May", 256.0), Series("Jun", 223.0), Series("Jul", 345.0), Series("Aug", 356.0), Series("Sep", 467.0),
             Series("Oct", 345.0), Series("Nov", 356.0), Series("Dec", 467.0)),
         display = BarDisplay(baseColor = "#492E87"))
-    val svg = BarMaker().makeBar(bar)
+    val svg = BarMaker().makeVerticalBar(bar)
     val outfile2 = File("gen/bars.svg")
     outfile2.writeBytes(svg.toByteArray())
 }
