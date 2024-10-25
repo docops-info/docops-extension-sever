@@ -24,16 +24,20 @@ class VBarMaker {
     private fun addBars(bar: Bar) : String {
         var sb = StringBuilder()
         var startY = 80
+        var anchor = "middle"
         bar.series.forEach {
             val per = bar.scaleUp(it.value)
+            if(per < 41) {
+                anchor = "start"
+            }
             sb.append("""
        <g transform="translate(245, $startY)"><!--560 168/2-->
-        <rect class="bar" x="0" height="40" width="$per" fill="url(#backGrad_${bar.display.id})"/>
+        <rect class="glass bar shadowed" x="0" height="40" width="$per" stroke="url(#backGrad_${bar.display.id})" stroke-width="3" fill="#FFF6F6"/>
         <text x="-10" y="20" text-anchor="end"
               style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.label?.escapeXml()}
         </text>
-        <text x="${per / 2}" y="24" text-anchor="middle"
-              style="fill: #fcfcfc; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.value}
+        <text x="${per / 2}" y="24" text-anchor="$anchor"
+              style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${bar.valueFmt(it.value)}
         </text>
     </g>
             """.trimIndent())
@@ -53,7 +57,7 @@ class VBarMaker {
     }
 
     private fun makeLineSeparator() : String{
-        return "<line x1=\"240\" x2=\"240\" y1=\"60\" y2=\"${height - 60}\" stroke=\"#A64942\"/>"
+        return "<line x1=\"240\" x2=\"240\" y1=\"60\" y2=\"$height\" stroke=\"#A64942\"/>"
     }
 
     private fun makeBackground(bar: Bar): String {
@@ -80,7 +84,6 @@ class VBarMaker {
         return """
         <g>
         <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${bar.display.id})"/>
-        <rect height="60" x="0" y="${height - 60}" width="100%" fill="url(#backGrad_${bar.display.id})"/>
         <text x="400" y="40" text-anchor="middle"
               style="fill: $fontColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${bar.title.escapeXml()}
         </text>
@@ -95,6 +98,65 @@ class VBarMaker {
             <style>
             .bar:hover {
                 filter: grayscale(100%) sepia(100%);
+            }
+            .bar:hover {
+                filter: grayscale(100%) sepia(100%);
+            }
+            .glass:after, .glass:before {
+                content: "";
+                display: block;
+                position: absolute
+            }
+
+            .glass {
+                overflow: hidden;
+                color: #fff;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
+                background-image: radial-gradient(circle at center, rgba(0, 167, 225, .25), rgba(0, 110, 149, .5));
+                box-shadow: 0 5px 10px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2);
+                position: relative
+            }
+
+            .glass:after {
+                background: rgba(0, 167, 225, .2);
+                z-index: 0;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                backdrop-filter: blur(3px) saturate(400%);
+                -webkit-backdrop-filter: blur(3px) saturate(400%)
+            }
+
+            .glass:before {
+                width: calc(100% - 4px);
+                height: 35px;
+                background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
+                top: 2px;
+                left: 2px;
+                border-radius: 30px 30px 200px 200px;
+                opacity: .7
+            }
+
+            .glass:hover {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, .9)
+            }
+
+            .glass:hover:before {
+                opacity: 1
+            }
+
+            .glass:active {
+                text-shadow: 0 0 2px rgba(0, 0, 0, .9);
+                box-shadow: 0 3px 8px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2)
+            }
+
+            .glass:active:before {
+                height: 25px
+            }
+            .shadowed {
+                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }
             </style>
             </defs>

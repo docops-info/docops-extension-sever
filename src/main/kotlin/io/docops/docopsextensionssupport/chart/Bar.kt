@@ -60,11 +60,11 @@ fun Bar.valueFmt(value: Double): String {
     var numberString : String = ""
     numberString = when {
         abs(value / 1000000) > 1 -> {
-            (value / 1000000).toString() + "m"
+            "${(value / 1000000)} m"
 
         }
         abs(value / 1000) > 1 -> {
-            (value / 1000).toString() + "k"
+            "${(value / 1000)} k"
 
         }
         else -> {
