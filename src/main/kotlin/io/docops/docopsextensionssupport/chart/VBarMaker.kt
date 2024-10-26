@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 
@@ -8,36 +9,41 @@ class VBarMaker {
     private var fontColor = ""
     private var height = 600
     fun makeVerticalBar(bar: Bar): String {
+        bar.sorted()
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(head(bar))
         sb.append(addDefs(bar))
         sb.append(makeBackground(bar))
         sb.append(makeTitle(bar))
-        sb.append(makeLineSeparator())
+        sb.append(makeLineSeparator(bar))
         sb.append(makeColumnHeader(bar))
         sb.append(addBars(bar))
         sb.append(tail())
-        return sb.toString()
+        return joinXmlLines(sb.toString())
     }
 
     private fun addBars(bar: Bar) : String {
         var sb = StringBuilder()
         var startY = 80
-        var anchor = "middle"
+        var anchor = "start"
+        var fill = "#FFF6F6"
+        var fontDisplayColor = "#111111"
+        if(bar.display.useDark) {
+            fontDisplayColor = "#fcfcfc"
+            fill = "url(#backGrad_${bar.display.id})"
+        }
         bar.series.forEach {
             val per = bar.scaleUp(it.value)
             if(per < 41) {
                 anchor = "start"
             }
             sb.append("""
-       <g transform="translate(245, $startY)"><!--560 168/2-->
-        <rect class="glass bar shadowed" x="0" height="40" width="$per" stroke="url(#backGrad_${bar.display.id})" stroke-width="3" fill="#FFF6F6"/>
-        <text x="-10" y="20" text-anchor="end"
-              style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.label?.escapeXml()}
+       <g transform="translate(245, $startY)">
+        <rect class="glass bar shadowed" x="0" height="40" width="$per" stroke="url(#backGrad_${bar.display.id})" stroke-width="3" fill="$fill"/>
+        <text x="-10" y="24" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.label?.escapeXml()}
         </text>
-        <text x="${per / 2}" y="24" text-anchor="$anchor"
-              style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${bar.valueFmt(it.value)}
+        <text x="${per + 10}" y="24" text-anchor="$anchor" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${bar.valueFmt(it.value)}
         </text>
     </g>
             """.trimIndent())
@@ -47,22 +53,30 @@ class VBarMaker {
         return sb.toString()
     }
 
-    private fun makeColumnHeader(bar: Bar) : String{
+    private fun makeColumnHeader(bar: Bar) : String {
+        var fontDisplayColor = "#111111"
+        if(bar.display.useDark) {
+            fontDisplayColor = "#fcfcfc"
+        }
         return """
      <g>
-        <text x="235" y="75" text-anchor="end" style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.xLabel?.escapeXml()}</text>
-        <text x="245" y="75" text-anchor="start" style="fill: #111111; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.yLabel?.escapeXml()}</text>
+        <text x="235" y="75" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.xLabel?.escapeXml()}</text>
+        <text x="245" y="75" text-anchor="start" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.yLabel?.escapeXml()}</text>
     </g>
         """.trimIndent()
     }
 
-    private fun makeLineSeparator() : String{
-        return "<line x1=\"240\" x2=\"240\" y1=\"60\" y2=\"$height\" stroke=\"#A64942\"/>"
+    private fun makeLineSeparator(bar: Bar) : String{
+        return "<line x1=\"240\" x2=\"240\" y1=\"60\" y2=\"$height\" stroke=\"${bar.display.baseColor}\"/>"
     }
 
     private fun makeBackground(bar: Bar): String {
+        var backGround = "#f5f5f5"
+        if(bar.display.useDark) {
+            backGround = "#1f2937"
+        }
         return """
-            <rect width="100%" height="100%" fill="#f5f5f5"/>
+            <rect width="100%" height="100%" fill="$backGround" stroke="url(#backGrad_${bar.display.id})"/>
         """.trimIndent()
     }
 
@@ -84,8 +98,7 @@ class VBarMaker {
         return """
         <g>
         <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${bar.display.id})"/>
-        <text x="400" y="40" text-anchor="middle"
-              style="fill: $fontColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${bar.title.escapeXml()}
+        <text x="400" y="40" text-anchor="middle" style="fill: $fontColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${bar.title.escapeXml()}
         </text>
     </g>
         """.trimIndent()

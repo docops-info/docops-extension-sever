@@ -239,7 +239,7 @@ fun main() {
         series = mutableListOf(Series("Jan", 120.0), Series("Feb", 334.0), Series("Mar", 455.0), Series("Apr", 244.0),
             Series("May", 256.0), Series("Jun", 223.0), Series("Jul", 345.0), Series("Aug", 356.0), Series("Sep", 467.0),
             Series("Oct", 345.0), Series("Nov", 356.0), Series("Dec", 467.0)),
-        display = BarDisplay(baseColor = "#492E87"))
+        display = BarDisplay(baseColor = "#B9B4C7", useDark = true))
     val svg = BarMaker().makeVerticalBar(bar)
     val outfile2 = File("gen/bars.svg")
     outfile2.writeBytes(svg.toByteArray())

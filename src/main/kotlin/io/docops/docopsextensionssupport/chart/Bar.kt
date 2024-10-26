@@ -11,7 +11,7 @@ class Bar(val title: String, val yLabel: String? = "", val xLabel: String? = "",
 class Series(val label: String? = "", val value: Double, val itemDisplay: BarDisplay? = null, val id: String = UUID.randomUUID().toString())
 
 @Serializable
-class BarDisplay(val id: String = UUID.randomUUID().toString(), val baseColor: String = "#FE7A36",  val type: String = "R", val vBar : Boolean = false)
+class BarDisplay(val id: String = UUID.randomUUID().toString(), val baseColor: String = "#FE7A36",  val type: String = "R", val vBar : Boolean = false, val useDark: Boolean = false, val sorted: Boolean=false)
 
 
 fun Bar.seriesTotal() = series.sumOf { it.value }
@@ -55,6 +55,11 @@ fun Bar.ticks(): NiceScale {
     return nice
 
 
+}
+fun Bar.sorted() {
+    if(this.display.sorted) {
+        series.sortBy { it.value }
+    }
 }
 fun Bar.valueFmt(value: Double): String {
     var numberString : String = ""
