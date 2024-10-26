@@ -63,7 +63,7 @@
         }
       ],
   "display": {
-"baseColor": "#D9B650", "vBar": true
+"baseColor": "#008170", "vBar": true, "sorted": true, "useDark": true
   }
 }
 
