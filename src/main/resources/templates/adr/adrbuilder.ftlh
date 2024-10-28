@@ -1,12 +1,18 @@
 <H1>ADR Builder</H1>
 <div>
-    <article class="flex max-w-xl flex-col items-start justify-between">
-        <p class="mt-5 text-sm leading-6 text-gray-600">The ADR builder is a view to help users of AsciiDoctorJ
-        learn the syntax of building a macro inside the AsciiDoctor Document. This form is intended for use by developers.
-        Developers can leverage the form to fill out the ADR and the output will be reflected in the ADR builder as well
-            as the custom DSL syntax
-        </p>
-    </article>
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">ADR builder UI</h1>
+            <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+                The ADR builder provides this visual interface that
+                guides users through the process of constructing the AsciiDoctor macro.
+                By allowing developers to fill out the ADR form, the tool demonstrates how the input
+                into the proper ADR builder syntax and custom DSL (Domain-Specific Language) syntax,
+                thereby teaching them the correct macro syntax within the AsciiDoctor context.
+            </p>
+
+        </div>
+    </section>
 </div>
 <div id="contentBox" class="contentBox"></div>
 <div class="divider"></div>

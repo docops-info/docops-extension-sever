@@ -1,8 +1,18 @@
 <div>
-    <p>Welcome to DocOps badge creator UI.
-        This view helps developers create a badge and provide the asciidoctor syntax to use.
-        The form helps build out the dsl syntax.
-    </p>
+
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">DocOps badge creator UI</h1>
+            <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+                The purpose of the DocOps badge creator UI is to streamline the process for developers
+                to create badges efficiently and correctly.
+                By providing a user-friendly interface and
+                the necessary syntax, it aims to simplify the task and ensure that the output is
+                syntactically correct and ready for use in Asciidoctor.
+            </p>
+
+        </div>
+    </section>
 </div>
 <div id="contentBox"></div>
 <div class="divider"></div>
