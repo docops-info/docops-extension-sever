@@ -1,0 +1,106 @@
+package io.docops.docopsextensionssupport.button.shape
+
+import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.button.Button
+import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.svgsupport.textAscent
+import io.docops.docopsextensionssupport.svgsupport.textHeight
+
+class Oval(buttons: Buttons) : Regular(buttons) {
+
+    override fun draw(): String {
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val rows = toRows()
+        var count = 0
+        rows.forEachIndexed { index, buttons ->
+
+            sb.append(drawButtonInternal(index, buttons, count))
+            count += buttons.size
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): Any {
+
+        val btns = StringBuilder()
+        var win = "_top"
+        buttons.theme?.let {
+            if (it.newWin) {
+                win = "_blank"
+            }
+        }
+        var startX = 10
+
+        var startY = 10
+        if (index > 0) {
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
+        }
+        buttonList.forEach { button: Button ->
+            val text = itemTextWidth(button.label, 245, 24)
+            val tspan = StringBuilder()
+            var dy = 0
+            text.forEachIndexed { index, s ->
+                dy = if (text.size == 1) {
+                    51
+                } else if(text.size == 2 && index == 0) {
+                    41
+                } else if(text.size == 3 && index == 0) {
+                    31
+                } else {
+                    24
+                }
+                tspan.append("""<tspan x="125" dy="$dy">${s.escapeXml()}</tspan>""")
+            }
+            btns.append("""
+                <g transform="translate($startX,$startY)">
+        <a xlink:href="${button.link}" href="${button.link}" target="$win"
+           style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+            <rect width="250" height="90" ry="36" rx="36" fill="none" stroke="url(#btn_${button.id})"
+                  stroke-width='5' filter="url(#Bevel2)"/>
+            <text x="135" y="0" text-anchor="middle" class="filtered"
+                  style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; fill:url(#btn_${button.id});">
+                $tspan
+            </text>
+        </a>
+    </g>
+            """.trimIndent())
+
+            startX += BUTTON_WIDTH + BUTTON_PADDING + 5
+        }
+        return btns.toString()
+    }
+
+    override fun width(): Float {
+        var columns = 3
+        var scale = 1.0f
+        buttons.theme?.let {
+            columns = it.columns
+            scale = it.scale
+        }
+        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
+    }
+
+    override fun height(): Float {
+        val size = toRows().size
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        if (size > 1) {
+            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
+        }
+        val h = BUTTON_HEIGHT + 30
+        return h * scale
+    }
+    companion object {
+        const val BUTTON_HEIGHT: Int = 90
+        const val BUTTON_WIDTH = 250
+        const val BUTTON_PADDING = 10
+    }
+}

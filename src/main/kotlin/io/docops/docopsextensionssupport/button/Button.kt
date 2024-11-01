@@ -18,9 +18,7 @@ package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.button.shape.*
 import io.docops.docopsextensionssupport.support.generateGradient
-import io.docops.docopsextensionssupport.support.hexToHsl
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.awt.Color
 import java.net.URI
@@ -119,7 +117,8 @@ enum class ButtonType {
     REGULAR,
     ROUND,
     CIRCLE,
-    SLIM
+    SLIM,
+    OVAL
 }
 
 /**
@@ -374,6 +373,9 @@ class Buttons(
 
             ButtonType.SLIM -> {
                 Slim(this)
+            }
+            ButtonType.OVAL -> {
+                Oval(this)
             }
         }
         return creator

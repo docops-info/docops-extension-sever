@@ -16,6 +16,9 @@
         <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=REGULAR" data-hx-target="#buttonTarget"><i class="fad fa-tablet-button text-xs mr-2"></i> Regular</a>
     </li>
     <li class="me-2">
+        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=OVAL" data-hx-target="#buttonTarget"><i class="fad fa-tablet-button text-xs mr-2"></i> OVAL</a>
+    </li>
+    <li class="me-2">
         <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=ROUND" data-hx-target="#buttonTarget"><i class="fad fa-circle text-xs mr-2"></i> Round</a>
     </li>
 

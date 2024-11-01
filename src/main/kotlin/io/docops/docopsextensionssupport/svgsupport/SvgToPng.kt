@@ -29,6 +29,19 @@ fun String.textWidth(fontName: String, size: Int = 12): Int {
     return fm.stringWidth(this)
 }
 
+fun String.textHeight(fontName: String, size: Int = 12): Int {
+    val font =  Font(fontName,Font.PLAIN,size)
+    val c = Canvas()
+    val fm = c.getFontMetrics(font)
+    return fm.height
+}
+fun String .textAscent(fontName: String, size: Int = 12): Int {
+    val font =  Font(fontName,Font.PLAIN,size)
+    val c = Canvas()
+    val fm = c.getFontMetrics(font)
+    return fm.ascent
+}
+
 fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica"): MutableList<String> {
     val split = itemText.split(" ")
     val itemArray = mutableListOf<String>()
