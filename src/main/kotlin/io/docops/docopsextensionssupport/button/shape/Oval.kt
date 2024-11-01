@@ -55,16 +55,17 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 } else {
                     24
                 }
-                tspan.append("""<tspan x="125" dy="$dy">${s.escapeXml()}</tspan>""")
+                var fill = "url(#btn_${button.id})"
+                if(isPdf) {
+                    fill = "${button.color}"
+                }
+                tspan.append("""<tspan x="125" dy="$dy" style="fill:$fill;">${s.escapeXml()}</tspan>""")
             }
             btns.append("""
                 <g transform="translate($startX,$startY)">
-        <a xlink:href="${button.link}" href="${button.link}" target="$win"
-           style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
-            <rect width="250" height="90" ry="36" rx="36" fill="none" stroke="url(#btn_${button.id})"
-                  stroke-width='5' filter="url(#Bevel2)"/>
-            <text x="135" y="0" text-anchor="middle" class="filtered"
-                  style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; fill:url(#btn_${button.id});">
+        <a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
+            <rect class="raise" width="250" height="90" ry="36" rx="36" fill="#fcfcfc" stroke="url(#btn_${button.id})" stroke-width='5' filter="url(#Bevel2)"/>
+            <text x="135" y="0" text-anchor="middle" class="filtered" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; fill:url(#btn_${button.id});">
                 $tspan
             </text>
         </a>

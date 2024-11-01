@@ -138,8 +138,8 @@ class DocOpsBadgeGenerator {
         img: String,
         label : String
     ): String {
-        val labelFill = clrMap["darker"]!!
-        val messageFill = mMap["darker"]!!
+        val labelFill = clrMap["color3"]!!
+        val messageFill = mMap["color3"]!!
         val filterText = ""
         val maskText = ""
         val mask = """
