@@ -56,7 +56,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             var lines = ""
             button.description?.let {
                 lines += "<text x=\"0\" y=\"38\" >"
-                lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 2)
+                lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 4)
                 lines+= "</text>"
             }
             var linesOrImage = lines
@@ -90,7 +90,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             btns.append("""
          <g transform="translate($startX,$startY)" cursor="pointer">
         <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-        <rect x="0" y="0" fill="$fill" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="#000000" class="btn_${button.id}_cls raise">
+        <rect class="basecard" x="0" y="0" fill="#fcfcfc" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="url(#btn_${button.id})" stroke-width="3">
             <title>${button.label.escapeXml()}</title>
         </rect>
         <path $labelStyle  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
