@@ -41,9 +41,11 @@ class BarMaker {
 
     private fun end(bar: Bar) = "</svg>"
     private fun makeHead(bar: Bar): String {
+        val height = 540 * bar.display.scale
+        val width = bar.calcWidth() * bar.display.scale
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${bar.calcWidth()}" height="540" viewBox="0 0 ${bar.calcWidth()} 540" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width}" height="$height" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
     private fun addTicks( bar: Bar): String {

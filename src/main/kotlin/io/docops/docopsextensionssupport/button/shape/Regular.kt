@@ -95,7 +95,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     protected open fun start() : String {
         val height= height()
         val width = width()
-        return """<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}">"""
+        return """<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAnPan="magnify" preserveAspectRatio="none">"""
     }
 
     protected fun end() = """</svg>"""

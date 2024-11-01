@@ -27,6 +27,7 @@ class ButtonHandler {
     }
 
     private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
+        buttons.useDark = useDark
         val buttonShape = buttons.createSVGShape()
         val imgSrc = buttonShape.drawShape(type)
         val headers = HttpHeaders()

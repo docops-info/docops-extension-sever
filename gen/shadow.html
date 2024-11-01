@@ -1,0 +1,296 @@
+<html lang="en">
+<head>
+    <style>
+        .icon{
+            width: 32px;
+            height: 32px;
+            fill: #ccc;
+        }
+
+        .icon.is-check{
+            fill: #FE4365;
+        }
+
+        .icon.is-x1_5{
+            width: 48px;
+            height: 48px;
+        }
+
+        .icon.is-x2{
+            width: 64px;
+            height: 64px;
+        }
+
+
+        body{
+            font-family: monospace;
+            color: #0099CC;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<!-- SVG SOURCE -->
+<svg height="0" width="0" style="position:absolute;margin-left: -100%;">
+    <path id="heart-icon" d="M16,28.261c0,0-14-7.926-14-17.046c0-9.356,13.159-10.399,14-0.454c1.011-9.938,14-8.903,14,0.454
+  C30,20.335,16,28.261,16,28.261z"/>
+
+    <filter id='inset-shadow' data-iconmelon='filter:96c25f4e7a8a5b39d6df22c349dbaf39' >
+        <!-- Shadow offset -->
+        <feOffset
+                dx='0'
+                dy='0'
+        />
+        <!-- Shadow blur -->
+        <feGaussianBlur
+                stdDeviation='1'
+                result='offset-blur'
+        />
+        <!-- Invert drop shadow to make an inset shadow-->
+        <feComposite
+                operator='out'
+                in='SourceGraphic'
+                in2='offset-blur'
+                result='inverse'
+        />
+        <!-- Cut colour inside shadow -->
+        <feFlood
+                flood-color='black'
+                flood-opacity='.95'
+                result='color'
+        />
+        <feComposite
+                operator='in'
+                in='color'
+                in2='inverse'
+                result='shadow'
+        />
+        <!-- Placing shadow over element -->
+        <feComposite
+                operator='over'
+                in='shadow'
+                in2='SourceGraphic'
+        />
+    </filter>
+
+    <filter id='emboss' x="-25%" y="-25%" width="150%" height="150%">
+        <feOffset in="SourceAlpha" dx="0.16666666666666666" dy="0.8333333333333334" result="17"></feOffset>
+        <feGaussianBlur stdDeviation="0.5" in="17" result="18"></feGaussianBlur>
+        <feSpecularLighting surfaceScale="1" specularConstant="0.9" specularExponent="15" in="18" result="19">
+            <fePointLight x="-1000" y="-5000"   z="300"></fePointLight>
+        </feSpecularLighting>
+        <feComposite in="19" in2="SourceAlpha" operator="in" result="20"></feComposite>
+        <feOffset in="SourceAlpha" dx="-0.16666666666666666" dy="-0.8333333333333334" result="21"></feOffset>
+        <feGaussianBlur stdDeviation="0.5" in="21" result="22"></feGaussianBlur>
+        <feSpecularLighting surfaceScale="1" specularConstant="1.8" specularExponent="8" in="22" result="23">
+            <fePointLight x="100" y="5000" z="300"></fePointLight>
+        </feSpecularLighting>
+        <feComposite in="23" in2="SourceAlpha" operator="in" result="24"></feComposite
+
+        >
+        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .85 0" in="24" result="25"></feColorMatrix>
+        <feComposite k1="0" k2="0.8" k3="0.5" k4="0" in="20" in2="25" operator="arithmetic" result="26"></feComposite>
+        <feMerge in="26" result="27">
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+            <feMergeNode in="26"></feMergeNode>
+        </feMerge>
+    </filter>
+    <filter id='blurry' x="-200%" y="-200%" width="400%" height="400%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+    </filter>
+
+    <filter id='color-shadow' color-interpolation-filters="sRGB">
+        <feComponentTransfer in="SourceGraphic">
+            <feFuncR type="discrete" tableValues=".5"/>
+            <feFuncG type="discrete" tableValues=".5"/>
+            <feFuncB type="discrete" tableValues=".5"/>
+        </feComponentTransfer>
+        <feGaussianBlur stdDeviation=".85"/>
+        <feOffset dx="1" dy="1" result="shadow"/>
+        <feComposite in="SourceGraphic" in2="shadow" operator="over"/>
+    </filter>
+
+
+    <filter id='color-shadow2' color-interpolation-filters="sRGB">
+        <feOffset dx="1" dy="1"/>
+        <feGaussianBlur stdDeviation=".85"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 .2, 1 0 0 0 1, 1 0 0 0 .75, 0 0 0 1 0" result="shadow"/>
+        <feMerge>
+            <feMergeNode in="shadow"/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    </filter>
+
+
+</svg>
+<!-- SVG SOURCE ends-->
+
+
+
+
+<h4>filter effects:</h4>
+
+<div>
+    <svg class="icon" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5 is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2 is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+</div>
+
+
+<div>
+    <svg class="icon" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-check" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5 is-check" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2 is-check" viewBox="0 0 32 32">
+        <g filter="url(#inset-shadow)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+</div>
+
+
+
+
+<div>
+    <svg class="icon" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-check" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5 is-check" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2 is-check" viewBox="0 0 32 32">
+        <g filter="url(#emboss)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+</div>
+
+
+
+<div>
+
+    <svg class="icon" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x1_5 is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+    <svg class="icon is-x2 is-check" viewBox="0 0 32 32">
+        <g filter="url(#color-shadow2)">
+            <use xlink:href="#heart-icon"></use>
+        </g>
+    </svg>
+
+</div>
+</body>
+</html>

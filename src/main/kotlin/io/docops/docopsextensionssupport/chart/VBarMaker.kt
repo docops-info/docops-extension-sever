@@ -85,9 +85,10 @@ class VBarMaker {
         val numOfBars = bar.series.size
         val heightAdjustment = (numOfBars * 40) + (numOfBars * 5) + 160
         height = heightAdjustment
+        val finalHeight = height * bar.display.scale
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="800" height="$heightAdjustment" viewBox="0 0 800 $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
+            <svg width="800" height="$finalHeight" viewBox="0 0 800 $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
     private fun tail(): String {
