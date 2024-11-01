@@ -89,7 +89,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
                 """
         <g transform="translate($startX,$startY)" cursor="pointer" filter="url(#Bevel2)">
             <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
-              ry="15" fill="#f0f0f0" fill-opacity='0.3'/>
+              ry="15" fill="#fcfcfc" fill-opacity='0.3'/>
             <a xlink:href="${button.link}" class="linkText" target="$win">
             <text x="115" y="16" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             </a>
