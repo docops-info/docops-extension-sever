@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
+import io.docops.docopsextensionssupport.support.svgGradient
+import java.util.UUID
 
 class AdrMaker {
 
@@ -10,8 +12,8 @@ class AdrMaker {
     fun makeAdrSvg(adr: Adr, dropShadow: Boolean = true, config: AdrParserConfig, useDark: Boolean) : String {
         val editorColor = if(useDark) EditorDark() else EditorLite()
         val sb = StringBuilder()
-        sb.append(defs())
-        sb.append(setBackground(editorColor))
+        sb.append(defs(editorColor))
+        sb.append(setBackground(editorColor, config, useDark))
         sb.append(title(adr, editorColor))
         sb.append(status(adr, editorColor, mapBgFromStatus(adr = adr)))
         sb.append(makeOutline(editorColor))
@@ -40,7 +42,7 @@ class AdrMaker {
             >
         """.trimIndent()
     }
-    fun defs() : String {
+    fun defs(editorColor: EditorColor) : String {
         //language=html
         return """
             <defs>
@@ -48,12 +50,19 @@ class AdrMaker {
             .adrlink { fill: #5AB2FF; text-decoration: underline; }
             .adrlink:hover, .adrlink:active { outline: dotted 1px #5AB2FF; }
             </style>
+            ${editorColor.backGrad()}
             </defs>
         """.trimIndent()
     }
     fun tail() = "</svg>"
 
-    fun setBackground(editorColor: EditorColor) = "<rect width=\"100%\" height=\"100%\" fill='${editorColor.background}' stroke=\"${editorColor.lineColor}\" stroke-width=\"3\"/>"
+    fun setBackground(editorColor: EditorColor, config: AdrParserConfig, useDark: Boolean) : String {
+        var fill= "url(#${editorColor.id})"
+        if(config.isPdf || !useDark) {
+            fill = editorColor.background
+        }
+        return "<rect width=\"100%\" height=\"100%\" fill='$fill' stroke=\"${editorColor.lineColor}\" stroke-width=\"3\"/>"
+    }
     fun title(adr: Adr, editorColor: EditorColor): String {
 
         return """<text x="50%" y="25" text-anchor="middle" fill="${editorColor.titleColor}"
@@ -186,7 +195,13 @@ class AdrMaker {
     }
 }
 
-open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000")
+open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000", val id: String = UUID.randomUUID().toString()){
+
+}
 class EditorLite(background: String = "#fcfcfc", lineColor: String="#E4D0D0", textColor: String="#000000", titleColor: String="#000000"): EditorColor(background, lineColor, textColor, titleColor)
-class EditorDark(background: String = "#21252B",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorDark(background: String = "#1f2937",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)
+
+fun EditorColor.backGrad(): String {
+    return svgGradient(background, id)
+}

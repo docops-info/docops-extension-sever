@@ -16,9 +16,7 @@ import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
-import io.docops.docopsextensionssupport.scorecard.ComparisonChartMaker
 import io.micrometer.core.annotation.Timed
-import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
 import org.apache.commons.logging.LogFactory
 import org.springframework.stereotype.Controller
@@ -33,7 +31,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import java.nio.charset.StandardCharsets
 
 @Controller
 @RequestMapping("/api/docops")
@@ -128,7 +125,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("adr".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = AdrHandler()
-                handler.handleSVG(payload = payload, scale = scale, useDark = useDark)
+                handler.handleSVG(payload = payload, scale = scale, useDark = useDark, backEnd = backend)
             }
             log.info("adr executed in ${timing.duration.inWholeMilliseconds}ms")
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("adr", timing.duration.inWholeMilliseconds))

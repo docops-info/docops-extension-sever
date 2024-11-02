@@ -19,13 +19,13 @@ class LineChartMaker {
         sb.append(makeHead(lineChart))
         sb.append(makeDefs(lineChart))
         fontColor = determineTextColor(lineChart.display.backgroundColor)
-        sb.append("<rect width='100%' height='100%' fill='url(#backGrad1)' stroke='#111111'/>")
+        sb.append("<rect width='100%' height='100%' fill='url(#backGrad${lineChart.display.id})' stroke='#111111'/>")
         lineChart.points.forEachIndexed { index, mutableList ->
             sb.append("<g>")
             sb.append(makePoints(mutableList, index, lineChart))
             sb.append("</g>")
         }
-        sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad1)"/>""")
+        sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad${lineChart.display.id})"/>""")
         val points = lineChart.points[0]
         val xGap = maxGraphWidth / (points.points.size + 1)
         var num = xGap
@@ -43,7 +43,7 @@ class LineChartMaker {
     private fun legend(chart: LineChart): String {
         val sb = StringBuilder()
         sb.append("""
-  <rect width="100%" height="50" x="0" y="360" fill="url(#backGrad1)"/>
+  <rect width="100%" height="50" x="0" y="360" fill="url(#backGrad${chart.display.id})"/>
   <g transform="translate(0, 10)">""")
         var x = 8
         var textX = 15
@@ -93,7 +93,7 @@ class LineChartMaker {
 
 
     private fun makeDefs(lineChart: LineChart): String {
-        val clr = gradientColorFromColor(lineChart.display.backgroundColor, "backGrad1")
+        val clr = gradientColorFromColor(lineChart.display.backgroundColor, "backGrad${lineChart.display.id}")
         return """
             <defs>
              $clr
