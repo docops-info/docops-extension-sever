@@ -59,17 +59,15 @@ class BarGroupMaker {
     }
 
     private fun addGroup(barGroup: BarGroup, added: Group, startX: Double): String {
-        var displayGradId = barGroup.display.id
         val sb = StringBuilder()
         var counter = startX
-        var count=0
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
             val color = "url(#defColor_$index)"
            //println("${series.value} -> $per -> ${500-per}")
-            sb.append("""<rect class="bar" x="$counter" y="${500 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
+            sb.append("""<rect class="bar" x="$counter" y="${498 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
-                sb.append("""<text x="${counter + 4}" y="${500 - per - 2}" style="${barGroup.display.barFontValueStyle}; fill: $fontColor;">${barGroup.valueFmt(series.value)}</text>""")
+                sb.append("""<text x="${counter + 12}" y="${500 - per - 4}" style="${barGroup.display.barFontValueStyle}; fill: $fontColor; text-anchor: middle;">${barGroup.valueFmt(series.value)}</text>""")
             }
             //sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
             counter += 26.0
@@ -221,11 +219,19 @@ class BarGroupMaker {
     }
 
     private fun makeXLine(barGroup: BarGroup): String {
-        return """<line x1="50" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
+        return """<line x1="50" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+            <g transform="translate(${barGroup.calcWidth() - 10},497.5)">
+            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="3" stroke="${barGroup.display.lineColor}"/>
+            </g>
+        """.trimMargin()
     }
 
     private fun makeYLine(barGroup: BarGroup): String {
-        return """<line x1="50" x2="50" y1="12" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>"""
+        return """<line x1="50" x2="50" y1="12" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+            <g transform="translate(47.5,16), rotate(-90)">
+            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="3" stroke="${barGroup.display.lineColor}"/>
+            </g>
+        """.trimMargin()
     }
 }
 
