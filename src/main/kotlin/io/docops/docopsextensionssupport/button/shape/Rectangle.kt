@@ -21,6 +21,7 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.EmbeddedImage
 import io.docops.docopsextensionssupport.button.Link
+import io.docops.docopsextensionssupport.support.determineTextColor
 
 /**
  * This class represents a rectangle shape that consists of buttons.
@@ -67,17 +68,19 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
         buttonList.forEach { button: Button ->
             localCount++
-            var link = """<a xlink:href="${button.link}" target="$win" fill="#000000">$localCount</a>"""
+            var textFillColor = "#111111"
+            button.color?.let {
+                textFillColor = determineTextColor(it)
+            }
+            var link = """<a xlink:href="${button.link}" target="$win" fill="$textFillColor">$localCount</a>"""
             if(isPdf) {
                 link = "$localCount"
             }
+
             var imageOrLabel = """
-            <rect x="10" y="10" height="98" width="98"
-                                  class="mybox shape btn_${button.id}_cls" rx="18" ry="18" fill="${button.color}"/>
-            <g class="glass" transform="translate(10,10)">
-           
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central"
-                  font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+            <rect x="10" y="10" height="98" width="98" class="btn_${button.id}_cls" rx="20" ry="20" fill="${button.color}"/>
+            <g transform="translate(10,10)">
+            <text x="49" y="68" text-anchor="middle" alignment-baseline="central" font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
                 $link
             </text>
             </g>
@@ -87,11 +90,10 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             }
             btns.append(
                 """
-        <g transform="translate($startX,$startY)" cursor="pointer" filter="url(#Bevel2)">
-            <rect x="0" y="0" width="310" filter="url(#Bevel2)" stroke="#b2b2b2" class="glass" height="120" rx="15"
-              ry="15" fill="#fcfcfc" fill-opacity='0.3'/>
+        <g transform="translate($startX,$startY)" cursor="pointer">
+            <rect x="0" y="0" width="310" stroke="#b2b2b2"  height="120" rx="15" ry="15" fill="#fcfcfc" fill-opacity='0.3'/>
             <a xlink:href="${button.link}" class="linkText" target="$win">
-            <text x="115" y="16" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
+            <text x="115" y="16" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             </a>
             <a xlink:href="${button.link}" class="linkText" target="$win"> 
             $imageOrLabel
