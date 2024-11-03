@@ -42,9 +42,9 @@ class ComparisonChartMaker {
         $left
         $right
         <linearGradient id="leftCol" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#7d838d"/>
-            <stop class="stop2" offset="50%" stop-color="#4b5462"/>
-            <stop class="stop3" offset="100%" stop-color="#374151"/>
+            <stop class="stop1" offset="0%" stop-color="#ffffff"/>
+            <stop class="stop2" offset="50%" stop-color="#F5F5F7"/>
+            <stop class="stop3" offset="100%" stop-color="#c4c4c5"/>
         </linearGradient>
         <filter id="shadow" x="0" y="0" width="200%" height="200%">
             <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1" />
@@ -58,16 +58,19 @@ class ComparisonChartMaker {
         //language=svg
         sb.append("""
                <rect x="0" y="0" width="100%" height="100%" fill="url(#leftCol)" style="filter: url(#shadow);"/>
+               <g transform="translate(0,0)">
+                <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
+                </g>
                <g transform="translate(342,0)">
                <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.leftColumnColor}" style="filter: url(#shadow);"/>
-               <rect y="32" width="341" height="34" fill="url(#leftCol)"/>
+               <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[0]}
                 </text>
                 </g>
                 <g transform="translate(684,0)">
                <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.rightColumnColor}" style="filter: url(#shadow);"/>
-               <rect y="32" width="341" height="34" fill="url(#leftCol)"/>
+               <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[1]}
                 </text>
@@ -83,7 +86,7 @@ class ComparisonChartMaker {
         //language=svg
         sb.append("""<g transform="translate(2,$startY)">""")
         //language=svg
-        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: #fcfcfc;" x="5" y="0">
+        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: #111111;" x="5" y="0">
             $key
         </text>""")
         sb.append("</g>")
@@ -115,7 +118,7 @@ class ComparisonChartMaker {
         sb.append("</g>")
         val endY = startY + (value.rows() * 14)
         //language=svg
-        sb.append("""<line x1="341" x2="1024" y1="$endY" y2="$endY" stroke="#a3742c"/>""")
+        sb.append("""<line x1="0" x2="1024" y1="$endY" y2="$endY" stroke="#a3742c"/>""")
         return sb.toString()
     }
 }

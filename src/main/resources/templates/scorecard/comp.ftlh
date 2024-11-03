@@ -43,8 +43,8 @@
       "next": "0 High and 0 Critical"
     }
   ], "display": {
-          "leftColumnColor":   "#A67B5B",
-         "rightColumnColor":   "#399918"
+          "leftColumnColor":   "#f5f5f5",
+         "rightColumnColor":   "#f5f5f5"
         }
 }
         </textarea>
