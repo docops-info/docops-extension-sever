@@ -3,11 +3,12 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
-class LineChartMaker {
+class LineChartMaker(val isPdf: Boolean) {
 
     private val maxHeight = 360
     private val maxGraphHeight = 410
@@ -20,9 +21,10 @@ class LineChartMaker {
         sb.append(makeDefs(lineChart))
         fontColor = determineTextColor(lineChart.display.backgroundColor)
         sb.append("<rect width='100%' height='100%' fill='url(#backGrad${lineChart.display.id})' stroke='#111111'/>")
+        val toolTip = StringBuilder()
         lineChart.points.forEachIndexed { index, mutableList ->
             sb.append("<g>")
-            sb.append(makePoints(mutableList, index, lineChart))
+            sb.append(makePoints(mutableList, index, lineChart, toolTip))
             sb.append("</g>")
         }
         sb.append("""<rect width="100%" height="37" x="0" y="0" fill="url(#backGrad${lineChart.display.id})"/>""")
@@ -36,6 +38,9 @@ class LineChartMaker {
         sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="$fontColor" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         sb.append(legend(lineChart))
         sb.append(addTicks(lineChart))
+        if(!isPdf) {
+            sb.append(toolTip)
+        }
         sb.append(end())
         return joinXmlLines(sb.toString())
     }
@@ -110,7 +115,7 @@ class LineChartMaker {
             </defs>
         """.trimIndent()
     }
-    private fun makePoints(points: Points, index: Int, lineChart: LineChart): String {
+    private fun makePoints(points: Points, index: Int, lineChart: LineChart, toolTip: StringBuilder): String {
         val maxData = points.points.maxOf { it.y } + 100
         val oneUnit = maxHeight / maxData
         val xGap = maxGraphWidth / (points.points.size + 1)
@@ -120,6 +125,7 @@ class LineChartMaker {
         val str = StringBuilder()
         val sb = StringBuilder()
         val elements = StringBuilder()
+        val cMap = gradientFromColor(DefaultChartColors[index])
         points.points.forEachIndexed { itemIndex, item ->
             val y = maxHeight - (item.y * oneUnit)
             if (index == 0) {
@@ -127,9 +133,15 @@ class LineChartMaker {
                 elements.append("""<polyline points="0,$num2 $maxGraphWidth,$num2" style="stroke: #aaaaaa"/>""")
                 elements.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:$fontColor;">${item.label}</text>""")
             }
-            elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
+            //elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             str.append(" $num,$y")
-            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${DefaultChartColors[index]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            toolTip.append("""
+                <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
+                <path d="${getTopToolTip(ToolTipConfig(width = 70, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
+                <text x="-15" y="-35" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
+                </g>
+            """.trimIndent())
             num += xGap
             num2 += yGap
         }
@@ -137,10 +149,27 @@ class LineChartMaker {
         sb.append(elements)
         return sb.toString()
     }
+    fun getTopToolTip(params: ToolTipConfig) : String
+    {
+        val top = -params.offset - params.height
+        val sb = StringBuilder()
+        sb.append("M 0,0 L ${-params.offset},${-params.offset} H ${-params.width / 2 + params.radius}")
+        sb.append(" Q ${-params.width / 2},${-params.offset}  ${-params.width / 2},${-params.offset - params.radius}")
+        sb.append(" V ${top + params.radius}")
+        sb.append(" Q ${-params.width / 2},${top}  ${-params.width / 2 + params.radius},${top}")
+        sb.append(" H ${params.width / 2 - params.radius}")
+        sb.append(" Q ${params.width / 2},${top}  ${params.width / 2},${top + params.radius}")
+        sb.append(" V ${-params.offset - params.radius}")
+        sb.append(" Q ${params.width / 2},${-params.offset}  ${params.width / 2 - params.radius},${-params.offset}")
+        sb.append(" H ${params.offset}")
+        sb.append(" z")
+        return sb.toString()
+    }
+    class ToolTipConfig(val offset: Int = 15, val radius: Int = 5, val width: Int = 70, val height: Int = 50)
 }
 
 fun main() {
-    val maker = LineChartMaker()
+    val maker = LineChartMaker(false)
     val points = mutableListOf<Point>(
         Point(label = "Jan", y = 40.0), Point(label = "Feb", y = 70.0), Point(label = "Mar", 90.0),
         Point(label = "Apr", 70.0), Point(label = "May", 40.0), Point(label = "Jun", 30.0),

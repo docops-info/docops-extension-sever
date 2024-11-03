@@ -27,7 +27,7 @@ class LineController {
     fun makeLineChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             var contents = httpServletRequest.getParameter("content")
-            val maker = LineChartMaker()
+            val maker = LineChartMaker(false)
             val chart = Json.decodeFromString<LineChart>(contents)
             val svg = maker.makeLineChart(chart)
             val headers = HttpHeaders()

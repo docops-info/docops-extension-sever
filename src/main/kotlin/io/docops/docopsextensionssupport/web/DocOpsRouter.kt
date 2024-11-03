@@ -195,7 +195,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("line".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = LineHandler()
-                handler.handleSVG(payload=payload)
+                handler.handleSVG(payload=payload, backend.equals("PDF", true))
             }
             log.info("line handler executed in ${timing.duration.inWholeMilliseconds}ms")
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("line", timing.duration.inWholeMilliseconds))
