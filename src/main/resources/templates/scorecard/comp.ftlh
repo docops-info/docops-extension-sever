@@ -42,10 +42,10 @@
       "original": "12 High and 2 Critical",
       "next": "0 High and 0 Critical"
     }
-  ], "display": {
-          "leftColumnColor":   "#f5f5f5",
-         "rightColumnColor":   "#f5f5f5"
-        }
+  ],
+    "display": {
+          "itemColumnColor": "#0D92F4"
+    }
 }
         </textarea>
         </div>
