@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -9,14 +10,14 @@ import kotlin.text.toByteArray
 class ComparisonChartMaker {
     fun make(comparisonChart: ComparisonChart): String {
         var lastLine = comparisonChart.lines().entries.last().value.begin
-        lastLine += (comparisonChart.lines().entries.last().value.rows() * 14) + 5
+        lastLine += (comparisonChart.lines().entries.last().value.rows() * 12) + 5
 
         val sb = StringBuilder()
         sb.append(head(comparisonChart, lastLine))
         sb.append(defs(comparisonChart))
         sb.append(headerRow(comparisonChart, lastLine))
-        comparisonChart.lines().forEach { key, value ->
-            sb.append(makeRow(key= key, value = value, startY = value.begin, display = comparisonChart.display))
+        comparisonChart.lines().forEach { (key, value) ->
+            sb.append(makeRow(key= key, value = value, startY = value.begin, display = comparisonChart.display, lastLine))
         }
         sb.append(tail(comparisonChart))
         return sb.toString()
@@ -34,18 +35,15 @@ class ComparisonChartMaker {
 
     private fun tail(comparisonChart: ComparisonChart) = "</svg>"
     private fun defs(comparisonChart: ComparisonChart): String {
+        val item = svgGradient(comparisonChart.display.itemColumnColor, "ID_${comparisonChart.display.id}_item")
         val left = svgGradient(comparisonChart.display.leftColumnColor, "ID_${comparisonChart.display.id}_leftCol")
         val right = svgGradient(comparisonChart.display.rightColumnColor, "ID_${comparisonChart.display.id}_rightCol")
         //language=svg
         return """
         <defs>
+        $item
         $left
         $right
-        <linearGradient id="leftCol" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffffff"/>
-            <stop class="stop2" offset="50%" stop-color="#F5F5F7"/>
-            <stop class="stop3" offset="100%" stop-color="#c4c4c5"/>
-        </linearGradient>
         <filter id="shadow" x="0" y="0" width="200%" height="200%">
             <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1" />
         </filter>
@@ -53,73 +51,82 @@ class ComparisonChartMaker {
     """.trimIndent()
     }
 
-    fun headerRow(comparisonChart: ComparisonChart, lastLine: Int) : String {
+    private fun headerRow(comparisonChart: ComparisonChart, lastLine: Int) : String {
         val sb = StringBuilder()
+        val textColor = determineTextColor(comparisonChart.display.itemColumnColor)
         //language=svg
         sb.append("""
-               <rect x="0" y="0" width="100%" height="100%" fill="url(#leftCol)" style="filter: url(#shadow);"/>
+               <rect x="0" y="0" width="341" height="100%" fill="url(#ID_${comparisonChart.display.id}_item)" aria-label='left column'/>
                <g transform="translate(0,0)">
-                <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
+                <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" stroke="#a3742c"/>
                 </g>
                <g transform="translate(342,0)">
-               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.leftColumnColor}" style="filter: url(#shadow);"/>
-               <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
+               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column'/>
+               <rect y="30" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[0]}
                 </text>
                 </g>
                 <g transform="translate(684,0)">
-               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.rightColumnColor}" style="filter: url(#shadow);"/>
-               <rect y="32" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
+               <rect x="0" y="0" width="340" height="$lastLine" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column'/>
+               <rect y="30" width="341" height="34" fill="#f5f5f7" stroke="#a3742c"/>
                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}" >
                     ${comparisonChart.colHeader[1]}
                 </text>
                 </g>
-                <rect y="0" width="100%" height="30" fill="url(#leftCol)" filter="url(#shadow)"/>
-                <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}">${comparisonChart.title}</text>
+                <rect y="0" width="100%" height="30" fill="url(#ID_${comparisonChart.display.id}_item)" aria-label='title bar'/>
+                <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title}</text>
         """.trimIndent())
         return sb.toString()
     }
-    fun makeRow(key: String, value: ColLine, startY: Int, display: ComparisonChartDisplay) : String {
+    private fun makeRow(key: String, value: ColLine, startY: Int, display: ComparisonChartDisplay, lastLine: Int) : String {
         val sb = StringBuilder()
         //col 1
-        //language=svg
+        //language=
         sb.append("""<g transform="translate(2,$startY)">""")
-        //language=svg
-        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: #111111;" x="5" y="0">
+        val textColor = determineTextColor(display.itemColumnColor)
+        //language=
+        sb.append("""<text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: $textColor;" x="5" y="0">
             $key
         </text>""")
         sb.append("</g>")
+        var dy = 0
+
         //language=svg
         sb.append("""<g transform="translate(346,$startY)">""")
-        sb.append("<text style='font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;' x='0' y='0'>")
-        var dy = 0
-        //language=svg
-        value.lines.first.forEachIndexed { idx, t ->
-            if(idx > 0) {
-                dy =14
-            }
-            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.leftColumnFontColor};">$t</tspan>""")
-        }
+        sb.append("<text style='font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;' x='0' y='0'>")
+        columnText(value.lines.first, dy, sb, display.leftColumnFontColor)
         sb.append("</text>")
         sb.append("</g>")
-        //language=svg
         sb.append("""<g transform="translate(686,$startY)">""")
-        sb.append("""<text style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;" x="0" y="0">""")
+        sb.append("""<text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;" x="0" y="0">""")
         dy = 0
-        //language=svg
-        value.lines.second.forEachIndexed { idx, t ->
-            if(idx > 0) {
-                dy =14
-            }
-            sb.append("""<tspan x="0" dy="$dy" style="font-size: 14px; font-family: Arial, Helvetica, sans-serif;fill: ${display.rightColumnFontColor};">$t</tspan>""")
-        }
+        //language=
+        columnText(value.lines.second, dy, sb, display.rightColumnFontColor)
         sb.append("</text>")
         sb.append("</g>")
         val endY = startY + (value.rows() * 14)
-        //language=svg
+        //language=
         sb.append("""<line x1="0" x2="1024" y1="$endY" y2="$endY" stroke="#a3742c"/>""")
+        sb.append("""<line x1="341" x2="341" y1="30" y2="$lastLine" stroke="#a3742c"/>""")
+        sb.append("""<line x1="683" x2="683" y1="30" y2="$lastLine" stroke="#a3742c"/>""")
         return sb.toString()
+    }
+
+    private fun columnText(
+        value: MutableList<String>,
+        dy: Int,
+        sb: StringBuilder,
+        display: String
+    ): Int {
+        var dy1 = dy
+        value.forEachIndexed { idx, t ->
+            if (idx > 0) {
+                dy1 = 14
+            }
+            sb.append("""<tspan x="0" dy="$dy1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;fill: ${display};">$t</tspan>""")
+        }
+        return dy1
     }
 }
 
