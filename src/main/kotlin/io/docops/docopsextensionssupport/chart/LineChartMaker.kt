@@ -4,6 +4,8 @@ import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.svgsupport.ToolTip
+import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -126,6 +128,7 @@ class LineChartMaker(val isPdf: Boolean) {
         val sb = StringBuilder()
         val elements = StringBuilder()
         val cMap = gradientFromColor(DefaultChartColors[index])
+        val toolTipGen = ToolTip()
         points.points.forEachIndexed { itemIndex, item ->
             val y = maxHeight - (item.y * oneUnit)
             if (index == 0) {
@@ -136,9 +139,10 @@ class LineChartMaker(val isPdf: Boolean) {
             //elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             str.append(" $num,$y")
             elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+
             toolTip.append("""
                 <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
-                <path d="${getTopToolTip(ToolTipConfig(width = 70, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
+                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = 70, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
                 <text x="-15" y="-35" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
                 </g>
             """.trimIndent())
@@ -149,23 +153,7 @@ class LineChartMaker(val isPdf: Boolean) {
         sb.append(elements)
         return sb.toString()
     }
-    fun getTopToolTip(params: ToolTipConfig) : String
-    {
-        val top = -params.offset - params.height
-        val sb = StringBuilder()
-        sb.append("M 0,0 L ${-params.offset},${-params.offset} H ${-params.width / 2 + params.radius}")
-        sb.append(" Q ${-params.width / 2},${-params.offset}  ${-params.width / 2},${-params.offset - params.radius}")
-        sb.append(" V ${top + params.radius}")
-        sb.append(" Q ${-params.width / 2},${top}  ${-params.width / 2 + params.radius},${top}")
-        sb.append(" H ${params.width / 2 - params.radius}")
-        sb.append(" Q ${params.width / 2},${top}  ${params.width / 2},${top + params.radius}")
-        sb.append(" V ${-params.offset - params.radius}")
-        sb.append(" Q ${params.width / 2},${-params.offset}  ${params.width / 2 - params.radius},${-params.offset}")
-        sb.append(" H ${params.offset}")
-        sb.append(" z")
-        return sb.toString()
-    }
-    class ToolTipConfig(val offset: Int = 15, val radius: Int = 5, val width: Int = 70, val height: Int = 50)
+
 }
 
 fun main() {
