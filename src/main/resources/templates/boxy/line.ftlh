@@ -171,7 +171,7 @@
       ]
     }
   ],
-  "display" : {"backgroundColor": "#EDFFFA"}
+  "display" : {"backgroundColor": "#EDFFFA", "smoothLines": false}
 }
             </textarea>
         </div>

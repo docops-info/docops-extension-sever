@@ -15,7 +15,7 @@ data class Points(val label: String, val points: MutableList<Point>)
 data class Point(val label: String, val y: Double)
 
 @Serializable
-data class LineChartDisplay (val id: String = UUID.randomUUID().toString(), val backgroundColor: String = "#F5F5F5")
+data class LineChartDisplay (val id: String = UUID.randomUUID().toString(), val backgroundColor: String = "#F5F5F5", val smoothLines: Boolean = false)
 fun LineChart.peakHeight(): Double {
     val points = this.points
     val max = points.maxBy{it.points.maxOf { it.y }}

@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.ToolTip
 import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
+import io.docops.docopsextensionssupport.svgsupport.getBezierPathFromPoints
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -138,8 +139,9 @@ class LineChartMaker(val isPdf: Boolean) {
             }
             //elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             str.append(" $num,$y")
-            elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
-
+            if(!lineChart.display.smoothLines) {
+                elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            }
             toolTip.append("""
                 <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
                 <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = 70, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
@@ -149,7 +151,28 @@ class LineChartMaker(val isPdf: Boolean) {
             num += xGap
             num2 += yGap
         }
-        sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
+        if(lineChart.display.smoothLines) {
+            // try bezier
+            val ry = str.split(" ")
+            val ary = mutableListOf<io.docops.docopsextensionssupport.svgsupport.Point>()
+
+            ry.forEach { el ->
+                val items = el.split(",")
+                if (items.isNotEmpty() && items.size == 2) {
+                    ary.add(
+                        io.docops.docopsextensionssupport.svgsupport.Point(
+                            x = items[0].toDouble(),
+                            items[1].toDouble()
+                        )
+                    )
+                }
+            }
+
+            val curve = getBezierPathFromPoints(ary)
+            sb.append("<path d=\"$curve\" style=\"stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;\"/>")
+        } else {
+            sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
+        }
         sb.append(elements)
         return sb.toString()
     }

@@ -69,3 +69,69 @@ fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName:
     }
     return itemArray
 }
+
+fun getBezierPathFromPoints(points: List<Point>): String {
+    val start = points.first()
+    val controlPoints = points.drop(1).toMutableList()
+
+    val path = mutableListOf("M ${ptToStr(start)}")
+
+    when {
+        // if only one point, draw a straight line
+        controlPoints.size == 1 -> {
+            path.add("L ${ptToStr(controlPoints[0])}")
+        }
+        // if there are groups of 3 points, draw cubic bezier curves
+        controlPoints.size % 3 == 0 -> {
+            for (i in controlPoints.indices step 3) {
+                val (c1, c2, p) = controlPoints.slice(i until i + 3)
+                path.add("C ${ptToStr(c1)}, ${ptToStr(c2)}, ${ptToStr(p)}")
+            }
+        }
+        // if there's an even number of points, draw quadratic curves
+        controlPoints.size % 2 == 0 -> {
+            for (i in controlPoints.indices step 2) {
+                val (c, p) = controlPoints.slice(i until i + 2)
+                path.add("Q ${ptToStr(c)}, ${ptToStr(p)}")
+            }
+        }
+        // else, add missing points and try again
+        else -> {
+            for (i in controlPoints.size - 3 downTo 2 step 2) {
+                val missingPoint = midPoint(controlPoints[i - 1], controlPoints[i])
+                controlPoints.add(i, missingPoint)
+            }
+            return getBezierPathFromPoints(listOf(start) + controlPoints)
+        }
+    }
+
+    return path.joinToString(" ")
+}
+
+fun midPoint(pt1: Point, pt2: Point): Point {
+    return Point(
+        x = (pt2.x + pt1.x) / 2,
+        y = (pt2.y + pt1.y) / 2
+    )
+}
+
+fun ptToStr(point: Point): String {
+    return "${point.x} ${point.y}"
+}
+
+data class Point(val x: Double, val y: Double)
+
+fun main() {
+
+    val points = "73,322.2857142857143 146,303.42857142857144 219,284.57142857142856 292,265.7142857142857 365,246.85714285714286 438,228.0 511,209.14285714285714 584,173.14285714285717 657,171.42857142857144"
+    val ry = points.split(" ")
+    val ary = mutableListOf<Point>()
+
+    ry.forEach { el ->
+        val items = el.split(",")
+        ary.add(Point(x=items[0].toDouble(), items[1].toDouble()))
+    }
+
+    val curve = getBezierPathFromPoints(ary)
+    println(curve)
+}
