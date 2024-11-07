@@ -12,7 +12,6 @@ import java.util.UUID
 
 class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG", val isPdf: Boolean = false) {
 
-    private val docOpsBadgeGenerator = DocOpsBadgeGenerator()
     private var bgColor = "#fcfcfc"
     private var fgColor = "#111111"
     private val colors = mutableListOf<String>()
@@ -78,7 +77,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(placeMatRequest.useDark && !placeMatRequest.fill ) {
                 grad = "#fcfcfc"
             }
-            if(isPdf && placeMatRequest.useDark) {
+            if(isPdf) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
             }
             val lines= conn.textToLines()
