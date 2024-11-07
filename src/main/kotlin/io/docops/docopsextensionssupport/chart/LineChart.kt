@@ -28,6 +28,13 @@ fun Points.textWidth(): Int {
     return label.textWidth("Arial", 10)
 }
 
+fun Points.toDoubleArray(): DoubleArray {
+    val arr = mutableListOf<Double>()
+    points.forEachIndexed{index, point ->
+        arr.add(index, point.y)
+    }
+    return arr.toDoubleArray()
+}
 fun LineChart.ticks(): NiceScale {
     val min = this.points.minOf { it.points.minOf { it.y }}
     val max = this.points.maxOf { it.points.maxOf{it.y} }

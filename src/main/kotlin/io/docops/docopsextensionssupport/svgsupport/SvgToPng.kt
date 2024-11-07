@@ -18,6 +18,8 @@ package io.docops.docopsextensionssupport.svgsupport
 
 import java.awt.Canvas
 import java.awt.Font
+import kotlin.math.max
+import kotlin.math.min
 
 
 class SvgToPng
@@ -134,4 +136,47 @@ fun main() {
 
     val curve = getBezierPathFromPoints(ary)
     println(curve)
+    val graph = listOf(2, 2, 5, 8, 5, 4, 3, 9)
+    val pointZ = mutableListOf<Point>()
+    for (i in graph.indices) {
+        pointZ.add(Point((i * 50 + 20).toDouble(), (graph[i] * 40 * -1 + 400).toDouble()))
+    }
+
+    println(makePath(ary))
+
 }
+
+
+fun catmullRom2bezier(points: List<Point>): List<List<Point>> {
+    val result = mutableListOf<List<Point>>()
+    for (i in 0 until points.size - 1) {
+        val p = mutableListOf<Point>()
+
+        val idx = max(i-1, 0)
+        p.add(Point(points[idx].x, points[idx].y))
+        p.add(Point(points[i].x, points[i].y))
+        p.add(Point(points[i + 1].x, points[i + 1].y))
+        val minIdx = min(i + 2, points.size - 1)
+        p.add(Point(points[minIdx].x, points[minIdx].y))
+
+        val bp = mutableListOf<Point>()
+        bp.add(Point((-p[0].x + 6 * p[1].x + p[2].x) / 6, (-p[0].y + 6 * p[1].y + p[2].y) / 6))
+        bp.add(Point((p[1].x + 6 * p[2].x - p[3].x) / 6, (p[1].y + 6 * p[2].y - p[3].y) / 6))
+        bp.add(Point(p[2].x, p[2].y))
+        result.add(bp)
+    }
+
+    return result
+}
+
+fun makePath(points: List<Point>): String {
+    var result = "M${points[0].x},${points[0].y} "
+    val catmull = catmullRom2bezier(points)
+    for (i in catmull.indices) {
+        result += "C${catmull[i][0].x},${catmull[i][0].y} ${catmull[i][1].x},${catmull[i][1].y} ${catmull[i][2].x},${catmull[i][2].y} "
+    }
+    return result
+}
+
+
+

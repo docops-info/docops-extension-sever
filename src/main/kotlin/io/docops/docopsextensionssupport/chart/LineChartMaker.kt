@@ -4,9 +4,7 @@ import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
-import io.docops.docopsextensionssupport.svgsupport.ToolTip
-import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
-import io.docops.docopsextensionssupport.svgsupport.getBezierPathFromPoints
+import io.docops.docopsextensionssupport.svgsupport.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -40,7 +38,7 @@ class LineChartMaker(val isPdf: Boolean) {
         }
         sb.append("""<text x="${maxGraphWidth/2}" y="14" fill="$fontColor" font-size="12pt" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">${lineChart.title}</text>""")
         sb.append(legend(lineChart))
-        sb.append(addTicks(lineChart))
+        //sb.append(addTicks(lineChart))
         if(!isPdf) {
             sb.append(toolTip)
         }
@@ -130,6 +128,7 @@ class LineChartMaker(val isPdf: Boolean) {
         val elements = StringBuilder()
         val cMap = gradientFromColor(DefaultChartColors[index])
         val toolTipGen = ToolTip()
+
         points.points.forEachIndexed { itemIndex, item ->
             val y = maxHeight - (item.y * oneUnit)
             if (index == 0) {
@@ -137,15 +136,20 @@ class LineChartMaker(val isPdf: Boolean) {
                 elements.append("""<polyline points="0,$num2 $maxGraphWidth,$num2" style="stroke: #aaaaaa"/>""")
                 elements.append("""<text x="${num-8}" y="30" style="font-size:11px; font-family: Arial, Helvetica, sans-serif; font-weight:bold; fill:$fontColor;">${item.label}</text>""")
             }
-            //elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
-            str.append(" $num,$y")
-            if(!lineChart.display.smoothLines) {
-                elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            if(isPdf) {
+                elements.append("""<text x="${num-8}" y="${y - 10}" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;" id="text_${lineChart.id}_${index}_$itemIndex">${item.y}</text>""")
             }
+            str.append(" $num,$y")
+            //if(!lineChart.display.smoothLines) {
+                elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+            //}
+            val tipWidth = points.label.textWidth("Helvetica", 12) + 24
             toolTip.append("""
                 <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
-                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = 70, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
-                <text x="-15" y="-35" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
+                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
+                <text x="0" y="-50" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${points.label}</text>
+                <text x="0" y="-35" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
+                <text x="0" y="-20" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.label}</text>
                 </g>
             """.trimIndent())
             num += xGap
@@ -169,7 +173,9 @@ class LineChartMaker(val isPdf: Boolean) {
             }
 
             val curve = getBezierPathFromPoints(ary)
-            sb.append("<path d=\"$curve\" style=\"stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;\"/>")
+            val smootherCurve = makePath(ary)
+            println(smootherCurve)
+            sb.append("<path d=\"$smootherCurve\" style=\"stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;\"/>")
         } else {
             sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
         }
