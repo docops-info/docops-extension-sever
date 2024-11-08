@@ -1,7 +1,10 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.svgsupport.Point
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 import kotlin.math.cos
 import kotlin.math.sin
@@ -11,18 +14,25 @@ import kotlin.math.PI
 
 class PieSliceMaker {
 
+    private var width: Double = 420.0
+    private var height: Double = 420.0
     fun makePie(pieSlices: PieSlices) : String {
 
         val sb = StringBuilder()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
         sb.append("<g transform=\"translate(4,20)\">")
-        sb.append("""<text x="100" y="10" text-anchor="middle" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title}</text>""")
-        sb.append("""<g transform="translate(100,120) rotate(-90)" style="stroke: #fcfcfc; stroke-width: 3px;">""")
-        sb.append(makePaths(pieSlices))
+        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title}</text>""")
+        sb.append("""<g transform="translate(0,0)">""")
+        val paths = StringBuilder()
+        val labels = StringBuilder()
+        generateSvgPieChart(pieSlices, width, height,200.0, paths,labels)
+        sb.append(paths)
+        sb.append(labels)
+        //sb.append(makePaths(pieSlices))
         sb.append("</g>")
         sb.append("</g>")
-        sb.append(makeLabels(pieSlices))
+        //sb.append(makeLabels(pieSlices))
         sb.append(endSvg())
         return joinXmlLines(sb.toString())
     }
@@ -62,13 +72,67 @@ class PieSliceMaker {
         }
         return sb.toString()
     }
+    fun generateSvgPieChart(pieSlices: PieSlices, width: Double, height: Double, radius: Double, paths : StringBuilder, labels : StringBuilder) {
+        val total = pieSlices.sum()
+        val centerX = width / 2
+        val centerY = height / 2
+        var startAngle = 0.0
+
+
+        pieSlices.slices.forEachIndexed{index, segment ->
+
+            val value = segment.amount
+            val endAngle = startAngle + (value / total) * 360.0
+
+            val start = polarToCartesian(centerX, centerY, radius, startAngle)
+            val end = polarToCartesian(centerX, centerY, radius, endAngle)
+
+            val largeArcFlag = if (endAngle - startAngle <= 180) "0" else "1"
+
+            // SVG Path for the arc
+            val pathData = listOf(
+                "M $centerX $centerY",
+                "L ${start.x} ${start.y}",
+                "A $radius $radius 0 $largeArcFlag 1 ${end.x} ${end.y}",
+                "Z"
+            ).joinToString(" ")
+
+            paths.append("<path class=\"pie\" d=\"$pathData\" fill=\"${segment.displayColor(index)}\" />\n")
+
+            // Midpoint for label
+            val midAngle = startAngle + (endAngle - startAngle) / 2
+            val labelPoint = polarToCartesian(centerX, centerY, radius / 2, midAngle)
+            labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"black\" style=\"font-size: 10px; font-family: Arial, Helvetica, sans-serif;\">")
+            val spans = itemTextWidth(segment.label, 25, 10)
+            spans.forEachIndexed { index, it ->
+                var dy = 0
+                if(index != 0) {
+                    dy = 10
+                }
+                labels.append("<tspan x=\"${labelPoint.x}\" dy=\"$dy\">${it.escapeXml()}</tspan>")
+
+            }
+            labels.append("</text>\n")
+            startAngle = endAngle
+        }
+
+
+    }
+    fun polarToCartesian(centerX: Double, centerY: Double, radius: Double, angleInDegrees: Double): Point {
+        val angleInRadians = Math.toRadians(angleInDegrees)
+        return Point(
+            centerX + (radius * cos(angleInRadians)),
+            centerY + (radius * sin(angleInRadians))
+        )
+    }
+
     private fun startSvg(pieSlices: PieSlices) : String {
         val buffer = 120
-        val baseHeight = 200
+        val baseHeight = 420
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
-
+        height = h.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="$h" width="220" viewBox='0 0 220.0 $h'>
+            <svg xmlns="http://www.w3.org/2000/svg" height="$h" width="420" viewBox='0 0 420.0 $h'>
           """
     }
     private fun endSvg() = "</svg>"

@@ -29,4 +29,7 @@ fun PieSlices.determineMaxLegendRows(): Int {
    return max
 }
 
+fun PieSlices.sum(): Double {
+    return slices.sumOf { it.amount }
+}
 

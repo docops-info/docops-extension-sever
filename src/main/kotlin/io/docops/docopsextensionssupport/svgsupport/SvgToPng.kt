@@ -18,8 +18,10 @@ package io.docops.docopsextensionssupport.svgsupport
 
 import java.awt.Canvas
 import java.awt.Font
+import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sin
 
 
 class SvgToPng
@@ -144,6 +146,8 @@ fun main() {
 
     println(makePath(ary))
 
+
+
 }
 
 
@@ -177,6 +181,4 @@ fun makePath(points: List<Point>): String {
     }
     return result
 }
-
-
 
