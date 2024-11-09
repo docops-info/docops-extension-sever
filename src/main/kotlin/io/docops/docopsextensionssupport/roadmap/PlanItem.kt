@@ -1,12 +1,10 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
-import io.docops.docopsextensionssupport.chart.DefaultChartColors
-import io.docops.docopsextensionssupport.support.generateGradient
-import io.docops.docopsextensionssupport.support.hexToRgb
+import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.support.svgGradient
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import java.util.*
 
 @Serializable
 class PlanItem(val id: String = UUID.randomUUID().toString(), val type: String, val title: String?, val color: String?) {
@@ -76,7 +74,7 @@ class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
         val sb = StringBuilder()
         var column = 0
         planItems.forEach { (t, u) ->
-            val color = DefaultChartColors[column % DefaultChartColors.size]
+            val color = STUNNINGPIE[column % STUNNINGPIE.size]
             val grad = svgGradient(color, "planItem_$column")
             sb.append(grad)
             column++

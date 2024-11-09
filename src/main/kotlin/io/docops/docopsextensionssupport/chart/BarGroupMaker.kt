@@ -139,7 +139,7 @@ class BarGroupMaker {
 
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
-        DefaultChartColors.forEachIndexed { idx, item->
+        STUNNINGPIE.forEachIndexed { idx, item->
             val gradient = gradientFromColor(item)
             defGrad.append("""
                 <linearGradient id="defColor_$idx" x2="100%" y2="0%">

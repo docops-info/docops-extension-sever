@@ -3,9 +3,36 @@ package io.docops.docopsextensionssupport.chart
 class ChartColors {
 }
 
-val DefaultChartColors = mutableListOf<String>(
-    "#e60049", "#0bb4ff", "#50e991", "#e6d800",
-    "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff",
-    "#00bfa0", "#8bd3c7", "#fdcce5", "#beb9db",
-    "#ffee65", "#ffb55a", "#bd7ebe", "#b2e061",
-    "#7eb0d5", "#fd7f6f")
+
+
+
+val STUNNINGPIE = listOf(
+    "#003f5c",
+    "#58508d",
+    "#bc5090",
+    "#ff6361",
+    "#ffa600",
+    "#f39c12",
+    "#c837ab",
+    "#e74c3c",
+    "#FFF1C9",
+    "#F7B7A3",
+    "#EA5F89",
+    "#e9c46a",
+    "#6d9eeb",
+    "#637a91",
+    "#9B3192",
+    "#57167E",
+    "#2B0B3F",
+    "#353535",
+    "#FF6384", // Light Red
+    "#36A2EB", // Light Blue
+    "#FFCE56", // Light Yellow
+    "#4BC0C0", // Light Teal
+    "#9966FF", // Light Purple
+    "#FF9F40", // Light Orange
+    "#C9CBCF", // Light Grey
+    "#2ECC71", // Light Green
+    "#E74C3C", // Light Coral
+    "#3498DB"  // Light Royal Blue
+)

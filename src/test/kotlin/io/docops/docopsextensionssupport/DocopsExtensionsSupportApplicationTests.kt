@@ -1,14 +1,12 @@
 package io.docops.docopsextensionssupport
 
-import io.docops.docopsextensionssupport.chart.DefaultChartColors
-import io.docops.docopsextensionssupport.timeline.TimelineMaker.Companion.DEFAULT_COLORS
+import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import java.io.File
 import java.lang.Math.toRadians
 import kotlin.math.cos
-import kotlin.math.PI
 import kotlin.math.sin
-import java.io.File
 
 @SpringBootTest
 class DocopsExtensionsSupportApplicationTests {
@@ -45,7 +43,7 @@ fun main() {
     var lastx = radius
     var lasty = 0
     var ykey = 40
-    val colors = DefaultChartColors
+    val colors = STUNNINGPIE
     val borderColor = "#fcfcfc"
 
     var seg = 0.0

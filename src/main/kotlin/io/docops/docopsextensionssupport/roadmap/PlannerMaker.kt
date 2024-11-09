@@ -1,7 +1,7 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
-import io.docops.docopsextensionssupport.chart.DefaultChartColors
+import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
@@ -19,7 +19,7 @@ class PlannerMaker {
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
         cols.forEach { (key, value) ->
-            var color = DefaultChartColors[column % DefaultChartColors.size]
+            var color = STUNNINGPIE[column % STUNNINGPIE.size]
             if(value[0].color != null) {
                 color = value[0].color!!
             }

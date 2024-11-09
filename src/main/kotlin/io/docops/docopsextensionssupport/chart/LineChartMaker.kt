@@ -55,7 +55,7 @@ class LineChartMaker(val isPdf: Boolean) {
         var textX = 15
         chart.points.forEachIndexed { index, mutableList ->
             sb.append(
-                """<circle r="5" cx="$x" cy="366" fill="${DefaultChartColors[index]}"/>
+                """<circle r="5" cx="$x" cy="366" fill="${STUNNINGPIE[index]}"/>
     <text x="$textX" y="370" font-family="Arial, Helvetica, sans-serif" font-size="10px" fill="$fontColor">${mutableList.label} </text>
         """.trimIndent()
             )
@@ -100,9 +100,21 @@ class LineChartMaker(val isPdf: Boolean) {
 
     private fun makeDefs(lineChart: LineChart): String {
         val clr = gradientColorFromColor(lineChart.display.backgroundColor, "backGrad${lineChart.display.id}")
+        val defGrad = StringBuilder()
+        STUNNINGPIE.forEachIndexed { idx, item->
+            val gradient = gradientFromColor(item)
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
+            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
+            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
+        </linearGradient>
+            """.trimIndent())
+        }
         return """
             <defs>
              $clr
+             $defGrad
             <script>
             function showText(id) {
                 var tooltip = document.getElementById(id);
@@ -126,7 +138,7 @@ class LineChartMaker(val isPdf: Boolean) {
         val str = StringBuilder()
         val sb = StringBuilder()
         val elements = StringBuilder()
-        val cMap = gradientFromColor(DefaultChartColors[index])
+        val cMap = gradientFromColor(STUNNINGPIE[index])
         val toolTipGen = ToolTip()
 
         points.points.forEachIndexed { itemIndex, item ->
@@ -141,15 +153,16 @@ class LineChartMaker(val isPdf: Boolean) {
             }
             str.append(" $num,$y")
             //if(!lineChart.display.smoothLines) {
-                elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: ${cMap["color1"]};" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
+                elements.append("""<circle r="5" cx="$num" cy="$y" style="cursor: pointer; stroke: $fontColor; fill: url(#defColor_$index);" onmouseover="showText('text_${lineChart.id}_${index}_$itemIndex')" onmouseout="hideText('text_${lineChart.id}_${index}_$itemIndex')"/>""")
             //}
             val tipWidth = points.label.textWidth("Helvetica", 12) + 24
+            var fillColor = determineTextColor(STUNNINGPIE[index])
             toolTip.append("""
                 <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
-                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="${cMap["color1"]}" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
-                <text x="0" y="-50" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${points.label}</text>
-                <text x="0" y="-35" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
-                <text x="0" y="-20" text-anchor="middle" style="fill:$fontColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.label}</text>
+                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="url(#defColor_$index)" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
+                <text x="0" y="-50" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${points.label}</text>
+                <text x="0" y="-35" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
+                <text x="0" y="-20" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.label}</text>
                 </g>
             """.trimIndent())
             num += xGap
@@ -164,7 +177,7 @@ class LineChartMaker(val isPdf: Boolean) {
                 val items = el.split(",")
                 if (items.isNotEmpty() && items.size == 2) {
                     ary.add(
-                        io.docops.docopsextensionssupport.svgsupport.Point(
+                        Point(
                             x = items[0].toDouble(),
                             items[1].toDouble()
                         )
@@ -174,10 +187,9 @@ class LineChartMaker(val isPdf: Boolean) {
 
             val curve = getBezierPathFromPoints(ary)
             val smootherCurve = makePath(ary)
-            println(smootherCurve)
-            sb.append("<path d=\"$smootherCurve\" style=\"stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;\"/>")
+            sb.append("<path d=\"$smootherCurve\" style=\"stroke: url(#defColor_$index); stroke-width: 2; fill: none;\"/>")
         } else {
-            sb.append("""<polyline points="$str" style="stroke: ${DefaultChartColors[index]}; stroke-width: 2; fill: none;"/>""")
+            sb.append("""<polyline points="$str" style="stroke: url(#defColor_$index); stroke-width: 2; fill: none;"/>""")
         }
         sb.append(elements)
         return sb.toString()

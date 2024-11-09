@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.Point
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
@@ -11,6 +12,7 @@ import kotlin.math.sin
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 import kotlin.math.PI
+import kotlin.math.atan2
 
 class PieSliceMaker {
 
@@ -102,8 +104,12 @@ class PieSliceMaker {
             // Midpoint for label
             val midAngle = startAngle + (endAngle - startAngle) / 2
             val labelPoint = polarToCartesian(centerX, centerY, radius / 2, midAngle)
-            labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"black\" style=\"font-size: 10px; font-family: Arial, Helvetica, sans-serif;\">")
-            val spans = itemTextWidth(segment.label, 25, 10)
+            //val outerLabelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX.toInt(), centerY.toInt())
+            //val labelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX, centerY)
+            val textColor = determineTextColor(STUNNINGPIE[index])
+            labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 10px; font-family: Arial, Helvetica, sans-serif;\">")
+            val spans = itemTextWidth(segment.label, 60, 10)
+            spans.add(segment.amount.toString())
             spans.forEachIndexed { index, it ->
                 var dy = 0
                 if(index != 0) {
@@ -167,7 +173,7 @@ class PieSliceMaker {
     }
     private fun makeDefs(pieSlices: PieSlices) : String {
         val defGrad = StringBuilder()
-        DefaultChartColors.forEachIndexed { idx, item->
+        STUNNINGPIE.forEachIndexed { idx, item->
             val gradient = gradientFromColor(item)
             defGrad.append("""
                 <linearGradient id="defColor_$idx" x2="100%" y2="0%">
@@ -213,4 +219,27 @@ fun main() {
     println(str)
     val outfile2 = File("gen/pieslice.svg")
     outfile2.writeBytes(svg.toByteArray())
+
+    val startArc = Point(354.1043187201574, 432.6865001584483)
+    val endArc = Point(248.07822183293365, 490.341663999371)
+
+    // Given radius
+    val radius = 200.0
+
+    val midPoint = findArcCenter(radius, startArc, endArc, 210.0, 294.0)
+
+}
+
+fun findArcCenter(radius: Double, start: Point, end: Point, cx: Double, cy: Double): Point {
+
+    // Mid angle calculation
+    val startAngle = atan2(start.y - cy, start.x - cx)
+    val endAngle = atan2(end.y - cy, end.x - cx)
+    val midAngle = (startAngle + endAngle) / 2
+
+    // Mid point on the arc
+    val midPointX = cx + radius * cos(midAngle)
+    val midPointY = cy + radius * sin(midAngle)
+
+    return Point(midPointX, midPointY)
 }
