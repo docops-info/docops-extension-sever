@@ -26,7 +26,7 @@
       "label": "Science"
     }
   ],
-  "pieDisplay": {"baseColor":  "#0D92F4", "outlineColor" : "#0D92F4", "useDark": false, "scale": 2}
+  "pieDisplay": {"baseColor":  "#ff6361", "outlineColor" : "#58508d", "useDark": false, "scale": 2}
 }
 
             </textarea>

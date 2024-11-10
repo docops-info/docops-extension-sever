@@ -69,7 +69,7 @@ class PieMaker {
                 dy = 0
             }
             sb.append( """
-            <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif; fill: $fill;">${s.escapeXml()}</tspan>
+            <tspan x="18" dy="$dy" style="font-family: Arial, Helvetica,sans-serif; fill: ${display.baseColor};">${s.escapeXml()}</tspan>
         """.trimIndent())
         }
         sb.append("</text>")
