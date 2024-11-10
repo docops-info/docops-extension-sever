@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -51,6 +52,7 @@ class TimelineController {
      * @param httpServletRequest The HttpServletRequest object containing the request data.
      * @return The ResponseEntity object containing the updated timeline in the response body.
      */
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Timed(
@@ -108,6 +110,7 @@ class TimelineController {
      * @param useDark Indicates whether to use a dark theme for the timeline, defaults to false.
      * @return A ResponseEntity containing the timeline data, either as an SVG image or a PNG image if the type is "PDF".
      */
+    @Traceable
     @GetMapping("/")
     @ResponseBody
     @Timed(
@@ -147,6 +150,7 @@ class TimelineController {
      * @param title The title of the timeline table.
      * @return A ResponseEntity containing the generated timeline table as a byte array.
      */
+    @Traceable
     @GetMapping("/table")
     @ResponseBody
     @Timed(value = "docops.roadmap.table.data.html")

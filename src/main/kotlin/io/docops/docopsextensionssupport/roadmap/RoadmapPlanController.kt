@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoctorj.extension.panels.compressString
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -44,6 +45,7 @@ class RoadmapPlanController {
      * @param httpServletRequest The HttpServletRequest object that contains the request parameters.
      * @return A ResponseEntity object with the binary representation of the generated roadmap plan and the appropriate headers.
      */
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Counted(value = "docops.roadmap.put.html", description = "Creating a roadmap plan from webform")
@@ -102,6 +104,7 @@ class RoadmapPlanController {
      *
      * @return The road map image as a byte array wrapped in a ResponseEntity.
      */
+    @Traceable
     @GetMapping("/")
     @ResponseBody
     @Counted("docops.roadmap.get.html", description = "Creating a roadmap plan from http get")

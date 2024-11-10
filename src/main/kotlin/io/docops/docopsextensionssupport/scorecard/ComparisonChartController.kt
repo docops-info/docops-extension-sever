@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -18,6 +19,7 @@ class ComparisonChartController {
 
     private val log = LogFactory.getLog(ComparisonChartController::class.java)
 
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Counted(value = "docops.comp.put", description = "Creating comparison chart http put")

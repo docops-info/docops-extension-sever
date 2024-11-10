@@ -16,6 +16,7 @@ import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
 import io.micrometer.core.instrument.MeterRegistry
 import org.apache.commons.logging.LogFactory
@@ -39,6 +40,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
 
     private var log = LogFactory.getLog(DocOpsRouter::class.java)
 
+    @Traceable
     @GetMapping("/svg")
     @Timed(value = "docops.router.svg", description="Creating a docops visual using http get", percentiles=[0.5, 0.9])
     fun getSvg(@RequestParam(value = "kind", required = true) kind: String,

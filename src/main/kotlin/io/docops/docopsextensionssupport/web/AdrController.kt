@@ -20,6 +20,7 @@ import io.docops.docopsextensionssupport.adr.ADRParser
 import io.docops.docopsextensionssupport.adr.AdrMaker
 import io.docops.docopsextensionssupport.adr.AdrParserConfig
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -54,6 +55,7 @@ class AdrController() {
      * @param consequences The consequences of the decision in the ADR.
      * @param participants The participants involved in the ADR.
      * @param context      The*/
+    @Traceable
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.adr.put", description = "Creating adr from web form", percentiles=[0.5, 0.9])
@@ -154,6 +156,7 @@ class AdrController() {
      * @param servletResponse The servlet response object.
      * @return The ADR data in SVG format as a byte array.
      */
+    @Traceable
     @GetMapping("/adr")
     @ResponseBody
     @Timed(value = "docops.adr.get", description="docops adr from asciidoctor plugin", percentiles=[0.5, 0.9])
@@ -178,6 +181,7 @@ class AdrController() {
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 
+    @Traceable
     @GetMapping("/adr/summary/table")
     @ResponseBody
     fun getAdrRow(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {

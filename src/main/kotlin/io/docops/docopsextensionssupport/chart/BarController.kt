@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
 
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -21,6 +22,8 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/bar")
 class BarController {
     private val log = LogFactory.getLog(BarController::class.java)
+
+    @Traceable
     @PutMapping("/barchart")
     @ResponseBody
     @Counted(value="docops.barchart.put", description="Creating a barchart using http put")

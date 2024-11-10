@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.badge
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletResponse
@@ -53,6 +54,7 @@ class BadgeController {
      * @param badge The form data containing the badge details.
      * @param servletResponse The HTTP servlet response object used to send the badge as a response.
      */
+    @Traceable
     @PutMapping("/badge/item", produces = ["image/svg+xml"])
     @ResponseBody
     @Counted(value = "docops.badge.put", description= "Number of times create a badge using put method")

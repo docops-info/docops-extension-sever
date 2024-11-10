@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoctorj.extension.panels.compressString
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -58,6 +59,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @return a ResponseEntity containing the release in the requested format
      */
 //support for pdf png file type
+    @Traceable
     @GetMapping("/", produces = [MediaType.IMAGE_PNG_VALUE, "image/svg+xml"])
     @Counted(value="docops.release.get", description="Creating a release diagram using http get")
     @Timed(value = "docops.release.get", description="Creating a release diagram using http get", percentiles=[0.5, 0.9])
@@ -114,6 +116,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @param type the type of the filled view (optional, default value is "PDF")
      * @return the generated filled view as a string
      */
+    @Traceable
     @GetMapping("/prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Counted(value="docops.release.get.prefill", description="Creating a release diagram from prefilled data using http get")
@@ -136,6 +139,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @param type The type of the payload. Default value is "PDF".
      * @return The result of filling the ModelMap with the data from the JSON payload as a String.
      */
+    @Traceable
     @PutMapping("prefill", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Counted(value = "docops.release.put.json", description="Creating a release diagram from prefilled data using http put")
@@ -155,6 +159,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @param releaseStrategy The release strategy to be updated.
      * @return The SVG representation of the updated release strategy.
      */
+    @Traceable
     @PutMapping("/", produces = ["image/svg+xml"])
     @ResponseBody
     @Counted("docops.release.put", description="Creating a release diagram using http put")
@@ -198,6 +203,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @param servletRequest The current HTTP servlet request.
      * @return The rendered view as a string.
      */
+    @Traceable
     @PutMapping("/build", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Counted("docops.release.put.build", description="Creating a release strategy builder diagram using http put")

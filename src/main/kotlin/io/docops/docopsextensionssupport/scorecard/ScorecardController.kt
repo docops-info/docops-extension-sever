@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import kotlinx.serialization.json.Json
@@ -45,6 +46,7 @@ class ScorecardController {
      * @return A ResponseEntity object containing the generated score card as an SVG image file.
      * @throws Exception If an error occurs during the retrieval or generation of the score card.
      */
+    @Traceable
     @GetMapping("/")
     @ResponseBody
     @Timed(value="docops.getScoreCard", description="docops asciidoctorj plugin", percentiles=[0.5, 0.9])
@@ -77,6 +79,7 @@ class ScorecardController {
      * @return The response entity containing the generated SVG image as a byte array.
      * @throws Exception if an error occurs while generating the SVG image.
      */
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Timed(value="docops.putScorecard", description="creating a scorecard from a web form", percentiles=[0.5, 0.9])
@@ -104,6 +107,7 @@ class ScorecardController {
      * @param payload The JSON payload as a String.
      * @return A ResponseEntity containing the Scorecard object as ByteArray.
      */
+    @Traceable
     @PutMapping("/form")
     @ResponseBody
     @Timed(value="docops.putScorecardForm", description="creating a scorecard from a web form with json", percentiles=[0.5, 0.9])

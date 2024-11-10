@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -45,6 +46,7 @@ class BoxyController {
      * @param httpServletRequest The HttpServletRequest containing the request parameters.
      * @return A ResponseEntity containing the diagnostic image as a byte array.
      */
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Counted(value="docops.boxy.put", description="Creating a Button using http put")
@@ -106,6 +108,7 @@ class BoxyController {
      * @param outlineColor The color of the connector outline. Default value is "#37cdbe".
      * @return A ResponseEntity containing the byte array representation of the connector image.
      */
+    @Traceable
     @GetMapping("/")
     @ResponseBody
     @Counted(value = "docops.connector.get", description="Creating a connector diagram using http get")

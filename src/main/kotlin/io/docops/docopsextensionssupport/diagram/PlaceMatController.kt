@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -24,6 +25,7 @@ import java.net.URLDecoder
 @RequestMapping("/api/placemat")
 class PlaceMatController {
     private val log = LoggerFactory.getLogger(PlaceMatController::class.java)
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Counted(value="docops.placemat.put", description="Creating a Placemat using http put")
@@ -62,6 +64,7 @@ class PlaceMatController {
         return maker.makePlacerMat().shapeSvg
     }
 
+    @Traceable
     @GetMapping("/")
     @ResponseBody
     @Counted(value = "docops.placemat.get", description="Creating a placemat diagram using http get")

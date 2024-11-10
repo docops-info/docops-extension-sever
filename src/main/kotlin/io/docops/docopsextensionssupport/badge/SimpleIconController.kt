@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.badge
 
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
 import org.silentsoft.simpleicons.SimpleIcons
@@ -52,6 +53,7 @@ class SimpleIconController {
         provider.addIncludeFilter(RegexPatternTypeFilter(Pattern.compile(".*")))
         return provider.findCandidateComponents(packageName)
     }
+    @Traceable
     @RequestMapping("/simple/icons", method = [RequestMethod.GET, RequestMethod.POST])
     @Timed(value = "docops.simpleicons", histogram = true, percentiles = [0.5, 0.95])
     fun getByLetter(@RequestParam(name = "SEL") selected : String,  model: Model) : String {
@@ -62,6 +64,7 @@ class SimpleIconController {
     }
 
 
+    @Traceable
     @GetMapping("/simple/icon")
     @Timed(value = "docops.simpleicon", histogram = true, percentiles = [0.5, 0.95])
     fun showIcon(@RequestParam(name = "iconName") iconName: String, model: Model): String {

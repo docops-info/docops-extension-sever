@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
@@ -21,6 +22,7 @@ import kotlin.time.measureTimedValue
 class PieSliceController {
     private val log = LogFactory.getLog(PieSliceController::class.java)
 
+    @Traceable
     @PutMapping("/")
     @ResponseBody
     @Counted(value = "docops.boxy.put", description = "Creating a Button using http put")

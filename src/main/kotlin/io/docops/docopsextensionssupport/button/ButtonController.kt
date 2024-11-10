@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -58,6 +59,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param theme (Optional) The theme query parameter.
      * @return The ResponseEntity containing the converted ButtonForm object.
      */
+    @Traceable
     @Timed(value="docops.button.put.fromJsonToButtonForm.time", description="Creating a Button using Form Submission", percentiles=[0.5,0.9])
     @Counted(value="docops.button.put.fromJsonToButtonForm.count", description="Success Fail count of fromJsonToButtonForm")
     @PutMapping("/buttons/form")
@@ -128,6 +130,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param buttons The Buttons object in JSON format.
      * @return The ResponseEntity containing the generated SVG representation as a ByteArray.
      */
+    @Traceable
     @Timed(value="Docops.ButtonController.put.fromJsonToButton.time", description="Creating a Button using Form Submission JSON")
     @Counted(value="Docops.ButtonController.put.fromJsonToButton.count", description="Success Fail count of fromJsonToButton")
     @PutMapping("/buttons")
@@ -154,6 +157,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @return A ResponseEntity object containing the retrieved buttons as a byte array.
      * @throws Exception if an error occurs while retrieving the buttons.
      */
+    @Traceable
     @Timed(value="docops.button.get.getButtons.time", description="Creating a Button using http get", percentiles=[0.5, 0.9])
     @Counted(value="docops.button.get.getButtons.count", description="Success Fail count of getButtons")
     @GetMapping("/buttons")
@@ -187,7 +191,8 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
      * @param theme The theme to be applied to the button item.
      * @return A ResponseEntity containing the updated button item JSON string.
      */
-    @Timed(value="docops.button.put.themeItem.time", description="Updating button theme using http put")
+       @Traceable
+       @Timed(value="docops.button.put.themeItem.time", description="Updating button theme using http put")
     @Counted(value="docops.button.put.themeItem.count", description="Success Fail count of themeItem")
     @OptIn(ExperimentalSerializationApi::class)
     @PutMapping("button/theme")
