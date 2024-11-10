@@ -24,7 +24,7 @@ class PieSliceMaker {
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
         sb.append("<g transform=\"translate(4,20)\">")
-        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title}</text>""")
+        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,0)">""")
         val paths = StringBuilder()
         val labels = StringBuilder()
