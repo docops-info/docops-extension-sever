@@ -25,6 +25,8 @@ class BarGroupDisplay(
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val yLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val lineColor: String = "#FFBB5C",
+    val vBar : Boolean = true,
+    val useDark : Boolean = false,
     val scale: Double = 1.0
 )
 
@@ -41,6 +43,14 @@ fun BarGroup.calcWidth(): Int {
     return sum
 }
 
+fun BarGroup.calcHeight(): Int {
+    val count = this.groups.sumOf { it.series.size }
+    val sum = count * 24 + 5 + (21 * (count-1))
+    if (sum <= 400) {
+        return 512
+    }
+    return sum
+}
 fun BarGroup.maxData(): Double {
     return this.groups.maxOf { it.series.maxOf { it.value } }
 }

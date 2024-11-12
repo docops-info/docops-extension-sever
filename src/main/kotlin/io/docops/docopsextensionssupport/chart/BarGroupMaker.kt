@@ -233,6 +233,11 @@ class BarGroupMaker {
             </g>
         """.trimMargin()
     }
+
+    fun makeVGroupBar(group: BarGroup): String {
+        val vGroupBar = VGroupBar()
+        return vGroupBar.makeVerticalBar(group)
+    }
 }
 
 
@@ -286,7 +291,8 @@ fun createBarGroupTestData(): BarGroup {
         yLabel = "Sales (USD)",
         xLabel = "Quarters",
         groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
-        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#F3EDED", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; font-size:9px;", scale = 1.0)
+        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#F3EDED", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; font-size:9px;"
+            , scale = 1.0, useDark = true)
     )
 
     return barGroup
@@ -298,7 +304,7 @@ fun main() {
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
-    val svg = BarGroupMaker().makeBar(barGroupTestData)
+    val svg = BarGroupMaker().makeVGroupBar(barGroupTestData)
     val outfile2 = File("gen/groupbar.svg")
     outfile2.writeBytes(svg.toByteArray())
 }

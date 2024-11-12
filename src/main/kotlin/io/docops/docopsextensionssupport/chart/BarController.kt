@@ -68,7 +68,12 @@ class BarController {
             var contents = httpServletRequest.getParameter("content")
             val maker = BarGroupMaker()
             val bars = Json.decodeFromString<BarGroup>(contents)
-            val svg = maker.makeBar(bars)
+            val svg = if(bars.display.vBar) {
+                maker.makeVGroupBar(bars)
+            }
+            else {
+                maker.makeBar(bars)
+            }
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")

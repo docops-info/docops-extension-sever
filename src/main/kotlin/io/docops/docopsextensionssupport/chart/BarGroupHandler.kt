@@ -15,7 +15,12 @@ class BarGroupHandler {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val maker = BarGroupMaker()
         val bar = Json.decodeFromString<BarGroup>(data)
-        val svg = maker.makeBar(bar)
+        val svg = if(bar.display.vBar) {
+            maker.makeVGroupBar(bar)
+        }
+        else {
+             maker.makeBar(bar)
+        }
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
