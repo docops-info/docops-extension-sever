@@ -66,6 +66,7 @@ spring:
             enabled: true
           fixed:
             paths: /**
+
 springdoc:
   api-docs:
     enabled: true
@@ -74,3 +75,30 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+eureka:
+  client:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: discovery
+
+eureka:
+  instance:
+    hostname: localhost
+    health-check-url-path: ${server.servlet.context-path}/actuator/health
+    status-page-url-path: ${server.servlet.context-path}/actuator/info
+    appname: DocOpsExtensionServer
+    leaseRenewalIntervalInSeconds: 60
+    prefer-ip-address: false
+
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8050/admin/eureka/
+    region: default
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30

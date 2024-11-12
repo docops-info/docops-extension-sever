@@ -28,6 +28,18 @@
     <version>2024.00</version>
     <name>docops-extensions-support</name>
     <description>docops-extensions-support</description>
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <packaging>jar</packaging>
     <properties>
         <java.version>17</java.version>
@@ -49,6 +61,7 @@
         <maven-gpg.version>3.0.1</maven-gpg.version>
         <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
     </properties>
 
     <organization>
@@ -209,6 +222,24 @@
             <groupId>io.github.sercasti</groupId>
             <artifactId>spring-httpserver-timings-java17</artifactId>
             <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jersey.contribs</groupId>
+                    <artifactId>jersey-apache-client4</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <build>

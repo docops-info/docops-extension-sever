@@ -9,6 +9,13 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
+
+/**
+ * The `LineChartMaker` class is responsible for creating a line chart in SVG format. This class handles the
+ * generation of the SVG elements required to display a line chart with various customization options.
+ *
+ * @property isPdf A boolean property to determine if the output should be in PDF format.
+ */
 class LineChartMaker(val isPdf: Boolean) {
 
     private val maxHeight = 360
@@ -16,6 +23,13 @@ class LineChartMaker(val isPdf: Boolean) {
     private val maxWidth = 640
     private val maxGraphWidth = 730
     private var fontColor = "#111111"
+
+    /**
+     * Generates an SVG string representation of a line chart from the provided `LineChart` object.
+     *
+     * @param lineChart The `LineChart` object containing the data and display properties for the line chart.
+     * @return A `String` containing the SVG representation of the line chart.
+     */
     fun makeLineChart(lineChart: LineChart): String {
         val sb = StringBuilder()
         sb.append(makeHead(lineChart))
