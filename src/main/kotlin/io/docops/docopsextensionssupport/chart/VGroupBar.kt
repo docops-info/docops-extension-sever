@@ -76,13 +76,13 @@ class VGroupBar {
             backGround = "#1f2937"
         }
         return """
-            <rect width="100%" height="100%" fill="$backGround" stroke="url(#backGrad_${barGroup.display.id})"/>
+            <rect width="100%" height="100%" fill="$backGround" stroke="url(#backGrad_${barGroup.id})"/>
         """.trimIndent()
     }
     private fun makeTitle(barGroup: BarGroup): String {
         return """
         <g>
-        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${barGroup.display.id})"/>
+        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${barGroup.id})"/>
         <text x="400" y="40" text-anchor="middle" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${barGroup.title.escapeXml()}
         </text>
     </g>
