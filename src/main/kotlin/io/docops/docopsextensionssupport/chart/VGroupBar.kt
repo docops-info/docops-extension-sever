@@ -80,9 +80,13 @@ class VGroupBar {
         """.trimIndent()
     }
     private fun makeTitle(barGroup: BarGroup): String {
+        var back = ""
+        if(barGroup.display.useDark) {
+            back= "dark_"
+        }
         return """
         <g>
-        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${barGroup.id})"/>
+        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_$back${barGroup.id})"/>
         <text x="400" y="40" text-anchor="middle" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${barGroup.title.escapeXml()}
         </text>
     </g>
@@ -106,12 +110,17 @@ class VGroupBar {
         """.trimIndent()
     }
     private fun addLegend(d: Double, group: BarGroup): String {
+        var back = ""
+        var fColor = "#111111"
+        if(group.display.useDark) {
+            back= "dark_"
+            fColor = "#fcfcfc"
+        }
         val sb = StringBuilder()
         val distinct = group.legendLabel().distinct()
         sb.append("<g transform='translate(0, $d)'>")
-        val fColor = determineTextColor(group.display.baseColor)
 
-        sb.append("""<rect x="0" y="0" width="100%" height="${height-d}"  fill="url(#backGrad_${group.id})"/> """)
+        sb.append("""<rect x="0" y="0" width="100%" height="${height-d}"  fill="url(#backGrad_$back${group.id})"/> """)
         sb.append("""<text x="${width/2}" y="14" text-anchor="middle" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:12px;">Legend</text> """)
         var y = 18
         var startX = 0.2 * width
@@ -145,10 +154,11 @@ class VGroupBar {
         }
 
         val backColor = gradientColorFromColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
-
+        val darkBackColor = gradientColorFromColor("#1f2937", "backGrad_dark_${barGroup.id}")
         return """<defs>
                 $defGrad
                 $backColor
+                $darkBackColor
                 $gradients                   
                     <style>
                     .bar:hover {
