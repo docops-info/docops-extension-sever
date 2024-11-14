@@ -1,14 +1,11 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.web.ShapeResponse
-import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateGradient
-import io.docops.docopsextensionssupport.support.gradientFromColor
-import io.docops.docopsextensionssupport.support.hexToHsl
 import io.docops.docopsextensionssupport.svgsupport.textWidth
+import io.docops.docopsextensionssupport.web.ShapeResponse
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG", val isPdf: Boolean = false) {
 

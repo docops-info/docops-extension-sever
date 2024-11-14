@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.badge.DocOpsBadgeGenerator
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -8,18 +7,13 @@ import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import java.nio.charset.Charset
-import kotlin.time.measureTimedValue
 import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
+import java.nio.charset.Charset
+import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api/placemat")

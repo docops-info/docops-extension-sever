@@ -45,8 +45,7 @@ import javax.xml.xpath.*
  */
 @Controller
 @RequestMapping("/api")
-class BadgeController {
-    private var docOpsBadgeGenerator: DocOpsBadgeGenerator = DocOpsBadgeGenerator()
+class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
 
     /**
      * Retrieves a badge based on the provided form data and sends it as a response.
@@ -150,10 +149,6 @@ $txt
         @RequestParam(name = "backend", defaultValue = "", required = false) backend: String,
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray> {
-        if(docOpsBadgeGenerator == null)
-        {
-            docOpsBadgeGenerator = DocOpsBadgeGenerator()
-        }
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val split = data.split("|")
         when {

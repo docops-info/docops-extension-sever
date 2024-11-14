@@ -20,6 +20,7 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.silentsoft.simpleicons.SimpleIcons
+import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
 import java.net.URI
 import java.net.http.HttpClient
@@ -34,6 +35,7 @@ private const val BadgePerRow = 5
 /**
  * This class is responsible for generating badges using DocOps theme.
  */
+@Service
 class DocOpsBadgeGenerator {
 
 

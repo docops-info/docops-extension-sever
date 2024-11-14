@@ -35,7 +35,9 @@ import org.springframework.http.ResponseEntity
 
 @Controller
 @RequestMapping("/api/docops")
-class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegistry, private val applicationEventPublisher: ApplicationEventPublisher) {
+class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegistry,
+                                          private val applicationEventPublisher: ApplicationEventPublisher,
+    private val badgeHandler: BadgeHandler) {
 
 
     private var log = LogFactory.getLog(DocOpsRouter::class.java)
@@ -136,8 +138,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         }
         else if("badge".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
-                val handler = BadgeHandler()
-                handler.handleSVG(payload=payload, backend = backend)
+                badgeHandler.handleSVG(payload=payload, backend = backend)
             }
             log.info("buttons executed in ${timing.duration.inWholeMilliseconds}ms")
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("badge", timing.duration.inWholeMilliseconds))

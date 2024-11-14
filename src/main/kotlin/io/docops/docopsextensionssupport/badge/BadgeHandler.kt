@@ -2,19 +2,23 @@ package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.sercasti.tracing.Traceable
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Component
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
-class BadgeHandler {
+@Component
+class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator) {
 
+    @Traceable
     fun handleSVG(payload: String, backend: String) : ResponseEntity<ByteArray>  {
 
-        val docOpsBadgeGenerator = DocOpsBadgeGenerator()
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
         val badges = mutableListOf<Badge>()
         val isPdf = backend == "pdf"
