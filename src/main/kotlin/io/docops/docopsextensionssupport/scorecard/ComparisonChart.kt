@@ -21,6 +21,7 @@ class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
     val rightColumnColor: String = "#fcfcfc",
     val rightColumnFontColor: String = "#111111",
     val itemColumnColor: String = "#F5F5F7",
+    val lineColor: String = "#C4DAD2",
     val scale: Double = 1.0
         )
 
