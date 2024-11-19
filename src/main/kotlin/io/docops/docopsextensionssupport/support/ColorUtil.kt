@@ -109,3 +109,8 @@ fun determineTextColor(hexColor: String): String {
     val luminance = calculateLuminance(Triple(rgb["r"]!!, rgb["g"]!!, rgb["b"]!!))
     return if (luminance < 0.5) "#FCFCFC" else "#000000"
 }
+
+class SVGColor(val color: String, val id: String) {
+    val foreGroundColor: String = determineTextColor(color)
+    val linearGradient = svgGradient(color, id)
+}

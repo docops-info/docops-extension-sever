@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.generateGradient
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.support.hexToHsl
@@ -176,16 +177,10 @@ val gradients = mutableMapOf<String, String>(
 fun gradientMapToHsl(): Map<String, String> {
     var count = 0
     val gradMap = mutableMapOf<String,String>()
-    gradients.forEach{
+    gradients.forEach {
             k, v ->
-        val hsl = generateGradient(k)
-        gradMap[k] = """
-            <linearGradient id="grad$count" x2="0%" y2="100%">
-            <stop stop-color="${hsl["lighter"]}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$k" stop-opacity="1" offset="50%"/>
-            <stop stop-color="${hsl["darker"]}" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-        """.trimIndent()
+        val hsl = SVGColor(k, "grad$count")
+        gradMap[k] = hsl.linearGradient
         count++
     }
     return gradMap

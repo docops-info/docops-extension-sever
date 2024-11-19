@@ -1,12 +1,10 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.support.generateGradient
-import io.docops.docopsextensionssupport.web.ShapeResponse
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.getRandomColorHex
-import io.docops.docopsextensionssupport.support.gradientFromColor
-import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.web.ShapeResponse
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 
 /**
@@ -123,16 +121,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             i, choiceColor ->
            val res = gradientMapToHsl()[choiceColor]
             if(null == res) {
-                val gradient = generateGradient(choiceColor)
-                val hsl = generateGradient(choiceColor)
-                grad.append(
-                    """
-           <linearGradient id="grad${i}" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
-            <stop class="stop2" offset="100%" stop-color=${gradient["darker"]}"/>
-            </linearGradient> 
-            """.trimIndent()
-                )
+                val gradient = SVGColor(choiceColor, "grad${i}")
+                grad.append(gradient.linearGradient)
             } else {
                 grad.append(res)
             }

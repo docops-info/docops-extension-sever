@@ -2,7 +2,7 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
-import io.docops.docopsextensionssupport.support.svgGradient
+import io.docops.docopsextensionssupport.support.SVGColor
 import java.util.UUID
 
 class AdrMaker {
@@ -50,7 +50,7 @@ class AdrMaker {
             .adrlink { fill: #5AB2FF; text-decoration: underline; }
             .adrlink:hover, .adrlink:active { outline: dotted 1px #5AB2FF; }
             </style>
-            ${editorColor.backGrad()}
+            ${editorColor.backGrad().linearGradient}
             </defs>
         """.trimIndent()
     }
@@ -202,6 +202,6 @@ class EditorLite(background: String = "#fcfcfc", lineColor: String="#E4D0D0", te
 class EditorDark(background: String = "#1f2937",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)
 
-fun EditorColor.backGrad(): String {
-    return svgGradient(background, id)
+fun EditorColor.backGrad(): SVGColor {
+    return SVGColor(background, id)
 }

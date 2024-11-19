@@ -55,7 +55,7 @@ class AdrController() {
      * @param consequences The consequences of the decision in the ADR.
      * @param participants The participants involved in the ADR.
      * @param context      The*/
-    @Traceable
+    @Traceable(description = "Handles the HTTP PUT request for creating an Architecture Decision Record (ADR).")
     @PutMapping("/adr", produces = [MediaType.TEXT_HTML_VALUE])
     @ResponseBody
     @Timed(value = "docops.adr.put", description = "Creating adr from web form", percentiles=[0.5, 0.9])

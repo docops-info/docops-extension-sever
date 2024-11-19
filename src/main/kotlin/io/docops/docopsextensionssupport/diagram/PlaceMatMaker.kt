@@ -1,7 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.generateGradient
+import io.docops.docopsextensionssupport.support.SVGColor
+
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import java.io.File
@@ -60,7 +60,8 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         var y = 0
         placeMatRequest.placeMats.forEachIndexed {
                 i, conn ->
-            val textColor = determineTextColor(placeMatRequest.config.colorFromLegendName(conn.legend).color)
+            val svgColor = SVGColor(placeMatRequest.config.colorFromLegendName(conn.legend).color, UUID.randomUUID().toString())
+            val textColor = svgColor.foreGroundColor
 
             var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
             /*if(!useGrad) {
@@ -132,16 +133,8 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         placeMatRequest.config.legend.forEach {
             item ->
-            val gradient = generateGradient(item.color)
-            grad.append(
-                """
-           <linearGradient id="grad_${item.legendAsStyle()}_$id" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
-            </linearGradient> 
-            """.trimIndent()
-            )
+            val gradient = SVGColor(item.color, "grad_${item.legendAsStyle()}_$id")
+            grad.append(gradient.linearGradient)
         }
 
 
@@ -222,7 +215,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(!useGrad) {
                 grad = item.color
             }
-            val textColor = determineTextColor(item.color)
+            val textColor = SVGColor(item.color, UUID.randomUUID().toString()).foreGroundColor
                 val textLen = item.legend.textWidth("Helvetica", 110)
             sb.append("""
             <g transform="translate($start,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
