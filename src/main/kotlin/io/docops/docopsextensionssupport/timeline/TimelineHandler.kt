@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
@@ -13,7 +15,7 @@ import java.net.URLDecoder
 import kotlin.time.measureTimedValue
 
 class TimelineHandler {
-    private val log = LogFactory.getLog(TimelineHandler::class.java)
+    private val log = KotlinLogging.logger {  }
     fun handleSVG(
         payload: String,
         type: String,
@@ -32,9 +34,12 @@ class TimelineHandler {
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            withLoggingContext("isPdf" to "$isPdf", "title" to title, "scale" to scale, "numChars" to numChars, "type" to type, "payload" to data) {
+                log.info{"getTimeLineTable executed"}
+            }
             ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info("getTimeLineTable executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"getTimeLineTable executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 

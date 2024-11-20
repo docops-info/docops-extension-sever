@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.scorecard
 import io.docops.docopsextensionssupport.badge.findHeightWidth
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
@@ -15,7 +17,7 @@ import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
 class ScorecardHandler {
-    private val log = LogFactory.getLog(ScorecardController::class.java)
+    private val log = KotlinLogging.logger {  }
     fun handleSVG(
         payload: String,
         backend: String
@@ -30,9 +32,12 @@ class ScorecardHandler {
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+                withLoggingContext("isPdf" to isPdf.toString(), "payload" to data, "backend" to backend, "type" to "scorecard") {
+                    log.info{"Scorecard generated"}
+                }
                 ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
             }
-            log.info("getScoreCard executed in ${timing.duration.inWholeMilliseconds}ms ")
+            log.info{"getScoreCard executed in ${timing.duration.inWholeMilliseconds}ms "}
             return timing.value
         } catch (e: Exception) {
             e.printStackTrace()
