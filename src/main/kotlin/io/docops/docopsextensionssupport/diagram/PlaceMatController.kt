@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -18,7 +19,7 @@ import kotlin.time.measureTimedValue
 @Controller
 @RequestMapping("/api/placemat")
 class PlaceMatController {
-    private val log = LoggerFactory.getLogger(PlaceMatController::class.java)
+    private val log = KotlinLogging.logger {  }
     @Traceable
     @PutMapping("/")
     @ResponseBody
@@ -79,7 +80,7 @@ class PlaceMatController {
             ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
 
         }
-        log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"getConnector executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 }

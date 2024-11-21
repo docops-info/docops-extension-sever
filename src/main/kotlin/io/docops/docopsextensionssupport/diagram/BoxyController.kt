@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -38,7 +39,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/connector")
 class BoxyController {
 
-    private val log = LogFactory.getLog(BoxyController::class.java)
+    private val log = KotlinLogging.logger {  }
 
     /**
      * Generates a diagnostic image and returns it as a response entity.
@@ -88,7 +89,7 @@ class BoxyController {
         """.lines().joinToString(transform = String::trim, separator = "\n")
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info("makeDiag executed in ${timings.duration.inWholeMilliseconds}ms ")
+        log.info{"makeDiag executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
     }
 
@@ -129,7 +130,7 @@ class BoxyController {
             ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
 
         }
-        log.info("getConnector executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"getConnector executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 
