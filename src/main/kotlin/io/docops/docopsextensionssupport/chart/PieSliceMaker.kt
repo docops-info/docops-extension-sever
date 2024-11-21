@@ -2,8 +2,8 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.Point
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
@@ -174,14 +174,8 @@ class PieSliceMaker {
     private fun makeDefs(pieSlices: PieSlices) : String {
         val defGrad = StringBuilder()
         STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = gradientFromColor(item)
-            defGrad.append("""
-                <linearGradient id="defColor_$idx" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-            """.trimIndent())
+            val gradient = SVGColor(item, "defColor_$idx")
+            defGrad.append(gradient.linearGradient)
         }
         //language=svg
         return """

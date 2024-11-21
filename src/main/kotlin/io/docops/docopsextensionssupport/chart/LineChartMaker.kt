@@ -1,9 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -113,21 +112,15 @@ class LineChartMaker(val isPdf: Boolean) {
 
 
     private fun makeDefs(lineChart: LineChart): String {
-        val clr = gradientColorFromColor(lineChart.display.backgroundColor, "backGrad${lineChart.display.id}")
+        val clr = SVGColor(lineChart.display.backgroundColor, "backGrad${lineChart.display.id}")
         val defGrad = StringBuilder()
         STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = gradientFromColor(item)
-            defGrad.append("""
-                <linearGradient id="defColor_$idx" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-            """.trimIndent())
+            val gradient = SVGColor(item, "defColor_$idx")
+            defGrad.append(gradient.linearGradient)
         }
         return """
             <defs>
-             $clr
+             ${clr.linearGradient}
              $defGrad
             <script>
             function showText(id) {
@@ -152,7 +145,7 @@ class LineChartMaker(val isPdf: Boolean) {
         val str = StringBuilder()
         val sb = StringBuilder()
         val elements = StringBuilder()
-        val cMap = gradientFromColor(STUNNINGPIE[index])
+        val cMap = SVGColor(STUNNINGPIE[index])
         val toolTipGen = ToolTip()
 
         points.points.forEachIndexed { itemIndex, item ->
@@ -173,7 +166,7 @@ class LineChartMaker(val isPdf: Boolean) {
             var fillColor = determineTextColor(STUNNINGPIE[index])
             toolTip.append("""
                 <g transform="translate(${num},${y -20})" visibility="hidden" id="text_${lineChart.id}_${index}_$itemIndex">
-                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="url(#defColor_$index)" stroke="${cMap["color3"]}" stroke-width="3" opacity="0.8" /> 
+                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="url(#defColor_$index)" stroke="${cMap.darker()}" stroke-width="3" opacity="0.8" /> 
                 <text x="0" y="-50" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${points.label}</text>
                 <text x="0" y="-35" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.y}</text>
                 <text x="0" y="-20" text-anchor="middle" style="fill:$fillColor; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${item.label}</text>

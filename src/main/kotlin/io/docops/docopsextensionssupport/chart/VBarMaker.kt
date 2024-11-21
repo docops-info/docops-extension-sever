@@ -2,7 +2,7 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 
 class VBarMaker {
@@ -105,10 +105,10 @@ class VBarMaker {
         """.trimIndent()
     }
     private fun addDefs(bar: Bar) : String {
-        val backColor = gradientColorFromColor(bar.display.baseColor, "backGrad_${bar.display.id}")
+        val backColor = SVGColor(bar.display.baseColor, "backGrad_${bar.display.id}")
         return """
             <defs>
-            $backColor
+            ${backColor.linearGradient}
             <style>
             .bar:hover {
                 filter: grayscale(100%) sepia(100%);

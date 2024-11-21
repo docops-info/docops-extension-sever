@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.apache.catalina.manager.JspHelper.escapeXml
@@ -161,9 +161,9 @@ class BarMaker {
         return elements.toString()
     }
     private fun makeDefs(bar: Bar, gradients: String) : String {
-        val backColor = gradientColorFromColor(bar.display.baseColor, "backGrad_${bar.display.id}")
+        val backColor = SVGColor(bar.display.baseColor, "backGrad_${bar.display.id}")
         return """<defs>
-            $backColor
+            ${backColor.linearGradient}
              <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
                 <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>

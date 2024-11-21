@@ -1,9 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
-import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
-import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 
 class VGroupBar {
@@ -143,22 +141,16 @@ class VGroupBar {
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
         STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = gradientFromColor(item)
-            defGrad.append("""
-                <linearGradient id="defColor_$idx" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-            """.trimIndent())
+            val gradient = SVGColor(item, "defColor_$idx")
+            defGrad.append(gradient.linearGradient)
         }
 
-        val backColor = gradientColorFromColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
-        val darkBackColor = gradientColorFromColor("#1f2937", "backGrad_dark_${barGroup.id}")
+        val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
+        val darkBackColor = SVGColor("#1f2937", "backGrad_dark_${barGroup.id}")
         return """<defs>
                 $defGrad
-                $backColor
-                $darkBackColor
+                ${backColor.linearGradient}
+                ${darkBackColor.linearGradient}
                 $gradients                   
                     <style>
                     .bar:hover {
@@ -227,14 +219,7 @@ class VGroupBar {
            </defs>"""
     }
     private fun makeGradient(barDisplay: BarGroupDisplay): String {
-        val gradient1 = gradientFromColor(barDisplay.baseColor)
-        return """
-        <linearGradient id="linearGradient_${barDisplay.id}" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="${gradient1["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient1["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient1["color3"]}"/>
-        </linearGradient>
-        """.trimIndent()
+        val gradient1 = SVGColor(barDisplay.baseColor, "linearGradient_${barDisplay.id}")
+        return gradient1.linearGradient
     }
-    class GroupResult(val endY: Int, val bars: String)
 }
