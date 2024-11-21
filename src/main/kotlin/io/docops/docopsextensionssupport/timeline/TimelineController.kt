@@ -16,8 +16,6 @@
 
 package io.docops.docopsextensionssupport.timeline
 
-import io.docops.docopsextensionssupport.badge.findHeightWidth
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -27,11 +25,7 @@ import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import kotlin.time.measureTimedValue

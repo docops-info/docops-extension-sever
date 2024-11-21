@@ -16,10 +16,8 @@
 
 package io.docops.docopsextensionssupport.timeline
 
-import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToMultiLineText
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
-import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
 /**

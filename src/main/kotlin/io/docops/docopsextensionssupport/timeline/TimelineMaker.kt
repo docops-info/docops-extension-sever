@@ -18,11 +18,10 @@ package io.docops.docopsextensionssupport.timeline
 
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.support.getRandomColorHex
-import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 /**
  * The `TimelineMaker` class is used to create a SVG timeline based on the provided parameters.
@@ -226,10 +225,10 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
 
-        val colorMap = gradientFromColor(outlineColor)
+        val colorMap = SVGColor(outlineColor)
         val hsl = hexToHsl(outlineColor, pdf)
         sb.append("""<radialGradient id="outlineGradient_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:${colorMap["color1"]}; stop-opacity:1" />
+            <stop offset="30%" style="stop-color:${colorMap.lighter()}; stop-opacity:1" />
             <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
         </radialGradient>""")
         //language=html
@@ -257,11 +256,11 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             <stop class="stop3" offset="100%" stop-color="#282828"/>
         </linearGradient>
         <linearGradient id="arrowColor_$id" x2="0%" y2="100%">
-            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="${colorMap.lighter()}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
         <linearGradient id="topBar_$id" x2="0%" y2="100%">
-            <stop stop-color="${colorMap["color1"]}" stop-opacity="1" offset="0%"/>
+            <stop stop-color="${colorMap.lighter()}" stop-opacity="1" offset="0%"/>
             <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
         </linearGradient>
         <marker

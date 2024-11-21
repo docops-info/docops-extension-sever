@@ -39,7 +39,7 @@ class ColorToGradientController {
     @PutMapping("/grad")
     fun putColors(httpServletRequest: HttpServletRequest): ResponseEntity<String> {
         val color = httpServletRequest.getParameter("gradColor")
-        val gradient = generateGradient(color)
+        val gradient = SVGColor(color, "grad1")
         val hsl = hexToHsl(color)
         val textColor = determineTextColor(color)
         return accepted().body(
@@ -47,18 +47,14 @@ class ColorToGradientController {
         <div>
         <svg width="200" height="200" viewBox="0 0 200.0 200.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Docops: Color Gradient" >
         <defs>
-            <linearGradient id="grad1" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
-                <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
-            </linearGradient>
+            ${gradient.linearGradient}
             <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/>
-                <stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/>
+                <stop class="stop1" offset="0%" stop-color="${gradient.lighter()}"/>
+                <stop class="stop2" offset="50%" stop-color="${gradient.original()}"/>
+                <stop class="stop3" offset="100%" stop-color="${gradient.darker()}"/>
             </linearGradient>
             <linearGradient x2="0%" y2="100%" id="grad3">
-                <stop stop-color="${gradient["lighter"]}" stop-opacity="1" offset="0%"/>
+                <stop stop-color="${gradient.lighter()}" stop-opacity="1" offset="0%"/>
                 <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
             </linearGradient>
         </defs>
@@ -73,17 +69,17 @@ class ColorToGradientController {
 <pre>
     <code class="xml">
         &lt;linearGradient id="grad1" x2="0%" y2="100%"&gt;
-            &lt;stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/&gt;
-            &lt;stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/&gt;
-            &lt;stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient.lighter()}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient.original()}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient.darker()}"/&gt;
         &lt;/linearGradient&gt;
         &lt;linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%"&gt;
-            &lt;stop class="stop1" offset="0%" stop-color="${gradient["lighter"]}"/&gt;
-            &lt;stop class="stop2" offset="50%" stop-color="${gradient["original"]}"/&gt;
-            &lt;stop class="stop3" offset="100%" stop-color="${gradient["darker"]}"/&gt;
+            &lt;stop class="stop1" offset="0%" stop-color="${gradient.lighter()}"/&gt;
+            &lt;stop class="stop2" offset="50%" stop-color="${gradient.original()}"/&gt;
+            &lt;stop class="stop3" offset="100%" stop-color="${gradient.darker()}"/&gt;
         &lt;/linearGradient&gt;
         &lt;linearGradient x2="0%" y2="100%" id="grad3"&gt;
-            &lt;stop stop-color="${gradient["original"]}" stop-opacity="1" offset="0%"/&gt;
+            &lt;stop stop-color="${gradient.original()}" stop-opacity="1" offset="0%"/&gt;
             &lt;stop stop-color="$hsl" stop-opacity="1" offset="100%"/&gt;
         &lt;/linearGradient&gt;
     </code>
@@ -100,16 +96,8 @@ document.querySelectorAll('pre code').forEach((el) => {
 
     @GetMapping("/grad/svg/{color}")
     fun svgLinearGradient(@PathVariable("color") color: String): ResponseEntity<String> {
-        val gradient = gradientFromColor(color)
-        return accepted().body(
-            """
-        <linearGradient id="headerGreen" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="${gradient["color1"]}"/>
-            <stop class="stop2" offset="50%" stop-color="${gradient["color2"]}"/>
-            <stop class="stop3" offset="100%" stop-color="${gradient["color3"]}"/>
-        </linearGradient>
-        """.trimIndent()
-        )
+        val gradient = SVGColor(color, "headerGreen")
+        return accepted().body(gradient.linearGradient)
         //#e56516
     }
 

@@ -20,7 +20,6 @@ import io.docops.asciidoc.buttons.dsl.Panels
 import io.docops.asciidoc.buttons.service.PanelService
 import io.docops.asciidoc.buttons.service.ScriptLoader
 import io.docops.asciidoc.buttons.theme.ButtonType
-import java.awt.Color
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
