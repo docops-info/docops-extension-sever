@@ -32,7 +32,7 @@ class ScorecardHandler {
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-                withLoggingContext("isPdf" to isPdf.toString(), "payload" to data, "backend" to backend, "type" to "scorecard") {
+                withLoggingContext("isPdf" to isPdf.toString(),  "backend" to backend, "type" to "scorecard") {
                     log.info{"Scorecard generated"}
                 }
                 ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)

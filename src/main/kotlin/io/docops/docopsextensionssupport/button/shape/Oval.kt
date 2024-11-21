@@ -4,8 +4,7 @@ import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
-import io.docops.docopsextensionssupport.svgsupport.textAscent
-import io.docops.docopsextensionssupport.svgsupport.textHeight
+
 
 class Oval(buttons: Buttons) : Regular(buttons) {
 

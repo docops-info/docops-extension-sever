@@ -17,7 +17,7 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.asciidoc.utils.escapeXml
-import io.docops.docopsextensionssupport.support.generateGradient
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Service
@@ -50,10 +50,13 @@ class DocOpsBadgeGenerator {
         badges.forEachIndexed { i, badge ->
             val label = badge.label.escapeXml()
             val message = badge.message.escapeXml()
-            val clrMap = gradientFromColor(badge.labelColor!!)
-            val mMap = gradientFromColor(badge.messageColor!!)
             val maskId = UUID.randomUUID().toString()
-            val grad = makeGradient(maskId, clrMap, mMap)
+
+            val labelColor = SVGColor(badge.labelColor!!, "label_${maskId}")
+            val messageColor = SVGColor(badge.messageColor!!, "message_${maskId}")
+            //val clrMap = gradientFromColor(badge.labelColor!!)
+            //val mMap = gradientFromColor(badge.messageColor!!)
+            val grad = labelColor.linearGradient + messageColor.linearGradient
             var labelWidth = measureText(badge.label) * 100.0F
             val messageWidth = measureText(badge.message) * 100.0F
             var labelLink = label
@@ -90,11 +93,11 @@ class DocOpsBadgeGenerator {
             }
             sb.append("<g transform='translate($xPos,${rowNum*21})'>")
             if(badge.isPdf) {
-                val b = makeSVGForPDF(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, img, label)
+                val b = makeSVGForPDF(labelColor, messageColor, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, img, label)
                 sb.append(b)
             }
             else {
-                val b = makeSvg(clrMap, mMap, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, grad, mask, filterText, img, label)
+                val b = makeSvg(labelColor, messageColor, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, grad, mask, filterText, img, label)
                 sb.append(b)
             }
             sb.append("</g>")
@@ -127,8 +130,8 @@ class DocOpsBadgeGenerator {
     }
 
     private fun makeSVGForPDF(
-        clrMap: Map<String, String>,
-        mMap: Map<String, String>,
+        clrMap: SVGColor,
+        mMap: SVGColor,
         labelWidth: Float,
         messageWidth: Float,
         textWidth: Int,
@@ -140,8 +143,8 @@ class DocOpsBadgeGenerator {
         img: String,
         label : String
     ): String {
-        val labelFill = clrMap["color3"]!!
-        val messageFill = mMap["color3"]!!
+        val labelFill = clrMap.darker()
+        val messageFill = mMap.darker()
         val filterText = ""
         val maskText = ""
         val mask = """
@@ -161,8 +164,8 @@ class DocOpsBadgeGenerator {
         """.trimIndent()
     }
     private fun makeSvg(
-        clrMap: Map<String, String>,
-        mMap: Map<String, String>,
+        clrMap: SVGColor,
+        mMap: SVGColor,
         labelWidth: Float,
         messageWidth: Float,
         textWidth: Int,

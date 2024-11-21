@@ -20,8 +20,8 @@ import io.docops.asciidoc.buttons.wrapText
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
-import io.docops.docopsextensionssupport.releasestrategy.gradientColorFromColor
-import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.support.SVGColor
+
 
 /**
  * The `Round` class is a subclass of the `Regular` class and represents a round button layout.
@@ -153,8 +153,8 @@ class Round(buttons: Buttons) : Regular(buttons) {
         val linGrad = StringBuilder()
         buttons.buttons.forEachIndexed {
             i, b ->
-            val grad =  gradientColorFromColor(b.color!!, "nnneon-grad$i-${buttons.id}")
-           linGrad.append(grad)
+            val grad = SVGColor(b.color!!, "nnneon-grad$i-${buttons.id}")
+           linGrad.append(grad.linearGradient)
         }
         var style = """
              <style>

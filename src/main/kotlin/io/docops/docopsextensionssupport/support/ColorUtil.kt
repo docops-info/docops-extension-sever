@@ -110,7 +110,19 @@ fun determineTextColor(hexColor: String): String {
     return if (luminance < 0.5) "#FCFCFC" else "#000000"
 }
 
-class SVGColor(val color: String, val id: String) {
+class SVGColor(val color: String, val id: String = UUID.randomUUID().toString()) {
     val foreGroundColor: String = determineTextColor(color)
-    val linearGradient = svgGradient(color, id)
+    val colorMap = gradientFromColor(color)
+    val linearGradient = """
+        <linearGradient id="$id" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:${colorMap["color1"]}"/>
+            <stop offset="50%" style="stop-color:${colorMap["color2"]}"/>
+            <stop offset="100%" style="stop-color:${colorMap["color3"]}"/>
+        </linearGradient>
+    """.trimIndent()
+
+    fun lighter() = colorMap["color1"]
+    fun darker() = colorMap["color3"]
+    fun original() = color
+
 }

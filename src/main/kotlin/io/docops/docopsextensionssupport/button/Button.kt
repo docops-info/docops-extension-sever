@@ -17,7 +17,7 @@
 package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.button.shape.*
-import io.docops.docopsextensionssupport.support.generateGradient
+import io.docops.docopsextensionssupport.support.SVGColor
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.awt.Color
@@ -442,24 +442,12 @@ class Buttons(
 class Link(val label: String, val href: String)
 
 fun buildGradientDef(color: String, id: String): String {
-    val m = gradientFromColor(color)
-    return """
-           <linearGradient id="btn_${id}" x2="1" y2="1">
-            <stop class="stop1" offset="0%" stop-color="${m["color2"]}"/>
-            <stop class="stop2" offset="100%" stop-color="${m["color3"]}"/>
-            </linearGradient> 
-        """
+    val m = SVGColor(color, "btn_${id}")
+    return m.linearGradient
 }
 fun buildGradientHslDef(color: String, id: String): String {
-    val m = generateGradient(color)
-    //val hsl = hexToHsl(color)
-    return """
-        <linearGradient x2="0%" y2="100%" id="btn_${id}">
-            <stop stop-color="${m["lighter"]}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="${m["original"]}" stop-opacity="1" offset="50%"/>
-            <stop stop-color="${m["darker"]}" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-    """.trimIndent()
+    val m = SVGColor(color, "btn_${id}")
+   return m.linearGradient
 }
 
 fun getResourceFromUrl(url: String): String {

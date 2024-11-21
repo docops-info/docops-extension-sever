@@ -17,7 +17,6 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
