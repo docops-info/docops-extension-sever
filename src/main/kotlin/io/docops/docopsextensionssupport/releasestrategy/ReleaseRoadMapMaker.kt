@@ -18,7 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
-import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.util.*
 
@@ -153,7 +153,7 @@ class ReleaseRoadMapMaker {
         val colors = StringBuilder()
         val shades = mutableMapOf(0 to "M", 1 to "R", 2 to "G")
         releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
-            colors.append(gradientColorFromColor(s, "release${shades[index]}"))
+            colors.append(SVGColor(s, "release${shades[index]}").linearGradient)
         }
         //language=svg
         return """

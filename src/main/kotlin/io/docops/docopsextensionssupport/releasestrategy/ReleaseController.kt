@@ -16,15 +16,13 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.asciidoctorj.extension.panels.compressString
 import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -32,9 +30,7 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
-import java.io.StringWriter
 import java.net.URLDecoder
-import java.util.*
 import kotlin.time.measureTimedValue
 
 
@@ -47,7 +43,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/release")
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
 
-    private val log = LogFactory.getLog(ReleaseController::class.java)
+    private val log = KotlinLogging.logger {  }
 
     /**
      * Retrieves the release in the specified format.
@@ -103,7 +99,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 ResponseEntity(output.toByteArray(), headers, HttpStatus.OK)
             }
         }
-        log.info("getRelease executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"getRelease executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 
@@ -127,7 +123,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             val release = Json.decodeFromString<ReleaseStrategy>(data)
             makeFilledView(model = model, releaseStrategy = release)
         }
-        log.info("prefill executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"prefill executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 
@@ -149,7 +145,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             val release = Json.decodeFromString<ReleaseStrategy>(payload)
             makeFilledView(model = model, releaseStrategy = release)
         }
-        log.info("prefillFromJson executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"prefillFromJson executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 
@@ -189,7 +185,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 }
             }
         }
-        log.info("putStrategy executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"putStrategy executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 
@@ -219,7 +215,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             val releaseStrategy = ReleaseStrategy(title, releases, style)
             makeFilledView(model = model, releaseStrategy = releaseStrategy)
         }
-        log.info("createStrategy executed in ${timing.duration.inWholeMilliseconds}ms ")
+        log.info{"createStrategy executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
 

@@ -18,7 +18,6 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
-import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -224,7 +223,7 @@ fun main() {
           "Team will have QA do initial testing."
         ],
         "date": "September 20th, 2023",
-        "completed": true
+        "completed": true,
         "goal": "Our goal is to deplou lastest code along with security applied at the API Layer"
       },
       {

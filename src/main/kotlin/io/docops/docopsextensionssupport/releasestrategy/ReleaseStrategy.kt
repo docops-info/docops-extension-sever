@@ -16,30 +16,9 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.GA
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M1
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M2
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M3
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M4
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M5
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M6
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M7
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M8
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.M9
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC1
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC2
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC3
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC4
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC5
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC6
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC7
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC8
-import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.RC9
-import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.*
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
-import java.io.ByteArrayOutputStream
-import kotlin.math.max
 
 
 /**
