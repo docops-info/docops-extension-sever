@@ -18,7 +18,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradientsKeys
-import io.docops.docopsextensionssupport.scorecard.generateRectPathData
+import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
@@ -164,7 +164,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         var c = startingY + 40
         var count = 0
         doneChunks.forEach { mutableLists ->
-            val boxTitle = generateRectPathData(184f, 18f,5f,5f,0f,0f)
+            val boxTitle = generateRectanglePathData(184f, 18f,5f,5f,0f,0f)
             sb.append("""<g transform="translate(26,$c)">""")
 
             mutableLists.forEachIndexed { index, item ->
@@ -254,7 +254,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         }
         val sb = StringBuilder("""<g transform="translate(26,${105 * (index + 1) + (inc * index)})">""")
         val now = """<rect x="0" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #0D9276;stroke-width: 2;"/>"""
-        val boxTitle = generateRectPathData(184f, 18f,5f,5f,0f,0f)
+        val boxTitle = generateRectanglePathData(184f, 18f,5f,5f,0f,0f)
         val nowTitle = """<path d="$boxTitle"  fill="#0D9276"/>"""
         val next = """<rect x="210" y="0" fill="#fcfcfc" height="120" width="184" rx="5" ry="5" style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: #D63484; stroke-width: 2; text-anchor: middle; font-weight: bold; "/>"""
         val nextTitle = """<g transform="translate(210,0)"><path d="$boxTitle" fill="#D63484"/></g>"""
@@ -454,7 +454,7 @@ refactor displayConfigUrl to displayTheme
     val rm = RoadMapMaker(false, 26)
     val output = rm.makeRoadMapImage(str, "1.0", "OKTA Progress", "30")
     val f = File("gen/roadmap.svg")
-    val d = generateRectPathData(552f, 54f,5f,5f,0f,0f)
+    val d = generateRectanglePathData(552f, 54f,5f,5f,0f,0f)
     println(d)
     f.writeBytes(output.toByteArray())
 }
