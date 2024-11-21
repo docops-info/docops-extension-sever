@@ -217,7 +217,8 @@ class ButtonDisplay(
     var useDark: Boolean = false,
     var strokeColor: String = "gold",
     var sortBy: Sort = Sort(ButtonSortBy.LABEL, SortDirection.ASCENDING),
-    val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;")
+    val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;"),
+    val raise: Boolean = true
 )
 
 /**

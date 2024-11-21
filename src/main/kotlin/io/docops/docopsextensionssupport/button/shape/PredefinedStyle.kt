@@ -28,6 +28,8 @@ fun baseCard() = """.basecard { -webkit-filter: drop-shadow( 3px 3px 2px rgba(0,
 fun linkText() = """ .linkText { fill: #000000; font-size: 15px; font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: normal; cursor: pointer; } .linkText:hover { fill: #ea0606; border: #d2ddec solid; }
     .linkTextDark { fill: #fcfcfc; font-size: 15px; font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: normal; cursor: pointer; } .linkText:hover { fill: #ea0606; border: #d2ddec solid; }
 """.trimMargin()
+
+fun lightShadow() = """.light-shadow {filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));}"""
 fun myBox() = """.shape { stroke: black; } .mybox:hover { -webkit-animation: 0.5s draw linear forwards; animation: 0.5s draw linear forwards; }"""
 
 fun keyFrame() = """ @keyframes draw { 0% { stroke-dasharray: 140 540; stroke-dashoffset: -474; stroke-width: 3px; } 100% { stroke-dasharray: 760; stroke-dashoffset: 0; stroke-width: 5px; } }"""

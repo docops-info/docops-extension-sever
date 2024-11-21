@@ -20,6 +20,7 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.support.determineTextColor
 
 /**
  * Regular class is responsible for creating regular buttons shape.
@@ -76,12 +77,23 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                 filter = ""
                 fill = "${button.color}"
             }
+            var btnLook = """fill="$fill" class="raise btn_${button.id}_cls" $filter"""
+            var textFillColor = determineTextColor(button.color!!)
+            var textClass = "glass"
+            buttons.theme?.raise?.let {
+                if(!it) {
+                    btnLook = """fill="#fcfcfc" stroke="$fill" stroke-width="2""""
+                    textFillColor = button.color!!
+                    textClass = "light-shadow"
+                }
+            }
+
             btns.append(
                 """
         <g transform="translate($startX,$startY)">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-            <rect x="0" y="0" fill="$fill" width="300" height="30" class="raise btn_${button.id}_cls" $filter rx="10" ry="10"/>
-            <text x="150" y="20" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
+            <rect x="0" y="0" $btnLook width="300" height="30" rx="10" ry="10"/>
+            <text x="150" y="20" text-anchor="middle" class="$textClass" style="${button.buttonStyle?.labelStyle}; fill:$textFillColor">${button.label.escapeXml()}</text>
             </a>
         </g>
         """.trimIndent()
@@ -107,6 +119,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         var style = """
              <style>
             ${glass()}
+            ${lightShadow()}
             ${raise(strokeColor = strokeColor)}
             ${baseCard()}
             ${gradientStyle()}
