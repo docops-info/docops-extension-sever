@@ -161,7 +161,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("pieslice".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue {
                 val handler = PieSliceHandler()
-                handler.handleSVG(payload=payload)
+                handler.handleSVG(payload=payload, "pdf".equals(backend, ignoreCase = true))
             }
             logger.info{"pie handler executed in ${timing.duration.inWholeMilliseconds}ms"}
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("pieslice", timing.duration.inWholeMilliseconds))

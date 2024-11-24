@@ -14,10 +14,10 @@ import kotlinx.serialization.encodeToString
 import kotlin.math.PI
 import kotlin.math.atan2
 
-class PieSliceMaker {
+open class PieSliceMaker {
 
-    private var width: Double = 420.0
-    private var height: Double = 420.0
+    protected var width: Double = 420.0
+    protected var height: Double = 420.0
     fun makePie(pieSlices: PieSlices) : String {
 
         val sb = StringBuilder()
@@ -132,7 +132,7 @@ class PieSliceMaker {
         )
     }
 
-    private fun startSvg(pieSlices: PieSlices) : String {
+    protected fun startSvg(pieSlices: PieSlices) : String {
         val buffer = 120
         val baseHeight = 420
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
@@ -141,7 +141,7 @@ class PieSliceMaker {
             <svg xmlns="http://www.w3.org/2000/svg" height="$h" width="420" viewBox='0 0 420.0 $h'>
           """
     }
-    private fun endSvg() = "</svg>"
+    protected fun endSvg() = "</svg>"
 
     private fun makeLabels(pieSlices: PieSlices): String {
         val sb = StringBuilder()
@@ -171,7 +171,7 @@ class PieSliceMaker {
         sb.append("</g>")
         return sb.toString()
     }
-    private fun makeDefs(pieSlices: PieSlices) : String {
+    protected fun makeDefs(pieSlices: PieSlices) : String {
         val defGrad = StringBuilder()
         STUNNINGPIE.forEachIndexed { idx, item->
             val gradient = SVGColor(item, "defColor_$idx")
@@ -180,7 +180,16 @@ class PieSliceMaker {
         //language=svg
         return """
             <defs>
-           
+           <script>
+            function showText(id) {
+                var tooltip = document.getElementById(id);
+                tooltip.style.visibility = "visible";
+            }
+            function hideText(id) {
+                var tooltip = document.getElementById(id);
+                tooltip.style.visibility = "hidden";
+            }
+            </script>
             $defGrad
             <style>
             .pie:hover {
@@ -199,16 +208,22 @@ fun Double.round(decimals: Int): Double {
 }
 
 fun main() {
-    val maker= PieSliceMaker()
     val pieSlices = PieSlices(title = "Favorite Anime",mutableListOf(PieSlice(label= "Naruto", amount = 5.0),
         PieSlice(label = "Bleach", amount = 4.0),
         PieSlice(label = "One Piece", amount = 9.0),
         PieSlice(label = "One Punch Man", amount = 7.0),
         PieSlice(label = "My Hero Academia", amount = 6.0),
         PieSlice(label = "Demon Slayer", amount = 10.0),
-    ))
-    val svg = maker.makePie(pieSlices)
-
+    ), SliceDisplay(donut = true) )
+    var svg = ""
+    if(!pieSlices.display.donut){
+        val maker= PieSliceMaker()
+         svg = maker.makePie(pieSlices)
+    }
+    else {
+        val maker = DonutMaker()
+        svg = maker.makeDonut(pieSlices)
+    }
     val str = Json.encodeToString(pieSlices)
     println(str)
     val outfile2 = File("gen/pieslice.svg")

@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.chart.PieSliceMaker
 import io.docops.docopsextensionssupport.web.panel.uncompressString
 import kotlinx.serialization.json.Json
 import org.springframework.http.CacheControl
@@ -13,11 +12,17 @@ import java.nio.charset.StandardCharsets
 
 class PieSliceHandler {
 
-    fun handleSVG(payload: String) : ResponseEntity<ByteArray>{
+    fun handleSVG(payload: String, isPdf: Boolean) : ResponseEntity<ByteArray>{
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val maker = PieSliceMaker()
         val slices = Json.decodeFromString<PieSlices>(data)
-        val svg = maker.makePie(slices)
+        var svg = ""
+        if(!slices.display.donut || isPdf) {
+            val maker = PieSliceMaker()
+             svg = maker.makePie(slices)
+        } else {
+            val maker = DonutMaker()
+             svg = maker.makeDonut(slices)
+        }
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

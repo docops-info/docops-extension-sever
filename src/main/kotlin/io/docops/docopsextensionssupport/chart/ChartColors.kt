@@ -10,8 +10,6 @@ val STUNNINGPIE = listOf(
     "#003f5c",
     "#58508d",
     "#bc5090",
-    "#ff6361",
-    "#ffa600",
     "#f39c12",
     "#c837ab",
     "#e74c3c",
@@ -25,6 +23,8 @@ val STUNNINGPIE = listOf(
     "#57167E",
     "#2B0B3F",
     "#353535",
+    "#ff6361",
+    "#ffa600",
     "#FF6384", // Light Red
     "#36A2EB", // Light Blue
     "#FFCE56", // Light Yellow

@@ -30,9 +30,15 @@ class PieSliceController {
     fun makePieChart(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
-            val maker = PieSliceMaker()
             val slices = Json.decodeFromString<PieSlices>(contents)
-            val svg = maker.makePie(slices)
+            var svg = ""
+            if(!slices.display.donut) {
+                val maker = PieSliceMaker()
+                svg = maker.makePie(slices)
+            } else {
+                val maker = DonutMaker()
+                svg = maker.makeDonut(slices)
+            }
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
