@@ -9,7 +9,7 @@ class PieMaker {
 
 
     fun makePies(pies: Pies) : String {
-        val width = pies.pies.size * 36
+        val width = pies.pies.size * 36 + 20
         val sb = StringBuilder()
         sb.append(makeHead(width, pies))
         sb.append("<defs>")
@@ -43,13 +43,16 @@ class PieMaker {
 
     private fun tail() = """</svg></svg>"""
     private fun makePieSvg(pie: Pie, display: PieDisplay) : String {
-
+        var fill = "#fcfcfc"
+        if(display.useDark) {
+            fill = "none"
+        }
         //language=svg
         return """
-        <svg width="36" height="36"  style="display: block;margin: 10px auto; max-width: 80%; max-height: 250px;">
-        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: none;stroke: ${display.baseColor};stroke-width: 3.8; filter: url(#Bevel);"
+        <svg class="shadowed" width="36" height="36"  style="display: block;margin: 10px auto; max-width: 80%; max-height: 250px;">
+        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="fill: ${fill};stroke: ${display.baseColor};stroke-width: 1;"
         />
-        <path stroke-dasharray="${pie.percent}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="${display.outlineColor}" style="fill: none;stroke-width: 2.8; stroke-linecap: round; animation: progress 1s ease-out forwards; filter: url(#Bevel3);"
+        <path stroke-dasharray="${pie.percent}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke="${display.outlineColor}" style="fill: none;stroke-width: 1.2; stroke-linecap: round; animation: progress 1s ease-out forwards;"
         />
         <text x="18" y="20.35" style="font-family: Arial, Helvetica,sans-serif;font-size: 7px;text-anchor: middle; fill: ${display.outlineColor};">${pie.percent}%</text>
     </svg>
@@ -78,23 +81,13 @@ class PieMaker {
 
     private fun filters() =
          """
-            <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-                <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
-                    <fePointLight x="-5000" y="-10000" z="20000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
-            </filter>
-            <filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="blur"/>
-                <feSpecularLighting in="blur" surfaceScale="10" specularConstant="3.5" specularExponent="10" result="specOut" lighting-color="#ffffff">
-                    <fePointLight x="-5000" y="-10000" z="0000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>
-            </filter>
-        """.trimIndent()
+             <style>
+                .shadowed {
+                    -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                }
+            </style>
+         """.trimIndent()
 
 }
 
