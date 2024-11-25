@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.ToolTip
 import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
@@ -14,6 +15,9 @@ class DonutMaker : PieSliceMaker(){
         val sb= StringBuffer()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
+        sb.append("<g transform=\"translate(4,20)\">")
+        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("</g>")
         val donuts = pieSlices.toDonutSlices()
         sb.append(createDonutCommands(donuts))
         sb.append(addLegend(donuts))
