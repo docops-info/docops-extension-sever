@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.gallery
 
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import org.springframework.context.ApplicationContext
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -46,7 +47,7 @@ class GalleryController (private val applicationContext: ApplicationContext){
             val json =  applicationContext.getResource("classpath:gallery/$type/$name")
             //language=html
             return ResponseEntity("""<div>
-                    <pre><code id="dataView">${json.getContentAsString(Charset.defaultCharset())}</code></pre>
+                    <pre><code id="dataView">${json.getContentAsString(Charset.defaultCharset()).escapeXml()}</code></pre>
                 
                 </div>
                 <script>
