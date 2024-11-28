@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.gallery
 
-import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.ApplicationContext
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -20,26 +19,31 @@ class GalleryController (private val applicationContext: ApplicationContext){
         model.addAttribute("imageUrlGenerator", ImageUrlGenerator())
         return "chart/gallery"
     }
+    @GetMapping("/badge/gallery.html")
+    fun badgeGallery(model: Model): String {
+        model.addAttribute("imageUrlGenerator", ImageUrlGenerator())
+        return "badge/gallery"
+    }
 
     @GetMapping("/galleryItem.html")
-    fun galleryItem(@RequestParam("name") name: String, @RequestParam("kind") kind: String, response: HttpServletResponse) {
+    fun galleryItem(@RequestParam("name") name: String, @RequestParam("kind") kind: String, @RequestParam("type") type: String): ResponseEntity<String> {
         val imageUrlGenerator = ImageUrlGenerator(name)
         val obj = """
-            <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/$name.json", kind)}">
-                <img src="${imageUrlGenerator.getUrl("chart/$name.json", kind)}"/>
+            <object type="image/svg+xml" data="${imageUrlGenerator.getUrl(name= "$type/$name", kind = kind)}">
+                <img src="${imageUrlGenerator.getUrl(name="$type/$name", kind)}"/>
             </object>
             <div id="json-target" hx-swap-oob="true"></div>
-            <a hx-swap-oob="true" id="targetJsonView" href="#" data-hx-get="galleryJsonView.html?name=${name}" data-hx-target="#json-target">View JSON</a>
+            <a hx-swap-oob="true" id="targetJsonView" href="#" data-hx-get="galleryJsonView.html?name=${name}&type=$type" data-hx-target="#json-target">View JSON</a>
         """.trimIndent()
-        response.outputStream.write(obj.toByteArray())
+        return ResponseEntity(obj, HttpStatus.OK)
     }
 
     @GetMapping("/galleryJsonView.html", produces = [MediaType.TEXT_HTML_VALUE])
-    fun jsonView(@RequestParam(name = "name", required = true) name: String): ResponseEntity<String> {
+    fun jsonView(@RequestParam(name = "name", required = true) name: String, @RequestParam("type") type: String): ResponseEntity<String> {
         try {
             val headers = HttpHeaders()
             headers.set("HX-Trigger", """{"button-click": {"element": "$name"}}""")
-            val json =  applicationContext.getResource("classpath:gallery/chart/$name.json")
+            val json =  applicationContext.getResource("classpath:gallery/$type/$name")
             //language=html
             return ResponseEntity("""<div>
                     <pre><code id="dataView">${json.getContentAsString(Charset.defaultCharset())}</code></pre>

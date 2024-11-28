@@ -63,8 +63,8 @@ class DocOpsBadgeGenerator {
             var messageLink = message
             badge.url?.let {
                 if(it.isNotEmpty() && !badge.isPdf) {
-                    labelLink = """<a href='${badge.url}'>$label</a>"""
-                    messageLink = """<a href='${badge.url}'>$message</a>"""
+                    labelLink = """<a href='${badge.url}' target='_blank'>$label</a>"""
+                    messageLink = """<a href='${badge.url}' target='_blank'>$message</a>"""
                 }
             }
 
@@ -272,8 +272,8 @@ class DocOpsBadgeGenerator {
         var labelLink = label
         var messageLink = message
         if (href.isNotEmpty() && !isPdf) {
-            labelLink = """<a href='$href'>$label</a>"""
-            messageLink = """<a href='$href'>$message</a>"""
+            labelLink = """<a href='$href' target='_blank'>$label</a>"""
+            messageLink = """<a href='$href' target='_blank'>$message</a>"""
         }
         var startX = 50
         var textWidth = 0
