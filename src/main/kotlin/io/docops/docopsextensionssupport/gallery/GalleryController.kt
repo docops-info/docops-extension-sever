@@ -25,6 +25,11 @@ class GalleryController (private val applicationContext: ApplicationContext){
         model.addAttribute("imageUrlGenerator", ImageUrlGenerator())
         return "badge/gallery"
     }
+    @GetMapping("/buttons/gallery.html")
+    fun buttonsGallery(model: Model): String {
+        model.addAttribute("imageUrlGenerator", ImageUrlGenerator())
+        return "buttons/gallery"
+    }
 
     @GetMapping("/galleryItem.html")
     fun galleryItem(@RequestParam("name") name: String, @RequestParam("kind") kind: String, @RequestParam("type") type: String): ResponseEntity<String> {
