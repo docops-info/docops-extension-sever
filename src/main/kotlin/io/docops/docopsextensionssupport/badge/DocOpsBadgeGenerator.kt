@@ -421,6 +421,8 @@ class DocOpsBadgeGenerator {
                 logo = getLogoFromUrl(input)
                 logo = "data:image/svg+xml;base64," + Base64.getEncoder()
                     .encodeToString(logo.toByteArray())
+            } else {
+                logo = input
             }
         }
         return logo
