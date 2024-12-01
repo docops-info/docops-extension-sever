@@ -418,9 +418,7 @@ class DocOpsBadgeGenerator {
                         .encodeToString(src.toByteArray())
                 }
             } else if (input.startsWith("http")) {
-                logo = getLogoFromUrl(input)
-                logo = "data:image/svg+xml;base64," + Base64.getEncoder()
-                    .encodeToString(logo.toByteArray())
+                logo = input
             } else {
                 logo = input
             }
