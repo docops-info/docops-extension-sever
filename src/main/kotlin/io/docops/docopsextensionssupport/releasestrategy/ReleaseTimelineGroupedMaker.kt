@@ -166,16 +166,19 @@ open class ReleaseTimelineGroupedMaker {
                 <style>
             #ID${id} .shadM {
                 fill: #6cadde;
-                filter: drop-shadow(0 2mm 1mm #6cadde);
+                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }
             #ID${id} .shadR {
                 fill: #C766A0;
-                filter: drop-shadow(0 2mm 1mm #C766A0);
+                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }
 
             #ID${id} .shadG {
                 fill: #136e33;
-                filter: drop-shadow(0 2mm 1mm #136e33);
+                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }
             #ID${id} .milestone {
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
