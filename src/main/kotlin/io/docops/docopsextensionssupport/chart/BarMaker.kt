@@ -121,7 +121,7 @@ class BarMaker {
     }
     private fun addTitle(bar: Bar): String {
         val center = bar.centerWidth()
-        return """<text x="$center" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor;text-anchor: middle; font-size: 24px;">${bar.title}</text>"""
+        return """<text x="$center" y="24" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor;text-anchor: middle; font-size: 24px;-webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); ">${bar.title}</text>"""
     }
     private fun addGrid(bar: Bar) : String
     {

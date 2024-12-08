@@ -109,7 +109,7 @@ class BarGroupMaker {
         return sb.toString()
     }
     private fun makeTitle(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}; fill: $fontColor;">${barGroup.title}</text>"""
+        return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}; fill: $fontColor;-webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); ">${barGroup.title}</text>"""
     }
     private fun makeXLabel(barGroup: BarGroup): String {
         return """<text x="${barGroup.calcWidth()/2}" y="536" style="${barGroup.display.xLabelStyle}; fill: $fontColor;" >${barGroup.xLabel}</text>"""
