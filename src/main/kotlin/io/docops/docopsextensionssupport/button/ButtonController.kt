@@ -94,7 +94,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
                 }
             }
             val buttons = Json.decodeFromString<Buttons>(newPayload)
-            buttons.useDark = true
+            buttons.useDark = false
             val buttonShape = buttons.createSVGShape()
             val imgSrc = buttonShape.drawShape("SVG")
             val div = """
@@ -138,7 +138,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
     fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
-                createResponse(buttons, true, "SVG")
+                createResponse(buttons, false, "SVG")
             }
             log.info("fromJsonToButton executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value
