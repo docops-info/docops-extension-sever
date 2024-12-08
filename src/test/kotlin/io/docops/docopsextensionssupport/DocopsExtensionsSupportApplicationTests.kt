@@ -19,6 +19,18 @@ class DocopsExtensionsSupportApplicationTests {
 
 }
 
+fun getPath(w: Int = 100, h: Int = 100, curvature: Double = 0.5): String {
+    val curveWidth = (w / 2) * (1 - curvature)
+    val curveHeight = (h / 2) * (1 - curvature)
+
+    return  """
+        M 0, ${h / 2}
+        C 0, $curveWidth $curveHeight, 0 ${w / 2}, 0
+        S $w $curveHeight $w ${h / 2}
+        ${w - curveWidth}, ${h - 0} ${w / 2}, $h
+        0, ${w - curveHeight} 0, ${h / 2}
+    """.trimIndent()
+}
 fun main() {
     val L = mutableListOf(
         """<?xml version="1.0" encoding="UTF-8" standalone="no"?>""",
@@ -63,6 +75,6 @@ fun main() {
 
     File("gen/pienew.svg").writeText(L.joinToString(""))
 
-
+    println(getPath(100, 100, 0.5))
 }
 // Placeholder functions for Scribus functionalities
