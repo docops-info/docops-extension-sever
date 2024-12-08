@@ -144,6 +144,19 @@
             <groupId>io.docops</groupId>
             <artifactId>asciidoctorj-docops-panel</artifactId>
             <version>${asciidoctorj-docops-panel.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.16.1</version>
         </dependency>
 
         <dependency>
@@ -256,7 +269,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.3.6</version>
+                <version>3.4.0</version>
                 <configuration>
                     <mainClass>io.docops.docopsextensionssupport.DocopsExtensionsSupportApplicationKt</mainClass>
                     <requiresUnpack>
