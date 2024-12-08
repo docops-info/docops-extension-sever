@@ -8,62 +8,36 @@
             <label for="content" class="mb-2">JSON</label>
             <textarea id="content" name="content" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" cols="90" rows="20" placeholder="" data-hx-put="api/bar/barchart" data-hx-target="#contentBox">
 {
-  "title": "Show Me the Money",
-  "yLabel": "Number of Sales",
-  "xLabel": "Month",
-
-      "series": [
-        {
-          "label": "Jan",
-          "value": 5000
-        },
-        {
-          "label": "Feb",
-          "value": 7000
-        },
-        {
-          "label": "Mar",
-          "value": 4000
-        },
-        {
-          "label": "Apr",
-          "value": 15000
-        },
-        {
-          "label": "May",
-          "value": 5700
-        },
-        {
-          "label": "Jun",
-          "value": 6400
-        },
-        {
-          "label": "Jul",
-          "value": 8322
-        },
-        {
-          "label": "Aug",
-          "value": 4400
-        },
-        {
-          "label": "Sept",
-          "value": 4520
-        },
-        {
-          "label": "Oct",
-          "value": 3200
-        },
-        {
-          "label": "Nov",
-          "value": 5025
-        },
-        {
-          "label": "Dec",
-          "value": 6000
-        }
-      ],
+  "title": "Favorite Movie Types",
+  "yLabel": "People",
+  "xLabel": "Movie Type",
+  "series": [
+    {
+      "label": "Comedy",
+      "value": 1300000
+    },
+    {
+      "label": "Action",
+      "value": 700000
+    },
+    {
+      "label": "Romance",
+      "value": 120000
+    },
+    {
+      "label": "Drama",
+      "value": 500000
+    },
+    {
+      "label": "SciFi",
+      "value": 180000
+    }
+  ],
   "display": {
-"baseColor": "#008170", "vBar": true, "sorted": true, "useDark": true
+    "baseColor": "#B43F3F",
+    "vBar": true,
+    "useDark": false,
+    "sorted": false
   }
 }
 

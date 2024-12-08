@@ -44,7 +44,7 @@
     }
   ],
     "display": {
-          "itemColumnColor": "#C68FE6"
+          "itemColumnColor": "#e0f0ea"
     }
 }
         </textarea>
