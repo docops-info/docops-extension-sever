@@ -63,10 +63,16 @@ fun randomColor(): Int {
 }
 
 fun hexToRgb(hex: String): Map<String, Int> {
-    val r = hex.substring(1, 3).toInt(16)
-    val g = hex.substring(3, 5).toInt(16)
-    val b = hex.substring(5, 7).toInt(16)
-    return mapOf("r" to r, "g" to g, "b" to b)
+    try {
+        val r = hex.substring(1, 3).toInt(16)
+        val g = hex.substring(3, 5).toInt(16)
+        val b = hex.substring(5, 7).toInt(16)
+        return mapOf("r" to r, "g" to g, "b" to b)
+    } catch (e: Exception) {
+        println(hex)
+        throw e
+    }
+
 }
 
 fun rgbToHex(r: Int, g: Int, b: Int): String {
