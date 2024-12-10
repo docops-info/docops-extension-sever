@@ -29,6 +29,9 @@
         <a href="#" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=LARGE" data-hx-target="#buttonTarget"><i class="fad fa-square text-xs mr-2"></i> Large</a>
     </li>
     <li class="me-2">
+        <a href="#" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=HEX" data-hx-target="#buttonTarget"><i class="fad fa-square text-xs mr-2"></i> Honeycomb (Hex)</a>
+    </li>
+    <li class="me-2">
         <a href="#" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="button/fromJson.html?type=PILL" data-hx-target="#buttonTarget"><i class="fad fa-pills text-xs mr-2"></i> Pill</a>
     </li>
     <li class="me-2">
