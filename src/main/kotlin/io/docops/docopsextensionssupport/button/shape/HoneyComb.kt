@@ -97,12 +97,12 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             filter = ""
             fill = "url(#btn_${button.id})"
         }
-        var btnLook = """fill="$fill" class="raise btn_${button.id}_cls" $filter"""
+        var btnLook = """fill="$fill" $filter"""
+
         return """
         <g transform="translate($x,$y)" cursor="pointer">
         <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-        <polygon class="bar shadowed" $btnLook
-             points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
+        <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
         <text x="145" y="$startTextY" text-anchor="middle" style="fill: #111111; font-size: 24px;font-family: Arial,Helvetica, sans-serif;">$spans</text>
         </a>
         </g>
