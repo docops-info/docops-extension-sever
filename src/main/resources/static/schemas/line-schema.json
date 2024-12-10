@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DocOps Line Chart Schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "points": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": ["label", "y"]
+            }
+          }
+        },
+        "required": ["label", "points"]
+      }
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "smoothLines": {
+          "type": "boolean"
+        },
+        "backgroundColor": {
+          "type": "string"
+        }
+      },
+      "required": []
+    }
+  },
+  "required": ["title", "points"]
+}

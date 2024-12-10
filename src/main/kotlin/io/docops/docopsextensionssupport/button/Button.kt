@@ -118,7 +118,8 @@ enum class ButtonType {
     ROUND,
     CIRCLE,
     SLIM,
-    OVAL
+    OVAL,
+    HEX
 }
 
 /**
@@ -251,7 +252,9 @@ class Buttons(
             theme = Json.decodeFromString<ButtonDisplay>(content)
         }
         theme?.let {
-            it.useDark = useDark
+            if(!it.useDark) {
+                it.useDark = useDark
+            }
         }
         buttons.forEach {
             val color = determineButtonColor(it)
@@ -377,6 +380,9 @@ class Buttons(
             }
             ButtonType.OVAL -> {
                 Oval(this)
+            }
+            ButtonType.HEX -> {
+                HoneyComb(this)
             }
         }
         return creator

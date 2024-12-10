@@ -126,6 +126,18 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${myBox()}
             ${keyFrame()}
             ${linkText()}
+            .bar:hover {
+                filter: grayscale(100%) sepia(100%);
+            }
+
+            .bar:hover {
+                filter: grayscale(100%) sepia(100%);
+            }
+
+            .shadowed {
+                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+            }
             </style>
         """.trimIndent()
         if(isPdf) {

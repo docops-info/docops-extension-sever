@@ -72,7 +72,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
     }
 
-    protected fun toRows(): MutableList<MutableList<Button>> {
+    protected open fun toRows(): MutableList<MutableList<Button>> {
         val rows = mutableListOf<MutableList<Button>>()
         var rowArray = mutableListOf<Button>()
         rows.add(rowArray)
