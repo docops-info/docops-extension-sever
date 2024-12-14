@@ -13,6 +13,6 @@ fun generateRectanglePathData(width: Float, height: Float, topLetRound:Float, to
 }
 
 fun main() {
-    val path = generateRectanglePathData(200f, 300f, 12f,12f,0f,0f)
+    val path = generateRectanglePathData(255f, 10f, 0f,5f,5f,0f)
     println(path)
 }

@@ -16,11 +16,14 @@
 
 package io.docops.docopsextensionssupport.support
 
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.accepted
 import org.springframework.web.bind.annotation.*
 import java.awt.Color
+import java.util.Base64
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -36,6 +39,38 @@ class ColorToGradientController {
         return accepted().body(gradientFromColor(color))
     }
 
+    @GetMapping("/grad")
+    fun gradList(): ResponseEntity<String> {
+        val l = STUNNINGPIE.chunked(10)
+
+        val h = 10 * 30 + 50
+        val w = 50 * l.size
+        val sb = StringBuilder()
+        val grads = StringBuilder()
+        l.forEachIndexed { index, s ->
+            s.forEachIndexed { i, color ->
+                val gradient = SVGColor(color, "grad${index}_$i")
+                val fontColor = determineTextColor(color)
+                grads.append(gradient.linearGradient)
+                sb.append("""<g transform="translate(${index*50},${i*30})">""")
+                sb.append("""<rect x="0" y="0" width="50" height="30" fill="url(#grad${index}_$i)" onclick="copyTextToClipboard('$color')"/>""")
+                sb.append("""<text x="25" y="15" text-anchor="middle" style="font-size:8px; font-family: Arial, Helvetica;fill:$fontColor;">$color</text>""")
+                sb.append("</g>")
+            }
+        }
+        val str = """
+            <svg xmlns="http://www.w3.org/2000/svg" width="$w.0" height="$h.0" viewBox="0 0 $w.0 $h.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="b2298d05-51bd-42ac-a3f1-35407b972f5d" zoomAndPan="magnify" preserveAspectRatio="none">
+                 <defs>$grads</defs>
+                 $sb
+            </svg>
+        """.trimIndent()
+       /* val b64 =Base64.getEncoder().encodeToString(str.toByteArray())
+        val html = """
+              $str
+        """.trimIndent()*/
+    return ResponseEntity.ok(joinXmlLines( str))
+
+    }
     @PutMapping("/grad")
     fun putColors(httpServletRequest: HttpServletRequest): ResponseEntity<String> {
         val color = httpServletRequest.getParameter("gradColor")
