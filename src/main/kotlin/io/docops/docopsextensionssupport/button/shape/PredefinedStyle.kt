@@ -23,7 +23,7 @@ fun glass () = """.glass:after,.glass:before{content:"";display:block;position:a
 
 fun raise (strokeColor: String = "gold", opacity: Float = 0.9f) = """.raise {pointer-events: bounding-box;opacity: 1;filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}.raise:hover {stroke: ${strokeColor};stroke-width: 3px; opacity: ${opacity};}"""
 
-fun baseCard() = """.basecard { -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); } .basecard:hover { cursor: pointer; stroke-width: 3; stroke-dasharray: 8; }"""
+fun baseCard() = """.basecard { -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3)); } .basecard:hover { cursor: pointer; filter: grayscale(100%) sepia(100%); }"""
 
 fun linkText() = """ .linkText { fill: #000000; font-size: 15px; font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: normal; cursor: pointer; } .linkText:hover { fill: #ea0606; border: #d2ddec solid; }
     .linkTextDark { fill: #fcfcfc; font-size: 15px; font-family: "Inter var", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: normal; cursor: pointer; } .linkText:hover { fill: #ea0606; border: #d2ddec solid; }
