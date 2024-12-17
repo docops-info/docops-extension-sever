@@ -132,3 +132,5 @@ class SVGColor(val color: String, val id: String = UUID.randomUUID().toString())
     fun original() = color
 
 }
+
+

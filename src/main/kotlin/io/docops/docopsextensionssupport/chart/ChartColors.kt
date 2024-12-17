@@ -1,9 +1,9 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.support.SVGColor
+
 class ChartColors {
 }
-
-
 
 
 val STUNNINGPIE = listOf(
@@ -15,20 +15,20 @@ val STUNNINGPIE = listOf(
     "#54bebe", "#76c8c8", "#98d1d1", "#badbdb",
     "#dedad2", "#e4bcad", "#df979e", "#d7658b",
     "#c80064", "#cc241d", "#98971a", "#d79921",
-    "#458588", "#b16286", "#689d6a", "#a87c0a",
-    "#928374", "#fb4934", "#b8bb26", "#fabd2f",
+    "#a87c0a",
+    "#928374", "#fb4934", "#b8bb26",
     "#1d2021", "#393b3a", "#a5989b", "#565e65",
     "#d65d0e", "#e7c547", "#7fb3d5", "#7d9029",
     "#b392f0", "#548dd4", "#ff6361", "#5998de",
-    "#fbf1c7", "#cc241d", "#458588", "#b16286",
-    "#458588", "#b16286", "#076678", "#8f3f71",
-    "#689d6a", "#fb4934", "#b8bb26", "#fabd2f",
-    "#427b58", "#9d0006", "#a5989b", "#af3a03",
+    "#fbf1c7", "#458588",
+    "#b16286", "#076678", "#8f3f71",
+    "#689d6a",   "#fabd2f",
+    "#427b58", "#9d0006",  "#af3a03",
     "#ffa600", "#a991f7", "#c837ab", "#e74c3c",
      "#F7B7A3", "#EA5F89", "#e9c46a",
     "#01005E", "#22267B", "#28518A", "#04879C",
     "#f34141", "#fc2947", "#df1c41", "#cd3636",
-    "#003f5c", "#58508d", "#bc5090", "#ff6361",
+    "#003f5c", "#58508d", "#bc5090",
     "#e0f0ea", "#95adbe", "#574f7d", "#503a65",
     "#3c2a4d", "#f39c12","#FFF1C9",
     "#f6d860", "#37cdbe", "#3d4451",
@@ -41,3 +41,11 @@ val STUNNINGPIE = listOf(
     "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
     "#C9CBCF", "#2ECC71", "#E74C3C", "#3498DB"
 )
+
+fun chartColorAsSVGColor () : MutableList<SVGColor> {
+    val list = mutableListOf<SVGColor>()
+    STUNNINGPIE.forEachIndexed { index, it ->
+        list.add(SVGColor(it, "svgGradientColor_$index"))
+    }
+    return list
+}

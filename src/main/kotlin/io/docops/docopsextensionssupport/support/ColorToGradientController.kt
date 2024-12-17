@@ -41,7 +41,7 @@ class ColorToGradientController {
 
     @GetMapping("/grad")
     fun gradList(): ResponseEntity<String> {
-        val l = STUNNINGPIE.chunked(10)
+        val l = STUNNINGPIE.sortedBy { it.replace("#","").toInt(16) }.chunked(10)
 
         val h = 10 * 30 + 50
         val w = 50 * l.size
@@ -53,7 +53,7 @@ class ColorToGradientController {
                 val fontColor = determineTextColor(color)
                 grads.append(gradient.linearGradient)
                 sb.append("""<g transform="translate(${index*50},${i*30})">""")
-                sb.append("""<rect x="0" y="0" width="50" height="30" fill="url(#grad${index}_$i)" onclick="copyTextToClipboard('$color')"/>""")
+                sb.append("""<rect x="0" y="0" width="50" height="30" fill="url(#grad${index}_$i)"/>""")
                 sb.append("""<text x="25" y="15" text-anchor="middle" style="font-size:8px; font-family: Arial, Helvetica;fill:$fontColor;">$color</text>""")
                 sb.append("</g>")
             }
@@ -64,10 +64,6 @@ class ColorToGradientController {
                  $sb
             </svg>
         """.trimIndent()
-       /* val b64 =Base64.getEncoder().encodeToString(str.toByteArray())
-        val html = """
-              $str
-        """.trimIndent()*/
     return ResponseEntity.ok(joinXmlLines( str))
 
     }
