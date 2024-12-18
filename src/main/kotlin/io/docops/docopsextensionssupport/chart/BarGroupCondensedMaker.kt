@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.textWidth
@@ -24,6 +25,7 @@ class BarGroupCondensedMaker {
 
         height = h
         sb.append(makeDefs(barGroup))
+        sb.append("<g transform='scale(${barGroup.display.scale})'>")
         sb.append("""<rect width="100%" height="100%" fill="${theme.background}"/>""")
         sb.append("""<text x="${width/2}" text-anchor="middle" y="16" style="font-size: 16px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.title}</text>""")
         sb.append(addTickBars(h, w, barGroup))
@@ -39,8 +41,9 @@ class BarGroupCondensedMaker {
         }
         sb.append("</g>")
         sb.append(addLegend(h-BOTTOM_BUFFER + 10f, barGroup))
+        sb.append("</g>")
         sb.append(end())
-        return sb.toString()
+        return joinXmlLines(sb.toString())
     }
     private fun addGroup(barGroup: BarGroup, added: Group): String {
         val sb = StringBuilder()
@@ -55,8 +58,8 @@ class BarGroupCondensedMaker {
             //println("${series.value} -> $per -> ${500-per}")
             val path = generateRectanglePathData(per.toFloat(), 10f,0.0f, 6.0f, 5f, 0.0f).replace("\n", "")
             sb.append("""
-           <g class="bar shadow" transform="translate(10, $startY)">
-                <path d="$path" fill="$color"/>
+           <g transform="translate(10, $startY)">
+                <path d="$path" fill="$color" class="bar shadowed"/>
                 <text x="${per+5}" y="8" style="font-size: 8px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(series.value)}</text>
             </g>
             """.trimIndent())
@@ -79,9 +82,24 @@ class BarGroupCondensedMaker {
         val defs = StringBuilder()
         val clrs = chartColorAsSVGColor()
         defs.append("<defs>")
-        clrs.forEachIndexed { index, s ->
-            defs.append(s.linearGradient)
+        defs.append("""
+            <linearGradient id="condensedLite" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="#ffffff"/>
+            <stop class="stop2" offset="50%" stop-color="#F8FAFC"/>
+            <stop class="stop3" offset="100%" stop-color="#c6c8c9"/>
+        </linearGradient>
+            <linearGradient id="condensedDark" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop class="stop1" offset="0%" stop-color="#37084b"/>
+            <stop class="stop2" offset="50%" stop-color="#2E073F"/>
+            <stop class="stop3" offset="100%" stop-color="#240532"/>
+        </linearGradient>""")
+        val sz = barGroup.maxGroup().series.size
+        for(i in 0 until sz) {
+            defs.append(clrs[i].linearGradient)
         }
+        /*clrs.forEachIndexed { index, s ->
+            defs.append(s.linearGradient)
+        }*/
         defs.append("<style type=\"text/css\">")
         defs.append("""
             .shadowed {
@@ -101,7 +119,7 @@ class BarGroupCondensedMaker {
         val tickBar = barGroup.maxValue() / 3
         val sb = StringBuilder()
         sb.append("""<line x1="109" x2="109" y1="30" y2="$bottom" class="light-shadow" stroke-width="2" stroke="${theme.lineColor}" />""")
-        for(i in 1..10 step 1) {
+        for(i in 1..9 step 1) {
             val spot = barGroup.scaleUp(tickBar * i) + 108
             sb.append("""
                 <line x1="$spot" x2="$spot" y1="30" y2="$bottom" class="light-shadow" stroke-width="1" stroke="${theme.lineColor}" />
@@ -158,7 +176,7 @@ class BarGroupCondensedMaker {
 
         return """
      <g>
-        <text x="100" y="25" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:10px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+        <text x="107" y="25" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:10px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
         <text x="112" y="25" text-anchor="start" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:10px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
     </g>
         """.trimIndent()
@@ -167,7 +185,7 @@ class BarGroupCondensedMaker {
 
 open class BarTheme(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#111111", val titleColor: String = "#000000", val id: String = UUID.randomUUID().toString())
 
-class BarThemeLite(background: String = "#F8FAFC", lineColor: String="#E4D0D0", textColor: String="#000000", titleColor: String="#000000"): BarTheme(background, lineColor, textColor, titleColor)
-class BarThemeDark(background: String = "#1f2937",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): BarTheme(background, lineColor, textColor, titleColor)
+class BarThemeLite(background: String = "url(#condensedLite)", lineColor: String="#E4D0D0", textColor: String="#000000", titleColor: String="#000000"): BarTheme(background, lineColor, textColor, titleColor)
+class BarThemeDark(background: String = "url(#condensedDark)",  lineColor: String = "#fcfcfc",  textColor: String = "#ABB2BF", titleColor: String = "#FCFCFC"): BarTheme(background, lineColor, textColor, titleColor)
 
 
