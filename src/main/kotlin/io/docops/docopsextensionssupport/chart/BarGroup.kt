@@ -25,7 +25,8 @@ class BarGroupDisplay(
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val yLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val lineColor: String = "#FFBB5C",
-    val vBar : Boolean = true,
+    val vBar : Boolean = false,
+    val condensed: Boolean = false,
     val useDark : Boolean = false,
     val scale: Double = 1.0
 )
@@ -42,6 +43,8 @@ fun BarGroup.calcWidth(): Int {
     }
     return sum
 }
+
+
 
 fun BarGroup.calcHeight(): Int {
     val count = this.groups.sumOf { it.series.size }
@@ -72,15 +75,21 @@ fun BarGroup.scaleUp(item: Double): Double {
     return (450 * item) / m
 }
 
+fun BarGroup.maxValue(): Double {
+    val m = groups.maxOf { it.series.maxOf { it.value } }
+    return m / 3
+}
 fun BarGroup.valueFmt(value: Double): String {
-    var numberString : String = ""
+    var numberString = ""
+
     numberString = when {
         abs(value / 1000000) > 1 -> {
-            (value / 1000000).toString() + "m"
+            String.format("%.1f", (value / 1000000)) + "m"
+
 
         }
         abs(value / 1000) > 1 -> {
-            (value / 1000).toString() + "k"
+            String.format("%.1f", (value / 1000)) + "k"
 
         }
         else -> {

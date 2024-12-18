@@ -225,6 +225,10 @@ class BarGroupMaker {
         val vGroupBar = VGroupBar()
         return vGroupBar.makeVerticalBar(group)
     }
+    fun makeCondensed(group: BarGroup): String {
+        val vGroupBar = BarGroupCondensedMaker()
+        return vGroupBar.makeBar(group)
+    }
 }
 
 
@@ -291,7 +295,7 @@ fun main() {
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
-    val svg = BarGroupMaker().makeVGroupBar(barGroupTestData)
+    val svg = BarGroupCondensedMaker().makeBar(barGroupTestData)
     val outfile2 = File("gen/groupbar.svg")
     outfile2.writeBytes(svg.toByteArray())
 }
