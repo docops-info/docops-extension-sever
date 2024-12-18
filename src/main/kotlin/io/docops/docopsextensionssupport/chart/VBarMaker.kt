@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.support.generateRectanglePathData
 
 class VBarMaker {
     private var fontColor = ""
@@ -25,29 +26,31 @@ class VBarMaker {
 
     private fun addBars(bar: Bar) : String {
         var sb = StringBuilder()
-        var startY = 80
+        var startY = 60
         var anchor = "start"
-        var fill = "#FFF6F6"
+        var fill = "#C1D8C3"
         var fontDisplayColor = "#111111"
+        fill = "url(#backGrad_${bar.display.id})"
+
         if(bar.display.useDark) {
             fontDisplayColor = "#fcfcfc"
-            fill = "url(#backGrad_${bar.display.id})"
         }
         bar.series.forEach {
             val per = bar.scaleUp(it.value)
             if(per < 41) {
                 anchor = "start"
             }
+            val path = generateRectanglePathData(per.toFloat(), 10f,0.0f, 6.0f, 5f, 0.0f).replace("\n", "")
             sb.append("""
        <g transform="translate(245, $startY)">
-        <rect class="glass bar shadowed" x="0" height="40" width="$per" stroke="url(#backGrad_${bar.display.id})" stroke-width="3" fill="$fill"/>
-        <text x="-10" y="24" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.label?.escapeXml()}
+       <path d="$path" fill="$fill" class="bar shadowed" stroke="url(#backGrad_${bar.display.id})" stroke-width="1"/>
+        <text x="-10" y="8" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${it.label?.escapeXml()}
         </text>
-        <text x="${per + 10}" y="24" text-anchor="$anchor" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${bar.valueFmt(it.value)}
+        <text x="${per + 10}" y="8" text-anchor="$anchor" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${bar.valueFmt(it.value)}
         </text>
     </g>
             """.trimIndent())
-            startY += 45
+            startY += 15
 
         }
         return sb.toString()
@@ -60,14 +63,14 @@ class VBarMaker {
         }
         return """
      <g>
-        <text x="235" y="75" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.xLabel?.escapeXml()}</text>
-        <text x="245" y="75" text-anchor="start" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.yLabel?.escapeXml()}</text>
+        <text x="235" y="45" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.xLabel?.escapeXml()}</text>
+        <text x="245" y="45" text-anchor="start" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${bar.yLabel?.escapeXml()}</text>
     </g>
         """.trimIndent()
     }
 
     private fun makeLineSeparator(bar: Bar) : String{
-        return "<line x1=\"240\" x2=\"240\" y1=\"60\" y2=\"$height\" stroke=\"${bar.display.baseColor}\"/>"
+        return "<line x1=\"240\" x2=\"240\" y1=\"30\" y2=\"$height\" stroke=\"${bar.display.baseColor}\"/>"
     }
 
     private fun makeBackground(bar: Bar): String {
@@ -83,7 +86,7 @@ class VBarMaker {
 
     private fun head(bar: Bar): String {
         val numOfBars = bar.series.size
-        val heightAdjustment = (numOfBars * 40) + (numOfBars * 5) + 160
+        val heightAdjustment = (numOfBars * 10) + (numOfBars * 5) + 100
         height = heightAdjustment
         val finalHeight = height * bar.display.scale
         return """
@@ -98,8 +101,8 @@ class VBarMaker {
     private fun makeTitle(bar: Bar): String {
         return """
         <g>
-        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_${bar.display.id})"/>
-        <text x="400" y="40" text-anchor="middle" style="fill: $fontColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${bar.title.escapeXml()}
+        <rect height="24" x="0" y="0" width="100%" fill="url(#backGrad_${bar.display.id})"/>
+        <text x="400" y="20" text-anchor="middle" style="fill: $fontColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${bar.title.escapeXml()}
         </text>
     </g>
         """.trimIndent()
