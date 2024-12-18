@@ -97,9 +97,7 @@ class BarGroupCondensedMaker {
         for(i in 0 until sz) {
             defs.append(clrs[i].linearGradient)
         }
-        /*clrs.forEachIndexed { index, s ->
-            defs.append(s.linearGradient)
-        }*/
+
         defs.append("<style type=\"text/css\">")
         defs.append("""
             .shadowed {

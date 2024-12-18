@@ -11,12 +11,12 @@ fun PieSlice.displayColor(index: Int) : String {
     return if(null != itemDisplay?.color) {
         itemDisplay.color
     } else {
-        "url(#defColor_$index)"
+        "url(#svgGradientColor_$index)"
     }
 }
 
 @Serializable
-data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false)
+data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f)
 
 @Serializable
 data class SliceItemDisplay(val id: String = UUID.randomUUID().toString(), val color: String?)
@@ -55,7 +55,7 @@ fun PieSlice.toDonutSlice(sum: Double, idx: Int): DonutSlice {
     return DonutSlice(id = id,
         percent = (amount / sum) * 100,
         amount = amount,
-        color = "url(#defColor_$idx)",
+        color = "url(#svgGradientColor_$idx)",
         label = label
         )
 }

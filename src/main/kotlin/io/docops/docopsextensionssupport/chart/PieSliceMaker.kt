@@ -23,8 +23,9 @@ open class PieSliceMaker {
         val sb = StringBuilder()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
+        sb.append("<g transform='scale(${pieSlices.display.scale})'>")
         sb.append("<g transform=\"translate(4,20)\">")
-        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,0)">""")
         val paths = StringBuilder()
         val labels = StringBuilder()
@@ -32,6 +33,7 @@ open class PieSliceMaker {
         sb.append(paths)
         sb.append(labels)
         //sb.append(makePaths(pieSlices))
+        sb.append("</g>")
         sb.append("</g>")
         sb.append("</g>")
         //sb.append(makeLabels(pieSlices))
@@ -138,7 +140,7 @@ open class PieSliceMaker {
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="$h" width="420" viewBox='0 0 420.0 $h'>
+            <svg xmlns="http://www.w3.org/2000/svg" height="${h * pieSlices.display.scale}" width="${420 * pieSlices.display.scale}" viewBox='0 0 ${420.0 * pieSlices.display.scale} ${h * pieSlices.display.scale}'>
           """
     }
     protected fun endSvg() = "</svg>"
@@ -173,10 +175,12 @@ open class PieSliceMaker {
     }
     protected fun makeDefs(pieSlices: PieSlices) : String {
         val defGrad = StringBuilder()
-        STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = SVGColor(item, "defColor_$idx")
-            defGrad.append(gradient.linearGradient)
+        val clrs = chartColorAsSVGColor()
+        val sz = pieSlices.slices.size
+        for(i in 0 until sz) {
+            defGrad.append(clrs[i].linearGradient)
         }
+
         //language=svg
         return """
             <defs>

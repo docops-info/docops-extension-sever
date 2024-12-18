@@ -15,12 +15,15 @@ class DonutMaker : PieSliceMaker(){
         val sb= StringBuffer()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
+        sb.append("<g transform='scale(${pieSlices.display.scale})'>")
         sb.append("<g transform=\"translate(4,20)\">")
-        sb.append("""<text x="${width/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
         sb.append("</g>")
         val donuts = pieSlices.toDonutSlices()
         sb.append(createDonutCommands(donuts))
-        sb.append(addLegend(donuts))
+        sb.append(addLegend(donuts, pieSlices))
+        sb.append("</g>")
+
         sb.append(endSvg())
         return sb.toString()
     }
@@ -41,7 +44,7 @@ class DonutMaker : PieSliceMaker(){
             sb.append("""
                 <path d="${it.commands}" fill="${it.color}" transform="rotate(${it.offset})" class="pie" style="transform-origin: center; cursor: pointer;" onmouseover="showText('text_${it.id}')" onmouseout="hideText('text_${it.id}')"/>
                 <g transform="translate(150,175)" visibility="hidden" id="text_${it.id}">
-                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="url(#defColor_$index)" stroke="${cMap.darker()}" stroke-width="3" opacity="0.8" /> 
+                <path d="${toolTipGen.getTopToolTip(ToolTipConfig(width = tipWidth, height = 50))}" fill="url(#svgGradientColor_$index)" stroke="${cMap.darker()}" stroke-width="3" opacity="0.8" /> 
                 <text x="0" y="-50" text-anchor="middle" style="fill:#111111; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${it.label}</text>
                 <text x="0" y="-35" text-anchor="middle" style="fill:#111111; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${it.amount}</text>
                 <text x="0" y="-20" text-anchor="middle" style="fill:#111111; font-size:12px;font-family: Arial, Helvetica, sans-serif;">${slices[index].valueFmt(it.percent)} %</text>
@@ -53,13 +56,13 @@ class DonutMaker : PieSliceMaker(){
         return sb
     }
 
-    private fun addLegend(donuts: MutableList<DonutSlice>): StringBuilder {
+    private fun addLegend(donuts: MutableList<DonutSlice>, pieSlices: PieSlices): StringBuilder {
         val sb = StringBuilder()
-        sb.append("<g transform='translate(210,460)'>")
+        sb.append("<g transform='translate(${210 * pieSlices.display.scale},${460 * pieSlices.display.scale})'>")
         sb.append("""<text text-anchor="middle" x="0" y="20" style="font-size: 10px; font-family: Arial, Helvetica, sans-serif; cursor: pointer;">""")
         donuts.forEachIndexed { index, donutSlice ->
 
-            sb.append("""<tspan x="0" dy="14" fill="url(#defColor_$index)" onmouseover="showText('text_${donutSlice.id}')" onmouseout="hideText('text_${donutSlice.id}')">${donutSlice.label}(${donutSlice.valueFmt(donutSlice.amount)}) | ${donutSlice.valueFmt(donutSlice.percent)}%</tspan>""")
+            sb.append("""<tspan x="0" dy="14" fill="url(#svgGradientColor_$index)" onmouseover="showText('text_${donutSlice.id}')" onmouseout="hideText('text_${donutSlice.id}')">${donutSlice.label}(${donutSlice.valueFmt(donutSlice.amount)}) | ${donutSlice.valueFmt(donutSlice.percent)}%</tspan>""")
         }
         sb.append("</text>")
         sb.append("</g>")
