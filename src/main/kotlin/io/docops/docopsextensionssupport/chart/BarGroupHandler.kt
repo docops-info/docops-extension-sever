@@ -17,6 +17,8 @@ class BarGroupHandler {
         val bar = Json.decodeFromString<BarGroup>(data)
         val svg = if(bar.display.vBar) {
             maker.makeVGroupBar(bar)
+        }else if (bar.display.condensed) {
+            maker.makeCondensed(bar)
         }
         else {
              maker.makeBar(bar)
