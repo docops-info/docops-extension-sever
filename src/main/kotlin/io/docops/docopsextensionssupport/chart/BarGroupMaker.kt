@@ -45,7 +45,7 @@ class BarGroupMaker {
         sb.append("""<rect x="${d-10}" y="45" width="$w" height="$h"  fill="#cccccc"/> """)
         var y = 52
         distinct.forEachIndexed { index, item ->
-            val color = "url(#defColor_$index)"
+            val color = "url(#svgGradientColor_$index)"
             sb.append("""<rect x="${d-5}" y="$y" width="8" height="8" fill="$color"/>""")
             y+=10
         }
@@ -62,7 +62,7 @@ class BarGroupMaker {
         var counter = startX
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
-            val color = "url(#defColor_$index)"
+            val color = "url(#svgGradientColor_$index)"
            //println("${series.value} -> $per -> ${500-per}")
             sb.append("""<rect class="bar" x="$counter" y="${498 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
             if(series.value > 0) {
@@ -132,10 +132,12 @@ class BarGroupMaker {
 
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
-        STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = SVGColor(item, "defColor_$idx")
-            defGrad.append(gradient.linearGradient)
+        val clrs = chartColorAsSVGColor()
+        val sz = barGroup.maxGroup().series.size
+        for(i in 0 until sz) {
+            defGrad.append(clrs[i].linearGradient)
         }
+
 
         val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
 
