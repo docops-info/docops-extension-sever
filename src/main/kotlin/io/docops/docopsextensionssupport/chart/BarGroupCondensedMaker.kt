@@ -2,17 +2,21 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.util.UUID
 
-private const val BAR_HEIGHT = 10f
-private const val width = 600f
-private const val BOTTOM_BUFFER = 55f
-private var height = 400f
 
 class BarGroupCondensedMaker {
+    private val BAR_HEIGHT = 10f
+    private val width = 600f
+    private val BOTTOM_BUFFER = 55f
+    private var additional = 0f
+    private var height = 400f
+    private var TOTAL_BAR_HEIGHT = 400f
+
     private var fontColor = "#fcfcfc"
     var theme = BarTheme()
     fun makeBar(barGroup: BarGroup): String {
@@ -28,8 +32,8 @@ class BarGroupCondensedMaker {
         sb.append("<g transform='scale(${barGroup.display.scale})'>")
         sb.append("""<rect width="100%" height="100%" fill="${theme.background}"/>""")
         sb.append("""<text x="${width/2}" text-anchor="middle" y="16" style="font-size: 16px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.title}</text>""")
-        sb.append(addTickBars(h, w, barGroup))
         sb.append(makeColumnHeader(barGroup))
+        sb.append(addTickBars(h, w, barGroup))
         sb.append("""<g transform="translate(100,20)">""")
         var startY= 0
         barGroup.groups.forEach { group ->
@@ -40,7 +44,8 @@ class BarGroupCondensedMaker {
 
         }
         sb.append("</g>")
-        sb.append(addLegend(h-BOTTOM_BUFFER + 10f, barGroup))
+        println(startY)
+        sb.append(addLegend((TOTAL_BAR_HEIGHT + 35) + 10f, barGroup))
         sb.append("</g>")
         sb.append(end())
         return joinXmlLines(sb.toString())
@@ -54,7 +59,7 @@ class BarGroupCondensedMaker {
         """.trimIndent())
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
-            val color = "url(#svgGradientColor_$index)"
+            val color = "url(#${series.label?.replace(" ", "")})"
             //println("${series.value} -> $per -> ${500-per}")
             val path = generateRectanglePathData(per.toFloat(), 10f,0.0f, 6.0f, 5f, 0.0f).replace("\n", "")
             sb.append("""
@@ -93,9 +98,10 @@ class BarGroupCondensedMaker {
             <stop class="stop2" offset="50%" stop-color="#2E073F"/>
             <stop class="stop3" offset="100%" stop-color="#240532"/>
         </linearGradient>""")
-        val sz = barGroup.maxGroup().series.size
+        val labels = barGroup.uniqueLabels()
+        val sz = labels.size
         for(i in 0 until sz) {
-            defs.append(clrs[i].linearGradient)
+            defs.append(SVGColor(STUNNINGPIE[i], labels[i].replace(" ", "")).linearGradient)
         }
 
         defs.append("<style type=\"text/css\">")
@@ -113,7 +119,7 @@ class BarGroupCondensedMaker {
         return defs.toString()
     }
     private fun addTickBars(h: Float, w: Float, barGroup: BarGroup): String {
-        val bottom = h - BOTTOM_BUFFER
+        val bottom = TOTAL_BAR_HEIGHT + 35
         val tickBar = barGroup.maxValue() / 3
         val sb = StringBuilder()
         sb.append("""<line x1="109" x2="109" y1="30" y2="$bottom" class="light-shadow" stroke-width="2" stroke="${theme.lineColor}" />""")
@@ -133,7 +139,13 @@ class BarGroupCondensedMaker {
         barGroup.groups.forEachIndexed { index, g ->
             count += g.series.size
         }
-        return count * BAR_HEIGHT + barGroup.groups.size * 5 + BAR_HEIGHT + BOTTOM_BUFFER + 20
+        val labels = legendRow(barGroup)
+
+        if(labels > 2) {
+            additional += 12 * (labels - 2) + 14
+        }
+        TOTAL_BAR_HEIGHT = count * BAR_HEIGHT + barGroup.groups.size * 5 + BAR_HEIGHT
+        return count * BAR_HEIGHT + barGroup.groups.size * 5 + BAR_HEIGHT + BOTTOM_BUFFER + 20 + additional
     }
     private fun determineWidth(barGroup: BarGroup): Float {
         return width
@@ -142,7 +154,7 @@ class BarGroupCondensedMaker {
         var back = ""
         var fColor = theme.titleColor
         val sb = StringBuilder()
-        val distinct = group.legendLabel().distinct()
+        val distinct = group.uniqueLabels()
         sb.append("<g transform='translate(0, $d)'>")
         sb.append("""<text x="${width/2}" y="14" text-anchor="middle" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:12px;">Legend</text> """)
         var y = 18
@@ -153,7 +165,7 @@ class BarGroupCondensedMaker {
                 y+= 10
                 startX = 0.2 * width
             }
-            val color = "url(#svgGradientColor_$index)"
+            val color = "url(#${item.replace(" ", "")})"
             sb.append("""<rect x="$startX" y="$y" width="8" height="8" fill="$color"/>""")
             sb.append("""<text x="${startX+ 10}" y="${y+8}" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:8px;">""")
             sb.append("""<tspan x="${startX+ 10}" dy="0">$item</tspan>""")
@@ -162,6 +174,22 @@ class BarGroupCondensedMaker {
         }
         sb.append("</g>")
         return sb.toString()
+    }
+    private fun legendRow(group: BarGroup): Int {
+        var y = 18
+        var startX = 0.2 * width
+        val endX =  width - (0.2 * width)
+        val distinct = group.uniqueLabels()
+        var rows = 1
+        distinct.forEachIndexed { index, item ->
+            if(startX > endX) {
+                y+= 10
+                rows++
+                startX = 0.2 * width
+            }
+            startX += 8 + item.textWidth("Helvetica", 10) + 8
+        }
+        return rows
     }
     fun getTheme(useDark: Boolean = false) : BarTheme {
         return if(useDark) {

@@ -70,6 +70,16 @@ fun BarGroup.maxGroup(): Group {
     }
     return maxGroup
 }
+
+fun BarGroup.uniqueLabels(): List<String> {
+    val uniqueLabels = mutableListOf<String>()
+    this.groups.forEach {
+        it.series.forEach { l ->
+            l.label?.let { it1 -> uniqueLabels.add(it1) }
+        }
+    }
+    return uniqueLabels.distinct().toList()
+}
 fun BarGroup.scaleUp(item: Double): Double {
     val m = groups.maxOf { it.series.maxOf { it.value } }
     return (450 * item) / m
