@@ -42,10 +42,11 @@ val STUNNINGPIE = listOf(
     "#C9CBCF", "#2ECC71", "#E74C3C", "#3498DB"
 )
 
-fun chartColorAsSVGColor () : MutableList<SVGColor> {
+fun chartColorAsSVGColor (id: String = "svgGradientColor") : MutableList<SVGColor> {
     val list = mutableListOf<SVGColor>()
     STUNNINGPIE.forEachIndexed { index, it ->
-        list.add(SVGColor(it, "svgGradientColor_$index"))
+        val identity = if(id.isEmpty()) { "svgGradientColor_$index"} else { "${id}_$index" }
+        list.add(SVGColor(it, identity))
     }
     return list
 }
