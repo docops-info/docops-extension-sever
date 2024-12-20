@@ -1,92 +1,134 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
+  "title": "BarGroup",
+  "description": "Represents a bar group with metadata for charting purposes",
   "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for the BarGroup"
+    },
     "title": {
-      "type": "string"
+      "type": "string",
+      "description": "Title of the bar group"
     },
     "yLabel": {
-      "type": "string"
+      "type": "string",
+      "description": "Y-axis label for the bar group",
+      "default": ""
     },
     "xLabel": {
-      "type": "string"
+      "type": "string",
+      "description": "X-axis label for the bar group",
+      "default": ""
     },
     "groups": {
       "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "label": {
-              "type": "string"
-            },
-            "series": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "label": {
-                      "type": "string"
-                    },
-                    "value": {
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "label",
-                    "value"
-                  ]
-                }
-              ]
-            }
+      "description": "A list of groups, each containing a label and series data",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Label for the group"
           },
-          "required": [
-            "label",
-            "series"
-          ]
-        }
-      ]
+          "series": {
+            "type": "array",
+            "description": "A mutable list of series inside the group",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": ["string", "null"],
+                  "description": "Label of the series (nullable)"
+                },
+                "value": {
+                  "type": "number",
+                  "description": "Value associated with the series"
+                }
+              },
+              "required": ["value"]
+            }
+          }
+        },
+        "required": ["label", "series"]
+      }
     },
     "display": {
       "type": "object",
+      "description": "Display settings for the BarGroup",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for the display settings"
+        },
         "baseColor": {
-          "type": "string"
+          "type": "string",
+          "format": "color",
+          "description": "Base color for the bars",
+          "default": "#D988B9"
         },
         "barSeriesFontStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for bar series font",
+          "default": "font-family: Arial,Helvetica, sans-serif; font-size:9px; text-anchor:middle"
         },
         "barSeriesLabelFontStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for bar series label font",
+          "default": "font-family: Arial,Helvetica, sans-serif;  font-size:9px; text-anchor:start;"
         },
         "barFontValueStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for bar font value",
+          "default": "font-family: Arial,Helvetica, sans-serif; font-size:9px;"
         },
         "titleStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for the title",
+          "default": "font-family: Arial,Helvetica, sans-serif;  font-size:14px; text-anchor:middle"
         },
         "xLabelStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for x-axis label",
+          "default": "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle"
         },
         "yLabelStyle": {
-          "type": "string"
+          "type": "string",
+          "description": "CSS style for y-axis label",
+          "default": "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle"
         },
         "lineColor": {
-          "type": "string"
+          "type": "string",
+          "format": "color",
+          "description": "Color of the bar grid lines",
+          "default": "#FFBB5C"
+        },
+        "vBar": {
+          "type": "boolean",
+          "description": "Indicates if vertical bars should be displayed",
+          "default": false
+        },
+        "condensed": {
+          "type": "boolean",
+          "description": "Indicates if bars should be condensed",
+          "default": false
+        },
+        "useDark": {
+          "type": "boolean",
+          "description": "Indicates if the dark color scheme should be used",
+          "default": false
         },
         "scale": {
-          "type": "number"
+          "type": "number",
+          "description": "Scaling factor for the bars",
+          "default": 1.0
         }
       },
-      "required": [
-      ]
+      "required": [ "baseColor", "barSeriesFontStyle", "barSeriesLabelFontStyle", "barFontValueStyle", "titleStyle", "xLabelStyle", "yLabelStyle", "lineColor"]
     }
   },
-  "required": [
-    "title",
-    "yLabel",
-    "xLabel",
-    "groups"
-  ]
+  "required": ["title", "groups", "display"]
 }
