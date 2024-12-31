@@ -3,8 +3,6 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
-import io.docops.docopsextensionssupport.chart.STUNNINGPIE
-import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
@@ -35,7 +33,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         sb.append("""<g transform="scale(${buttons.theme?.scale})">""")
 
-        var startX= 10
+        var startX: Int
         var startY = 10
         rows.forEachIndexed { index, buttons ->
             startX = if(index == 0 || isEven(index)) {
@@ -43,7 +41,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             } else {
                 155
             }
-            buttons.forEachIndexed { i, button ->
+            buttons.forEach {  button ->
                 val x = startX
                 val y = startY
                 sb.append(createSingleHoneyCom(button, x, y))
@@ -52,7 +50,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             startY += BUTTON_HEIGHT
         }
         sb.append("</g>")
-        return sb.toString()
+        return joinXmlLines(sb.toString())
     }
 
     fun head(): String {
@@ -73,8 +71,8 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING ) * scale
     }
-    fun createSingleHoneyCom(button: Button, x: Int, y: Int): String {
-        val textSpans = itemTextWidth(button.label, 245, 24)
+    private fun createSingleHoneyCom(button: Button, x: Int, y: Int): String {
+        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = 24)
         val startTextY = 187 - (textSpans.size * 12)
         val spans = StringBuilder()
         textSpans.forEachIndexed { index, s ->
@@ -97,10 +95,11 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             filter = ""
             fill = "url(#btn_${button.id})"
         }
-        var btnLook = """fill="$fill" $filter"""
-
+        val btnLook = """fill="$fill" $filter"""
+        val title = descriptionOrLabel(button)
         return """
         <g transform="translate($x,$y)" cursor="pointer">
+        <title>$title</title>
         <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
         <text x="145" y="$startTextY" text-anchor="middle" style="fill: #111111; font-size: 24px;font-family: Arial,Helvetica, sans-serif;">$spans</text>
@@ -108,12 +107,24 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         </g>
         """.trimIndent()
     }
+
+    private fun descriptionOrLabel(button: Button): String {
+        return when {
+            button.description.isNullOrEmpty() -> {
+                button.label
+            }
+            else -> {
+                button.description
+            }
+        }
+    }
+
     override fun toRows(): MutableList<MutableList<Button>> {
         val rows = mutableListOf<MutableList<Button>>()
         var rowArray = mutableListOf<Button>()
         rows.add(rowArray)
         var count = 0
-        buttons.buttons.forEachIndexed { index, s ->
+        buttons.buttons.forEach { s ->
             buttons.theme?.let { disp ->
                 if(count == 0 || isEven(count)) {
                     if (rowArray.size == disp.columns) {
@@ -134,11 +145,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         return rows
     }
-    fun isEven(value: Int) = value % 2 == 0
-    fun isOdd(value: Int) = value % 2 == 1
-
-}
-
-fun main() {
+    private fun isEven(value: Int) = value % 2 == 0
+    //fun isOdd(value: Int) = value % 2 == 1
 
 }
