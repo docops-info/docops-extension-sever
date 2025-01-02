@@ -80,7 +80,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         textSpans.forEachIndexed { index, s ->
             var dy = 0
             if(index > 0) {
-                dy=24
+                dy=fontSize
             }
             val fontColor = determineTextColor(button.color!!)
             spans.append("""<tspan x="145" dy="$dy" style="fill:${fontColor}; font-family:Arial,Helvetica, sans-serif;">${s.escapeXml()}</tspan>""")
