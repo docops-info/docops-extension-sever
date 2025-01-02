@@ -18,10 +18,8 @@ package io.docops.docopsextensionssupport.svgsupport
 
 import java.awt.Canvas
 import java.awt.Font
-import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.sin
 
 
 class SvgToPng
@@ -73,6 +71,8 @@ fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName:
     }
     return itemArray
 }
+
+
 
 fun getBezierPathFromPoints(points: List<Point>): String {
     val start = points.first()

@@ -72,9 +72,11 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING ) * scale
     }
     private fun createSingleHoneyCom(button: Button, x: Int, y: Int): String {
-        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = 24)
-        val startTextY = 187 - (textSpans.size * 12)
         val spans = StringBuilder()
+        val fontSize = button.buttonStyle?.fontSize ?: 24
+        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = fontSize)
+        val startTextY = 187 - (textSpans.size * 12)
+
         textSpans.forEachIndexed { index, s ->
             var dy = 0
             if(index > 0) {
@@ -97,16 +99,18 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         val btnLook = """fill="$fill" $filter"""
         val title = descriptionOrLabel(button)
+        val textColor = determineTextColor(button.color!!)
         return """
         <g transform="translate($x,$y)" cursor="pointer">
         <title>$title</title>
         <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
-        <text x="145" y="$startTextY" text-anchor="middle" style="fill: #111111; font-size: 24px;font-family: Arial,Helvetica, sans-serif;">$spans</text>
+        <text x="145" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
         </a>
         </g>
         """.trimIndent()
     }
+
 
     private fun descriptionOrLabel(button: Button): String {
         return when {

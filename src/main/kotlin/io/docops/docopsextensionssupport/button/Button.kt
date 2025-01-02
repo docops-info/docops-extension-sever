@@ -102,7 +102,8 @@ class ButtonStyle(
     val dateStyle: String? = null,
     val typeStyle: String? = null,
     val authorStyle: String? = null,
-    val linkStyle: String? = null
+    val linkStyle: String? = null,
+    val fontSize: Int = 12
 )
 
 /**
@@ -218,7 +219,10 @@ class ButtonDisplay(
     var useDark: Boolean = false,
     var strokeColor: String = "gold",
     var sortBy: Sort = Sort(ButtonSortBy.LABEL, SortDirection.ASCENDING),
-    val buttonStyle: ButtonStyle = ButtonStyle(labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;"),
+    val buttonStyle: ButtonStyle = ButtonStyle(
+        labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;",
+        fontSize = 12
+    ),
     val raise: Boolean = true
 )
 
@@ -269,6 +273,22 @@ class Buttons(
         sort()
     }
 
+    private fun parseStyleForFontSize(style: String?, defaultSize: Int = 24): Int {
+        var sz = defaultSize
+        style?.let {
+            val styles = it.split(";")
+            styles.forEach {
+                if(it.trim().startsWith("font-size")) {
+                    val size = it.substringAfter("font-size:")
+                    if(size.contains("px")) {
+                        val num = size.substringBefore("px").trim().toInt()
+                        sz =num
+                    }
+                }
+            }
+        }
+        return sz
+    }
     private fun determineButtonColor(button: Button): String {
         var color: String = ""
 
@@ -293,10 +313,12 @@ class Buttons(
     }
 
     private fun determineStyle(button: Button): ButtonStyle {
+        var fontSize = 12
         var labelStyle = button.buttonStyle?.labelStyle
         if (null == labelStyle) {
             theme?.let {
                 labelStyle = it.buttonStyle.labelStyle
+                fontSize = parseStyleForFontSize(labelStyle)
             }
         }
         var descriptionStyle: String? = button.buttonStyle?.descriptionStyle
@@ -346,7 +368,8 @@ class Buttons(
             dateStyle = dateStyle,
             typeStyle = typeStyle,
             authorStyle = authorStyle,
-            linkStyle = linkStyle
+            linkStyle = linkStyle,
+            fontSize = fontSize
         )
     }
 
