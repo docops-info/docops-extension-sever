@@ -144,6 +144,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         return """
             <defs>
             ${filters()}
+            ${naturalShadow()}
             ${gradient()}
             ${uses()}
            $style

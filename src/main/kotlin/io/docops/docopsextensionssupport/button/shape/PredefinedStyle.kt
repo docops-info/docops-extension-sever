@@ -32,6 +32,7 @@ fun linkText() = """ .linkText { fill: #000000; font-size: 15px; font-family: "I
 fun lightShadow() = """.light-shadow {filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));}"""
 fun myBox() = """.shape { stroke: black; } .mybox:hover { -webkit-animation: 0.5s draw linear forwards; animation: 0.5s draw linear forwards; }"""
 
+fun naturalShadow() = """<filter id="naturalShadow" x="0" y="0" width="2" height="2"><feOffset in="SourceGraphic" dx="3" dy="3" /><feGaussianBlur stdDeviation="5" result="blur" /><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>"""
 fun keyFrame() = """ @keyframes draw { 0% { stroke-dasharray: 140 540; stroke-dashoffset: -474; stroke-width: 3px; } 100% { stroke-dasharray: 760; stroke-dashoffset: 0; stroke-width: 5px; } }"""
 fun filters() = """
        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
