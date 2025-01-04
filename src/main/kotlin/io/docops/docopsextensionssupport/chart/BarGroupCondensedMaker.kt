@@ -44,7 +44,6 @@ class BarGroupCondensedMaker {
 
         }
         sb.append("</g>")
-        println(startY)
         sb.append(addLegend((TOTAL_BAR_HEIGHT + 35) + 10f, barGroup))
         sb.append("</g>")
         sb.append(end())
