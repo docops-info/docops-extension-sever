@@ -20,7 +20,6 @@
     <script src="editor/js/theme.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/ext/json-enc.js"></script>
-    <script src="js/jquery.sse.js"></script>
     <style>
         .forestxmas {
             background-image: url(images/forest.svg);
@@ -630,40 +629,6 @@
 
 </script>
 <script>
-    console.log('-- START --');
-    var w = $.SSE('api/stats/docops-stream', {
-        onOpen: function (e) {
-            console.log("Open");
-            console.log(e);
-        },
-        onEnd: function (e) {
-            console.log("End");
-            console.log(e);
-        },
-        onError: function (e) {
-            console.log("Could not connect");
-        },
-        onMessage: function (e) {
-            console.log("Message");
-            console.log(e.data);
-            $('#stats').html(e.data);
-        },
-        options: {
-            forceAjax: false
-        },
-        events: {
-            myEvent: function (e) {
-                console.log('Custom Event');
-                console.log(e);
-            }
-        },
-//            headers: {
-//                'Authorization': 'Bearer 000000000000000000000'
-//            }
-    });
-    w.start()
-
-
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const d = new Date();
     let name = month[d.getMonth()];
