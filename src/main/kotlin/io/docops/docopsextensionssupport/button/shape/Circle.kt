@@ -48,7 +48,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 """
         <g transform="translate($startX,$startY)" filter="url(#naturalShadow)">
             <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
-            <circle cx="50" cy="50" r="50" fill="$fill" class="btn_${button.id}_cls" $filter/>
+            <circle cx="50" cy="50" r="50" fill="$fill" class="btn_${button.id}_cls bar" $filter/>
             <text x="50" y="50" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">
             $title
             </text>

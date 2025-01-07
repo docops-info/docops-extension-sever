@@ -73,7 +73,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             }
             btns.append("""
                 <g transform="translate($startX,$startY)">
-                <rect class="raise" width="250" height="90" ry="36" rx="36" fill="$background" stroke="url(#btn_${button.id})" stroke-width='5' filter="url(#Bevel2)"/>
+                <rect class="bar" width="250" height="90" ry="36" rx="36" fill="$background" stroke="url(#btn_${button.id})" stroke-width='5' filter="url(#Bevel2)"/>
         <a xlink:href="${button.link}" href="${button.link}" xlink:show="new" xlink:type="simple" target="$win" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">
             <text x="135" y="0" text-anchor="middle" class="filtered" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; fill:url(#btn_${button.id});" lengthAdjust="spacing">
                 $tspan

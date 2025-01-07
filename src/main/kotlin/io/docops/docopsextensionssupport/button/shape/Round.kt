@@ -103,7 +103,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             btns.append("""
             <g transform="translate($startX,$startY)" cursor="pointer">
             <a xlink:href="${button.link}" target="$win">
-            <g stroke-width="16" stroke="$stroke" fill="#fcfcfc" cursor="pointer" class="raise">
+            <g stroke-width="16" stroke="$stroke" fill="#fcfcfc" cursor="pointer" class="raise bar">
                 <title class="description">${button.description?.escapeXml()}</title>
                 <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
                 <circle r="55" cx="0" cy="0"/>
@@ -168,6 +168,9 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 stroke: gold;
                 stroke-width: 3px;
                 opacity: 0.9;
+            }
+            .bar:hover {
+                filter: grayscale(100%) sepia(100%);
             }
             </style>
         """.trimIndent()

@@ -77,12 +77,12 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                 filter = ""
                 fill = "${button.color}"
             }
-            var btnLook = """fill="$fill" class="raise btn_${button.id}_cls" $filter"""
+            var btnLook = """fill="$fill" class="raise btn_${button.id}_cls bar" $filter"""
             var textFillColor = determineTextColor(button.color!!)
             var textClass = "glass"
             buttons.theme?.raise?.let {
                 if(!it) {
-                    btnLook = """fill="#fcfcfc" stroke="$fill" stroke-width="2""""
+                    btnLook = """fill="#fcfcfc" stroke="$fill" stroke-width="2" class='bar'"""
                     textFillColor = button.color!!
                     textClass = "light-shadow"
                 }
