@@ -83,7 +83,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
                 dy=fontSize
             }
             val fontColor = determineTextColor(button.color!!)
-            spans.append("""<tspan x="145" dy="$dy" style="fill:${fontColor}; font-family:Arial,Helvetica, sans-serif;">${s.escapeXml()}</tspan>""")
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:Arial,Helvetica, sans-serif;">${s.escapeXml()}</tspan>""")
         }
         var win = "_top"
         buttons.theme?.let {
@@ -105,7 +105,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         <title>$title</title>
         <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
-        <text x="145" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
+        <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
         </a>
         </g>
         """.trimIndent()
