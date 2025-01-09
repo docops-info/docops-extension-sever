@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.badge
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.github.sercasti.tracing.Traceable
 import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
@@ -30,6 +31,7 @@ import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
+
 private const val BadgePerRow = 5
 
 /**
@@ -39,6 +41,7 @@ private const val BadgePerRow = 5
 class DocOpsBadgeGenerator {
 
 
+    @Traceable
     fun createBadgeFromList(badges: MutableList<Badge>): Pair<String, Float> {
 
         val sb= StringBuilder()
@@ -238,6 +241,7 @@ class DocOpsBadgeGenerator {
      *
      * @return The SVG representation of the badge.
      */
+    @Traceable
     fun createBadge(
         iLabel: String,
         iMessage: String,
