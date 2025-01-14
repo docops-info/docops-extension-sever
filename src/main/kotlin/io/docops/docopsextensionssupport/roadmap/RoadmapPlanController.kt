@@ -75,7 +75,7 @@ class RoadmapPlanController {
             val index = httpServletRequest.getParameter("index")
             val rmm = PlannerMaker()
 
-            val svg = rmm.makePlannerImage(contents, title)
+            val svg = rmm.makePlannerImage(contents, title, "1.0")
 
             div = """
             <div>$svg</div>
@@ -126,7 +126,7 @@ class RoadmapPlanController {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val rmm = PlannerMaker()
 
-            val svg = rmm.makePlannerImage(data, title)
+            val svg = rmm.makePlannerImage(data, title, scale)
             val headers = HttpHeaders()
 
             headers.cacheControl = CacheControl.noCache().headerValue

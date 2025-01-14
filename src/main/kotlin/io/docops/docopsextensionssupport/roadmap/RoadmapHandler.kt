@@ -14,7 +14,7 @@ class RoadmapHandler {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val rmm = PlannerMaker()
 
-            val svg = rmm.makePlannerImage(data, title)
+            val svg = rmm.makePlannerImage(data, title, scale)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
