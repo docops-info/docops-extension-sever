@@ -203,10 +203,20 @@ open class ReleaseTimelineMaker {
                 <stop class="stop2" offset="50%" stop-color="#7ec667"/>
                 <stop class="stop3" offset="100%" stop-color="#54B435"/>
             </linearGradient>
+            <linearGradient id="dmode1" x2="0%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#222627"/>
+                <stop class="stop2" offset="50%" stop-color="#1d2021"/>
+                <stop class="stop3" offset="100%" stop-color="#17191a"/>
+            </linearGradient>
             <g id="completedCheck">
                 <polyline points="10 25 22 40 50 10" fill="none" stroke="url(#circlecheck)" stroke-width="6"/>
             </g>
-
+            <g id="bullStar">
+             <svg height="24" width="24" viewBox="0 0 500,210" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="100,10 40,198 190,78 10,78 160,198"
+                         style="fill:url(#ID0756d7d2-2648-4a67-89af-c133b3a8d4c9);stroke:#cccccc;stroke-width:5;fill-rule:evenodd;"/>
+             </svg>
+            </g>
              $colors
              $style
          </defs>

@@ -52,6 +52,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
          var titleFill = "#000000"
          if(releaseStrategy.useDark) {
              titleFill = "#fcfcfc"
+             str.append("""<rect width="100%" height="100%" fill="url(#dmode1)"/>""")
+
          }
          str.append(title(releaseStrategy.title, width, titleFill))
          str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID$id'>""")
@@ -67,10 +69,10 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
     private fun head(width: Float, id: String, title: String, scale: Float, releaseStrategy: ReleaseStrategy) : String{
 
-        val height = (270  + 215 + releaseStrategy.maxLinesForHeight())* scale
+        val height = (275  + releaseStrategy.maxLinesForHeight() + 38)* scale
         //language=svg
         return """
-            <svg width="$width" height="$height" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img'
+            <svg width="${width / 1.7777777778}" height="${height / 1.7777777778}" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
@@ -98,9 +100,10 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             }
         }
         val goals = release.goal.escapeXml()
-        val itemArray = itemTextWidth(goals, 290, 24)
+        val itemArray = itemTextWidth(goals, 290, 20)
         val lines = linesToUrlIfExist(itemArray, mutableMapOf())
-        val spans = linesToSpanText(lines,24, 150)
+
+        val spans = linesToSpanText(lines,20, 150)
         val textY = 88 - (lines.size * 12)
         var positionX = startX
         if(currentIndex>0) {
@@ -119,16 +122,14 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         }
         //language=svg
         return """
-         <g transform="translate(${positionX+10},60)" class="${shadeColor(release)}">
-             <text text-anchor="middle" x="250" y="-12" class="milestoneTL">${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${fishTailColor(release, releaseStrategy)}" fill="$fill"/>
-             <path d="m 400,0 v 200 l 100,-100 z" fill="$fill" stroke="${fishTailColor(release, releaseStrategy)}" />
-            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="${releaseStrategy.displayConfig.fontColor}">${release.type}</text>
+         <g transform="translate(${positionX+10},60)" >
+             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" fill='${fishTailColor(release, releaseStrategy)}'>${release.date}</text>
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" fill="#fcfcfc" stroke="${fishTailColor(release, releaseStrategy)}" stroke-width="2"/>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#111111">${release.type}</text>
             $completed
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
-                <rect x="0" y="0" height="200" width="300" fill="$fill" class="$clz"/>
                 <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="12px"
-                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="${releaseStrategy.displayConfig.fontColor}">
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#111111">
                    $spans
                 </text>
             </g>
@@ -141,23 +142,27 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                 startX = currentIndex * 425 -(20*currentIndex)
             }
             val lineText = StringBuilder()
+            val bulletStar = StringBuilder()
             var lineStart = 2
+        var y = -3
         val newLines = releaseStrategy.releaseLinesToDisplay(release.lines)
         newLines.forEachIndexed { index, s ->
-            var bullet = ""
             if(s is BulletLine) {
-                bullet = "- "
-                lineStart = 2
+                bulletStar.append("""
+                <use xlink:href="#bullStar" x="1" y="$y" width="24" height="24"/>
+            """.trimIndent())
+                lineStart = 12
             } else {
-                lineStart = 4
+                lineStart = 14
             }
+
                 lineText.append(
                     """
                 <tspan x="$lineStart" dy="12" class="entry" font-size="12px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">$bullet ${s.text.escapeXml()}</tspan>
+                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">${s.text.escapeXml()}</tspan>
             """.trimIndent()
                 )
-
+                y += 12
             }
             var x = 200
             var visibility = "visibility='block'"
@@ -180,6 +185,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
                 $lineText
             </text>
+            $bulletStar
         </g>
         """.trimIndent()
     }
@@ -187,7 +193,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     private fun linesToSpanText(lines: MutableList<String>, dy: Int, x: Int): String {
         val text = StringBuilder()
         lines.forEach {
-            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">$it</tspan>""")
+            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="20" font-weight="normal">$it</tspan>""")
         }
         return text.toString()
     }
@@ -205,7 +211,7 @@ fun main() {
         "lines": [
           "Team will deploy application and build out infrastructure with Terraform scripts.",
           "Team will Apply API gateway pattern to establish API version infrastructure.",
-          "Tream will validate access to the application",
+          "Team will validate access to the application",
           "Team will shutdown infrastructure as security is not in place."
         ],
         "date": "July 30th, 2023",
@@ -224,7 +230,7 @@ fun main() {
         ],
         "date": "September 20th, 2023",
         "completed": true,
-        "goal": "Our goal is to deplou lastest code along with security applied at the API Layer"
+        "goal": "Our goal is to deploy lastest code along with security applied at the API Layer"
       },
       {
         "type": "GA",
@@ -251,8 +257,8 @@ fun main() {
     """.trimIndent()
 
     val release = Json.decodeFromString<ReleaseStrategy>(data)
-    release.useDark = false
+    release.useDark = true
     val str = ReleaseTimelineSummaryMaker().make(release, isPdf = false)
-    val f = File("gen/release.svg")
+    val f = File("gen/rel2.svg")
     f.writeText(str)
 }
