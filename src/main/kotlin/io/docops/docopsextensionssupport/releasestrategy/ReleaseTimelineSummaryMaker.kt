@@ -104,7 +104,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val lines = linesToUrlIfExist(itemArray, mutableMapOf())
 
         val spans = linesToSpanText(lines,20, 150)
-        val textY = 88 - (lines.size * 12)
+        val textY = 100 - (lines.size * 12)
         var positionX = startX
         if(currentIndex>0) {
             positionX += currentIndex * 5
