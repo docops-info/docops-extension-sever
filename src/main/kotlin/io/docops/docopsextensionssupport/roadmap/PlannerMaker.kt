@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.roadmap
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
@@ -109,7 +110,7 @@ private fun itemGradient(planItems: PlanItems): String {
     private fun makeHead(planItems: PlanItems, title: String, grads: String, itemGrad:  String, width: Int, height: Int): String {
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="${width * 0.50}" height="${height * 0.50}"
+     width="${(width * 0.50) / DISPLAY_RATIO_16_9}" height="${(height * 0.50)/DISPLAY_RATIO_16_9}"
      viewBox="0 0 $width $height">
      <defs>
      $grads

@@ -21,6 +21,7 @@ import java.awt.Font
 import kotlin.math.max
 import kotlin.math.min
 
+const val DISPLAY_RATIO_16_9 = 1.7777777778
 
 class SvgToPng
 

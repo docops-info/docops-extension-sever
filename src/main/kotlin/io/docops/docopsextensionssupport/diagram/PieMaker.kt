@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.io.File
 
 class PieMaker {
@@ -35,7 +36,7 @@ class PieMaker {
         if(pies.pieDisplay.useDark) {
             backgroundColor = """<rect width="100%" height="100%" fill="#374151"/>"""
         }
-        return """<svg xmlns="http://www.w3.org/2000/svg" height="$outerHeight" width="$outerWidth" viewBox="0 0 $width $height">
+        return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">
             $backgroundColor
             """

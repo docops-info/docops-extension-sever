@@ -21,6 +21,7 @@ import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 /**
  * Regular class is responsible for creating regular buttons shape.
@@ -107,7 +108,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     protected open fun start() : String {
         val height= height()
         val width = width()
-        return """<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="none">"""
+        return """<svg xmlns="http://www.w3.org/2000/svg" width="${width/ DISPLAY_RATIO_16_9}" height="${height/ DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">"""
     }
 
     protected fun end() = """</svg>"""

@@ -2,10 +2,12 @@ package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.text.toByteArray
+
 
 class ComparisonChartMaker {
     fun make(comparisonChart: ComparisonChart): String {
@@ -28,7 +30,7 @@ class ComparisonChartMaker {
     private fun head(comparisonChart: ComparisonChart, lastLine: Int) = """
         <svg id="ID_${comparisonChart.id}"
      xmlns="http://www.w3.org/2000/svg"
-     width="${(1024 * comparisonChart.display.scale )/ 1.7777777778}" height="${(lastLine * comparisonChart.display.scale) / 1.7777777778}"
+     width="${(1024 * comparisonChart.display.scale )/ DISPLAY_RATIO_16_9}" height="${(lastLine * comparisonChart.display.scale) / DISPLAY_RATIO_16_9}"
      viewBox="0 0 1024.0 $lastLine"
      preserveAspectRatio="xMidYMin slice"
      >

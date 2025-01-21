@@ -20,6 +20,7 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.io.File
 import java.util.*
 
@@ -212,7 +213,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         val scaleF = scale.toFloat()
         val height = DEFAULT_HEIGHT * scale.toFloat()
         return Pair("""
-        <svg width="${width * scaleF}" height="$height" viewBox="0 0 ${width * scaleF} $height"
+        <svg width="${(width * scaleF) / DISPLAY_RATIO_16_9}" height="${height/ DISPLAY_RATIO_16_9}" viewBox="0 0 ${width * scaleF} $height"
         preserveAspectRatio="xMidYMin slice"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <desc>https://docops.io/extension</desc>

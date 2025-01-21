@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -72,7 +73,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val height = (275  + releaseStrategy.maxLinesForHeight() + 38)* scale
         //language=svg
         return """
-            <svg width="${width / 1.7777777778}" height="${height / 1.7777777778}" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img'
+            <svg width="${width / DISPLAY_RATIO_16_9}" height="${height / DISPLAY_RATIO_16_9}" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' 
+            xmlns:xlink="http://www.w3.org/1999/xlink" role='img' preserveAspectRatio='xMidYMid meet'
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
