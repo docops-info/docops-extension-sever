@@ -28,7 +28,7 @@ class ComparisonChartMaker {
     private fun head(comparisonChart: ComparisonChart, lastLine: Int) = """
         <svg id="ID_${comparisonChart.id}"
      xmlns="http://www.w3.org/2000/svg"
-     width="${1024 * comparisonChart.display.scale}" height="${lastLine * comparisonChart.display.scale}"
+     width="${(1024 * comparisonChart.display.scale )/ 1.7777777778}" height="${(lastLine * comparisonChart.display.scale) / 1.7777777778}"
      viewBox="0 0 1024.0 $lastLine"
      preserveAspectRatio="xMidYMin slice"
      >
