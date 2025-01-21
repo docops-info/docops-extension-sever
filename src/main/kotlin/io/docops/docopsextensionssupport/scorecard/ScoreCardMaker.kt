@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.asciidoc.utils.escapeXml
 import io.docops.docopsextensionssupport.support.hexToHsl
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.awt.Color
@@ -92,7 +93,7 @@ class ScoreCardMaker {
     fun head(scoreCard: ScoreCard, height: Float, id: String): String {
         //50 top, 35.1 each row
         val width = WIDTH
-        return """<svg id="d$id" xmlns="http://www.w3.org/2000/svg" width="${width * scoreCard.scale}" height="${height * scoreCard.scale}"
+        return """<svg id="d$id" xmlns="http://www.w3.org/2000/svg" width="${(width * scoreCard.scale) / DISPLAY_RATIO_16_9}" height="${(height * scoreCard.scale)/DISPLAY_RATIO_16_9}"
      viewBox="0 0 ${width * scoreCard.scale} ${height * scoreCard.scale}"
      preserveAspectRatio="xMidYMin slice"
      xmlns:xlink="http://www.w3.org/1999/xlink">

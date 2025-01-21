@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.util.UUID
 
@@ -25,7 +26,7 @@ class BarGroupCondensedMaker {
         val sb = StringBuilder()
         var h = determineHeight(barGroup)
         var w = determineWidth(barGroup)
-        sb.append(makeHead(h, w, barGroup))
+        sb.append(makeHead(h, w, barGroup, scale= barGroup.display.scale))
 
         height = h
         sb.append(makeDefs(barGroup))
@@ -74,10 +75,10 @@ class BarGroupCondensedMaker {
 
     }
 
-    private fun makeHead(h: Float, w: Float, barGroup: BarGroup): String {
+    private fun makeHead(h: Float, w: Float, barGroup: BarGroup, scale: Double): String {
         return  """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="$w" height="$h" viewBox="0 0 $w $h" xmlns="http://www.w3.org/2000/svg" id="${barGroup.id}" zoomAndPan="magnify" preserveAspectRatio="none">
+            <svg width="${(w * scale)/ DISPLAY_RATIO_16_9}" height="${(h * scale )/DISPLAY_RATIO_16_9}" viewBox="0 0 ${w*scale} ${h*scale}" xmlns="http://www.w3.org/2000/svg" id="${barGroup.id}" preserveAspectRatio="xMidYMid meet">
         """.trimIndent()
     }
 
