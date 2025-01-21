@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -121,7 +122,7 @@ class BarGroupMaker {
     private fun makeHead(barGroup: BarGroup): String {
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${barGroup.calcWidth() * barGroup.display.scale}" height="${540 * barGroup.display.scale}" viewBox="0 0 ${barGroup.calcWidth()} 540" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(540 * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} 540" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
 

@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 class VBarMaker {
     private var fontColor = ""
@@ -91,7 +92,7 @@ class VBarMaker {
         val finalHeight = height * bar.display.scale
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="800" height="$finalHeight" viewBox="0 0 800 $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${800/DISPLAY_RATIO_16_9}" height="${finalHeight/ DISPLAY_RATIO_16_9}" viewBox="0 0 800 $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
     private fun tail(): String {

@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.adr
 import io.docops.docopsextensionssupport.adr.model.Adr
 import io.docops.docopsextensionssupport.adr.model.Status
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.util.UUID
 
 class AdrMaker {
@@ -36,7 +37,7 @@ class AdrMaker {
 
     fun head(width: Float = 720.0f, height: Float = 450.0f): String {
         return """
-            <svg id="adr" xmlns="http://www.w3.org/2000/svg" width='$width' height='$height'
+            <svg id="adr" xmlns="http://www.w3.org/2000/svg" width='${width/ DISPLAY_RATIO_16_9}' height='${height/DISPLAY_RATIO_16_9}'
                  xmlns:xlink="http://www.w3.org/1999/xlink" font-family="arial"
                  viewBox="0 0 $width $height"
             >

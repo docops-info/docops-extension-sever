@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 
 class VGroupBar {
@@ -62,7 +63,7 @@ class VGroupBar {
         val finalHeight = height * barGroup.display.scale
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="$width" height="$finalHeight" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
     private fun tail(): String {

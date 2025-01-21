@@ -106,7 +106,7 @@ class LineChartMaker(val isPdf: Boolean) {
 
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg height="$maxGraphHeight" width="$maxGraphWidth" viewBox="0 0 $maxGraphWidth $maxGraphHeight" id="ID_${lineChart.id}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <svg height="${maxGraphHeight/DISPLAY_RATIO_16_9}" width="${maxGraphWidth/DISPLAY_RATIO_16_9}" viewBox="0 0 $maxGraphWidth $maxGraphHeight" id="ID_${lineChart.id}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         """.trimIndent()
     }
 

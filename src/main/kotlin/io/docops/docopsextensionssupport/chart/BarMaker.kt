@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import org.apache.catalina.manager.JspHelper.escapeXml
 import java.io.File
 import kotlin.math.max
@@ -45,7 +46,7 @@ class BarMaker {
         val width = bar.calcWidth() * bar.display.scale
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width}" height="$height" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
     private fun addTicks( bar: Bar): String {

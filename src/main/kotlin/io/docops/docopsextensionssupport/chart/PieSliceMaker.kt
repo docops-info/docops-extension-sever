@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.Point
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
@@ -140,7 +141,7 @@ open class PieSliceMaker {
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="${h * pieSlices.display.scale}" width="${420 * pieSlices.display.scale}" viewBox='0 0 ${420.0 * pieSlices.display.scale} ${h * pieSlices.display.scale}'>
+            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(420 * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${420.0 * pieSlices.display.scale} ${h * pieSlices.display.scale}'>
           """
     }
     protected fun endSvg() = "</svg>"
