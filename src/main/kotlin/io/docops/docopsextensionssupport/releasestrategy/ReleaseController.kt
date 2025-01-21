@@ -212,7 +212,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             getReleaseTypes(servletRequest)
             val releases = getReleaseTypes(servletRequest)
 
-            val releaseStrategy = ReleaseStrategy(title, releases, style)
+            val releaseStrategy = ReleaseStrategy(title=title, releases= releases, style= style)
             makeFilledView(model = model, releaseStrategy = releaseStrategy)
         }
         log.info{"createStrategy executed in ${timing.duration.inWholeMilliseconds}ms "}

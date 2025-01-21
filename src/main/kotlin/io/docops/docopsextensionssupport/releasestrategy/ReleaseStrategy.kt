@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.*
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 
 /**
@@ -58,6 +59,21 @@ enum class ReleaseEnum {
             }
 
             else -> "bev"
+        }
+    }
+    fun marker(releaseEnum: ReleaseEnum): String {
+        return when (releaseEnum) {
+            in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
+                "M"
+            }
+            in arrayOf(RC1,RC2,RC3,RC4,RC5,RC6,RC7,RC8,RC9) -> {
+                "R"
+            }
+            GA -> {
+                "G"
+            }
+
+            else -> "M"
         }
     }
     fun speed(releaseEnum: ReleaseEnum): String {
@@ -130,7 +146,7 @@ fun Release.fillColor(releaseStrategy: ReleaseStrategy) : String {
  * @property carColors The list of colors to be used for cars in the display. Defaults to ["#fcfcfc", "#000000", "#ff0000"].
  */
 @Serializable
-class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#5f57ff", "#2563eb", "#7149c6"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"))
+class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#5f57ff", "#2563eb", "#7149c6"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"), val notesVisible: Boolean =false)
 /**
  * Represents a release strategy.
  *
@@ -146,7 +162,7 @@ open class LineType(val text: String)
 class BulletLine(text: String): LineType(text)
 class PlainLine(text: String): LineType(text)
 @Serializable
-class ReleaseStrategy (val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35, val displayConfig: DisplayConfig = DisplayConfig(), var useDark: Boolean = false)
+class ReleaseStrategy (val id: String = UUID.randomUUID().toString(), val title: String, val releases: MutableList<Release>, val style: String = "TL", val scale: Float = 1.0f, val numChars: Int= 35, val displayConfig: DisplayConfig = DisplayConfig(), var useDark: Boolean = false)
 
 fun ReleaseStrategy.styles(): MutableMap<String, String> = mutableMapOf("TL" to "Timeline", "TLS" to "Timeline Summary",  "R" to "Roadmap", "TLG" to "Timeline Grouped")
 

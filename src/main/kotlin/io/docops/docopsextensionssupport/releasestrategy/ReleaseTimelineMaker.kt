@@ -39,16 +39,15 @@ open class ReleaseTimelineMaker {
     open fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         this.isPdf = isPdf
         val width = determineWidth(releaseStrategy = releaseStrategy)
-        val id = UUID.randomUUID().toString()
-        val str = StringBuilder(head(width, id, title= releaseStrategy.title, releaseStrategy.scale))
-        str.append(defs(isPdf, id,releaseStrategy.scale, releaseStrategy))
+        val str = StringBuilder(head(width, id = releaseStrategy.id, title= releaseStrategy.title, releaseStrategy.scale))
+        str.append(defs(isPdf, id=releaseStrategy.id,releaseStrategy.scale, releaseStrategy))
         var titleFill = "#000000"
         if(releaseStrategy.useDark) {
             titleFill = "#fcfcfc"
         }
-        str.append(title(releaseStrategy.title, width, titleFill))
+        str.append(title(title= releaseStrategy.title, width, titleFill))
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(buildReleaseItem(release,index, isPdf, id))
+            str.append(buildReleaseItem(release,index, isPdf, id=releaseStrategy.id))
         }
         str.append("</g>")
         str.append(tail())
@@ -211,10 +210,28 @@ open class ReleaseTimelineMaker {
             <g id="completedCheck">
                 <polyline points="10 25 22 40 50 10" fill="none" stroke="url(#circlecheck)" stroke-width="6"/>
             </g>
-            <g id="bullStar">
+            <linearGradient id="bulletGrad1" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#282d93"/>
+            <stop class="stop2" offset="50%" stop-color="#22267B"/>
+            <stop class="stop3" offset="100%" stop-color="#1b1e62"/>
+            </linearGradient>
+            <g id="bullStarM$id">
              <svg height="24" width="24" viewBox="0 0 500,210" xmlns="http://www.w3.org/2000/svg">
                 <polygon points="100,10 40,198 190,78 10,78 160,198"
-                         style="fill:url(#ID0756d7d2-2648-4a67-89af-c133b3a8d4c9);stroke:#cccccc;stroke-width:5;fill-rule:evenodd;"/>
+                         style="fill:url(#shadM_rect_${id});stroke:#cccccc;stroke-width:5;"/>
+             </svg>
+            </g>
+            <g id="bullStarR$id">
+             <svg height="24" width="24" viewBox="0 0 500,210" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="100,10 40,198 190,78 10,78 160,198"
+                         style="fill:url(#shadR_rect_${id});stroke:#cccccc;stroke-width:5;"/>
+             </svg>
+            </g>
+            
+            <g id="bullStarG$id">
+             <svg height="24" width="24" viewBox="0 0 500,210" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="100,10 40,198 190,78 10,78 160,198"
+                         style="fill:url(#shadG_rect_${id});stroke:#cccccc;stroke-width:5;"/>
              </svg>
             </g>
              $colors

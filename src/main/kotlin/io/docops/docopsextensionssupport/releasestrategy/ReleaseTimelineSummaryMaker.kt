@@ -40,15 +40,15 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
       */
      override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
-        val id = UUID.randomUUID().toString()
+
         val str = StringBuilder(head(
                 width,
-                id,
+                releaseStrategy.id,
                 title = releaseStrategy.title,
                 releaseStrategy.scale,
                 releaseStrategy
             ))
-        str.append(defs(isPdf, id,  releaseStrategy.scale, releaseStrategy))
+        str.append(defs(isPdf, releaseStrategy.id,  releaseStrategy.scale, releaseStrategy))
          var titleFill = "#000000"
          if(releaseStrategy.useDark) {
              titleFill = "#fcfcfc"
@@ -56,10 +56,10 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
          }
          str.append(title(releaseStrategy.title, width, titleFill))
-         str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID$id'>""")
+         str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(buildReleaseItem(release,index, isPdf, id, releaseStrategy))
-            str.append(buildReleaseItemHidden(release,index, isPdf, id, releaseStrategy))
+            str.append(buildReleaseItem(release,index, isPdf, releaseStrategy.id, releaseStrategy))
+            str.append(buildReleaseItemHidden(release,index, isPdf, releaseStrategy.id, releaseStrategy))
         }
 
         str.append("</g>")
@@ -149,7 +149,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         newLines.forEachIndexed { index, s ->
             if(s is BulletLine) {
                 bulletStar.append("""
-                <use xlink:href="#bullStar" x="1" y="$y" width="24" height="24"/>
+                <use xlink:href="#bullStar${release.type.marker(release.type)}$id" x="1" y="$y" width="24" height="24"/>
             """.trimIndent())
                 lineStart = 12
             } else {
@@ -165,12 +165,12 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                 y += 12
             }
             var x = 200
-            var visibility = "visibility='block'"
+            var visibility = "visibility='hidden'"
             var anchor = "text-anchor='middle'"
-            if (isPdf) {
+            if (isPdf || releaseStrategy.displayConfig.notesVisible) {
                 x = 10
                 anchor = ""
-                visibility = ""
+                visibility = "visibility='visible'"
             }
         val height = (newLines.size+1) * 12
         var positionX = startX
