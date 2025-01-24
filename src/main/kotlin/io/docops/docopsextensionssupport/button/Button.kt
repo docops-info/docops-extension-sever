@@ -152,24 +152,12 @@ enum class ButtonSortBy {
      *
      * Labels are used to display text in a user interface.
      */
-    LABEL, /**
-     * This class represents a date.
-     *
-     * @property day The day of the date.
-     * @property month The month of the date.
-     * @property year The year of the date.
-     */
-    DATE, /**
-     *  This class represents the details of an author.
-     *
-     *  @property name The name of the author.
-     *  @property email The email address of the author.
-     *  @property bio A brief description of the author's background.
-     */
+    LABEL,
+    DATE,
     AUTHOR, /**
      * The `ORDER` class represents the insertion order of a button.
      *
-     * This class provides means to sort buttons by their inseertion order,
+     * This class provides the means to sort buttons by their insertion order.
      *
      * @constructor Creates a new instance of the `ORDER` class.
      *

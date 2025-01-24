@@ -36,9 +36,7 @@ import java.nio.charset.StandardCharsets
  * This class is responsible for handling HTTP requests related to ADR (Architectural Decision Records).
  * It provides methods to create and retrieve ADRs.
  *
- * @property adrText The text content of the ADR.
  * @property svg The SVG content of the ADR.
- * @property config The configuration options for parsing and rendering the ADR.
  */
 @Controller
 @RequestMapping("/api")

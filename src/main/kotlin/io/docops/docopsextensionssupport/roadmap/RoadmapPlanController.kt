@@ -22,6 +22,7 @@ import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
+import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -37,7 +38,7 @@ import kotlin.time.measureTimedValue
 @Controller
 @RequestMapping("/api/roadmap")
 class RoadmapPlanController {
-    val log = LogFactory.getLog(RoadmapPlanController::class.java)
+    val log: Log = LogFactory.getLog(RoadmapPlanController::class.java)
 
     /**
      * Generates a roadmap plan based on the provided parameters.

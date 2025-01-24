@@ -28,6 +28,5 @@ class BarHandler {
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
-        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 }
