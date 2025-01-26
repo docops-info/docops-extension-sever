@@ -1,10 +1,15 @@
 package io.docops.docopsextensionssupport.button.shape
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.badge.manipulateSVG
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import org.silentsoft.simpleicons.SimpleIcons
+import java.io.ByteArrayInputStream
+import java.util.Base64
+import javax.xml.parsers.DocumentBuilderFactory
 
 class HoneyComb(buttons: Buttons) : Regular(buttons) {
 
@@ -100,13 +105,24 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         val btnLook = """fill="$fill" $filter"""
         val title = descriptionOrLabel(button)
         val textColor = determineTextColor(button.color!!)
+        var img = ""
+        button.embeddedImage?.let {
+            img = getIcon(it.ref)
+        }
+        val endY = textSpans.size * fontSize + 5 + startTextY - fontSize + 10
         return """
         <g transform="translate($x,$y)" cursor="pointer" filter="url(#naturalShadow)">
         <title>$title</title>
         <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
+        <g transform="translate(125,125) scale(2.0)">
+         $img 
+        </g>
         <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
         </a>
+        <line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:4"/>
+        <line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:4"/>
+       
         </g>
         """.trimIndent()
     }
@@ -123,6 +139,30 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
     }
 
+    private fun getIcon(icon: String) : String {
+        var logo = ""
+        val simpleIcon = SimpleIcons.get(icon.replace("<", "").replace(">", ""))
+        if (simpleIcon != null) {
+            val ico = simpleIcon.svg
+            if(ico.isNotBlank()) {
+                return """
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}"/>
+                    </svg>
+                """.trimIndent()
+
+            }
+            val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(ByteArrayInputStream(ico?.toByteArray()))
+            var src = ""
+            xml?.let {
+                src = manipulateSVG(xml, simpleIcon.hex)
+            }
+            logo =  "data:image/svg+xml;base64," + Base64.getEncoder()
+                .encodeToString(src.toByteArray())
+        }
+        return """<image x='125' y='260' width='50' height='50' xlink:href='$logo'/>"""
+    }
     override fun toRows(): MutableList<MutableList<Button>> {
         val rows = mutableListOf<MutableList<Button>>()
         var rowArray = mutableListOf<Button>()
