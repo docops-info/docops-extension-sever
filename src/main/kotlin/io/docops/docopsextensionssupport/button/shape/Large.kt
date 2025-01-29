@@ -56,16 +56,22 @@ class Large(buttons: Buttons) : Regular(buttons) {
             startY = index * 410 + 10
         }
         buttonList.forEach { button: Button ->
+            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append(
                 """
-                <a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">
+                $href
                 <g transform="translate($startX,$startY)" class="basecard btn_${button.id}_cls">
                 <use xlink:href="#outerBox" stroke="$strokeColor"><title class="description">${button.label.escapeXml()}</title></use>
                 <use xlink:href="#topTextBox"/>
                 ${determineLineText(button)}
                 ${drawText(button)}
                 </g>
-                </a>
+                $endAnchor
                 """.trimIndent()
             )
 

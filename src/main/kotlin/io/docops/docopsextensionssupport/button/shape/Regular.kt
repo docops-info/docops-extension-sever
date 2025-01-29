@@ -88,14 +88,19 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                     textClass = "light-shadow"
                 }
             }
-
+            var href = """<a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append(
                 """
         <g transform="translate($startX,$startY)">
-            <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
+            $href
             <rect x="0" y="0" $btnLook width="300" height="30" rx="10" ry="10"/>
             <text x="150" y="20" text-anchor="middle" class="$textClass" style="${button.buttonStyle?.labelStyle}; fill:$textFillColor">${button.label.escapeXml()}</text>
-            </a>
+            $endAnchor
         </g>
         """.trimIndent()
             )

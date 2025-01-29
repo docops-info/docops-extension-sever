@@ -110,16 +110,23 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             img = getIcon(it.ref)
         }
         val endY = textSpans.size * fontSize + 5 + startTextY - fontSize + 10
+        var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+        var endAnchor = "</a>"
+        if(!button.enabled) {
+           href = ""
+            endAnchor = ""
+        }
+
         return """
         <g transform="translate($x,$y)" cursor="pointer" filter="url(#naturalShadow)">
         <title>$title</title>
-        <a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
+        $href
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
-        <g transform="translate(125,125) scale(2.0)">
+        <g transform="translate(110,110) scale(2.0)">
          $img 
         </g>
         <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
-        </a>
+        $endAnchor
         <line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:4"/>
         <line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:4"/>
        
@@ -146,7 +153,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             val ico = simpleIcon.svg
             if(ico.isNotBlank()) {
                 return """
-                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}"/>
                     </svg>
                 """.trimIndent()

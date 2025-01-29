@@ -88,16 +88,22 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             button.embeddedImage?.let {
                 imageOrLabel = makeEmbedImage( it)
             }
+            var href = """<a xlink:href="${button.link}" class="linkText" target="$win">"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append(
                 """
         <g transform="translate($startX,$startY)" cursor="pointer">
             <rect x="0" y="0" width="310" stroke="#b2b2b2"  height="120" rx="15" ry="15" fill="#fcfcfc" fill-opacity='0.3'/>
-            <a xlink:href="${button.link}" class="linkText" target="$win">
+            $href
             <text x="115" y="16" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
-            </a>
-            <a xlink:href="${button.link}" class="linkText" target="$win"> 
+            $endAnchor
+            $href
             $imageOrLabel
-            </a>
+            $endAnchor
             ${linksToText(button.links, button.buttonStyle?.linkStyle)}
         </g>
         """.trimIndent()

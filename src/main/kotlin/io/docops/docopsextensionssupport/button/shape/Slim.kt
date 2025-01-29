@@ -87,9 +87,15 @@ class Slim(buttons: Buttons) : Regular(buttons) {
                 recClz = "${button.color}"
                 labelStyle = "style=\"fill: ${button.color};\""
             }
+            var href = """<a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append("""
          <g transform="translate($startX,$startY)" cursor="pointer">
-        <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
+        $href
         <rect class="basecard" x="0" y="0" fill="#fcfcfc" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="url(#btn_${button.id})" stroke-width="3">
             <title>${button.label.escapeXml()}</title>
         </rect>
@@ -100,7 +106,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         $linesOrImage
         <text x="145" y="135" text-anchor="end">${authors}</text>
         <text x="145" y="145" style="${button.buttonStyle?.dateStyle}" text-anchor="end">${btnDate}</text>
-        </a>
+        $endAnchor
         </g>
             """.trimIndent())
             startX += BUTTON_WIDTH + BUTTON_PADDING

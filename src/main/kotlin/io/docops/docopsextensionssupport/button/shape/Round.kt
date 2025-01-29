@@ -100,9 +100,15 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 stroke = "${button.color}"
                 fill = "url(#btn_${button.id})"
             }
+            var href = """<a xlink:href="${button.link}" target="$win">"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append("""
             <g transform="translate($startX,$startY)" cursor="pointer">
-            <a xlink:href="${button.link}" target="$win">
+            $href
             <g stroke-width="16" stroke="$stroke" fill="#fcfcfc" cursor="pointer" class="raise bar">
                 <title class="description">${button.description?.escapeXml()}</title>
                 <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
@@ -111,7 +117,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             <text  x="0" y="$lineY" text-anchor="middle" style="fill: ${button.color}">
                 $title
             </text>
-            </a>
+            $endAnchor
             </g>
             """.trimIndent())
 

@@ -44,15 +44,21 @@ class Circle(buttons: Buttons): Regular(buttons) {
             }
             val title = linesToMultiLineTextInternal(button.buttonStyle?.labelStyle,
                 lines, 12, 50)
+            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append(
                 """
         <g transform="translate($startX,$startY)" filter="url(#naturalShadow)">
-            <a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>
+            $href
             <circle cx="50" cy="50" r="50" fill="$fill" class="btn_${button.id}_cls bar" $filter/>
             <text x="50" y="50" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">
             $title
             </text>
-            </a>
+            $endAnchor
         </g>
         """.trimIndent()
             )

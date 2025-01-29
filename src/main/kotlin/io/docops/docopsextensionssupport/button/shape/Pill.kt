@@ -58,9 +58,15 @@ class Pill(buttons: Buttons) : Regular(buttons) {
                 fill = "fill='${button.color}'"
                 overlay = "${button.color}"
             }
+            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">"""
+            var endAnchor = "</a>"
+            if(!button.enabled) {
+                href = ""
+                endAnchor = ""
+            }
             btns.append(
                 """
-                <a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">
+                $href
                 <g role="button" cursor="pointer" transform="translate($startX, $startY)">
                     <rect id="button" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" $fill filter="url(#buttonBlur)" />
                     <rect id="buttongrad" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="$overlay"/>
@@ -68,7 +74,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
                     <rect id="buttonbottom" x="25" y="50" width="260" height="7" fill="#ffffff" ry="24" rx="24" fill-opacity="0.3" filter="url(#bottomshine)"/>
                     <text id="label" x="150" y="43" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
                 </g>
-                </a>
+                $endAnchor
                 """
             )
 

@@ -83,6 +83,7 @@ class Button(
     var gradient: String? = null,
     var buttonGradientStyle: String? = null,
     var buttonStyle: ButtonStyle? = null,
+    var enabled: Boolean = true,
     var embeddedImage: EmbeddedImage? = null
 )
 
