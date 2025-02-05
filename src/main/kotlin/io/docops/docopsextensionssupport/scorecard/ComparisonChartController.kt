@@ -27,7 +27,7 @@ class ComparisonChartController {
     fun makePieChart(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             var contents = httpServletRequest.getParameter("content")
-            val maker = ComparisonChartMaker()
+            val maker = ComparisonTableMaker()
             val comp = Json.decodeFromString<ComparisonChart>(contents)
             val svg = maker.make(comp)
 
