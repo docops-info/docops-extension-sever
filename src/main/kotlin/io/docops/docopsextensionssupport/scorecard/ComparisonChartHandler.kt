@@ -10,7 +10,7 @@ class ComparisonChartHandler {
 
     fun handleSVG(payload: String) : ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val maker = ComparisonChartMaker()
+        val maker = ComparisonTableMaker()
         val comparisonChart = Json.decodeFromString<ComparisonChart>(data)
         val svg = maker.make(comparisonChart)
         val headers = HttpHeaders()

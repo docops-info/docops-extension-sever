@@ -22,13 +22,15 @@ class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
     val rightColumnFontColor: String = "#111111",
     val itemColumnColor: String = "#F5F5F7",
     val lineColor: String = "#C4DAD2",
+    val rowColor: String = "#F1F1F1",
+    val defaultRowColor: String = "#fcfcfc",
     val scale: Double = 1.0
         )
 
 @Serializable
 data class Row(val title: String, val original: String, val next: String)
 
-data class ColLine(val lines: Pair<MutableList<String>, MutableList<String>>, val begin: Int)
+data class ColLine(val lines: Pair<MutableList<String>, MutableList<String>>, val begin: Int, val maxLines: Int = 0)
 
 fun ColLine.rows(): Int {
     return maxOf(lines.first.size, lines.second.size)
@@ -49,7 +51,7 @@ fun ComparisonChart.lines(): MutableMap<String, ColLine> {
         val outcome1 = itemTextWidth(row.original, SPLIT_BY, 12, "Arial")
         val outcome2 = itemTextWidth(row.next, SPLIT_BY, 12, "Arial")
         val maxLines = maxOf(outcome1.size, outcome2.size)
-        val colLine = ColLine(Pair(outcome1, outcome2), begin)
+        val colLine = ColLine(Pair(outcome1, outcome2), begin, maxLines= maxLines)
         resp.put(row.title, colLine)
         begin += 20 + (maxLines * 14)
     }
