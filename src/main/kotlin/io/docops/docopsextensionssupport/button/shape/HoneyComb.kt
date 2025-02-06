@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.badge.manipulateSVG
 import io.docops.docopsextensionssupport.button.Button
+import io.docops.docopsextensionssupport.button.ButtonDisplay
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
@@ -40,16 +41,16 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
 
         var startX: Int
         var startY = 10
-        rows.forEachIndexed { index, buttons ->
+        rows.forEachIndexed { index, buttonsI ->
             startX = if(index == 0 || isEven(index)) {
                 10
             } else {
                 155
             }
-            buttons.forEach {  button ->
+            buttonsI.forEach {  button ->
                 val x = startX
                 val y = startY
-                sb.append(createSingleHoneyCom(button, x, y))
+                sb.append(createSingleHoneyCom(button, x, y, buttons.theme!!))
                 startX += BUTTON_WIDTH
             }
             startY += BUTTON_HEIGHT
@@ -76,7 +77,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING ) * scale
     }
-    private fun createSingleHoneyCom(button: Button, x: Int, y: Int): String {
+    private fun createSingleHoneyCom(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val spans = StringBuilder()
         val fontSize = button.buttonStyle?.fontSize ?: 24
         val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = fontSize)
@@ -116,20 +117,27 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
            href = ""
             endAnchor = ""
         }
-
+        var typeText = ""
+        button.type?.let {typeText = it.uppercase()}
+        var l1 = ""
+        var l2 = ""
+        if(theme.hexLinesEnabled) {
+            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:4"/>"""
+            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:4"/>"""
+        }
         return """
         <g transform="translate($x,$y)" cursor="pointer" filter="url(#naturalShadow)">
         <title>$title</title>
         $href
         <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
-        <g transform="translate(110,110) scale(2.0)">
+        <g transform="translate(125,50) scale(1.0)">
          $img 
         </g>
         <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
         $endAnchor
-        <line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:4"/>
-        <line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:4"/>
-       
+        $l1
+        $l2
+        <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-weight: bold;letter-spacing: 3px;">$typeText</text>
         </g>
         """.trimIndent()
     }

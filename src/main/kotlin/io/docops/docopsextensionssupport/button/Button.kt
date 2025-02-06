@@ -212,6 +212,7 @@ class ButtonDisplay(
         labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;",
         fontSize = 12
     ),
+    val hexLinesEnabled: Boolean = false,
     val raise: Boolean = true
 )
 
