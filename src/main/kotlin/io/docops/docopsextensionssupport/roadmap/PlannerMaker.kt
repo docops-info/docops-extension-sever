@@ -18,8 +18,8 @@ class PlannerMaker {
         val itemGrad = itemGradient(planItems)
         val width = determineWidth(planItems)
         val height = determineHeight(planItems)
-        sb.append(makeHead(planItems, title, grads, itemGrad, width, height))
-        sb.append("""<g transform="scale($scale)">""")
+        sb.append(makeHead(planItems, title, grads, itemGrad, width, height, scale))
+        sb.append("""<g>""")
         sb.append("""<text x="${width/2}" y="40" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 36px; font-weight: bold;">${title.escapeXml()}</text>""")
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
@@ -107,10 +107,18 @@ private fun itemGradient(planItems: PlanItems): String {
     private fun determineHeight(planItems: PlanItems) : Int {
         return planItems.maxRows() * 360 + (planItems.maxRows() * 10)+ 120
     }
-    private fun makeHead(planItems: PlanItems, title: String, grads: String, itemGrad:  String, width: Int, height: Int): String {
+    private fun makeHead(
+        planItems: PlanItems,
+        title: String,
+        grads: String,
+        itemGrad: String,
+        width: Int,
+        height: Int,
+        scale: String
+    ): String {
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="${(width * 0.50) / DISPLAY_RATIO_16_9}" height="${(height * 0.50)/DISPLAY_RATIO_16_9}"
+     width="${(width * 0.50 * scale.toFloat()) / DISPLAY_RATIO_16_9}" height="${(height * 0.50 * scale.toFloat())/DISPLAY_RATIO_16_9}"
      viewBox="0 0 $width $height">
      <defs>
      $grads
