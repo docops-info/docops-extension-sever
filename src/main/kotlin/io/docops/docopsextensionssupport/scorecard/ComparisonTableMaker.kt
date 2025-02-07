@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.scorecard
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -18,8 +19,12 @@ class ComparisonTableMaker {
         var startY = 64
         var evenOdd = 0
         comparisonChart.lines().forEach { (key, value) ->
-            sb.append(makeRow(key= key, value = value, startY = startY, display = comparisonChart.display, isEven(evenOdd)))
-            startY += (34 + ((value.maxLines-1) * 12))
+            val keyToRows = itemTextWidth(key, 330, 12, "Arial")
+            val totalLinesMax = maxOf(value.maxLines, keyToRows.size)
+
+            sb.append(makeRow(key= key, value = value, startY = startY, display = comparisonChart.display, isEven(evenOdd), keyToRows, totalLinesMax))
+
+            startY += (34 + ((totalLinesMax-1) * 12))
             evenOdd++
         }
         sb.append(tail(comparisonChart))
@@ -66,22 +71,34 @@ class ComparisonTableMaker {
         return sb.toString()
     }
 
-    private fun makeRow(key: String, value: ColLine, startY: Int, display: ComparisonChartDisplay, even: Boolean) : String {
+    private fun makeRow(
+        key: String,
+        value: ColLine,
+        startY: Int,
+        display: ComparisonChartDisplay,
+        even: Boolean,
+        keyToRows: MutableList<String>,
+        totalLinesMax: Int
+    ) : String {
         val sb = StringBuilder()
         //col 1
         val textColor = determineTextColor(display.itemColumnColor)
-        val rowHeight = 34 + ((value.maxLines-1) * 12)
-        println(rowHeight)
+
+        val rowHeight = 34 + ((totalLinesMax-1) * 12)
+
+        var dy = 0
+        val sb2 = StringBuilder()
+        columnText(keyToRows, dy, sb2, determineTextColor(display.itemColumnColor))
         sb.append("""
         <g transform="translate(0,$startY)" class="rowShade">    
         <rect y="0" width="341" height="$rowHeight" fill="${display.itemColumnColor}" />
         <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: $textColor;"
               x="5" y="24">
-            $key
+            $sb2
         </text>
         </g>
         """.trimIndent())
-        var dy = 0
+
 
         var rowFill = display.defaultRowColor
         if(even) {

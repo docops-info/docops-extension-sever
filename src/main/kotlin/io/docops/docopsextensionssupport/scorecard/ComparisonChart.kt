@@ -33,6 +33,7 @@ data class Row(val title: String, val original: String, val next: String)
 data class ColLine(val lines: Pair<MutableList<String>, MutableList<String>>, val begin: Int, val maxLines: Int = 0)
 
 fun ColLine.rows(): Int {
+
     return maxOf(lines.first.size, lines.second.size)
 }
 
@@ -44,13 +45,15 @@ fun Row.numOfRows(): Int {
 }
 
 
+
 fun ComparisonChart.lines(): MutableMap<String, ColLine> {
     val resp = mutableMapOf<String, ColLine>()
     var begin = 110
     rows.forEach { row ->
         val outcome1 = itemTextWidth(row.original, SPLIT_BY, 12, "Arial")
         val outcome2 = itemTextWidth(row.next, SPLIT_BY, 12, "Arial")
-        val maxLines = maxOf(outcome1.size, outcome2.size)
+        val outcome3 =  itemTextWidth(row.title, SPLIT_BY, 12, "Arial")
+        val maxLines = maxOf(outcome3.size,maxOf(outcome1.size, outcome2.size))
         val colLine = ColLine(Pair(outcome1, outcome2), begin, maxLines= maxLines)
         resp.put(row.title, colLine)
         begin += 20 + (maxLines * 14)
