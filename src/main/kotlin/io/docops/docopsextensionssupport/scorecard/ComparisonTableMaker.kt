@@ -7,6 +7,7 @@ import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.awt.Font
 
 class ComparisonTableMaker {
     fun make(comparisonChart: ComparisonChart): String {
@@ -18,11 +19,12 @@ class ComparisonTableMaker {
         sb.append(headerRow(comparisonChart, lastLine))
         var startY = 64
         var evenOdd = 0
+        var idx = 1
         comparisonChart.lines().forEach { (key, value) ->
-            val keyToRows = itemTextWidth(key, 330, 12, "Arial")
+            val keyToRows = itemTextWidth(key, 310, 12, "Arial", style = Font.BOLD)
             val totalLinesMax = maxOf(value.maxLines, keyToRows.size)
 
-            sb.append(makeRow(key= key, value = value, startY = startY, display = comparisonChart.display, isEven(evenOdd), keyToRows, totalLinesMax))
+            sb.append(makeRow(value = value, startY = startY, display = comparisonChart.display, isEven(evenOdd), keyToRows, totalLinesMax, idx++))
 
             startY += (34 + ((totalLinesMax-1) * 12))
             evenOdd++
@@ -37,8 +39,8 @@ class ComparisonTableMaker {
     private fun head(comparisonChart: ComparisonChart, lastLine: Int) = """
         <svg id="ID_${comparisonChart.id}"
      xmlns="http://www.w3.org/2000/svg"
-     width="${(1024 * comparisonChart.display.scale )/ DISPLAY_RATIO_16_9}" height="${(lastLine * comparisonChart.display.scale) / DISPLAY_RATIO_16_9}"
-     viewBox="0 0 1024.0 $lastLine"
+     width="${(1024 * comparisonChart.display.scale )/ DISPLAY_RATIO_16_9}" height="${((lastLine + 13) * comparisonChart.display.scale) / DISPLAY_RATIO_16_9}"
+     viewBox="0 0 1024.0 ${lastLine+13}"
      preserveAspectRatio="xMidYMin slice"
      >
     """.trimIndent()
@@ -51,7 +53,7 @@ class ComparisonTableMaker {
         sb.append("""
             <rect y="0" width="100%" height="30" fill="${comparisonChart.display.itemColumnColor}" aria-label="title bar" />
             <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title}</text>
-
+            <g aria-label='header'>
            <g transform="translate(0,0)">
             <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" />
             </g>
@@ -67,18 +69,20 @@ class ComparisonTableMaker {
                      ${comparisonChart.colHeader[1]}
                 </text>
             </g>
+            <line x1="0" x2="1024" y1="64" y2="64" stroke="#cccccc"/>
+            </g>
         """.trimIndent())
         return sb.toString()
     }
 
     private fun makeRow(
-        key: String,
         value: ColLine,
         startY: Int,
         display: ComparisonChartDisplay,
         even: Boolean,
         keyToRows: MutableList<String>,
-        totalLinesMax: Int
+        totalLinesMax: Int,
+        idx: Int
     ) : String {
         val sb = StringBuilder()
         //col 1
@@ -86,9 +90,10 @@ class ComparisonTableMaker {
 
         val rowHeight = 34 + ((totalLinesMax-1) * 12)
 
-        var dy = 0
+        val dy = 0
         val sb2 = StringBuilder()
         columnText(keyToRows, dy, sb2, determineTextColor(display.itemColumnColor))
+        sb.append("<g aria-label=\"row $idx\">")
         sb.append("""
         <g transform="translate(0,$startY)" class="rowShade">    
         <rect y="0" width="341" height="$rowHeight" fill="${display.itemColumnColor}" />
@@ -118,6 +123,8 @@ class ComparisonTableMaker {
         """.trimIndent())
         columnText(value.lines.second, dy, sb, display.rightColumnFontColor)
         sb.append("</text></g>")
+        sb.append("""<line x1="0" x2="1024" y1="${startY+rowHeight}" y2="${startY+rowHeight}" stroke="#cccccc"/>""")
+        sb.append("</g>")
         return sb.toString()
     }
     private fun defs(comparisonChart: ComparisonChart): String {

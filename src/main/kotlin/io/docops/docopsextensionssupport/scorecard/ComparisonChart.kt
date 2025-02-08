@@ -52,7 +52,7 @@ fun ComparisonChart.lines(): MutableMap<String, ColLine> {
     rows.forEach { row ->
         val outcome1 = itemTextWidth(row.original, SPLIT_BY, 12, "Arial")
         val outcome2 = itemTextWidth(row.next, SPLIT_BY, 12, "Arial")
-        val outcome3 =  itemTextWidth(row.title, SPLIT_BY, 12, "Arial")
+        val outcome3 =  itemTextWidth(row.title, 310, 12, "Arial")
         val maxLines = maxOf(outcome3.size,maxOf(outcome1.size, outcome2.size))
         val colLine = ColLine(Pair(outcome1, outcome2), begin, maxLines= maxLines)
         resp.put(row.title, colLine)

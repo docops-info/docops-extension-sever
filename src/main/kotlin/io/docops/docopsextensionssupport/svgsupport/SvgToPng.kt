@@ -25,8 +25,8 @@ const val DISPLAY_RATIO_16_9 = 1.7777777778
 
 class SvgToPng
 
-fun String.textWidth(fontName: String, size: Int = 12): Int {
-    val font =  Font(fontName,Font.PLAIN,size)
+fun String.textWidth(fontName: String, size: Int = 12, style: Int = Font.PLAIN): Int {
+    val font =  Font(fontName,style,size)
     val c = Canvas()
     val fm = c.getFontMetrics(font)
     return fm.stringWidth(this)
@@ -45,10 +45,10 @@ fun String .textAscent(fontName: String, size: Int = 12): Int {
     return fm.ascent
 }
 
-fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica"): MutableList<String> {
+fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica", style: Int = Font.PLAIN): MutableList<String> {
     val split = itemText.split(" ")
     val itemArray = mutableListOf<String>()
-    val width = itemText.textWidth(fontName, fontSize)
+    val width = itemText.textWidth(fontName, fontSize, style = style)
     if(width > maxWidth) {
         val sb = StringBuilder()
         split.forEachIndexed { index, s ->
