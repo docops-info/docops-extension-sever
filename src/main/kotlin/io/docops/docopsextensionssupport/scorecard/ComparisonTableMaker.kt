@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
@@ -30,19 +31,14 @@ class ComparisonTableMaker {
             evenOdd++
         }
         sb.append(tail(comparisonChart))
-        return sb.toString()
+        return joinXmlLines(sb.toString())
     }
 
     private fun isEven(number: Int): Boolean {
         return number % 2 == 0
     }
     private fun head(comparisonChart: ComparisonChart, lastLine: Int) = """
-        <svg id="ID_${comparisonChart.id}"
-     xmlns="http://www.w3.org/2000/svg"
-     width="${(1024 * comparisonChart.display.scale )/ DISPLAY_RATIO_16_9}" height="${((lastLine + 13) * comparisonChart.display.scale) / DISPLAY_RATIO_16_9}"
-     viewBox="0 0 1024.0 ${lastLine+13}"
-     preserveAspectRatio="xMidYMin slice"
-     >
+        <svg id="ID_${comparisonChart.id}" xmlns="http://www.w3.org/2000/svg" width="${(1024 * comparisonChart.display.scale )/ DISPLAY_RATIO_16_9}" height="${((lastLine + 13) * comparisonChart.display.scale) / DISPLAY_RATIO_16_9}" viewBox="0 0 1024.0 ${lastLine+13}" preserveAspectRatio="xMidYMin slice">
     """.trimIndent()
     private fun tail(comparisonChart: ComparisonChart) = "</svg>"
 
@@ -51,25 +47,27 @@ class ComparisonTableMaker {
         val textColor = determineTextColor(comparisonChart.display.itemColumnColor)
         //language=svg
         sb.append("""
+            <g aria-label="title">
             <rect y="0" width="100%" height="30" fill="${comparisonChart.display.itemColumnColor}" aria-label="title bar" />
             <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title}</text>
-            <g aria-label='header'>
-           <g transform="translate(0,0)">
-            <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" />
             </g>
-            <g transform="translate(341,0)">
-                <rect y="30" width="341" height="34" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column header'/>
-                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}">
-                     ${comparisonChart.colHeader[0]}
-                </text>
-            </g>
-            <g transform="translate(682,0)">
-                <rect y="30" width="341" height="34" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column header'/>
-                <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}">
-                     ${comparisonChart.colHeader[1]}
-                </text>
-            </g>
-            <line x1="0" x2="1024" y1="64" y2="64" stroke="#cccccc"/>
+            <g aria-label="header" class="rowShade">
+               <g transform="translate(0,0)">
+                <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" />
+                </g>
+                <g transform="translate(341,0)">
+                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column header'/>
+                    <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}">
+                         ${comparisonChart.colHeader[0]}
+                    </text>
+                </g>
+                <g transform="translate(682,0)">
+                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column header'/>
+                    <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}">
+                         ${comparisonChart.colHeader[1]}
+                    </text>
+                </g>
+                <line x1="0" x2="1024" y1="64" y2="64" stroke="#cccccc"/>
             </g>
         """.trimIndent())
         return sb.toString()
@@ -93,12 +91,11 @@ class ComparisonTableMaker {
         val dy = 0
         val sb2 = StringBuilder()
         columnText(keyToRows, dy, sb2, determineTextColor(display.itemColumnColor))
-        sb.append("<g aria-label=\"row $idx\">")
+        sb.append("<g aria-label=\"row $idx\" class=\"rowShade\">")
         sb.append("""
-        <g transform="translate(0,$startY)" class="rowShade">    
+        <g transform="translate(0,$startY)">    
         <rect y="0" width="341" height="$rowHeight" fill="${display.itemColumnColor}" />
-        <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: $textColor;"
-              x="5" y="24">
+        <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: $textColor;" x="5" y="24">
             $sb2
         </text>
         </g>
@@ -110,15 +107,15 @@ class ComparisonTableMaker {
             rowFill = display.rowColor
         }
         sb.append("""
-            <g transform="translate(341,$startY)" class="rowShade">
-            <rect y="0" width="341" height="$rowHeight" fill="$rowFill" class="rowShade"/>
+            <g transform="translate(341,$startY)">
+            <rect y="0" width="341" height="$rowHeight" fill="$rowFill"/>
             <text id="path1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; " x="2" y="24">""".trimIndent())
         columnText(value.lines.first, dy, sb, display.leftColumnFontColor)
             sb.append("</text></g>")
         //language=svg
         sb.append("""
-            <g transform="translate(682,$startY)" class="rowShade">
-        <rect y="0" width="341" height="$rowHeight" fill="$rowFill" class="rowShade"/>
+            <g transform="translate(682,$startY)">
+        <rect y="0" width="341" height="$rowHeight" fill="$rowFill"/>
         <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; " x="2" y="24">
         """.trimIndent())
         columnText(value.lines.second, dy, sb, display.rightColumnFontColor)
