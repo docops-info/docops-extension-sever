@@ -167,16 +167,12 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
                 """.trimIndent()
 
             }
-            val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                .parse(ByteArrayInputStream(ico?.toByteArray()))
-            var src = ""
-            xml?.let {
-                src = manipulateSVG(xml, simpleIcon.hex)
-            }
-            logo =  "data:image/svg+xml;base64," + Base64.getEncoder()
-                .encodeToString(src.toByteArray())
         }
-        return """<image x='125' y='260' width='50' height='50' xlink:href='$logo'/>"""
+        return """
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <image width='50' height="50" xlink:href="$logo" href="$logo"/>
+            </svg>
+            """.trimIndent()
     }
     override fun toRows(): MutableList<MutableList<Button>> {
         val rows = mutableListOf<MutableList<Button>>()
