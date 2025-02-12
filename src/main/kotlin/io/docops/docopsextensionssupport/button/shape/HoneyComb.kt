@@ -50,7 +50,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             buttonsI.forEach {  button ->
                 val x = startX
                 val y = startY
-                sb.append(createSingleHoneyCom(button, x, y, buttons.theme!!))
+                sb.append(createSingleHoneyComb(button, x, y, buttons.theme!!))
                 startX += BUTTON_WIDTH
             }
             startY += BUTTON_HEIGHT
@@ -77,7 +77,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         }
         return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING ) * scale
     }
-    private fun createSingleHoneyCom(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
+    private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val spans = StringBuilder()
         val fontSize = button.buttonStyle?.fontSize ?: 24
         val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = fontSize)
@@ -129,7 +129,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         <g transform="translate($x,$y)" cursor="pointer" filter="url(#naturalShadow)">
         <title>$title</title>
         $href
-        <polygon class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
+        <polygon stroke="${theme.strokeColor}" stroke-width="3" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
         <g transform="translate(125,50) scale(1.0)">
          $img 
         </g>
@@ -155,7 +155,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
     }
 
     private fun getIcon(icon: String) : String {
-        var logo = ""
+        var logo = icon
         val simpleIcon = SimpleIcons.get(icon.replace("<", "").replace(">", ""))
         if (simpleIcon != null) {
             val ico = simpleIcon.svg
