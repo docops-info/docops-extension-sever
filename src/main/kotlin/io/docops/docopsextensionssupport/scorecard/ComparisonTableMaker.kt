@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
@@ -49,7 +50,7 @@ class ComparisonTableMaker {
         sb.append("""
             <g aria-label="title">
             <rect y="0" width="100%" height="30" fill="${comparisonChart.display.itemColumnColor}" aria-label="title bar" />
-            <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title}</text>
+            <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title.escapeXml()}</text>
             </g>
             <g aria-label="header" class="rowShade">
                <g transform="translate(0,0)">
@@ -58,13 +59,13 @@ class ComparisonTableMaker {
                 <g transform="translate(341,0)">
                     <rect y="30" width="341" height="34" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column header'/>
                     <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}">
-                         ${comparisonChart.colHeader[0]}
+                         ${comparisonChart.colHeader[0].escapeXml()}
                     </text>
                 </g>
                 <g transform="translate(682,0)">
                     <rect y="30" width="341" height="34" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column header'/>
                     <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}">
-                         ${comparisonChart.colHeader[1]}
+                         ${comparisonChart.colHeader[1].escapeXml()}
                     </text>
                 </g>
                 <line x1="0" x2="1024" y1="64" y2="64" stroke="#cccccc"/>
@@ -160,9 +161,26 @@ class ComparisonTableMaker {
             if (idx > 0) {
                 dy1 = 14
             }
-            sb.append("""<tspan x="5" dy="$dy1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;fill: ${display};">$t</tspan>""")
+            sb.append("""<tspan x="5" dy="$dy1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;fill: ${display};">${t.escapeXml()}</tspan>""")
         }
         return dy1
+    }
+
+    fun toCsv(comparisonChart: ComparisonChart): String {
+        val header = ""","${comparisonChart.title}","""
+        val subHeader = ""","${comparisonChart.colHeader[0]}","${comparisonChart.colHeader[1]}""""
+        val sb = StringBuilder()
+        sb.append(header)
+        sb.appendLine()
+        sb.append(subHeader)
+        sb.appendLine()
+        comparisonChart.lines().forEach { (key, value) ->
+            sb.append(""""$key","${value.lines.first.joinToString(" ")}","${value.lines.second.joinToString(" ")}"""")
+            sb.appendLine()
+
+        }
+        return sb.toString()
+
     }
 }
 
@@ -185,4 +203,5 @@ fun main() {
     val svg = comparisonTableMaker.make(comparisonChart)
     val outfile2 = File("gen/compare.svg")
     outfile2.writeBytes(svg.toByteArray())
+    println(comparisonTableMaker.toCsv(comparisonChart))
 }
