@@ -202,6 +202,7 @@ class Sort(val sort: ButtonSortBy = ButtonSortBy.LABEL, val direction: SortDirec
 @Serializable
 class ButtonDisplay(
     val colors: List<String> = DARK1(),
+    val colorTypeMap: MutableMap<String, String> = mutableMapOf(),
     val scale: Float = 1.0f,
     val columns: Int = 3,
     val newWin: Boolean = false,
@@ -248,6 +249,9 @@ class Buttons(
         theme?.let {
             if(!it.useDark) {
                 it.useDark = useDark
+            }
+            if(it.colorTypeMap.isNotEmpty()) {
+                typeMap.putAll(it.colorTypeMap)
             }
         }
         buttons.forEach {
