@@ -162,15 +162,15 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
             if(ico.isNotBlank()) {
                 return """
                     <svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}"/>
+                    <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}" filter="url(#Bevel2)"/>
                     </svg>
                 """.trimIndent()
 
             }
         }
         return """
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <image width='50' height="50" xlink:href="$logo" href="$logo"/>
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" filter="url(#Bevel2)">
+                    <image width='50' height="50" xlink:href="$logo" href="$logo" />
             </svg>
             """.trimIndent()
     }
