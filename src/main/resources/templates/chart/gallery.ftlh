@@ -2,7 +2,8 @@
 <div>
     <h3>Chart Gallery</h3>
 
-    <div class="inline-flex rounded-md shadow-sm" role="group">
+    <div class="flex space-x-4 overflow-x-auto pb-4">
+        <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow overflow-hidden">
         <button data-hx-get="galleryItem.html?name=bar1.json&kind=bar&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
             Bar Chart Dark
         </button>
@@ -46,12 +47,13 @@
             Line 3
         </button>
     </div>
+    </div>
     <figure>
         <figcaption class="figure-key">
             Charts Gallery
         </figcaption>
         <div class="figure-content">
-            <div id="gallery-chart-container">
+            <div id="gallery-chart-container" class="flex-shrink-0 w-64 bg-white rounded-lg shadow overflow-hidden">
                 <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}">
                     <img src="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}" alt="gallery item bar1"/>
                 </object>
