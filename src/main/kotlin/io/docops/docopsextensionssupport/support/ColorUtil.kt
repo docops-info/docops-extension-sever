@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.support
 
+import kotlinx.serialization.Serializable
 import java.awt.Color
 import java.util.*
 import kotlin.math.floor
@@ -116,6 +117,7 @@ fun determineTextColor(hexColor: String): String {
     return if (luminance < 0.5) "#FCFCFC" else "#000000"
 }
 
+@Serializable
 class SVGColor(val color: String, val id: String = UUID.randomUUID().toString()) {
     val foreGroundColor: String = determineTextColor(color)
     val colorMap = gradientFromColor(color)
