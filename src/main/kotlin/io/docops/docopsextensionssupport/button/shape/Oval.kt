@@ -52,7 +52,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             background = "none"
         }
         buttonList.forEach { button: Button ->
-            val text = itemTextWidth(button.label, 245, 24)
+            val text = itemTextWidth(button.label, 245F, 24)
             val tspan = StringBuilder()
             var dy = 0
             text.forEachIndexed { index, s ->

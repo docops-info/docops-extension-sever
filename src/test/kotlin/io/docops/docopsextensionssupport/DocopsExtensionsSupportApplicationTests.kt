@@ -31,7 +31,7 @@ fun getPath(w: Int = 100, h: Int = 100, curvature: Double = 0.5): String {
         0, ${w - curveHeight} 0, ${h / 2}
     """.trimIndent()
 }
-fun main() {
+fun mainx() {
     val L = mutableListOf(
         """<?xml version="1.0" encoding="UTF-8" standalone="no"?>""",
         """<svg width="500" height="400" xmlns="http://www.w3.org/2000/svg" version="1.1"> """,

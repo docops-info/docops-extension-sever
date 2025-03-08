@@ -58,7 +58,7 @@ fun Entry.toTextWithSpan(numChars: Float, x: Int, y: Int, clazz: String, dy: Int
     var text = """<text x="$x" y="$y" font-size="14px" font-family="Arial, Helvetica, sans-serif" fill='$fillColor'>"""
 
     //val lines = linesToUrlIfExist(wrapText(s, numChars), urlMap)
-    val itemArray = itemTextWidth(s, 220, 14, "Arial")
+    val itemArray = itemTextWidth(s, 220F, 14, "Arial")
     val lines = linesToUrlIfExist(itemArray, urlMap)
     val spans = linesToMultiLineText(lines,dy, x, fillColor)
     text += spans

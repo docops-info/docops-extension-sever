@@ -206,7 +206,7 @@ class ScoreCardMaker {
 
         }
         scoreCard.initiativeItems.forEach {
-            val itemArray = itemTextWidth(it.displayText, 450)
+            val itemArray = itemTextWidth(it.displayText, 450F)
             //val items = it.displayTextToList(70)
             val h = 12+ itemArray.size * 12f
             sb.append(
@@ -254,7 +254,7 @@ class ScoreCardMaker {
             grad = "#5D9C59"
         }
         scoreCard.outcomeItems.forEach {
-            val itemArray = itemTextWidth(it.displayText, 450)
+            val itemArray = itemTextWidth(it.displayText, 450F)
                 //val items = it.displayTextToList(70)
             val h = 12+ itemArray.size * 12f
             sb.append(

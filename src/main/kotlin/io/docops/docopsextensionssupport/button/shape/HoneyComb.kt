@@ -80,7 +80,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val spans = StringBuilder()
         val fontSize = button.buttonStyle?.fontSize ?: 24
-        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245, fontSize = fontSize)
+        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245F, fontSize = fontSize)
         val startTextY = 187 - (textSpans.size * 12)
 
         textSpans.forEachIndexed { index, s ->

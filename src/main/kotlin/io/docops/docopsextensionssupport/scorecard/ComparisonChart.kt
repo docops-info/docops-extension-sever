@@ -9,8 +9,7 @@ class ComparisonChart(
     val id: String = UUID.randomUUID().toString(),
     val title: String, val colHeader: MutableList<String>, val rows: MutableList<Row>, val display: ComparisonChartDisplay = ComparisonChartDisplay()
 )
-private const val SPLIT_BY = 325
-
+private const val SPLIT_BY = 325F
 @Serializable
 class ComparisonChartDisplay(val id: String = UUID.randomUUID().toString(),
     val titleFontStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:18px; text-anchor:middle; font-weight: bold;",
@@ -52,7 +51,7 @@ fun ComparisonChart.lines(): MutableMap<String, ColLine> {
     rows.forEach { row ->
         val outcome1 = itemTextWidth(row.original, SPLIT_BY, 12, "Arial")
         val outcome2 = itemTextWidth(row.next, SPLIT_BY, 12, "Arial")
-        val outcome3 =  itemTextWidth(row.title, 310, 12, "Arial")
+        val outcome3 =  itemTextWidth(row.title, 310F, 12, "Arial")
         val maxLines = maxOf(outcome3.size,maxOf(outcome1.size, outcome2.size))
         val colLine = ColLine(Pair(outcome1, outcome2), begin, maxLines= maxLines)
         resp.put(row.title, colLine)

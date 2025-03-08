@@ -45,7 +45,7 @@ fun String .textAscent(fontName: String, size: Int = 12): Int {
     return fm.ascent
 }
 
-fun itemTextWidth(itemText: String, maxWidth: Int, fontSize: Int = 12, fontName: String = "Helvetica", style: Int = Font.PLAIN): MutableList<String> {
+fun itemTextWidth(itemText: String, maxWidth: Float, fontSize: Int = 12, fontName: String = "Helvetica", style: Int = Font.PLAIN): MutableList<String> {
     val split = itemText.split(" ")
     val itemArray = mutableListOf<String>()
     val width = itemText.textWidth(fontName, fontSize, style = style)

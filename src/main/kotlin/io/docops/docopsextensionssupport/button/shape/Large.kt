@@ -111,7 +111,7 @@ class Large(buttons: Buttons) : Regular(buttons) {
     private fun drawText(button: Button): String {
         var desc = mutableListOf<String>()
         button.description?.let {
-            desc= itemTextWidth(itemText = it, maxWidth = 295, fontSize = 12, fontName = "Helvetica")
+            desc= itemTextWidth(itemText = it, maxWidth = 295F, fontSize = 12, fontName = "Helvetica")
            // desc = addLinebreaks(it, 35)
         }
         val descList = StringBuilder()

@@ -125,7 +125,7 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
         itemArray.add("")
         return itemArray
     }
@@ -149,7 +149,7 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
         itemArray.add("")
         return itemArray
     }
@@ -173,7 +173,7 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength, 11)
+        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
         itemArray.add("")
         return itemArray
     }

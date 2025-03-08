@@ -82,7 +82,7 @@ private fun itemGradient(planItems: PlanItems): String {
             }
             planItem.content?.let {
                 //todo fix url
-                val contentList = itemTextWidth(planItem.content!!, 542, 24, "Helvetica")
+                val contentList = itemTextWidth(planItem.content!!, 542F, 24, "Helvetica")
                 val list = linesToUrlIfExist(contentList, planItem.urlMap)
                 sb.append("<text x='20' y='62' style='font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24px;'>")
                 list.forEachIndexed { index, string ->

@@ -1,36 +1,39 @@
-<svg width="512" height="512" viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' role='img'
-     aria-label='Docops: Release Strategy'>
+<svg viewBox="0 0 1024 768" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="1024" height="768" fill="#0c0f14" />
 
+    <polygon points="512,100 700,668 324,668" fill="url(#grad1)" />
+    <polygon points="400,400 624,400 512,668" fill="#ffffff" />
+
+
+
+
+    <!-- Stylized Text -->
+    <text x="50%" y="650" text-anchor="middle" font-family="'Gill Sans', sans-serif" font-size="80"
+          fill="url(#textGradient)" font-weight="700" letter-spacing="8" filter="url(#glow)">
+        Architecture
+    </text>
+
+    <!-- Gradient for Text -->
     <defs>
-        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feOffset in="SourceAlpha" dx="2" dy="2" result="offset"/>
-            <feGaussianBlur in="offset" stdDeviation="1" result="blur"/>
-            <feFlood flood-color="#555" flood-opacity="1" result="color"/>
-            <feComposite in="color" in2="blur" operator="in" result="shadow"/>
-            <feComposite in="SourceGraphic" in2="shadow" result="bevel"/>
-        </filter>
-        <style>
-            .cover1 {
-                fill: rgb(80, 218, 119);
-                filter: drop-shadow(0 2mm 1mm rgb(27, 84, 44));
-            }
-
-            .cover2 {
-                fill: rgb(247, 243, 252);
-                filter: drop-shadow(0 2mm 1mm rgb(114, 90, 178));
-            }
-
-            .logo {
-                font-family: Arial,Helvetica,sans-serif;
-                fill: rgb(247, 243, 252);
-                filter: drop-shadow(0 2mm 1mm rgb(114, 90, 178));
-            }
-        </style>
+        <linearGradient id="textGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop class="stop1" offset="0%" stop-color="#ffb800"/>
+            <stop class="stop2" offset="50%" stop-color="#FF9A00"/>
+            <stop class="stop3" offset="100%" stop-color="#cc7b00"/>
+        </linearGradient>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#52f8ff"/>
+            <stop class="stop2" offset="50%" stop-color="#45CFDD"/>
+            <stop class="stop3" offset="100%" stop-color="#37a5b0"/>
+        </linearGradient>
     </defs>
-    <path d="m0,0 l0,512 l512,-512 z" class="cover1"/>
-    <path d="m512,0 l0,512 -512,0z" class="cover2"/>
 
-    <text x="256" y="256" font-family="Arial" font-size="100" text-anchor="middle" fill="#ff8c00" filter="url(#shadow)">DocOps.io</text>
-<!--    <rect x="300" y="0" width="250" height="100%" class="col1"/>
-    <rect x="550" y="0" width="250" height="100%" fill="none"/>-->
+    <!-- Glow Effect -->
+    <filter id="glow">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurred" />
+        <feMerge>
+            <feMergeNode in="blurred" />
+            <feMergeNode in="SourceGraphic" />
+        </feMerge>
+    </filter>
 </svg>

@@ -111,7 +111,7 @@ open class PieSliceMaker {
             //val labelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX, centerY)
             val textColor = determineTextColor(STUNNINGPIE[index])
             labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 10px; font-family: Arial, Helvetica, sans-serif;\">")
-            val spans = itemTextWidth(segment.label, 60, 10)
+            val spans = itemTextWidth(segment.label, 60F, 10)
             spans.add(segment.amount.toString())
             spans.forEachIndexed { index, it ->
                 var dy = 0

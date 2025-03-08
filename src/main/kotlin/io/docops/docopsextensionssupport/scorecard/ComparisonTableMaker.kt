@@ -23,7 +23,7 @@ class ComparisonTableMaker {
         var evenOdd = 0
         var idx = 1
         comparisonChart.lines().forEach { (key, value) ->
-            val keyToRows = itemTextWidth(key, 310, 12, "Arial", style = Font.BOLD)
+            val keyToRows = itemTextWidth(key, 310F, 12, "Arial", style = Font.BOLD)
             val totalLinesMax = maxOf(value.maxLines, keyToRows.size)
 
             sb.append(makeRow(value = value, startY = startY, display = comparisonChart.display, isEven(evenOdd), keyToRows, totalLinesMax, idx++))

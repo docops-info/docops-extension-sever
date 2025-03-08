@@ -40,6 +40,9 @@
         <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="comp.html" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Comparison Chart</a>
     </li>
     <li class="me-2">
+        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="table.html" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Table </a>
+    </li>
+    <li class="me-2">
         <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="color/grad.html" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Color Gradient Help</a>
     </li>
 </ul>

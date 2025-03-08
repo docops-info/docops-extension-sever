@@ -379,6 +379,13 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun score(model: Model): String {
         return "scorecard/menu"
     }
+
+    @GetMapping("/table.html")
+    @Counted
+    @Timed(value = "docops.table")
+    fun table(model: Model): String {
+        return "scorecard/table"
+    }
     private val gradientMap = mapOf<String, GradientStyle>(
         "BlueTheme" to BlueTheme,
         "RedTheme" to RedTheme,

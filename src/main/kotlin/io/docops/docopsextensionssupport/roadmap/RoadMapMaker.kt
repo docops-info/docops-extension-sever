@@ -183,7 +183,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
                     val spans = linesToMultiLineText(lines, BoxFontSize, 2, null, 18)
@@ -198,7 +198,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
                     val spans = linesToMultiLineText(lines, BoxFontSize, 212, null,18)
@@ -213,7 +213,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
                     text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
                     val lines =
                         linesToUrlIfExist(
-                            itemTextWidth(item.joinToString(" "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                            itemTextWidth(item.joinToString(" "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                             roadmaps.urlMap
                         )
                     val spans = linesToMultiLineText(lines, BoxFontSize, 422, null, 18)
@@ -274,7 +274,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="2" y="2" fill="#421A56" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #0D9276; ">"""
             text += """<tspan x="2" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                itemTextWidth(roadmaps.now[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                itemTextWidth(roadmaps.now[index].joinToString(separator = " "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
             val spans = linesToMultiLineText(lines, BoxFontSize, 2, null, 18)
@@ -296,7 +296,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="212" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #D63484;">"""
             text += """<tspan x="212" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                itemTextWidth(roadmaps.next[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                itemTextWidth(roadmaps.next[index].joinToString(separator = " "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
             val spans = linesToMultiLineText(lines, BoxFontSize, 212, null, 18)
@@ -328,7 +328,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             var text = """<text x="422" y="2" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #FA1E0E;">"""
             text += """<tspan x="422" dy="12" fill="#fcfcfc">$t</tspan>"""
             val lines = linesToUrlIfExist(
-                itemTextWidth(roadmaps.later[index].joinToString(separator = " "), BoxMaxWidth, BoxFontSize, "Helvetica"),
+                itemTextWidth(roadmaps.later[index].joinToString(separator = " "), BoxMaxWidth.toFloat(), BoxFontSize, "Helvetica"),
                 roadmaps.urlMap
             )
             val spans = linesToMultiLineText(lines, BoxFontSize, 422, null, 18)

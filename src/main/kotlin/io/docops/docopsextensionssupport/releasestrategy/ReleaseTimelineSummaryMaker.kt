@@ -102,7 +102,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             }
         }
         val goals = release.goal.escapeXml()
-        val itemArray = itemTextWidth(goals, 290, 20)
+        val itemArray = itemTextWidth(goals, 290F, 20)
         val lines = linesToUrlIfExist(itemArray, mutableMapOf())
 
         val spans = linesToSpanText(lines,20, 150)

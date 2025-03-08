@@ -84,7 +84,7 @@ class ReleaseRoadMapMaker {
             str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
         }
         str.append("</text></g>")
-        val itemArray = itemTextWidth(release.goal, 900, 24)
+        val itemArray = itemTextWidth(release.goal, 900F, 24)
         val lines = linesToUrlIfExist(itemArray, mutableMapOf())
         val tspans = linesToSpanText(lines,24,400)
         val startTextY = 300 - (lines.size * 12)

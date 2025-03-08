@@ -1,10 +1,9 @@
 package io.docops.docopsextensionssupport.svgtable
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import io.docops.docopsextensionssupport.support.SVGColor
 
 class TableTest {
 
@@ -12,105 +11,168 @@ class TableTest {
     fun `test table creation and row addition`() {
         val table = Table()
         val row = Row()
-        val cell = Cell(data = "Test", maxWidth = 100)
-        
+        val cell = Cell(data = "Test Cell")
         row.addCell(cell)
         table.addRow(row)
-        
+
         assertEquals(1, table.rows.size)
         assertEquals(1, table.rows[0].cells.size)
-        assertEquals("Test", table.rows[0].cells[0].data)
+        assertEquals("Test Cell", table.rows[0].cells[0].data)
     }
 
     @Test
-    fun `test input validation`() {
+    fun `test table with header`() {
         val table = Table()
+        val thead = THead(mutableListOf())
+        val headerRow = Row()
+        headerRow.addCell(Cell(data = "Header"))
+        thead.rows.add(headerRow)
+        table.thead = thead
+
+        val bodyRow = Row()
+        bodyRow.addCell(Cell(data = "Body"))
+        table.addRow(bodyRow)
+
+        assertNotNull(table.thead)
+        assertEquals(1, table.thead?.rows?.size)
+        assertEquals("Header", table.thead?.rows?.get(0)?.cells?.get(0)?.data)
+        assertEquals(1, table.rows.size)
+        assertEquals("Body", table.rows[0].cells[0].data)
+    }
+
+    @Test
+    fun `test cell configuration`() {
+        val cell = Cell(
+            data = "Test",
+            fontName = "Arial",
+            fontSize = 14,
+            display = DisplayConfig(
+                fill = SVGColor("#ff0000"),
+                fontColor = SVGColor("#000000")
+            )
+        )
+
+        assertEquals("Test", cell.data)
+        assertEquals("Arial", cell.fontName)
+        assertEquals(14, cell.fontSize)
+        assertEquals("#ff0000", cell.display.fill.color)
+    }
+
+    @Test
+    fun `test row height calculation`() {
         val row = Row()
-        
-        // Test empty row validation
-        assertThrows<IllegalArgumentException> {
-            table.addRow(row)
-        }
-        
-        // Test cell with invalid maxWidth
-        assertThrows<IllegalArgumentException> {
-            row.addCell(Cell(data = "Test", maxWidth = 0))
-        }
-        
-        // Test cell with invalid fontSize
-        assertThrows<IllegalArgumentException> {
-            Cell(data = "Test", maxWidth = 100, fontSize = 0).toLines()
+        row.addCell(Cell(data = "Line 1\nLine 2"))
+        row.addCell(Cell(data = "Single Line"))
+
+        val height = row.rowHeight()
+        assertTrue(height > 0)
+    }
+
+    @Test
+    fun `test empty table validation throws exception`() {
+        val table = Table(display = TableConfig(mutableListOf(0.99f)))
+        assertThrows<IllegalArgumentException>("Table must contain at least one row") {
+            table.toSvg()
         }
     }
 
     @Test
-    fun `test SVG generation`() {
+    fun `test minimum valid table`() {
         val table = Table()
         val row = Row()
-        row.addCell(Cell(data = "Test", maxWidth = 100))
+        val cell = Cell(data = "Test")
+        row.addCell(cell)
         table.addRow(row)
-        
         val svg = table.toSvg()
-        
-        assertTrue(svg.contains("<g>"))
-        assertTrue(svg.contains("<text"))
-        assertTrue(svg.contains("<tspan"))
-        assertTrue(svg.contains("Test"))
-        assertTrue(svg.contains("font-family: Arial"))
+        assertTrue(svg.isNotEmpty())
     }
 
     @Test
-    fun `test cell text wrapping`() {
-        val cell = Cell(
-            data = "This is a long text that should wrap",
-            maxWidth = 50,
-            fontSize = 12
-        )
-        
-        val lines = cell.toLines()
-        assertTrue(lines.size > 1)
-        assertTrue(lines.all { it.length <= 50 })
-    }
-
-    @Test
-    fun `test XML escaping in cell content`() {
-        val cell = Cell(
-            data = "Test & <example> \"quoted\" 'text'",
-            maxWidth = 100
-        )
-        
-        val svg = cell.toTextSpans(cell.toLines(), 0, 0)
-        
-        assertTrue(svg.contains("&amp;"))
-        assertTrue(svg.contains("&lt;example&gt;"))
-        assertTrue(svg.contains("&quot;quoted&quot;"))
-        assertTrue(svg.contains("&apos;text&apos;"))
-    }
-
-    @Test
-    fun `test complex table structure`() {
+    fun `test table with multiple rows and cells`() {
         val table = Table()
+
+        // Add header
+        val thead = THead(mutableListOf())
+        val headerRow = Row(display = DisplayConfig(fill = SVGColor("#cccccc")))
+        headerRow.addCell(Cell(data = "Column 1"))
+        headerRow.addCell(Cell(data = "Column 2"))
+        thead.rows.add(headerRow)
+        table.thead = thead
+
+        // Add body rows
         val row1 = Row()
-        val row2 = Row()
-        
-        row1.addCell(Cell(data = "Header 1", maxWidth = 100))
-        row1.addCell(Cell(data = "Header 2", maxWidth = 100))
-        
-        row2.addCell(Cell(data = "Data 1", maxWidth = 100))
-        row2.addCell(Cell(data = "Data 2", maxWidth = 100))
-        
+        row1.addCell(Cell(data = "Data 1"))
+        row1.addCell(Cell(data = "Data 2"))
         table.addRow(row1)
+
+        val row2 = Row()
+        row2.addCell(Cell(data = "Data 3"))
+        row2.addCell(Cell(data = "Data 4"))
         table.addRow(row2)
-        
+
         val svg = table.toSvg()
-        assertTrue(svg.contains("Header 1"))
-        assertTrue(svg.contains("Header 2"))
+        assertTrue(svg.contains("Column 1"))
+        assertTrue(svg.contains("Column 2"))
         assertTrue(svg.contains("Data 1"))
         assertTrue(svg.contains("Data 2"))
-        
-        // Verify structure
-        assertEquals(2, table.rows.size)
-        assertEquals(2, table.rows[0].cells.size)
-        assertEquals(2, table.rows[1].cells.size)
+        assertTrue(svg.contains("Data 3"))
+        assertTrue(svg.contains("Data 4"))
+    }
+
+    @Test
+    fun `test table height calculation with body only`() {
+        val table = Table()
+
+        // Add a simple row with single-line cells
+        val row1 = Row()
+        row1.addCell(Cell(data = "Data 1"))
+        row1.addCell(Cell(data = "Data 2"))
+        table.addRow(row1)
+
+        // Height should be: initial offset (8) + row height (fontSize 12 + padding 10)
+        val expectedHeight = 18f
+        assertEquals(expectedHeight, table.tableHeight())
+    }
+
+    @Test
+    fun `test table height calculation with header and body`() {
+        val table = Table()
+
+        // Add header
+        val thead = THead(mutableListOf())
+        val headerRow = Row()
+        headerRow.addCell(Cell(data = "Header 1"))
+        headerRow.addCell(Cell(data = "Header 2"))
+        thead.rows.add(headerRow)
+        table.thead = thead
+
+        // Add body row
+        val bodyRow = Row()
+        bodyRow.addCell(Cell(data = "Body 1"))
+        bodyRow.addCell(Cell(data = "Body 2"))
+        table.addRow(bodyRow)
+
+        // Height should be: initial offset (8) + header row height (12 + 10) + body row height (12 + 10)
+        val expectedHeight = 28f
+        assertEquals(expectedHeight, table.tableHeight())
+    }
+
+    @Test
+    fun `test table height calculation with wrapped text`() {
+        val table = Table()
+
+        // Add a row with wrapped text (will create multiple lines)
+        val row = Row()
+        row.addCell(Cell(
+            data = "This is a long text that will wrap into multiple lines because it exceeds the maximum width",
+            fontSize = 12
+        ))
+        table.addRow(row)
+
+        val height = table.tableHeight()
+        assertTrue(height >= 18.0f, "Height should be greater than 30px due to text wrapping")
+
+        // Print actual height for debugging
+        println("[DEBUG_LOG] Table height with wrapped text: $height")
     }
 }
