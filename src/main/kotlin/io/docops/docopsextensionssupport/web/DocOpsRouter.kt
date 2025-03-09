@@ -15,6 +15,7 @@ import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
+import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
@@ -205,6 +206,16 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             }
             logger.info{"line handler executed in ${timing.duration.inWholeMilliseconds}ms"}
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("comparison", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
+        else if("table".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = TableHandler()
+                handler.handleSVG(payload=payload)
+            }
+            logger.info{"table handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("table", timing.duration.inWholeMilliseconds))
 
             return timing.value
         }

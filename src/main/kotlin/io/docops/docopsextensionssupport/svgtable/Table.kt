@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.svgtable
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -58,7 +60,7 @@ class Table(
         val h = tableHeight()
         sv.append("""
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1024" height="$h" viewBox="0 0 1024 $h" xmlns="http://www.w3.org/2000/svg">
+<svg width="${1024/DISPLAY_RATIO_16_9 }" height="${h / DISPLAY_RATIO_16_9}" viewBox="0 0 1024 $h" xmlns="http://www.w3.org/2000/svg">
 
         """.trimIndent())
         return sv.toString()
@@ -153,7 +155,8 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
 
             var startX = 1.0
             row.cells.forEachIndexed { i, cell ->
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 12px; fill: ${row.display.fontColor.color};", dy = 12)
+                val fontColor = determineTextColor(cell.display.fill.color)
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 12px; fill: ${fontColor};", dy = 12)
                 sb.append("<g class=\"rowShade\" aria-label=\"header column ${i+1}\">")
                 sb.append("""<rect x="$startX" y="0" fill="url(#${cell.display.fill.id})" width="${cellWidths[i].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
                 sb.append(lines)
