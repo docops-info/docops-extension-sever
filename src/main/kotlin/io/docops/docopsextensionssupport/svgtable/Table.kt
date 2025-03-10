@@ -52,15 +52,16 @@ class Table(
         val headSvg = thead?.toSvg(cellWidths) ?: ""
         val numHeaderRows = thead?.rows?.size ?: 0
         val bodySvg = TBody(rows, numHeaderRows, cellWidths).toSvg()
-        return makeHead() + makeDefs() + headSvg + bodySvg + endSvg()
+        return makeHead(display, cellWidths) + makeDefs() + """<g transform="scale(${display.scale})">""" + headSvg + bodySvg + "</g>" +endSvg()
     }
 
-    private fun makeHead(): String {
+    private fun makeHead(display: TableConfig, cellWidths: MutableList<CellWidth>): String {
         val sv = StringBuilder()
         val h = tableHeight()
+        val w =  tableWidth(cellWidths)
         sv.append("""
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="${1024/DISPLAY_RATIO_16_9 }" height="${h / DISPLAY_RATIO_16_9}" viewBox="0 0 1024 $h" xmlns="http://www.w3.org/2000/svg">
+<svg width="${w/DISPLAY_RATIO_16_9 * display.scale}" height="${h / DISPLAY_RATIO_16_9 * display.scale}" viewBox="0 0 ${w * display.scale} ${h * display.scale}" xmlns="http://www.w3.org/2000/svg">
 
         """.trimIndent())
         return sv.toString()
@@ -115,6 +116,10 @@ class Table(
 
         return totalHeight
     }
+    fun tableWidth(cellWidths: MutableList<CellWidth>): Float {
+        val w = cellWidths.map { it.width }.sum()
+        return w
+    }
 }
 
 fun Table.getColorGradients() : String {
@@ -147,11 +152,11 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
                 }
         }
         rows.forEach { row ->
-            sb.append("<g>")
-            var currentX = INITIAL_OFFSET.toFloat()
+            sb.append("<g aria-label=\"Header\">")
+            var currentX = INITIAL_OFFSET
             val rowColor = row.display.fill
             sb.append("<g aria-label=\"Header Row\">")
-            sb.append("""<rect x="1" y="0" width="99.4%" height="${row.rowHeight()}" fill="${rowColor.color}"/>""")
+            sb.append("""<rect x="1" y="0" width="100%" height="${row.rowHeight()}" fill="${rowColor.color}"/>""")
 
             var startX = 1.0
             row.cells.forEachIndexed { i, cell ->
@@ -213,16 +218,17 @@ internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int,
             sb.append("<g>")
             sb.append("<g aria-label=\"Row ${j+1}\">")
             var currentX = INITIAL_OFFSET
-            sb.append("""<rect x="1" y="${currentY-2}" width="99.4%" height="${row.rowHeight()}" fill="${getColorForNumber(i)}"/>""")
+            sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="${getColorForNumber(i)}"/>""")
             row.cells.forEachIndexed { k, cell ->
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width), (startX+2.0).toFloat(), (currentY+4.0).toFloat())
+                val fontColor = determineTextColor(cell.display.fill.color)
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "fill: $fontColor;")
                 var cellColor = getColorForNumber(i)
                 if(!cell.display.isDefault) {
                     println("Default cell")
                     cellColor = cell.display.fill.color
                 }
                 sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1}\">")
-                sb.append("""<rect x="$startX" y="${currentY-2}" fill="${cellColor}" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
+                sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
                 sb.append(lines)
                 currentX += cellWidths[k].width + CELL_PADDING
                 sb.append("</g>")
@@ -279,7 +285,7 @@ class Row(val cells: MutableList<Cell> = mutableListOf(), val display: DisplayCo
 @Serializable
 class Cell(
     val data: String = "",
-    val fontName: String = "Arial",
+    val fontName: String = "Helvetica",
     val fontSize: Int = 12, val display: DisplayConfig = DisplayConfig()
 ) {
     private var lineSize: Float = 0.0f
@@ -297,6 +303,7 @@ class Cell(
      */
     fun toLines(width: Float): MutableList<String>  {
         require(fontSize > 0) { "fontSize must be positive" }
+        println(width)
         val lines =  itemTextWidth(data, maxWidth = width, fontSize = fontSize, fontName = fontName)
         lineSize = (lines.size * fontSize).toFloat()
         return lines
@@ -343,7 +350,7 @@ class DisplayConfig(val fill: SVGColor = SVGColor("#fcfcfc"), val fontColor: SVG
 }
 
 @Serializable
-class TableConfig(val cellWidths: MutableList<Float> = mutableListOf())
+class TableConfig(val cellWidths: MutableList<Float> = mutableListOf(), val scale: Float = 1.0f)
 
 @Serializable
 class CellWidth(val index: Int, val width: Float)
