@@ -221,7 +221,7 @@ internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int,
             sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="${getColorForNumber(i)}"/>""")
             row.cells.forEachIndexed { k, cell ->
                 val fontColor = determineTextColor(cell.display.fill.color)
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "fill: $fontColor;")
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: ${fontColor};",)
                 var cellColor = getColorForNumber(i)
                 if(!cell.display.isDefault) {
                     println("Default cell")

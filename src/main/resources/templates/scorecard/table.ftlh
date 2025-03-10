@@ -10,12 +10,12 @@
             </label>
             <textarea id="content" name="content" rows="16" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
 {
-  "display": {"cellWidths": [0.20,0.20,0.35,0.25]},
+  "display": {"cellWidths": [0.20,0.20,0.35,0.25], "scale": 1.5},
   "rows": [
     {
       "cells": [
         {
-          "data": "Cell 1  Create header row and assign it to thead Create header row and assign it to thead"
+          "data": "Cell 1  Create header row and assign it to thead Create header row and assign it to thead", "display": {"fill": {"color": "#D01257"}}
         },
         {
           "data": "Cell 2"
@@ -37,7 +37,7 @@
           "data": "Cell 5"
         },
         {
-          "data": "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity."
+          "data": "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity.", "display": {"fill": {"color": "#118DF0"}}
         },
         {
           "data": "Cell 7"
@@ -47,7 +47,7 @@
     {
       "cells": [
         {
-          "data": "Row 3, Cell 1 with long text to test word wrapping and alignment"
+          "data": "Row 3, Cell 1 with long text to test word wrapping and alignment", "display": {"fill": {"color": "#0CCA98"}}
         },
         {
           "data": "Row 3, Cell 2"
