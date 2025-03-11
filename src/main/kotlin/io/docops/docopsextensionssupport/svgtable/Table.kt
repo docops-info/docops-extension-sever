@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.svgtable
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
@@ -61,7 +62,7 @@ class Table(
         val w =  tableWidth(cellWidths)
         sv.append("""
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="${w/DISPLAY_RATIO_16_9 * display.scale}" height="${h / DISPLAY_RATIO_16_9 * display.scale}" viewBox="0 0 ${w * display.scale} ${h * display.scale}" xmlns="http://www.w3.org/2000/svg">
+<svg width="${w/DISPLAY_RATIO_16_9 * display.scale}" height="${h / DISPLAY_RATIO_16_9 * display.scale}" viewBox="0 0 ${w * display.scale} ${h * display.scale}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
         """.trimIndent())
         return sv.toString()
@@ -141,7 +142,7 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
         private const val CELL_PADDING = 5
         private const val ROW_PADDING = 10.0f
     }
-    
+
     fun toSvg(cellWidths: MutableList<CellWidth>): String {
         require(rows.isNotEmpty()) { "Table must contain at least one row" }
         val sb = StringBuilder()
@@ -224,7 +225,6 @@ internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int,
                 val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: ${fontColor};",)
                 var cellColor = getColorForNumber(i)
                 if(!cell.display.isDefault) {
-                    println("Default cell")
                     cellColor = cell.display.fill.color
                 }
                 sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1}\">")
@@ -242,6 +242,7 @@ internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int,
 
         return sb.toString()
     }
+
 
     private fun getColorForNumber(number: Int): String {
         return when (number % 2) {
@@ -303,12 +304,47 @@ class Cell(
      */
     fun toLines(width: Float): MutableList<String>  {
         require(fontSize > 0) { "fontSize must be positive" }
-        println(width)
-        val lines =  itemTextWidth(data, maxWidth = width, fontSize = fontSize, fontName = fontName)
+        val urlMap = mutableMapOf<String,String>()
+        var s = data
+        if(data.contains("[[") && data.contains("]]")) {
+            val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
+            val matches = regex.findAll(s)
+            matches.forEach {
+                    item ->
+                val urlItem = item.value.split(" ")
+                val url = urlItem[0]
+                var display = "__"
+                if(urlItem.size > 1) {
+                     display = urlItem[1]
+                }
+                s = s.replace("[[${item.value}]]", "[[${display}]]")
+                urlMap["[[${display}]]"] = url
+            }
+        }
+
+        val itemArray =  itemTextWidth(s, maxWidth = width, fontSize = fontSize, fontName = fontName)
+        val lines = linesToUrl(itemArray, urlMap)
         lineSize = (lines.size * fontSize).toFloat()
         return lines
     }
 
+    private fun linesToUrl(lines: MutableList<String>, urlMap: MutableMap<String, String>): MutableList<String> {
+        val newLines = mutableListOf<String>()
+        lines.forEach { input ->
+            var line = input
+            if (input.contains("[[") && input.contains("]]")) {
+                val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
+                val matches = regex.findAll(input)
+                matches.forEach {
+                    val output = urlMap["[[${it.value}]]"]
+                    val url = """<a xlink:href="$output" target="_blank" style="fill: #0000EE; text-decoration: underline;">${it.value}</a>"""
+                    line = line.replace("[[${it.value}]]", url)
+                }
+            }
+            newLines.add(line)
+        }
+        return newLines
+    }
     /**
      * Converts cell content to SVG text spans
      * @param lines The lines of text to render
@@ -336,11 +372,12 @@ class Cell(
                 if(i>0) {
                     downBy = dy
                 }
-                append("<tspan x=\"$startX\" dy=\"$downBy\">${line.escapeXml()}</tspan>")
+                append("<tspan x=\"$startX\" dy=\"$downBy\">${line}</tspan>")
             }
             append("</text>")
         }.toString()
     }
+
 
 }
 
@@ -385,7 +422,7 @@ fun main() {
 
     val cells3 = listOf(
         Cell(
-            data = "Row 3, Cell 1 with long text to test word wrapping and alignment",
+            data = "Row 3, Cell 1 with [[https://example.com Example Link]] to test link parsing",
 
             fontName = "Arial",
             fontSize = 12
@@ -399,7 +436,7 @@ fun main() {
     val cells4 = listOf(
         Cell(data = "Row 4, Cell 1",   fontName = "Arial", fontSize = 12),
         Cell(
-            data = "Row 4, Cell 2 with even longer text to test behavior",
+            data = "Row 4, Cell 2 with [[https://example.com Link1]] and [[https://docops.io DocOps]] multiple links",
 
             fontName = "Arial",
             fontSize = 12
@@ -419,7 +456,7 @@ fun main() {
         Cell(data = "Row 5, Cell 2",   fontName = "Arial", fontSize = 12),
         Cell(data = "Row 5, Cell 3",   fontName = "Arial", fontSize = 12),
         Cell(
-            data = "Row 5, Cell 4 with custom text",
+            data = "Row 5, Cell 4 with link without label: [[https://github.com/docops-info]]",
 
             fontName = "Arial",
             fontSize = 12
@@ -429,9 +466,9 @@ fun main() {
 
     println(table.toSvg())
 
-    val prettyJson = Json { // this returns the JsonBuilder
+    /*val prettyJson = Json { // this returns the JsonBuilder
         prettyPrint = true
     }
     val json = prettyJson.encodeToString(table)
-    println(json)
+    println(json)*/
 }
