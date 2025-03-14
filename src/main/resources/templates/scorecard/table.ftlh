@@ -37,7 +37,7 @@
           "data": "Cell 5"
         },
         {
-          "data": "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity.", "display": {"fill": {"color": "#118DF0"}}
+          "data": "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity.", "display": {"fill": {"color": "#118DF0"}, "style": "font-family: Arial, Helvetica; font-size:12px; fill: #fcfcfc;"}
         },
         {
           "data": "Cell 7"
@@ -72,9 +72,9 @@
           "data": "Row 4, Cell 3"
         },
         {
-          "data": "Row 4, Cell 4 with unique font size",
-          "fontSize": 14,
+          "data": "Row 4, Cell 4 with unique font size"
           "display": {
+             "style": "font-family: Arial, Helvetica; font-size:14px; font-weight: 700; font-variant:small-caps;",
             "fill": {
               "color": "#fcfcfc"
             },
@@ -116,16 +116,16 @@
       {
         "cells": [
           {
-            "data": "Header 1"
+            "data": "Too Sweet Header or Saturn or Snooze then Luther", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
           },
           {
-            "data": "Header 2"
+            "data": "Header 2", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px;font-weight: 700;fill: #fcfcfc;"}
           },
           {
-            "data": "Header 3"
+            "data": "Header 3", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc;"}
           },
           {
-            "data": "Header 4"
+            "data": "Header 4", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
           }
         ]
       }

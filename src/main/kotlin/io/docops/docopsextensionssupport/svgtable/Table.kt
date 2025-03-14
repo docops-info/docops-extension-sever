@@ -1,14 +1,10 @@
 package io.docops.docopsextensionssupport.svgtable
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
-import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 /**
  * Represents a table that can be rendered as SVG.
@@ -50,10 +46,9 @@ class Table(
                 cellWidths.add(CellWidth(i, sz))
             }
         }
-        val headSvg = thead?.toSvg(cellWidths) ?: ""
-        val numHeaderRows = thead?.rows?.size ?: 0
-        val bodySvg = TBody(rows, numHeaderRows, cellWidths).toSvg()
-        return makeHead(display, cellWidths) + makeDefs() + """<g transform="scale(${display.scale})">""" + headSvg + bodySvg + "</g>" +endSvg()
+        val headSvg = thead?.toSvg(cellWidths) ?: Pair("", 0f)
+        val bodySvg = TBody(rows, maxOf(headSvg.second,18f), cellWidths).toSvg()
+        return makeHead(display, cellWidths) + makeDefs() + """<g transform="scale(${display.scale})">""" + headSvg.first + bodySvg + "</g>" +endSvg()
     }
 
     private fun makeHead(display: TableConfig, cellWidths: MutableList<CellWidth>): String {
@@ -103,7 +98,7 @@ class Table(
      * @return Total height in pixels
      */
     fun tableHeight(): Float {
-        var totalHeight = 8f // Initial offset
+        var totalHeight = 30f // Initial offset
 
         // Add thead height if present
         thead?.rows?.forEach { row ->
@@ -138,33 +133,38 @@ fun Table.getColorGradients() : String {
 @Serializable
 class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConfig()) {
     companion object {
-        private const val INITIAL_OFFSET = 8.0f
+        private const val INITIAL_OFFSET = 4f
         private const val CELL_PADDING = 5
         private const val ROW_PADDING = 10.0f
+        private const val HEADER_ROW_HEIGHT = 30.0f
     }
 
-    fun toSvg(cellWidths: MutableList<CellWidth>): String {
+    fun toSvg(cellWidths: MutableList<CellWidth>): Pair<String, Float> {
         require(rows.isNotEmpty()) { "Table must contain at least one row" }
         val sb = StringBuilder()
         var currentY = INITIAL_OFFSET
+        var maxLines = 0
         rows.forEach { row ->
                 row.cells.forEachIndexed { i, cell ->
-                    cell.toLines(cellWidths[i].width)
+                    val x = cell.toLines(cellWidths[i].width-4)
+                    maxLines = maxOf(maxLines, x.size)
                 }
         }
+        var rowHeight = maxLines * 14.0f
         rows.forEach { row ->
             sb.append("<g aria-label=\"Header\">")
             var currentX = INITIAL_OFFSET
             val rowColor = row.display.fill
             sb.append("<g aria-label=\"Header Row\">")
-            sb.append("""<rect x="1" y="0" width="100%" height="${row.rowHeight()}" fill="${rowColor.color}"/>""")
+            sb.append("""<rect x="1" y="0" width="100%" height="$HEADER_ROW_HEIGHT" fill="${rowColor.color}"/>""")
 
             var startX = 1.0
             row.cells.forEachIndexed { i, cell ->
-                val fontColor = determineTextColor(cell.display.fill.color)
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 12px; fill: ${fontColor};", dy = 12)
+                val fontColor = cell.display.fontColor.color
+                val fontStyle = cell.display.parseFontStyle()
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style=cell.display.style, dy = fontStyle.size)
                 sb.append("<g class=\"rowShade\" aria-label=\"header column ${i+1}\">")
-                sb.append("""<rect x="$startX" y="0" fill="url(#${cell.display.fill.id})" width="${cellWidths[i].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
+                sb.append("""<rect x="$startX" y="0" fill="url(#${cell.display.fill.id})" width="${cellWidths[i].width}" height="${maxOf(rowHeight,18f)}" stroke="#cccccc"/>""")
                 sb.append(lines)
                 currentX += cellWidths[i].width + CELL_PADDING
                 startX += cellWidths[i].width
@@ -175,14 +175,14 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
             currentY += (row.cells.maxOfOrNull { it.height() } ?: 0.0f) + ROW_PADDING
         }
 
-        return sb.toString()
+        return Pair(sb.toString(), rowHeight)
     }
 }
 /**
  * Internal implementation class for SVG table rendering.
  * @property rows List of rows to render
  */
-internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int, val cellWidths: MutableList<CellWidth>) {
+internal class TBody(private val rows: MutableList<Row>, val headerHeight: Float, val cellWidths: MutableList<CellWidth>) {
     companion object {
         private const val INITIAL_OFFSET = 8.0f
         private const val CELL_PADDING = 5.0f
@@ -207,7 +207,7 @@ internal class TBody(private val rows: MutableList<Row>, val numHeaderRows: Int,
         require(rows.isNotEmpty()) { "Table must contain at least one row" }
 
         val sb = StringBuilder()
-        var currentY = INITIAL_OFFSET + numHeaderRows * 16
+        var currentY =  headerHeight
         rows.forEach { row ->
             row.cells.forEachIndexed { i, cell ->
                 cell.toLines(cellWidths[i].width)
@@ -286,8 +286,7 @@ class Row(val cells: MutableList<Cell> = mutableListOf(), val display: DisplayCo
 @Serializable
 class Cell(
     val data: String = "",
-    val fontName: String = "Helvetica",
-    val fontSize: Int = 12, val display: DisplayConfig = DisplayConfig()
+    val display: DisplayConfig = DisplayConfig()
 ) {
     private var lineSize: Float = 0.0f
 
@@ -303,7 +302,7 @@ class Cell(
      * @return List of text lines
      */
     fun toLines(width: Float): MutableList<String>  {
-        require(fontSize > 0) { "fontSize must be positive" }
+
         val urlMap = mutableMapOf<String,String>()
         var s = data
         if(data.contains("[[") && data.contains("]]")) {
@@ -322,9 +321,10 @@ class Cell(
             }
         }
 
-        val itemArray =  itemTextWidth(s, maxWidth = width, fontSize = fontSize, fontName = fontName)
+        val fontStyle = display.parseFontStyle()
+        val itemArray =  itemTextWidth(s, maxWidth = width)
         val lines = linesToUrl(itemArray, urlMap)
-        lineSize = (lines.size * fontSize).toFloat()
+        lineSize = (lines.size * fontStyle.size)
         return lines
     }
 
@@ -358,19 +358,18 @@ class Cell(
         lines: MutableList<String>,
         startX: Float,
         startY: Float,
-        style: String = "font-family: $fontName; font-size: ${fontSize}px; fill: #000000;",
-        dy: Int = fontSize
+        style: String = "font-family: Arial; font-size: 12px; fill: #000000;",
+        dy: Float = 12f
     ): String {
         require(startX >= 0) { "startX must be non-negative" }
         require(startY >= 0) { "startY must be non-negative" }
-        require(dy > 0) { "dy must be positive" }
 
         return StringBuilder().apply {
-            append("<text x=\"$startX\" y=\"$startY\" style=\"$style\">")
+            append("<text x=\"$startX\" y=\"$startY\" style=\"${display.style}\">")
             var downBy = 8
             lines.forEachIndexed { i, line ->
                 if(i>0) {
-                    downBy = dy
+                    downBy = dy.toInt()
                 }
                 append("<tspan x=\"$startX\" dy=\"$downBy\">${line}</tspan>")
             }
@@ -382,10 +381,27 @@ class Cell(
 }
 
 @Serializable
-class DisplayConfig(val fill: SVGColor = SVGColor("#fcfcfc"), val fontColor: SVGColor = SVGColor("#000000"), val scale: Float = 1.0f) {
+class DisplayConfig(
+    val fill: SVGColor = SVGColor("#fcfcfc"),
+    val fontColor: SVGColor = SVGColor("#000000"),
+    val scale: Float = 1.0f,
+    val style: String = "font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: #000000;"
+) {
     val isDefault = fill.color == "#fcfcfc" && fontColor.color == "#000000" && scale == 1.0f
+
+    fun parseFontStyle(): ParsedFont {
+        val fontSizeRegex = """font-size:\s*([\d.]+)px""".toRegex()
+        val fontFamilyRegex = """font-family:\s*([^,;]+)""".toRegex()
+
+        val fontSize = fontSizeRegex.find(style)?.groupValues?.get(1) ?: "12"
+        val fontFamily = fontFamilyRegex.find(style)?.groupValues?.get(1) ?: "Arial"
+
+        return ParsedFont(name = fontFamily, size= fontSize.toFloat())
+    }
 }
 
+@Serializable
+class ParsedFont(val name: String, val size: Float)
 @Serializable
 class TableConfig(val cellWidths: MutableList<Float> = mutableListOf(), val scale: Float = 1.0f)
 
@@ -397,69 +413,57 @@ fun main() {
 
     // Create header row and assign it to thead
     val headerCells = listOf(
-        Cell(data = "Header 1",   fontName = "Arial", fontSize = 12, DisplayConfig(fill = SVGColor("#1EE3CF"),fontColor = SVGColor("#000000"))),
-        Cell(data = "Header 2",   fontName = "Arial", fontSize = 12,DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000"))),
-        Cell(data = "Header 3",   fontName = "Arial", fontSize = 12,DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000"))),
-        Cell(data = "Header 4",   fontName = "Arial", fontSize = 12,DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000")))
+        Cell(data = "Header 1", DisplayConfig(fill = SVGColor("#1EE3CF"),fontColor = SVGColor("#000000"))),
+        Cell(data = "Header 2", DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000"))),
+        Cell(data = "Header 3", DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000"))),
+        Cell(data = "Header 4", DisplayConfig(fill = SVGColor("#DDDDDD"),fontColor = SVGColor("#000000")))
     )
     table.thead = THead(mutableListOf(Row(headerCells.toMutableList(), DisplayConfig(fill = SVGColor("#DDDDDD"), fontColor = SVGColor("#111111")))))
 
     val cells = listOf(
-        Cell(data = "Cell 1  Create header row and assign it to thead Create header row and assign it to thead",   fontName = "Arial", fontSize = 12),
-        Cell(data = "Cell 2",   fontName = "Arial", fontSize = 12),
-        Cell(data = "Cell 3",   fontName = "Arial", fontSize = 12),
-        Cell(data = "Cell 4",  fontName = "Arial", fontSize = 12)
+        Cell(data = "Cell 1  Create header row and assign it to thead Create header row and assign it to thead",   ),
+        Cell(data = "Cell 2",   ),
+        Cell(data = "Cell 3",   ),
+        Cell(data = "Cell 4",  )
     )
     table.addRow(Row(cells.toMutableList()))
 
     val cells2 = listOf(
-        Cell(data = "Cell 4",  fontName = "Arial", fontSize = 12),
-        Cell(data = "Cell 5",  fontName = "Arial", fontSize = 12),
-        Cell(data = "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity.",   fontName = "Arial", fontSize = 12, display = DisplayConfig(fill = SVGColor("#FF8BA0"))),
-        Cell(data = "Cell 7",   fontName = "Arial", fontSize = 12)
+        Cell(data = "Cell 4",  ),
+        Cell(data = "Cell 5",  ),
+        Cell(data = "Cell certbot automatically checks for expiring certificates and renews them if necessary. This command is typically run periodically, such as through a cron job, to ensure continuous certificate validity.",    display = DisplayConfig(fill = SVGColor("#FF8BA0"))),
+        Cell(data = "Cell 7",   )
     )
     table.addRow(Row(cells2.toMutableList()))
 
     val cells3 = listOf(
         Cell(
-            data = "Row 3, Cell 1 with [[https://example.com Example Link]] to test link parsing",
-
-            fontName = "Arial",
-            fontSize = 12
+            data = "Row 3, Cell 1 with [[https://example.com Example Link]] to test link parsing"
         ),
-        Cell(data = "Row 3, Cell 2",  fontName = "Arial", fontSize = 12),
-        Cell(data = "Row 3, Cell 3",  fontName = "Arial", fontSize = 12),
-        Cell(data = "Row 3, Cell 4",   fontName = "Arial", fontSize = 12)
+        Cell(data = "Row 3, Cell 2"),
+        Cell(data = "Row 3, Cell 3"),
+        Cell(data = "Row 3, Cell 4")
     )
     table.addRow(Row(cells3.toMutableList()))
 
     val cells4 = listOf(
-        Cell(data = "Row 4, Cell 1",   fontName = "Arial", fontSize = 12),
+        Cell(data = "Row 4, Cell 1"),
         Cell(
-            data = "Row 4, Cell 2 with [[https://example.com Link1]] and [[https://docops.io DocOps]] multiple links",
-
-            fontName = "Arial",
-            fontSize = 12
+            data = "Row 4, Cell 2 with [[https://example.com Link1]] and [[https://docops.io DocOps]] multiple links"
         ),
-        Cell(data = "Row 4, Cell 3",   fontName = "Arial", fontSize = 12),
+        Cell(data = "Row 4, Cell 3"),
         Cell(
-            data = "Row 4, Cell 4 with unique font size",
-
-            fontName = "Arial",
-            fontSize = 14
+            data = "Row 4, Cell 4 with unique font size"
         )
     )
     table.addRow(Row(cells4.toMutableList()))
 
     val cells5 = listOf(
-        Cell(data = "Row 5, Cell 1",  fontName = "Arial", fontSize = 12),
-        Cell(data = "Row 5, Cell 2",   fontName = "Arial", fontSize = 12),
-        Cell(data = "Row 5, Cell 3",   fontName = "Arial", fontSize = 12),
+        Cell(data = "Row 5, Cell 1"),
+        Cell(data = "Row 5, Cell 2"),
+        Cell(data = "Row 5, Cell 3"),
         Cell(
-            data = "Row 5, Cell 4 with link without label: [[https://github.com/docops-info]]",
-
-            fontName = "Arial",
-            fontSize = 12
+            data = "Row 5, Cell 4 with link without label: [[https://github.com/docops-info]]"
         )
     )
     table.addRow(Row(cells5.toMutableList()))
