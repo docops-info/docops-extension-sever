@@ -133,7 +133,7 @@ fun Table.getColorGradients() : String {
 @Serializable
 class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConfig()) {
     companion object {
-        private const val INITIAL_OFFSET = 4f
+        private const val INITIAL_OFFSET = 8f
         private const val CELL_PADDING = 5
         private const val ROW_PADDING = 10.0f
         private const val HEADER_ROW_HEIGHT = 30.0f
@@ -150,7 +150,7 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
                     maxLines = maxOf(maxLines, x.size)
                 }
         }
-        var rowHeight = maxLines * 14.0f
+        val rowHeight = maxLines * 14.0f + 10.0f
         rows.forEach { row ->
             sb.append("<g aria-label=\"Header\">")
             var currentX = INITIAL_OFFSET
