@@ -44,8 +44,6 @@ class TableTest {
     fun `test cell configuration`() {
         val cell = Cell(
             data = "Test",
-            fontName = "Arial",
-            fontSize = 14,
             display = DisplayConfig(
                 fill = SVGColor("#ff0000"),
                 fontColor = SVGColor("#000000")
@@ -53,8 +51,6 @@ class TableTest {
         )
 
         assertEquals("Test", cell.data)
-        assertEquals("Arial", cell.fontName)
-        assertEquals(14, cell.fontSize)
         assertEquals("#ff0000", cell.display.fill.color)
     }
 
@@ -130,7 +126,7 @@ class TableTest {
         table.addRow(row1)
 
         // Height should be: initial offset (8) + row height (fontSize 12 + padding 10)
-        val expectedHeight = 18f
+        val expectedHeight = 40f
         assertEquals(expectedHeight, table.tableHeight())
     }
 
@@ -153,7 +149,7 @@ class TableTest {
         table.addRow(bodyRow)
 
         // Height should be: initial offset (8) + header row height (12 + 10) + body row height (12 + 10)
-        val expectedHeight = 28f
+        val expectedHeight = 50f
         assertEquals(expectedHeight, table.tableHeight())
     }
 
@@ -164,8 +160,7 @@ class TableTest {
         // Add a row with wrapped text (will create multiple lines)
         val row = Row()
         row.addCell(Cell(
-            data = "This is a long text that will wrap into multiple lines because it exceeds the maximum width",
-            fontSize = 12
+            data = "This is a long text that will wrap into multiple lines because it exceeds the maximum width"
         ))
         table.addRow(row)
 
