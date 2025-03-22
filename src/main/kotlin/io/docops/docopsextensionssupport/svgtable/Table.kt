@@ -162,7 +162,7 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
             row.cells.forEachIndexed { i, cell ->
                 val fontColor = cell.display.fontColor.color
                 val fontStyle = cell.display.parseFontStyle()
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style=cell.display.style, dy = fontStyle.size)
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: ${fontStyle.size}px; fill: ${fontColor};", dy = fontStyle.size)
                 sb.append("<g class=\"rowShade\" aria-label=\"header column ${i+1}\">")
                 sb.append("""<rect x="$startX" y="0" fill="url(#${cell.display.fill.id})" width="${cellWidths[i].width}" height="${maxOf(rowHeight,18f)}" stroke="#cccccc"/>""")
                 sb.append(lines)
@@ -221,13 +221,13 @@ internal class TBody(private val rows: MutableList<Row>, val headerHeight: Float
             var currentX = INITIAL_OFFSET
             sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="${getColorForNumber(i)}"/>""")
             row.cells.forEachIndexed { k, cell ->
-                val fontColor = determineTextColor(cell.display.fill.color)
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: ${fontColor};",)
                 var cellColor = getColorForNumber(i)
                 if(!cell.display.isDefault) {
                     cellColor = cell.display.fill.color
                 }
-                sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1}\">")
+                val fontColor = determineTextColor(cellColor)
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: ${fontColor};",)
+                sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1} cellcolor $cellColor $fontColor\">")
                 sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
                 sb.append(lines)
                 currentX += cellWidths[k].width + CELL_PADDING
@@ -365,7 +365,7 @@ class Cell(
         require(startY >= 0) { "startY must be non-negative" }
 
         return StringBuilder().apply {
-            append("<text x=\"$startX\" y=\"$startY\" style=\"${display.style}\">")
+            append("<text x=\"$startX\" y=\"$startY\" style=\"${style}\">")
             var downBy = 8
             lines.forEachIndexed { i, line ->
                 if(i>0) {
