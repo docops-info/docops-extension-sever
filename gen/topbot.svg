@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="grad1" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#3e5bdb"/>
+            <stop class="stop2" offset="50%" stop-color="#344CB7"/>
+            <stop class="stop3" offset="100%" stop-color="#293c92"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="grad3">
+            <stop class="stop1" offset="0%" stop-color="#d0ffb1"/>
+            <stop class="stop2" offset="50%" stop-color="#AEEA94"/>
+            <stop class="stop3" offset="100%" stop-color="#8bbb76"/>
+        </linearGradient>
+        <filter id="shadow" x="0" y="0" width="200%" height="200%">
+            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1"/>
+        </filter>
+        <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
+                                lighting-color="#fcfcfc">
+                <fePointLight x="-5000" y="-10000" z="20000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"/>
+        </filter>
+        <filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="10" specularConstant="3.5" specularExponent="10"
+                                result="specOut" lighting-color="#ffffff">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"/>
+        </filter>
+        <linearGradient id="grad4" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#822a2a"/>
+            <stop class="stop2" offset="50%" stop-color="#6D2323"/>
+            <stop class="stop3" offset="100%" stop-color="#571c1c"/>
+        </linearGradient>
+        <linearGradient x2="0%" y2="100%" id="grad5">
+            <stop class="stop1" offset="0%" stop-color="#d0ffb1"/>
+            <stop class="stop2" offset="50%" stop-color="#AEEA94"/>
+            <stop class="stop3" offset="100%" stop-color="#8bbb76"/>
+        </linearGradient>
+        <filter id="shadow" x="0" y="0" width="200%" height="200%">
+            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1"/>
+        </filter>
+        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
+                                lighting-color="white">
+                <fePointLight x="-5000" y="-10000" z="0000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                         result="litPaint"/>
+        </filter>
+    </defs>
+<g transform="translate(0,0)" >
+
+    <g>
+        <path d="M20,20 l250,0 V150 h-110 v25 h-20 v-25 h-120z" stroke="url(#grad1)" stroke-width="6" fill="#cccccc" filter="url(#Bevel)" stroke-linejoin="round" stroke-miterlimit="10"/>
+    </g>
+    <g>
+        <text x="150" y="50" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24px" filter="url(#Bevel2)" fill="url(#grad1)">
+            <tspan x="150">Domain</tspan>
+            <tspan x="150" dy="24">&amp;</tspan>
+            <tspan x="150" dy="24">Uno</tspan>
+            <tspan x="150" dy="24">(Preferred Domain)</tspan>
+        </text>
+    </g>
+    <g>
+        <text x="148" y="154" font-family="Arial, Helvetica, sans-serif" font-size="6px" filter="url(#Bevel2)" fill="url(#grad1)">
+            <tspan  x="148">N</tspan>
+            <tspan  x="148" dy="6">G</tspan>
+            <tspan  x="148" dy="6">D</tspan>
+            <tspan  x="148" dy="6">S</tspan>
+        </text>
+    </g>
+</g>
+    <g transform="translate(0,133)" >
+            <defs>
+
+            </defs>
+            <g>
+                <path d="M20,20 l118,0 v25 h25 v-25 l110,0 V150 h-250z" stroke="url(#grad3)" stroke-width="6" fill="#FFCFCF" filter="url(#Bevel)" stroke-linejoin="round" stroke-miterlimit="10"/>
+            </g>
+            <g>
+                <text x="150" y="70" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24px" filter="url(#Bevel3)" fill="url(#grad4)">
+                    <tspan x="150">Account</tspan>
+                    <tspan x="150" dy="24">File</tspan>
+                    <tspan x="150" dy="24">Domain</tspan>
+                </text>
+            </g>
+    </g>
+
+</svg>
