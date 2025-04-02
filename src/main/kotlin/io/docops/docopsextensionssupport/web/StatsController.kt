@@ -60,12 +60,12 @@ class StatsController @Autowired constructor(private val applicationEventPublish
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         return ResponseEntity(joinXmlLines("""
-           <svg xmlns="http://www.w3.org/2000/svg" width="173" height="40" viewBox="0 0 390 120">
+           <svg xmlns="http://www.w3.org/2000/svg" width="346" height="30" viewBox="0 0 390 30">
     <defs>
     <linearGradient id="grad1" x2="0%" y2="100%">
         <stop class="stop1" offset="0%" stop-color="#153e69"/>
-        <stop class="stop2" offset="50%" stop-color="#123458"/>
-        <stop class="stop3" offset="100%" stop-color="#0e2946"/>
+            <stop class="stop2" offset="50%" stop-color="#123458"/>
+            <stop class="stop3" offset="100%" stop-color="#0e2946"/>
     </linearGradient>
     <linearGradient id="grad2" x2="0%" y2="100%">
         <stop class="stop1" offset="0%" stop-color="#ffffff"/>
@@ -73,20 +73,20 @@ class StatsController @Autowired constructor(private val applicationEventPublish
         <stop class="stop3" offset="100%" stop-color="#c1bfb8"/>
     </linearGradient>
     </defs>
-    <rect x="0" y="0" width="100%" height="100%" fill="url(#grad1)"/>
-    <rect x="5" y="10" width="185" height="100" fill="url(#grad1)" rx="5" ry="5" stroke="#a1a1a1" stroke-width="1"/>
-    <rect x="195" y="10" width="185" height="100" fill="url(#grad1)" rx="5" ry="5" stroke="#a1a1a1" stroke-width="1"/>
+    <rect x="0" y="0" width="100%" height="100%" fill="url(#grad1)" rx="12" ry="12"/>
+    <rect x="5" y="5" width="185" height="20" fill="url(#grad1)" rx="5" ry="5" stroke="#a1a1a1" stroke-width="1"/>
+    <rect x="195" y="5" width="185" height="20" fill="url(#grad1)" rx="5" ry="5" stroke="#a1a1a1" stroke-width="1"/>
 
-    <g transform="translate(5,10)">
-        <text x="92.5" y="30" text-anchor="middle" style="font-family: Helvetica,Arial,sans-serif;" fill="#fcfcfc">
-            <tspan x="92.5" style="font-weight: bold;  font-size:14px; fill: #fcfcfc;">Estimated reading time</tspan>
-            <tspan x="92.5" dy="40" style="font-weight: bold; font-size: 36px; fill: #1b98f8;">$mins Mins</tspan>
+    <g transform="translate(5,5)">
+        <text x="0" y="15" style="font-family: Helvetica,Arial,sans-serif;" fill="#fcfcfc">
+            <tspan x="5" style="font-weight: bold;  font-size:14px; ">reading time</tspan>
+            <tspan x="92.5"  style="font-weight: bold; font-size: 12px; fill: #1b98f8;">$mins Minutes</tspan>
         </text>
     </g>
-    <g transform="translate(195,10)">
-    <text x="92.5" y="30" text-anchor="middle"  style="font-family: Helvetica,Arial,sans-serif;" fill="#fcfcfc">
-        <tspan x="92.5"  style="font-weight: bold; font-size: 14px; fill: #fcfcfc;">Word count</tspan>
-        <tspan x="92.5" dy="40" style="font-weight: bold; font-size: 36px; fill: #1b98f8;">$count</tspan>
+    <g transform="translate(195,5)">
+    <text x="0" y="15" text-anchor="end" style="font-family: Helvetica,Arial,sans-serif;" fill="#fcfcfc">
+        <tspan x="88" style="font-weight: bold; font-size: 14px; ">Word count</tspan>
+        <tspan x="120"  style="font-weight: bold; font-size: 12px; fill: #1b98f8;">$count</tspan>
     </text>
     </g>
 </svg>
