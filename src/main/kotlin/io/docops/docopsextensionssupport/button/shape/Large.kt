@@ -17,11 +17,10 @@
 package io.docops.docopsextensionssupport.button.shape
 
 
-
-import io.docops.asciidoc.utils.addLinebreaks
-import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.svgsupport.addLinebreaks
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
 /**

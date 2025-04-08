@@ -19,7 +19,7 @@ package io.docops.docopsextensionssupport.button
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
-import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed

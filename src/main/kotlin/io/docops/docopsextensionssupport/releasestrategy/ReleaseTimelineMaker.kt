@@ -16,7 +16,7 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import java.util.UUID

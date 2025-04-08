@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.io.File

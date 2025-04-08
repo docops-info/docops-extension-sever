@@ -18,6 +18,14 @@ package io.docops.docopsextensionssupport.svgsupport
 
 import java.awt.Canvas
 import java.awt.Font
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStreamReader
+import java.nio.charset.Charset
+import java.util.*
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 import kotlin.math.max
 import kotlin.math.min
 
@@ -192,4 +200,65 @@ fun generateRectPathData(
     bottomLeftRound: Float
 ): String {
     return """M 0 $topLetRound A $topLetRound $topLetRound 0 0 1 $topLetRound 0 L ${(width - topRightRound)} 0 A $topRightRound $topRightRound 0 0 1 $width $topRightRound L $width ${(height - bottomRightRound)} A $bottomRightRound $bottomRightRound 0 0 1 ${(width - bottomRightRound)} $height L $bottomLeftRound $height A $bottomLeftRound $bottomLeftRound 0 0 1 0 ${(height - bottomLeftRound)} Z"""
+}
+
+fun addLinebreaks(input: String, maxLineLength: Int): MutableList<StringBuilder> {
+    val list = mutableListOf<StringBuilder>()
+
+    val tok = StringTokenizer(input, " ")
+    var output = StringBuilder(input.length)
+    var lineLen = 0
+    while (tok.hasMoreTokens()) {
+        val word = tok.nextToken()
+        if (lineLen + word.length > maxLineLength) {
+            list.add(output)
+            output = StringBuilder(input.length)
+            lineLen = 0
+        }
+        output.append("$word ")
+        lineLen += word.length
+    }
+    if (list.size == 0 || lineLen > 0) {
+        list.add(output)
+    }
+    return list
+}
+
+fun String.makeLines(): List<String> {
+    return this.split(" ")
+}
+
+fun uncompressString(zippedBase64Str: String): String {
+    try {
+        val decoder = Base64.getUrlDecoder()
+        val bytes: ByteArray = decoder.decode(zippedBase64Str)
+        var zi: GZIPInputStream? = null
+        zi = GZIPInputStream(ByteArrayInputStream(bytes))
+        val reader = InputStreamReader(zi, Charset.defaultCharset())
+        val input = BufferedReader(reader)
+
+        val content = StringBuilder()
+        try {
+            var line = input.readLine()
+            while (line != null) {
+                content.append(line + "\n")
+                line = input.readLine()
+            }
+        } finally {
+            reader.close()
+        }
+        return content.toString()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return ""
+}
+fun compressString(body: String): String {
+    val baos = ByteArrayOutputStream()
+    val zos = GZIPOutputStream(baos)
+    zos.use { z ->
+        z.write(body.toByteArray())
+    }
+    val bytes = baos.toByteArray()
+    return Base64.getUrlEncoder().encodeToString(bytes)
 }

@@ -1,8 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.ShapeResponse
-import io.docops.docopsextensionssupport.web.panel.uncompressString
 import kotlinx.serialization.json.Json
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders

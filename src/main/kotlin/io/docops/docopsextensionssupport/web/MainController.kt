@@ -16,7 +16,6 @@
 
 package io.docops.docopsextensionssupport.web
 
-import io.docops.asciidoc.buttons.theme.*
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import io.micrometer.observation.annotation.Observed
@@ -173,23 +172,6 @@ class MainController @Autowired constructor(private val applicationContext: Appl
         writer.flush()
     }
 
-    @GetMapping("panels/customslim.html")
-    @Counted
-    fun customizeView(model: Model, httpServletRequest: HttpServletRequest, servletResponse: HttpServletResponse): String {
-        val params = httpServletRequest.parameterMap
-        val theme = params["theme"]?.get(0)
-        return if("----" != theme) {
-            model.addAttribute("theme", gradientMap[theme])
-            "panels/customslim"
-        } else {
-            servletResponse.contentType = "text/html"
-            servletResponse.characterEncoding = "UTF-8"
-            servletResponse.status = 500
-            "panels/errors"
-
-        }
-
-    }
 
     @GetMapping("/strat.html")
     @Counted
@@ -386,18 +368,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     fun table(model: Model): String {
         return "scorecard/table"
     }
-    private val gradientMap = mapOf<String, GradientStyle>(
-        "BlueTheme" to BlueTheme,
-        "RedTheme" to RedTheme,
-        "GreenTheme" to GreenTheme,
-        "PurpleTheme" to PurpleTheme,
-        "LightPurpleTheme" to LightPurpleTheme,
-        "MagentaTheme" to MagentaTheme,
-        "DarkTheme" to DarkTheme,
-        "DarkTheme2" to DarkTheme2,
-        "LightGreyTheme" to LightGreyTheme,
-        "OrangeTheme" to OrangeTheme
-        )
+
 }
 
 

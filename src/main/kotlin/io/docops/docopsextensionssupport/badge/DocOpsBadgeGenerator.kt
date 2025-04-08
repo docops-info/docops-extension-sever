@@ -16,7 +16,8 @@
 
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.asciidoc.utils.escapeXml
+
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.github.sercasti.tracing.Traceable

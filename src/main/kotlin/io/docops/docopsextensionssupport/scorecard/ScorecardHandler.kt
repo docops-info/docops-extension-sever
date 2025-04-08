@@ -1,8 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.badge.findHeightWidth
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
-import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.serialization.json.Json

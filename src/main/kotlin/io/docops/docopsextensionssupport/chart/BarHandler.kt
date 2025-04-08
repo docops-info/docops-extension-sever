@@ -1,15 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.cal.CalEntry
-import io.docops.docopsextensionssupport.diagram.PieMaker
-import io.docops.docopsextensionssupport.diagram.Pies
-import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import kotlinx.serialization.json.Json
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 

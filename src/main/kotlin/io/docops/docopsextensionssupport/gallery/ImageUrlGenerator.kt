@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.gallery
 
-import io.docops.asciidoctorj.extension.panels.compressString
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 

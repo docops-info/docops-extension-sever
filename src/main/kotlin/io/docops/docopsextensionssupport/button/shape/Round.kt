@@ -16,10 +16,10 @@
 
 package io.docops.docopsextensionssupport.button.shape
 
-import io.docops.asciidoc.buttons.wrapText
-import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.SVGColor
 
 

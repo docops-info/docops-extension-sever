@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import kotlinx.serialization.json.Json
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders

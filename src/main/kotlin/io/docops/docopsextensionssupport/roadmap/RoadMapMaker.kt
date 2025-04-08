@@ -16,7 +16,7 @@
 
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.asciidoc.utils.escapeXml
+import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.diagram.allGradientsKeys
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth

@@ -16,8 +16,8 @@
 
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.asciidoctorj.extension.panels.compressString
-import io.docops.docopsextensionssupport.web.panel.uncompressString
+import io.docops.docopsextensionssupport.svgsupport.compressString
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
