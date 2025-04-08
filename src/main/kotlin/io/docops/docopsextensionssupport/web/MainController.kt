@@ -140,7 +140,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @Counted
     @Timed(value = "docops.panel.image.builder.html")
     fun getAdr(model: Model): String {
-        return "adr/adrbuilder"
+        return "adr/adrnew"
     }
 
 
