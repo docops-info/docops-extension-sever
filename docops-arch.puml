@@ -1,0 +1,124 @@
+@startuml DocOps Extension Server Architecture
+
+!define RECTANGLE class
+!define COMPONENT component
+
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam roundCorner 15
+skinparam defaultTextAlignment center
+
+title DocOps Extension Server Architecture
+
+' Client Applications
+actor "User" as user
+actor "External System" as external
+
+' Main Components
+package "Client Applications" {
+    [Web Browser] as browser
+    [API Client] as apiClient
+}
+
+package "DocOps Extension Server" {
+    ' Main Application
+    component "Spring Boot Application" as springApp {
+        [DocopsExtensionsSupportApplication] as mainApp
+    }
+
+    ' Controllers Layer
+    package "Controllers" {
+        [MainController] as mainController
+        [BadgeController] as badgeController
+        [ButtonController] as buttonController
+        [ReleaseController] as releaseController
+        [TimelineController] as timelineController
+        [SchemaAccessController] as schemaController
+        [StatsController] as statsController
+        ' ... other controllers
+    }
+
+    ' Service Layer
+    package "Services" {
+        [DocOpsBadgeGenerator] as badgeGenerator
+        [ButtonMaker] as buttonMaker
+        [ReleaseStrategyMaker] as releaseMaker
+        [TimelineMaker] as timelineMaker
+        ' ... other services
+    }
+
+    ' Data Models
+    package "Models" {
+        [Badge] as badgeModel
+        [Button] as buttonModel
+        [ReleaseStrategy] as releaseModel
+        [Timeline] as timelineModel
+        ' ... other models
+    }
+
+    ' Templates
+    package "Templates" {
+        [Freemarker Templates] as templates
+    }
+
+    ' Static Resources
+    package "Static Resources" {
+        [CSS] as css
+        [JavaScript] as js
+        [Images] as images
+        [Schemas] as schemas
+    }
+}
+
+' External Dependencies
+package "External Dependencies" {
+    [SVG Rendering Libraries] as svgLib
+    [HTTP Client] as httpClient
+}
+
+' Relationships
+user --> browser : accesses
+external --> apiClient : uses
+
+browser --> mainController : HTTP requests
+apiClient --> badgeController : API calls
+apiClient --> buttonController : API calls
+apiClient --> releaseController : API calls
+apiClient --> timelineController : API calls
+
+mainController --> templates : renders
+badgeController --> badgeGenerator : uses
+buttonController --> buttonMaker : uses
+releaseController --> releaseMaker : uses
+timelineController --> timelineMaker : uses
+schemaController --> schemas : serves
+
+badgeGenerator --> badgeModel : creates
+buttonMaker --> buttonModel : creates
+releaseMaker --> releaseModel : creates
+timelineMaker --> timelineModel : creates
+
+badgeGenerator --> svgLib : uses
+buttonMaker --> svgLib : uses
+releaseMaker --> svgLib : uses
+timelineMaker --> svgLib : uses
+
+badgeGenerator --> httpClient : for external icons
+
+' Data Flow
+browser <-- mainController : HTML/CSS/JS
+apiClient <-- badgeController : SVG/PNG
+apiClient <-- buttonController : SVG/PNG
+apiClient <-- releaseController : SVG/PNG
+apiClient <-- timelineController : SVG/PNG
+
+legend right
+  |= Component |= Description |
+  |Controllers | Handle HTTP requests and responses |
+  |Services | Implement business logic for generating content |
+  |Models | Data structures for the application |
+  |Templates | Freemarker templates for rendering views |
+  |Static Resources | CSS, JavaScript, images, and schemas |
+endlegend
+
+@enduml
