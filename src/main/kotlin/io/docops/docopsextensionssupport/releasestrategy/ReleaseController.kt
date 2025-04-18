@@ -156,37 +156,164 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
      * @return The SVG representation of the updated release strategy.
      */
     @Traceable
-    @PutMapping("/", produces = ["image/svg+xml"])
+    @PutMapping("/", produces = ["image/svg+xml"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Counted("docops.release.put", description="Creating a release diagram using http put")
     @Timed(value = "docops.release.put", description="Creating a release diagram using http put", percentiles=[0.5, 0.9])
-    fun putStrategy(@RequestBody releaseStrategy: ReleaseStrategy): String {
+    fun putStrategy(@RequestBody(required = false) jsonReleaseStrategy: ReleaseStrategy?,
+                    @ModelAttribute model: ModelMap,
+                    servletRequest: HttpServletRequest): String {
         val timing = measureTimedValue {
-            when (releaseStrategy.style) {
-                "TL" -> {
-                    createTimelineSvg(releaseStrategy)
-                }
+            val releaseStrategy = jsonReleaseStrategy ?: throw ErrorResponseException(
+                HttpStatus.BAD_REQUEST,
+                ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "JSON body is required"),
+                null
+            )
 
-                "TLS" -> {
-                    createTimelineSummarySvg(releaseStrategy)
-                }
-
-                "R" -> {
-                     createRoadMap(releaseStrategy, animate = "ON")
-                }
-
-                "TLG" -> {
-                     createTimelineGrouped(releaseStrategy)
-                }
-
-                else -> {
-                    val pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"Unknown Release Strategy style ${releaseStrategy.style}")
-                    throw ErrorResponseException(HttpStatus.BAD_REQUEST,pb, null)
-                }
-            }
+            processReleaseStrategy(releaseStrategy)
         }
         log.info{"putStrategy executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
+    }
+
+    /**
+     * Updates the strategy for releasing a resource using form-urlencoded data.
+     *
+     * @return The SVG representation of the updated release strategy.
+     */
+    @Traceable
+    @PutMapping("/", produces = ["image/svg+xml"], consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+    @ResponseBody
+    @Counted("docops.release.put.form", description="Creating a release diagram using http put with form data")
+    @Timed(value = "docops.release.put.form", description="Creating a release diagram using http put with form data", percentiles=[0.5, 0.9])
+    fun putStrategyForm(@ModelAttribute model: ModelMap, servletRequest: HttpServletRequest): String {
+        val timing = measureTimedValue {
+            // Construct from form parameters
+            val title = servletRequest.getParameter("title") ?: ""
+            val style = servletRequest.getParameter("style") ?: "TL"
+            val scale = servletRequest.getParameter("scale")?.toFloatOrNull() ?: 1.0f
+
+            // Get releases from form parameters
+            val releases = getReleaseTypesFromForm(servletRequest)
+
+            // Create display config
+            val fontColor = servletRequest.getParameter("displayConfig.fontColor") ?: "#fcfcfc"
+            val milestoneColor = servletRequest.getParameter("displayConfig.milestoneColor") ?: "#fcfcfc"
+            val notesVisible = servletRequest.getParameter("displayConfig.notesVisible") != null
+
+            // Get colors arrays
+            val colors = listOf(
+                servletRequest.getParameter("displayConfig.colors[0]") ?: "#5f57ff",
+                servletRequest.getParameter("displayConfig.colors[1]") ?: "#2563eb",
+                servletRequest.getParameter("displayConfig.colors[2]") ?: "#7149c6"
+            )
+
+            val circleColors = listOf(
+                servletRequest.getParameter("displayConfig.circleColors[0]") ?: "#fc86be",
+                servletRequest.getParameter("displayConfig.circleColors[1]") ?: "#dc93f6",
+                servletRequest.getParameter("displayConfig.circleColors[2]") ?: "#aeb1ed"
+            )
+
+            val carColors = listOf(
+                servletRequest.getParameter("displayConfig.carColors[0]") ?: "#fcfcfc",
+                servletRequest.getParameter("displayConfig.carColors[1]") ?: "#000000",
+                servletRequest.getParameter("displayConfig.carColors[2]") ?: "#ff0000"
+            )
+
+            val displayConfig = DisplayConfig(
+                fontColor = fontColor,
+                milestoneColor = milestoneColor,
+                colors = colors,
+                circleColors = circleColors,
+                carColors = carColors,
+                notesVisible = notesVisible
+            )
+
+            val releaseStrategy = ReleaseStrategy(
+                title = title,
+                releases = releases,
+                style = style,
+                scale = scale,
+                displayConfig = displayConfig
+            )
+
+            processReleaseStrategy(releaseStrategy)
+        }
+        log.info{"putStrategyForm executed in ${timing.duration.inWholeMilliseconds}ms "}
+        return timing.value
+    }
+
+    /**
+     * Process a release strategy and generate the appropriate SVG based on the style.
+     */
+    private fun processReleaseStrategy(releaseStrategy: ReleaseStrategy): String {
+        return when (releaseStrategy.style) {
+            "TL" -> {
+                createTimelineSvg(releaseStrategy)
+            }
+
+            "TLS" -> {
+                createTimelineSummarySvg(releaseStrategy)
+            }
+
+            "R" -> {
+                 createRoadMap(releaseStrategy, animate = "ON")
+            }
+
+            "TLG" -> {
+                 createTimelineGrouped(releaseStrategy)
+            }
+
+            else -> {
+                val pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"Unknown Release Strategy style ${releaseStrategy.style}")
+                throw ErrorResponseException(HttpStatus.BAD_REQUEST,pb, null)
+            }
+        }
+    }
+
+    private fun getReleaseTypesFromForm(servletRequest: HttpServletRequest): MutableList<Release> {
+        val releases = mutableListOf<Release>()
+        val paramNames = servletRequest.parameterNames.toList()
+
+        // Find all release type parameters to determine how many releases we have
+        val typeParams = paramNames.filter { it.matches(Regex("releases\\[\\d+\\]\\.type")) }
+
+        typeParams.forEach { typeParam ->
+            // Extract the index from the parameter name
+            val indexMatch = Regex("releases\\[(\\d+)\\]\\.type").find(typeParam)
+            val index = indexMatch?.groupValues?.get(1) ?: return@forEach
+
+            // Get the release type
+            val typeValue = servletRequest.getParameter(typeParam) ?: return@forEach
+            val type = try {
+                ReleaseEnum.valueOf(typeValue)
+            } catch (e: IllegalArgumentException) {
+                return@forEach
+            }
+
+            // Get date and goal
+            val date = servletRequest.getParameter("releases[$index].date") ?: "TBD"
+            val goal = servletRequest.getParameter("releases[$index].goal") ?: ""
+
+            // Get selected and completed status
+            val selected = servletRequest.getParameter("releases[$index].selected") != null
+            val completed = servletRequest.getParameter("releases[$index].completed") != null
+
+            // Get lines
+            val lines = mutableListOf<String>()
+            var lineIndex = 0
+            while (true) {
+                val lineParam = "releases[$index].lines[$lineIndex]"
+                val line = servletRequest.getParameter(lineParam) ?: break
+                lines.add(line)
+                lineIndex++
+            }
+
+            // Add the release to our list
+            releases.add(Release(type, lines, date, selected, goal, completed))
+        }
+
+        return releases
     }
 
 
@@ -241,7 +368,7 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                 <div id='imageblock'>
                 $svg
                 </div>
-            
+
         """.lines().joinToString(transform = String::trim, separator = "\n")
 
         return div

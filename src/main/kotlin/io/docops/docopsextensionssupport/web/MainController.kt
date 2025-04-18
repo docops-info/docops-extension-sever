@@ -98,7 +98,7 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @Counted
     @Timed(value = "docops.badge.html")
     fun getBadge(): String {
-        return "badge/badge"
+        return "badge/badgenew"
     }
 
     @GetMapping("/chart.html")
@@ -222,6 +222,13 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     @Timed(value = "docops.roadmap.plan.html")
     fun roadmap(model: Model): String {
         return "roadmap/rm"
+    }
+
+    @GetMapping("/rmstrategy.html")
+    @Counted
+    @Timed(value = "docops.release.strategy.ui.html")
+    fun releaseStrategyUI(model: Model): String {
+        return "roadmap/rmui"
     }
     @GetMapping("/button/fromJson.html")
     @Counted
@@ -370,6 +377,3 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     }
 
 }
-
-
-
