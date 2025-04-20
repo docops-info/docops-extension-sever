@@ -53,11 +53,20 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
         }
     }
     /**
-     * Converts a JSON payload and theme query parameter to a ButtonForm object.
+     * Converts a JSON payload and theme query parameter to a ButtonForm object and returns SVG content.
      *
-     * @param payload The JSON payload string.
-     * @param theme (Optional) The theme query parameter.
-     * @return The ResponseEntity containing the converted ButtonForm object.
+     * This endpoint accepts a JSON payload containing button data and an optional theme parameter.
+     * If a theme is provided, it's applied to the buttons before rendering. The method returns
+     * an HTML fragment containing the SVG representation of the buttons and the theme data.
+     *
+     * @param payload The JSON payload string containing button definitions. This should be a valid JSON
+     *                object that can be deserialized into a [Buttons] object. The payload defines the
+     *                buttons to be rendered, including their labels, links, and other properties.
+     * @param theme (Optional) The theme query parameter specifying the name of a theme file (without extension)
+     *              from the classpath:static/buttondisplay/ directory. If provided, the theme's settings
+     *              will be applied to the buttons. If not provided or empty, no theme will be applied.
+     * @return The ResponseEntity containing an HTML fragment with the SVG representation of the buttons
+     *         and the theme data in a separate div with data-hx-swap-oob attribute.
      */
     @Traceable
     @Timed(value="docops.button.put.fromJsonToButtonForm.time", description="Creating a Button using Form Submission", percentiles=[0.5,0.9])

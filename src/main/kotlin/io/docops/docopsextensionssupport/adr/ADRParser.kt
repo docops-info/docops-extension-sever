@@ -274,7 +274,7 @@ fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRigh
  Z"""
 }
 fun main() {
-    val config = AdrParserConfig(newWin = false, lineSize = 80, increaseWidthBy = 70)
+    val config = AdrParserConfig(newWin = false, lineSize = 80, increaseWidthBy = 70, scale = 2.2f)
     val adr = ADRParser().parse(
         // language=text
         """

@@ -362,3 +362,32 @@ Accept-Encoding: gzip, deflate, br, zstd
 
 ###
 
+# curl 'http://localhost:8010/extension/api/release/' -X PUT -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:137.0) Gecko/20100101 Firefox/137.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br, zstd' -H 'HX-Request: true' -H 'HX-Target: contentBox' -H 'HX-Current-URL: http://localhost:8010/extension/#' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://localhost:8010' -H 'Connection: keep-alive' -H 'Referer: http://localhost:8010/extension/' -H 'Cookie: Idea-ba6ea630=bc6d4828-c453-4f4f-8bd4-d166b33d7828; Idea-ba6ea9ef=b0a6d26b-200b-41a5-b642-be5b36fd8793; Idea-ba6ea9f0=9ed9272a-e949-4412-a9f7-03eaaa9dac62; Idea-ba6ea9f1=59051c09-5bcf-4eea-82a7-5e4301225fe7; Idea-ba6eadb0=2c6efc84-8bf2-4110-8826-097426ce782c; Idea-ba6eadb1=3606aa1e-798c-483c-a80d-598bd492d157; Idea-ba6eadb2=eb163875-c2e7-43bc-868b-eee6899824c6; Idea-ba6eb171=8c070c3f-1612-4b46-a747-acb3e4b5fcb9; Idea-ba6eb172=a18179eb-45ce-4b4e-a4d2-7d66e24969bd; Idea-ba6eb173=9bd85f45-bb8c-41ab-bfdc-40045fe617d8' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin' -H 'Priority: u=0' --data-raw 'title=November%20versio&style=TLS&scale=1.0&displayConfig.fontColor=%23fcfcfc&displayConfig.milestoneColor=%23fcfcfc&displayConfig.colors%5B0%5D=%235f57ff&displayConfig.colors%5B1%5D=%232563eb&displayConfig.colors%5B2%5D=%237149c6&displayConfig.circleColors%5B0%5D=%23fc86be&displayConfig.circleColors%5B1%5D=%23dc93f6&displayConfig.circleColors%5B2%5D=%23aeb1ed&displayConfig.carColors%5B0%5D=%23fcfcfc&displayConfig.carColors%5B1%5D=%23000000&displayConfig.carColors%5B2%5D=%23ff0000&releases%5B0%5D.type=M1&releases%5B0%5D.date=2025-04-29&releases%5B0%5D.goal=Enjoytime%20off&releases%5B0%5D.lines%5B0%5D=tried&releases%5B0%5D.lines%5B1%5D=true'
+PUT http://localhost:8010/extension/api/release/
+HX-Request: true
+HX-Target: contentBox
+Accept: image/svg+xml
+Content-Type: application/x-www-form-urlencoded
+
+title = November%20versio &
+style = TLS &
+scale = 1.0 &
+displayConfig.fontColor = %23fcfcfc &
+displayConfig.milestoneColor = %23fcfcfc &
+displayConfig.colors%5B0%5D = %235f57ff &
+displayConfig.colors%5B1%5D = %232563eb &
+displayConfig.colors%5B2%5D = %237149c6 &
+displayConfig.circleColors%5B0%5D = %23fc86be &
+displayConfig.circleColors%5B1%5D = %23dc93f6 &
+displayConfig.circleColors%5B2%5D = %23aeb1ed &
+displayConfig.carColors%5B0%5D = %23fcfcfc &
+displayConfig.carColors%5B1%5D = %23000000 &
+displayConfig.carColors%5B2%5D = %23ff0000 &
+releases%5B0%5D.type = M1 &
+releases%5B0%5D.date = 2025-04-29 &
+releases%5B0%5D.goal = Enjoytime%20off &
+releases%5B0%5D.lines%5B0%5D = tried &
+releases%5B0%5D.lines%5B1%5D = true
+
+###
+

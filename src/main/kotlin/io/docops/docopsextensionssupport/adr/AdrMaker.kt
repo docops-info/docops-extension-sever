@@ -31,13 +31,13 @@ class AdrMaker {
         val participantsOutcome = participants(adr, consequencesOutcome.lastYPosition, editorColor)
         sb.append(participantsOutcome.text)
         val wrapper = StringBuilder()
-        wrapper.append(head(width = 720.0f, height = participantsOutcome.lastYPosition+dy)).append(sb).append(tail())
+        wrapper.append(head(width = 720.0f, height = participantsOutcome.lastYPosition+dy, config.scale)).append(sb).append(tail())
         return wrapper.toString()
     }
 
-    fun head(width: Float = 720.0f, height: Float = 450.0f): String {
+    fun head(width: Float = 720.0f, height: Float = 450.0f, scale: Float = 1.0f): String {
         return """
-            <svg id="adr" xmlns="http://www.w3.org/2000/svg" width='${width/ DISPLAY_RATIO_16_9}' height='${height/DISPLAY_RATIO_16_9}'
+            <svg id="adr" xmlns="http://www.w3.org/2000/svg" width='${width * scale/ DISPLAY_RATIO_16_9 }' height='${height * scale/DISPLAY_RATIO_16_9}'
                  xmlns:xlink="http://www.w3.org/1999/xlink" font-family="arial"
                  viewBox="0 0 $width $height"
             >

@@ -51,6 +51,10 @@ class EmbeddedImage(val ref: String, val type: String = "image/png")
 /**
  * Represents a button that can be used in an application's user interface.
  *
+ * Buttons can be customized with various properties including labels, links, colors, and styles.
+ * They can be rendered in different shapes using the [ButtonType] enum and organized in collections
+ * using the [Buttons] class.
+ *
  * @property id A unique identifier for the button. If not specified, a random UUID will be generated.
  * @property label The text that appears on the button.
  * @property link The destination URL or action associated with the button.
@@ -66,6 +70,45 @@ class EmbeddedImage(val ref: String, val type: String = "image/png")
  * @property buttonGradientStyle The gradient style of the button.
  * @property buttonStyle The style of the button.
  * @property embeddedImage The embedded image associated with the button.
+ *
+ * Example of creating a simple button:
+ * ```kotlin
+ * val simpleButton = Button(
+ *     label = "Click Me",
+ *     link = "https://example.com",
+ *     description = "A simple button example"
+ * )
+ * ```
+ *
+ * Example of creating a button with custom styling:
+ * ```kotlin
+ * val styledButton = Button(
+ *     label = "Styled Button",
+ *     link = "https://example.com/styled",
+ *     description = "A button with custom styling",
+ *     color = "#3498db",
+ *     buttonStyle = ButtonStyle(
+ *         labelStyle = "font-family: Arial; font-size: 14px; fill: #ffffff;",
+ *         descriptionStyle = "font-family: Arial; font-size: 12px; fill: #cccccc;"
+ *     )
+ * )
+ * ```
+ *
+ * Example of creating a button with additional metadata:
+ * ```kotlin
+ * val metadataButton = Button(
+ *     label = "Documentation",
+ *     link = "https://docs.example.com",
+ *     description = "Access project documentation",
+ *     date = "05/15/2023",
+ *     type = "Documentation",
+ *     author = mutableListOf("John Doe", "Jane Smith"),
+ *     links = mutableListOf(
+ *         Link("API Reference", "https://docs.example.com/api"),
+ *         Link("User Guide", "https://docs.example.com/guide")
+ *     )
+ * )
+ * ```
  */
 @Serializable
 class Button(
@@ -90,11 +133,30 @@ class Button(
 /**
  * Represents the style configuration for a button.
  *
+ * The ButtonStyle class defines the visual appearance of text elements within a [Button].
+ * It allows customization of font family, size, color, and other CSS properties for different
+ * parts of the button such as label, description, date, type, and author information.
+ *
+ * This class is used by the [Button] class to style its text elements and by the [ButtonDisplay]
+ * class to define default styles for collections of buttons. When a button doesn't specify its own
+ * style, it inherits styles from the ButtonDisplay's buttonStyle property.
+ *
  * @property labelStyle The style for the label text of the button.
  * @property descriptionStyle The style for the description text of the button.
  * @property dateStyle The style for the date text of the button.
  * @property typeStyle The style for the type text of the button.
  * @property authorStyle The style for the author text of the button.
+ * @property linkStyle The style for link text elements of the button.
+ * @property fontSize The base font size for the button text elements.
+ *
+ * Example of creating a ButtonStyle:
+ * ```kotlin
+ * val style = ButtonStyle(
+ *     labelStyle = "font-family: Arial; font-size: 14px; fill: #ffffff;",
+ *     descriptionStyle = "font-family: Arial; font-size: 12px; fill: #cccccc;",
+ *     fontSize = 14
+ * )
+ * ```
  */
 @Serializable
 class ButtonStyle(
@@ -125,44 +187,65 @@ enum class ButtonType {
 }
 
 /**
- * Represents the sorting options for a button.
+ * Represents the sorting options for buttons in a collection.
  *
- * This enum class defines the available sorting options for a button.
- * The sorting options include type, label, date, author, and order.
+ * This enum class defines the available criteria for sorting buttons within a [Buttons] collection.
+ * The sorting is applied by the [Buttons.sort] method based on the [ButtonDisplay.sortBy] configuration.
  *
  * Usage:
- *
- * ```
- * val sortBy = ButtonSortBy.TYPE
+ * ```kotlin
+ * // Create a sort configuration for buttons
+ * val sortConfig = Sort(ButtonSortBy.TYPE, SortDirection.ASCENDING)
+ * 
+ * // Use in a ButtonDisplay
+ * val display = ButtonDisplay(sortBy = sortConfig)
  * ```
  */
 @Serializable
 enum class ButtonSortBy {
     /**
-     * Represents a type.
-     *
-     * This class is used to represent a type in a software system.
-     *
-     * Usage:
-     *
-     * ```
-     * val type = Type()
-     **/
-    TYPE, /**
-     * Represents a label.
-     *
-     * Labels are used to display text in a user interface.
+     * Sort buttons by their type property.
+     * 
+     * When this option is selected, buttons will be grouped together by their type value.
+     * This is useful for organizing buttons into logical categories.
+     * 
+     * If a button doesn't have a type specified, it will be treated as having an empty string type.
+     */
+    TYPE,
+
+    /**
+     * Sort buttons by their label property.
+     * 
+     * When this option is selected, buttons will be sorted alphabetically by their label text.
+     * This is the default sorting option and provides a predictable, alphabetical ordering.
      */
     LABEL,
+
+    /**
+     * Sort buttons by their date property.
+     * 
+     * When this option is selected, buttons will be sorted chronologically by their date value.
+     * This is useful for timelines or showing buttons in chronological order.
+     * 
+     * If a button doesn't have a date specified, it will be treated as having the date "01/01/1970".
+     */
     DATE,
-    AUTHOR, /**
-     * The `ORDER` class represents the insertion order of a button.
-     *
-     * This class provides the means to sort buttons by their insertion order.
-     *
-     * @constructor Creates a new instance of the `ORDER` class.
-     *
-     * @property items The list of items in the order.
+
+    /**
+     * Sort buttons by their author property.
+     * 
+     * When this option is selected, buttons will be sorted alphabetically by the first author in their author list.
+     * This is useful for organizing buttons by creator or owner.
+     * 
+     * If a button doesn't have any authors specified, it will be treated as having an empty string author.
+     */
+    AUTHOR,
+
+    /**
+     * Preserve the original insertion order of buttons.
+     * 
+     * When this option is selected, no sorting is applied and buttons remain in the order they were added to the collection.
+     * This is useful when a specific manual ordering is desired.
      */
     ORDER
 }
@@ -188,16 +271,50 @@ enum class SortDirection {
 class Sort(val sort: ButtonSortBy = ButtonSortBy.LABEL, val direction: SortDirection = SortDirection.ASCENDING)
 
 /**
- * Represents the display settings for a button.
+ * Represents the display settings for a collection of buttons.
  *
- * @property colors The list of colors to use for the button.
- * @property scale The scale factor of the button.
- * @property columns The number of columns to display the buttons.
- * @property newWin Indicates if the button should open in a new window when clicked.
- * @property useDark Indicates if dark theme should be used for the button.
- * @property strokeColor The color of the button stroke.
- * @property sortBy The sort order for the buttons.
- * @property buttonStyle The style settings for the button label.
+ * The ButtonDisplay class serves as a theme or configuration container that defines
+ * how a collection of [Button] objects should be rendered. It provides default styling,
+ * layout options, color schemes, and behavior settings that apply to all buttons in a
+ * [Buttons] collection.
+ *
+ * Key relationships:
+ * - ButtonDisplay contains a [ButtonStyle] object that defines default text styling for buttons
+ * - [Buttons] class uses ButtonDisplay as its theme property
+ * - Individual [Button] objects inherit styles and colors from ButtonDisplay when they don't
+ *   specify their own
+ *
+ * The color assignment works as follows:
+ * 1. If a button specifies its own color, that color is used
+ * 2. If a button has a type but no color, the color is taken from colorTypeMap for that type
+ * 3. If the type isn't in colorTypeMap, a color is assigned from the colors list and added to colorTypeMap
+ * 4. If a button has neither color nor type, the first color in the colors list is used
+ *
+ * @property colors The list of colors to use for buttons that don't specify their own color.
+ * @property colorTypeMap A map associating button types with specific colors.
+ * @property scale The scale factor of the buttons (1.0 = 100%).
+ * @property columns The number of columns to use when displaying buttons in a grid.
+ * @property newWin Indicates if button links should open in a new window when clicked.
+ * @property useDark Indicates if dark theme should be used for the buttons.
+ * @property strokeColor The color of the button stroke/border.
+ * @property sortBy The sort configuration for ordering buttons in the collection.
+ * @property buttonStyle The default style settings for button text elements.
+ * @property hexLinesEnabled Whether to show connecting lines in hexagonal button layouts.
+ * @property raise Whether to apply a raised/3D effect to buttons.
+ *
+ * Example of creating a ButtonDisplay:
+ * ```kotlin
+ * val display = ButtonDisplay(
+ *     colors = listOf("#3498db", "#2ecc71", "#e74c3c", "#f39c12"),
+ *     scale = 1.2f,
+ *     columns = 4,
+ *     newWin = true,
+ *     buttonStyle = ButtonStyle(
+ *         labelStyle = "font-family: Arial; font-size: 14px; fill: #ffffff;",
+ *         descriptionStyle = "font-family: Arial; font-size: 12px; fill: #eeeeee;"
+ *     )
+ * )
+ * ```
  */
 @Serializable
 class ButtonDisplay(
@@ -218,16 +335,52 @@ class ButtonDisplay(
 )
 
 /**
- * Class representing a collection of buttons.
+ * Class representing a collection of buttons with shared configuration and rendering options.
  *
- * @property buttons The list of buttons.
- * @property buttonType The type of buttons in the collection.
- * @property theme The display theme for the buttons.
- * @property themeUrl The URL for the theme.
+ * The Buttons class serves as the main container for a group of [Button] objects that should be
+ * rendered together. It coordinates the styling, layout, and appearance of individual buttons
+ * through its relationship with [ButtonDisplay] (theme) and [ButtonType] (shape).
+ *
+ * Key relationships:
+ * - Buttons contains a list of [Button] objects that it manages
+ * - Buttons uses a [ButtonDisplay] object as its theme to provide default styling and layout
+ * - Buttons specifies a [ButtonType] that determines the shape and visual appearance of all buttons
+ * - During initialization, Buttons applies theme settings to each Button, including colors and styles
+ *
+ * The initialization process:
+ * 1. If themeUrl is provided, the theme is loaded from that URL
+ * 2. Theme settings are applied to all buttons in the collection
+ * 3. Colors and styles are determined for each button based on theme and button properties
+ * 4. Buttons are sorted according to the theme's sortBy configuration
+ *
+ * @property buttons The list of buttons in this collection.
+ * @property buttonType The type/shape of all buttons in this collection.
+ * @property theme The display theme for the buttons, providing default styling and layout.
+ * @property themeUrl The URL from which to load the theme (optional).
  * @property useDark Flag indicating if the dark theme should be used.
  * @property id The unique identifier for the button collection.
- * @property typeMap A map of button types and their corresponding colors.
- * @constructor Creates a Buttons instance.
+ * @property typeMap A map of button types and their corresponding colors (built during initialization).
+ *
+ * Example of creating a Buttons collection:
+ * ```kotlin
+ * val buttonCollection = Buttons(
+ *     buttons = mutableListOf(
+ *         Button(label = "Home", link = "https://example.com/home"),
+ *         Button(label = "Products", link = "https://example.com/products"),
+ *         Button(label = "Contact", link = "https://example.com/contact")
+ *     ),
+ *     buttonType = ButtonType.PILL,
+ *     theme = ButtonDisplay(
+ *         colors = listOf("#3498db", "#2ecc71", "#e74c3c"),
+ *         columns = 3,
+ *         newWin = true
+ *     )
+ * )
+ *
+ * // Generate SVG representation
+ * val buttonShape = buttonCollection.createSVGShape()
+ * val svg = buttonShape.drawShape("SVG")
+ * ```
  */
 @Serializable
 class Buttons(
@@ -465,15 +618,46 @@ class Buttons(
 @Serializable
 class Link(val label: String, val href: String)
 
+/**
+ * Creates an SVG linear gradient definition from a color.
+ *
+ * This utility function creates an SVG linear gradient definition using the specified color
+ * and button ID. It uses the [SVGColor] class to generate the gradient.
+ *
+ * @param color The base color for the gradient in hex format (e.g., "#3498db")
+ * @param id The button ID to use in the gradient identifier
+ * @return An SVG linear gradient definition as a string
+ */
 fun buildGradientDef(color: String, id: String): String {
     val m = SVGColor(color, "btn_${id}")
     return m.linearGradient
 }
+
+/**
+ * Creates an SVG linear gradient definition from a color using HSL color space.
+ *
+ * This utility function creates an SVG linear gradient definition using the specified color
+ * and button ID. It uses the [SVGColor] class to generate the gradient with HSL color transformations.
+ *
+ * @param color The base color for the gradient in hex format (e.g., "#3498db")
+ * @param id The button ID to use in the gradient identifier
+ * @return An SVG linear gradient definition as a string
+ */
 fun buildGradientHslDef(color: String, id: String): String {
     val m = SVGColor(color, "btn_${id}")
-   return m.linearGradient
+    return m.linearGradient
 }
 
+/**
+ * Retrieves content from a URL as a string.
+ *
+ * This utility function makes an HTTP request to the specified URL and returns the response body as a string.
+ * It's used to fetch remote resources like theme configurations or other button-related data.
+ * The function includes timeout settings and error handling.
+ *
+ * @param url The URL to fetch content from
+ * @return The content from the URL as a string, or an empty string if an error occurs
+ */
 fun getResourceFromUrl(url: String): String {
     val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
         .connectTimeout(Duration.ofSeconds(20))
@@ -491,6 +675,17 @@ fun getResourceFromUrl(url: String): String {
     }
 }
 
+/**
+ * Creates a gradient color map from a base color.
+ *
+ * This utility function takes a base color and generates a map of three colors for creating gradients:
+ * - color1: A lighter tint of the base color (50% tint)
+ * - color2: A slightly lighter tint of the base color (25% tint)
+ * - color3: The original base color
+ *
+ * @param color The base color in hex format (e.g., "#3498db")
+ * @return A map containing three color values for gradient generation
+ */
 fun gradientFromColor(color: String): Map<String, String> {
     val decoded = Color.decode(color)
     val tinted1 = tint(decoded, 0.5)
@@ -498,6 +693,15 @@ fun gradientFromColor(color: String): Map<String, String> {
     return mapOf("color1" to tinted1, "color2" to tinted2, "color3" to color)
 }
 
+/**
+ * Creates a darker shade of a color.
+ *
+ * This utility function takes a Color object and returns a darker shade (50% darker)
+ * as a hex color string.
+ *
+ * @param color The base Color object
+ * @return A hex color string representing a darker shade of the input color
+ */
 private fun shade(color: Color): String {
     val rs: Double = color.red * 0.50
     val gs = color.green * 0.50
@@ -505,6 +709,17 @@ private fun shade(color: Color): String {
     return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
 }
 
+/**
+ * Creates a lighter tint of a color.
+ *
+ * This utility function takes a Color object and a factor value to create a lighter tint
+ * of the color. The factor determines how much lighter the tint will be (0.0 = no change,
+ * 1.0 = white).
+ *
+ * @param color The base Color object
+ * @param factor The tint factor (0.0 to 1.0)
+ * @return A hex color string representing a lighter tint of the input color
+ */
 private fun tint(color: Color, factor: Double): String {
     val rs = color.red + (factor * (255 - color.red))
     val gs = color.green + (factor * (255 - color.green))
@@ -512,6 +727,14 @@ private fun tint(color: Color, factor: Double): String {
     return "#${rs.toInt().toString(16)}${gs.toInt().toString(16)}${bs.toInt().toString(16)}"
 }
 
+/**
+ * Generates a random color.
+ *
+ * This utility function generates a random color value.
+ * Note: This function currently doesn't return the generated color.
+ *
+ * @return Nothing (function should be modified to return the generated color)
+ */
 fun randomColor() {
     val color = (Math.random() * 16777215).toInt() or (0xFF shl 24)
 }

@@ -6,6 +6,30 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
 
+/**
+ * Implements a circular button shape with centered text.
+ *
+ * The Circle class extends the [Regular] class to create buttons with a circular appearance.
+ * Each button is rendered as a perfect circle with text centered in the middle, providing
+ * a distinctive and visually appealing alternative to rectangular buttons.
+ *
+ * Key features:
+ * - Perfect circle shape with 50px radius
+ * - Text centered in the middle of the circle
+ * - Automatic text wrapping for longer labels
+ * - Intelligent vertical positioning of text based on number of lines
+ * - Natural shadow effect for depth
+ * - Compact layout with buttons arranged in a grid
+ *
+ * This shape is particularly useful for:
+ * - Navigation menus where a distinctive shape helps with recognition
+ * - Interfaces where space efficiency is important
+ * - Designs that require a more modern or playful appearance
+ * - Applications where circular buttons align with the overall design aesthetic
+ *
+ * The Circle shape maintains the same row-based layout as Regular buttons
+ * but with different spacing and dimensions optimized for circular elements.
+ */
 class Circle(buttons: Buttons): Regular(buttons) {
 
     companion object {

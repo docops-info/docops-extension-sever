@@ -21,10 +21,34 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 
 /**
- * The Pill class represents a type of button that has a pill-shaped appearance.
- * It inherits from the Regular class.
+ * Implements a pill-shaped button with enhanced visual effects and rounded ends.
  *
- * @param buttons The Buttons object that contains the theme and other properties for the button.
+ * The Pill class extends the [Regular] class to create buttons with a distinctive pill shape
+ * characterized by fully rounded ends and a taller profile. These buttons feature multiple
+ * visual effects including gradients, blurs, and highlights to create a glossy, three-dimensional
+ * appearance.
+ *
+ * Key features:
+ * - Pill shape with fully rounded ends (26px radius)
+ * - Taller profile (56px height) compared to Regular buttons
+ * - Multiple layered visual effects:
+ *   - Base button with gradient fill
+ *   - Blur filter for soft edges
+ *   - Top shine gradient for highlight
+ *   - Bottom shine for depth
+ * - Centered text label
+ * - Smooth layout with appropriate spacing
+ *
+ * This shape is particularly useful for:
+ * - Primary action buttons that need to stand out
+ * - Interfaces with a modern, glossy aesthetic
+ * - Buttons that need to appear more tactile and pressable
+ * - Designs where rounded, friendly shapes are preferred
+ *
+ * The Pill shape maintains the same row-based layout as Regular buttons
+ * but with enhanced visual styling that gives a more polished appearance.
+ *
+ * @param buttons The Buttons collection to be rendered
  */
 class Pill(buttons: Buttons) : Regular(buttons) {
 

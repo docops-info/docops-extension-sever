@@ -24,9 +24,26 @@ import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 /**
- * Regular class is responsible for creating regular buttons shape.
+ * Implements the standard button shape with rounded rectangles.
  *
- * @param buttons The Buttons object containing the theme and button data.
+ * The Regular class is the base implementation for button shapes, providing a standard
+ * appearance with rounded rectangle buttons arranged in rows. It serves as the parent
+ * class for many other shape implementations that customize or extend this basic layout.
+ *
+ * Key features:
+ * - Renders buttons as rounded rectangles with a 10px radius
+ * - Arranges buttons in rows based on the theme's column setting
+ * - Supports hover effects and visual styling through CSS
+ * - Provides SVG filters for bevel and shadow effects
+ * - Handles button scaling based on theme settings
+ *
+ * This class implements the complete rendering pipeline:
+ * 1. Creates the SVG container with appropriate dimensions
+ * 2. Defines styles, filters, and gradients in the defs section
+ * 3. Draws the buttons in a grid layout
+ * 4. Closes the SVG container
+ *
+ * @param buttons The Buttons collection to be rendered
  */
 open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
@@ -143,7 +160,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         """.trimIndent()
         if(isPdf) {
             style = """
-                
+
             """.trimIndent()
         }
 

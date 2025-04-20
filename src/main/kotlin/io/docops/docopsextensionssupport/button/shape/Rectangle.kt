@@ -24,8 +24,28 @@ import io.docops.docopsextensionssupport.button.Link
 import io.docops.docopsextensionssupport.support.determineTextColor
 
 /**
- * This class represents a rectangle shape that consists of buttons.
- * It extends the Regular class and inherits its properties and methods.
+ * Implements a rectangular card-style button layout with enhanced visual features.
+ *
+ * The Rectangle class extends the [Regular] class to create a more visually rich button
+ * representation that resembles a card or tile. Each button is rendered as a larger
+ * rectangular card with the following unique characteristics:
+ *
+ * Key features:
+ * - Larger button size (310×120 pixels) compared to Regular buttons
+ * - Card-like appearance with rounded corners (15px radius)
+ * - Support for embedded images (98×98 pixels) on the left side
+ * - Numerical indicators for each button
+ * - Support for multiple links within each button
+ * - Enhanced text layout with label positioned to the right of the image
+ *
+ * This shape is particularly useful for:
+ * - Buttons that need to display more information
+ * - Navigation elements that benefit from visual indicators
+ * - Interfaces where buttons need to be more prominent
+ * - Cases where embedded images help identify button purpose
+ *
+ * The Rectangle shape maintains the same row-based layout as Regular buttons
+ * but with larger dimensions and more complex internal structure.
  */
 class Rectangle(buttons: Buttons) : Regular(buttons) {
 
