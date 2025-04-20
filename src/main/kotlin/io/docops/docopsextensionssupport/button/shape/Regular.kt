@@ -89,21 +89,23 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
         buttonList.forEach { button: Button ->
-            var fill = "class=\"btn_${button.id}_cls\""
-            var overlay = "url(#overlayGrad)"
+            var filter = "filter=\"url(#Bevel2)\""
+            var fill = "url(#btn_${button.id})"
             if(isPdf) {
-                fill = "fill='${button.color}'"
-                overlay = "${button.color}"
+                filter = ""
+                fill = "${button.color}"
             }
+            var btnLook = """fill="$fill" class="raise btn_${button.id}_cls bar" $filter"""
             var textFillColor = determineTextColor(button.color!!)
             var textClass = "glass"
             buttons.theme?.raise?.let {
                 if(!it) {
+                    btnLook = """fill="#fcfcfc" stroke="$fill" stroke-width="2" class='bar'"""
                     textFillColor = button.color!!
                     textClass = "light-shadow"
                 }
             }
-            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var href = """<a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
             var endAnchor = "</a>"
             if(!button.enabled) {
                 href = ""
@@ -111,15 +113,12 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
             btns.append(
                 """
-        $href
-        <g role="button" cursor="pointer" transform="translate($startX,$startY)">
-            <rect id="button" x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="10" ry="10" $fill filter="url(#buttonBlur)" />
-            <rect id="buttongrad" x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="10" ry="10" fill="$overlay"/>
-            <rect id="buttontop" x="5" y="2" width="${BUTTON_WIDTH - 10}" height="${BUTTON_HEIGHT/2}" rx="8" ry="8" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
-            <rect id="buttonbottom" x="10" y="${BUTTON_HEIGHT - 8}" width="${BUTTON_WIDTH - 20}" height="5" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
-            <text id="label" x="${BUTTON_WIDTH/2}" y="${BUTTON_HEIGHT/2 + 5}" text-anchor="middle" class="$textClass" style="${button.buttonStyle?.labelStyle}; fill:$textFillColor">${button.label.escapeXml()}</text>
+        <g transform="translate($startX,$startY)">
+            $href
+            <rect x="0" y="0" $btnLook width="300" height="30" rx="10" ry="10"/>
+            <text x="150" y="20" text-anchor="middle" class="$textClass" style="${button.buttonStyle?.labelStyle}; fill:$textFillColor">${button.label.escapeXml()}</text>
+            $endAnchor
         </g>
-        $endAnchor
         """.trimIndent()
             )
 
