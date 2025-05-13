@@ -74,19 +74,15 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             button.author?.let {
                 authors = authorsToTSpans(it, "145", button.buttonStyle?.authorStyle)
             }
-            var fill = "#fcfcfc"
+            var fill = "class=\"btn_${button.id}_cls\""
             var overlay = "url(#overlayGrad)"
             var clz = "glass"
-            var recClz = "btn_${button.id}_cls"
-            var labelStyle = """fill="$overlay" class="$recClz""""
             if(isPdf) {
-                fill = "${button.color}"
-                overlay = "url(#btn_${button.id})"
+                fill = "fill='${button.color}'"
+                overlay = "${button.color}"
                 clz = ""
-                recClz = "${button.color}"
-                labelStyle = "style=\"fill: ${button.color};\""
             }
-            var href = """<a xlink:href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
             var endAnchor = "</a>"
             if(!button.enabled) {
                 href = ""
@@ -95,10 +91,15 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             btns.append("""
          <g transform="translate($startX,$startY)" cursor="pointer">
         $href
-        <rect class="basecard" x="0" y="0" fill="#fcfcfc" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="5" ry="5"  stroke="url(#btn_${button.id})" stroke-width="3">
+        <rect id="button" x="0" y="0" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="8" ry="8" $fill filter="url(#buttonBlur)">
             <title>${button.label.escapeXml()}</title>
         </rect>
-        <path $labelStyle  d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z"/>
+        <rect id="buttongrad" x="0" y="0" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="8" ry="8" fill="$overlay"/>
+        <rect id="buttontop" x="5" y="2" width="${BUTTON_HEIGHT - 10}" height="20" rx="6" ry="6" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
+        <rect id="buttonbottom" x="10" y="${BUTTON_HEIGHT - 8}" width="${BUTTON_HEIGHT - 20}" height="5" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
+        <path id="labelPath" d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z" $fill filter="url(#buttonBlur)"/>
+        <path id="labelPathGrad" d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z" fill="$overlay"/>
+        <path id="labelPathTop" d="M 5 2 L 145 2 A 3.0 3.0 0 0 1 148.0 5.0 L 148.0 15 A 0.0 0.0 0 0 1 148.0 15.0 L 2.0 15.0 A 0.0 0.0 0 0 1 2 15 L 2 5 A 3.0 3.0 0 0 1 5.0 2.0 Z" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
         <text text-anchor="middle" x="75" y="8" class="$clz">
             $title
         </text>

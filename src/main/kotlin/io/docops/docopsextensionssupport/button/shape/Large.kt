@@ -95,12 +95,12 @@ class Large(buttons: Buttons) : Regular(buttons) {
                 fill = "${button.color}"
             }
             return """
-            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)" style="fill: ${button.color}; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine1.size};">${button.cardLine1.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" class="light-shadow" style="fill: ${button.color}; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine1.size};">${button.cardLine1.line.escapeXml()}
             </text>
             <g transform="translate(0,95.5)">
             <use xlink:href="#bottomTextBox" stroke="${button.color}" fill="$fill"/>
 
-            <text text-anchor="middle" x="150" y="67.75" filter="url(#Bevel2)" style="fill: #ffffff; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine2.size};" >${button.cardLine2.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" class="light-shadow" style="fill: #ffffff; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine2.size};" >${button.cardLine2.line.escapeXml()}
             </text>
         </g>
             """.trimIndent()

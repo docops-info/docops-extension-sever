@@ -89,7 +89,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
                 dy=fontSize
             }
             val fontColor = determineTextColor(button.color!!)
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:Arial,Helvetica, sans-serif;">${s.escapeXml()}</tspan>""")
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight:500;">${s.escapeXml()}</tspan>""")
         }
         var win = "_top"
         buttons.theme?.let {
@@ -122,14 +122,14 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         var l1 = ""
         var l2 = ""
         if(theme.hexLinesEnabled) {
-            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:2"/>"""
-            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:2"/>"""
+            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:1;stroke-opacity:0.7"/>"""
+            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:1;stroke-opacity:0.7"/>"""
         }
         return """
         <g transform="translate($x,$y)" cursor="pointer">
         <title>$title</title>
         $href
-        <polygon stroke="${theme.strokeColor}" stroke-width="7" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994"/>
+        <polygon stroke="${theme.strokeColor}" stroke-width="3" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994" rx="5" ry="5" filter="drop-shadow(3px 3px 3px rgba(0,0,0,0.2))"/>
         <g transform="translate(125,50) scale(1.0)">
          $img 
         </g>
@@ -137,7 +137,7 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         $endAnchor
         $l1
         $l2
-        <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-weight: bold;letter-spacing: 3px;">$typeText</text>
+        <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 0.9em;">$typeText</text>
         </g>
         """.trimIndent()
     }

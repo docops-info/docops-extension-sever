@@ -98,9 +98,12 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             }
 
             var imageOrLabel = """
-            <rect x="10" y="10" height="98" width="98" class="btn_${button.id}_cls" rx="20" ry="20" fill="${button.color}"/>
+            <rect id="button" x="10" y="10" height="98" width="98" class="btn_${button.id}_cls" rx="20" ry="20" filter="url(#buttonBlur)"/>
+            <rect id="buttongrad" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="url(#overlayGrad)"/>
+            <rect id="buttontop" x="15" y="12" height="40" width="88" rx="18" ry="18" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
+            <rect id="buttonbottom" x="20" y="100" height="5" width="78" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
             <g transform="translate(10,10)">
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central" font-family="Helvetica, sans-serif" font-size="60px" filter="url(#Bevel2)">
+            <text x="49" y="68" text-anchor="middle" alignment-baseline="central" font-family="Helvetica, sans-serif" font-size="60px" class="glass">
                 $link
             </text>
             </g>
@@ -117,9 +120,12 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             btns.append(
                 """
         <g transform="translate($startX,$startY)" cursor="pointer">
-            <rect x="0" y="0" width="310" stroke="#b2b2b2"  height="120" rx="15" ry="15" fill="#fcfcfc" fill-opacity='0.3'/>
+            <rect id="mainButton" x="0" y="0" width="310" height="120" rx="15" ry="15" class="btn_${button.id}_cls" filter="url(#buttonBlur)"/>
+            <rect id="mainButtongrad" x="0" y="0" width="310" height="120" rx="15" ry="15" fill="url(#overlayGrad)" fill-opacity="0.7"/>
+            <rect id="mainButtontop" x="5" y="2" width="300" height="50" rx="13" ry="13" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
+            <rect id="mainButtonbottom" x="10" y="112" width="290" height="5" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
             $href
-            <text x="115" y="16" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
+            <text x="115" y="16" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
             $endAnchor
             $href
             $imageOrLabel
@@ -137,25 +143,28 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
     private fun makeEmbedImage( buttonImage: EmbeddedImage): String {
         return """
-            <image x="10" y="10" width="98" height="98" href="${buttonImage.ref}"/>""".trimIndent()
+            <rect id="imageFrame" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="#fcfcfc" filter="url(#buttonBlur)"/>
+            <rect id="imageFrameGrad" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="url(#overlayGrad)" fill-opacity="0.3"/>
+            <image id="embeddedImage" x="10" y="10" width="98" height="98" href="${buttonImage.ref}" filter="url(#naturalShadow)"/>
+            <rect id="imageFrameTop" x="15" y="12" height="30" width="88" rx="18" ry="18" fill="url(#topshineGrad)" fill-opacity="0.5" filter="url(#topshineBlur)"/>""".trimIndent()
 
     }
     private fun linksToText(links: MutableList<Link>?, style: String?): String {
-        val sb = StringBuilder("""<text x="115" y="20">""")
-        var linkText = "linkText"
+        val sb = StringBuilder("""<text id="linkText" x="115" y="20" class="glass">""")
+        var linkClass = "linkText"
         buttons.theme?.let {
             if(it.useDark) {
-                linkText = "linkTextDark"
+                linkClass = "linkTextDark"
             }
         }
         links?.let {
             it.forEach { link ->
-                var linkElement = """<a xlink:href="${link.href}" class="$linkText" style="$style" target="_blank">${link.label.escapeXml()}</a>"""
+                var linkElement = """<a xlink:href="${link.href}" href="${link.href}" class="$linkClass" style="$style" target="_blank">${link.label.escapeXml()}</a>"""
                 if(isPdf) {
                     linkElement = link.label.escapeXml()
                 }
                 sb.append("""
-            <tspan x="115" dy="14" style="$style">
+            <tspan x="115" dy="14" style="$style" class="glass">
                 $linkElement
             </tspan>
                 """.trimIndent())
