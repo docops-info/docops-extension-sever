@@ -16,7 +16,7 @@ fun PieSlice.displayColor(index: Int) : String {
 }
 
 @Serializable
-data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f)
+data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f, val useDark: Boolean = false)
 
 @Serializable
 data class SliceItemDisplay(val id: String = UUID.randomUUID().toString(), val color: String?)

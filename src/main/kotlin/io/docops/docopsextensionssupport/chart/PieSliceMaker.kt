@@ -17,7 +17,7 @@ import kotlin.math.atan2
 
 open class PieSliceMaker {
 
-    protected var width: Double = 420.0
+    protected var width: Double = 600.0
     protected var height: Double = 420.0
     fun makePie(pieSlices: PieSlices) : String {
 
