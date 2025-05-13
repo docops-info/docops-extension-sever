@@ -147,7 +147,7 @@ open class ReleaseTimelineMaker {
             #ID${id} .lines { font-size: 10px; }
             #ID${id} .milestoneTL > .entry { text-anchor: start; font-weight: normal; }
             .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4)); }
-            .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; }
+            .raise:hover { stroke: gold; stroke-width: 1px; opacity: 0.9; }
             
         </style>
             <script>

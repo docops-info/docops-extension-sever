@@ -42,17 +42,19 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     }
     companion object {
          val DEFAULT_COLORS = mutableListOf(
-             "#45618E",
-             "#A43B3B",
-             "#FFD373",
-             "#F7E67A",
-             "#01FF90",
-             "#FF6F36",
-             "#EAA213",
-             "#FFAF10",
-             "#FF7F00",
-             "#6D4F98")
+             "#4285F4", // Google Blue
+             "#EA4335", // Google Red
+             "#FBBC05", // Google Yellow
+             "#34A853", // Google Green
+             "#5E35B1", // Deep Purple
+             "#00ACC1", // Cyan
+             "#FB8C00", // Orange
+             "#43A047", // Green
+             "#E91E63", // Pink
+             "#3949AB"  // Indigo
+         )
         val DEFAULT_HEIGHT: Float = 660.0F
+        const val DEFAULT_FONT_FAMILY = "Roboto, sans-serif"
     }
 
     /**
@@ -81,7 +83,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
 
         sb.append("<g transform=\"scale($scale)\">")
 
-        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 24px;font-family: Arial, Helvetica, sans-serif; font-variant:small-caps" class="edge" fill="$textColor" >${title.escapeXml()}</text>""")
+        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 28px; font-family: ${DEFAULT_FONT_FAMILY}; font-variant: small-caps; font-weight: 600; letter-spacing: 0.5px;" class="edge tm_title" fill="$textColor" >${title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,24) scale(1.0)">""")
 
         sb.append(buildRoad(head.second-100))
@@ -115,32 +117,32 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         {
             x +=  125 * index
         }
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd", 14, "#21252B")
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd timeline-text", 14, "#21252B")
         var fill = "url(#topBar_$id)"
 
         //language=svg
         return """
-      <g transform="translate($x,0)" class="odd">
-        <g transform="translate(125,320)">
+      <g transform="translate($x,0)" class="odd timeline-entry">
+        <g transform="translate(125,320)" class="timeline-marker">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
              <g transform="translate(-135,-182)">
-                <path d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
+                <path d="M135,100 v62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
             </g>
             <g transform="translate(-3,-86),rotate(-90)">
                 <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
             </g>
         </g>
-        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" />
-        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" />
+        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="8" ry="8" class="edge" />
+        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="8" ry="8" />
         <text x="125" y="50" fill='#000000' text-anchor='middle'
-                  style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                  class="glass raiseText">
+                  style="font-family: ${DEFAULT_FONT_FAMILY}; text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: 0.5px; font-weight: bold; font-variant: small-caps;"
+                  class="glass raiseText timeline-date">
                   ${entry.date}
         </text>
         $text
     </g>
-    
+
         """.trimIndent()
     }
     private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
@@ -150,35 +152,35 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             x += 125 * index
         }
 
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even", dy=14, "#21252B")
+        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even timeline-text", dy=14, "#21252B")
         var fill = "url(#topBar_$id)"
 
 
         //language=svg
         return """
-        <g transform="translate($x,0)" class="even">
-        <g transform="translate(125,320)">
+        <g transform="translate($x,0)" class="even timeline-entry">
+        <g transform="translate(125,320)" class="timeline-marker">
             <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
             <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
              <g transform="translate(-134,-80)">
-                <path d="M135,100 v62"  stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
+                <path d="M135,100 v62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
             </g>
             <g transform="translate(3,86),rotate(90)">
                 <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
             </g>
         </g>
-        
-        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" />
-        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke-width="2"/>
-        
+
+        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="8" ry="8" class="edge" />
+        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="8" ry="8" />
+
         <text x="125" y="450" fill='#000000' text-anchor='middle'
-                  style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                  class="glass raiseText">
+                  style="font-family: ${DEFAULT_FONT_FAMILY}; text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: 0.5px; font-weight: bold; font-variant: small-caps;"
+                  class="glass raiseText timeline-date">
                   ${entry.date}
         </text>
         $text
     </g>
-    
+
         """.trimIndent()
     }
     private fun dateTotSpan(date: String, x: Int, dy: Int, textColor: String) : String {
@@ -191,7 +193,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     }
     private fun buildRoad(width: Int): String {
         return """
-            <g transform="translate(30,320)">
+            <g transform="translate(30,320)" class="timeline-road">
             <path d="M0,0 h$width" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor_$id)" class="raise"
                   stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="10" y1="0" x2="$width" y2="0" stroke="#fcfcfc"
@@ -235,14 +237,20 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         //language=html
         var style = """
         <style>
-            .edge { filter: drop-shadow(0 2mm 2mm #66557c); }
-            .cricleedge { filter: drop-shadow(0 2mm 2mm #a899bd); }
-            .odd { font-size:14px; font-family: Arial, Helvetica, sans-serif; fill: #000000;}
-            .even { font-size:14px; font-family: Arial, Helvetica, sans-serif; fill: #000000;}
-            .rmLink { fill: #0000bb; text-decoration: underline; }
-            .main_pane { fill: #f1f5f8; }
+            .edge { filter: drop-shadow(0 2mm 2mm rgba(0, 0, 0, 0.2)); }
+            .cricleedge { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.15)); }
+            .odd { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
+            .even { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
+            .rmLink { fill: #1a73e8; text-decoration: underline; }
+            .main_pane { fill: #f8f9fa; }
             .each_tm { fill: #fcfcfc; }
-            .tm_title { fill: rgba(0, 0, 0, 0.96); }
+            .tm_title { fill: rgba(0, 0, 0, 0.87); font-weight: 500; }
+            .timeline-entry { transition: transform 0.3s ease; }
+            .timeline-entry:hover { transform: scale(1.02); }
+            .timeline-date { font-weight: 600; letter-spacing: 0.5px; }
+            .timeline-text { line-height: 1.5; }
+            .timeline-marker { filter: drop-shadow(0 1mm 1mm rgba(0, 0, 0, 0.1)); }
+            .timeline-road { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1)); }
         </style>
         """.trimIndent()
         if(isPdf) {
@@ -250,7 +258,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         }
         return Pair("""
         <defs>
-        
+
         <linearGradient id="panelBack" x2="1" y2="1">
             <stop class="stop1" offset="0%" stop-color="#939393"/>
             <stop class="stop2" offset="50%" stop-color="#5d5d5d"/>
@@ -277,10 +285,10 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
          </marker>   
         $sb
         $style
-        
+
 
     </defs>
-    
+
     """.trimIndent(),colors)
     }
 

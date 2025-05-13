@@ -50,11 +50,41 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                 releaseStrategy
             ))
         str.append(defs(isPdf, releaseStrategy.id,  releaseStrategy.scale, releaseStrategy))
+
+        // Add custom CSS for enhanced aesthetics
+        if (!isPdf) {
+            str.append("""
+                <style>
+                    #ID${releaseStrategy.id} .raise { 
+                        pointer-events: bounding-box; 
+                        opacity: 1; 
+                        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3)); 
+                        transition: transform 0.3s ease, filter 0.3s ease;
+                    }
+                    #ID${releaseStrategy.id} .raise:hover { 
+                        filter: drop-shadow(5px 5px 6px rgba(0, 0, 0, 0.4));
+                    }
+                    #ID${releaseStrategy.id} .milestoneTL { 
+                        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; 
+                        font-weight: bold; 
+                        transition: color 0.3s ease;
+                    }
+                    #ID${releaseStrategy.id} .lines { 
+                        font-size: 12px; 
+                        line-height: 1.4;
+                    }
+                </style>
+            """.trimIndent())
+        }
+
          var titleFill = "#000000"
+         var backgroundColor = "#f8f9fa"
          if(releaseStrategy.useDark) {
              titleFill = "#fcfcfc"
+             backgroundColor = "#21252B"
              str.append("""<rect width="100%" height="100%" fill="url(#dmode1)"/>""")
-
+         } else {
+             str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
          }
          str.append(title(releaseStrategy.title, width, titleFill))
          str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
@@ -120,18 +150,29 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         var clz = "raise"
         if(isPdf) {
             clz = ""
-            fill =release.fillColor(releaseStrategy)
+            fill = release.fillColor(releaseStrategy)
         }
+
+        // Set colors based on dark mode
+        var cardFill = "#fcfcfc"
+        var textFill = "#111111"
+        var dateColor = fishTailColor(release, releaseStrategy)
+
+        if(releaseStrategy.useDark) {
+            cardFill = "#2c3033"
+            textFill = "#e6e6e6"
+        }
+
         //language=svg
         return """
-         <g transform="translate(${positionX+10},60)" >
-             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" fill='${fishTailColor(release, releaseStrategy)}'>${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" fill="#fcfcfc" stroke="${fishTailColor(release, releaseStrategy)}" stroke-width="2"/>
-            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#111111">${release.type}</text>
+         <g transform="translate(${positionX+10},60)" class="$clz">
+             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" fill='$dateColor'>${release.date}</text>
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" fill="$cardFill" stroke="$dateColor" stroke-width="2"/>
+            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="$textFill">${release.type}</text>
             $completed
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
                 <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="12px"
-                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="#111111">
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="$textFill">
                    $spans
                 </text>
             </g>
@@ -180,11 +221,21 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             positionX += currentIndex * 5
         }
 
+        // Set colors based on dark mode
+        var cardFill = "#fcfcfc"
+        var textFill = "#111111"
+        var borderColor = fishTailColor(release, releaseStrategy)
+
+        if(releaseStrategy.useDark) {
+            cardFill = "#2c3033"
+            textFill = "#e6e6e6"
+        }
+
             //language=svg
             return """
          <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" $visibility>
-            <rect width='400' height='$height' stroke="${fishTailColor(release, releaseStrategy)}" fill="#fcfcfc"/>
-            <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">
+            <rect width='400' height='$height' stroke="$borderColor" fill="$cardFill" rx="4" ry="4"/>
+            <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold" fill="$textFill">
                 $lineText
             </text>
             $bulletStar
@@ -258,9 +309,19 @@ fun main() {
   }
     """.trimIndent()
 
-    val release = Json.decodeFromString<ReleaseStrategy>(data)
-    release.useDark = true
-    val str = ReleaseTimelineSummaryMaker().make(release, isPdf = false)
-    val f = File("gen/rel2.svg")
-    f.writeText(str)
+    // Generate light mode version
+    val lightRelease = Json.decodeFromString<ReleaseStrategy>(data)
+    lightRelease.useDark = false
+    val lightStr = ReleaseTimelineSummaryMaker().make(lightRelease, isPdf = false)
+    val lightFile = File("gen/release_light.svg")
+    lightFile.writeText(lightStr)
+    println("Generated light mode SVG: ${lightFile.absolutePath}")
+
+    // Generate dark mode version
+    val darkRelease = Json.decodeFromString<ReleaseStrategy>(data)
+    darkRelease.useDark = true
+    val darkStr = ReleaseTimelineSummaryMaker().make(darkRelease, isPdf = false)
+    val darkFile = File("gen/release_dark.svg")
+    darkFile.writeText(darkStr)
+    println("Generated dark mode SVG: ${darkFile.absolutePath}")
 }

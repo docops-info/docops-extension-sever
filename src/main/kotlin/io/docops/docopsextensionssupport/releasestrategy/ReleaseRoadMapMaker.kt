@@ -51,16 +51,19 @@ class ReleaseRoadMapMaker {
             startY += 225
         }
         var titleFill = "#000000"
+        var backgroundFill = "#f8f9fa"
         if(releaseStrategy.useDark) {
             titleFill = "#fcfcfc"
+            backgroundFill = "url(#dmode1)"
         }
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  width="${releaseStrategy.scale * 1200}" height="${height * releaseStrategy.scale}"
                  viewBox="0 0 ${releaseStrategy.scale * 1200} ${height * releaseStrategy.scale}">
                  <desc>https://docops.io/extension</desc>
-                 ${svgDefs(isPdf,releaseStrategy)}     
-                 <g transform="scale(${releaseStrategy.scale})">    
+                 ${svgDefs(isPdf,releaseStrategy)}
+                 <g transform="scale(${releaseStrategy.scale})">
+                 <rect width="1200" height="$height" fill="$backgroundFill"/>
                 <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif" fill="$titleFill">${releaseStrategy.title.escapeXml()}</text>
                 $str
                 </g>
@@ -92,18 +95,23 @@ class ReleaseRoadMapMaker {
         if(release.completed) {
             completed = "<use xlink:href=\"#completedCheck\" x=\"300\" y=\"315\" fill=\"#fcfcfc\" width=\"24\" height=\"24\"/>"
         }
+        
+        // Determine colors based on dark mode
+        val rectStroke = if(releaseStrategy.useDark) "#444444" else "#cccccc"
+        val circleFill = if(releaseStrategy.useDark) "#2c3033" else "#ffffff"
+        val textColor = if(releaseStrategy.useDark) "#e6e6e6" else "#073763"
+        
         //language=svg
         return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
-            <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='#cccccc' class='row'/>
+            <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='$rectStroke' class='row'/>
             <g>
             <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
             <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${releaseStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
-            <circle cx="323" cy="307" r="66" fill="#ffffff"/>
-             <text  class="milestoneDate" fill="#073763"><textPath text-anchor="middle" startOffset="25%" xlink:href="#curve">${release.date}</textPath></text>
+            <circle cx="323" cy="307" r="66" fill="$circleFill"/>
+             <text class="milestoneDate" fill="$textColor"><textPath text-anchor="middle" startOffset="25%" xlink:href="#curve">${release.date}</textPath></text>
             <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
-            fill="#073763">${release.type}
+            fill="$textColor">${release.type}
             </text>
-           
             </g>
             
             $str
@@ -188,6 +196,11 @@ class ReleaseRoadMapMaker {
                         <stop class="stop1" offset="0%" stop-color="#a9d99a"/>
                         <stop class="stop2" offset="50%" stop-color="#7ec667"/>
                         <stop class="stop3" offset="100%" stop-color="#54B435"/>
+                    </linearGradient>
+                    <linearGradient id="dmode1" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#222627"/>
+                        <stop class="stop2" offset="50%" stop-color="#1d2021"/>
+                        <stop class="stop3" offset="100%" stop-color="#17191a"/>
                     </linearGradient>
                     <filter id="filter-2">
                         <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
