@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DocOps Extension Server</title>
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.0.js"></script>
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.5.1/css/pro.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/modal.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+    <script src="js/echarts.5.5.0.js" defer></script>
+    <script src="editor/js/theme.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/ext/json-enc.js"></script>
+    <style>
+        .forestxmas {
+            background-image: url(images/forest.svg);
+            height: 200px;
+        }
+
+        /* Theme toggle button should always be visible */
+        #theme-toggle {
+            position: relative;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Dropdown menu styling */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            min-width: 200px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-800">
+<div id="adv">
+</div>
+
+<!-- Navigation Menu -->
+<nav class="bg-white border-gray-200 dark:bg-gray-900 shadow-md">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="images/favicon.svg" class="h-8" alt="DocOps Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">DocOps Extension Server</span>
+        </a>
+
+        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
+
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
+            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li class="dropdown">
+                    <button class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        Architecture <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-400">
+                            <li>
+                                <a href="#" data-hx-get="adrbuilder.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">ADR</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        Visuals <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-400">
+                            <li>
+                                <a href="#" data-hx-get="badge.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Badges</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="buttons.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Buttons</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="cal.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Calendar Icon</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="boxy.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Connectors</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="pm.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Placemats</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        Planning <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-400">
+                            <li>
+                                <a href="#" data-hx-get="roadmap.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Planner</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="fromJson.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Release Strategy</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="scorecard.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Scorecard</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="timeline.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Timeline</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        Charts <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-400">
+                            <li>
+                                <a href="#" data-hx-get="pieslice.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pie Slice</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="pie.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pie Chart</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="line.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Line Chart</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="bar.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Bar Chart</a>
+                            </li>
+                            <li>
+                                <a href="#" data-hx-get="bargroup.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Group Bar Chart</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" data-hx-get="gallery.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Gallery</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Theme toggle functionality
+    var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+    // Change the icons inside the button based on previous settings
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        themeToggleLightIcon.classList.remove('hidden');
+    } else {
+        themeToggleDarkIcon.classList.remove('hidden');
+    }
+
+    var themeToggleBtn = document.getElementById('theme-toggle');
+
+    themeToggleBtn.addEventListener('click', function() {
+        // Toggle icons inside button
+        themeToggleDarkIcon.classList.toggle('hidden');
+        themeToggleLightIcon.classList.toggle('hidden');
+
+        // If set via local storage previously
+        if (localStorage.getItem('color-theme')) {
+            if (localStorage.getItem('color-theme') === 'light') {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            }
+        } else {
+            // If not set via local storage previously
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        }
+    });
+
+    document.body.addEventListener("showFrame", function (evt) {
+        if (typeof showHTMLInIFrame === "function") {
+            showHTMLInIFrame();
+        }
+    });
+
+    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const d = new Date();
+    let name = month[d.getMonth()];
+    if("December" === name || "November" === name) {
+        var elem = document.getElementById("adv");
+        if(elem) {elem.setAttribute("class", "forestxmas");}
+    }
+</script>
+
+<!-- Main Content -->
+<div class="bg-white dark:bg-gray-800 py-24 sm:py-32" id="app">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl lg:mx-0">
+            <h2 class="text-3xl tracking-tight text-gray-900 sm:text-4xl font-extrabold dark:text-white">DocOps Extension Server for AsciiDoctorJ</h2>
+            <p class="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                Welcome to the DocOps Extension Server, a powerful collection of SVG visuals that extends the capabilities of AsciiDoctorJ.
+                Our extensions improve the quality, functionality, and presentation of your documentation with a variety of tools
+                including architecture decision records, badges, charts, and more.
+            </p>
+        </div>
+
+        <div id="stats"></div>
+        <div id="bod" class="mx-auto max-w-7xl px-6 lg:px-8"></div>
+
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-6">Extension Categories</h2>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Architecture</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Document architecture decisions in a standardized format.</p>
+                <a href="#" data-hx-get="adrbuilder.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="text-blue-600 hover:underline dark:text-blue-400">Learn more →</a>
+            </div>
+
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Visual Elements</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Enhance your documentation with badges, buttons, and more.</p>
+                <a href="#" data-hx-get="buttons.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="text-blue-600 hover:underline dark:text-blue-400">Explore visuals →</a>
+            </div>
+
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Charts & Diagrams</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Visualize data with pie charts, line charts, and bar charts.</p>
+                <a href="#" data-hx-get="gallery.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="text-blue-600 hover:underline dark:text-blue-400">View gallery →</a>
+            </div>
+
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Planning Tools</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Organize with planners, release strategies, and timelines.</p>
+                <a href="#" data-hx-get="roadmap.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="text-blue-600 hover:underline dark:text-blue-400">Plan your project →</a>
+            </div>
+
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Documentation</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Learn how to use the DocOps Extension Server effectively.</p>
+                <a href="#" class="text-blue-600 hover:underline dark:text-blue-400">Read the docs →</a>
+            </div>
+
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Gallery</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Browse examples of what you can create with DocOps.</p>
+                <a href="#" data-hx-get="gallery.html" data-hx-target="#bod" hx-swap="innerHTML show:top" class="text-blue-600 hover:underline dark:text-blue-400">Explore gallery →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

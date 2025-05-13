@@ -5,9 +5,39 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
-
+/**
+ * Implements an oval button shape with enhanced visual effects.
+ *
+ * The Oval class extends the [Regular] class to create buttons with a distinctive oval appearance.
+ * Each button is rendered as a rounded rectangle with fully rounded ends, providing
+ * a smooth, modern look with multiple visual effects for depth and dimension.
+ *
+ * Key features:
+ * - Oval shape with fully rounded ends (36px radius)
+ * - Multiple layered visual effects:
+ *   - Base button with gradient fill
+ *   - Blur filter for soft edges
+ *   - Top shine gradient for highlight
+ *   - Bottom shine for depth
+ * - Intelligent text positioning based on content length
+ * - Smooth layout with appropriate spacing
+ *
+ * This shape is particularly useful for:
+ * - Primary action buttons that need to stand out
+ * - Interfaces with a modern, glossy aesthetic
+ * - Buttons that need to appear more tactile and pressable
+ * - Designs where smooth, rounded shapes are preferred
+ *
+ * The Oval shape maintains the same row-based layout as Regular buttons
+ * but with enhanced visual styling that gives a more polished appearance.
+ */
 class Oval(buttons: Buttons) : Regular(buttons) {
 
+    /**
+     * Renders the buttons with the oval shape and modern visual effects.
+     *
+     * @return The SVG string representation of the buttons
+     */
     override fun draw(): String {
         var scale = 1.0f
         buttons.theme?.let {
@@ -32,6 +62,14 @@ class Oval(buttons: Buttons) : Regular(buttons) {
         return sb.toString()
     }
 
+    /**
+     * Renders a row of oval buttons with modern visual effects.
+     *
+     * @param index The index of the row
+     * @param buttonList The list of buttons to render in this row
+     * @param count The total count of buttons rendered so far
+     * @return The SVG string representation of the buttons in this row
+     */
     private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): Any {
 
         val btns = StringBuilder()
@@ -47,10 +85,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
         if (index > 0) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
-        var background = "#fcfcfc"
-        if(buttons.useDark) {
-            background = "none"
-        }
+
         buttonList.forEach { button: Button ->
             val text = itemTextWidth(button.label, 245F, 24)
             val tspan = StringBuilder()
@@ -65,27 +100,35 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 } else {
                     24
                 }
-                var fill = "url(#btn_${button.id})"
-                if(isPdf) {
-                    fill = "${button.color}"
-                }
-                tspan.append("""<tspan x="125" dy="$dy" style="fill:$fill;">${s.escapeXml()}</tspan>""")
+                tspan.append("""<tspan x="125" dy="$dy">${s.escapeXml()}</tspan>""")
             }
-            var href = """<a xlink:href="${button.link}" href="${button.link}" xlink:show="new" xlink:type="simple" target="$win" style="text-decoration: none; font-family:Arial; fill: #fcfcfc;">"""
+
+            var fill = "class=\"btn_${button.id}_cls\""
+            var overlay = "url(#overlayGrad)"
+            if(isPdf) {
+                fill = "fill='${button.color}'"
+                overlay = "${button.color}"
+            }
+
+            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
             var endAnchor = "</a>"
             if(!button.enabled) {
                 href = ""
                 endAnchor = ""
             }
+
             btns.append("""
-                <g transform="translate($startX,$startY)">
-                <rect class="bar" width="250" height="90" ry="36" rx="36" fill="$background" stroke="url(#btn_${button.id})" stroke-width='5' filter="url(#Bevel2)"/>
-            $href
-            <text x="135" y="0" text-anchor="middle" class="filtered" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; fill:url(#btn_${button.id});" lengthAdjust="spacing">
-                $tspan
-            </text>
-            $endAnchor
-    </g>
+                <g role="button" cursor="pointer" transform="translate($startX,$startY)">
+                    $href
+                    <rect id="button" x="0" y="0" width="250" height="90" rx="36" ry="36" $fill filter="url(#buttonBlur)" />
+                    <rect id="buttongrad" x="0" y="0" width="250" height="90" rx="36" ry="36" fill="$overlay" />
+                    <rect id="buttontop" x="10" y="5" width="230" height="40" rx="30" ry="30" fill="url(#topshineGrad)" filter="url(#topshineBlur)" />
+                    <rect id="buttonbottom" x="20" y="70" width="210" height="15" rx="30" ry="7" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)" />
+                    <text id="label" x="125" y="0" text-anchor="middle" class="glass" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold;">
+                        $tspan
+                    </text>
+                    $endAnchor
+                </g>
             """.trimIndent())
 
             startX += BUTTON_WIDTH + BUTTON_PADDING + 5
@@ -100,7 +143,10 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
+        // Adjusted to account for the button width (250px) plus padding
+        // Each button takes BUTTON_WIDTH + BUTTON_PADDING + 5 horizontal space (line 121)
+        // Adding extra padding (10px) for the initial left margin
+        return (columns * (BUTTON_WIDTH + BUTTON_PADDING + 5) + 10) * scale
     }
 
     override fun height(): Float {
@@ -110,9 +156,12 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
         if (size > 1) {
-            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
+            // Adjusted to account for the button height (90px) plus padding
+            // Adding extra padding to ensure the bottom shine effect is visible
+            return (size * BUTTON_HEIGHT + (size * BUTTON_PADDING) + 20) * scale
         }
-        val h = BUTTON_HEIGHT + 30
+        // For a single row, add extra padding for the bottom shine effect
+        val h = BUTTON_HEIGHT + 40
         return h * scale
     }
     companion object {

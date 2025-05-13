@@ -18,7 +18,6 @@ import io.docops.docopsextensionssupport.roadmap.wrapText
  * - Text centered in the middle of the circle
  * - Automatic text wrapping for longer labels
  * - Intelligent vertical positioning of text based on number of lines
- * - Natural shadow effect for depth
  * - Compact layout with buttons arranged in a grid
  *
  * This shape is particularly useful for:
@@ -49,18 +48,18 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 10
+        var startX = 60
 
         var startY = 10
         if (index > 0) {
             startY += 110
         }
         buttonList.forEach { button: Button ->
-            var filter = "filter=\"url(#Bevel2)\""
-            var fill = "url(#btn_${button.id})"
+            var fill = "class=\"btn_${button.id}_cls\""
+            var overlay = "url(#overlayGrad)"
             if(isPdf) {
-                filter = ""
-                fill = "${button.color}"
+                fill = "fill='${button.color}'"
+                overlay = "${button.color}"
             }
             val lines = wrapText(button.label.escapeXml(), 15f)
             var lineY = 0
@@ -77,14 +76,17 @@ class Circle(buttons: Buttons): Regular(buttons) {
             }
             btns.append(
                 """
-        <g transform="translate($startX,$startY)" filter="url(#naturalShadow)">
-            $href
-            <circle cx="50" cy="50" r="50" fill="$fill" class="btn_${button.id}_cls bar" $filter/>
-            <text x="50" y="50" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">
+        $href
+        <g role="button" cursor="pointer" transform="translate($startX,$startY)">
+            <circle id="button" cx="50" cy="50" r="50" $fill filter="url(#buttonBlur)" />
+            <circle id="buttongrad" cx="50" cy="50" r="50" fill="$overlay" />
+            <circle id="buttontop" cx="50" cy="35" r="40" fill="url(#topshineGrad)" filter="url(#topshineBlur)" />
+            <circle id="buttonbottom" cx="50" cy="65" r="30" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)" />
+            <text id="label" x="50" y="50" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">
             $title
             </text>
-            $endAnchor
         </g>
+        $endAnchor
         """.trimIndent()
             )
 
@@ -126,6 +128,9 @@ class Circle(buttons: Buttons): Regular(buttons) {
             scale = it.scale
             cols = it.columns
         }
-        return (((cols * 125)+ (cols * 5)) + (cols * 7)) * scale
+        // Adjusted to account for increased startX (60) and circle diameter (100px)
+        // Each button takes 105px of horizontal space (line 94: startX += 105)
+        // Adding extra padding (60px) for the initial left margin
+        return ((cols * 105) + 60) * scale
     }
 }
