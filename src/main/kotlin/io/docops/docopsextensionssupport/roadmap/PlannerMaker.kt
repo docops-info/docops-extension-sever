@@ -20,7 +20,14 @@ class PlannerMaker {
         val height = determineHeight(planItems)
         sb.append(makeHead(planItems, title, grads, itemGrad, width, height, scale))
         sb.append("""<g>""")
-        sb.append("""<text x="${width/2}" y="40" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 36px; font-weight: bold;">${title.escapeXml()}</text>""")
+        sb.append("""
+            <defs>
+                <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.3" flood-color="#000000" />
+                </filter>
+            </defs>
+            <text x="${width/2}" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 42px; font-weight: bold; filter: url(#title-shadow);">${title.escapeXml()}</text>
+        """)
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
         cols.forEach { (key, value) ->
@@ -28,7 +35,7 @@ class PlannerMaker {
             if(value[0].color != null) {
                 color = value[0].color!!
             }
-            val startX = 10 + (column * 562)
+            val startX = 20 + (column * 572)
             sb.append(makeColumn( key, value, 60, startX, colorIn = "url(#planItem_$column)", color))
             column++
         }
@@ -69,43 +76,53 @@ private fun itemGradient(planItems: PlanItems): String {
             }
 
             sb.append("""<g transform="translate($startX, $y)">""")
+            // Add drop shadow filter
             sb.append("""
-                <rect x="0" y="0" fill="#fcfcfc" height="360" width="552" rx="5" ry="5"
-                          style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: $color;stroke-width: 2;"/>
-                        <path d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 547.0 0 A 5.0 5.0 0 0 1 552.0 5.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z
+                <defs>
+                    <filter id="shadow-${planItem.id}" x="-10%" y="-10%" width="120%" height="120%">
+                        <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.2" />
+                    </filter>
+                </defs>
+                <rect x="0" y="0" fill="#fcfcfc" height="360" width="552" rx="8" ry="8"
+                          style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: $color;stroke-width: 2; filter: url(#shadow-${planItem.id});"/>
+                        <path d="M 0 8.0 A 8.0 8.0 0 0 1 8.0 0 L 544.0 0 A 8.0 8.0 0 0 1 552.0 8.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z
                 " fill="$color"/>
             """.trimIndent())
 
             planItem.title?.let {
                 val textColor = determineTextColor(columnColor)
-                sb.append("""<text x="20" y="36" style="font-family: Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px;">${planItem.title}</text>""")
+                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px; font-weight: 600;">${planItem.title}</text>""")
             }
             planItem.content?.let {
                 //todo fix url
-                val contentList = itemTextWidth(planItem.content!!, 542F, 24, "Helvetica")
+                val contentList = itemTextWidth(planItem.content!!, 532F, 24, "Helvetica")
                 val list = linesToUrlIfExist(contentList, planItem.urlMap)
-                sb.append("<text x='20' y='62' style='font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24px;'>")
+                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #333333; font-size: 20px;'>")
                 list.forEachIndexed { index, string ->
-                    sb.append("""<tspan x="20" dy="24" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size: 24px;">${string}</tspan>""")
+                    sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #333333; font-size: 20px;">${string}</tspan>""")
                 }
                 sb.append("</text>")
             }
             sb.append("</g>")
-            y += 360 +10
+            y += 360 + 20
         }
 
         sb.append("""
             <g transform="translate($startX, 10)">
-            <text x="281" y="26" text-anchor="middle" style="font-family: Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; stroke: $parentColor; font-weight: bold;">${key.escapeXml().uppercase()}</text>
+                <filter id="glow-$key" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; font-weight: bold; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()
     }
     private fun determineWidth(planItems: PlanItems) : Int {
-        return (552 * planItems.toColumns().size) + (planItems.toColumns().size * 10) + 10
+        return (552 * planItems.toColumns().size) + (planItems.toColumns().size * 20) + 20
     }
     private fun determineHeight(planItems: PlanItems) : Int {
-        return planItems.maxRows() * 360 + (planItems.maxRows() * 10)+ 120
+        return planItems.maxRows() * 360 + (planItems.maxRows() * 20) + 120
     }
     private fun makeHead(
         planItems: PlanItems,
