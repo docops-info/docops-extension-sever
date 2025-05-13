@@ -2,8 +2,11 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
+import java.awt.Font
 
 class VGroupBar {
     private var height  = 600
@@ -35,20 +38,38 @@ class VGroupBar {
         sb.append("""<g aria-label="${group.label}" transform="translate(203,$startY)">""")
         var currentY = 0
         val bars = (group.series.size * 24) /2 + 6
+
+        // Improve group label styling
+        val labelColor = if (barGroup.display.useDark) "#e5e7eb" else "#666"
         sb.append("""
             <text x="-10" y="$bars" text-anchor="end"
-                  style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px;">${group.label}
+                  style="fill: $labelColor; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">${group.label}
             </text>
         """.trimIndent())
+
+        // Create bars with modern styling
         group.series.forEachIndexed { idx, it ->
             val per = barGroup.scaleUp(it.value)
+            val valueColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+
+            // Add bar with rounded corners, animation, and hover effect
             sb.append("""
-            <rect class="glass bar shadowed" y="$currentY" x="0.0" height="24" width="$per" fill="url(#defColor_$idx)" style="stroke: #111111;" />
-            <text x="${per+5}" y="${currentY + 14}" style="font-family: Arial,Helvetica, sans-serif; font-size:9px;; fill: $fontDisplayColor;">
-                ${barGroup.valueFmt(it.value)}
-            </text>
+            <g class="bar-group">
+                <rect class="bar" y="$currentY" x="0.0" height="24" width="$per" rx="6" ry="6" 
+                      fill="url(#defColor_$idx)" filter="url(#dropShadow)">
+                    <animate attributeName="width" from="0" to="$per" dur="1s" fill="freeze"/>
+                </rect>
+                <text x="${per+5}" y="${currentY + 16}" 
+                      style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: $valueColor;">
+                    ${barGroup.valueFmt(it.value)}
+                </text>
+                <text x="5" y="${currentY + 16}" 
+                      style="font-family: Arial, sans-serif; font-size: 12px; fill: $labelColor;">
+                    ${it.label ?: ""}
+                </text>
+            </g>
             """.trimIndent())
-            currentY += 26
+            currentY += 30 // Increase spacing between bars
         }
         sb.append("</g>")
         builder.append(sb.toString())
@@ -70,154 +91,206 @@ class VGroupBar {
         return "</svg>"
     }
     private fun makeBackground(barGroup: BarGroup): String {
-        var backGround = "#f5f5f5"
-        if(barGroup.display.useDark) {
-            backGround = "#1f2937"
-        }
+        val backgroundColor = if(barGroup.display.useDark) "#1f2937" else "#f8f9fa"
         return """
-            <rect width="100%" height="100%" fill="$backGround" stroke="url(#backGrad_${barGroup.id})"/>
+            <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """.trimIndent()
     }
     private fun makeTitle(barGroup: BarGroup): String {
-        var back = ""
-        if(barGroup.display.useDark) {
-            back= "dark_"
-        }
+        val titleBgColor = if (barGroup.display.useDark) "#374151" else "#f0f0f0"
+        val titleTextColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+
+        // Calculate the width of the title text
+        val titleWidth = barGroup.title.textWidth("Arial", 24, Font.BOLD)
+
+        // Add padding to ensure the text fits comfortably
+        val padding = 40
+        val rectWidth = titleWidth + padding * 2
+
         return """
         <g>
-        <rect height="60" x="0" y="0" width="100%" fill="url(#backGrad_$back${barGroup.id})"/>
-        <text x="400" y="40" text-anchor="middle" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:20px;">${barGroup.title.escapeXml()}
-        </text>
-    </g>
+            <rect x="${width/2 - rectWidth/2}" y="10" width="$rectWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.7"/>
+            <text x="${width/2}" y="38" style="font-family: Arial, sans-serif; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold; -webkit-filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2)); filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2));">${barGroup.title.escapeXml()}</text>
+        </g>
         """.trimIndent()
     }
     private fun makeLineSeparator(barGroup: BarGroup) : String{
-        var strokeColor = "#000000"
-        if(barGroup.display.useDark) {
-            strokeColor = "#fcfcfc"
-        }
-        return "<line x1=\"200\" x2=\"200\" y1=\"80\" y2=\"$height\" stroke=\"$strokeColor\" stroke-width=\"3\"/>"
+        val axisColor = if (barGroup.display.useDark) "#9ca3af" else "#666"
+        return """
+            <line x1="200" x2="200" y1="80" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round"/>
+        """.trimIndent()
     }
 
     private fun makeColumnHeader(barGroup: BarGroup) : String {
-
+        val textColor = if (barGroup.display.useDark) "#e5e7eb" else "#666"
         return """
-     <g>
-        <text x="193" y="75" text-anchor="end" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
-        <text x="205" y="75" text-anchor="start" style="fill: $fontDisplayColor; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
-    </g>
+        <g>
+            <text x="193" y="75" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+            <text x="205" y="75" text-anchor="start" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
+        </g>
         """.trimIndent()
     }
     private fun addLegend(d: Double, group: BarGroup): String {
-        var back = ""
-        var fColor = "#111111"
-        if(group.display.useDark) {
-            back= "dark_"
-            fColor = "#fcfcfc"
-        }
+        val legendBgColor = if (group.display.useDark) "#374151" else "#f0f0f0"
+        val legendTextColor = if (group.display.useDark) "#e5e7eb" else "#666"
+        val legendBorderColor = if (group.display.useDark) "#4b5563" else "#ddd"
+
         val sb = StringBuilder()
         val distinct = group.legendLabel().distinct()
+
+        // Calculate legend dimensions
+        val legendWidth = min(600, width - 40)
+        val itemsPerRow = 4
+        val rowCount = (distinct.size + itemsPerRow - 1) / itemsPerRow // Ceiling division
+        val rowHeight = 20 // Height per row
+        val topPadding = 40 // Space for the "Legend" title and padding
+        val bottomPadding = 10 // Padding at the bottom
+        val legendHeight = topPadding + (rowCount * rowHeight) + bottomPadding
+        val legendX = (width - legendWidth) / 2
+        val legendY = d + 10
+
         sb.append("<g transform='translate(0, $d)'>")
 
-        sb.append("""<rect x="0" y="0" width="100%" height="${height-d}"  fill="url(#backGrad_$back${group.id})"/> """)
-        sb.append("""<text x="${width/2}" y="14" text-anchor="middle" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:12px;">Legend</text> """)
-        var y = 18
-        var startX = 0.2 * width
-        val endX =  width - (0.2 * width)
+        // Modern legend background with rounded corners and drop shadow
+        sb.append("""
+            <rect x="$legendX" y="10" width="$legendWidth" height="$legendHeight" rx="15" ry="15" 
+                  fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1" opacity="0.9"
+                  filter="url(#dropShadow)"/>
+            <text x="${width/2}" y="30" text-anchor="middle" 
+                  style="font-family: Arial, sans-serif; fill: $legendTextColor; font-size: 16px; font-weight: bold;">Legend</text>
+        """.trimIndent())
+
+        // Create a more organized legend layout
+        var y = 50
+        var startX = legendX + 30
+        val itemWidth = legendWidth / itemsPerRow
+
         distinct.forEachIndexed { index, item ->
-            if(startX > endX) {
-                y+= 10
-                startX = 0.2 * width
-            }
+            val row = index / itemsPerRow
+            val col = index % itemsPerRow
+
+            val itemX = legendX + 30 + (col * itemWidth)
+            val itemY = 50 + (row * 20)
+
             val color = "url(#defColor_$index)"
-            sb.append("""<rect x="$startX" y="$y" width="8" height="8" fill="$color"/>""")
-            sb.append("""<text x="${startX+ 10}" y="${y+8}" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:10px;">""")
-            sb.append("""<tspan x="${startX+ 10}" dy="0">$item</tspan>""")
-            sb.append("</text>")
-            startX += 8 + item.textWidth("Helvetica", 10) + 8
+            sb.append("""
+                <g class="legend-item">
+                    <rect x="$itemX" y="$itemY" width="12" height="12" rx="2" ry="2" fill="$color"/>
+                    <text x="${itemX + 18}" y="${itemY + 10}" 
+                          style="font-family: Arial, sans-serif; fill: $legendTextColor; font-size: 12px;">$item</text>
+                </g>
+            """.trimIndent())
         }
+
         sb.append("</g>")
         return sb.toString()
+    }
+
+    private fun min(a: Int, b: Int): Int {
+        return if (a < b) a else b
     }
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
         STUNNINGPIE.forEachIndexed { idx, item->
-            val gradient = SVGColor(item, "defColor_$idx")
-            defGrad.append(gradient.linearGradient)
+            // Create more vibrant gradients for each color
+            val baseColor = item
+            val brighterColor = brightenColor(baseColor, 0.2)
+            val darkerColor = darkenColor(baseColor, 0.2)
+
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="$brighterColor"/>
+                    <stop offset="50%" stop-color="$baseColor"/>
+                    <stop offset="100%" stop-color="$darkerColor"/>
+                </linearGradient>
+            """.trimIndent())
         }
 
         val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
         val darkBackColor = SVGColor("#1f2937", "backGrad_dark_${barGroup.id}")
+
         return """<defs>
                 $defGrad
                 ${backColor.linearGradient}
                 ${darkBackColor.linearGradient}
-                $gradients                   
-                    <style>
+                $gradients
+
+                <!-- Drop shadow filter -->
+                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+                    <feOffset in="blur" dx="3" dy="3" result="offsetBlur"/>
+                    <feComponentTransfer in="offsetBlur" result="shadow">
+                        <feFuncA type="linear" slope="0.3"/>
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode in="shadow"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <!-- Glow filter for hover effect -->
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+                    <feColorMatrix in="blur" type="matrix" values="
+                        1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 18 -7
+                    " result="glow"/>
+                    <feMerge>
+                        <feMergeNode in="glow"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <style>
+                    .bar {
+                        transition: all 0.3s ease;
+                    }
                     .bar:hover {
-                filter: grayscale(100%) sepia(100%);
-            }
-            .bar:hover {
-                filter: grayscale(100%) sepia(100%);
-            }
-            .glass:after, .glass:before {
-                content: "";
-                display: block;
-                position: absolute
-            }
-
-            .glass {
-                overflow: hidden;
-                color: #fff;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
-                background-image: radial-gradient(circle at center, rgba(0, 167, 225, .25), rgba(0, 110, 149, .5));
-                box-shadow: 0 5px 10px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2);
-                position: relative
-            }
-
-            .glass:after {
-                background: rgba(0, 167, 225, .2);
-                z-index: 0;
-                height: 100%;
-                width: 100%;
-                top: 0;
-                left: 0;
-                backdrop-filter: blur(3px) saturate(400%);
-                -webkit-backdrop-filter: blur(3px) saturate(400%)
-            }
-
-            .glass:before {
-                width: calc(100% - 4px);
-                height: 35px;
-                background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
-                top: 2px;
-                left: 2px;
-                border-radius: 30px 30px 200px 200px;
-                opacity: .7
-            }
-
-            .glass:hover {
-                text-shadow: 0 1px 2px rgba(0, 0, 0, .9)
-            }
-
-            .glass:hover:before {
-                opacity: 1
-            }
-
-            .glass:active {
-                text-shadow: 0 0 2px rgba(0, 0, 0, .9);
-                box-shadow: 0 3px 8px rgba(0, 0, 0, .75), inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 -6px 6px -3px rgba(0, 129, 174, .2)
-            }
-
-            .glass:active:before {
-                height: 25px
-            }
-            .shadowed {
-                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
-                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
-            }
-            </style>
+                        filter: url(#glow);
+                        transform: scale(1.05);
+                        cursor: pointer;
+                    }
+                    .legend-item {
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                    }
+                    .legend-item:hover {
+                        transform: translateX(5px);
+                        font-weight: bold;
+                    }
+                    .shadowed {
+                        filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
+                    }
+                </style>
            </defs>"""
+    }
+
+    // Helper function to brighten a color
+    private fun brightenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, true)
+    }
+
+    // Helper function to darken a color
+    private fun darkenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, false)
+    }
+
+    // Helper function to adjust a color's brightness
+    private fun adjustColor(hexColor: String, factor: Double, brighten: Boolean): String {
+        val hex = hexColor.replace("#", "")
+        val r = Integer.parseInt(hex.substring(0, 2), 16)
+        val g = Integer.parseInt(hex.substring(2, 4), 16)
+        val b = Integer.parseInt(hex.substring(4, 6), 16)
+
+        val adjustment = if (brighten) factor else -factor
+
+        val newR = (r + (255 - r) * adjustment).toInt().coerceIn(0, 255)
+        val newG = (g + (255 - g) * adjustment).toInt().coerceIn(0, 255)
+        val newB = (b + (255 - b) * adjustment).toInt().coerceIn(0, 255)
+
+        return String.format("#%02x%02x%02x", newR, newG, newB)
     }
     private fun makeGradient(barDisplay: BarGroupDisplay): String {
         val gradient1 = SVGColor(barDisplay.baseColor, "linearGradient_${barDisplay.id}")

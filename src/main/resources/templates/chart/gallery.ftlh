@@ -2,64 +2,192 @@
 <div>
     <h3>Chart Gallery</h3>
 
-    <div class="flex space-x-4 overflow-x-auto pb-4">
-        <div class="flex-shrink-0 w-64 bg-white rounded-lg shadow overflow-hidden">
-        <button data-hx-get="galleryItem.html?name=bar1.json&kind=bar&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Bar Chart Dark
-        </button>
-        <button data-hx-get="galleryItem.html?name=bar2.json&kind=bar&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Bar Chart
-        </button>
-        <button data-hx-get="galleryItem.html?name=group1.json&kind=bargroup&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Group Chart
-        </button>
-        <button data-hx-get="galleryItem.html?name=group2.json&kind=bargroup&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Group Chart Dark
-        </button>
-        <button data-hx-get="galleryItem.html?name=group3.json&kind=bargroup&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Group Chart
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie1.json&kind=pieslice&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Pie Chart 1
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie2.json&kind=pieslice&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Donut View
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie3.json&kind=pie&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Percentages 1
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie4.json&kind=pie&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Percentages 2
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie5.json&kind=pie&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Percentages 3
-        </button>
-        <button data-hx-get="galleryItem.html?name=pie6.json&kind=pie&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Percentages 4
-        </button>
-        <button data-hx-get="galleryItem.html?name=line1.json&kind=line&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Line 1
-        </button>
-        <button data-hx-get="galleryItem.html?name=line2.json&kind=line&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Line 2
-        </button>
-        <button data-hx-get="galleryItem.html?name=line3.json&kind=line&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-            Line 3
-        </button>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Bar Chart Dark</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}" alt="Bar Chart Dark" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=bar1.json&kind=bar&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=bar1.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Bar Chart</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/bar2.json", "bar")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/bar2.json", "bar")}" alt="Bar Chart" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=bar2.json&kind=bar&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=bar2.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Group Chart</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/group1.json", "bargroup")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/group1.json", "bargroup")}" alt="Group Chart" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=group1.json&kind=bargroup&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=group1.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Group Chart Dark</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/group2.json", "bargroup")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/group2.json", "bargroup")}" alt="Group Chart Dark" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=group2.json&kind=bargroup&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=group2.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Pie Chart 1</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/pie1.json", "pieslice")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/pie1.json", "pieslice")}" alt="Pie Chart 1" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=pie1.json&kind=pieslice&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=pie1.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Donut View</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/pie2.json", "pieslice")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/pie2.json", "pieslice")}" alt="Donut View" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=pie2.json&kind=pieslice&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=pie2.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Line Chart 1</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/line1.json", "line")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/line1.json", "line")}" alt="Line Chart 1" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=line1.json&kind=line&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=line1.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Line Chart 2</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/line2.json", "line")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/line2.json", "line")}" alt="Line Chart 2" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=line2.json&kind=line&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=line2.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="p-4">
+                <h4 class="font-medium text-lg mb-2">Percentage Graphs</h4>
+                <div class="chart-preview">
+                    <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/pie6.json", "pie")}">
+                        <img src="${imageUrlGenerator.getUrl("chart/pie6.json", "pie")}" alt="Line Chart 2" class="w-full h-40 object-contain"/>
+                    </object>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <button data-hx-get="galleryItem.html?name=pie6.json&kind=pie&type=chart" data-hx-target="#gallery-chart-container" type="button" class="px-3 py-1.5 text-sm font-medium text-gray-100 bg-blue-600 rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        View Full Size
+                    </button>
+                    <a href="#" data-hx-get="galleryJsonView.html?name=pie6.json&type=chart" data-hx-target="#json-target" class="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50">
+                        View JSON
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
+
     <figure>
         <figcaption class="figure-key">
-            Charts Gallery
+            Selected Chart
         </figcaption>
         <div class="figure-content">
-            <div id="gallery-chart-container" class="flex-shrink-0 w-64 bg-white rounded-lg shadow overflow-hidden">
+            <div id="gallery-chart-container" class="w-full bg-white rounded-lg shadow-lg overflow-hidden p-4">
                 <object type="image/svg+xml" data="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}">
-                    <img src="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}" alt="gallery item bar1"/>
+                    <img src="${imageUrlGenerator.getUrl("chart/bar1.json", "bar")}" alt="gallery item bar1" class="mx-auto"/>
                 </object>
             </div>
         </div>
     </figure>
-    <a id="targetJsonView" href="#" data-hx-get="galleryJsonView.html?name=bar2.json" data-hx-target="#json-target">View JSON</a>
-    <div id="json-target"></div>
+
+    <div id="json-target" class="mt-6 bg-gray-50 rounded-lg p-4"></div>
 </div>
+
