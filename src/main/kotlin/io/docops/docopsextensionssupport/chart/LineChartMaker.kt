@@ -58,7 +58,7 @@ class LineChartMaker(val isPdf: Boolean) {
             num += xGap
         }
         sb.append(legend(lineChart))
-        //sb.append(addTicks(lineChart))
+        sb.append(addTicks(lineChart))
         if(!isPdf) {
             sb.append(toolTip)
         }
@@ -148,22 +148,41 @@ class LineChartMaker(val isPdf: Boolean) {
     private fun addTicks( lineChart: LineChart): String {
         val sb = StringBuilder()
 
-        val nice =lineChart.ticks()
+        val nice = lineChart.ticks()
         val minV = nice.getNiceMin()
         val maxV = nice.getNiceMax()
         val tickSpacing = nice.getTickSpacing()
         var i = minV
         val maxData = lineChart.points[0].points.maxOf { it.y } + 100
         val oneUnit = maxHeight / maxData
-        while(i < maxV ) {
+
+        // Add y-axis line
+        sb.append("""
+        <line x1="50" x2="50" y1="0" y2="$maxHeight" stroke="$fontColor" stroke-width="1.5"/>
+        """.trimIndent())
+
+        // Add tick marks and labels
+        while(i <= maxV) {
             val y = maxHeight - (i * oneUnit)
+
+            // Add tick mark
             sb.append("""
-     <line x1="40" x2="48" y1="$y" y2="$y" stroke="$fontColor" stroke-width="3"/>
-    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor; font-size:10px; text-anchor:end">${lineChart.valueFmt(i)}</text>
+            <line x1="45" x2="55" y1="$y" y2="$y" stroke="$fontColor" stroke-width="1.5"/>
             """.trimIndent())
 
-            i+=tickSpacing
+            // Add label
+            sb.append("""
+            <text x="40" y="${y+4}" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: $fontColor; font-size:11px;">${lineChart.valueFmt(i)}</text>
+            """.trimIndent())
+
+            // Add horizontal grid line
+            sb.append("""
+            <line x1="50" x2="$maxGraphWidth" y1="$y" y2="$y" class="grid-line" stroke-dasharray="3,3" stroke="#dddddd" stroke-width="0.5"/>
+            """.trimIndent())
+
+            i += tickSpacing
         }
+
         return sb.toString()
     }
 

@@ -36,7 +36,7 @@ class DonutMaker : PieSliceMaker(){
         // Create custom defs with enhanced styling
         sb.append(createEnhancedDefs(pieSlices))
 
-        sb.append("<g transform='scale(${pieSlices.display.scale})'>")
+        sb.append("<g>")
         sb.append("<g transform=\"translate(4,20)\">")
 
         // Use dark mode text color if enabled

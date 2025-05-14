@@ -18,9 +18,9 @@ class BarGroup(
 class BarGroupDisplay(
     val id: String = UUID.randomUUID().toString(),
     val baseColor: String = "#D988B9",
-    val barSeriesFontStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:9px; text-anchor:middle",
-    val barSeriesLabelFontStyle: String = "font-family: Arial,Helvetica, sans-serif;  font-size:9px; text-anchor:start;",
-    val barFontValueStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:9px;",
+    val barSeriesFontStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle",
+    val barSeriesLabelFontStyle: String = "font-family: Arial,Helvetica, sans-serif;  font-size:12px; text-anchor:start;",
+    val barFontValueStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px;",
     val titleStyle: String = "font-family: Arial,Helvetica, sans-serif;  font-size:14px; text-anchor:middle",
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val yLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
@@ -37,9 +37,18 @@ class Group(val label: String, val series: MutableList<Series>)
 
 fun BarGroup.calcWidth(): Int {
     val count = this.groups.sumOf { it.series.size }
-    val sum = count * 24 + 5 + (21 * (count-1))
-    if (sum <= 400) {
-        return 512
+    // Calculate total width based on:
+    // - Initial offset: 40 pixels
+    // - Bar width: 40 pixels
+    // - Spacing between bars: 45 pixels (includes the bar width)
+    // - Group spacing: 2 pixels
+    val totalBarsWidth = count * 45.0
+    val totalGroupSpacing = (groups.size - 1) * 2.0
+    val sum = (40.0 + totalBarsWidth + totalGroupSpacing).toInt()
+
+    // Ensure minimum width of 800 pixels
+    if (sum <= 800) {
+        return 800
     }
     return sum
 }
@@ -48,9 +57,9 @@ fun BarGroup.calcWidth(): Int {
 
 fun BarGroup.calcHeight(): Int {
     val count = this.groups.sumOf { it.series.size }
-    val sum = count * 24 + 5 + (21 * (count-1))
-    if (sum <= 400) {
-        return 512
+    val sum = count * 40 + 2 + (5 * (count-1))
+    if (sum <= 800) {
+        return 800
     }
     return sum
 }

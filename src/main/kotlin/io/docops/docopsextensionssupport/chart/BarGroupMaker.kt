@@ -25,7 +25,7 @@ class BarGroupMaker {
         val elements = StringBuilder()
         barGroup.groups.forEach { group ->
             val added = addGroup(barGroup, group, startX)
-            startX += group.series.size * 26.0 + 15
+            startX += group.series.size * 45.0 + 2
             elements.append(added)
         }
 
@@ -41,20 +41,23 @@ class BarGroupMaker {
     private fun addLegend(d: Double, group: BarGroup): String {
         val sb = StringBuilder()
         val distinct = group.legendLabel().distinct()
-        val h = distinct.size * 12
-        val w = group.calcWidth() - d - 10
-        sb.append("""<rect x="${d-10}" y="45" width="$w" height="$h"  fill="#cccccc"/> """)
-        var y = 52
-        distinct.forEachIndexed { index, item ->
-            val color = "url(#svgGradientColor_$index)"
-            sb.append("""<rect x="${d-5}" y="$y" width="8" height="8" fill="$color"/>""")
-            y+=10
-        }
-        sb.append("""<text x="$d" y="49" style="font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:10px;">""")
-        distinct.forEachIndexed{ i, item ->
-            sb.append("""<tspan x="${d+5}" dy="10">$item</tspan>""")
-        }
-        sb.append("</text>")
+
+        // Create a legend similar to bar.svg with rounded corners, background, and border
+        val legendWidth = 200
+        val legendHeight = 30
+        val legendX = d - (legendWidth / 2)
+        val legendY = 510
+
+        // Use colors based on dark mode
+        val legendBgColor = if (group.display.useDark) "#374151" else "#f8f9fa"
+        val legendBorderColor = if (group.display.useDark) "#4b5563" else "#ddd"
+        val legendTextColor = if (group.display.useDark) "#f9fafb" else "#666"
+
+        sb.append("""<rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" rx="15" ry="15" fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1"/>""")
+
+        // Add legend text with color based on dark mode
+        sb.append("""<text x="${legendX + (legendWidth / 2)}" y="${legendY + 20}" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="$legendTextColor">${group.title}</text>""")
+
         return sb.toString()
     }
 
@@ -64,27 +67,41 @@ class BarGroupMaker {
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
             val color = "url(#svgGradientColor_$index)"
-           //println("${series.value} -> $per -> ${500-per}")
-            sb.append("""<rect class="bar" x="$counter" y="${498 - per}" height="$per" width="24" fill="$color" style="stroke: #fcfcfc;"/>""")
-            if(series.value > 0) {
-                sb.append("""<text x="${counter + 12}" y="${500 - per - 4}" style="${barGroup.display.barFontValueStyle}; fill: $fontColor; text-anchor: middle;">${barGroup.valueFmt(series.value)}</text>""")
-            }
-            //sb.append("""<text x="-490" y="${counter + 15}" transform="rotate(270)" style="${barGroup.display.barSeriesLabelFontStyle}">${series.label}</text>""")
-            counter += 26.0
-        }
-        val textX = startX + (added.series.size / 2 * 26.0)
-        sb.append(makeSeriesLabel(textX, 500.0, added.label, barGroup))
-        //sb.append("""<text x="$textX" y="512" style="${barGroup.display.barSeriesFontStyle}">${added.label}</text>""")
-        return sb.toString()
+            // Create rectangular bar with rounded corners like in bar.svg
+            sb.append("""
+                <rect class="bar" 
+                      x="$counter" 
+                      y="${490 - per}" 
+                      width="40" 
+                      height="${per}" 
+                      rx="6" 
+                      ry="6" 
+                      fill="$color">
+                    <animate attributeName="height" from="0" to="${per}" dur="1s" fill="freeze"/>
+                    <animate attributeName="y" from="490" to="${490 - per}" dur="1s" fill="freeze"/>
+                </rect>
+            """.trimIndent())
 
+            if(series.value > 0) {
+                // Value label on top of bar with color based on dark mode
+                val valueLabelColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+                sb.append("""<text x="${counter + 20}" y="${490 - per - 8}" style="${barGroup.display.barFontValueStyle}; fill: $valueLabelColor; text-anchor: middle; font-weight: bold;">${barGroup.valueFmt(series.value)}</text>""")
+            }
+            counter += 40.5
+        }
+        val textX = startX + (added.series.size / 2 * 45.0)
+        sb.append(makeSeriesLabel(textX, 490.0, added.label, barGroup))
+        return sb.toString()
     }
 
     private fun makeSeriesLabel(x: Double, y: Double, label: String, barGroup: BarGroup): String {
         val sb = StringBuilder()
-        sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}; fill: $fontColor;" >""")
+        // Use color based on dark mode for series labels
+        val seriesLabelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+        sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}; fill: $seriesLabelColor;" >""")
         val str = label.split(" ")
         str.forEachIndexed { index, s ->
-            sb.append("<tspan x='$x' dy='10' style=\"${barGroup.display.barSeriesFontStyle}; fill: $fontColor;\">$s</tspan>")
+            sb.append("<tspan x='$x' dy='10' style=\"${barGroup.display.barSeriesFontStyle}; fill: $seriesLabelColor;\">$s</tspan>")
         }
         sb.append("</text>")
         return sb.toString()
@@ -102,21 +119,76 @@ class BarGroupMaker {
             val y = 500 - barGroup.scaleUp(i)
             sb.append("""
      <line x1="40" x2="48" y1="$y" y2="$y" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
-    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial,Helvetica, sans-serif; fill: $fontColor; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
+    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial, sans-serif; fill: ${if (barGroup.display.useDark) "#f9fafb" else "#666"}; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
         }
         return sb.toString()
     }
+    // Helper function to estimate text width based on font size and text length
+    private fun estimateTextWidth(text: String, fontSize: Int): Int {
+        // Average character width in pixels (approximate for Arial font)
+        val avgCharWidth = fontSize * 0.6
+
+        // Add some padding for bold text
+        val boldFactor = 1.2
+
+        // Calculate estimated width
+        return (text.length * avgCharWidth * boldFactor).toInt()
+    }
+
     private fun makeTitle(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="20" style="${barGroup.display.titleStyle}; fill: $fontColor;-webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); ">${barGroup.title}</text>"""
+        val center = barGroup.calcWidth()/2
+        // Use #f0f0f0 for title background and #333 for title text like in bar.svg
+        val titleBgColor = if (barGroup.display.useDark) "#374151" else "#f0f0f0"
+        val titleTextColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+
+        // Estimate the width needed for the title text (font size is 24px)
+        val estimatedTextWidth = estimateTextWidth(barGroup.title, 24)
+
+        // Add padding on both sides (40px on each side)
+        val rectWidth = estimatedTextWidth + 80
+
+        // Ensure minimum width of 300px
+        val finalWidth = Math.max(300, rectWidth)
+
+        // Ensure the title fits within the graph width
+        val adjustedWidth = Math.min(finalWidth, barGroup.calcWidth() - 40)
+
+        return """
+            <g>
+                <rect x="${center - adjustedWidth/2}" y="10" width="$adjustedWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.7"/>
+                <text x="$center" y="38" style="font-family: Arial, sans-serif; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold; -webkit-filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2)); filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2));">${barGroup.title}</text>
+            </g>
+        """.trimIndent()
     }
     private fun makeXLabel(barGroup: BarGroup): String {
-        return """<text x="${barGroup.calcWidth()/2}" y="536" style="${barGroup.display.xLabelStyle}; fill: $fontColor;" >${barGroup.xLabel}</text>"""
+        val center = barGroup.calcWidth()/2
+        // Use #666 for axis labels like in bar.svg
+        val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+
+        return """
+            <text x="$center" y="520" 
+                  style="font-family: Arial, sans-serif; fill: $labelColor; 
+                  text-anchor: middle; font-size: 14px; font-weight: bold;">
+                ${barGroup.xLabel}
+            </text>
+        """.trimIndent()
     }
+
     private fun makeYLabel(barGroup: BarGroup): String {
-        return """<text x="-270" y="18" style="${barGroup.display.yLabelStyle}; fill: $fontColor;" transform="rotate(270)">${barGroup.yLabel}</text>"""
+        // Use #666 for axis labels like in bar.svg
+        val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+
+        return """
+            <text x="250" y="-10" 
+                  style="font-family: Arial, sans-serif; fill: $labelColor; 
+                  text-anchor: middle; font-size: 14px; font-weight: bold;" 
+                  transform="rotate(90)">
+                ${barGroup.yLabel}
+            </text>
+        """.trimIndent()
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
@@ -127,99 +199,181 @@ class BarGroupMaker {
     }
 
     private fun makeGradient(barDisplay: BarGroupDisplay): String {
-        val gradient1 = SVGColor(barDisplay.baseColor, "linearGradient_${barDisplay.id}")
-        return gradient1.linearGradient
+        // Create a gradient matching bar.svg format with two stops
+        val baseColor = barDisplay.baseColor
+        val darkerColor = darkenColor(baseColor, 0.3) // Create a darker color for the gradient end
+
+        return """
+        <linearGradient id="linearGradient_${barDisplay.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="$baseColor"/>
+            <stop offset="100%" stop-color="$darkerColor"/>
+        </linearGradient>
+        """.trimIndent()
+    }
+
+    // Helper function to brighten a color
+    private fun brightenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, true)
+    }
+
+    // Helper function to darken a color
+    private fun darkenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, false)
+    }
+
+    // Helper function to adjust a color's brightness
+    private fun adjustColor(hexColor: String, factor: Double, brighten: Boolean): String {
+        val hex = hexColor.replace("#", "")
+        val r = Integer.parseInt(hex.substring(0, 2), 16)
+        val g = Integer.parseInt(hex.substring(2, 4), 16)
+        val b = Integer.parseInt(hex.substring(4, 6), 16)
+
+        val adjustment = if (brighten) factor else -factor
+
+        val newR = (r + (255 - r) * adjustment).toInt().coerceIn(0, 255)
+        val newG = (g + (255 - g) * adjustment).toInt().coerceIn(0, 255)
+        val newB = (b + (255 - b) * adjustment).toInt().coerceIn(0, 255)
+
+        return String.format("#%02x%02x%02x", newR, newG, newB)
     }
 
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
+        // Define color palettes exactly matching bar.svg gradients
+        val modernColors = listOf(
+            Triple("#4361ee", "#3a0ca3", "#4361ee"), // Bar 1: Blue to Purple
+            Triple("#4cc9f0", "#4361ee", "#4cc9f0"), // Bar 2: Light Blue to Blue
+            Triple("#f72585", "#b5179e", "#f72585"), // Bar 3: Pink to Purple
+            Triple("#7209b7", "#560bad", "#7209b7"), // Bar 4: Purple to Dark Purple
+            Triple("#f77f00", "#d62828", "#f77f00"), // Bar 5: Orange to Red
+            Triple("#2a9d8f", "#264653", "#2a9d8f")  // Bar 6: Teal to Dark Blue
+        )
+
         val defGrad = StringBuilder()
-        val clrs = chartColorAsSVGColor()
         val sz = barGroup.maxGroup().series.size
+
+        // Create gradients matching bar.svg format
         for(i in 0 until sz) {
-            defGrad.append(clrs[i].linearGradient)
+            val colorSet = modernColors[i % modernColors.size]
+            defGrad.append("""
+                <linearGradient id="svgGradientColor_$i" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="${colorSet.first}"/>
+                    <stop offset="100%" stop-color="${colorSet.second}"/>
+                </linearGradient>
+            """.trimIndent())
         }
 
-
+        // Create background gradient
         val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
 
         return """<defs>
             $defGrad
-             ${backColor.linearGradient}
-                 <linearGradient id="grad1" x2="0%" y2="100%">
+            ${backColor.linearGradient}
+            <linearGradient id="grad1" x2="0%" y2="100%">
                 <stop class="stop1" offset="0%" stop-color="#f6f6f5"/>
                 <stop class="stop2" offset="50%" stop-color="#f2f1f0"/>
                 <stop class="stop3" offset="100%" stop-color="#EEEDEB"/>
-                </linearGradient>
-                   $gradients
-                    <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/>
-                    </pattern>
-                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-                        <rect width="100" height="100" fill="url(#tenthGrid)"/>
-                        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
-                    </pattern>
-                    <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-                        <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10"
-                                            result="specOut" lighting-color="white">
-                            <fePointLight x="-5000" y="-10000" z="20000"/>
-                        </feSpecularLighting>
-                        <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                        <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
-                                     result="litPaint"/>
-                    </filter>
-                    <filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="blur"/>
-                        <feSpecularLighting in="blur" surfaceScale="10" specularConstant="3.5" specularExponent="10"
-                                            result="specOut" lighting-color="#ffffff">
-                            <fePointLight x="-5000" y="-10000" z="0000"/>
-                        </feSpecularLighting>
-                        <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                        <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
-                                     result="litPaint"/>
-                    </filter>
-                    <style>
-                    .bar:hover {
-                        filter: grayscale(100%) sepia(100%);
-                    }
-                     </style>
-                </defs>"""
+            </linearGradient>
+            $gradients
+            <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                <rect width="100" height="100" fill="url(#tenthGrid)"/>
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
+            </pattern>
+            <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+                <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10"
+                                    result="specOut" lighting-color="white">
+                    <fePointLight x="-5000" y="-10000" z="20000"/>
+                </feSpecularLighting>
+                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                             result="litPaint"/>
+            </filter>
+            <filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="blur"/>
+                <feSpecularLighting in="blur" surfaceScale="10" specularConstant="3.5" specularExponent="10"
+                                    result="specOut" lighting-color="#ffffff">
+                    <fePointLight x="-5000" y="-10000" z="0000"/>
+                </feSpecularLighting>
+                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                             result="litPaint"/>
+            </filter>
+            <filter id="dropShadow" filterUnits="userSpaceOnUse" width="150%" height="150%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+                <feOffset dx="2" dy="2"/>
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.3"/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            <style>
+                .bar:hover {
+                    filter: grayscale(100%) sepia(100%);
+                }
+            </style>
+        </defs>"""
     }
 
     private fun addGrid(barGroup: BarGroup): String {
         val maxHeight = 540
         val maxWidth = barGroup.calcWidth()
         val maxData = barGroup.maxData() + 100
-        val oneUnit = maxHeight / maxData
-        val xGap = maxWidth / (barGroup.maxGroup().series.size + 1)
-        val yGap = maxHeight / (barGroup.maxGroup().series.size + 1)
-        var num = xGap
-        var num2 = yGap
-        val elements = StringBuilder()
-        elements.append("""<rect width='100%' height='100%' fill='url(#backGrad_${barGroup.id})' stroke="#aaaaaa" stroke-width="1"/>""")
 
-        barGroup.maxGroup().series.forEach {
-            elements.append("""<polyline points="$num,0 $num,$maxHeight" style="stroke: #aaaaaa"/>""")
-            elements.append("""<polyline points="0,$num2 $maxWidth,$num2" style="stroke: #aaaaaa"/>""")
-            num += xGap
-            num2 += yGap
+        // Define colors based on dark mode, matching bar.svg aesthetics
+        val gridLineColor = if (barGroup.display.useDark) "#374151" else "#eee"
+        val axisColor = if (barGroup.display.useDark) "#9ca3af" else "#ccc"
+        val backgroundColor = if (barGroup.display.useDark) "#1f2937" else "#f8f9fa"
+        val textColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+
+        // Create a cleaner grid with fewer lines
+        val yGap = maxHeight / 5 // Reduced number of horizontal grid lines
+        val xGap = maxWidth / (barGroup.maxGroup().series.size + 1)
+
+        val elements = StringBuilder()
+
+        // Use light background with rounded corners like in bar.svg
+        elements.append("""<rect width='100%' height='100%' fill='${backgroundColor}' rx="15" ry="15"/>""")
+
+        // Add horizontal grid lines (reduced number for cleaner look)
+        for (i in 1..4) {
+            elements.append("""<line x1="30" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="${gridLineColor}" stroke-width="1" stroke-dasharray="5,5"/>""")
         }
+
+        // Add vertical grid lines for each data point
+        var num = xGap
+        barGroup.maxGroup().series.forEach {
+            elements.append("""<line x1="${num}" y1="12" x2="${num}" y2="500" stroke="${gridLineColor}" stroke-width="1" stroke-dasharray="5,5"/>""")
+            num += xGap
+        }
+
+        // Add main x-axis with better styling
+        elements.append("""
+            <line x1="30" x2="${maxWidth}" y1="500" y2="500" stroke="${axisColor}" stroke-width="2"/>
+        """.trimIndent())
 
         return elements.toString()
     }
 
     private fun makeXLine(barGroup: BarGroup): String {
-        return """<line x1="50" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+        // Use #ccc for axis lines with stroke-width="2" like in bar.svg
+        return """<line x1="50" x2="${barGroup.calcWidth() - 10}" y1="500" y2="500" stroke="#ccc" stroke-width="2"/>
             <g transform="translate(${barGroup.calcWidth() - 10},497.5)">
-            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="3" stroke="${barGroup.display.lineColor}"/>
+            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" stroke="#ccc"/>
             </g>
         """.trimMargin()
     }
 
     private fun makeYLine(barGroup: BarGroup): String {
-        return """<line x1="50" x2="50" y1="12" y2="500" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
+        // Use #ccc for axis lines with stroke-width="2" like in bar.svg
+        return """<line x1="50" x2="50" y1="12" y2="500" stroke="#ccc" stroke-width="2"/>
             <g transform="translate(47.5,16), rotate(-90)">
-            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="3" stroke="${barGroup.display.lineColor}"/>
+            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" stroke="#ccc"/>
             </g>
         """.trimMargin()
     }
@@ -286,7 +440,7 @@ fun createBarGroupTestData(): BarGroup {
         xLabel = "Quarters",
         groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
         display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#F3EDED", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; font-size:9px;"
-            , scale = 1.0, useDark = true)
+            , scale = 1.0, useDark = false)
     )
 
     return barGroup
@@ -298,7 +452,7 @@ fun main() {
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
-    val svg = BarGroupCondensedMaker().makeBar(barGroupTestData)
+    val svg = BarGroupMaker().makeBar(barGroupTestData)
     val outfile2 = File("gen/groupbar.svg")
     outfile2.writeBytes(svg.toByteArray())
 }

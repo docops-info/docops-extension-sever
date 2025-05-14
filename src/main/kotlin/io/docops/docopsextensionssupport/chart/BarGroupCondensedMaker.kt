@@ -24,8 +24,8 @@ class BarGroupCondensedMaker {
         theme = getTheme(barGroup.display.useDark)
         fontColor = determineTextColor(barGroup.display.baseColor)
         val sb = StringBuilder()
-        var h = determineHeight(barGroup)
-        var w = determineWidth(barGroup)
+        val h = determineHeight(barGroup)
+        val w = determineWidth(barGroup)
         sb.append(makeHead(h, w, barGroup, scale= barGroup.display.scale))
 
         height = h
