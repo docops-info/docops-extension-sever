@@ -280,24 +280,31 @@ fun main() {
         """
         Title:Use Solr for Structured Data Search
 Date: November 24th, 2010
-Status: Deprecated
-Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search
-large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in
-combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured 
-data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
-There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated. These solutions provide out of the box capabilities
-that can be leveraged by developers without needed to build RESTful or GraphQL type APIs.
+Status: Rejected
+Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
+There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
+
+These solutions provide out of the box capabilities that can be leveraged by developers without needed to build RESTful or
+GraphQL type APIs.
 Decision:Use [[https://solr.apache.org/ Solr]] for data indexing. This use is because Solr has high performance throughput with large volume of data.
 Unstructured data can also be supported.
 If this decision does not meet the need then additional PoC will be created.
+Solr and Elasticsearch are both open source search engines. Both can be used to search
+large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in
+combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured
+data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
+There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
 Consequences:Data Needs to be replicated across the solr cloud instances.
 This Solr cloud needs maintenance.
-Near realtime data replication is required Additional Cost of maintaining the Solr Cloud environment.
+Near realtime data replication is required Additional Cost of maintaining the Solr Cloud environment. Solr and Elasticsearch are both open source search engines. Both can be used to search
+large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured
+data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
+There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
 Participants:Roach,Rose,Duffy
         """.trimIndent(),
         config
     )
-    var svg = (AdrMaker().makeAdrSvg(adr, false, config, true))
+    var svg = (AdrMaker().makeAdrSvg(adr, false, config, false))
     adr.urlMap.forEach { (t, u) ->
         svg = svg.replace("_${t}_", u)
     }
