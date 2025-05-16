@@ -80,27 +80,39 @@ class Large(buttons: Buttons) : Regular(buttons) {
         return btns.toString()
     }
     private fun determineLineText(button: Button): String {
+        // Determine which modern gradient to use based on button color
+        val modernGradient = when {
+            button.color?.contains("blue", ignoreCase = true) == true -> "url(#modernBlueGradient)"
+            button.color?.contains("purple", ignoreCase = true) == true -> "url(#modernPurpleGradient)"
+            button.color?.contains("green", ignoreCase = true) == true -> "url(#modernGreenGradient)"
+            button.color?.contains("orange", ignoreCase = true) == true || 
+            button.color?.contains("yellow", ignoreCase = true) == true -> "url(#modernOrangeGradient)"
+            button.color?.contains("red", ignoreCase = true) == true || 
+            button.color?.contains("pink", ignoreCase = true) == true -> "url(#modernRedGradient)"
+            else -> "url(#btn_${button.id})"
+        }
+
         if(button.embeddedImage != null) {
             val img = button.embeddedImage
             return """
-                <use xlink:href="#singleBox"  fill="url(#btn_${button.id})"/>
+                <use xlink:href="#singleBox" fill="$modernGradient" filter="url(#modernShadow)"/>
                 <image x="0" y="0" width="300" height="191" xlink:href="${img?.ref}" href="${img?.ref}" clip-path="inset(1px round 18px 18px 0px 0px)"/>""".trimIndent()
         }
         else if ((button.cardLine1 == null) || (button.cardLine2 == null)) {
-            return """<use xlink:href="#singleBox"  fill="url(#btn_${button.id})"/>
+            return """<use xlink:href="#singleBox" fill="$modernGradient" filter="url(#modernShadow)" class="modern-card"/>
             """.trimMargin()
         } else {
-            var fill = "url(#btn_${button.id})"
+            var fill = modernGradient
             if(isPdf) {
                 fill = "${button.color}"
             }
             return """
-            <text text-anchor="middle" x="150" y="67.75" class="light-shadow" style="fill: ${button.color}; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine1.size};">${button.cardLine1.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" class="modern-text" style="fill: ${button.color}; font-weight: bold; font-family: 'Inter var', system-ui, 'Helvetica Neue', sans-serif; font-size: ${button.cardLine1.size};">${button.cardLine1.line.escapeXml()}
             </text>
             <g transform="translate(0,95.5)">
-            <use xlink:href="#bottomTextBox" stroke="${button.color}" fill="$fill"/>
+            <use xlink:href="#bottomTextBox" stroke="${button.color}" fill="$fill" filter="url(#softGlow)" class="modern-card"/>
 
-            <text text-anchor="middle" x="150" y="67.75" class="light-shadow" style="fill: #ffffff; font-weight: bold; font-family: Arial, Helvetica, sans-serif;font-size: ${button.cardLine2.size};" >${button.cardLine2.line.escapeXml()}
+            <text text-anchor="middle" x="150" y="67.75" class="modern-text" style="fill: #ffffff; font-weight: bold; font-family: 'Inter var', system-ui, 'Helvetica Neue', sans-serif; font-size: ${button.cardLine2.size};" >${button.cardLine2.line.escapeXml()}
             </text>
         </g>
             """.trimIndent()
@@ -110,17 +122,17 @@ class Large(buttons: Buttons) : Regular(buttons) {
     private fun drawText(button: Button): String {
         var desc = mutableListOf<String>()
         button.description?.let {
-            desc= itemTextWidth(itemText = it, maxWidth = 295F, fontSize = 12, fontName = "Helvetica")
+            desc= itemTextWidth(itemText = it, maxWidth = 295F, fontSize = 12, fontName = "Inter")
            // desc = addLinebreaks(it, 35)
         }
         val descList = StringBuilder()
         desc.forEach {
-            descList.append("""<tspan x="10" dy="14" style="${button.buttonStyle?.descriptionStyle}">${it.toString().escapeXml()}</tspan>""")
+            descList.append("""<tspan x="10" dy="14" class="modern-text" style="${button.buttonStyle?.descriptionStyle ?: "font-size: 12px; font-weight: 400;"}">${it.toString().escapeXml()}</tspan>""")
         }
         val authors = StringBuilder()
         button.author?.let {
             it.forEach { txt ->
-                authors.append("""<tspan x="10" dy="14" style="${button.buttonStyle?.authorStyle}">${txt.escapeXml()}</tspan>""")
+                authors.append("""<tspan x="10" dy="14" class="modern-text" style="${button.buttonStyle?.authorStyle ?: "font-size: 11px; font-style: italic; fill: #555;"}">${txt.escapeXml()}</tspan>""")
             }
         }
         var title  = mutableListOf<StringBuilder>()
@@ -129,16 +141,17 @@ class Large(buttons: Buttons) : Regular(buttons) {
         }
         val titleList = StringBuilder()
         title.forEach {
-            titleList.append("""<tspan x="10" dy="14" style="${button.buttonStyle?.typeStyle}" fill="${button.color}">${it.toString().escapeXml()}</tspan>""")
+            titleList.append("""<tspan x="10" dy="14" class="modern-text" style="${button.buttonStyle?.typeStyle ?: "font-weight: 600;"}" fill="${button.color}">${it.toString().escapeXml()}</tspan>""")
         }
         var dt = ""
         button.date?.let {
-            dt = "<tspan x=\"10\" dy=\"14\" style=\"${button.buttonStyle?.dateStyle}\">${it}</tspan>"
+            dt = "<tspan x=\"10\" dy=\"14\" class=\"modern-text\" style=\"${button.buttonStyle?.dateStyle ?: "font-size: 11px; fill: #777;"}\">${it}</tspan>"
         }
         return """
             <g transform="translate(0,190)" class="title">
-            <text x="10" y="20" style="font-family: Arial, Helvetica, sans-serif;font-size:12px;">
-                <tspan style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</tspan>
+            <rect x="0" y="0" width="300" height="210" rx="0" ry="0" fill="#fafafa" opacity="0.7" filter="url(#softGlow)"/>
+            <text x="10" y="20" style="font-family: 'Inter var', system-ui, 'Helvetica Neue', sans-serif; font-size:12px;">
+                <tspan class="modern-text" style="${button.buttonStyle?.labelStyle ?: "font-weight: 700; font-size: 14px;"}">${button.label.escapeXml()}</tspan>
                 $titleList
                 $descList
                 $authors

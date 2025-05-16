@@ -149,6 +149,8 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${myBox()}
             ${keyFrame()}
             ${linkText()}
+            ${modernText()}
+            ${modernCard()}
             .bar:hover {
                 filter: grayscale(100%) sepia(100%);
             }
@@ -169,6 +171,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${filters()}
             ${naturalShadow()}
             ${gradient()}
+            ${modernGradients()}
             ${uses()}
            $style
             </defs>
