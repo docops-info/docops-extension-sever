@@ -41,14 +41,30 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 </defs>
             """.trimIndent())
         }
-        sb.append("<rect width=\"100%\" height=\"100%\" fill=\"$bgColor\" stroke=\"#111111\" stroke-width=\"3\"/>")
+        // Enhanced background with subtle gradient
+        sb.append("""<rect width="100%" height="100%" fill="$bgColor" stroke="none"/>""")
+
+        // Add subtle grid pattern for background texture
+        if (!isPdf) {
+            sb.append("""
+            <pattern id="subtle-grid" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="40" height="40" fill="$bgColor"/>
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${if(placeMatRequest.useDark) "#333333" else "#dddddd"}" stroke-width="0.5"/>
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#subtle-grid)" opacity="0.4"/>
+            """)
+        }
+
         sb.append("<g transform=\"translate(0,0)\">")
+
+        // Enhanced title with better styling
         sb.append("""<g transform="translate(0,0)">
-            <text x="20" y="24" text-anchor="start" font-size="24" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">${placeMatRequest.title}</text>
+            <text x="20" y="30" text-anchor="start" font-size="28" class="title-text" fill="$fgColor">${placeMatRequest.title}</text>
+            <line x1="20" y1="38" x2="${Math.min(placeMatRequest.title.length * 16, 400)}" y2="38" stroke="$fgColor" stroke-width="2" opacity="0.6" />
         </g>
         <g transform="translate(0,50)">""")
         sb.append(makeBody(id))
-        sb.append(makeLegend(height + 20 - 50, id))
+        sb.append(makeLegend(height + 20 - 50, id, width))
         sb.append("</g>")
         sb.append("</g>")
         sb.append(tail())
@@ -65,13 +81,9 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             val textColor = svgColor.foreGroundColor
 
             var grad = "url(#grad_${conn.legendAsStyle()}_$id)"
-            /*if(!useGrad) {
-                grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
-            }*/
             var strokeWidth = 1
             if(!placeMatRequest.fill) {
-                //grad = "none"
-                strokeWidth = 5
+                strokeWidth = 3
             }
             if(placeMatRequest.useDark && !placeMatRequest.fill ) {
                 grad = "#fcfcfc"
@@ -79,8 +91,13 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             if(isPdf) {
                 grad = placeMatRequest.config.colorFromLegendName(conn.legend).color
             }
-            val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" y="${lines.second}" text-anchor="middle" class="glass" style="fill:$textColor; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;">""")
+
+            // Improved text layout
+            val lines = conn.textToLines()
+            val textY = lines.second
+
+            // Enhanced text styling with better class
+            val str = StringBuilder("""<text x="135" y="$textY" text-anchor="middle" class="placemat-text" style="fill:$textColor; font-size:22px;">""")
             var newLine = false
 
             lines.first.forEachIndexed {
@@ -95,11 +112,14 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 if((i + 1) % 5 == 0) {
                     newLine = true
                 }
-                //language=svg
+
+                // Enhanced rectangle with better styling
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <rect x="10" y="10" class="shadowed"  width="250" height="90" ry="18" rx="18"  style="fill: ${grad}; stroke: ${placeMatRequest.config.colorFromLegendName(conn.legend).color};stroke-width: $strokeWidth;"/>
+                <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" 
+                      style="fill: ${grad}; stroke: ${placeMatRequest.config.colorFromLegendName(conn.legend).color};
+                      stroke-width: $strokeWidth; stroke-opacity: 0.8;"/>
                 $str
             """.trimIndent()
                 )
@@ -147,85 +167,154 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
             <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
         </filter>
-        <filter id="poly" x="0" y="0" width="200%" height="200%">
-            <feOffset result="offOut" in="SourceGraphic" dx="10" dy="15" />
-            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
-            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        <filter id="enhanced-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="2" dy="2" stdDeviation="4" flood-opacity="0.3" />
         </filter>
-        <filter id="shadow2">
-            <feDropShadow
-                    dx="-0.8"
-                    dy="-0.8"
-                    stdDeviation="0"
-                    flood-color="pink"
-                    flood-opacity="0.5" />
+        <filter id="inner-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+            <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />
+            <feFlood flood-color="#ffffff" flood-opacity="0.5" result="glowColor" />
+            <feComposite in="glowColor" in2="offsetBlur" operator="in" result="innerGlow" />
+            <feComposite in="SourceGraphic" in2="innerGlow" operator="over" />
+        </filter>
+        <filter id="soft-highlight" x="0" y="0" width="100%" height="100%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feOffset in="blur" dx="0" dy="-2" result="offsetBlur" />
+            <feFlood flood-color="#ffffff" flood-opacity="0.3" result="highlightColor" />
+            <feComposite in="highlightColor" in2="offsetBlur" operator="in" result="highlight" />
+            <feComposite in="SourceGraphic" in2="highlight" operator="over" />
         </filter>
         <style>
             #diag_$id .shadowed {
-                -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
-                filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
+                filter: url(#enhanced-shadow);
+                transition: all 0.3s ease;
             }
-            #diag_$id  .filtered {
-                filter: url(#filter);
-                fill: black;
-                font-family: 'Ultra', serif;
-                font-size: 100px;
-
+            #diag_$id .placemat-box {
+                filter: url(#enhanced-shadow);
+                transition: transform 0.2s ease;
             }
-            #diag_$id  .filtered-small {
-                filter: url(#filter);
-                fill: black;
-                font-family: 'Ultra', serif;
-                font-size: 14px;
-
-            }
-
-            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
-            1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
-            center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
-            rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px)
-            saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% -
-            4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px
-            30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px
-            rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
-            3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2)}.glass:active:before{height:25px}
-
-            #diag_$id  .boxText {
-                font-size:24px;
+            #diag_$id .placemat-text {
                 font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-weight: 600;
                 font-variant: small-caps;
-                font-weight: bold;
+                text-rendering: optimizeLegibility;
+                fill-opacity: 0.95;
+                filter: url(#soft-highlight);
+            }
+            #diag_$id .title-text {
+                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-weight: 700;
+                font-variant: small-caps;
+                letter-spacing: 0.5px;
+                filter: url(#soft-highlight);
+            }
+            #diag_$id .legend-box {
+                filter: url(#enhanced-shadow);
+                opacity: 0.95;
+            }
+            #diag_$id .legend-text {
+                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-weight: 600;
+                text-rendering: optimizeLegibility;
+            }
+            #diag_$id .legend-title {
+                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-weight: 700;
+                letter-spacing: 0.5px;
             }
         </style>
         <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
-        <rect id="bbox" class="shadowed"  width="250" height="90" ry="18" rx="18"  />
+        <rect id="bbox" class="placemat-box" width="250" height="90" ry="20" rx="20" />
         <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         </defs>
         """.trimIndent()
     }
-    private fun makeLegend(y: Float, id: String): String {
-        val sb = StringBuilder("""<g transform="translate(20,$y),scale(0.15)">""")
-        sb.append("""<text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="$fgColor">Legend</text>""")
-        var start = 10.0
-        placeMatRequest.config.legend.forEach{
-            item ->
+    private fun makeLegend(y: Float, id: String, svgWidth: Float): String {
+        // Calculate total width needed for legend items
+        var totalWidth = 0
+        val legendItems = mutableListOf<Triple<String, Int, String>>() // grad, width, textColor
+
+        // Get the longest legend text to ensure proper sizing
+        var maxTextLen = 0
+
+        placeMatRequest.config.legend.forEach { item ->
             var grad = "url(#grad_${item.legendAsStyle()}_$id)"
             if(!useGrad) {
                 grad = item.color
             }
             val textColor = SVGColor(item.color, UUID.randomUUID().toString()).foreGroundColor
-                val textLen = item.legend.textWidth("Helvetica", 110)
+            // Add 20% to text width to ensure text fits properly
+            val textLen = (item.legend.textWidth("Helvetica", 110) * 1.2).toInt()
+            maxTextLen = maxOf(maxTextLen, textLen)
+
+            // Store item details for later use
+            legendItems.add(Triple(grad, textLen, textColor))
+
+            // Add width plus increased spacing (100 instead of 80)
+            totalWidth += (textLen + 100)
+        }
+
+        // Add padding to total width for better spacing
+        val horizontalPadding = 120 // 60px on each side
+        val legendGroupWidth = totalWidth + horizontalPadding
+
+        // Calculate legend height based on content
+        val titleHeight = 60 // Space for title and separator
+        val itemHeight = 130 // Height of legend items with padding
+        val legendHeight = titleHeight + itemHeight + 30 // Additional bottom padding
+
+        // Calculate the scale factor based on the number of legend items
+        // Use a smaller scale for many items, larger for few
+        val scaleFactor = when {
+            placeMatRequest.config.legend.size > 5 -> 0.16
+            placeMatRequest.config.legend.size <= 3 -> 0.20
+            else -> 0.18
+        }
+
+        // Center the legend group horizontally
+        // Calculate the starting x position to center the legend
+        val centerX = svgWidth / 2 - (legendGroupWidth * scaleFactor) / 2 // Adjust for the scale factor
+
+        // Modern legend with centered positioning and increased spacing
+        val sb = StringBuilder("""<g transform="translate($centerX,$y),scale($scaleFactor)">""")
+
+        // Add a subtle background for the entire legend
+        sb.append("""<rect x="0" y="0" width="$legendGroupWidth" height="$legendHeight" rx="20" ry="20" 
+                      fill="${if(placeMatRequest.useDark) "#2a3a4a" else "#f5f5f7"}" 
+                      opacity="0.4" class="legend-background"/>""")
+
+        // Center the legend title
+        sb.append("""<text x="${legendGroupWidth/2}" y="35" text-anchor="middle" font-size="110" 
+                      class="legend-title" fill="$fgColor">Legend</text>""")
+
+        // Add a subtle separator line
+        sb.append("""<line x1="${legendGroupWidth*0.1}" y1="50" x2="${legendGroupWidth*0.9}" y2="50" 
+                      stroke="$fgColor" stroke-width="2" opacity="0.3" />""")
+
+        var start = (legendGroupWidth - totalWidth) / 2 // Center the items within the legend box
+
+        // Add each legend item with more spacing
+        legendItems.forEachIndexed { index, (grad, textLen, textColor) ->
+            val item = placeMatRequest.config.legend[index]
+
+            // Calculate proper width for the legend item rectangle
+            val rectWidth = textLen + 40 // Add more padding around text
+
+            // Enhanced legend items with modern styling
             sb.append("""
-            <g transform="translate($start,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
-                <rect x="0" y="0" width="${textLen+20}" height="110" fill="$grad" class="shadowed"/>
-                <text text-anchor="middle" style="fill: $textColor;" x="${(textLen+20)/2}" y="90" textLength="${textLen - 10}">${item.legend}</text>
+            <g transform="translate($start,70)" font-size="96">
+                <rect x="0" y="0" width="$rectWidth" height="110" fill="$grad" rx="15" ry="15" 
+                      class="legend-box" filter="url(#enhanced-shadow)"/>
+                <text text-anchor="middle" class="legend-text" style="fill: $textColor;" 
+                      x="${rectWidth/2}" y="70">${item.legend}</text>
             </g>
             """.trimIndent())
-            start += (textLen + 60)
+
+            // Increased spacing between items
+            start += (textLen + 100)
         }
+
         sb.append("</g>")
         return sb.toString()
     }
