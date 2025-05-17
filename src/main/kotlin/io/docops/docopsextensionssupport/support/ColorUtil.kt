@@ -118,14 +118,37 @@ fun determineTextColor(hexColor: String): String {
 }
 
 @Serializable
-class SVGColor(val color: String, val id: String = UUID.randomUUID().toString()) {
+class SVGColor(
+    val color: String, 
+    val id: String = UUID.randomUUID().toString(),
+    val gradientAngle: String = "to bottom", // Options: "to bottom", "to right", "to bottom right", etc.
+    val opacityStart: Double = 1.0,
+    val opacityMiddle: Double = 0.95,
+    val opacityEnd: Double = 0.9
+) {
     val foreGroundColor: String = determineTextColor(color)
     val colorMap = gradientFromColor(color)
+
+    // Convert CSS gradient angle to SVG x1,y1,x2,y2 coordinates
+    private val gradientCoordinates: String = when(gradientAngle) {
+        "to right" -> "x1='0%' y1='0%' x2='100%' y2='0%'"
+        "to bottom right" -> "x1='0%' y1='0%' x2='100%' y2='100%'"
+        "to bottom left" -> "x1='100%' y1='0%' x2='0%' y2='100%'"
+        "to top" -> "x1='0%' y1='100%' x2='0%' y2='0%'"
+        "to top right" -> "x1='0%' y1='100%' x2='100%' y2='0%'"
+        "to top left" -> "x1='100%' y1='100%' x2='0%' y2='0%'"
+        "to left" -> "x1='100%' y1='0%' x2='0%' y2='0%'"
+        else -> "x1='0%' y1='0%' x2='0%' y2='100%'" // Default: to bottom
+    }
+
+    // Enhanced gradient with more stops and opacity control
     val linearGradient = """
-        <linearGradient id="$id" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:${colorMap["color1"]}"/>
-            <stop offset="50%" style="stop-color:${colorMap["color2"]}"/>
-            <stop offset="100%" style="stop-color:${colorMap["color3"]}"/>
+        <linearGradient id="$id" $gradientCoordinates>
+            <stop offset="0%" style="stop-color:${colorMap["color1"]}" stop-opacity="$opacityStart"/>
+            <stop offset="25%" style="stop-color:${blendColors(colorMap["color1"]!!, colorMap["color2"]!!, 0.75)}" stop-opacity="${opacityStart + (opacityMiddle - opacityStart) * 0.5}"/>
+            <stop offset="50%" style="stop-color:${colorMap["color2"]}" stop-opacity="$opacityMiddle"/>
+            <stop offset="75%" style="stop-color:${blendColors(colorMap["color2"]!!, colorMap["color3"]!!, 0.75)}" stop-opacity="${opacityMiddle + (opacityEnd - opacityMiddle) * 0.5}"/>
+            <stop offset="100%" style="stop-color:${colorMap["color3"]}" stop-opacity="$opacityEnd"/>
         </linearGradient>
     """.trimIndent()
 
@@ -133,6 +156,15 @@ class SVGColor(val color: String, val id: String = UUID.randomUUID().toString())
     fun darker() = colorMap["color3"]
     fun original() = color
 
+    // Helper function to blend two colors
+    private fun blendColors(color1: String, color2: String, ratio: Double): String {
+        val rgb1 = hexToRgb(color1)
+        val rgb2 = hexToRgb(color2)
+
+        val r = (rgb1["r"]!! * (1 - ratio) + rgb2["r"]!! * ratio).toInt()
+        val g = (rgb1["g"]!! * (1 - ratio) + rgb2["g"]!! * ratio).toInt()
+        val b = (rgb1["b"]!! * (1 - ratio) + rgb2["b"]!! * ratio).toInt()
+
+        return rgbToHex(r, g, b)
+    }
 }
-
-
