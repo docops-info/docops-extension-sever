@@ -2,7 +2,6 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.io.File
 
@@ -27,7 +26,7 @@ class PieMaker {
         val sb = StringBuilder()
         sb.append(makeHead(width, pies))
         sb.append("<defs>")
-            sb.append(filters())
+            sb.append(filters(pies))
             sb.append(gradients(pies))
         sb.append("</defs>")
         pies.pies.forEachIndexed { index, pie ->
@@ -58,7 +57,7 @@ class PieMaker {
             backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="#ffffff" filter="url(#dropShadow)"/>"""
         }
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight">
-            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">
+            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" id="${pies.pieDisplay.id}">
             $backgroundColor
             """
     }
@@ -116,21 +115,21 @@ class PieMaker {
         return sb.toString()
     }
 
-    private fun filters() =
+    private fun filters(pies: Pies) =
          """
              <style>
-                .pie {
+               #${pies.pieDisplay.id} .pie {
                     transition: transform 0.3s ease;
                     cursor: pointer;
                 }
-                .pie:hover {
+                #${pies.pieDisplay.id} .pie:hover {
                     transform: scale(1.1);
                     filter: url(#glow);
                 }
-                .pie-container {
+                #${pies.pieDisplay.id} .pie-container {
                     transition: all 0.3s ease;
                 }
-                .pie-container:hover text {
+                #${pies.pieDisplay.id} .pie-container:hover text {
                     font-weight: bold;
                 }
              </style>

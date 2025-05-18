@@ -209,7 +209,7 @@ class LineChartMaker(val isPdf: Boolean) {
 
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg height="${adjustedGraphHeight/DISPLAY_RATIO_16_9}" width="${maxGraphWidth/DISPLAY_RATIO_16_9}" viewBox="0 0 $maxGraphWidth $adjustedGraphHeight" id="ID_${lineChart.id}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <svg height="${adjustedGraphHeight/DISPLAY_RATIO_16_9}" width="${maxGraphWidth/DISPLAY_RATIO_16_9}" viewBox="0 0 $maxGraphWidth $adjustedGraphHeight" id="id_${lineChart.id}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         """.trimIndent()
     }
 
@@ -261,39 +261,39 @@ class LineChartMaker(val isPdf: Boolean) {
             }
             </script>
             <style>
-                .grid-line {
+                #id_${lineChart.id} .grid-line {
                     stroke: #dddddd;
                     stroke-width: 0.5;
                     stroke-dasharray: 3,3;
                 }
-                .chart-point {
+                #id_${lineChart.id} .chart-point {
                     transition: all 0.3s ease;
                 }
-                .chart-point:hover {
+                #id_${lineChart.id} .chart-point:hover {
                     r: 7;
                     filter: url(#glow);
                 }
-                .chart-line {
+                #id_${lineChart.id} .chart-line {
                     stroke-linecap: round;
                     stroke-linejoin: round;
                 }
-                .chart-area {
+                #id_${lineChart.id} .chart-area {
                     opacity: 0.7;
                 }
-                .legend-item {
+                #id_${lineChart.id} .legend-item {
                     transition: all 0.3s ease;
                     cursor: pointer;
                 }
-                .legend-item:hover {
+                #id_${lineChart.id} .legend-item:hover {
                     transform: translateX(5px);
                 }
-                .legend-item:hover text {
+                #id_${lineChart.id} .legend-item:hover text {
                     font-weight: bold;
                 }
-                .legend-item:hover .legend-item-bg {
+                #id_${lineChart.id} .legend-item:hover .legend-item-bg {
                     opacity: 0.2;
                 }
-                .shadowed {
+                #id_${lineChart.id} .shadowed {
                     filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
                 }
             </style>
@@ -391,7 +391,9 @@ class LineChartMaker(val isPdf: Boolean) {
                 val lastPoint = ary.lastOrNull()
                 if (firstPoint != null && lastPoint != null) {
                     val areaPath = "$smootherCurve L ${lastPoint.x},${maxHeight} L ${firstPoint.x},${maxHeight} Z"
-                    sb.append("""<path d="$areaPath" class="chart-area" fill="url(#areaGradient_$index)" opacity="0.5" />""")
+                    if (lineChart.display.showArea) {
+                        sb.append("""<path d="$areaPath" class="chart-area" fill="url(#areaGradient_$index)" opacity="0.5" />""")
+                    }
                 }
 
                 // Add the line with animation
@@ -400,8 +402,10 @@ class LineChartMaker(val isPdf: Boolean) {
                 </path>""")
             } else {
                 // For straight lines
-                // Add area fill
-                sb.append("""<polygon points="$xGap,$maxHeight$str $num,$maxHeight" class="chart-area" fill="url(#areaGradient_$index)" opacity="0.5" />""")
+                // Add area fill if showArea is true
+                if (lineChart.display.showArea) {
+                    sb.append("""<polygon points="$xGap,$maxHeight$str $num,$maxHeight" class="chart-area" fill="url(#areaGradient_$index)" opacity="0.5" />""")
+                }
 
                 // Add the line with animation
                 val lineLength = str.length * 2 // Approximate length for animation

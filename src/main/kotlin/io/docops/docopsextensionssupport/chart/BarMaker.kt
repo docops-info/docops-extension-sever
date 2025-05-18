@@ -47,7 +47,7 @@ class BarMaker {
         val backgroundColor = if (bar.display.useDark) "#1f2937" else "#f8f9fa"
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
+            <svg id="id_${bar.display.id}" width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
                 <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """.trimIndent()
     }
@@ -231,25 +231,25 @@ class BarMaker {
                     </filter>
 
                     <style>
-                    .bar {
+                    #id_${bar.display.id} .bar {
                         transition: all 0.3s ease;
                     }
-                    .bar:hover {
+                    #id_${bar.display.id} .bar:hover {
                         filter: url(#glow);
                         transform: scale(1.05);
                         cursor: pointer;
                     }
-                    .chart-title {
+                    #id_${bar.display.id} .chart-title {
                         font-family: Arial, sans-serif;
                         font-size: 24px;
                         font-weight: bold;
                     }
-                    .axis-label {
+                    #id_${bar.display.id} .axis-label {
                         font-family: Arial, sans-serif;
                         font-size: 14px;
                         fill: #666;
                     }
-                    .tick-label {
+                    #id_${bar.display.id} .tick-label {
                         font-family: Arial, sans-serif;
                         font-size: 12px;
                         fill: #666;

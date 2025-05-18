@@ -151,10 +151,10 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             ${linkText()}
             ${modernText()}
             ${modernCard()}
-            .bar:hover {
+            #${buttons.id} .bar:hover {
                 filter: grayscale(100%) sepia(100%);
             }
-            .shadowed {
+            #${buttons.id} .shadowed {
                 -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
                 filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }

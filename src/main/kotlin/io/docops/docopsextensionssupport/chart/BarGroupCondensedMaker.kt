@@ -84,7 +84,7 @@ class BarGroupCondensedMaker {
     private fun makeHead(h: Float, w: Float, barGroup: BarGroup, scale: Double): String {
         return  """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${(w * scale)/ DISPLAY_RATIO_16_9}" height="${(h * scale )/DISPLAY_RATIO_16_9}" viewBox="0 0 ${w*scale} ${h*scale}" xmlns="http://www.w3.org/2000/svg" id="${barGroup.id}" preserveAspectRatio="xMidYMid meet">
+            <svg width="${(w * scale)/ DISPLAY_RATIO_16_9}" height="${(h * scale )/DISPLAY_RATIO_16_9}" viewBox="0 0 ${w*scale} ${h*scale}" xmlns="http://www.w3.org/2000/svg" id="id_${barGroup.id}" preserveAspectRatio="xMidYMid meet">
         """.trimIndent()
     }
 
@@ -112,25 +112,25 @@ class BarGroupCondensedMaker {
 
         defs.append("<style type=\"text/css\">")
         defs.append("""
-            .shadowed {
+            #id_${barGroup.id} .shadowed {
                 -webkit-filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, .25));
                 filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, .25));
                 transition: all 0.3s ease;
             }
-            .bar:hover {
+            #id_${barGroup.id} .bar:hover {
                 filter: brightness(1.1) saturate(1.1);
                 transform: translateY(-1px);
                 -webkit-filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, .35));
                 filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, .35));
             }
-            text {
+            #id_${barGroup.id} text {
                 font-family: 'Arial', sans-serif;
                 transition: all 0.3s ease;
             }
-            .bar-label {
+            #id_${barGroup.id} .bar-label {
                 opacity: 0.9;
             }
-            .bar:hover + .bar-label {
+            #id_${barGroup.id} .bar:hover + .bar-label {
                 opacity: 1;
                 font-weight: bold;
             }

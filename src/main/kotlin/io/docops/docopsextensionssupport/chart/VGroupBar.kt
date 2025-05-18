@@ -82,9 +82,10 @@ class VGroupBar {
         val heightAdjustment = (numOfBars * 24) + (numOfBars * 5)  + (barGroup.groups.size*24) + 80
         height = heightAdjustment
         val finalHeight = height * barGroup.display.scale
+
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg" id="id_${barGroup.id}">
         """.trimIndent()
     }
     private fun tail(): String {
@@ -161,8 +162,8 @@ class VGroupBar {
         """.trimIndent())
 
         // Create a more organized legend layout
-        var y = 50
-        var startX = legendX + 30
+        val y = 50
+        val startX = legendX + 30
         val itemWidth = legendWidth / itemsPerRow
 
         distinct.forEachIndexed { index, item ->
@@ -244,23 +245,23 @@ class VGroupBar {
                 </filter>
 
                 <style>
-                    .bar {
+                    #id_${barGroup.id} .bar {
                         transition: all 0.3s ease;
                     }
-                    .bar:hover {
+                    #id_${barGroup.id} .bar:hover {
                         filter: url(#glow);
                         transform: scale(1.05);
                         cursor: pointer;
                     }
-                    .legend-item {
+                    #id_${barGroup.id} .legend-item {
                         transition: all 0.3s ease;
                         cursor: pointer;
                     }
-                    .legend-item:hover {
+                    #id_${barGroup.id} .legend-item:hover {
                         transform: translateX(5px);
                         font-weight: bold;
                     }
-                    .shadowed {
+                    #id_${barGroup.id} .shadowed {
                         filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
                     }
                 </style>

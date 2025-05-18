@@ -139,7 +139,7 @@ open class PieSliceMaker {
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(420 * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${420.0 * pieSlices.display.scale} ${h * pieSlices.display.scale}'>
+            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(baseHeight * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${660 * pieSlices.display.scale} ${h * pieSlices.display.scale}' id="id_${pieSlices.display.id}">
           """
     }
     protected fun endSvg() = "</svg>"
@@ -195,7 +195,7 @@ open class PieSliceMaker {
             </script>
             $defGrad
             <style>
-            .pie:hover {
+            #id_${pieSlices.display.id} .pie:hover {
                 filter: grayscale(100%) sepia(100%);
             }
             </style>
