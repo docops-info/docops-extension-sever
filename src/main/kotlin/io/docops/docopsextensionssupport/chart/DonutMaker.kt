@@ -29,7 +29,7 @@ class DonutMaker : PieSliceMaker(){
         val backgroundColor = if (pieSlices.display.useDark) "#1f2937" else "#ffffff"
 
         sb.append("""<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(width * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${width * pieSlices.display.scale} ${h * pieSlices.display.scale}'>
+            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(width * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${width * pieSlices.display.scale} ${h * pieSlices.display.scale}' id="id_${pieSlices.display.id}">
             <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """)
 
@@ -94,19 +94,19 @@ class DonutMaker : PieSliceMaker(){
             </filter>
 
             <style>
-            .pie {
+            #id_${pieSlices.display.id} .pie {
                 transition: all 0.3s ease;
                 filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.2));
             }
-            .pie:hover {
+            #id_${pieSlices.display.id} .pie:hover {
                 filter: url(#glow);
                 transform: scale(1.05);
             }
-            .legend-item {
+            #id_${pieSlices.display.id} .legend-item {
                 transition: all 0.3s ease;
                 cursor: pointer;
             }
-            .legend-item:hover {
+            #id_${pieSlices.display.id} .legend-item:hover {
                 font-weight: bold;
                 transform: translateX(5px);
             }

@@ -145,7 +145,7 @@ class VBarMaker {
     private fun head(bar: Bar): String {
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width/DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width/DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" id="id_${bar.display.id}">
         """.trimIndent()
     }
 
@@ -204,10 +204,10 @@ class VBarMaker {
                 </filter>
 
                 <style>
-                    rect {
+                   #id_${bar.display.id} rect {
                         transition: all 0.3s ease;
                     }
-                    rect:hover {
+                    #id_${bar.display.id} rect:hover {
                         filter: url(#glow);
                         transform: scale(1.05);
                         cursor: pointer;

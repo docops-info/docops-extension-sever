@@ -56,8 +56,8 @@ class PieMaker {
         } else {
             backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="#ffffff" filter="url(#dropShadow)"/>"""
         }
-        return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight">
-            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" id="${pies.pieDisplay.id}">
+        return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" >
             $backgroundColor
             """
     }
@@ -118,18 +118,19 @@ class PieMaker {
     private fun filters(pies: Pies) =
          """
              <style>
-               #${pies.pieDisplay.id} .pie {
+               #id_${pies.pieDisplay.id} .pie {
                     transition: transform 0.3s ease;
                     cursor: pointer;
+                    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.2));
                 }
-                #${pies.pieDisplay.id} .pie:hover {
-                    transform: scale(1.1);
+                #id_${pies.pieDisplay.id} .pie:hover {
+                    transform: scale(1.05);
                     filter: url(#glow);
                 }
-                #${pies.pieDisplay.id} .pie-container {
+                #id_${pies.pieDisplay.id} .pie-container {
                     transition: all 0.3s ease;
                 }
-                #${pies.pieDisplay.id} .pie-container:hover text {
+                #id_${pies.pieDisplay.id} .pie-container:hover text {
                     font-weight: bold;
                 }
              </style>

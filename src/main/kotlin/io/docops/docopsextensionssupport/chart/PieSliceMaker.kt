@@ -195,7 +195,13 @@ open class PieSliceMaker {
             </script>
             $defGrad
             <style>
+            #id_${pieSlices.display.id} .pie {
+                    transition: transform 0.3s ease;
+                    cursor: pointer;
+                    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.2));
+                }
             #id_${pieSlices.display.id} .pie:hover {
+                transform: scale(1.05);
                 filter: grayscale(100%) sepia(100%);
             }
             </style>

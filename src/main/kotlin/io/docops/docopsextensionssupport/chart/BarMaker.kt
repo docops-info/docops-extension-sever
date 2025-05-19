@@ -19,7 +19,7 @@ class BarMaker {
         sb.append(makeDefs(bar, itemGradients(bar)))
         sb.append(addGrid(bar = bar))
         sb.append(addGroupStart(bar))
-        var startX: Int = 1
+        val startX = 1
         var startY: Int = bar.calcLeftPadding()
         var incY = 42
         var minY = max(0, startY)
@@ -161,7 +161,7 @@ class BarMaker {
         val xGap = maxWidth / (bar.series.size + 1)
         val yGap = maxHeight / 5 // Reduced number of horizontal grid lines for cleaner look
         var num = xGap
-        var num2 = yGap
+        val num2 = yGap
         val elements = StringBuilder()
 
         // Define colors based on dark mode
