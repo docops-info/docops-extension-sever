@@ -46,7 +46,7 @@ class BarGroupMaker {
         val legendWidth = 200
         val legendHeight = 30
         val legendX = d - (legendWidth / 2)
-        val legendY = 510
+        val legendY = 530 // Moved down to accommodate the increased SVG height
 
         // Use colors based on dark mode
         val legendBgColor = if (group.display.useDark) "#374151" else "#f8f9fa"
@@ -119,7 +119,7 @@ class BarGroupMaker {
             val y = 500 - barGroup.scaleUp(i)
             sb.append("""
      <line x1="40" x2="48" y1="$y" y2="$y" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
-    <text x="35" y="${y+3}" text-anchor="end" style="font-family: Arial, sans-serif; fill: ${if (barGroup.display.useDark) "#f9fafb" else "#666"}; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
+    <text x="30" y="${y+3}" text-anchor="end" style="font-family: Arial, sans-serif; fill: ${if (barGroup.display.useDark) "#f9fafb" else "#666"}; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -169,7 +169,7 @@ class BarGroupMaker {
         val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
 
         return """
-            <text x="$center" y="520" 
+            <text x="$center" y="560" 
                   style="font-family: Arial, sans-serif; fill: $labelColor; 
                   text-anchor: middle; font-size: 14px; font-weight: bold;">
                 ${barGroup.xLabel}
@@ -182,7 +182,7 @@ class BarGroupMaker {
         val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
 
         return """
-            <text x="250" y="-10" 
+            <text x="250" y="-20" 
                   style="font-family: Arial, sans-serif; fill: $labelColor; 
                   text-anchor: middle; font-size: 14px; font-weight: bold;" 
                   transform="rotate(90)">
@@ -192,9 +192,11 @@ class BarGroupMaker {
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
+        // Increase the height to accommodate labels better
+        val svgHeight = 600 // Increased from 540 to 600
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(540 * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} 540" xmlns="http://www.w3.org/2000/svg">
+            <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg">
         """.trimIndent()
     }
 

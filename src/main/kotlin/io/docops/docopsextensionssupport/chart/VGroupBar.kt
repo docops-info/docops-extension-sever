@@ -11,7 +11,7 @@ import java.awt.Font
 class VGroupBar {
     private var height  = 600
     private var fontDisplayColor = "#111111"
-    private val width = 800
+    private val width = 900 // Increased from 800 to provide more space for labels
     fun makeVerticalBar(barGroup: BarGroup): String {
         if(barGroup.display.useDark) {
             fontDisplayColor = "#fcfcfc"
@@ -23,7 +23,7 @@ class VGroupBar {
         sb.append(makeTitle(barGroup))
         sb.append(makeLineSeparator(barGroup))
         sb.append(makeColumnHeader(barGroup))
-        var startY = 80
+        var startY = 90 // Increased from 80 to align with the new line separator position
         barGroup.groups.forEach { t ->
             startY = makeGroup(startY, t, barGroup, sb)
         }
@@ -118,7 +118,7 @@ class VGroupBar {
     private fun makeLineSeparator(barGroup: BarGroup) : String{
         val axisColor = if (barGroup.display.useDark) "#9ca3af" else "#666"
         return """
-            <line x1="200" x2="200" y1="80" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="200" x2="200" y1="85" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round"/>
         """.trimIndent()
     }
 
@@ -126,8 +126,8 @@ class VGroupBar {
         val textColor = if (barGroup.display.useDark) "#e5e7eb" else "#666"
         return """
         <g>
-            <text x="193" y="75" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
-            <text x="205" y="75" text-anchor="start" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
+            <text x="180" y="75" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+            <text x="220" y="75" text-anchor="start" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
         </g>
         """.trimIndent()
     }
@@ -140,15 +140,15 @@ class VGroupBar {
         val distinct = group.legendLabel().distinct()
 
         // Calculate legend dimensions
-        val legendWidth = min(600, width - 40)
-        val itemsPerRow = 4
+        val legendWidth = min(700, width - 40) // Increased from 600 to accommodate more items per row
+        val itemsPerRow = 5 // Increased from 4 to 5 to better utilize the wider legend
         val rowCount = (distinct.size + itemsPerRow - 1) / itemsPerRow // Ceiling division
         val rowHeight = 20 // Height per row
         val topPadding = 40 // Space for the "Legend" title and padding
         val bottomPadding = 10 // Padding at the bottom
         val legendHeight = topPadding + (rowCount * rowHeight) + bottomPadding
         val legendX = (width - legendWidth) / 2
-        val legendY = d + 10
+        val legendY = d + 20 // Increased from 10 to 20 to provide more space
 
         sb.append("<g transform='translate(0, $d)'>")
 

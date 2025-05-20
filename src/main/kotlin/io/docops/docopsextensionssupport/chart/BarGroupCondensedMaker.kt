@@ -12,8 +12,8 @@ import java.util.UUID
 
 class BarGroupCondensedMaker {
     private val BAR_HEIGHT = 10f
-    private val width = 600f
-    private val BOTTOM_BUFFER = 55f
+    private val width = 650f // Increased from 600f to provide more space for labels
+    private val BOTTOM_BUFFER = 75f // Increased from 55f to provide more space at the bottom
     private var additional = 0f
     private var height = 400f
     private var TOTAL_BAR_HEIGHT = 400f
@@ -153,7 +153,7 @@ class BarGroupCondensedMaker {
             val opacity = if (i % 2 == 0) "0.4" else "0.6"  // Alternating opacity
             sb.append("""
                 <line x1="$spot" x2="$spot" y1="30" y2="$bottom" class="light-shadow" stroke-width="1" stroke="${theme.lineColor}" stroke-opacity="$opacity" stroke-dasharray="${if (i % 4 == 0) "none" else "1,1"}" />
-                <text x="$spot" y="${bottom+10}" text-anchor="middle" style="font-size: 8px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(tickBar*i)}</text>
+                <text x="$spot" y="${bottom+15}" text-anchor="middle" style="font-size: 10px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(tickBar*i)}</text>
             """.trimIndent())
         }
 
@@ -337,10 +337,10 @@ class BarGroupCondensedMaker {
         return """
      <g>
         <rect x="20" y="18" width="85" height="16" rx="3" ry="3" fill="${theme.lineColor}" fill-opacity="0.1" />
-        <text x="107" y="28" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:10px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+        <text x="107" y="28" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
 
-        <rect x="112" y="18" width="85" height="16" rx="3" ry="3" fill="${theme.lineColor}" fill-opacity="0.1" />
-        <text x="115" y="28" text-anchor="start" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:10px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
+        <rect x="112" y="18" width="120" height="16" rx="3" ry="3" fill="${theme.lineColor}" fill-opacity="0.1" />
+        <text x="115" y="28" text-anchor="start" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
     </g>
         """.trimIndent()
     }
