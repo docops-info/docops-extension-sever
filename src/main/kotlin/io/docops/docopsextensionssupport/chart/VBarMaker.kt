@@ -10,12 +10,12 @@ import kotlin.math.max
 
 class VBarMaker {
     private var fontColor = ""
-    private var height = 400
-    private var width = 800
-    private val xAxisStart = 80
+    private var height = 500  // Increased height to accommodate labels
+    private var width = 900   // Increased width to provide more space
+    private val xAxisStart = 100  // Increased to provide more space for y-axis labels
     private val yAxisStart = 80
-    private val xAxisEnd = 720
-    private val yAxisEnd = 320
+    private val xAxisEnd = 800  // Adjusted to maintain proportions
+    private val yAxisEnd = 380  // Increased to provide more space for x-axis labels
     private val barWidth = 60
     private val barSpacing = 100 // Center-to-center spacing between bars
 
@@ -46,10 +46,20 @@ class VBarMaker {
         val labelColor = if (bar.display.useDark) "#e5e7eb" else "#666"
         val valueColor = if (bar.display.useDark) "#f9fafb" else "#333"
 
+        // Calculate available width for bars
+        val availableWidth = xAxisEnd - xAxisStart
+
+        // Adjust spacing based on number of bars to prevent overlapping
+        val adjustedBarSpacing = if (bar.series.size > 6) {
+            availableWidth / (bar.series.size + 1)
+        } else {
+            barSpacing
+        }
+
         // Create each bar with its own gradient
         bar.series.forEachIndexed { index, series ->
             val barHeight = (series.value / maxValue) * (yAxisEnd - yAxisStart)
-            val barX = xAxisStart + (index * barSpacing) + 40
+            val barX = xAxisStart + (index * adjustedBarSpacing) + (adjustedBarSpacing - barWidth) / 2
             val barY = yAxisEnd - barHeight
             val gradientId = "gradient${index + 1}"
 
@@ -69,8 +79,15 @@ class VBarMaker {
                     <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
                     <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
                 </rect>
-                <text x="${barX + barWidth/2}" y="${yAxisEnd + 20}" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="$labelColor">${series.label}</text>
+                <text x="${barX + barWidth/2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">${series.label}</text>
                 <text x="${barX + barWidth/2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
+            """.trimIndent())
+        }
+
+        // Add X-axis label
+        if (bar.xLabel != null && bar.xLabel.isNotEmpty()) {
+            sb.append("""
+                <text x="${(xAxisStart + xAxisEnd) / 2}" y="${yAxisEnd + 50}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="$labelColor">${bar.xLabel.escapeXml()}</text>
             """.trimIndent())
         }
 
@@ -96,10 +113,16 @@ class VBarMaker {
         // Define grid line color based on dark mode
         val gridLineColor = if (bar.display.useDark) "#374151" else "#eee"
 
+        // Calculate y-axis tick positions
+        val yAxisHeight = yAxisEnd - yAxisStart
+        val tickCount = 5
+        val tickSpacing = yAxisHeight / (tickCount - 1)
+
         // Add horizontal grid lines
-        for (y in 260 downTo 80 step 60) {
+        for (i in 0 until tickCount) {
+            val yPos = yAxisEnd - (i * tickSpacing)
             sb.append("""
-                <line x1="$xAxisStart" y1="$y" x2="$xAxisEnd" y2="$y" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>
+                <line x1="$xAxisStart" y1="$yPos" x2="$xAxisEnd" y2="$yPos" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>
             """.trimIndent())
         }
 
@@ -123,14 +146,27 @@ class VBarMaker {
         // Define text color based on dark mode
         val textColor = if (bar.display.useDark) "#e5e7eb" else "#666"
 
+        // Calculate y-axis tick positions
+        val yAxisHeight = yAxisEnd - yAxisStart
+        val tickCount = 5
+        val tickSpacing = yAxisHeight / (tickCount - 1)
+
         // Y-axis labels
-        sb.append("""
-            <text x="${xAxisStart - 10}" y="$yAxisEnd" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">0</text>
-            <text x="${xAxisStart - 10}" y="260" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">25</text>
-            <text x="${xAxisStart - 10}" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">50</text>
-            <text x="${xAxisStart - 10}" y="140" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">75</text>
-            <text x="${xAxisStart - 10}" y="80" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">100</text>
-        """.trimIndent())
+        for (i in 0 until tickCount) {
+            val yPos = yAxisEnd - (i * tickSpacing)
+            val value = (i * 25) // 0, 25, 50, 75, 100
+            sb.append("""
+                <text x="${xAxisStart - 15}" y="${yPos + 4}" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">$value</text>
+                <line x1="${xAxisStart - 5}" y1="$yPos" x2="$xAxisStart" y2="$yPos" stroke="$textColor" stroke-width="1"/>
+            """.trimIndent())
+        }
+
+        // Add Y-axis label
+        if (bar.yLabel != null && bar.yLabel.isNotEmpty()) {
+            sb.append("""
+                <text x="30" y="${(yAxisStart + yAxisEnd) / 2}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="$textColor" transform="rotate(-90, 30, ${(yAxisStart + yAxisEnd) / 2})">${bar.yLabel.escapeXml()}</text>
+            """.trimIndent())
+        }
 
         return sb.toString()
     }
@@ -162,14 +198,9 @@ class VBarMaker {
     }
 
     private fun addLegend(bar: Bar): String {
-        val legendBgColor = if (bar.display.useDark) "#374151" else "#f8f9fa"
-        val legendStrokeColor = if (bar.display.useDark) "#4b5563" else "#ddd"
-        val legendTextColor = if (bar.display.useDark) "#e5e7eb" else "#666"
-        return """
-            <!-- Legend -->
-            <rect x="300" y="360" width="200" height="30" rx="15" ry="15" fill="$legendBgColor" stroke="$legendStrokeColor" stroke-width="1"/>
-            <text x="400" y="380" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="$legendTextColor">${bar.xLabel ?: "Performance"}</text>
-        """.trimIndent()
+        // We're now adding the x-axis label directly in the addBars method
+        // This method is kept for potential future enhancements like adding a color legend
+        return ""
     }
 
     private fun addDefs(bar: Bar): String {
@@ -220,18 +251,18 @@ class VBarMaker {
 
 // Main function to test the VBarMaker implementation
 fun main() {
-    // Create sample data
+    // Create sample data with long labels to test overlapping
     val bar = Bar(
-        title = "Quarterly Performance",
-        yLabel = "Revenue ($)",
-        xLabel = "Quarter",
+        title = "Quarterly Performance with Long Labels",
+        yLabel = "Revenue in Thousands of Dollars ($)",
+        xLabel = "Quarters with Extended Descriptions",
         series = mutableListOf(
-            Series("Q1", 65.0),
-            Series("Q2", 85.0),
-            Series("Q3", 55.0),
-            Series("Q4", 78.0),
-            Series("Q5", 62.0),
-            Series("Q6", 90.0)
+            Series("Q1 - First Quarter", 65.0),
+            Series("Q2 - Second Quarter", 85.0),
+            Series("Q3 - Third Quarter", 55.0),
+            Series("Q4 - Fourth Quarter", 78.0),
+            Series("Q5 - Fifth Quarter", 62.0),
+            Series("Q6 - Sixth Quarter", 90.0)
         ),
         display = BarDisplay(baseColor = "#4361ee", useDark = false)
     )
@@ -244,4 +275,35 @@ fun main() {
     outfile.writeBytes(svg.toByteArray())
 
     println("Vertical bar chart saved to ${outfile.absolutePath}")
+
+    // Create another test with more bars to test spacing
+    val barWithMoreSeries = Bar(
+        title = "Monthly Performance with Many Bars",
+        yLabel = "Revenue in Thousands of Dollars ($)",
+        xLabel = "Months of the Year",
+        series = mutableListOf(
+            Series("January", 65.0),
+            Series("February", 85.0),
+            Series("March", 55.0),
+            Series("April", 78.0),
+            Series("May", 62.0),
+            Series("June", 90.0),
+            Series("July", 75.0),
+            Series("August", 80.0),
+            Series("September", 70.0),
+            Series("October", 85.0),
+            Series("November", 60.0),
+            Series("December", 95.0)
+        ),
+        display = BarDisplay(baseColor = "#4361ee", useDark = false)
+    )
+
+    // Generate the vertical bar chart with more bars
+    val svgWithMoreBars = VBarMaker().makeVerticalBar(barWithMoreSeries)
+
+    // Save the chart to a file
+    val outfileWithMoreBars = java.io.File("gen/vertical_bar_chart_more_bars.svg")
+    outfileWithMoreBars.writeBytes(svgWithMoreBars.toByteArray())
+
+    println("Vertical bar chart with more bars saved to ${outfileWithMoreBars.absolutePath}")
 }
