@@ -529,6 +529,19 @@
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>3.2.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.docops</groupId>
+                        <artifactId>asciidoctorj-docops-panel</artifactId>
+                        <version>${asciidoctorj-docops-panel.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <attributes>
+                        <panel-server>https://roach.gy/extension/</panel-server>
+                        <panel-webserver>https://roach.gy/extension/</panel-webserver>
+                    </attributes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>asciidoc-to-html</id>
@@ -539,14 +552,13 @@
                         <configuration>
                             <backend>html5</backend>
                             <attributes>
+                                <allow-uri-read/>
                                 <dataUri/>
                                 <toc>left</toc>
                                 <icons>font</icons>
                                 <sectanchors>true</sectanchors>
                                 <idprefix/>
                                 <idseparator>-</idseparator>
-                                <panel-server>https://roach.gy/extension</panel-server>
-                                <panel-webserver>https://roach.gy/extension</panel-webserver>
                             </attributes>
                         </configuration>
                     </execution>
