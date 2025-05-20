@@ -72,9 +72,10 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         this.pdf = isPdf
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
-        val head = head(entries, scale)
+        val id = UUID.randomUUID().toString()
+        val head = head(entries, scale, id)
         sb.append(head.first)
-        val defs = defs(isPdf)
+        val defs = defs(isPdf, id)
         val colors = defs.second
         sb.append(defs.first)
 
@@ -206,7 +207,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         </g>
         """.trimIndent()
     }
-    private fun head(entries: MutableList<Entry>, scale: String) : Pair<String, Int> {
+    private fun head(entries: MutableList<Entry>, scale: String, id: String) : Pair<String, Int> {
         var width = 0
         entries.forEachIndexed { index, entry ->
             width = 140 * index + 80
@@ -217,14 +218,14 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         return Pair("""
         <svg width="${(width * scaleF) / DISPLAY_RATIO_16_9}" height="${height/ DISPLAY_RATIO_16_9}" viewBox="0 0 ${width * scaleF} $height"
         preserveAspectRatio="xMidYMin slice"
-        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="id_$id">
         <desc>https://docops.io/extension</desc>
     """.trimIndent(),width)
     }
 
     private fun tail() : String = "</svg>"
 
-    private fun defs(isPdf: Boolean): Pair<String, MutableMap<Int, String>> {
+    private fun defs(isPdf: Boolean, id: String): Pair<String, MutableMap<Int, String>> {
         val colors = mutableMapOf<Int, String>()
         val sb = StringBuilder()
 
@@ -237,20 +238,20 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         //language=html
         var style = """
         <style>
-            .edge { filter: drop-shadow(0 2mm 2mm rgba(0, 0, 0, 0.2)); }
-            .cricleedge { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.15)); }
-            .odd { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
-            .even { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
-            .rmLink { fill: #1a73e8; text-decoration: underline; }
-            .main_pane { fill: #f8f9fa; }
-            .each_tm { fill: #fcfcfc; }
-            .tm_title { fill: rgba(0, 0, 0, 0.87); font-weight: 500; }
-            .timeline-entry { transition: transform 0.3s ease; }
-            .timeline-entry:hover { transform: scale(1.02); }
-            .timeline-date { font-weight: 600; letter-spacing: 0.5px; }
-            .timeline-text { line-height: 1.5; }
-            .timeline-marker { filter: drop-shadow(0 1mm 1mm rgba(0, 0, 0, 0.1)); }
-            .timeline-road { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1)); }
+            #id_$id .edge { filter: drop-shadow(0 2mm 2mm rgba(0, 0, 0, 0.2)); }
+            #id_$id .cricleedge { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.15)); }
+            #id_$id .odd { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
+            #id_$id .even { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
+            #id_$id .rmLink { fill: #1a73e8; text-decoration: underline; }
+            #id_$id .main_pane { fill: #f8f9fa; }
+            #id_$id .each_tm { fill: #fcfcfc; }
+            #id_$id .tm_title { fill: rgba(0, 0, 0, 0.87); font-weight: 500; }
+            #id_$id .timeline-entry { transition: transform 0.3s ease; }
+            #id_$id .timeline-entry:hover {  }
+            #id_$id .timeline-date { font-weight: 600; letter-spacing: 0.5px; }
+            #id_$id .timeline-text { line-height: 1.5; }
+            #id_$id .timeline-marker { filter: drop-shadow(0 1mm 1mm rgba(0, 0, 0, 0.1)); }
+            #id_$id .timeline-road { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1)); }
         </style>
         """.trimIndent()
         if(isPdf) {
