@@ -122,8 +122,9 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
         var l1 = ""
         var l2 = ""
         if(theme.hexLinesEnabled) {
-            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:#fcfcfc;stroke-width:1;stroke-opacity:0.7"/>"""
-            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:#fcfcfc;stroke-width:1;stroke-opacity:0.7"/>"""
+            val lineColor = determineTextColor(button.color!!)
+            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
+            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
         }
         return """
         <g transform="translate($x,$y)" cursor="pointer">
