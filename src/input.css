@@ -1,3 +1,39 @@
+@import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* You can add custom styles below using @layer if needed */
+@layer components {
+    /* Example of custom component styles */
+    .btn-primary {
+        @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors;
+    }
+
+    .btn-secondary {
+        @apply border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors;
+    }
+
+    .feature-card {
+        @apply bg-gray-50 p-6 rounded-lg;
+    }
+
+    .feature-icon {
+        @apply w-12 h-12 rounded-lg flex items-center justify-center mb-4;
+    }
+
+    .code-block {
+        @apply bg-gray-900 rounded-lg p-4;
+    }
+}
+
+/* If you need any custom CSS that can't be handled with Tailwind utilities */
+@layer utilities {
+    .bg-gradient-hero {
+        background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        --tw-gradient-from: #2563EB;
+        --tw-gradient-to: #7C3AED;
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+}
+
