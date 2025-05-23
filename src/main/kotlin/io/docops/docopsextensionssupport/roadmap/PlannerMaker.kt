@@ -7,6 +7,20 @@ import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
+// DocOps branding colors based on the legend.html branding look
+val DOCOPS_BRANDING_COLORS = listOf(
+    // Business Capability (Red gradient)
+    "#eb0e0e",
+    // Engineering (Blue gradient)
+    "#004680",
+    // Both (Pink gradient)
+    "#ff6dd0",
+    // Additional colors from the original STUNNINGPIE
+    "#e6d800", // Yellow
+    "#50e991", // Green
+    "#9b19f5"  // Purple
+)
+
 class PlannerMaker {
 
     fun makePlannerImage(source: String, title: String, scale: String): String {
@@ -23,15 +37,19 @@ class PlannerMaker {
         sb.append("""
             <defs>
                 <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
-                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.3" flood-color="#000000" />
+                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
                 </filter>
+                <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
+                </linearGradient>
             </defs>
-            <text x="${width/2}" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 42px; font-weight: bold; filter: url(#title-shadow);">${title.escapeXml()}</text>
+            <text x="${width/2}" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">${title.escapeXml()}</text>
         """)
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
         cols.forEach { (key, value) ->
-            var color = STUNNINGPIE[column % STUNNINGPIE.size]
+            var color = DOCOPS_BRANDING_COLORS[column % DOCOPS_BRANDING_COLORS.size]
             if(value[0].color != null) {
                 color = value[0].color!!
             }
@@ -80,26 +98,37 @@ private fun itemGradient(planItems: PlanItems): String {
             sb.append("""
                 <defs>
                     <filter id="shadow-${planItem.id}" x="-10%" y="-10%" width="120%" height="120%">
-                        <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.2" />
+                        <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" />
                     </filter>
+                    <linearGradient id="card-gradient-${planItem.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" />
+                    </linearGradient>
                 </defs>
-                <rect x="0" y="0" fill="#fcfcfc" height="360" width="552" rx="8" ry="8"
-                          style="fill: #fcfcfc; font-family: Arial, Helvetica, sans-serif; stroke: $color;stroke-width: 2; filter: url(#shadow-${planItem.id});"/>
-                        <path d="M 0 8.0 A 8.0 8.0 0 0 1 8.0 0 L 544.0 0 A 8.0 8.0 0 0 1 552.0 8.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z
-                " fill="$color"/>
+                <rect x="0" y="0" height="360" width="552" rx="12" ry="12"
+                      style="fill: url(#card-gradient-${planItem.id}); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-${planItem.id});"/>
+                <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z"
+                      fill="$color"/>
             """.trimIndent())
 
             planItem.title?.let {
                 val textColor = determineTextColor(columnColor)
-                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px; font-weight: 600;">${planItem.title}</text>""")
+                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;">${planItem.title}</text>""")
             }
             planItem.content?.let {
                 //todo fix url
                 val contentList = itemTextWidth(planItem.content!!, 532F, 24, "Helvetica")
                 val list = linesToUrlIfExist(contentList, planItem.urlMap)
-                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #333333; font-size: 20px;'>")
+                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px; line-height: 1.5;'>")
                 list.forEachIndexed { index, string ->
-                    sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #333333; font-size: 20px;">${string}</tspan>""")
+                    // Check if the line starts with a bullet point
+                    if (string.startsWith("•")) {
+                        // Render bullet point with proper indentation
+                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px; font-weight: 600;">• </tspan>""")
+                        sb.append("""<tspan style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px;">${string.substring(1)}</tspan>""")
+                    } else {
+                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px;">${string}</tspan>""")
+                    }
                 }
                 sb.append("</text>")
             }
@@ -113,7 +142,7 @@ private fun itemGradient(planItems: PlanItems): String {
                     <feGaussianBlur stdDeviation="2" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; font-weight: bold; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
+                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; font-weight: bold; letter-spacing: 1px; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()

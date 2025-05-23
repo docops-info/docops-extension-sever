@@ -6,6 +6,36 @@ import java.io.File
 class PlannerMakerTest {
 
     @Test
+    fun testBulletPoints() {
+        val content = """
+- now
+* Implement user authentication system
+* Set up CI/CD pipeline
+* Create database schema
+- next
+* Develop REST API endpoints
+* Build frontend components
+* Implement search functionality
+- later
+* Add analytics dashboard
+* Optimize performance
+* Implement advanced features
+- done
+* Project requirements gathering
+* Architecture design
+* Technology stack selection
+        """.trimIndent()
+
+        val plannerMaker = PlannerMaker()
+        val svg = plannerMaker.makePlannerImage(content, "Project Roadmap", "1.0")
+
+        val outputFile = File("gen/planner-bullet-test.svg")
+        outputFile.writeBytes(svg.toByteArray())
+
+        println("SVG with bullet points generated at: ${outputFile.absolutePath}")
+    }
+
+    @Test
     fun testMakePlannerImage() {
         val str = """
 - now Docker

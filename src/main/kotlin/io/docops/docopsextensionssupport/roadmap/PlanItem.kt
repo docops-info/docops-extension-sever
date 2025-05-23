@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
+import io.docops.docopsextensionssupport.roadmap.DOCOPS_BRANDING_COLORS
 import io.docops.docopsextensionssupport.support.SVGColor
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -74,7 +75,7 @@ class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
         val sb = StringBuilder()
         var column = 0
         planItems.forEach { (t, u) ->
-            val color = STUNNINGPIE[column % STUNNINGPIE.size]
+            val color = DOCOPS_BRANDING_COLORS[column % DOCOPS_BRANDING_COLORS.size]
             val grad = SVGColor(color, "planItem_$column")
             sb.append(grad.linearGradient)
             column++
@@ -83,4 +84,3 @@ class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
 
     }
 }
-

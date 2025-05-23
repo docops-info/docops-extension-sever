@@ -19,19 +19,24 @@ class PlannerParser {
                     val item = parseLine(lineToParse)
                     items.add(item)
                     //currentType = item.type
-                    item.addContent(bodyContent.joinToString(" "))
+                    item.addContent(bodyContent.joinToString("\n"))
                 }
                 bodyContent = mutableListOf()
                 counter++
                 //header line
             }  else {
                 //body content
-                bodyContent.add(string)
+                // Check if line starts with * and mark it as a bullet point
+                if(string.startsWith("* ")) {
+                    bodyContent.add("•" + string.substring(1))
+                } else {
+                    bodyContent.add(string)
+                }
             }
         }
         val item = parseLine(currentType)
         items.add(item)
-        item.addContent(bodyContent.joinToString(" "))
+        item.addContent(bodyContent.joinToString("\n"))
         return PlanItems(items = items)
     }
 
@@ -56,6 +61,3 @@ class PlannerParser {
     }
 
 }
-
-
-
