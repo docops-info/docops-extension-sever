@@ -26,7 +26,7 @@ class ComparisonChartController {
     @Timed(value = "docops.comp.put", description = "Creating a comparison chart http put", percentiles = [0.5, 0.9])
     fun makePieChart(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
-            var contents = httpServletRequest.getParameter("content")
+            val contents = httpServletRequest.getParameter("content")
             val maker = ComparisonTableMaker()
             val comp = Json.decodeFromString<ComparisonChart>(contents)
             val svg = maker.make(comp)

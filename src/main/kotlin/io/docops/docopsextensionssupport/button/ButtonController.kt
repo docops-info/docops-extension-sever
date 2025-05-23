@@ -23,6 +23,8 @@ import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
+import jakarta.servlet.http.HttpServletRequest
+import jdk.internal.org.jline.utils.InfoCmp
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -43,6 +45,84 @@ import kotlin.time.measureTimedValue
 class ButtonController @Autowired constructor(private val applicationContext: ApplicationContext, private val objectMapper: ObjectMapper){
     private val log = LoggerFactory.getLogger(ButtonController::class.java)
     private val themeMap = mutableMapOf<String, String>()
+
+    @GetMapping("/buttons/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultButtonsJson = """
+        {
+          "buttons": [
+            {
+              "label": "Amazon",
+              "link": "https://www.amazon.com",
+              "description": "E-commerce, cloud computing, digital streaming",
+              "embeddedImage": {"ref": "<Amazon>"}
+            },
+            {
+              "label": "Apple",
+              "link": "https://www.apple.com",
+              "description": "Consumer electronics, software and services",
+              "embeddedImage": {"ref": "<Apple>"}
+            },
+            {
+              "label": "DocOps.io",
+              "link": "https://docops.io",
+              "description": "Documentation experience for developers",
+              "embeddedImage": {"ref": "images/docops.svg"}
+            }
+          ],
+          "buttonType": "HEX",
+          "theme": {"hexLinesEnabled": true,"strokeColor": "#7695FF","colors": ["#353d4b"],"scale": 1,"columns": 3}
+        }
+        """.trimIndent()
+
+        val editModeHtml = """
+            <div id="buttonsContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/buttons" hx-target="#buttonsPreview" class="space-y-4">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Buttons JSON:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultButtonsJson}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Buttons
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/buttons/view-mode"
+                                hx-target="#buttonsContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="buttonsPreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Buttons" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/buttons/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="buttonsContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/buttons.svg" type="image/svg+xml" height="100%" width="100%" class="max-h-full max-w-full">
+                <img src="images/buttons.svg" alt="Hexagonal Buttons" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
 
     init {
         val themeList = applicationContext.getResources("classpath:static/buttondisplay/*.json")
@@ -144,10 +224,17 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
     @Counted(value="Docops.ButtonController.put.fromJsonToButton.count", description="Success Fail count of fromJsonToButton")
     @PutMapping("/buttons")
     @ResponseBody
-    fun fromJsonToButton(@RequestBody buttons: Buttons): ResponseEntity<ByteArray> {
+    fun fromJsonToButton(httpServletRequest : HttpServletRequest): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
-                createResponse(buttons, false, "SVG")
+                val contents = httpServletRequest.getParameter("content")
+                if(contents.isNotEmpty()) {
+                    val buttons = Json.decodeFromString<Buttons>(contents)
+                     createResponse(buttons, false, "SVG")
+
+                } else {
+                    ResponseEntity.badRequest().body("No Payload Found".toByteArray(StandardCharsets.UTF_8))
+                }
             }
             log.info("fromJsonToButton executed in ${timing.duration.inWholeMilliseconds}ms ")
             return timing.value

@@ -46,6 +46,61 @@ import javax.xml.xpath.*
 @RequestMapping("/api")
 class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator){
 
+    @GetMapping("/badge/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultBadgeContent = """Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<Java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc"""
+
+        val editModeHtml = """
+            <div id="badgeContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-post="api/badges" hx-target="#badgePreview" class="space-y-4">
+                    <div>
+                        <label for="payload" class="block text-sm font-medium text-gray-700 mb-1">Edit Badge Configuration:</label>
+                        <textarea id="payload" name="payload" rows="6" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultBadgeContent}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Badges
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/badge/view-mode"
+                                hx-target="#badgeContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="badgePreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Badges" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/badge/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="badgeContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/badge.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/badge.svg" alt="Badges & Shields" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
     /**
      * Retrieves a badge based on the provided form data and sends it as a response.
      *
@@ -221,19 +276,20 @@ $txt
     ):  ResponseEntity<ByteArray>{
         //val data = uncompressString(payload)
         val data = (URLDecoder.decode(payload,"UTF-8"))
+        val allLines = data.split("\\r?\\n".toRegex())
         val lines = mutableListOf<String>()
         var x = 0.0f
         var y = 0.0f
         val buffer = 5.0f
         val str = StringBuilder()
         var count =0
-        data.lines().forEach { line ->
+        allLines.forEach { line ->
             val split = line.split("|")
             var link = ""
             if (split.size > 2) {
                 link = split[2]
             }
-            if (split.size != 6) {
+            if (split.size != 7) {
                 throw BadgeFormatException("Badge Format invalid, expecting 5 pipe delimited values [$data]")
             }
             val message: String = split[1]

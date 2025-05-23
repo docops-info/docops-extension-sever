@@ -116,16 +116,16 @@
       {
         "cells": [
           {
-            "data": "Too Sweet Header or Saturn or Snooze then Luther", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
+            "data": "Too Sweet Header or Saturn or Snooze then Luther", "display": {"fill": {"color": "#1447e6"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
           },
           {
-            "data": "Header 2", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px;font-weight: 700;fill: #fcfcfc;"}
+            "data": "Header 2", "display": {"fill": {"color": "#1447e6"}, "style": "font-family: Arial, Helvetica; font-size:12px;font-weight: 700;fill: #fcfcfc;"}
           },
           {
-            "data": "Header 3", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc;"}
+            "data": "Header 3", "display": {"fill": {"color": "#1447e6"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc;"}
           },
           {
-            "data": "Header 4", "display": {"fill": {"color": "#143D60"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
+            "data": "Header 4", "display": {"fill": {"color": "#1447e6"}, "style": "font-family: Arial, Helvetica; font-size:12px; font-weight: 700;fill: #fcfcfc; "}
           }
         ]
       }

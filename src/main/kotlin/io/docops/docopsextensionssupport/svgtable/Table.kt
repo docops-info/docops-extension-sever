@@ -70,27 +70,29 @@ class Table(
         return """
             <defs>
             ${getColorGradients()}
-            <filter id="shadow" x="0" y="0" width="200%" height="200%">
-            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1"/>
-        </filter>
-        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
-            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut"
-                                lighting-color="white">
-                <fePointLight x="-5000" y="-10000" z="0000"/>
-            </feSpecularLighting>
-            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
-                         result="litPaint"/>
-        </filter>
-        <style>.rowShade {
-            pointer-events: bounding-box;
-        }
+            <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop class="stop1" offset="0%" stop-color="#2563eb" stop-opacity="1"/>
+                <stop class="stop2" offset="100%" stop-color="#9333ea" stop-opacity="1"/>
+            </linearGradient>
 
-        .rowShade:hover {
-            filter: grayscale(100%) sepia(100%);
-        }</style>
-        </defs>
+            <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop class="stop3" offset="0%" stop-color="#fafafa" stop-opacity="1"/>
+                <stop class="stop2" offset="50%" stop-color="#f9fafb" stop-opacity="1"/>
+                <stop class="stop1" offset="100%" stop-color="#f3f4f6" stop-opacity="1"/>
+            </linearGradient>
+
+            <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1"/>
+            </filter>
+
+            <style>.rowShade {
+                pointer-events: bounding-box;
+            }
+
+            .rowShade:hover {
+                filter: grayscale(100%) sepia(100%);
+            }</style>
+            </defs>
         """.trimMargin()
     }
     /**
@@ -156,7 +158,7 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
             var currentX = INITIAL_OFFSET
             val rowColor = row.display.fill
             sb.append("<g aria-label=\"Header Row\">")
-            sb.append("""<rect x="1" y="0" width="100%" height="$HEADER_ROW_HEIGHT" fill="${rowColor.color}"/>""")
+            sb.append("""<rect x="1" y="0" width="100%" height="$HEADER_ROW_HEIGHT" fill="url(#headerGradient)" rx="4" ry="4"/>""")
 
             var startX = 1.0
             row.cells.forEachIndexed { i, cell ->
@@ -166,9 +168,9 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
                 }
                 val fontColor = determineTextColor(cellColor)
                 val fontStyle = cell.display.parseFontStyle()
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: ${fontStyle.size}px; fill: ${fontColor};", dy = fontStyle.size)
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: ${fontStyle.size}px; fill: ${fontColor}; letter-spacing: 0.5px;", dy = fontStyle.size)
                 sb.append("<g class=\"rowShade\" aria-label=\"header column ${i+1} cellcolor $cellColor $fontColor\">")
-                sb.append("""<rect x="$startX" y="0" fill="url(#${cell.display.fill.id})" width="${cellWidths[i].width}" height="${maxOf(rowHeight,18f)}" stroke="#cccccc"/>""")
+                sb.append("""<rect x="$startX" y="0" fill="$cellColor" width="${cellWidths[i].width}" height="${maxOf(rowHeight,18f)}" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
                 sb.append(lines)
                 currentX += cellWidths[i].width + CELL_PADDING
                 startX += cellWidths[i].width
@@ -223,16 +225,18 @@ internal class TBody(private val rows: MutableList<Row>, val headerHeight: Float
             sb.append("<g>")
             sb.append("<g aria-label=\"Row ${j+1}\">")
             var currentX = INITIAL_OFFSET
-            sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="${getColorForNumber(i)}"/>""")
+            sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="url(#backgroundGradient)" filter="url(#shadowFilter)" rx="4" ry="4"/>""")
             row.cells.forEachIndexed { k, cell ->
-                var cellColor = getColorForNumber(i)
+                var cellColor = "#f9fafb"
+                var fontColor = "374151"
                 if(!cell.display.isDefault) {
                     cellColor = cell.display.fill.color
+                    fontColor = determineTextColor(cellColor)
                 }
-                val fontColor = determineTextColor(cellColor)
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: ${fontColor};",)
+
+                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12px; fill: $fontColor; letter-spacing: 0.2px;",)
                 sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1}\">")
-                sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#cccccc"/>""")
+                sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
                 sb.append(lines)
                 currentX += cellWidths[k].width + CELL_PADDING
                 sb.append("</g>")
@@ -362,7 +366,7 @@ class Cell(
         lines: MutableList<String>,
         startX: Float,
         startY: Float,
-        style: String = "font-family: Arial; font-size: 12px; fill: #000000;",
+        style: String = "font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #374151; letter-spacing: 0.2px;",
         dy: Float = 12f
     ): String {
         require(startX >= 0) { "startX must be non-negative" }
@@ -387,11 +391,11 @@ class Cell(
 @Serializable
 class DisplayConfig(
     val fill: SVGColor = SVGColor("#fcfcfc"),
-    val fontColor: SVGColor = SVGColor("#000000"),
+    val fontColor: SVGColor = SVGColor("#374151"),
     val scale: Float = 1.0f,
-    val style: String = "font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; fill: #000000;"
+    val style: String = "font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12px; fill: #374151; letter-spacing: 0.2px;"
 ) {
-    val isDefault = fill.color == "#fcfcfc" && fontColor.color == "#000000" && scale == 1.0f
+    val isDefault = fill.color == "#fcfcfc" && fontColor.color == "#374151" && scale == 1.0f
 
     fun parseFontStyle(): ParsedFont {
         val fontSizeRegex = """font-size:\s*([\d.]+)px""".toRegex()

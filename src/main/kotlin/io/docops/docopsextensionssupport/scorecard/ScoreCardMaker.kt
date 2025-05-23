@@ -104,7 +104,7 @@ class ScoreCardMaker {
     fun defs(scoreCard: ScoreCard): String {
 
         var style = """
-            
+
             <script>
                 var reveal = function () {
                     var elems = document.querySelectorAll('#d${scoreCard.id} [display="none"]');
@@ -122,52 +122,44 @@ class ScoreCardMaker {
         val gradBevel = gradientFromColor(scoreCard.scoreCardTheme.backgroundColor)
         return """
             <defs>
-            <linearGradient id="header_${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop class="stop3" offset="0%" stop-color="${headerGrad["color1"]}" stop-opacity="1"/>
-                <stop class="stop2" offset="50%" stop-color="${headerGrad["color2"]}" stop-opacity="1"/>
-                <stop class="stop1" offset="100%" stop-color="${headerGrad["color3"]}" stop-opacity="1"/>
-            </linearGradient>
-            
-            <linearGradient id="bevelGradient${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop class="stop3" offset="0%" stop-color="${gradBevel["color1"]}" stop-opacity="1"/>
-            <stop class="stop2" offset="50%" stop-color="${gradBevel["color2"]}" stop-opacity="1"/>
-            <stop class="stop1" offset="100%" stop-color="${gradBevel["color3"]}" stop-opacity="1"/>
+            <linearGradient id="header_${scoreCard.id}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop class="stop1" offset="0%" stop-color="#2563eb" stop-opacity="1"/>
+                <stop class="stop2" offset="100%" stop-color="#9333ea" stop-opacity="1"/>
             </linearGradient>
 
-            <filter id="bevelFilter" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-                <feOffset in="blur" dx="2" dy="2" result="offsetBlur"/>
-                <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.75" specularExponent="20"
-                                    lighting-color="#bbbbbb" result="specOut">
-                    <fePointLight x="5000" y="-5000" z="20000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
-                <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+            <linearGradient id="bevelGradient${scoreCard.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop class="stop3" offset="0%" stop-color="#fafafa" stop-opacity="1"/>
+            <stop class="stop2" offset="50%" stop-color="#f9fafb" stop-opacity="1"/>
+            <stop class="stop1" offset="100%" stop-color="#f3f4f6" stop-opacity="1"/>
+            </linearGradient>
+
+            <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1"/>
             </filter>
             ${arrowHead(scoreCard)}
-            
+
             ${buildGradientDef(scoreCard.scoreCardTheme.arrowColor, "arrowColor", scoreCard = scoreCard)}
             <linearGradient id="leftBullet" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#f9b890"/>
-                <stop class="stop2" offset="50%" stop-color="#f69458"/>
-                <stop class="stop3" offset="100%" stop-color="#F37121"/>
+                <stop class="stop1" offset="0%" stop-color="#93c5fd"/>
+                <stop class="stop2" offset="50%" stop-color="#3b82f6"/>
+                <stop class="stop3" offset="100%" stop-color="#2563eb"/>
             </linearGradient>
             <linearGradient id="rightBullet" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#82b09d"/>
-                <stop class="stop2" offset="50%" stop-color="#44896c"/>
-                <stop class="stop3" offset="100%" stop-color="#06623B"/>
+                <stop class="stop1" offset="0%" stop-color="#d8b4fe"/>
+                <stop class="stop2" offset="50%" stop-color="#a855f7"/>
+                <stop class="stop3" offset="100%" stop-color="#9333ea"/>
             </linearGradient>
             $style
             </defs>
-            <rect width="100%" height="100%" fill="url(#bevelGradient${scoreCard.id})" filter="url(#bevelFilter)"/>
-            <rect width="100%" height="50" fill="url(#header_${scoreCard.id})"/>
-            
+            <rect width="100%" height="100%" fill="url(#bevelGradient${scoreCard.id})" filter="url(#shadowFilter)" rx="8" ry="8"/>
+            <rect width="100%" height="50" fill="url(#header_${scoreCard.id})" rx="8" ry="8"/>
+
         """.trimIndent()
     }
 
     private fun arrowHead(scoreCard: ScoreCard) =
         """<marker id="arrowhead1" markerWidth="2" markerHeight="5" refX="0" refY="1.5" orient="auto">
-            <polygon points="0 0, 1 1.5, 0 3" fill="${scoreCard.scoreCardTheme.arrowColor}"/>
+            <polygon points="0 0, 1 1.5, 0 3" fill="#6366f1"/>
         </marker>"""
 
     private fun gradientBackGround(scoreCard: ScoreCard): String {
@@ -187,10 +179,10 @@ class ScoreCardMaker {
             reveal = """onclick="reveal();" cursor="pointer""""
         }
         return """
-    <text x="522.5" y="20" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.titleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.title}</text>
-    <text x="255" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.initiativeTitleColor}; letter-spacing: normal;font-weight: bold;" >${scoreCard.initiativeTitle}</text>
-    <text x="755.5" y="40" style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 12px; fill: ${scoreCard.scoreCardTheme.outcomeTitleColor}; letter-spacing: normal;font-weight: bold;"  $reveal>${scoreCard.outcomeTitle}</text>
-   <line x1="522.5" x2="522.5" y1="50" y2="${height-10}" stroke="#21252B" stroke-dasharray="2"/>
+    <text x="522.5" y="20" style="font-family: 'Segoe UI', Arial, sans-serif; text-anchor:middle; font-size: 16px; fill: white; letter-spacing: 0.5px; font-weight: bold;" >${scoreCard.title}</text>
+    <text x="255" y="40" style="font-family: 'Segoe UI', Arial, sans-serif; text-anchor:middle; font-size: 14px; fill: white; letter-spacing: 0.5px; font-weight: 600;" >${scoreCard.initiativeTitle}</text>
+    <text x="755.5" y="40" style="font-family: 'Segoe UI', Arial, sans-serif; text-anchor:middle; font-size: 14px; fill: white; letter-spacing: 0.5px; font-weight: 600;"  $reveal>${scoreCard.outcomeTitle}</text>
+   <line x1="522.5" x2="522.5" y1="50" y2="${height-10}" stroke="#e5e7eb" stroke-dasharray="2"/>
         """.trimIndent()
     }
 
@@ -211,13 +203,13 @@ class ScoreCardMaker {
             val h = 12+ itemArray.size * 12f
             sb.append(
                 """
-                
+
                 <g transform="translate(10, $startY)">
                 $LEFT_STAR
                     <text x="15" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
                         ${itemsToSpan(itemArray, scoreCard.scoreCardTheme.initiativeDisplayTextColor, startX= 20)}
                     </text>
-                    <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
+                    <line x1="10" x2="460" y1="$h" y2="$h" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
                 </g>
             """.trimIndent()
             )
@@ -234,7 +226,7 @@ class ScoreCardMaker {
             indent = 10
         }
         sb.append("""
-            <tspan x="$indent" dy="12" style="fill:${color};font-family: Arial, Helvetica, sans-serif;">${str.escapeXml()}</tspan>
+            <tspan x="$indent" dy="12" style="fill:#374151;font-family: 'Segoe UI', Arial, sans-serif;font-size: 12px;letter-spacing: 0.2px;">${str.escapeXml()}</tspan>
         """.trimIndent())
             }
         return sb.toString()
@@ -264,7 +256,7 @@ class ScoreCardMaker {
         <text x="30" y="7" style="font-family: Arial, Helvetica, sans-serif;  font-size: 12px;" >
             ${itemsToSpan(itemArray, scoreCard.scoreCardTheme.outcomeDisplayTextColor, 25)}
         </text>
-        <line x1="10" x2="460" y1="$h" y2="$h" stroke="#21252B" stroke-dasharray="2"/>
+        <line x1="10" x2="460" y1="$h" y2="$h" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
     </g>
             """.trimIndent()
             )
@@ -274,19 +266,19 @@ class ScoreCardMaker {
     }
 
     private fun arrowLine(scoreCard: ScoreCard): String {
-        var grad = "url(#${scoreCard.id}_arrowColor)"
-        if (isPdf) {
-            grad = scoreCard.scoreCardTheme.arrowColor
-        }
         return """
         <g transform="translate(490,25)" >
-            <line x1="10" x2="50" y1="10" y2="10" stroke="${scoreCard.scoreCardTheme.arrowColor}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="10" x2="50" y1="10" y2="10" stroke="#f97316" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             <g transform="translate(50,7.5)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="$grad" stroke-width="3"
-                         fill="$grad"/>
+                <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f97316"/>
+                    <stop offset="100%" stop-color="#ea580c"/>
+                </linearGradient>
+                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke="#ffffff" stroke-width="1"
+                         fill="url(#arrowGradient)"/>
             </g>
         </g>
-        
+
         """.trimIndent()
     }
 
@@ -402,7 +394,7 @@ fun main() {
   }
 }
 
-            
+
     """.trimIndent()
     )
     val scoreCardMaker = ScoreCardMaker()

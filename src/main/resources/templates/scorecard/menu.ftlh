@@ -13,28 +13,7 @@
 </div>
 <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
     <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" data-hx-get="scorecard/index.html?type=score2" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Light</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-pink" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Pink</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-purple" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Purple</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-green" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Green</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-red" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Red</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-blue" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Blue</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score-yellow" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Yellow</a>
-    </li>
-    <li class="me-2">
-        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="scorecard/index.html?type=score1" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Dark</a>
+        <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" data-hx-get="scorecard/index.html?type=score2" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Scorecard</a>
     </li>
     <li class="me-2">
         <a href="#"  class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" hx-get="comp.html" data-hx-target="#scorecardTarget"><i class="fad fa-circle-half-stroke text-xs mr-2"></i> Comparison Chart</a>

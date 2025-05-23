@@ -41,6 +41,70 @@ class BoxyController {
 
     private val log = KotlinLogging.logger {  }
 
+    @GetMapping("/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultConnectorJson = """
+        {
+          "connectors": [
+            {"text": "Engineer","description": "Creates tests"},
+            {"text": "Unit Tests","description": "Run Unit Tests"},
+            {"text": "GitHub","description": "Upload to Github"},
+            {"text": "Test Engine","description": "GitHub webhook plugged into engine"},
+            {"text": "GitHub","description": "Results stored in Github"},
+            {"text": "API Documentation","description": "API documentation ready for consumption"}
+          ]
+        }
+        """.trimIndent()
+
+        val editModeHtml = """
+            <div id="connectorContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/connector/" hx-target="#connectorPreview" class="space-y-4">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Connector JSON:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultConnectorJson}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Connector
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/connector/view-mode"
+                                hx-target="#connectorContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="connectorPreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Connector" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="connectorContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/connector.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/connector.svg" alt="Flow Connectors" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
     /**
      * Generates a diagnostic image and returns it as a response entity.
      *
@@ -60,7 +124,10 @@ class BoxyController {
                 contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
                 title = httpServletRequest.getParameter("title")
             }
-            val scale = httpServletRequest.getParameter("scale")
+            var scale = httpServletRequest.getParameter("scale")
+            if(scale.isNullOrEmpty()) {
+                scale = "1.0"
+            }
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val svg = fromRequestToConnector(contents = contents, scale =  scale.toFloat(), useDark = "on" == useDarkInput)
             val headers = HttpHeaders()

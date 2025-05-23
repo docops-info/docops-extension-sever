@@ -44,7 +44,7 @@
     }
   ],
     "display": {
-          "itemColumnColor": "#e0f0ea"
+          "itemColumnColor": "#fafafa"
     }
 }
         </textarea>
@@ -62,12 +62,7 @@
         "display": {
              "scale": 1,
              "titleFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:24px; text-anchor:middle; font-weight: bold; font-variant: small-caps;",
-             "leftColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
-             "rightColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;",
-             "leftColumnColor":   "#F73D93",
-             "leftColumnFontColor":   "#fcfcfc",
-             "rightColumnColor":   "#03C988",
-             "rightColumnFontColor":   "#fcfcfc"
+             "leftColumnHeaderFontStyle":   "font-family: Arial,Helvetica, sans-serif; fill: #111111; font-size:20px; text-anchor:middle; font-weight: bold;"
         }
         </code></pre>
     </div>

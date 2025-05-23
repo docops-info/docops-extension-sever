@@ -45,30 +45,29 @@ class ComparisonTableMaker {
 
     private fun headerRow(comparisonChart: ComparisonChart, lastLine: Int) : String {
         val sb = StringBuilder()
-        val textColor = determineTextColor(comparisonChart.display.itemColumnColor)
         //language=svg
         sb.append("""
             <g aria-label="title">
-            <rect y="0" width="100%" height="30" fill="${comparisonChart.display.itemColumnColor}" aria-label="title bar" />
-            <text x="512" y="24" text-anchor="middle" style="${comparisonChart.display.titleFontStyle}; fill:$textColor;" aria-label='${comparisonChart.title}'>${comparisonChart.title.escapeXml()}</text>
+            <rect y="0" width="100%" height="30" fill="url(#header_${comparisonChart.id})" aria-label="title bar" rx="8" ry="8" />
+            <text x="512" y="24" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; fill: white; letter-spacing: 0.5px; font-weight: bold;" aria-label='${comparisonChart.title}'>${comparisonChart.title.escapeXml()}</text>
             </g>
             <g aria-label="header" class="rowShade">
                <g transform="translate(0,0)">
-                <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" />
+                <rect y="30" width="341" height="34" fill="${comparisonChart.display.itemColumnColor}" rx="4" ry="4" />
                 </g>
                 <g transform="translate(341,0)">
-                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column header'/>
-                    <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.leftColumnHeaderFontStyle}">
+                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.leftColumnColor}" aria-label='middle column header' rx="4" ry="4" />
+                    <text x="170" y="56" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #374151; letter-spacing: 0.5px; font-weight: 600;">
                          ${comparisonChart.colHeader[0].escapeXml()}
                     </text>
                 </g>
                 <g transform="translate(682,0)">
-                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column header'/>
-                    <text x="170" y="56" text-anchor="middle" style="${comparisonChart.display.rightColumnHeaderFontStyle}">
+                    <rect y="30" width="341" height="34" fill="${comparisonChart.display.rightColumnColor}" aria-label='right column header' rx="4" ry="4" />
+                    <text x="170" y="56" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #374151; letter-spacing: 0.5px; font-weight: 600;">
                          ${comparisonChart.colHeader[1].escapeXml()}
                     </text>
                 </g>
-                <line x1="0" x2="1024" y1="64" y2="64" stroke="#cccccc"/>
+                <line x1="0" x2="1024" y1="64" y2="64" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
             </g>
         """.trimIndent())
         return sb.toString()
@@ -85,18 +84,18 @@ class ComparisonTableMaker {
     ) : String {
         val sb = StringBuilder()
         //col 1
-        val textColor = determineTextColor(display.itemColumnColor)
+        val textColor = "#374151"
 
         val rowHeight = 34 + ((totalLinesMax-1) * 12)
 
         val dy = 0
         val sb2 = StringBuilder()
-        columnText(keyToRows, dy, sb2, determineTextColor(display.itemColumnColor))
+        columnText(keyToRows, dy, sb2, textColor)
         sb.append("<g aria-label=\"row $idx\" class=\"rowShade\">")
         sb.append("""
         <g transform="translate(0,$startY)">    
-        <rect y="0" width="341" height="$rowHeight" fill="${display.itemColumnColor}" />
-        <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; fill: $textColor;" x="5" y="24">
+        <rect y="0" width="341" height="$rowHeight" fill="${display.itemColumnColor}" rx="4" ry="4" />
+        <text style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; fill: $textColor; letter-spacing: 0.2px;" x="10" y="24">
             $sb2
         </text>
         </g>
@@ -109,19 +108,19 @@ class ComparisonTableMaker {
         }
         sb.append("""
             <g transform="translate(341,$startY)">
-            <rect y="0" width="341" height="$rowHeight" fill="$rowFill"/>
-            <text id="path1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; " x="2" y="24">""".trimIndent())
-        columnText(value.lines.first, dy, sb, display.leftColumnFontColor)
+            <rect y="0" width="341" height="$rowHeight" fill="$rowFill" rx="4" ry="4" />
+            <text id="path1" style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; letter-spacing: 0.2px;" x="10" y="24">""".trimIndent())
+        columnText(value.lines.first, dy, sb, textColor)
             sb.append("</text></g>")
         //language=svg
         sb.append("""
             <g transform="translate(682,$startY)">
-        <rect y="0" width="341" height="$rowHeight" fill="$rowFill"/>
-        <text style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; " x="2" y="24">
+        <rect y="0" width="341" height="$rowHeight" fill="$rowFill" rx="4" ry="4" />
+        <text style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; letter-spacing: 0.2px;" x="10" y="24">
         """.trimIndent())
-        columnText(value.lines.second, dy, sb, display.rightColumnFontColor)
+        columnText(value.lines.second, dy, sb, textColor)
         sb.append("</text></g>")
-        sb.append("""<line x1="0" x2="1024" y1="${startY+rowHeight}" y2="${startY+rowHeight}" stroke="#cccccc"/>""")
+        sb.append("""<line x1="0" x2="1024" y1="${startY+rowHeight}" y2="${startY+rowHeight}" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>""")
         sb.append("</g>")
         return sb.toString()
     }
@@ -132,22 +131,33 @@ class ComparisonTableMaker {
         //language=svg
         return """
         <defs>
-        $item
-        $left
-        $right
-        <filter id="shadow" x="0" y="0" width="200%" height="200%">
-            <feDropShadow dx="3" dy="3" stdDeviation="1" flood-color="#cccccc" flood-opacity="1" />
-        </filter>
-      <style>
-            .rowShade {
-                pointer-events: bounding-box;
-            }
-            .rowShade:hover {
-                filter: grayscale(100%) sepia(100%);
-            }
+            <linearGradient id="header_${comparisonChart.id}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop class="stop1" offset="0%" stop-color="#2563eb" stop-opacity="1"/>
+                <stop class="stop2" offset="100%" stop-color="#9333ea" stop-opacity="1"/>
+            </linearGradient>
 
-        </style>
-    </defs>
+            <linearGradient id="bevelGradient${comparisonChart.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop class="stop3" offset="0%" stop-color="#fafafa" stop-opacity="1"/>
+                <stop class="stop2" offset="50%" stop-color="#f9fafb" stop-opacity="1"/>
+                <stop class="stop1" offset="100%" stop-color="#f3f4f6" stop-opacity="1"/>
+            </linearGradient>
+
+            $item
+            $left
+            $right
+            <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1" />
+            </filter>
+            <style>
+                .rowShade {
+                    pointer-events: bounding-box;
+                }
+                .rowShade:hover {
+                    filter: grayscale(100%) sepia(100%);
+                }
+            </style>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bevelGradient${comparisonChart.id})" filter="url(#shadowFilter)" rx="8" ry="8"/>
     """.trimIndent()
     }
     private fun columnText(
@@ -161,7 +171,7 @@ class ComparisonTableMaker {
             if (idx > 0) {
                 dy1 = 14
             }
-            sb.append("""<tspan x="5" dy="$dy1" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif;fill: ${display};">${t.escapeXml()}</tspan>""")
+            sb.append("""<tspan x="10" dy="$dy1" style="font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; fill: ${display}; letter-spacing: 0.2px;">${t.escapeXml()}</tspan>""")
         }
         return dy1
     }
