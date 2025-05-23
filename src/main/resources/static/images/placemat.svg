@@ -1,108 +1,130 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1310.0" height="440.0" viewBox="0 0 1310.0 440.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_d1c0a101-ae08-4e5e-95b9-e53e31474124">           <defs>
-    <linearGradient id="grad_Business_Capability_d1c0a101-ae08-4e5e-95b9-e53e31474124" x2="0%" y2="100%">
-        <stop class="stop1" offset="0%" stop-color="#ff6dd0"></stop>
-        <stop class="stop2" offset="50%" stop-color="#FF5BAE"></stop>
-        <stop class="stop3" offset="100%" stop-color="#cc488b"></stop>
-    </linearGradient> <linearGradient id="grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124" x2="0%" y2="100%">
-    <stop class="stop1" offset="0%" stop-color="#0fafff"></stop>
-    <stop class="stop2" offset="50%" stop-color="#0D92F4"></stop>
-    <stop class="stop3" offset="100%" stop-color="#0a74c3"></stop>
-</linearGradient> <linearGradient id="grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124" x2="0%" y2="100%">
-    <stop class="stop1" offset="0%" stop-color="#eb0e0e"></stop>
-    <stop class="stop2" offset="50%" stop-color="#C40C0C"></stop>
-    <stop class="stop3" offset="100%" stop-color="#9c0909"></stop>
+<svg xmlns="http://www.w3.org/2000/svg" width="736.8749999907891" height="247.49999999690627" viewBox="0 0 1310.0 440.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_678a598b-0dc8-47fc-b15d-205f3917f7e0">            <defs>
+    <linearGradient id="grad_Business_Capability_678a598b-0dc8-47fc-b15d-205f3917f7e0" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#eb0e0e" stop-opacity="1.0"/>
+        <stop offset="25%" style="stop-color:#cd0c0c" stop-opacity="0.975"/>
+        <stop offset="50%" style="stop-color:#C40C0C" stop-opacity="0.95"/>
+        <stop offset="75%" style="stop-color:#a60909" stop-opacity="0.925"/>
+        <stop offset="100%" style="stop-color:#9c0909" stop-opacity="0.9"/>
+    </linearGradient><linearGradient id="grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#004680" stop-opacity="1.0"/>
+    <stop offset="25%" style="stop-color:#003d70" stop-opacity="0.975"/>
+    <stop offset="50%" style="stop-color:#003b6b" stop-opacity="0.95"/>
+    <stop offset="75%" style="stop-color:#00325a" stop-opacity="0.925"/>
+    <stop offset="100%" style="stop-color:#002f55" stop-opacity="0.9"/>
+</linearGradient><linearGradient id="grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#ff6dd0" stop-opacity="1.0"/>
+    <stop offset="25%" style="stop-color:#ff5fb6" stop-opacity="0.975"/>
+    <stop offset="50%" style="stop-color:#FF5BAE" stop-opacity="0.95"/>
+    <stop offset="75%" style="stop-color:#d84c93" stop-opacity="0.925"/>
+    <stop offset="100%" style="stop-color:#cc488b" stop-opacity="0.9"/>
 </linearGradient>
     <filter id="filter">
-        <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"></feMorphology>
-        <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"></feComposite>
+        <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
+        <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
     </filter>
-    <filter id="poly" x="0" y="0" width="200%" height="200%">
-        <feOffset result="offOut" in="SourceGraphic" dx="10" dy="15"></feOffset>
-        <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5"></feGaussianBlur>
-        <feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>
+    <filter id="enhanced-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="2" dy="2" stdDeviation="4" flood-opacity="0.3"/>
     </filter>
-    <filter id="shadow2">
-        <feDropShadow dx="-0.8" dy="-0.8" stdDeviation="0" flood-color="pink" flood-opacity="0.5"></feDropShadow>
+    <filter id="inner-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+        <feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+        <feFlood flood-color="#ffffff" flood-opacity="0.5" result="glowColor"/>
+        <feComposite in="glowColor" in2="offsetBlur" operator="in" result="innerGlow"/>
+        <feComposite in="SourceGraphic" in2="innerGlow" operator="over"/>
+    </filter>
+    <filter id="soft-highlight" x="0" y="0" width="100%" height="100%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+        <feOffset in="blur" dx="0" dy="-2" result="offsetBlur"/>
+        <feFlood flood-color="#ffffff" flood-opacity="0.3" result="highlightColor"/>
+        <feComposite in="highlightColor" in2="offsetBlur" operator="in" result="highlight"/>
+        <feComposite in="SourceGraphic" in2="highlight" operator="over"/>
     </filter>
     <style>
-        #diag_d1c0a101-ae08-4e5e-95b9-e53e31474124 .shadowed {
-            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
-            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .shadowed {
+            filter: url(#enhanced-shadow);
+            transition: all 0.3s ease;
         }
-        #diag_d1c0a101-ae08-4e5e-95b9-e53e31474124  .filtered {
-            filter: url(#filter);
-            fill: black;
-            font-family: 'Ultra', serif;
-            font-size: 100px;
-
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .placemat-box {
+            filter: url(#enhanced-shadow);
+            transition: transform 0.2s ease;
         }
-        #diag_d1c0a101-ae08-4e5e-95b9-e53e31474124  .filtered-small {
-            filter: url(#filter);
-            fill: black;
-            font-family: 'Ultra', serif;
-            font-size: 14px;
-
-        }
-
-        .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
-        1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
-        center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
-        rgba(0,0,0,.3),inset 0 -6px 6px -3px
-        rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px)
-        saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% -
-        4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px
-        30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px
-        rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
-        3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
-        rgba(0,129,174,.2)}.glass:active:before{height:25px}
-
-        #diag_d1c0a101-ae08-4e5e-95b9-e53e31474124  .boxText {
-            font-size:24px;
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .placemat-text {
             font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 600;
             font-variant: small-caps;
-            font-weight: bold;
+            text-rendering: optimizeLegibility;
+            fill-opacity: 0.95;
+            filter: url(#soft-highlight);
+        }
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .title-text {
+            font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            font-variant: small-caps;
+            letter-spacing: 0.5px;
+            filter: url(#soft-highlight);
+        }
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .legend-box {
+            filter: url(#enhanced-shadow);
+            opacity: 0.95;
+        }
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .legend-text {
+            font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            text-rendering: optimizeLegibility;
+        }
+        #diag_678a598b-0dc8-47fc-b15d-205f3917f7e0 .legend-title {
+            font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
     </style>
-    <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"></polygon>
-    <rect id="bbox" class="shadowed" width="250" height="90" ry="18" rx="18"></rect>
-    <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-    <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-</defs><rect width="100%" height="100%" fill="#fcfcfc" stroke="#111111" stroke-width="3"></rect><g transform="translate(0,0)"><g transform="translate(0,0)">
-    <text x="20" y="24" text-anchor="start" font-size="24" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="#111111">Observability</text>
-</g>
-    <g transform="translate(0,50)"><g transform="translate(0,0)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Audit</tspan></text></g><g transform="translate(260,0)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Traceability</tspan></text></g><g transform="translate(520,0)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #C40C0C;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Subscription</tspan></text></g><g transform="translate(780,0)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #C40C0C;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Automation</tspan></text></g><g transform="translate(1040,0)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Metrics</tspan></text></g><g transform="translate(0,110)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Business_Capability_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #FF5BAE;stroke-width: 1;"></rect>
-        <text x="135" y="45" text-anchor="middle" class="glass" style="fill:#000000; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Software</tspan><tspan x="135" dy="24">Milestone</tspan></text></g><g transform="translate(260,110)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Monitoring</tspan></text></g><g transform="translate(520,110)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Flakiness</tspan></text></g><g transform="translate(780,110)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="45" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Performance</tspan><tspan x="135" dy="24">Regression</tspan></text></g><g transform="translate(1040,110)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #0D92F4;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Misconfigurations</tspan></text></g><g transform="translate(0,220)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #C40C0C;stroke-width: 1;"></rect>
-        <text x="135" y="65" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">MTTR</tspan></text></g><g transform="translate(260,220)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #C40C0C;stroke-width: 1;"></rect>
-        <text x="135" y="36" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Change</tspan><tspan x="135" dy="24">Failure</tspan><tspan x="135" dy="24">Rate</tspan></text></g><g transform="translate(520,220)">
-        <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124); stroke: #C40C0C;stroke-width: 1;"></rect>
-        <text x="135" y="45" text-anchor="middle" class="glass" style="fill:#FCFCFC; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Deployment</tspan><tspan x="135" dy="24">Frequency</tspan></text></g><g transform="translate(20,350.0),scale(0.15)"><text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="#111111">Legend</text><g transform="translate(10.0,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
-        <rect x="0" y="0" width="977" height="110" fill="url(#grad_Business_Capability_d1c0a101-ae08-4e5e-95b9-e53e31474124)" class="shadowed"></rect>
-        <text text-anchor="middle" style="fill: #000000;" x="488" y="90" textLength="947">Business Capability</text>
-    </g><g transform="translate(1027.0,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
-        <rect x="0" y="0" width="605" height="110" fill="url(#grad_Engineering_d1c0a101-ae08-4e5e-95b9-e53e31474124)" class="shadowed"></rect>
-        <text text-anchor="middle" style="fill: #FCFCFC;" x="302" y="90" textLength="575">Engineering</text>
-    </g><g transform="translate(1672.0,40)" font-family="Helvetica,Arial,sans-serif" font-size="96">
-        <rect x="0" y="0" width="246" height="110" fill="url(#grad_Both_d1c0a101-ae08-4e5e-95b9-e53e31474124)" class="shadowed"></rect>
-        <text text-anchor="middle" style="fill: #FCFCFC;" x="123" y="90" textLength="216">Both</text>
-    </g></g></g></g></svg>
+    <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
+    <rect id="bbox" class="placemat-box" width="250" height="90" ry="20" rx="20"/>
+    <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</defs><rect width="100%" height="100%" fill="#17242b" stroke="none"/>
+    <pattern id="subtle-grid" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="40" height="40" fill="#17242b"/>
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333333" stroke-width="0.5"/>
+    </pattern>
+    <rect width="100%" height="100%" fill="url(#subtle-grid)" opacity="0.4"/>
+    <g transform="translate(0,0)"><g transform="translate(0,0)">
+        <text x="20" y="30" text-anchor="start" font-size="28" class="title-text" fill="#fcfcfc">Observability</text>
+        <line x1="20" y1="38" x2="208" y2="38" stroke="#fcfcfc" stroke-width="2" opacity="0.6"/>
+    </g>
+        <g transform="translate(0,50)"><g transform="translate(0,0)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Audit</tspan></text></g><g transform="translate(260,0)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Traceability</tspan></text></g><g transform="translate(520,0)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #FF5BAE;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#000000; font-size:22px;"><tspan x="135">Subscription</tspan></text></g><g transform="translate(780,0)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #FF5BAE;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#000000; font-size:22px;"><tspan x="135">Automation</tspan></text></g><g transform="translate(1040,0)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Metrics</tspan></text></g><g transform="translate(0,110)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Business_Capability_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #C40C0C;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="45" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Software</tspan><tspan x="135" dy="24">Milestone</tspan></text></g><g transform="translate(260,110)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Monitoring</tspan></text></g><g transform="translate(520,110)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Flakiness</tspan></text></g><g transform="translate(780,110)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="45" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Performance</tspan><tspan x="135" dy="24">Regression</tspan></text></g><g transform="translate(1040,110)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #003b6b;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#FCFCFC; font-size:22px;"><tspan x="135">Misconfigurations</tspan></text></g><g transform="translate(0,220)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #FF5BAE;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="55" text-anchor="middle" class="placemat-text" style="fill:#000000; font-size:22px;"><tspan x="135">MTTR</tspan></text></g><g transform="translate(260,220)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #FF5BAE;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="36" text-anchor="middle" class="placemat-text" style="fill:#000000; font-size:22px;"><tspan x="135">Change</tspan><tspan x="135" dy="24">Failure</tspan><tspan x="135" dy="24">Rate</tspan></text></g><g transform="translate(520,220)">
+            <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" style="fill: url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0); stroke: #FF5BAE;           stroke-width: 1; stroke-opacity: 0.8;"/>
+            <text x="135" y="45" text-anchor="middle" class="placemat-text" style="fill:#000000; font-size:22px;"><tspan x="135">Deployment</tspan><tspan x="135" dy="24">Frequency</tspan></text></g><g transform="translate(400.9,350.0),scale(0.2)"><rect x="0" y="0" width="2541" height="220" rx="20" ry="20" fill="#2a3a4a" opacity="0.4" class="legend-background"/><text x="1270" y="35" text-anchor="middle" font-size="110" class="legend-title" fill="#fcfcfc">Legend</text><line x1="254.10000000000002" y1="50" x2="2286.9" y2="50" stroke="#fcfcfc" stroke-width="2" opacity="0.3"/><g transform="translate(60,70)" font-size="96">
+            <rect x="0" y="0" width="1188" height="110" fill="url(#grad_Business_Capability_678a598b-0dc8-47fc-b15d-205f3917f7e0)" rx="15" ry="15" class="legend-box" filter="url(#enhanced-shadow)"/>
+            <text text-anchor="middle" class="legend-text" style="fill: #FCFCFC;" x="594" y="70">Business Capability</text>
+        </g><g transform="translate(1308,70)" font-size="96">
+            <rect x="0" y="0" width="742" height="110" fill="url(#grad_Engineering_678a598b-0dc8-47fc-b15d-205f3917f7e0)" rx="15" ry="15" class="legend-box" filter="url(#enhanced-shadow)"/>
+            <text text-anchor="middle" class="legend-text" style="fill: #FCFCFC;" x="371" y="70">Engineering</text>
+        </g><g transform="translate(2110,70)" font-size="96">
+            <rect x="0" y="0" width="311" height="110" fill="url(#grad_Both_678a598b-0dc8-47fc-b15d-205f3917f7e0)" rx="15" ry="15" class="legend-box" filter="url(#enhanced-shadow)"/>
+            <text text-anchor="middle" class="legend-text" style="fill: #000000;" x="155" y="70">Both</text>
+        </g></g></g></g></svg>
