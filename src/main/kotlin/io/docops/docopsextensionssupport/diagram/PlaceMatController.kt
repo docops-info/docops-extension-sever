@@ -20,6 +20,76 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/placemat")
 class PlaceMatController {
     private val log = KotlinLogging.logger {  }
+
+    @GetMapping("/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        //language=json
+        val defaultPlacematJson = """
+        {
+          "title": "System Architecture Overview",
+          "placeMats": [
+            {"name": "Frontend","legend": "UI"},
+            {"name": "Backend","legend": "API"},
+            {"name": "Database","legend": "DATA"}
+          ],
+          "config": {
+          "legend": [
+            {"legend": "UI","color": "#4361ee"},
+            {"legend": "API","color": "#3a0ca3"},
+            {"legend": "DATA","color": "#7209b7"}
+          ]}
+        }
+        """.trimIndent()
+        //language=html
+        val editModeHtml = """
+            <div id="placematContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/placemat/" hx-target="#placematPreview" class="space-y-4">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Placemat JSON:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultPlacematJson}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Placemat
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/placemat/view-mode"
+                                hx-target="#placematContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="placematPreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Placemat" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        //language=html
+        val viewModeHtml = """
+            <div id="placematContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/placemat.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/placemat.svg" alt="Placemat" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
     @Traceable
     @PutMapping("/")
     @ResponseBody

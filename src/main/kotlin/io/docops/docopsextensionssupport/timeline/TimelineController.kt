@@ -40,6 +40,78 @@ import kotlin.time.measureTimedValue
 class TimelineController {
     private val log = LogFactory.getLog(TimelineController::class.java)
 
+    @GetMapping("/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultTimelineContent = """
+        -
+        date: 1891
+        text: Mailbox, invented by Phillip Downing
+        -
+        date: 1923
+        text: The Three-Light Traffic Signal, invented by Garrett Morgan
+        -
+        date: 1932
+        text: Automatic Gear Shift, invented by Richard Spikes
+        date: July 23rd, 2023
+        text: DocOps extension Server releases a new feature, Timeline Maker
+        for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+        create very powerful timeline images. Enjoy!
+        -
+        date: August 15th, 2023
+        text: DocOps.io revamping website with updated documentation. All
+        our work will be updated with latest documentation for Panels,
+        for extension server are the various plug-ing for asciidoctorj.
+        """.trimIndent()
+
+        val editModeHtml = """
+            <div id="timelineContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/timeline/" hx-target="#timelinePreview" class="space-y-4">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Timeline Content:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultTimelineContent}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Timeline
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/timeline/view-mode"
+                                hx-target="#timelineContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="timelinePreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Timeline" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="timelineContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/timeline.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/timeline.svg" alt="Timeline" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
     /**
      * Updates the timeline based on the provided request data.
      *
@@ -63,7 +135,7 @@ class TimelineController {
                 contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
                 title = httpServletRequest.getParameter("title")
             }
-            val scale = httpServletRequest.getParameter("scale")
+            val scale = httpServletRequest.getParameter("scale")?: "0.5"
             val numChars = httpServletRequest.getParameter("numChars")
             var chars = numChars
             if (numChars == null || numChars.isEmpty()) {
@@ -71,7 +143,7 @@ class TimelineController {
             }
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val tm = TimelineMaker("on" == useDarkInput, outlineColor)
+            val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3")
             val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -173,4 +245,3 @@ class TimelineController {
         return timing.value
     }
 }
-

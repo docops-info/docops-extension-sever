@@ -16,6 +16,8 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.docopsextensionssupport.diagram.PlaceMatMaker
+import io.docops.docopsextensionssupport.diagram.PlaceMatRequest
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
@@ -44,6 +46,157 @@ import kotlin.time.measureTimedValue
 class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMarkerConfigurer) {
 
     private val log = KotlinLogging.logger {  }
+
+    @GetMapping("/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        //language=json
+        val defaultReleaseJson = """
+        {
+  "title": "Product Release Strategy",
+  "style": "TLS", "scale": 0.5,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
+        "Define release scope and objectives",
+        "Identify key features and enhancements",
+        "Create detailed project timeline",
+        "Allocate resources and responsibilities"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
+        "Code development and unit testing",
+        "Integration of components",
+        "Documentation updates",
+        "Internal code reviews"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
+        "Functional testing",
+        "Performance testing",
+        "Security testing",
+        "User acceptance testing"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
+        "Final approval and sign-off",
+        "Production deployment",
+        "Post-deployment verification",
+        "Monitoring and support"
+      ]
+    }
+  ]
+}
+        """.trimIndent()
+
+        val editModeHtml = """
+            <div id="releaseContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/release/strategy" hx-target="#releasePreview" class="space-y-4">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Release Strategy JSON:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultReleaseJson}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Strategy
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/release/view-mode"
+                                hx-target="#releaseContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="releasePreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Strategy" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="releaseContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/release.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/release.svg" alt="Release Strategy" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
+    @PutMapping("/strategy")
+    @ResponseBody
+    fun createReleaseStrategy(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val contents = httpServletRequest.getParameter("content")
+            var release = Json.decodeFromString<ReleaseStrategy>(contents)
+            var output = ""
+            val isPdf = false
+            when (release.style) {
+                "TL" -> {
+                    output = createTimelineSvg(release, isPdf)
+                }
+
+                "TLS" -> {
+                    output = createTimelineSummarySvg(release, isPdf)
+                }
+
+                "R" -> {
+                    output = createRoadMap(release, isPdf, "OFF")
+                }
+
+                "TLG" -> {
+                    output = createTimelineGrouped(release, isPdf)
+                }
+            }
+            val svg = output
+
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
+            val div = """
+                <div id='imageblock'>
+                $svg
+                </div>
+                <script>
+                var adrSource = `[docops,release]\n----\n${contents}\n----`;
+                </script>
+            """.trimIndent()
+
+            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
+        }
+
+        log.info{"createReleaseStrategy executed in ${timing.duration.inWholeMilliseconds}ms "}
+        return timing.value
+    }
 
     /**
      * Retrieves the release in the specified format.

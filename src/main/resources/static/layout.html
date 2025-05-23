@@ -542,9 +542,16 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryAdrButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/adr/edit-mode"
+                                        hx-target="#adrContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
                             <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
                             </object>
@@ -575,31 +582,17 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
 ----
 {
   "title": "System Architecture Overview",
-  "items": [
-    {
-      "name": "Frontend",
-      "description": "User interface components",
-      "type": "UI",
-      "items": ["React Components","Redux State Management","Responsive Design","Accessibility Features"]
-    },
-    {
-      "name": "Backend",
-      "description": "Server-side processing",
-      "type": "API",
-      "items": ["REST API Endpoints","Authentication Services","Business Logic Layer","Data Access Layer"]
-    },
-    {
-      "name": "Database",
-      "description": "Data storage solutions",
-      "type": "DATA",
-      "items": ["PostgreSQL for Relational Data","MongoDB for Document Storage","Redis for Caching","Elasticsearch for Search"]
-    }
+  "placeMats": [
+    {"name": "Frontend","legend": "UI"},
+    {"name": "Backend","legend": "API"},
+    {"name": "Database","legend": "DATA"}
   ],
+  "config": {
   "legend": [
-    {"name": "UI","color": "#4361ee"},
-    {"name": "API","color": "#3a0ca3"},
-    {"name": "DATA","color": "#7209b7"}
-  ]
+    {"legend": "UI","color": "#4361ee"},
+    {"legend": "API","color": "#3a0ca3"},
+    {"legend": "DATA","color": "#7209b7"}
+  ]}
 }
 ----</code></pre>
                     </div>
@@ -608,9 +601,16 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryPlacematButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/placemat/edit-mode"
+                                        hx-target="#placematContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="placematContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/placemat.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/placemat.svg" alt="Placemat" class="max-h-full max-w-full" />
                             </object>
@@ -662,9 +662,16 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryRoadmapButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/roadmap/edit-mode"
+                                        hx-target="#roadmapContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="roadmapContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/planner.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/planner.svg" alt="Project Planner" class="max-h-full max-w-full" />
                             </object>
@@ -695,11 +702,13 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
 ----
 {
   "title": "Product Release Strategy",
-  "phases": [
+  "style": "TLS", "scale": 0.5,
+  "releases": [
     {
-      "name": "Planning",
-      "description": "Initial planning and requirements gathering",
-      "tasks": [
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
         "Define release scope and objectives",
         "Identify key features and enhancements",
         "Create detailed project timeline",
@@ -707,9 +716,10 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
       ]
     },
     {
-      "name": "Development",
-      "description": "Implementation of planned features",
-      "tasks": [
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
         "Code development and unit testing",
         "Integration of components",
         "Documentation updates",
@@ -717,9 +727,10 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
       ]
     },
     {
-      "name": "Testing",
-      "description": "Quality assurance and validation",
-      "tasks": [
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
         "Functional testing",
         "Performance testing",
         "Security testing",
@@ -727,9 +738,10 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
       ]
     },
     {
-      "name": "Deployment",
-      "description": "Release to production environment",
-      "tasks": [
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
         "Final approval and sign-off",
         "Production deployment",
         "Post-deployment verification",
@@ -745,9 +757,16 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryReleaseButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/release/edit-mode"
+                                        hx-target="#releaseContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="releaseContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/release.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/release.svg" alt="Release Strategy" class="max-h-full max-w-full" />
                             </object>
@@ -778,27 +797,22 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
 ----
 {
   "title": "Technology Comparison",
-  "leftTitle": "Current Solution",
-  "rightTitle": "Proposed Solution",
-  "leftItems": [
-    "Limited scalability",
-    "High maintenance costs",
-    "Manual deployment process",
-    "Minimal monitoring capabilities",
-    "Difficult to extend"
+  "initiativeTitle": "Current Solution",
+  "outcomeTitle": "Proposed Solution",
+  "initiativeItems": [
+    {"displayText":"Limited scalability"},
+    {"displayText":"High maintenance costs"},
+    {"displayText":"Manual deployment process"},
+    {"displayText":"Minimal monitoring capabilities"},
+    {"displayText":"Difficult to extend"}
   ],
-  "rightItems": [
-    "Highly scalable architecture",
-    "Reduced operational costs",
-    "Automated CI/CD pipeline",
-    "Comprehensive monitoring",
-    "Modular and extensible design"
-  ],
-  "theme": {
-    "leftColor": "#e63946",
-    "rightColor": "#2a9d8f",
-    "textColor": "#ffffff"
-  }
+  "outcomeItems": [
+    {"displayText":"Highly scalable architecture"},
+    {"displayText":"Reduced operational costs"},
+    {"displayText":"Automated CI/CD pipeline"},
+    {"displayText":"Comprehensive monitoring"},
+    {"displayText":"Modular and extensible design"}
+  ]
 }
 ----</code></pre>
                     </div>
@@ -807,9 +821,16 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryScorecardButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/scorecard/edit-mode"
+                                        hx-target="#scorecardContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="scorecardContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/compare.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/compare.svg" alt="Scorecard" class="max-h-full max-w-full" />
                             </object>
@@ -879,9 +900,16 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
                     <div class="p-6 bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <span class="text-gray-400 text-sm">Interactive Preview</span>
+                            <div>
+                                <button id="tryTimelineButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/timeline/edit-mode"
+                                        hx-target="#timelineContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                        <div id="timelineContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/timeline.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/timeline.svg" alt="Timeline" class="max-h-full max-w-full" />
                             </object>

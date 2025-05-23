@@ -42,6 +42,113 @@ import java.nio.charset.StandardCharsets
 @RequestMapping("/api")
 class AdrController() {
 
+    @GetMapping("/adr/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultAdrContent = """title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants:
+Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
+
+        val editModeHtml = """
+            <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/adr" hx-target="#adrPreview" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title:</label>
+                            <input type="text" id="title" name="title" value="Use Elasticsearch for Search Functionality" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status:</label>
+                            <input type="text" id="status" name="status" value="Accepted" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date:</label>
+                            <input type="text" id="date" name="date" value="2024-05-15" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                        <div>
+                            <label for="participants" class="block text-sm font-medium text-gray-700 mb-1">Participants:</label>
+                            <input type="text" id="participants" name="participants" value="Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="context" class="block text-sm font-medium text-gray-700 mb-1">Context:</label>
+                        <textarea id="context" name="context" rows="4" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering</textarea>
+                    </div>
+                    <div>
+                        <label for="decision" class="block text-sm font-medium text-gray-700 mb-1">Decision:</label>
+                        <textarea id="decision" name="decision" rows="3" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync</textarea>
+                    </div>
+                    <div>
+                        <label for="consequences" class="block text-sm font-medium text-gray-700 mb-1">Consequences:</label>
+                        <textarea id="consequences" name="consequences" rows="4" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update ADR
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/adr/view-mode"
+                                hx-target="#adrContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="adrPreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update ADR" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/adr/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/adr.svg" type="image/svg+xml" class="max-h-full max-w-full">
+                <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
 
     /**
      * Handles the HTTP PUT request for creating an Architecture Decision Record (ADR).
@@ -137,7 +244,7 @@ class AdrController() {
                 });
                 </script>
             </div>
-        
+
 
     """.trimMargin()
     }

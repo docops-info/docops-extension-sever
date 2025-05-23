@@ -40,6 +40,84 @@ import kotlin.time.measureTimedValue
 class RoadmapPlanController {
     val log: Log = LogFactory.getLog(RoadmapPlanController::class.java)
 
+    @GetMapping("/edit-mode")
+    @ResponseBody
+    fun getEditMode(): ResponseEntity<String> {
+        val defaultRoadmapContent = """- now Authentication
+* Implement user authentication system
+* Set up CI/CD pipeline
+* Create database schema
+- next REST
+* Develop REST API endpoints
+* Build frontend components
+* Implement search functionality
+- later Analytics
+* Add analytics dashboard
+* Optimize performance
+* Implement advanced features
+- done Requirements
+* Project requirements gathering
+* Architecture design
+* Technology stack selection"""
+
+        val editModeHtml = """
+            <div id="roadmapContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
+                <form hx-put="api/roadmap/" hx-target="#roadmapPreview" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title:</label>
+                            <input type="text" id="title" name="title" value="Q3 Development Roadmap" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                        <div>
+                            <label for="scale" class="block text-sm font-medium text-gray-700 mb-1">Scale:</label>
+                            <input type="text" id="scale" name="scale" value="2.2" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Roadmap Content:</label>
+                        <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultRoadmapContent}</textarea>
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
+                            Update Roadmap
+                        </button>
+                        <button class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
+                                hx-get="api/roadmap/view-mode"
+                                hx-target="#roadmapContainer"
+                                hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                    <div id="roadmapPreview" class="mt-4 p-4 border border-gray-200 rounded-lg bg-white min-h-[200px]">
+                        <div class="text-center text-gray-500 text-sm">
+                            Click "Update Roadmap" to see the preview
+                        </div>
+                    </div>
+                </form>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+    }
+
+    @GetMapping("/view-mode")
+    @ResponseBody
+    fun getViewMode(): ResponseEntity<String> {
+        val viewModeHtml = """
+            <div id="roadmapContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                <object data="images/planner.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/planner.svg" alt="Project Roadmap" class="max-h-full max-w-full" />
+                </object>
+            </div>
+        """.trimIndent()
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.TEXT_HTML
+        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+    }
+
     /**
      * Generates a roadmap plan based on the provided parameters.
      *
