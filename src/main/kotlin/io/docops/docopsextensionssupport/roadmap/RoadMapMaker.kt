@@ -437,12 +437,21 @@ fun linesToUrlIfExist(lines: MutableList<String>, urlMap: MutableMap<String, Str
     lines.forEach { input ->
         var line = input
         if (input.contains("[[") && input.contains("]]")) {
-            val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
+            val regex = "\\[\\[(.*?)]]".toRegex()
             val matches = regex.findAll(input)
-            matches.forEach {
-                val output = urlMap["[[${it.value}]]"]
-                val url = """<a xlink:href="$output" target="_blank" style="fill: blue; text-decoration: underline;">${it.value}</a>"""
-                line = input.replace("[[${it.value}]]", url)
+
+            // Process all matches in reverse order to avoid index shifting
+            val matchResults = matches.toList().reversed()
+            for (match in matchResults) {
+                val displayText = match.groupValues[1]
+                val output = urlMap["[[${displayText}]]"]
+                if (output != null) {
+                    val url = """<a xlink:href="$output" target="_blank" style="fill: blue; text-decoration: underline;">${displayText}</a>"""
+                    // Replace only this specific occurrence
+                    val startIndex = match.range.first
+                    val endIndex = match.range.last + 1
+                    line = line.substring(0, startIndex) + url + line.substring(endIndex)
+                }
             }
         }
         newLines.add(line)

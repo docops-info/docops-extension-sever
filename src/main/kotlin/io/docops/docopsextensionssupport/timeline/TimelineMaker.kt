@@ -296,43 +296,41 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
 }
 
 fun main() {
+    // Test with the content from the issue description
     val entry = """
 -
-date: 1891
-text: Mailbox, invented by Phillip Downing       
+date: 1660-1798
+text: The Enlightenment/Neoclassical Period
+Literature focused on reason, logic, and scientific thought. Major writers include [[https://en.wikipedia.org/wiki/Alexander_Pope Alexander Pope]] and [[https://en.wikipedia.org/wiki/Jonathan_Swift Jonathan Swift]].
 -
-date: July 23rd, 2023
-text: DocOps extension Server releases a new feature, Timeline Maker
-for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
-create very powerful timeline images. Enjoy!
+date: 1798-1832
+text: Romanticism
+Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]].
 -
-date: August 15th, 2023
-text: DocOps.io revamping website with updated documentation. All 
-our work will be updated with latest documentation for Panels,
-for extension server are the various plug-ing for asciidoctorj.
+date: 1837-1901
+text: Victorian Era
+Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]].
 -
-date: September 1st, 2023
-text: DocOps.io will begin work on revamping the asciidoctorj converter.
-with the asciidoctorj 3.0.0 release coming we will need to migrate
-custom plug-ins to the new version of the extensions as they will bring breaking changes.
-- 
-date: October 18th, 2023
-text: Time to reimagine the future. Is it possible
-to write a lexer parser for custom language?
-- 
-date: November 16th, 2023
-text: Another year been on this earth.
-Time to celebrate. Good times.
-- 
-date: December 11th, 2023
-text: Annual start of vacation, time to relax
-and plugin the controller.
+date: 1914-1945
+text: Modernism
+Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]].
 -
-date: 01/01/2024
-text: First entry where we show text is wrapping or not and it's [[https://roach.gy roach.gy]] aligning properly
+date: 1945-present
+text: Postmodernism
+Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]].
     """.trimIndent()
-    val maker = TimelineMaker(true, "#a1d975")
-    val svg = maker.makeTimelineSvg(entry, "Another day in the neighborhood", "1", false, "30")
-    val f = File("gen/one.svg")
+
+    // Test normal output
+    val maker = TimelineMaker(false, "#a1d975")
+    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "1", false, "30")
+    val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
+
+    // Test PDF output
+    val makerPdf = TimelineMaker(false, "#a1d975")
+    val svgPdf = makerPdf.makeTimelineSvg(entry, "Literary Periods", "1", true, "30")
+    val fPdf = File("gen/timeline_pdf.svg")
+    fPdf.writeBytes(svgPdf.toByteArray())
+
+    println("Test completed. Check gen/timeline_normal.svg and gen/timeline_pdf.svg")
 }
