@@ -1,0 +1,516 @@
+= DocOps Pie Charts
+:imagesdir: images
+
+
+== Introduction
+
+The DocOps Pie Chart Extension allows you to create visually appealing pie charts in your AsciiDoctor documents. Pie charts are useful for showing the proportion of different categories within a whole and comparing relative sizes of data.
+
+This guide will help you understand the basic concepts of pie charts, how to include them in your AsciiDoctor documents, and provide examples of different types of pie charts.
+
+== Basic Concepts
+
+=== What are Pie Charts?
+
+Pie charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each pie chart has:
+
+* A title (the main heading of the chart)
+* A series of slices, each representing a proportion of the whole
+* Labels for each slice
+* Optional display settings for customizing the appearance
+
+The extension supports two main types of pie charts:
+
+* Regular Pie Charts - A traditional circular chart divided into slices
+* Donut Charts - Similar to pie charts but with a hole in the center
+* Multiple Pie Charts - A collection of small pie charts displayed together
+
+Each type can be displayed in various styles, including:
+
+* Custom colors for slices
+* Dark mode charts
+* Interactive hover effects
+* Animated transitions
+
+=== Pie Chart Components
+
+==== Regular Pie Charts and Donut Charts
+
+A regular pie chart or donut chart includes:
+
+* A title
+* A series of slices, each with a label and value (amount)
+* Display settings for visual appearance
+
+==== Multiple Pie Charts
+
+A multiple pie chart visualization includes:
+
+* Multiple small pie charts, each showing a percentage
+* Labels for each pie chart
+* Display settings for visual appearance
+
+== AsciiDoctor Syntax for Pie Charts
+
+To include pie charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format for regular pie charts and donut charts:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+{
+  "title": "Chart Title",
+  "slices": [
+    {
+      "label": "Category 1",
+      "amount": 16.0
+    },
+    {
+      "label": "Category 2",
+      "amount": 4.0
+    }
+    // More slices...
+  ],
+  "display": {
+    "donut": false,
+    "legendRows": 3
+  }
+}
+----
+....
+
+For multiple pie charts, use the following format:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 70.0,
+      "label": "Category 1"
+    },
+    {
+      "percent": 22.0,
+      "label": "Category 2"
+    }
+    // More pies...
+  ],
+  "pieDisplay": {
+    "baseColor": "#111111",
+    "outlineColor": "#FF77B7",
+    "useDark": false,
+    "scale": 1
+  }
+}
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the pie chart that is embedded in your document.
+
+=== Regular Pie Chart and Donut Chart Properties
+
+==== Main Properties
+
+* `title` (required): The main heading of the chart
+* `slices` (required): An array of data slices
+* `display` (optional): Settings for customizing the appearance
+
+==== Slice Properties
+
+Each slice in the `slices` array has the following properties:
+
+* `label` (required): The category label for the slice
+* `amount` (required): The numerical value for the slice
+
+==== Display Properties
+
+The `display` object can have the following properties:
+
+* `donut` (optional): Whether to display as a donut chart (default: false)
+* `legendRows` (optional): Number of rows in the legend (default: 3)
+
+=== Multiple Pie Charts Properties
+
+==== Main Properties
+
+* `pies` (required): An array of pie objects
+* `pieDisplay` (optional): Settings for customizing the appearance
+
+==== Pie Properties
+
+Each pie in the `pies` array has the following properties:
+
+* `label` (required): The label for the pie
+* `percent` (required): The percentage value for the pie (0-100)
+
+==== PieDisplay Properties
+
+The `pieDisplay` object can have the following properties:
+
+* `baseColor` (optional): The base color for the pies (default: "#A6AEBF")
+* `outlineColor` (optional): The outline color for the pies (default: "#050C9C")
+* `useDark` (optional): Whether to use dark mode (default: false)
+* `scale` (optional): A scaling factor for the chart (default: 1.0)
+
+== Examples
+
+=== Basic Pie Chart Example
+
+Here's a simple example of a regular pie chart:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+{
+  "title": "Favorite Anime",
+  "slices": [
+    {
+      "label": "Naruto",
+      "amount": 16.0
+    },
+    {
+      "label": "Bleach",
+      "amount": 4.0
+    },
+    {
+      "label": "One Piece",
+      "amount": 9.0
+    },
+    {
+      "label": "One Punch Man",
+      "amount": 7.0
+    },
+    {
+      "label": "My Hero Academia",
+      "amount": 6.0
+    },
+    {
+      "label": "Demon Slayer",
+      "amount": 10.0
+    }
+  ],
+  "display": {
+    "donut": false
+  }
+}
+----
+....
+
+[docops,pieslice]
+----
+{
+  "title": "Favorite Anime",
+  "slices": [
+    {
+      "label": "Naruto",
+      "amount": 16.0
+    },
+    {
+      "label": "Bleach",
+      "amount": 4.0
+    },
+    {
+      "label": "One Piece",
+      "amount": 9.0
+    },
+    {
+      "label": "One Punch Man",
+      "amount": 7.0
+    },
+    {
+      "label": "My Hero Academia",
+      "amount": 6.0
+    },
+    {
+      "label": "Demon Slayer",
+      "amount": 10.0
+    }
+  ],
+  "display": {
+    "donut": false
+  }
+}
+----
+
+=== Donut Chart Example
+
+You can create donut charts by setting the `donut` property to `true`:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+{
+  "title": "Favorite Anime",
+  "slices": [
+    {
+      "label": "Naruto",
+      "amount": 16.0
+    },
+    {
+      "label": "Bleach",
+      "amount": 4.0
+    },
+    {
+      "label": "One Piece",
+      "amount": 9.0
+    },
+    {
+      "label": "One Punch Man",
+      "amount": 7.0
+    },
+    {
+      "label": "My Hero Academia",
+      "amount": 6.0
+    },
+    {
+      "label": "Demon Slayer",
+      "amount": 10.0
+    }
+  ],
+  "display": {
+    "donut": true
+  }
+}
+----
+....
+
+[docops,pieslice]
+----
+{
+  "title": "Favorite Anime",
+  "slices": [
+    {
+      "label": "Naruto",
+      "amount": 16.0
+    },
+    {
+      "label": "Bleach",
+      "amount": 4.0
+    },
+    {
+      "label": "One Piece",
+      "amount": 9.0
+    },
+    {
+      "label": "One Punch Man",
+      "amount": 7.0
+    },
+    {
+      "label": "My Hero Academia",
+      "amount": 6.0
+    },
+    {
+      "label": "Demon Slayer",
+      "amount": 10.0
+    }
+  ],
+  "display": {
+    "donut": true
+  }
+}
+----
+
+=== Multiple Pie Charts Example
+
+Here's an example of multiple pie charts:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 14,
+      "label": "Toys"
+    },
+    {
+      "percent": 43,
+      "label": "Furniture"
+    },
+    {
+      "percent": 15.0,
+      "label": "Home Decoration"
+    },
+    {
+      "percent": 28.0,
+      "label": "Electronics"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#A6AEBF",
+    "outlineColor": "#FA4032",
+    "scale": 2,
+    "useDark": true
+  }
+}
+----
+....
+
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 14,
+      "label": "Toys"
+    },
+    {
+      "percent": 43,
+      "label": "Furniture"
+    },
+    {
+      "percent": 15.0,
+      "label": "Home Decoration"
+    },
+    {
+      "percent": 28.0,
+      "label": "Electronics"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#A6AEBF",
+    "outlineColor": "#FA4032",
+    "scale": 2,
+    "useDark": true
+  }
+}
+----
+
+=== Dark Mode Multiple Pie Charts Example
+
+You can create dark mode multiple pie charts by setting the `useDark` property to `true`:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 70.0,
+      "label": "Windows"
+    },
+    {
+      "percent": 22.0,
+      "label": "Macos"
+    },
+    {
+      "percent": 8.0,
+      "label": "Linux"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#111111",
+    "outlineColor": "#FF77B7",
+    "useDark": true,
+    "scale": 1
+  }
+}
+----
+....
+
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 70.0,
+      "label": "Windows"
+    },
+    {
+      "percent": 22.0,
+      "label": "Macos"
+    },
+    {
+      "percent": 8.0,
+      "label": "Linux"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#111111",
+    "outlineColor": "#FF77B7",
+    "useDark": true,
+    "scale": 1
+  }
+}
+----
+
+=== Custom Colors Example
+
+You can customize the colors of your pie charts:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 70.0,
+      "label": "Windows"
+    },
+    {
+      "percent": 22.0,
+      "label": "Macos"
+    },
+    {
+      "percent": 8.0,
+      "label": "Linux"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#4cc9f0",
+    "outlineColor": "#f72585",
+    "useDark": false,
+    "scale": 1
+  }
+}
+----
+....
+
+[docops,pie]
+----
+{
+  "pies": [
+    {
+      "percent": 70.0,
+      "label": "Windows"
+    },
+    {
+      "percent": 22.0,
+      "label": "Macos"
+    },
+    {
+      "percent": 8.0,
+      "label": "Linux"
+    }
+  ],
+  "pieDisplay": {
+    "baseColor": "#4cc9f0",
+    "outlineColor": "#f72585",
+    "useDark": false,
+    "scale": 1
+  }
+}
+----
+
+== Interactive Features
+
+Pie charts in the DocOps extension include several interactive features:
+
+* **Hover Effects**: Pie slices and charts have hover effects for better visibility
+* **Tooltips**: Hover over slices to see detailed information
+* **Animations**: Charts animate when they first appear on the page
+
+These interactive features enhance the user experience and make it easier to interpret the data in your charts.
+
+== Conclusion
+
+The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the JSON configuration format, you can create customized charts that match your document's style and purpose.
+
+The extension supports both regular pie charts, donut charts, and multiple pie charts, with various display options including custom colors, dark mode, and interactive features.

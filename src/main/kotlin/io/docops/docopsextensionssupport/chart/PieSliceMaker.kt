@@ -223,7 +223,7 @@ fun main() {
         PieSlice(label = "One Punch Man", amount = 7.0),
         PieSlice(label = "My Hero Academia", amount = 6.0),
         PieSlice(label = "Demon Slayer", amount = 10.0),
-    ), SliceDisplay(donut = true) )
+    ), SliceDisplay(donut = false) )
     var svg = ""
     if(!pieSlices.display.donut){
         val maker= PieSliceMaker()
@@ -235,7 +235,7 @@ fun main() {
     }
     val str = Json.encodeToString(pieSlices)
     println(str)
-    val outfile2 = File("gen/pieslice.svg")
+    val outfile2 = File("gen/pieslice2.svg")
     outfile2.writeBytes(svg.toByteArray())
 
     val startArc = Point(354.1043187201574, 432.6865001584483)
