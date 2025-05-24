@@ -1,0 +1,328 @@
+include::_base.adoc[]
+= DocOps Shields
+:imagesdir: images
+
+== Introduction
+
+The DocOps Shield Extension allows you to create visually appealing badges and shields in your AsciiDoctor documents. Shields are useful for displaying status information, version numbers, build status, and other metadata in a visually consistent way.
+
+This guide will help you understand the basic concepts of shields, how to include them in your AsciiDoctor documents, and provide examples of different types of shields.
+
+== Basic Concepts
+
+=== What are Shields?
+
+Shields in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each shield has:
+
+* A label (the left part of the shield)
+* A message (the right part of the shield)
+* Optional URL for making the shield clickable
+* Optional logo/icon
+* Customizable colors for both label and message sections
+* Customizable font color
+
+The extension supports various styling options, including:
+
+* Custom colors for label and message sections
+* Icons from the SimpleIcons library
+* Dark mode
+* Custom font colors
+* Links to external resources
+
+=== Shield Components
+
+A shield includes:
+
+* A label (left side)
+* A message (right side)
+* Optional URL for making the shield clickable
+* Optional logo/icon
+* Color settings for visual appearance
+
+== AsciiDoctor Syntax for Shields
+
+To include shields in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Label|Message|URL|LabelColor|MessageColor|Logo|FontColor
+----
+....
+
+The macro processes the pipe-delimited configuration and generates an SVG representation of the shield that is embedded in your document.
+
+=== Shield Properties
+
+* `Label` (required): The text for the left part of the shield
+* `Message` (required): The text for the right part of the shield
+* `URL` (optional): The URL to link to when the shield is clicked
+* `LabelColor` (optional): The color for the label background (default: #999999)
+* `MessageColor` (optional): The color for the message background (default: #ececec)
+* `Logo` (optional): The logo to display on the shield (e.g., <github> for GitHub logo)
+* `FontColor` (optional): The color for the text (default: #000000 for light backgrounds, #fcfcfc for dark backgrounds)
+
+== Examples
+
+=== Basic Shield Example
+
+Here's a simple example of a shield:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Status|Stable||#3C3D37|#4CC9F0
+----
+....
+
+----
+Status|Stable||#3C3D37|#4CC9F0
+----
+
+=== Shield with Logo Example
+
+You can add a logo to your shield using the SimpleIcons library:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
+----
+
+=== Dark Mode Shield Example
+
+You can create dark mode shields by using darker colors for the background and lighter colors for the text:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Dark Mode|Enabled||#1a1a1a|#4361ee|<moon>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Dark Mode|Enabled||#1a1a1a|#4361ee|<moon>|#fcfcfc
+----
+
+=== Shield with Link Example
+
+You can make your shields clickable by adding a URL:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+GitHub|DocOps|https://github.com/docops|#24292e|#2188ff|<github>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+GitHub|DocOps|https://github.com/docops|#24292e|#2188ff|<github>|#fcfcfc
+----
+
+=== Custom Color Shield Example
+
+You can use custom colors for both the label and message sections:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+License|Apache 2.0||#D988B9|#3B1E54|<license>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+License|Apache 2.0||#D988B9|#3B1E54|<license>|#fcfcfc
+----
+
+=== Multiple Shields Example
+
+You can create multiple shields by adding multiple lines to the badge macro:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc
+----
+
+=== CI/CD Status Badges Example
+
+Badges are commonly used to display CI/CD status information:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Build|Passing||#2A2A2A|#4CAF50|<checkmark>|#fcfcfc
+Tests|98%||#2A2A2A|#03A9F4|<test>|#fcfcfc
+Coverage|87%||#2A2A2A|#FF9800|<shield>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Build|Passing||#2A2A2A|#4CAF50|<checkmark>|#fcfcfc
+Tests|98%||#2A2A2A|#03A9F4|<test>|#fcfcfc
+Coverage|87%||#2A2A2A|#FF9800|<shield>|#fcfcfc
+----
+
+=== Version Information Badges Example
+
+Display version information with badges:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Version|v2.3.0||#0D47A1|#2196F3|<tag>|#fcfcfc
+Release|Stable||#1B5E20|#4CAF50|<rocket>|#fcfcfc
+Updated|2023-06-15||#311B92|#7C4DFF|<calendar>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Version|v2.3.0||#0D47A1|#2196F3|<tag>|#fcfcfc
+Release|Stable||#1B5E20|#4CAF50|<rocket>|#fcfcfc
+Updated|2023-06-15||#311B92|#7C4DFF|<calendar>|#fcfcfc
+----
+
+=== Security and Compliance Badges Example
+
+Showcase security and compliance information:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Security|A+||#B71C1C|#F44336|<security>|#fcfcfc
+GDPR|Compliant||#004D40|#009688|<checklist>|#fcfcfc
+HIPAA|Certified||#4A148C|#9C27B0|<verified>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Security|A+||#B71C1C|#F44336|<security>|#fcfcfc
+GDPR|Compliant||#004D40|#009688|<checklist>|#fcfcfc
+HIPAA|Certified||#4A148C|#9C27B0|<verified>|#fcfcfc
+----
+
+=== Technology Stack Badges Example
+
+Display your technology stack with badges:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Frontend|React||#282C34|#61DAFB|<react>|#fcfcfc
+Backend|Node.js||#333333|#8CC84B|<nodedotjs>|#fcfcfc
+Database|MongoDB||#1B2A3A|#47A248|<mongodb>|#fcfcfc
+Cloud|AWS||#232F3E|#FF9900|<amazonaws>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Frontend|React||#282C34|#61DAFB|<react>|#fcfcfc
+Backend|Node.js||#333333|#8CC84B|<nodedotjs>|#fcfcfc
+Database|MongoDB||#1B2A3A|#47A248|<mongodb>|#fcfcfc
+Cloud|AWS||#232F3E|#FF9900|<amazonaws>|#fcfcfc
+----
+
+=== Documentation Status Badges Example
+
+Show the status of your documentation:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Docs|Up to date||#1A237E|#3F51B5|<book>|#fcfcfc
+API|Documented||#BF360C|#FF5722|<api>|#fcfcfc
+Examples|Available||#006064|#00BCD4|<code>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Docs|Up to date||#1A237E|#3F51B5|<book>|#fcfcfc
+API|Documented||#BF360C|#FF5722|<api>|#fcfcfc
+Examples|Available||#006064|#00BCD4|<code>|#fcfcfc
+----
+
+=== Social Media Badges Example
+
+Link to your social media profiles:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+GitHub|Follow|https://github.com/docops|#24292E|#181717|<github>|#fcfcfc
+Twitter|@docops|https://twitter.com/docops|#1DA1F2|#1DA1F2|<twitter>|#fcfcfc
+LinkedIn|Connect|https://linkedin.com/company/docops|#0A66C2|#0A66C2|<linkedin>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+GitHub|Follow|https://github.com/docops|#24292E|#181717|<github>|#fcfcfc
+Twitter|@docops|https://twitter.com/docops|#1DA1F2|#1DA1F2|<twitter>|#fcfcfc
+LinkedIn|Connect|https://linkedin.com/company/docops|#0A66C2|#0A66C2|<linkedin>|#fcfcfc
+----
+
+=== Gradient-Style Badges Example
+
+Create badges with complementary color schemes:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Premium|Feature||#6A1B9A|#9C27B0|<star>|#fcfcfc
+Pro|Subscription||#1565C0|#2196F3|<award>|#fcfcfc
+Enterprise|Solution||#283593|#3F51B5|<building>|#fcfcfc
+----
+....
+
+[docops,badge]
+----
+Premium|Feature||#6A1B9A|#9C27B0|<star>|#fcfcfc
+Pro|Subscription||#1565C0|#2196F3|<award>|#fcfcfc
+Enterprise|Solution||#283593|#3F51B5|<building>|#fcfcfc
+----
+
+== Conclusion
+
+The DocOps Shield Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing badges and shields. By using the pipe-delimited configuration format, you can create customized shields that match your document's style and purpose.
+
+The extension supports various customization options, including custom colors, logos, links, and dark mode, allowing you to create shields that effectively communicate status information and metadata in your documentation.
+
+With the examples provided in this guide, you can create badges for various use cases, including CI/CD status, version information, security and compliance, technology stack, documentation status, and social media links.
