@@ -1,0 +1,695 @@
+include::_base.adoc[]
+= DocOps Connectors
+:imagesdir: images
+
+== Introduction
+
+The DocOps Connector Extension allows you to create visually appealing flow connectors in your AsciiDoctor documents. Connectors are useful for illustrating workflows, processes, and relationships between components.
+
+This guide will help you understand the basic concepts of connectors, how to include them in your AsciiDoctor documents, and provide examples of different types of connectors.
+
+== Basic Concepts
+
+=== What are Connectors?
+
+Connectors in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each connector has:
+
+* Text (displayed inside the connector box)
+* A description (providing additional context)
+* A base color (for visual customization)
+* An automatic letter identifier (A, B, C, etc.)
+
+The extension supports different display options, including:
+
+* Regular mode (light background)
+* Dark mode (dark background)
+* Different output types (SVG, PDF)
+
+=== Connector Components
+
+A connector diagram includes:
+
+* A series of connected boxes, each containing text
+* Arrows connecting the boxes in sequence
+* Letter identifiers for each box
+* A legend with descriptions for each connector
+
+== AsciiDoctor Syntax for Connectors
+
+To include connectors in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "First Step",
+      "baseColor": "#E14D2A",
+      "description": "Description of the first step"
+    },
+    {
+      "text": "Second Step",
+      "baseColor": "#82CD47",
+      "description": "Description of the second step"
+    },
+    {
+      "text": "Third Step",
+      "baseColor": "#687EFF",
+      "description": "Description of the third step"
+    }
+  ]
+}
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the connectors that is embedded in your document.
+
+=== Connector Properties
+
+==== Main Properties
+
+* `connectors` (required): An array of connector objects
+
+==== Connector Object Properties
+
+Each connector in the `connectors` array has the following properties:
+
+* `text` (required): The text displayed inside the connector box
+* `baseColor` (optional): The color of the connector (default: "#E14D2A")
+* `description` (optional): Additional text describing the connector (default: "")
+
+=== Display Options
+
+When using the connector macro, you can specify additional parameters:
+
+* `useDark`: Set to `true` to use dark mode (default: `false`)
+* `type`: The output type, either "SVG" or "PDF" (default: "SVG")
+* `scale`: A scaling factor for the diagram (default: 1.0)
+
+== Examples
+
+=== Basic Connector Example
+
+Here's a simple example of a connector diagram:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Developer",
+      "baseColor": "#E14D2A",
+      "description": "Writes unit tests"
+    },
+    {
+      "text": "Unit Tests",
+      "baseColor": "#82CD47",
+      "description": "Unit tests produces excel"
+    },
+    {
+      "text": "Microsoft Excel",
+      "baseColor": "#687EFF",
+      "description": "Excel is stored in test engine"
+    },
+    {
+      "text": "Test Engine",
+      "baseColor": "#C02739",
+      "description": "Test Engine write documentation"
+    },
+    {
+      "text": "API Documentation Output",
+      "baseColor": "#FEC260",
+      "description": "Documentation is committed"
+    }
+  ]
+}
+----
+....
+
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Developer",
+      "baseColor": "#E14D2A",
+      "description": "Writes unit tests"
+    },
+    {
+      "text": "Unit Tests",
+      "baseColor": "#82CD47",
+      "description": "Unit tests produces excel"
+    },
+    {
+      "text": "Microsoft Excel",
+      "baseColor": "#687EFF",
+      "description": "Excel is stored in test engine"
+    },
+    {
+      "text": "Test Engine",
+      "baseColor": "#C02739",
+      "description": "Test Engine write documentation"
+    },
+    {
+      "text": "API Documentation Output",
+      "baseColor": "#FEC260",
+      "description": "Documentation is committed"
+    }
+  ]
+}
+----
+
+=== Software Development Lifecycle Example
+
+This example illustrates a software development lifecycle:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Requirements",
+      "baseColor": "#4361ee",
+      "description": "Gathering and analyzing requirements"
+    },
+    {
+      "text": "Design",
+      "baseColor": "#3a0ca3",
+      "description": "Creating software architecture and design"
+    },
+    {
+      "text": "Implementation",
+      "baseColor": "#7209b7",
+      "description": "Writing code based on design"
+    },
+    {
+      "text": "Testing",
+      "baseColor": "#f72585",
+      "description": "Verifying software quality"
+    },
+    {
+      "text": "Deployment",
+      "baseColor": "#4cc9f0",
+      "description": "Releasing software to production"
+    },
+    {
+      "text": "Maintenance",
+      "baseColor": "#4895ef",
+      "description": "Ongoing support and updates"
+    }
+  ]
+}
+----
+....
+
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Requirements",
+      "baseColor": "#4361ee",
+      "description": "Gathering and analyzing requirements"
+    },
+    {
+      "text": "Design",
+      "baseColor": "#3a0ca3",
+      "description": "Creating software architecture and design"
+    },
+    {
+      "text": "Implementation",
+      "baseColor": "#7209b7",
+      "description": "Writing code based on design"
+    },
+    {
+      "text": "Testing",
+      "baseColor": "#f72585",
+      "description": "Verifying software quality"
+    },
+    {
+      "text": "Deployment",
+      "baseColor": "#4cc9f0",
+      "description": "Releasing software to production"
+    },
+    {
+      "text": "Maintenance",
+      "baseColor": "#4895ef",
+      "description": "Ongoing support and updates"
+    }
+  ]
+}
+----
+
+=== Dark Mode Connector Example
+
+You can create dark mode connectors by setting the `useDark` parameter to `true`:
+
+[source,asciidoc]
+....
+[docops,connector,useDark=true]
+----
+{
+  "connectors": [
+    {
+      "text": "Data Source",
+      "baseColor": "#4cc9f0",
+      "description": "Origin of data"
+    },
+    {
+      "text": "ETL Process",
+      "baseColor": "#4895ef",
+      "description": "Extract, Transform, Load"
+    },
+    {
+      "text": "Data Warehouse",
+      "baseColor": "#4361ee",
+      "description": "Centralized data repository"
+    },
+    {
+      "text": "Data Mart",
+      "baseColor": "#3a0ca3",
+      "description": "Subject-oriented data subset"
+    },
+    {
+      "text": "Business Intelligence",
+      "baseColor": "#7209b7",
+      "description": "Analytics and reporting"
+    },
+    {
+      "text": "End Users",
+      "baseColor": "#f72585",
+      "description": "Consumers of insights"
+    }
+  ]
+}
+----
+....
+
+[docops,connector,useDark=true]
+----
+{
+  "connectors": [
+    {
+      "text": "Data Source",
+      "baseColor": "#4cc9f0",
+      "description": "Origin of data"
+    },
+    {
+      "text": "ETL Process",
+      "baseColor": "#4895ef",
+      "description": "Extract, Transform, Load"
+    },
+    {
+      "text": "Data Warehouse",
+      "baseColor": "#4361ee",
+      "description": "Centralized data repository"
+    },
+    {
+      "text": "Data Mart",
+      "baseColor": "#3a0ca3",
+      "description": "Subject-oriented data subset"
+    },
+    {
+      "text": "Business Intelligence",
+      "baseColor": "#7209b7",
+      "description": "Analytics and reporting"
+    },
+    {
+      "text": "End Users",
+      "baseColor": "#f72585",
+      "description": "Consumers of insights"
+    }
+  ]
+}
+----
+
+=== Multi-word Connector Example
+
+Connectors automatically handle multi-word text by displaying each word on a new line:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "User Request",
+      "baseColor": "#ff9e00",
+      "description": "Initial user interaction"
+    },
+    {
+      "text": "Authentication Service",
+      "baseColor": "#ff7a00",
+      "description": "Verifies user identity"
+    },
+    {
+      "text": "Business Logic Layer",
+      "baseColor": "#ff5500",
+      "description": "Processes the request"
+    },
+    {
+      "text": "Database Access Layer",
+      "baseColor": "#ff0000",
+      "description": "Retrieves or stores data"
+    },
+    {
+      "text": "Response Generation",
+      "baseColor": "#e10600",
+      "description": "Creates response for user"
+    }
+  ]
+}
+----
+....
+
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "User Request",
+      "baseColor": "#ff9e00",
+      "description": "Initial user interaction"
+    },
+    {
+      "text": "Authentication Service",
+      "baseColor": "#ff7a00",
+      "description": "Verifies user identity"
+    },
+    {
+      "text": "Business Logic Layer",
+      "baseColor": "#ff5500",
+      "description": "Processes the request"
+    },
+    {
+      "text": "Database Access Layer",
+      "baseColor": "#ff0000",
+      "description": "Retrieves or stores data"
+    },
+    {
+      "text": "Response Generation",
+      "baseColor": "#e10600",
+      "description": "Creates response for user"
+    }
+  ]
+}
+----
+
+=== Cloud Architecture Example
+
+This example illustrates a cloud-based architecture:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Users",
+      "baseColor": "#06d6a0",
+      "description": "End users accessing the application"
+    },
+    {
+      "text": "CDN",
+      "baseColor": "#1b9aaa",
+      "description": "Content Delivery Network for static assets"
+    },
+    {
+      "text": "Load Balancer",
+      "baseColor": "#ef476f",
+      "description": "Distributes traffic across servers"
+    },
+    {
+      "text": "Web Servers",
+      "baseColor": "#ffd166",
+      "description": "Handles HTTP requests"
+    },
+    {
+      "text": "API Gateway",
+      "baseColor": "#073b4c",
+      "description": "Routes requests to microservices"
+    },
+    {
+      "text": "Microservices",
+      "baseColor": "#118ab2",
+      "description": "Individual service components"
+    },
+    {
+      "text": "Database",
+      "baseColor": "#06d6a0",
+      "description": "Persistent data storage"
+    }
+  ]
+}
+----
+....
+
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Users",
+      "baseColor": "#06d6a0",
+      "description": "End users accessing the application"
+    },
+    {
+      "text": "CDN",
+      "baseColor": "#1b9aaa",
+      "description": "Content Delivery Network for static assets"
+    },
+    {
+      "text": "Load Balancer",
+      "baseColor": "#ef476f",
+      "description": "Distributes traffic across servers"
+    },
+    {
+      "text": "Web Servers",
+      "baseColor": "#ffd166",
+      "description": "Handles HTTP requests"
+    },
+    {
+      "text": "API Gateway",
+      "baseColor": "#073b4c",
+      "description": "Routes requests to microservices"
+    },
+    {
+      "text": "Microservices",
+      "baseColor": "#118ab2",
+      "description": "Individual service components"
+    },
+    {
+      "text": "Database",
+      "baseColor": "#06d6a0",
+      "description": "Persistent data storage"
+    }
+  ]
+}
+----
+=== CI/CD Pipeline Example
+
+This example illustrates a continuous integration and deployment pipeline:
+
+[source,asciidoc]
+....
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Code Commit",
+      "baseColor": "#2d00f7",
+      "description": "Developer pushes code to repository"
+    },
+    {
+      "text": "Automated Tests",
+      "baseColor": "#6a00f4",
+      "description": "Unit and integration tests run"
+    },
+    {
+      "text": "Code Quality",
+      "baseColor": "#8900f2",
+      "description": "Static analysis and code review"
+    },
+    {
+      "text": "Build",
+      "baseColor": "#a100f2",
+      "description": "Compiling and packaging application"
+    },
+    {
+      "text": "Artifact Storage",
+      "baseColor": "#b100e8",
+      "description": "Storing build artifacts"
+    },
+    {
+      "text": "Staging Deploy",
+      "baseColor": "#bc00dd",
+      "description": "Deploying to staging environment"
+    },
+    {
+      "text": "Acceptance Tests",
+      "baseColor": "#d100d1",
+      "description": "Automated acceptance testing"
+    },
+    {
+      "text": "Production Deploy",
+      "baseColor": "#db00b6",
+      "description": "Deploying to production environment"
+    },
+    {
+      "text": "Monitoring",
+      "baseColor": "#e500a4",
+      "description": "Continuous monitoring and alerting"
+    }
+  ]
+}
+----
+....
+
+[docops,connector]
+----
+{
+  "connectors": [
+    {
+      "text": "Code Commit",
+      "baseColor": "#2d00f7",
+      "description": "Developer pushes code to repository"
+    },
+    {
+      "text": "Automated Tests",
+      "baseColor": "#6a00f4",
+      "description": "Unit and integration tests run"
+    },
+    {
+      "text": "Code Quality",
+      "baseColor": "#8900f2",
+      "description": "Static analysis and code review"
+    },
+    {
+      "text": "Build",
+      "baseColor": "#a100f2",
+      "description": "Compiling and packaging application"
+    },
+    {
+      "text": "Artifact Storage",
+      "baseColor": "#b100e8",
+      "description": "Storing build artifacts"
+    },
+    {
+      "text": "Staging Deploy",
+      "baseColor": "#bc00dd",
+      "description": "Deploying to staging environment"
+    },
+    {
+      "text": "Acceptance Tests",
+      "baseColor": "#d100d1",
+      "description": "Automated acceptance testing"
+    },
+    {
+      "text": "Production Deploy",
+      "baseColor": "#db00b6",
+      "description": "Deploying to production environment"
+    },
+    {
+      "text": "Monitoring",
+      "baseColor": "#e500a4",
+      "description": "Continuous monitoring and alerting"
+    }
+  ]
+}
+----
+=== PDF Output Type Example
+
+This example demonstrates using the PDF output type, which changes the rendering style:
+
+[source,asciidoc]
+....
+[docops,connector,type=PDF]
+----
+{
+  "connectors": [
+    {
+      "text": "Problem",
+      "baseColor": "#ff595e",
+      "description": "Identify the issue to be solved"
+    },
+    {
+      "text": "Research",
+      "baseColor": "#ffca3a",
+      "description": "Gather information and context"
+    },
+    {
+      "text": "Ideation",
+      "baseColor": "#8ac926",
+      "description": "Generate potential solutions"
+    },
+    {
+      "text": "Prototype",
+      "baseColor": "#1982c4",
+      "description": "Create a model of the solution"
+    },
+    {
+      "text": "Testing",
+      "baseColor": "#6a4c93",
+      "description": "Evaluate the prototype"
+    },
+    {
+      "text": "Implementation",
+      "baseColor": "#ff595e",
+      "description": "Put the solution into practice"
+    }
+  ]
+}
+----
+....
+
+[docops,connector,type=PDF]
+----
+{
+  "connectors": [
+    {
+      "text": "Problem",
+      "baseColor": "#ff595e",
+      "description": "Identify the issue to be solved"
+    },
+    {
+      "text": "Research",
+      "baseColor": "#ffca3a",
+      "description": "Gather information and context"
+    },
+    {
+      "text": "Ideation",
+      "baseColor": "#8ac926",
+      "description": "Generate potential solutions"
+    },
+    {
+      "text": "Prototype",
+      "baseColor": "#1982c4",
+      "description": "Create a model of the solution"
+    },
+    {
+      "text": "Testing",
+      "baseColor": "#6a4c93",
+      "description": "Evaluate the prototype"
+    },
+    {
+      "text": "Implementation",
+      "baseColor": "#ff595e",
+      "description": "Put the solution into practice"
+    }
+  ]
+}
+----
+== Conclusion
+
+The DocOps Connector Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing flow diagrams. By using the JSON configuration format, you can create customized connector diagrams that illustrate processes, workflows, and relationships between components.
+
+The extension supports both regular and dark mode displays, with various customization options for colors and descriptions.
