@@ -113,21 +113,21 @@ private fun itemGradient(planItems: PlanItems): String {
 
             planItem.title?.let {
                 val textColor = determineTextColor(columnColor)
-                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;">${planItem.title}</text>""")
+                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">${planItem.title}</text>""")
             }
             planItem.content?.let {
                 //todo fix url
                 val contentList = itemTextWidth(planItem.content!!, 532F, 24, "Helvetica")
                 val list = linesToUrlIfExist(contentList, planItem.urlMap)
-                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px; line-height: 1.5;'>")
+                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'>")
                 list.forEachIndexed { index, string ->
                     // Check if the line starts with a bullet point
                     if (string.startsWith("•")) {
                         // Render bullet point with proper indentation
-                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px; font-weight: 600;">• </tspan>""")
-                        sb.append("""<tspan style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px;">${string.substring(1)}</tspan>""")
+                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; font-weight: 600;">• </tspan>""")
+                        sb.append("""<tspan style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">${string.substring(1)}</tspan>""")
                     } else {
-                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 20px;">${string}</tspan>""")
+                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">${string}</tspan>""")
                     }
                 }
                 sb.append("</text>")
@@ -142,7 +142,7 @@ private fun itemGradient(planItems: PlanItems): String {
                     <feGaussianBlur stdDeviation="2" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 36px; font-weight: bold; letter-spacing: 1px; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
+                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()
@@ -165,7 +165,7 @@ private fun itemGradient(planItems: PlanItems): String {
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      width="${(width * 0.50 * scale.toFloat()) / DISPLAY_RATIO_16_9}" height="${(height * 0.50 * scale.toFloat())/DISPLAY_RATIO_16_9}"
-     viewBox="0 0 $width $height">
+     viewBox="0 0 $width $height" preserveAspectRatio="xMidYMin meet">
      <defs>
      $grads
      $itemGrad
