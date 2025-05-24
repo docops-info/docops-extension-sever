@@ -1,0 +1,425 @@
+include::_base.adoc[]
+= DocOps ADR
+
+== Introduction
+
+The DocOps ADR (Architecture Decision Record) Extension allows you to create visually appealing architecture decision records in your AsciiDoctor documents. ADRs are a way to document important architectural decisions, their context, and consequences.
+
+This guide will help you understand the basic concepts of ADRs, how to include them in your AsciiDoctor documents, and provide examples of different types of ADR visualizations.
+
+== Basic Concepts
+
+=== What are Architecture Decision Records?
+
+Architecture Decision Records (ADRs) in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each ADR has:
+
+* A title (the main heading of the ADR)
+* Status (Proposed, Accepted, Superseded, Deprecated, or Rejected)
+* Date of the decision
+* Context (the factors that influenced the decision)
+* Decision (the actual decision made)
+* Consequences (the results of the decision)
+* Participants (the people involved in making the decision)
+
+The extension supports various display options, including:
+
+* Light mode (default)
+* Dark mode
+* Different status colors
+
+=== ADR Components
+
+An ADR includes:
+
+* A title
+* Status and date information
+* Context section
+* Decision section
+* Consequences section
+* Participants section with stick figure representations
+
+== AsciiDoctor Syntax for ADRs
+
+To include ADRs in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,adr]
+----
+title: ADR title
+status: Accepted
+date: YYYY-MM-DD
+context: Context point 1
+- Context point 2
+decision: Decision point 1
+- Decision point 2
+consequences: Consequence 1
+Consequence 2
+participants:
+Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the ADR that is embedded in your document.
+
+=== ADR Properties
+
+==== Main Properties
+
+* `title` (required): The main heading of the ADR
+* `date` (required): The date when the decision was made
+* `status` (required): The status of the decision (Proposed, Accepted, Superseded, Deprecated, or Rejected)
+* `context` (required): An array of context statements
+* `decision` (required): An array of decision statements
+* `consequences` (required): An array of consequence statements
+* `participants` (optional): An array of participant names
+
+
+==== Status Options
+
+The `status` property can have one of the following values:
+
+* `Proposed`: Indicates a decision that is being considered (blue)
+* `Accepted`: Indicates a decision that has been approved (green)
+* `Superseded`: Indicates a decision that has been replaced by a newer decision (amber)
+* `Deprecated`: Indicates a decision that is no longer relevant (red)
+* `Rejected`: Indicates a decision that was not approved (dark red)
+
+== Examples
+
+=== Basic ADR Example
+
+Here's a simple example of an Architecture Decision Record:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants:
+Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants:
+Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+
+=== Dark Mode ADR Example
+
+You can create dark mode ADRs by setting the `useDark` parameter to `true`:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=true,role=center]
+----
+title: Adopt Microservices Architecture
+status: Accepted
+date: 2024-06-01
+context:
+- Our monolithic application is becoming difficult to maintain and scale
+- Development teams need to work independently on different parts of the system
+- We need to improve deployment frequency and reduce time-to-market
+- Different components have different scaling requirements
+decision:
+- We will gradually migrate from monolith to microservices architecture
+- We will use domain-driven design to identify service boundaries
+- We will implement an API gateway for client communication
+- We will use containerization (Docker) and orchestration (Kubernetes)
+consequences:
+- Improved scalability and resilience
+- Faster development cycles and independent deployments
+- Increased operational complexity
+- Need for robust service discovery and monitoring
+participants:
+Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)
+----
+....
+
+[docops,adr,useDark=true,role=center]
+----
+title: Adopt Microservices Architecture
+status: Accepted
+date: 2024-06-01
+context:
+- Our monolithic application is becoming difficult to maintain and scale
+- Development teams need to work independently on different parts of the system
+- We need to improve deployment frequency and reduce time-to-market
+- Different components have different scaling requirements
+decision:
+- We will gradually migrate from monolith to microservices architecture
+- We will use domain-driven design to identify service boundaries
+- We will implement an API gateway for client communication
+- We will use containerization (Docker) and orchestration (Kubernetes)
+consequences:
+- Improved scalability and resilience
+- Faster development cycles and independent deployments
+- Increased operational complexity
+- Need for robust service discovery and monitoring
+participants:
+Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)
+----
+
+=== Proposed Status ADR Example
+
+This example shows an ADR with "Proposed" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Implement GraphQL API Layer
+status: Proposed
+date: 2024-06-10
+context:
+- Our REST APIs require multiple round trips for complex data requirements
+- Mobile clients need efficient data loading with minimal bandwidth
+- Frontend teams need more flexibility in data fetching
+- API versioning and documentation are becoming challenging
+decision:
+- We will implement a GraphQL API layer on top of existing services
+- We will use Apollo Server for the GraphQL implementation
+- We will maintain existing REST APIs for backward compatibility
+- We will develop a phased migration plan for clients
+consequences:
+- More efficient data fetching for clients
+- Reduced network overhead for mobile applications
+- Self-documenting API with introspection
+- Learning curve for teams unfamiliar with GraphQL
+- Additional complexity in the API layer
+participants:
+Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Implement GraphQL API Layer
+status: Proposed
+date: 2024-06-10
+context:
+- Our REST APIs require multiple round trips for complex data requirements
+- Mobile clients need efficient data loading with minimal bandwidth
+- Frontend teams need more flexibility in data fetching
+- API versioning and documentation are becoming challenging
+decision:
+- We will implement a GraphQL API layer on top of existing services
+- We will use Apollo Server for the GraphQL implementation
+- We will maintain existing REST APIs for backward compatibility
+- We will develop a phased migration plan for clients
+consequences:
+- More efficient data fetching for clients
+- Reduced network overhead for mobile applications
+- Self-documenting API with introspection
+- Learning curve for teams unfamiliar with GraphQL
+- Additional complexity in the API layer
+participants:
+Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)
+----
+
+=== Rejected Status ADR Example
+
+This example shows an ADR with "Rejected" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We're experiencing performance issues with our relational database
+- Some of our data doesn't fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+decision:
+- We will not migrate from PostgreSQL to MongoDB
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team's existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in PostgreSQL optimization and tuning
+participants:
+Jennifer Lee (Database Administrator), Carlos Rodriguez (System Architect), Thomas Wright (Performance Engineer)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We're experiencing performance issues with our relational database
+- Some of our data doesn't fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+decision:
+- We will not migrate from PostgreSQL to MongoDB
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team's existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in PostgreSQL optimization and tuning
+participants:
+Jennifer Lee (Database Administrator), Carlos Rodriguez (System Architect), Thomas Wright (Performance Engineer)
+----
+
+=== Superseded Status ADR Example
+
+This example shows an ADR with "Superseded" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Use JWT for Authentication
+status: Superseded
+date: 2023-11-15
+context:
+- We need a stateless authentication mechanism
+- We want to reduce database lookups for auth verification
+- We need to support authentication across multiple services
+- We need to include authorization claims in the token
+decision:
+- We will use JWT (JSON Web Tokens) for authentication
+- We will implement token refresh mechanism
+- We will store tokens in HTTP-only cookies
+- We will include basic user permissions in the token
+consequences:
+- Stateless authentication reducing server load
+- Simplified authentication for microservices
+- Potential security risks if tokens are compromised
+- Limited token size due to being included in every request
+participants:
+Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Use JWT for Authentication
+status: Superseded
+date: 2023-11-15
+context:
+- We need a stateless authentication mechanism
+- We want to reduce database lookups for auth verification
+- We need to support authentication across multiple services
+- We need to include authorization claims in the token
+decision:
+- We will use JWT (JSON Web Tokens) for authentication
+- We will implement token refresh mechanism
+- We will store tokens in HTTP-only cookies
+- We will include basic user permissions in the token
+consequences:
+- Stateless authentication reducing server load
+- Simplified authentication for microservices
+- Potential security risks if tokens are compromised
+- Limited token size due to being included in every request
+participants:
+Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)
+----
+
+=== Deprecated Status ADR Example
+
+This example shows an ADR with "Deprecated" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=true,role=center]
+----
+title: Use Server-Side Rendering for Web Application
+status: Deprecated
+date: 2022-09-10
+context:
+- We need to optimize initial page load performance
+- SEO is important for our content-heavy application
+- We need to support users with slower internet connections
+- We want to reduce client-side JavaScript processing
+decision:
+- We will use Next.js for server-side rendering
+- We will implement incremental static regeneration for content pages
+- We will use client-side hydration for interactive components
+- We will implement code splitting for performance optimization
+consequences:
+- Improved initial page load times
+- Better SEO performance
+- Reduced client-side processing requirements
+- Increased server resource usage
+- More complex deployment architecture
+participants:
+Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
+----
+....
+
+[docops,adr,useDark=true,role=center]
+----
+title: Use Server-Side Rendering for Web Application
+status: Deprecated
+date: 2022-09-10
+context:
+- We need to optimize initial page load performance
+- SEO is important for our content-heavy application
+- We need to support users with slower internet connections
+- We want to reduce client-side JavaScript processing
+decision:
+- We will use Next.js for server-side rendering
+- We will implement incremental static regeneration for content pages
+- We will use client-side hydration for interactive components
+- We will implement code splitting for performance optimization
+consequences:
+- Improved initial page load times
+- Better SEO performance
+- Reduced client-side processing requirements
+- Increased server resource usage
+- More complex deployment architecture
+participants:
+Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
+----
+== Conclusion
+
+The DocOps ADR Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing architecture decision records. By using the JSON configuration format, you can create customized ADRs that document important architectural decisions in your projects.
+
+The extension supports various status types and display options, including dark mode, making it versatile for different documentation needs.

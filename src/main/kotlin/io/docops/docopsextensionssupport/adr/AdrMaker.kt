@@ -69,6 +69,25 @@ class AdrMaker {
             .adrlink { fill: #6366F1; text-decoration: underline; font-weight: 500; }
             .adrlink:hover, .adrlink:active { outline: dotted 1px #6366F1; fill: #4F46E5; }
             </style>
+
+            <!-- Bullet point symbols -->
+            <symbol id="bullet-dash" viewBox="0 0 24 24" width="12" height="12">
+                <!-- Double right chevron -->
+                <path d="M13.5 12L7.5 6L9 4.5L16.5 12L9 19.5L7.5 18L13.5 12Z M18.5 12L12.5 6L14 4.5L21.5 12L14 19.5L12.5 18L18.5 12Z" 
+                      fill="${editorColor.lineColor}" />
+            </symbol>
+
+            <symbol id="bullet-star" viewBox="0 0 24 24" width="12" height="12">
+                <!-- Star shape -->
+                <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" 
+                      fill="${editorColor.lineColor}" />
+            </symbol>
+
+            <symbol id="bullet-plus" viewBox="0 0 24 24" width="12" height="12">
+                <!-- Circular bullet point -->
+                <circle cx="12" cy="12" r="6" fill="${editorColor.lineColor}" />
+            </symbol>
+
             ${editorColor.backGrad().linearGradient}
             </defs>
         """.trimIndent()
@@ -126,14 +145,16 @@ class AdrMaker {
         val contentY = headerY + headerHeight + 10
 
         // Create header card with a slightly darker shade
-        val headerColor = editorColor.lineColor
-        val headerBgColor = if (editorColor is EditorLite) "#EEF2FF" else "#4B5563" // Indigo-50 for light, Gray-600 for dark
+        val headerBgColor = if (editorColor is EditorLite) "#F3F4F6" else "#4B5563" // Gray-100 for light, Gray-600 for dark
+
+        // Use status color for header text
+        val statusColor = mapBgFromStatus(adr)
 
         text.append("""
          <rect x="10" y="$headerY" width="700" height="$headerHeight" rx="4" ry="4" 
                fill="$headerBgColor" filter="url(#dropShadow)" />
          <text x="$headerX" y="${headerY + 20}"
-              style="fill: ${headerColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
+              style="fill: ${statusColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
               >Context
         </text>
         """.trimIndent())
@@ -142,7 +163,7 @@ class AdrMaker {
         val contentHeight = (adr.context.size * dy) + 30 // Add more padding at the bottom
 
         // Create content card with a lighter shade
-        val contentBgColor = if (editorColor is EditorLite) "#F5F7FF" else "#374151" // Lighter indigo for light, Gray-700 for dark
+        val contentBgColor = if (editorColor is EditorLite) "#F9FAFB" else "#374151" // Gray-50 for light, Gray-700 for dark
 
         text.append("""
             <rect x="30" y="$contentY" width="680" height="$contentHeight" rx="4" ry="4" 
@@ -157,9 +178,34 @@ class AdrMaker {
             {
                 y= dy
             }
-            text.append("""
-            <tspan x="$xIndent" dy="$y">$s</tspan>
-        """.trimIndent())
+
+            // Check if the line has a bullet point marker
+            if (s.startsWith("BULLET_DASH:") || s.startsWith("BULLET_STAR:") || s.startsWith("BULLET_PLUS:")) {
+                val bulletType = when {
+                    s.startsWith("BULLET_DASH:") -> "bullet-dash"
+                    s.startsWith("BULLET_STAR:") -> "bullet-star"
+                    else -> "bullet-plus"
+                }
+
+                // Extract the text without the bullet marker
+                val textContent = when {
+                    s.startsWith("BULLET_DASH:") -> s.substring("BULLET_DASH:".length)
+                    s.startsWith("BULLET_STAR:") -> s.substring("BULLET_STAR:".length)
+                    else -> s.substring("BULLET_PLUS:".length)
+                }
+
+                // Add the bullet point and the text
+                text.append("""
+                <tspan x="$xIndent" dy="$y">
+                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                    <tspan dx="16">$textContent</tspan>
+                </tspan>
+                """.trimIndent())
+            } else {
+                text.append("""
+                <tspan x="$xIndent" dy="$y">$s</tspan>
+                """.trimIndent())
+            }
             lineCount++
         }
         text.append("</text>")
@@ -177,14 +223,16 @@ class AdrMaker {
         val contentY = headerY + headerHeight + 10
 
         // Create header card with a slightly darker shade
-        val headerColor = editorColor.lineColor
-        val headerBgColor = if (editorColor is EditorLite) "#EEF2FF" else "#4B5563" // Indigo-50 for light, Gray-600 for dark
+        val headerBgColor = if (editorColor is EditorLite) "#F3F4F6" else "#4B5563" // Gray-100 for light, Gray-600 for dark
+
+        // Use status color for header text
+        val statusColor = mapBgFromStatus(adr)
 
         text.append("""
          <rect x="10" y="$headerY" width="700" height="$headerHeight" rx="4" ry="4" 
                fill="$headerBgColor" filter="url(#dropShadow)" />
          <text x="$headerX" y="${headerY + 20}"
-              style="fill: ${headerColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
+              style="fill: ${statusColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
               >Decision
         </text>
         """.trimIndent())
@@ -193,7 +241,7 @@ class AdrMaker {
         val contentHeight = (adr.decision.size * dy) + 30 // Add more padding at the bottom
 
         // Create content card with a lighter shade
-        val contentBgColor = if (editorColor is EditorLite) "#F5F7FF" else "#374151" // Lighter indigo for light, Gray-700 for dark
+        val contentBgColor = if (editorColor is EditorLite) "#F9FAFB" else "#374151" // Gray-50 for light, Gray-700 for dark
 
         text.append("""
             <rect x="30" y="$contentY" width="680" height="$contentHeight" rx="4" ry="4" 
@@ -208,9 +256,34 @@ class AdrMaker {
             {
                 y= dy
             }
-            text.append("""
-            <tspan x="$xIndent" dy="$y">$d</tspan>
-        """.trimIndent())
+
+            // Check if the line has a bullet point marker
+            if (d.startsWith("BULLET_DASH:") || d.startsWith("BULLET_STAR:") || d.startsWith("BULLET_PLUS:")) {
+                val bulletType = when {
+                    d.startsWith("BULLET_DASH:") -> "bullet-dash"
+                    d.startsWith("BULLET_STAR:") -> "bullet-star"
+                    else -> "bullet-plus"
+                }
+
+                // Extract the text without the bullet marker
+                val textContent = when {
+                    d.startsWith("BULLET_DASH:") -> d.substring("BULLET_DASH:".length)
+                    d.startsWith("BULLET_STAR:") -> d.substring("BULLET_STAR:".length)
+                    else -> d.substring("BULLET_PLUS:".length)
+                }
+
+                // Add the bullet point and the text
+                text.append("""
+                <tspan x="$xIndent" dy="$y">
+                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                    <tspan dx="16">$textContent</tspan>
+                </tspan>
+                """.trimIndent())
+            } else {
+                text.append("""
+                <tspan x="$xIndent" dy="$y">$d</tspan>
+                """.trimIndent())
+            }
             lineCount++
         }
         text.append("</text>")
@@ -227,14 +300,16 @@ class AdrMaker {
         val contentY = headerY + headerHeight + 10
 
         // Create header card with a slightly darker shade
-        val headerColor = editorColor.lineColor
-        val headerBgColor = if (editorColor is EditorLite) "#EEF2FF" else "#4B5563" // Indigo-50 for light, Gray-600 for dark
+        val headerBgColor = if (editorColor is EditorLite) "#F3F4F6" else "#4B5563" // Gray-100 for light, Gray-600 for dark
+
+        // Use status color for header text
+        val statusColor = mapBgFromStatus(adr)
 
         text.append("""
          <rect x="10" y="$headerY" width="700" height="$headerHeight" rx="4" ry="4" 
                fill="$headerBgColor" filter="url(#dropShadow)" />
          <text x="$headerX" y="${headerY + 20}"
-              style="fill: ${headerColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
+              style="fill: ${statusColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
               >Consequences
         </text>
         """.trimIndent())
@@ -243,7 +318,7 @@ class AdrMaker {
         val contentHeight = (adr.consequences.size * dy) + 30 // Add more padding at the bottom
 
         // Create content card with a lighter shade
-        val contentBgColor = if (editorColor is EditorLite) "#F5F7FF" else "#374151" // Lighter indigo for light, Gray-700 for dark
+        val contentBgColor = if (editorColor is EditorLite) "#F9FAFB" else "#374151" // Gray-50 for light, Gray-700 for dark
 
         text.append("""
             <rect x="30" y="$contentY" width="680" height="$contentHeight" rx="4" ry="4" 
@@ -258,9 +333,34 @@ class AdrMaker {
             {
                 y= dy
             }
-            text.append("""
-            <tspan x="$xIndent" dy="$y">$d</tspan>
-        """.trimIndent())
+
+            // Check if the line has a bullet point marker
+            if (d.startsWith("BULLET_DASH:") || d.startsWith("BULLET_STAR:") || d.startsWith("BULLET_PLUS:")) {
+                val bulletType = when {
+                    d.startsWith("BULLET_DASH:") -> "bullet-dash"
+                    d.startsWith("BULLET_STAR:") -> "bullet-star"
+                    else -> "bullet-plus"
+                }
+
+                // Extract the text without the bullet marker
+                val textContent = when {
+                    d.startsWith("BULLET_DASH:") -> d.substring("BULLET_DASH:".length)
+                    d.startsWith("BULLET_STAR:") -> d.substring("BULLET_STAR:".length)
+                    else -> d.substring("BULLET_PLUS:".length)
+                }
+
+                // Add the bullet point and the text
+                text.append("""
+                <tspan x="$xIndent" dy="$y">
+                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                    <tspan dx="16">$textContent</tspan>
+                </tspan>
+                """.trimIndent())
+            } else {
+                text.append("""
+                <tspan x="$xIndent" dy="$y">$d</tspan>
+                """.trimIndent())
+            }
             lineCount++
         }
         text.append("</text>")
@@ -268,45 +368,64 @@ class AdrMaker {
         return RowTextOutcome(text.toString(), contentY + contentHeight)
     }
     /**
-     * Creates a stick figure SVG representation
-     * @param x The x coordinate for the stick figure
-     * @param y The y coordinate for the stick figure
-     * @param name The name to display under the stick figure
-     * @param textColor The color for the text and stick figure
-     * @return SVG string representing a stick figure with name underneath
+     * Creates a Font Awesome style person figure SVG representation
+     * @param x The x coordinate for the person figure
+     * @param y The y coordinate for the person figure
+     * @param name The name to display under the person figure
+     * @param textColor The color for the text and person figure
+     * @return SVG string representing a person figure with name underneath
      */
-    private fun createStickFigure(x: Float, y: Float, name: String, textColor: String): String {
-        val figureHeight = 50f // Height of the stick figure
-        val headRadius = 10f
-        val bodyLength = 20f
-        val limbLength = 15f
+    private fun createPersonFigure(x: Float, y: Float, name: String, textColor: String): String {
+        // Font Awesome style person icon path
+        val personPath = "M256 288c79.5 0 144-64.5 144-144S335.5 0 256 0 112 64.5 112 144s64.5 144 144 144zm128 32h-55.1c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16H128C57.3 320 0 377.3 0 448v16c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48v-16c0-70.7-57.3-128-128-128z"
+
+        // Scale factor for the icon (adjust as needed)
+        val scale = 0.05
+
+        // Calculate the maximum width for text wrapping
+        val maxTextWidth = 140f
+
+        // Split the name into words for potential wrapping
+        val words = name.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = ""
+
+        // Simple text wrapping algorithm
+        for (word in words) {
+            if (currentLine.isEmpty()) {
+                currentLine = word
+            } else if ((currentLine.length + word.length + 1) * 6 < maxTextWidth) { // Rough estimate of text width
+                currentLine += " $word"
+            } else {
+                lines.add(currentLine)
+                currentLine = word
+            }
+        }
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine)
+        }
+
+        val textY = 50f // Base position for text
+        val lineHeight = 15f // Height between text lines
+
+        val textElements = lines.mapIndexed { index, line ->
+            """<text x="0" y="${textY + (index * lineHeight)}" 
+                  text-anchor="middle" fill="$textColor" 
+                  style="font-size: 12px; font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
+                $line
+            </text>"""
+        }.joinToString("\n")
 
         return """
-            <!-- Stick figure for $name -->
+            <!-- Person figure for $name -->
             <g transform="translate($x, $y)">
-                <!-- Head -->
-                <circle cx="0" cy="0" r="$headRadius" fill="none" stroke="$textColor" stroke-width="1.5" />
+                <!-- Font Awesome style person icon -->
+                <g transform="scale($scale) translate(-256, -256)">
+                    <path d="$personPath" fill="$textColor" />
+                </g>
 
-                <!-- Body -->
-                <line x1="0" y1="$headRadius" x2="0" y2="${headRadius + bodyLength}" 
-                      stroke="$textColor" stroke-width="1.5" stroke-linecap="round" />
-
-                <!-- Arms -->
-                <line x1="-${limbLength}" y1="${headRadius + 10}" x2="${limbLength}" y2="${headRadius + 10}" 
-                      stroke="$textColor" stroke-width="1.5" stroke-linecap="round" />
-
-                <!-- Legs -->
-                <line x1="0" y1="${headRadius + bodyLength}" x2="-${limbLength}" y2="${headRadius + bodyLength + limbLength}" 
-                      stroke="$textColor" stroke-width="1.5" stroke-linecap="round" />
-                <line x1="0" y1="${headRadius + bodyLength}" x2="${limbLength}" y2="${headRadius + bodyLength + limbLength}" 
-                      stroke="$textColor" stroke-width="1.5" stroke-linecap="round" />
-
-                <!-- Name -->
-                <text x="0" y="${headRadius + bodyLength + limbLength + 15}" 
-                      text-anchor="middle" fill="$textColor" 
-                      style="font-size: 12px; font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;">
-                    $name
-                </text>
+                <!-- Name with potential wrapping -->
+                $textElements
             </g>
         """.trimIndent()
     }
@@ -320,35 +439,27 @@ class AdrMaker {
         val contentY = headerY + headerHeight + 10
 
         // Create header card with a slightly darker shade
-        val headerColor = editorColor.lineColor
-        val headerBgColor = if (editorColor is EditorLite) "#EEF2FF" else "#4B5563" // Indigo-50 for light, Gray-600 for dark
+        val headerBgColor = if (editorColor is EditorLite) "#F3F4F6" else "#4B5563" // Gray-100 for light, Gray-600 for dark
+
+        // Use status color for header text
+        val statusColor = mapBgFromStatus(adr)
 
         text.append("""
          <rect x="10" y="$headerY" width="700" height="$headerHeight" rx="4" ry="4" 
                fill="$headerBgColor" filter="url(#dropShadow)" />
          <text x="$headerX" y="${headerY + 20}"
-              style="fill: ${headerColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
+              style="fill: ${statusColor};font-weight: 600; font-size: 14px;font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji;"
               >Participants
         </text>
         """.trimIndent())
 
-        // Calculate dimensions for stick figures
-        val figureWidth = 100f // Width allocated for each stick figure
-        val figureHeight = 100f // Height needed for stick figure + name
+        // Calculate dimensions for person figures with more space for text
+        val figureWidth = 150f // Increased width allocated for each person figure
+        val figureHeight = 120f // Increased height needed for person figure + multi-line name
         val participants = adr.participants.filter { it.isNotBlank() }
 
-        // Calculate content dimensions
-        val maxParticipantsPerRow = 6 // Maximum number of participants per row
-        val rows = (participants.size + maxParticipantsPerRow - 1) / maxParticipantsPerRow // Ceiling division
-        val contentHeight = rows * figureHeight + 20 // Add padding
-
-        // Create content card with a lighter shade
-        val contentBgColor = if (editorColor is EditorLite) "#F5F7FF" else "#374151" // Lighter indigo for light, Gray-700 for dark
-
-        text.append("""
-            <rect x="30" y="$contentY" width="680" height="$contentHeight" rx="4" ry="4" 
-                  fill="$contentBgColor" filter="url(#dropShadow)" />
-        """.trimIndent())
+        // Calculate content dimensions with fewer participants per row to accommodate longer text
+        val maxParticipantsPerRow = 4 // Reduced from 6 to 4 participants per row
 
         // Process participants: split comma-separated names into individual participants
         val participantList = mutableListOf<String>()
@@ -362,17 +473,27 @@ class AdrMaker {
             }
         }
 
-        // Add stick figures for each participant
+        val rows = (participantList.size + maxParticipantsPerRow - 1) / maxParticipantsPerRow // Ceiling division
+        val contentHeight = rows * figureHeight + 30 // Add more padding
+
+        // Create content card with a lighter shade
+        val contentBgColor = if (editorColor is EditorLite) "#F9FAFB" else "#374151" // Gray-50 for light, Gray-700 for dark
+
+        text.append("""
+            <rect x="30" y="$contentY" width="680" height="$contentHeight" rx="4" ry="4" 
+                  fill="$contentBgColor" filter="url(#dropShadow)" />
+        """.trimIndent())
+
+        // Add person figures for each participant
         participantList.forEachIndexed { index, participant ->
             val row = index / maxParticipantsPerRow
             val col = index % maxParticipantsPerRow
 
-            // Calculate position for this stick figure
-            val xPos = 30f + 50f + (col * figureWidth) // Start with padding + half figure width
-            val yPos = contentY + 30f + (row * figureHeight) // Start with padding
+            // Calculate position for this person figure with better spacing
+            val xPos = 30f + 75f + (col * figureWidth) // Start with padding + half figure width
+            val yPos = contentY + 40f + (row * figureHeight) // Start with padding
 
-
-            text.append(createStickFigure(xPos, yPos, participant.trim(), mapBgFromStatus(adr)))
+            text.append(createPersonFigure(xPos, yPos, participant.trim(), mapBgFromStatus(adr)))
         }
 
         return RowTextOutcome(text.toString(), contentY + contentHeight)
@@ -392,7 +513,7 @@ class AdrMaker {
 open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000", val id: String = UUID.randomUUID().toString()){
 
 }
-class EditorLite(background: String = "#ffffff", lineColor: String="#4361ee", textColor: String="#374151", titleColor: String="#3B82F6"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorLite(background: String = "#ffffff", lineColor: String="#6B7280", textColor: String="#374151", titleColor: String="#4B5563"): EditorColor(background, lineColor, textColor, titleColor)
 class EditorDark(background: String = "#1E293B",  lineColor: String = "#818CF8",  textColor: String = "#E5E7EB", titleColor: String = "#A5B4FC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)
 

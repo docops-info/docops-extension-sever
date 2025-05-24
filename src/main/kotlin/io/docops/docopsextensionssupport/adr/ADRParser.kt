@@ -125,9 +125,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
-        itemArray.add("")
-        return itemArray
+        // Return the list directly instead of processing with itemTextWidth
+        // This preserves the bullet point prefixes
+        return list
     }
 
     private fun mapDecision(
@@ -149,9 +149,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
-        itemArray.add("")
-        return itemArray
+        // Return the list directly instead of processing with itemTextWidth
+        // This preserves the bullet point prefixes
+        return list
     }
 
     private fun mapConsequences(
@@ -173,9 +173,9 @@ class ADRParser {
             list.addAll(it.addLinebreaks(config.lineSize))
             list.add("")
         }
-        val itemArray = itemTextWidth(parts.joinToString(), SplitLength.toFloat(), 11)
-        itemArray.add("")
-        return itemArray
+        // Return the list directly instead of processing with itemTextWidth
+        // This preserves the bullet point prefixes
+        return list
     }
 
     private fun mapParticipants(
@@ -200,7 +200,24 @@ inline fun <reified T : Enum<T>> enumContains(name: String): Boolean {
 
 fun String.addLinebreaks(maxLineLength: Int): MutableList<String> {
     val list = mutableListOf<String>()
-    val tok = StringTokenizer(this, " ")
+
+    // Check if the line starts with a bullet point marker
+    val trimmed = this.trim()
+    val bulletPrefix = when {
+        trimmed.startsWith("- ") -> "BULLET_DASH:"
+        trimmed.startsWith("* ") -> "BULLET_STAR:"
+        trimmed.startsWith("+ ") -> "BULLET_PLUS:"
+        else -> ""
+    }
+
+    // Remove the bullet point marker for processing
+    val processText = if (bulletPrefix.isNotEmpty()) {
+        if (trimmed.startsWith("- ")) trimmed.substring(2) else trimmed.substring(2)
+    } else {
+        this
+    }
+
+    val tok = StringTokenizer(processText, " ")
     var output = String()
     var lineLen = 0
     while (tok.hasMoreTokens()) {
@@ -210,7 +227,12 @@ fun String.addLinebreaks(maxLineLength: Int): MutableList<String> {
             println(word)
         }
         if (lineLen + word.length > maxLineLength) {
-            list.add(output.escapeXml())
+            // Add the bullet prefix to the first line only
+            if (list.isEmpty() && bulletPrefix.isNotEmpty()) {
+                list.add("$bulletPrefix${output.escapeXml()}")
+            } else {
+                list.add(output.escapeXml())
+            }
             output = String()
             lineLen = 0
         }
@@ -218,7 +240,12 @@ fun String.addLinebreaks(maxLineLength: Int): MutableList<String> {
         lineLen += word.length
     }
     if (list.size == 0 || lineLen > 0) {
-        list.add(output.escapeXml())
+        // Add the bullet prefix to the first line only
+        if (list.isEmpty() && bulletPrefix.isNotEmpty()) {
+            list.add("$bulletPrefix${output.escapeXml()}")
+        } else {
+            list.add(output.escapeXml())
+        }
     }
     return list
 }
@@ -281,26 +308,37 @@ fun main() {
         Title:Use Solr for Structured Data Search
 Date: November 24th, 2010
 Status: Rejected
-Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
+Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. 
+
+- Elasticsearch allows for faster indexing and more advanced search replicas.
+- Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search.
+* There is a need of having an API exposed which can be used to search structured data.
+* The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases.
+
 There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
 
 These solutions provide out of the box capabilities that can be leveraged by developers without needed to build RESTful or
 GraphQL type APIs.
 Decision:Use [[https://solr.apache.org/ Solr]] for data indexing. This use is because Solr has high performance throughput with large volume of data.
-Unstructured data can also be supported.
-If this decision does not meet the need then additional PoC will be created.
+
+- Unstructured data can also be supported.
+- If this decision does not meet the need then additional PoC will be created.
+* Solr uses a SQL-like query language which is familiar to many developers.
++ Solr has a large community and extensive documentation.
+
 Solr and Elasticsearch are both open source search engines. Both can be used to search
 large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in
-combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured
-data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
-There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
+combination for enterprise-level search.
 Consequences:Data Needs to be replicated across the solr cloud instances.
-This Solr cloud needs maintenance.
-Near realtime data replication is required Additional Cost of maintaining the Solr Cloud environment. Solr and Elasticsearch are both open source search engines. Both can be used to search
-large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search. There is a need of having an API exposed which can be used to search structured
-data. The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases since the application runs out of the same environment.
-There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
-Participants:Roach,Rose,Duffy
+
+- This Solr cloud needs maintenance.
+- Near realtime data replication is required.
+* Additional Cost of maintaining the Solr Cloud environment.
++ Requires expertise in Solr administration.
+
+Solr and Elasticsearch are both open source search engines. Both can be used to search
+large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search.
+Participants:Roach (Architecture),Rose(Engineering),Duffy(Architecture)
         """.trimIndent(),
         config
     )
