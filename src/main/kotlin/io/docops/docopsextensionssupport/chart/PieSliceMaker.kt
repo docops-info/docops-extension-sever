@@ -18,18 +18,18 @@ import kotlin.math.atan2
 open class PieSliceMaker {
 
     protected var width: Double = 600.0
-    protected var height: Double = 420.0
+    protected var height: Double = 600.0
     fun makePie(pieSlices: PieSlices) : String {
 
         val sb = StringBuilder()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
-        sb.append("<g transform=\"translate(4,20)\">")
+        sb.append("<g transform=\"translate(4,10)\">")
         sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
         sb.append("""<g transform="translate(0,0)">""")
         val paths = StringBuilder()
         val labels = StringBuilder()
-        generateSvgPieChart(pieSlices, width, height,200.0, paths,labels)
+        generateSvgPieChart(pieSlices, width, height,300.0, paths,labels)
         sb.append(paths)
         sb.append(labels)
         //sb.append(makePaths(pieSlices))
@@ -108,13 +108,14 @@ open class PieSliceMaker {
             //val outerLabelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX.toInt(), centerY.toInt())
             //val labelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX, centerY)
             val textColor = determineTextColor(STUNNINGPIE[index])
-            labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 10px; font-family: Arial, Helvetica, sans-serif;\">")
-            val spans = itemTextWidth(segment.label, 60F, 10)
+            labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 20px; font-family: Arial, Helvetica, sans-serif;\">")
+            val fontSize = 20
+            val spans = itemTextWidth(segment.label, 60F, fontSize)
             spans.add(segment.amount.toString())
             spans.forEachIndexed { index, it ->
                 var dy = 0
                 if(index != 0) {
-                    dy = 10
+                    dy = fontSize
                 }
                 labels.append("<tspan x=\"${labelPoint.x}\" dy=\"$dy\">${it.escapeXml()}</tspan>")
 
@@ -135,7 +136,7 @@ open class PieSliceMaker {
 
     protected fun startSvg(pieSlices: PieSlices) : String {
         val buffer = 120
-        val baseHeight = 420
+        val baseHeight = 600
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
