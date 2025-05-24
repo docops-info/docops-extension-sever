@@ -14,7 +14,7 @@ class AdrMaker {
     fun makeAdrSvg(adr: Adr, dropShadow: Boolean = true, config: AdrParserConfig, useDark: Boolean) : String {
         val editorColor = if(useDark) EditorDark() else EditorLite()
         val sb = StringBuilder()
-        sb.append(defs(editorColor))
+        sb.append(defs(editorColor, adr))
         sb.append(setBackground(editorColor, config, useDark))
         sb.append(title(adr, editorColor))
         sb.append(status(adr, editorColor, mapBgFromStatus(adr = adr)))
@@ -50,8 +50,9 @@ class AdrMaker {
             >
         """.trimIndent()
     }
-    fun defs(editorColor: EditorColor) : String {
+    fun defs(editorColor: EditorColor, adr: Adr) : String {
         //language=html
+        val statusColor = mapBgFromStatus(adr)
         return """
             <defs>
             <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -74,18 +75,18 @@ class AdrMaker {
             <symbol id="bullet-dash" viewBox="0 0 24 24" width="12" height="12">
                 <!-- Double right chevron -->
                 <path d="M13.5 12L7.5 6L9 4.5L16.5 12L9 19.5L7.5 18L13.5 12Z M18.5 12L12.5 6L14 4.5L21.5 12L14 19.5L12.5 18L18.5 12Z" 
-                      fill="${editorColor.lineColor}" />
+                      fill="${statusColor}" />
             </symbol>
 
             <symbol id="bullet-star" viewBox="0 0 24 24" width="12" height="12">
                 <!-- Star shape -->
                 <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" 
-                      fill="${editorColor.lineColor}" />
+                      fill="${statusColor}" />
             </symbol>
 
             <symbol id="bullet-plus" viewBox="0 0 24 24" width="12" height="12">
                 <!-- Circular bullet point -->
-                <circle cx="12" cy="12" r="6" fill="${editorColor.lineColor}" />
+                <circle cx="12" cy="12" r="6" fill="${statusColor}" />
             </symbol>
 
             ${editorColor.backGrad().linearGradient}
@@ -138,6 +139,7 @@ class AdrMaker {
     fun context(adr: Adr, editorColor: EditorColor): RowTextOutcome {
         val text = StringBuilder()
         var lineCount = 0;
+        val bulletPoints = mutableListOf<Triple<String, Float, Float>>() // type, x, y
 
         // Calculate header height and position
         val headerHeight = 30f
@@ -194,10 +196,18 @@ class AdrMaker {
                     else -> s.substring("BULLET_PLUS:".length)
                 }
 
-                // Add the bullet point and the text
+                // Always start a new line for bullet points
+                val bulletY = if (lineCount == 0) dy else y
+
+                // Calculate the y position for the bullet point
+                val bulletPointY = contentY + 15 + (lineCount * dy) + 6
+
+                // Store bullet point information for later rendering
+                bulletPoints.add(Triple(bulletType, xIndent.toFloat(), bulletPointY))
+
+                // Add the text with proper indentation
                 text.append("""
-                <tspan x="$xIndent" dy="$y">
-                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                <tspan x="$xIndent" dy="$bulletY">
                     <tspan dx="16">$textContent</tspan>
                 </tspan>
                 """.trimIndent())
@@ -210,12 +220,20 @@ class AdrMaker {
         }
         text.append("</text>")
 
+        // Add bullet points after the text
+        bulletPoints.forEach { (type, x, y) ->
+            text.append("""
+            <use xlink:href="#$type" x="$x" y="$y"/>
+            """.trimIndent())
+        }
+
         // Return the position after the content rectangle, including its full height
         return RowTextOutcome(text.toString(), contentY + contentHeight)
     }
     fun decision(adr: Adr, startY: Float, editorColor: EditorColor): RowTextOutcome {
         val text = StringBuilder()
         var lineCount = 0;
+        val bulletPoints = mutableListOf<Triple<String, Float, Float>>() // type, x, y
 
         // Calculate header height and position
         val headerHeight = 30f
@@ -272,10 +290,18 @@ class AdrMaker {
                     else -> d.substring("BULLET_PLUS:".length)
                 }
 
-                // Add the bullet point and the text
+                // Always start a new line for bullet points
+                val bulletY = if (lineCount == 0) dy else y
+
+                // Calculate the y position for the bullet point
+                val bulletPointY = contentY + 15 + (lineCount * dy) + 6
+
+                // Store bullet point information for later rendering
+                bulletPoints.add(Triple(bulletType, xIndent.toFloat(), bulletPointY))
+
+                // Add the text with proper indentation
                 text.append("""
-                <tspan x="$xIndent" dy="$y">
-                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                <tspan x="$xIndent" dy="$bulletY">
                     <tspan dx="16">$textContent</tspan>
                 </tspan>
                 """.trimIndent())
@@ -287,12 +313,20 @@ class AdrMaker {
             lineCount++
         }
         text.append("</text>")
+
+        // Add bullet points after the text
+        bulletPoints.forEach { (type, x, y) ->
+            text.append("""
+            <use xlink:href="#$type" x="$x" y="$y"/>
+            """.trimIndent())
+        }
         // Return the position after the content rectangle, including its full height
         return RowTextOutcome(text.toString(), contentY + contentHeight)
     }
     fun consequences(adr: Adr, startY: Float, editorColor: EditorColor): RowTextOutcome {
         val text = StringBuilder()
         var lineCount = 0;
+        val bulletPoints = mutableListOf<Triple<String, Float, Float>>() // type, x, y
 
         // Calculate header height and position
         val headerHeight = 30f
@@ -349,10 +383,18 @@ class AdrMaker {
                     else -> d.substring("BULLET_PLUS:".length)
                 }
 
-                // Add the bullet point and the text
+                // Always start a new line for bullet points
+                val bulletY = if (lineCount == 0) dy else y
+
+                // Calculate the y position for the bullet point
+                val bulletPointY = contentY + 15 + (lineCount * dy) + 6
+
+                // Store bullet point information for later rendering
+                bulletPoints.add(Triple(bulletType, xIndent.toFloat(), bulletPointY))
+
+                // Add the text with proper indentation
                 text.append("""
-                <tspan x="$xIndent" dy="$y">
-                    <use href="#$bulletType" x="${xIndent}" y="6" />
+                <tspan x="$xIndent" dy="$bulletY">
                     <tspan dx="16">$textContent</tspan>
                 </tspan>
                 """.trimIndent())
@@ -364,6 +406,13 @@ class AdrMaker {
             lineCount++
         }
         text.append("</text>")
+
+        // Add bullet points after the text
+        bulletPoints.forEach { (type, x, y) ->
+            text.append("""
+            <use xlink:href="#$type" x="$x" y="$y"/>
+            """.trimIndent())
+        }
         // Return the position after the content rectangle, including its full height
         return RowTextOutcome(text.toString(), contentY + contentHeight)
     }
@@ -464,11 +513,18 @@ class AdrMaker {
         // Process participants: split comma-separated names into individual participants
         val participantList = mutableListOf<String>()
         adr.participants.forEach { participantEntry ->
-            // Split by comma and trim each name
-            participantEntry.split(",").forEach { name ->
-                val trimmedName = name.trim()
-                if (trimmedName.isNotEmpty()) {
-                    participantList.add(trimmedName)
+            // The input format is expected to be "Name (Role), Name (Role)"
+            // We need to be careful about splitting by commas that are not inside parentheses
+
+            // Use regex to match participants with their roles
+            // This regex matches: name followed by optional role in parentheses
+            val regex = """([^,]+(?:\([^)]*\))?)(?:,\s*|$)""".toRegex()
+            val matches = regex.findAll(participantEntry)
+
+            matches.forEach { match ->
+                val participant = match.groupValues[1].trim()
+                if (participant.isNotEmpty()) {
+                    participantList.add(participant)
                 }
             }
         }

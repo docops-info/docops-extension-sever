@@ -36,25 +36,28 @@ class ADRParser {
         var value = mutableListOf<String>()
         val urlMap = mutableMapOf<Int, String>()
         var currKey = ""
+
         lines.forEach { aline ->
             val line = aline.makeUrl(urlMap, config)
-            val key: String
-            if (line.contains(":")) {
+
+            if (line.contains(":") && !line.startsWith("-") && !line.startsWith("*") && !line.startsWith("+")) {
                 if (currKey.isNotEmpty()) {
                     m[currKey.uppercase()] = value
                 }
                 value = mutableListOf<String>()
                 val split = line.split(":", limit = 2)
-                key = split[0].trim()
+                val key = split[0].trim()
                 currKey = key
                 value.add(split[1])
             } else {
                 value.add(line)
             }
         }
+
         if (!m.containsKey(currKey)) {
             m[currKey.uppercase()] = value
         }
+
         return mapToAdr(m, config, urlMap)
     }
 
@@ -66,10 +69,11 @@ class ADRParser {
         val title = mapTitle(map)
         val date = mapDate(map)
         val status = mapStatus(map)
-        val context = mapContext(map, config)
-        val decision = mapDecision(map, config)
-        val consequences = mapConsequences(map, config)
+        val context = processSection(map["CONTEXT"], config)
+        val decision = processSection(map["DECISION"], config)
+        val consequences = processSection(map["CONSEQUENCES"], config)
         val participants = mapParticipants(map, config)
+
         return Adr(
             title = title,
             date = date,
@@ -80,9 +84,69 @@ class ADRParser {
             participants = participants,
             urlMap = urlMap
         )
-
     }
 
+    /**
+     * Process a section of the ADR, handling empty lines and bullet points
+     */
+    private fun processSection(
+        sectionLines: List<String>?, 
+        config: AdrParserConfig
+    ): MutableList<String> {
+        if (sectionLines == null) return mutableListOf()
+
+        val result = mutableListOf<String>()
+        var currentParagraph = StringBuilder()
+        var isFirstLineInParagraph = true
+
+        // Process each line in the section
+        for (i in sectionLines.indices) {
+            val line = sectionLines[i].trim()
+
+            // Handle empty lines as paragraph breaks
+            if (line.isEmpty() || line.isBlank()) {
+                if (currentParagraph.isNotEmpty()) {
+                    // Process the completed paragraph
+                    result.addAll(currentParagraph.toString().addLinebreaks(config.lineSize))
+                    currentParagraph = StringBuilder()
+                    isFirstLineInParagraph = true
+                }
+
+                // Add an empty line marker
+                result.add("_nbsp;_")
+                continue
+            }
+
+            // Check for bullet points at the start of lines
+            if (line.startsWith("-") || line.startsWith("*") || line.startsWith("+")) {
+                // If we have accumulated text, process it first
+                if (currentParagraph.isNotEmpty()) {
+                    result.addAll(currentParagraph.toString().addLinebreaks(config.lineSize))
+                    currentParagraph = StringBuilder()
+                    isFirstLineInParagraph = true
+                }
+
+                // Process the bullet point line directly
+                result.addAll(line.addLinebreaks(config.lineSize))
+                continue
+            }
+
+            // Regular text - append to current paragraph
+            if (isFirstLineInParagraph) {
+                currentParagraph.append(line)
+                isFirstLineInParagraph = false
+            } else {
+                currentParagraph.append(" ").append(line)
+            }
+        }
+
+        // Process any remaining text
+        if (currentParagraph.isNotEmpty()) {
+            result.addAll(currentParagraph.toString().addLinebreaks(config.lineSize))
+        }
+
+        return result
+    }
 
     private fun mapTitle(map: MutableMap<String, MutableList<String>>): String {
         val title = map["TITLE"]
@@ -110,24 +174,7 @@ class ADRParser {
     private fun mapContext(map: MutableMap<String, MutableList<String>>, config: AdrParserConfig): MutableList<String> {
         val context = map["CONTEXT"]
         require(context != null) { "Invalid syntax context not found" }
-
-        val list = mutableListOf<String>()
-        val sb = StringBuilder()
-
-        context.forEach {
-            if(it.trim().isEmpty() || it.isBlank()) {
-                sb.append("_nbsp;_")
-            }
-            else {sb.append(" ${it.trim()}")}
-        }
-        val parts = sb.split("_nbsp;_")
-        parts.forEach{
-            list.addAll(it.addLinebreaks(config.lineSize))
-            list.add("")
-        }
-        // Return the list directly instead of processing with itemTextWidth
-        // This preserves the bullet point prefixes
-        return list
+        return processSection(context, config)
     }
 
     private fun mapDecision(
@@ -136,22 +183,7 @@ class ADRParser {
     ): MutableList<String> {
         val decision = map["DECISION"]
         require(decision != null) { "Invalid syntax decision not found" }
-        val list = mutableListOf<String>()
-        val sb = StringBuilder()
-        decision.forEach {
-            if(it.trim().isEmpty() || it.isBlank()) {
-                sb.append("_nbsp;_")
-            }
-            else {sb.append(" ${it.trim()}")}
-        }
-        val parts = sb.split("_nbsp;_")
-        parts.forEach{
-            list.addAll(it.addLinebreaks(config.lineSize))
-            list.add("")
-        }
-        // Return the list directly instead of processing with itemTextWidth
-        // This preserves the bullet point prefixes
-        return list
+        return processSection(decision, config)
     }
 
     private fun mapConsequences(
@@ -160,22 +192,7 @@ class ADRParser {
     ): MutableList<String> {
         val consequences = map["CONSEQUENCES"]
         require(consequences != null) { "Invalid syntax consequences not found" }
-        val list = mutableListOf<String>()
-        val sb = StringBuilder()
-        consequences.forEach {
-            if(it.trim().isEmpty() || it.isBlank()) {
-                sb.append("_nbsp;_")
-            }
-            else {sb.append(" ${it.trim()}")}
-        }
-        val parts = sb.split("_nbsp;_")
-        parts.forEach{
-            list.addAll(it.addLinebreaks(config.lineSize))
-            list.add("")
-        }
-        // Return the list directly instead of processing with itemTextWidth
-        // This preserves the bullet point prefixes
-        return list
+        return processSection(consequences, config)
     }
 
     private fun mapParticipants(
@@ -212,41 +229,51 @@ fun String.addLinebreaks(maxLineLength: Int): MutableList<String> {
 
     // Remove the bullet point marker for processing
     val processText = if (bulletPrefix.isNotEmpty()) {
-        if (trimmed.startsWith("- ")) trimmed.substring(2) else trimmed.substring(2)
+        trimmed.substring(2).trim() // Consistently use substring(2) for all bullet types
     } else {
         this
+    }
+
+    // If the text is empty after removing the bullet, just return the bullet
+    if (processText.trim().isEmpty() && bulletPrefix.isNotEmpty()) {
+        list.add("$bulletPrefix")
+        return list
     }
 
     val tok = StringTokenizer(processText, " ")
     var output = String()
     var lineLen = 0
+    var isFirstLine = true
+
     while (tok.hasMoreTokens()) {
         val word = tok.nextToken()
 
-        if(word.contains("nbps;")){
-            println(word)
-        }
-        if (lineLen + word.length > maxLineLength) {
-            // Add the bullet prefix to the first line only
-            if (list.isEmpty() && bulletPrefix.isNotEmpty()) {
+        // Check if adding this word would exceed the line length
+        if (lineLen + word.length > maxLineLength && lineLen > 0) {
+            // Add the current line to the list
+            if (isFirstLine && bulletPrefix.isNotEmpty()) {
                 list.add("$bulletPrefix${output.escapeXml()}")
+                isFirstLine = false
             } else {
                 list.add(output.escapeXml())
             }
             output = String()
             lineLen = 0
         }
+
         output += ("$word ")
-        lineLen += word.length
+        lineLen += word.length + 1 // +1 for the space
     }
-    if (list.size == 0 || lineLen > 0) {
-        // Add the bullet prefix to the first line only
-        if (list.isEmpty() && bulletPrefix.isNotEmpty()) {
-            list.add("$bulletPrefix${output.escapeXml()}")
+
+    // Add any remaining text
+    if (output.isNotEmpty()) {
+        if (isFirstLine && bulletPrefix.isNotEmpty()) {
+            list.add("$bulletPrefix${output.trim().escapeXml()}")
         } else {
-            list.add(output.escapeXml())
+            list.add(output.trim().escapeXml())
         }
     }
+
     return list
 }
 
@@ -263,30 +290,46 @@ fun String.makeUrl(urlMap: MutableMap<Int, String>, config: AdrParserConfig): St
 
     var newStr = this
     if (this.contains("[[") && this.contains("]]")) {
-        val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
+        // Improved regex to better handle wiki-style links
+        val regex = "\\[\\[(.*?)]]".toRegex()
         val matches = regex.findAll(this)
         val m = mutableMapOf<String, String>()
-        matches.forEach {
-            val sp = it.value.split(" ")
-            val str = StringBuilder()
-            for (i in 1 until sp.size) {
-                str.append(sp[i])
-                if (i < sp.size - 1) {
-                    str.append(" ")
-                }
-            }
-            val url = "<tspan><a href=\"${sp[0]}\" xlink:href=\"${sp[0]}\" class=\"adrlink\" target=\"$newWin\">${str}</a></tspan>"
-            m[url] = it.value
-        }
-        var count = key + 1
-        m.forEach { (k, v) ->
-            urlMap[count] = k
-            newStr = newStr.replace("[[${v}]]", "_${count++}_")
-        }
-        return newStr.escapeXml()
-    }
-    return this
 
+        matches.forEach {
+            val linkContent = it.groupValues[1]
+
+            // Split by first space to separate URL from text
+            val spaceIndex = linkContent.indexOf(' ')
+
+            if (spaceIndex > 0) {
+                val url = linkContent.substring(0, spaceIndex).trim()
+                val text = linkContent.substring(spaceIndex + 1).trim()
+
+                // Create SVG link element with proper styling
+                val svgLink = "<tspan><a href=\"$url\" xlink:href=\"$url\" class=\"adrlink\" target=\"$newWin\">$text</a></tspan>"
+                m[svgLink] = linkContent
+            } else {
+                // If no space found, use the whole content as both URL and text
+                val url = linkContent.trim()
+
+                // Create SVG link element with proper styling
+                val svgLink = "<tspan><a href=\"$url\" xlink:href=\"$url\" class=\"adrlink\" target=\"$newWin\">$url</a></tspan>"
+                m[svgLink] = linkContent
+            }
+        }
+
+        var count = key + 1
+        m.forEach { (svgLink, linkContent) ->
+            urlMap[count] = svgLink
+            // Replace the wiki link with a placeholder that will be replaced later
+            newStr = newStr.replace("[[${linkContent}]]", "_${count++}_")
+        }
+
+        // Don't escape XML here - we'll do it at the appropriate time
+        return newStr
+    }
+
+    return this
 }
 
 fun generateRectPathData(width: Float, height: Float, topLetRound:Float, topRightRound:Float, bottomRightRound:Float, bottomLeftRound:Float): String {
@@ -305,40 +348,29 @@ fun main() {
     val adr = ADRParser().parse(
         // language=text
         """
-        Title:Use Solr for Structured Data Search
-Date: November 24th, 2010
-Status: Rejected
-Context:  Solr and Elasticsearch are both open source search engines. Both can be used to search large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. 
+        title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We're experiencing performance issues with our relational database
+- Some of our data doesn't fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+Sometime free form text
 
-- Elasticsearch allows for faster indexing and more advanced search replicas.
-- Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search.
-* There is a need of having an API exposed which can be used to search structured data.
-* The Data currently resides in RDBMS, it is difficult to expose micro-service directly querying out of RDBMS databases.
-
-There are options like [[https://www.elastic.co ElasticSearch]] and Solr where data can be replicated.
-
-These solutions provide out of the box capabilities that can be leveraged by developers without needed to build RESTful or
-GraphQL type APIs.
-Decision:Use [[https://solr.apache.org/ Solr]] for data indexing. This use is because Solr has high performance throughput with large volume of data.
-
-- Unstructured data can also be supported.
-- If this decision does not meet the need then additional PoC will be created.
-* Solr uses a SQL-like query language which is familiar to many developers.
-+ Solr has a large community and extensive documentation.
-
-Solr and Elasticsearch are both open source search engines. Both can be used to search
-large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in
-combination for enterprise-level search.
-Consequences:Data Needs to be replicated across the solr cloud instances.
-
-- This Solr cloud needs maintenance.
-- Near realtime data replication is required.
-* Additional Cost of maintaining the Solr Cloud environment.
-+ Requires expertise in Solr administration.
-
-Solr and Elasticsearch are both open source search engines. Both can be used to search
-large amounts of data quickly and accurately. While Solr uses a SQL-like query language, Elasticsearch has a full-text search engine and is designed for distributed search and analytics. Elasticsearch also allows for faster indexing and more advanced search replicas. Both technologies have strengths and weaknesses and are often used in combination for enterprise-level search.
-Participants:Roach (Architecture),Rose(Engineering),Duffy(Architecture)
+SOmetimes empty lines
+sometimes wiki style likes [[https://www.apple.com Apple]]
+decision:
+- We will not migrate from PostgreSQL to MongoDB
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team's existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in PostgreSQL optimization and tuning
+participants:Thomas Wright (Performance Engineer), John Doe (Developer), Alice Johnson (Product Manager)
         """.trimIndent(),
         config
     )
@@ -349,4 +381,5 @@ Participants:Roach (Architecture),Rose(Engineering),Duffy(Architecture)
     svg = svg.replace("_nbsp;_","<tspan x=\"14\" dy=\"20\">&#160;</tspan>")
     val f = File("src/test/resources/test.svg")
     f.writeBytes(svg.toByteArray())
+    println("SVG file generated at: ${f.absolutePath}")
 }
