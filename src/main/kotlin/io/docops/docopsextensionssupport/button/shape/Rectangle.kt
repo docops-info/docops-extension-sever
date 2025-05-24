@@ -16,12 +16,12 @@
 
 package io.docops.docopsextensionssupport.button.shape
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.EmbeddedImage
 import io.docops.docopsextensionssupport.button.Link
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 
 /**
  * Implements a rectangular card-style button layout with enhanced visual features.

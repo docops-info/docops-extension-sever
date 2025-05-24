@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient

@@ -16,9 +16,9 @@
 
 package io.docops.docopsextensionssupport.web
 
-import io.docops.docopsextensionssupport.adr.ADRParser
-import io.docops.docopsextensionssupport.adr.AdrMaker
-import io.docops.docopsextensionssupport.adr.AdrParserConfig
+
+import io.docops.docopsextensionssupport.adr.AdrParser
+import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -182,13 +182,10 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
 
             try {
                 val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
-                val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 75, increaseWidthBy = 10)
-                val adr = ADRParser().parse(adrText, config)
-                var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = false)
+                val generator = AdrSvgGenerator()
+                val adr = AdrParser().parseContent(adrText)
+                val svg = generator.generate(adr)
 
-                adr.urlMap.forEach { (t, u) ->
-                    svg = svg.replace("_${t}_", u)
-                }
                 val results = makeAdrSource(adrText, svg).lines().joinToString(transform = String::trim, separator = "\n")
                 servletResponse.contentType = "text/html"
                 servletResponse.characterEncoding = "UTF-8"
@@ -281,12 +278,9 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
         servletResponse: HttpServletResponse
     ): ResponseEntity<ByteArray>{
         val contents = uncompressString(data)
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = lineSize.toInt(), increaseWidthBy = width.toInt(), scale = scale.toFloat())
-        val adr = ADRParser().parse(contents, config)
-        var svg = AdrMaker().makeAdrSvg(adr, config = config, useDark = true)
-        adr.urlMap.forEach { (t, u) ->
-            svg = svg.replace("_${t}_", u)
-        }
+        val generator = AdrSvgGenerator()
+        val adr = AdrParser().parseContent(contents)
+        val svg = generator.generate(adr)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
@@ -297,11 +291,11 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
     @ResponseBody
     fun getAdrRow(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val config = AdrParserConfig(newWin = true, isPdf = false, lineSize = 80, increaseWidthBy = 0, scale = 1.0f)
-        val adr = ADRParser().parse(data, config)
+        val generator = AdrSvgGenerator()
+        val adr = AdrParser().parseContent(data)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.TEXT_PLAIN
-        return ResponseEntity("${adr.title}~${adr.participantAsStr()}~${adr.date}".toByteArray(), headers, HttpStatus.OK)
+        return ResponseEntity("${adr.title}~${adr.participants}~${adr.date}".toByteArray(), headers, HttpStatus.OK)
     }
 }

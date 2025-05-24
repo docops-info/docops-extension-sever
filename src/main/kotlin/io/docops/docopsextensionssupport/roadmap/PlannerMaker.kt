@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9

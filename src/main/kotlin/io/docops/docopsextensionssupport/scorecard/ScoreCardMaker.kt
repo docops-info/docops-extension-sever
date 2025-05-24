@@ -16,7 +16,7 @@
 
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.support.hexToHsl
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth

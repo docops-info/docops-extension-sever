@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.gallery
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import org.springframework.context.ApplicationContext
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus

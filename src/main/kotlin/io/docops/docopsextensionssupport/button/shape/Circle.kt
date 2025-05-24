@@ -1,10 +1,10 @@
 package io.docops.docopsextensionssupport.button.shape
 
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 
 /**
  * Implements a circular button shape with centered text.

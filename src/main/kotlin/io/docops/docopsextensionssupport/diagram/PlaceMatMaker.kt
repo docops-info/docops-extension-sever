@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 import io.docops.docopsextensionssupport.svgsupport.textWidth
@@ -135,8 +136,8 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         return sb.toString()
     }
     private fun head(height: Float, width: Float, scale: Float = 1.0f, id: String)  = """
-        <svg xmlns="http://www.w3.org/2000/svg" width="${(width*scale)/ DISPLAY_RATIO_16_9}" height="${(height*scale)/DISPLAY_RATIO_16_9}"
-     viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${(width*scale)/ DISPLAY_RATIO_16_9}" height="${(350*scale)/DISPLAY_RATIO_16_9}"
+     viewBox="0 0 $width ${Math.max(height, 600.0f)}" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id">
     """.trimIndent()
 
     private fun tail() = "</svg>"
@@ -154,8 +155,15 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         placeMatRequest.config.legend.forEach {
             item ->
-            val gradient = SVGColor(item.color, "grad_${item.legendAsStyle()}_$id")
-            grad.append(gradient.linearGradient)
+            // Create simplified 2-stop gradient instead of using SVGColor's 5-stop gradient
+            val colorMap = gradientFromColor(item.color)
+            val simplifiedGradient = """
+                <linearGradient id="grad_${item.legendAsStyle()}_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:${colorMap["color1"]}" stop-opacity="1.0"/>
+                    <stop offset="100%" style="stop-color:${colorMap["color3"]}" stop-opacity="0.9"/>
+                </linearGradient>
+            """.trimIndent()
+            grad.append(simplifiedGradient)
         }
 
 
@@ -187,40 +195,30 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         <style>
             #diag_$id .shadowed {
                 filter: url(#enhanced-shadow);
-                transition: all 0.3s ease;
             }
             #diag_$id .placemat-box {
                 filter: url(#enhanced-shadow);
-                transition: transform 0.2s ease;
             }
             #diag_$id .placemat-text {
-                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 font-weight: 600;
-                font-variant: small-caps;
-                text-rendering: optimizeLegibility;
-                fill-opacity: 0.95;
-                filter: url(#soft-highlight);
+                fill-opacity: 1;
             }
             #diag_$id .title-text {
-                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 font-weight: 700;
-                font-variant: small-caps;
-                letter-spacing: 0.5px;
-                filter: url(#soft-highlight);
             }
             #diag_$id .legend-box {
                 filter: url(#enhanced-shadow);
-                opacity: 0.95;
+                opacity: 1;
             }
             #diag_$id .legend-text {
-                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 font-weight: 600;
-                text-rendering: optimizeLegibility;
             }
             #diag_$id .legend-title {
-                font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 font-weight: 700;
-                letter-spacing: 0.5px;
             }
         </style>
         <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
@@ -261,8 +259,8 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         // Calculate legend height based on content
         val titleHeight = 60 // Space for title and separator
-        val itemHeight = 130 // Height of legend items with padding
-        val legendHeight = titleHeight + itemHeight + 30 // Additional bottom padding
+        val itemHeight = 150 // Height of legend items with padding (increased from 130)
+        val legendHeight = titleHeight + itemHeight + 90 // Additional bottom padding (increased to match 300px total)
 
         // Calculate the scale factor based on the number of legend items
         // Use a smaller scale for many items, larger for few
@@ -285,11 +283,11 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                       opacity="0.4" class="legend-background"/>""")
 
         // Center the legend title
-        sb.append("""<text x="${legendGroupWidth/2}" y="35" text-anchor="middle" font-size="110" 
+        sb.append("""<text x="${legendGroupWidth/2}" y="45" text-anchor="middle" font-size="120" 
                       class="legend-title" fill="$fgColor">Legend</text>""")
 
         // Add a subtle separator line
-        sb.append("""<line x1="${legendGroupWidth*0.1}" y1="50" x2="${legendGroupWidth*0.9}" y2="50" 
+        sb.append("""<line x1="${legendGroupWidth*0.1}" y1="65" x2="${legendGroupWidth*0.9}" y2="65" 
                       stroke="$fgColor" stroke-width="2" opacity="0.3" />""")
 
         var start = (legendGroupWidth - totalWidth) / 2 // Center the items within the legend box
@@ -304,10 +302,10 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             // Enhanced legend items with modern styling
             sb.append("""
             <g transform="translate($start,70)" font-size="96">
-                <rect x="0" y="0" width="$rectWidth" height="110" fill="$grad" rx="15" ry="15" 
+                <rect x="0" y="0" width="$rectWidth" height="150" fill="$grad" rx="15" ry="15" 
                       class="legend-box" filter="url(#enhanced-shadow)"/>
                 <text text-anchor="middle" class="legend-text" style="fill: $textColor;" 
-                      x="${rectWidth/2}" y="70">${item.legend}</text>
+                      x="${rectWidth/2}" y="90">${item.legend}</text>
             </g>
             """.trimIndent())
 

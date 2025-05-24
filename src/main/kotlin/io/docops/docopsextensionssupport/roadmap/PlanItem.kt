@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.roadmap.DOCOPS_BRANDING_COLORS
 import io.docops.docopsextensionssupport.support.SVGColor

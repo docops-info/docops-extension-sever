@@ -17,9 +17,9 @@
 package io.docops.docopsextensionssupport.badge
 
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.github.sercasti.tracing.Traceable
 import org.silentsoft.simpleicons.SimpleIcons
 import org.springframework.stereotype.Service

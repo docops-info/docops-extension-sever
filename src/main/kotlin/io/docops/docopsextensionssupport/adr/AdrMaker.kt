@@ -1,7 +1,5 @@
 package io.docops.docopsextensionssupport.adr
 
-import io.docops.docopsextensionssupport.adr.model.Adr
-import io.docops.docopsextensionssupport.adr.model.Status
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.util.UUID
@@ -556,11 +554,11 @@ class AdrMaker {
     }
     fun mapBgFromStatus(adr: Adr): String {
         when {
-            Status.Proposed == adr.status -> return "#6366F1"  // Indigo
-            Status.Accepted == adr.status -> return "#10B981"  // Emerald
-            Status.Superseded == adr.status -> return "#F59E0B"  // Amber
-            Status.Deprecated == adr.status -> return "#EF4444"  // Red
-            Status.Rejected == adr.status -> return "#DC2626"  // Red-600
+            AdrStatus.Proposed == adr.status -> return "#6366F1"  // Indigo
+            AdrStatus.Accepted == adr.status -> return "#10B981"  // Emerald
+            AdrStatus.Superseded == adr.status -> return "#F59E0B"  // Amber
+            AdrStatus.Deprecated == adr.status -> return "#EF4444"  // Red
+            AdrStatus.Rejected == adr.status -> return "#DC2626"  // Red-600
         }
         return "#6B7280"  // Gray-500
     }

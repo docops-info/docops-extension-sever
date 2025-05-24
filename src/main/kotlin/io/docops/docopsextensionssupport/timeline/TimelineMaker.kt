@@ -17,7 +17,7 @@
 package io.docops.docopsextensionssupport.timeline
 
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.hexToHsl
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9

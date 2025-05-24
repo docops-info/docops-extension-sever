@@ -1,11 +1,11 @@
 package io.docops.docopsextensionssupport.button.shape
 
-import io.docops.docopsextensionssupport.adr.model.escapeXml
 import io.docops.docopsextensionssupport.badge.manipulateSVG
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.ButtonDisplay
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import org.silentsoft.simpleicons.SimpleIcons
 import java.io.ByteArrayInputStream
