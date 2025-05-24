@@ -24,9 +24,9 @@ open class PieSliceMaker {
         val sb = StringBuilder()
         sb.append(startSvg(pieSlices))
         sb.append(makeDefs(pieSlices))
-        sb.append("<g transform=\"translate(4,10)\">")
-        sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
-        sb.append("""<g transform="translate(0,0)">""")
+        sb.append("<g transform=\"translate(${(width * pieSlices.display.scale)/2},30)\">")
+        sb.append("""<text x="0" y="0" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<g transform="translate(0,40)">""")
         val paths = StringBuilder()
         val labels = StringBuilder()
         generateSvgPieChart(pieSlices, width, height,300.0, paths,labels)
@@ -77,7 +77,7 @@ open class PieSliceMaker {
     }
     fun generateSvgPieChart(pieSlices: PieSlices, width: Double, height: Double, radius: Double, paths : StringBuilder, labels : StringBuilder) {
         val total = pieSlices.sum()
-        val centerX = width / 2
+        val centerX = 0.0 // Center is at 0 because we've translated the entire SVG
         val centerY = height / 2
         var startAngle = 0.0
 
@@ -137,10 +137,12 @@ open class PieSliceMaker {
     protected fun startSvg(pieSlices: PieSlices) : String {
         val buffer = 120
         val baseHeight = 600
+        val baseWidth = 600
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
+        width = baseWidth.toDouble()
         return """<?xml version="1.0" encoding="UTF-8"?>
-            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)/ DISPLAY_RATIO_16_9}" width="${(baseHeight * pieSlices.display.scale)/DISPLAY_RATIO_16_9}" viewBox='0 0 ${660 * pieSlices.display.scale} ${h * pieSlices.display.scale}' id="id_${pieSlices.display.id}">
+            <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale)}" width="${(baseWidth * pieSlices.display.scale)}" viewBox='0 0 ${baseWidth * pieSlices.display.scale} ${h * pieSlices.display.scale}' id="id_${pieSlices.display.id}">
           """
     }
     protected fun endSvg() = "</svg>"
@@ -224,7 +226,7 @@ fun main() {
         PieSlice(label = "One Punch Man", amount = 7.0),
         PieSlice(label = "My Hero Academia", amount = 6.0),
         PieSlice(label = "Demon Slayer", amount = 10.0),
-    ), SliceDisplay(donut = false) )
+    ), SliceDisplay(donut = false, scale = 1.5f) )
     var svg = ""
     if(!pieSlices.display.donut){
         val maker= PieSliceMaker()
