@@ -75,7 +75,13 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
                         </div>
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status:</label>
-                            <input type="text" id="status" name="status" value="Accepted" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <select id="status" name="status" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <option value="Proposed">Proposed</option>
+                                <option value="Accepted" selected>Accepted</option>
+                                <option value="Superseded">Superseded</option>
+                                <option value="Deprecated">Deprecated</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
