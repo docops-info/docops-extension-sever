@@ -1,2 +1,315 @@
 include::_base.adoc[]
 = DocOps Scorecard
+:imagesdir: images
+
+== Introduction
+
+The DocOps Scorecard Extension allows you to create visually appealing comparison charts in your AsciiDoctor documents. Scorecards are useful for comparing two alternatives, showing before and after states, or presenting current vs. proposed solutions.
+
+This guide will help you understand the basic concepts of scorecards, how to include them in your AsciiDoctor documents, and provide examples of different types of scorecards with various customization options.
+
+== Basic Concepts
+
+=== What are Scorecards?
+
+Scorecards in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each scorecard has:
+
+* A title (the main heading of the chart)
+* Two column headers (typically for comparing alternatives)
+* A series of rows, each with a label and values for both columns
+* Optional display settings for customizing the appearance
+
+The extension supports various customization options, including:
+
+* Custom colors for columns and text
+* Dark mode charts
+* Scaling options
+* Font style customization
+
+=== Scorecard Components
+
+A scorecard includes:
+
+* A title bar at the top
+* Two column headers (e.g., "Current Solution" and "Proposed Solution")
+* Multiple rows, each with:
+  ** A row label in the left column
+  ** Values for each of the two comparison columns
+
+== AsciiDoctor Syntax for Scorecards
+
+To include scorecards in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Chart Title",
+  "initiativeTitle": "First Column Header",
+  "outcomeTitle": "Second Column Header",
+  "initiativeItems": [
+    {"displayText":"Item 1 for first column", "description":"Optional description"},
+    {"displayText":"Item 2 for first column"}
+    // More items...
+  ],
+  "outcomeItems": [
+    {"displayText":"Item 1 for second column"},
+    {"displayText":"Item 2 for second column"}
+    // More items...
+  ]
+}
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the scorecard that is embedded in your document.
+
+=== Scorecard Properties
+
+==== Main Properties
+
+* `title` (required): The main heading of the chart
+* `initiativeTitle` (required): The header for the first column
+* `outcomeTitle` (required): The header for the second column
+* `initiativeItems` (required): An array of items for the first column
+* `outcomeItems` (required): An array of items for the second column
+
+==== Item Properties
+
+Each item in the `initiativeItems` and `outcomeItems` arrays has the following properties:
+
+* `displayText` (required): The text to display in the column
+* `description` (optional): Additional description for the item (currently only used for initiativeItems)
+
+==== Display Properties
+
+The scorecard can be customized with various display properties:
+
+* Column colors
+* Text colors
+* Font styles
+* Scale factor
+
+== Examples
+
+=== Basic Scorecard Example
+
+Here's a simple example of a scorecard comparing technology solutions:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Technology Comparison",
+  "initiativeTitle": "Current Solution",
+  "outcomeTitle": "Proposed Solution",
+  "initiativeItems": [
+    {"displayText":"Limited scalability", "description":"Scalability Concerns"},
+    {"displayText":"High maintenance costs"},
+    {"displayText":"Manual deployment process"},
+    {"displayText":"Minimal monitoring capabilities"},
+    {"displayText":"Difficult to extend"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Highly scalable architecture"},
+    {"displayText":"Reduced operational costs"},
+    {"displayText":"Automated CI/CD pipeline"},
+    {"displayText":"Comprehensive monitoring"},
+    {"displayText":"Modular and extensible design"}
+  ]
+}
+----
+....
+
+[docops,scorecard]
+----
+{
+  "title": "Technology Comparison",
+  "initiativeTitle": "Current Solution",
+  "outcomeTitle": "Proposed Solution",
+  "initiativeItems": [
+    {"displayText":"Limited scalability", "description":"Scalability Concerns"},
+    {"displayText":"High maintenance costs"},
+    {"displayText":"Manual deployment process"},
+    {"displayText":"Minimal monitoring capabilities"},
+    {"displayText":"Difficult to extend"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Highly scalable architecture"},
+    {"displayText":"Reduced operational costs"},
+    {"displayText":"Automated CI/CD pipeline"},
+    {"displayText":"Comprehensive monitoring"},
+    {"displayText":"Modular and extensible design"}
+  ]
+}
+----
+
+
+=== Software Version Comparison Example
+
+This example compares features between software versions:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Software Version Comparison",
+  "initiativeTitle": "Version 1.0",
+  "outcomeTitle": "Version 2.0",
+  "initiativeItems": [
+    {"displayText":"Basic user authentication"},
+    {"displayText":"Limited reporting capabilities"},
+    {"displayText":"Single language support"},
+    {"displayText":"Manual backups required"},
+    {"displayText":"Basic UI with limited customization"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Multi-factor authentication and SSO"},
+    {"displayText":"Advanced analytics and custom reports"},
+    {"displayText":"Multilingual interface with 10+ languages"},
+    {"displayText":"Automated scheduled backups"},
+    {"displayText":"Modern UI with extensive customization options"}
+  ],
+    "scale": 1.1
+}
+----
+....
+
+[docops,scorecard]
+----
+{
+  "title": "Software Version Comparison",
+  "initiativeTitle": "Version 1.0",
+  "outcomeTitle": "Version 2.0",
+  "initiativeItems": [
+    {"displayText":"Basic user authentication"},
+    {"displayText":"Limited reporting capabilities"},
+    {"displayText":"Single language support"},
+    {"displayText":"Manual backups required"},
+    {"displayText":"Basic UI with limited customization"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Multi-factor authentication and SSO"},
+    {"displayText":"Advanced analytics and custom reports"},
+    {"displayText":"Multilingual interface with 10+ languages"},
+    {"displayText":"Automated scheduled backups"},
+    {"displayText":"Modern UI with extensive customization options"}
+  ],
+  "scale": 1.1
+
+}
+----
+
+=== Project Status Scorecard Example
+
+This example shows a project status comparison with custom colors:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Project Status Comparison",
+  "initiativeTitle": "Last Quarter",
+  "outcomeTitle": "Current Quarter",
+  "initiativeItems": [
+    {"displayText":"Budget: $500,000 (10% over)"},
+    {"displayText":"Timeline: 2 weeks behind schedule"},
+    {"displayText":"Resources: 8 team members"},
+    {"displayText":"Scope: Core features only"},
+    {"displayText":"Quality: 85% test coverage"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Budget: $450,000 (on target)"},
+    {"displayText":"Timeline: On schedule"},
+    {"displayText":"Resources: 10 team members"},
+    {"displayText":"Scope: Core + 2 additional features"},
+    {"displayText":"Quality: 95% test coverage"}
+  ]
+}
+----
+....
+
+[docops,scorecard]
+----
+{
+  "title": "Project Status Comparison",
+  "initiativeTitle": "Last Quarter",
+  "outcomeTitle": "Current Quarter",
+  "initiativeItems": [
+    {"displayText":"Budget: $500,000 (10% over)"},
+    {"displayText":"Timeline: 2 weeks behind schedule"},
+    {"displayText":"Resources: 8 team members"},
+    {"displayText":"Scope: Core features only"},
+    {"displayText":"Quality: 85% test coverage"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Budget: $450,000 (on target)"},
+    {"displayText":"Timeline: On schedule"},
+    {"displayText":"Resources: 10 team members"},
+    {"displayText":"Scope: Core + 2 additional features"},
+    {"displayText":"Quality: 95% test coverage"}
+  ]
+}
+----
+
+=== Architectural Decision Scorecard Example
+
+This example compares architectural approaches with detailed descriptions:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Architectural Approach Comparison",
+  "initiativeTitle": "Monolithic Architecture",
+  "outcomeTitle": "Microservices Architecture",
+  "initiativeItems": [
+    {"displayText":"Simpler development model", "description":"Less complexity in initial development"},
+    {"displayText":"Easier deployment", "description":"Single deployment unit"},
+    {"displayText":"Tight coupling between components", "description":"Changes in one area can affect others"},
+    {"displayText":"Limited technology flexibility", "description":"Usually one technology stack"},
+    {"displayText":"Scaling challenges", "description":"Must scale entire application"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Independent development teams"},
+    {"displayText":"Technology diversity"},
+    {"displayText":"Isolated failures"},
+    {"displayText":"Granular scaling"},
+    {"displayText":"Easier continuous deployment"}
+  ]
+}
+----
+....
+
+[docops,scorecard]
+----
+{
+  "title": "Architectural Approach Comparison",
+  "initiativeTitle": "Monolithic Architecture",
+  "outcomeTitle": "Microservices Architecture",
+  "initiativeItems": [
+    {"displayText":"Simpler development model", "description":"Less complexity in initial development"},
+    {"displayText":"Easier deployment", "description":"Single deployment unit"},
+    {"displayText":"Tight coupling between components", "description":"Changes in one area can affect others"},
+    {"displayText":"Limited technology flexibility", "description":"Usually one technology stack"},
+    {"displayText":"Scaling challenges", "description":"Must scale entire application"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Independent development teams"},
+    {"displayText":"Technology diversity"},
+    {"displayText":"Isolated failures"},
+    {"displayText":"Granular scaling"},
+    {"displayText":"Easier continuous deployment"}
+  ]
+}
+----
+
+== Conclusion
+
+The DocOps Scorecard Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing comparison charts. By using the JSON configuration format, you can create customized scorecards that match your document's style and purpose.
+
+The extension supports various customization options, including custom colors, dark mode, and scaling, allowing you to create scorecards that effectively communicate comparisons between alternatives, versions, or approaches.
