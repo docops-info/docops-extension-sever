@@ -392,8 +392,8 @@ class AdrMaker {
 open class EditorColor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#000000", val titleColor: String = "#000000", val id: String = UUID.randomUUID().toString()){
 
 }
-class EditorLite(background: String = "#ffffff", lineColor: String="#6366F1", textColor: String="#374151", titleColor: String="#4F46E5"): EditorColor(background, lineColor, textColor, titleColor)
-class EditorDark(background: String = "#1f2937",  lineColor: String = "#818CF8",  textColor: String = "#E5E7EB", titleColor: String = "#A5B4FC"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorLite(background: String = "#ffffff", lineColor: String="#4361ee", textColor: String="#374151", titleColor: String="#3B82F6"): EditorColor(background, lineColor, textColor, titleColor)
+class EditorDark(background: String = "#1E293B",  lineColor: String = "#818CF8",  textColor: String = "#E5E7EB", titleColor: String = "#A5B4FC"): EditorColor(background, lineColor, textColor, titleColor)
 class RowTextOutcome(val text: String, val lastYPosition: Float)
 
 fun EditorColor.backGrad(): SVGColor {

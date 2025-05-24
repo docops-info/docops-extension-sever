@@ -22,7 +22,7 @@ class ScorecardHandler {
     ): ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
-                var isPdf = backend == "pdf"
+                val isPdf = backend == "pdf"
                 val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
                 val content = Json.decodeFromString<ScoreCard>(data)
                 val sm = ScoreCardMaker()

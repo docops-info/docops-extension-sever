@@ -1,29 +1,46 @@
 /* Modern AsciiDoctor Stylesheet
  * A clean, professional stylesheet for AsciiDoctor documents
- * v2.0
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
  */
 
 :root {
-    /* Primary Color Palette */
-    --primary-color: #3b82f6;
-    --primary-hover: #2563eb;
-    --primary-light: #dbeafe;
-    --primary-dark: #1d4ed8;
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
 
     /* Secondary Color Palette */
-    --secondary-color: #64748b;
-    --secondary-light: #f1f5f9;
-    --secondary-dark: #334155;
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
 
     /* Text Colors */
-    --text-color: #1e293b;
-    --text-light: #64748b;
-    --text-muted: #94a3b8;
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
 
     /* Background Colors */
-    --bg-color: #ffffff;
-    --bg-light: #f8fafc;
-    --bg-dark: #0f172a;
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
 
     /* Border Colors */
     --border-color: #e2e8f0;
@@ -113,7 +130,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: var(--spacing-lg);
     font-weight: 700;
     line-height: 1.3;
-    color: var(--primary-color);
+    color: var(--text-color);
     scroll-margin-top: var(--spacing-2xl);
 }
 
@@ -122,6 +139,11 @@ h1 {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: var(--spacing-sm);
     margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
 h2 {
@@ -293,13 +315,14 @@ tbody tr:hover {
     background-color: var(--secondary-light);
 }
 
-/* Admonition Blocks */
+/* Admonition Blocks - Enhanced with DocOps.io styling */
 .admonitionblock {
     margin-bottom: var(--spacing-lg);
     border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
 }
 
 .admonitionblock > table {
@@ -386,14 +409,25 @@ tbody tr:hover {
     content: "\f06d"; /* Font Awesome fire icon */
 }
 
-/* Important */
+/* Important - with DocOps.io gradient styling */
 .admonitionblock.important {
-    background-color: var(--important-bg);
-    border-color: var(--important-border);
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
 }
 
 .admonitionblock.important td.icon {
-    background-color: var(--important-icon);
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
     color: white;
 }
 
@@ -430,6 +464,31 @@ img {
     margin: var(--spacing-md) 0;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* TOC */
@@ -742,14 +801,33 @@ kbd {
     border-radius: var(--radius-md);
     font-weight: 500;
     text-align: center;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
     border-bottom: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .button:hover {
     background-color: var(--primary-hover);
     text-decoration: none;
     color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
 }
 
 /* Mark text */
@@ -772,6 +850,55 @@ mark {
     text-align: right;
 }
 
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
 /* Custom callouts (beyond admonition blocks) */
 .callout {
     padding: var(--spacing-md);
@@ -782,11 +909,41 @@ mark {
     box-shadow: var(--shadow-sm);
 }
 
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
 .callout-title {
     font-weight: 700;
     margin-top: 0;
     margin-bottom: var(--spacing-sm);
     color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
 }
 
 /* Print page break control */
