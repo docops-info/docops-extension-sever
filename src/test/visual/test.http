@@ -179,8 +179,23 @@ Content-Type: application/json
     "message": "120",
     "url": "https://docops.travp.net/solr/Intuitive%20Experience"
   }
-
 ]
+
+### Test pipe-delimited format with format=pipe&payload= prefix
+POST http://localhost:8010/extension/api/badges
+Content-Type: application/x-www-form-urlencoded
+
+format=pipe&payload=Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<Java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc
+
+> {%
+client.test("Pipe-delimited format with prefix processed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+});
+%}
 ###
 
 ### Metrics
@@ -390,4 +405,3 @@ releases%5B0%5D.lines%5B0%5D = tried &
 releases%5B0%5D.lines%5B1%5D = true
 
 ###
-

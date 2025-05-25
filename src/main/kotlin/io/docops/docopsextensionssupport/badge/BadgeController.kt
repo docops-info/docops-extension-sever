@@ -22,6 +22,8 @@ import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -49,16 +51,59 @@ class BadgeController @Autowired constructor(private val docOpsBadgeGenerator: D
     @GetMapping("/badge/edit-mode")
     @ResponseBody
     fun getEditMode(): ResponseEntity<String> {
-        val defaultBadgeContent = """Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
+        val pipeDelimitedContent = """Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
 JVM|Runtime||#acacac|#3B1E54|<Java>|#fcfcfc
 AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc"""
+
+        val jsonContent = """[
+  {
+    "label": "Made With",
+    "message": "Kotlin",
+    "url": "",
+    "labelColor": "#06133b",
+    "messageColor": "#6fc441",
+    "logo": "<Kotlin>",
+    "fontColor": "#fcfcfc"
+  },
+  {
+    "label": "JVM",
+    "message": "Runtime",
+    "url": "",
+    "labelColor": "#acacac",
+    "messageColor": "#3B1E54",
+    "logo": "<Java>",
+    "fontColor": "#fcfcfc"
+  },
+  {
+    "label": "AsciiDoctor",
+    "message": "Documentation",
+    "url": "",
+    "labelColor": "#acacac",
+    "messageColor": "#4CC9FE",
+    "logo": "<asciidoctor>",
+    "fontColor": "#fcfcfc"
+  }
+]"""
 
         val editModeHtml = """
             <div id="badgeContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
                 <form hx-post="api/badges" hx-target="#badgePreview" class="space-y-4">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Format:</label>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="format" value="pipe" class="form-radio" checked onclick="switchFormat('pipe')">
+                                <span class="ml-2 text-sm text-gray-700">Pipe Delimited</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="format" value="json" class="form-radio" onclick="switchFormat('json')">
+                                <span class="ml-2 text-sm text-gray-700">JSON</span>
+                            </label>
+                        </div>
+                    </div>
                     <div>
                         <label for="payload" class="block text-sm font-medium text-gray-700 mb-1">Edit Badge Configuration:</label>
-                        <textarea id="payload" name="payload" rows="6" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultBadgeContent}</textarea>
+                        <textarea id="payload" name="payload" rows="10" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${pipeDelimitedContent}</textarea>
                     </div>
                     <div class="flex justify-between">
                         <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
@@ -76,6 +121,19 @@ AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc"""
                             Click "Update Badges" to see the preview
                         </div>
                     </div>
+                    <script>
+                        const pipeContent = `${pipeDelimitedContent}`;
+                        const jsonContent = `${jsonContent}`;
+
+                        function switchFormat(format) {
+                            const payloadTextarea = document.getElementById('payload');
+                            if (format === 'pipe') {
+                                payloadTextarea.value = pipeContent;
+                            } else if (format === 'json') {
+                                payloadTextarea.value = jsonContent;
+                            }
+                        }
+                    </script>
                 </form>
             </div>
         """.trimIndent()
@@ -274,50 +332,84 @@ $txt
         @RequestBody payload: String,
         @RequestParam(name = "type", defaultValue = "SVG", required = false) type: String
     ):  ResponseEntity<ByteArray>{
-        //val data = uncompressString(payload)
-        val data = (URLDecoder.decode(payload,"UTF-8"))
-        val allLines = data.split("\\r?\\n".toRegex())
-        val lines = mutableListOf<String>()
+        var decodedPayload = URLDecoder.decode(payload,"UTF-8")
+
+        // Check if the payload starts with format=pipe&payload= and extract just the payload part
+        if (decodedPayload.startsWith("format=pipe&payload=")) {
+            decodedPayload = decodedPayload.substringAfter("format=pipe&payload=")
+        }
+        else if (decodedPayload.startsWith("format=json&payload=")) {
+            decodedPayload = decodedPayload.substringAfter("format=json&payload=")
+        }
+
+        val data = decodedPayload
         var x = 0.0f
         var y = 0.0f
         val buffer = 5.0f
         val str = StringBuilder()
-        var count =0
-        allLines.forEach { line ->
-            val split = line.split("|")
-            var link = ""
-            if (split.size > 2) {
-                link = split[2]
-            }
-            if (split.size != 7) {
-                throw BadgeFormatException("Badge Format invalid, expecting 5 pipe delimited values [$data]")
-            }
-            val message: String = split[1]
-            val label: String = split[0]
-            var mcolor = "GREEN"
-            val color: String = split[3].trim()
-            val c = split[4].trim()
-            if (c.isNotEmpty()) {
-                mcolor = c
-            }
-            var logo = ""
-            if ("SVG" == type) {
-                logo = split[5].trim()
-            }
+        var count = 0
 
-
-            var output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor)
-            output = output.replace("id='m'", "id='m${count}'")
-            output = output.replace("url(#m4)", "url(#m${count++})")
-            str.append(
-                """<g transform="translate($x, $y)">
-                $output
-                </g>
-            """.trimMargin()
-            )
-            x += buffer + getXY(output)
-
+        // Try to parse as JSON first
+        try {
+            // Check if the data looks like JSON (starts with [ for array or { for object)
+            if (data.trim().startsWith("[") || data.trim().startsWith("{")) {
+                // If it starts with [, it's a JSON array of badges
+                if (data.trim().startsWith("[")) {
+                    val badgeList = Json.decodeFromString<List<Badge>>(data)
+                    badgeList.forEach { badge ->
+                        var output = docOpsBadgeGenerator.createBadge(
+                            badge.label, 
+                            badge.message, 
+                            badge.labelColor ?: "#999999", 
+                            badge.messageColor ?: "#ececec",
+                            badge.url ?: "",
+                            badge.logo ?: "",
+                            badge.fontColor
+                        )
+                        output = output.replace("id='m'", "id='m${count}'")
+                        output = output.replace("url(#m4)", "url(#m${count++})")
+                        str.append(
+                            """<g transform="translate($x, $y)">
+                            $output
+                            </g>
+                        """.trimMargin()
+                        )
+                        x += buffer + getXY(output)
+                    }
+                } 
+                // If it starts with {, it's a single JSON badge
+                else {
+                    val badge = Json.decodeFromString<Badge>(data)
+                    var output = docOpsBadgeGenerator.createBadge(
+                        badge.label, 
+                        badge.message, 
+                        badge.labelColor ?: "#999999", 
+                        badge.messageColor ?: "#ececec",
+                        badge.url ?: "",
+                        badge.logo ?: "",
+                        badge.fontColor
+                    )
+                    output = output.replace("id='m'", "id='m${count}'")
+                    output = output.replace("url(#m4)", "url(#m${count++})")
+                    str.append(
+                        """<g transform="translate($x, $y)">
+                        $output
+                        </g>
+                    """.trimMargin()
+                    )
+                    x += buffer + getXY(output)
+                }
+            } 
+            // If it doesn't look like JSON, process as pipe-delimited
+            else {
+                x = processPipeDelimitedData(data, str, type, x, y, buffer, count)
+            }
+        } 
+        // If JSON parsing fails, fall back to pipe-delimited processing
+        catch (e: Exception) {
+            x = processPipeDelimitedData(data, str, type, x, y, buffer, count)
         }
+
         val output = """
             <svg xmlns="http://www.w3.org/2000/svg" width="$x" height="20">
             $str
@@ -327,11 +419,67 @@ $txt
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
 
+        return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
 
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-       return ResponseEntity(output.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    /**
+     * Process pipe-delimited data format for badges
+     */
+    private fun processPipeDelimitedData(
+        data: String, 
+        str: StringBuilder, 
+        type: String, 
+        initialX: Float, 
+        initialY: Float, 
+        buffer: Float,
+        initialCount: Int
+    ): Float {
+        var x = initialX
+        var y = initialY
+        var count = initialCount
 
+        val allLines = data.split("\\r?\\n".toRegex())
+        allLines.forEach { line ->
+            if (line.isNotEmpty()) {
+                val split = line.split("|")
+                var link = ""
+                if (split.size > 2) {
+                    link = split[2]
+                }
+                if (split.size != 7) {
+                    throw BadgeFormatException("Badge Format invalid, expecting 7 pipe delimited values [$data]")
+                }
+                val message: String = split[1]
+                val label: String = split[0]
+                var mcolor = "GREEN"
+                val color: String = split[3].trim()
+                val c = split[4].trim()
+                if (c.isNotEmpty()) {
+                    mcolor = c
+                }
+                var logo = ""
+                if ("SVG" == type) {
+                    logo = split[5].trim()
+                }
+
+                var fontColor = "#ffffff"
+                if (split.size == 7) {
+                    fontColor = split[6]
+                }
+
+                var output = docOpsBadgeGenerator.createBadge(label, message, color, mcolor, link, logo, fontColor)
+                output = output.replace("id='m'", "id='m${count}'")
+                output = output.replace("url(#m4)", "url(#m${count++})")
+                str.append(
+                    """<g transform="translate($x, $y)">
+                    $output
+                    </g>
+                """.trimMargin()
+                )
+                x += buffer + getXY(output)
+            }
+        }
+        return x
     }
 
     fun getXY(originalSvg: String): Float {
