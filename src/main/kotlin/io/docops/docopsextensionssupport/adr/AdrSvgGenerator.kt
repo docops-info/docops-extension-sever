@@ -1,28 +1,6 @@
 package io.docops.docopsextensionssupport.adr
 
 
-import java.awt.Font
-import java.awt.font.FontRenderContext
-import java.awt.geom.AffineTransform
-import kotlin.collections.any
-import kotlin.collections.isNotEmpty
-import kotlin.collections.sumOf
-import kotlin.collections.withIndex
-import kotlin.text.contains
-import kotlin.text.format
-import kotlin.text.isEmpty
-import kotlin.text.isNotEmpty
-import kotlin.text.lowercase
-import kotlin.text.replace
-import kotlin.text.split
-import kotlin.text.startsWith
-import kotlin.text.substring
-import kotlin.text.toRegex
-import kotlin.text.trim
-import kotlin.text.trimMargin
-import kotlin.text.uppercase
-import kotlin.to
-
 /**
  * Generates SVG diagrams for Architecture Decision Records (ADRs).
  * Creates iOS-style cards with sections for title, date, status, context, decision, consequences, and participants.
@@ -34,7 +12,6 @@ class AdrSvgGenerator {
             |<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" preserveAspectRatio='xMidYMid meet'>
             |<defs>
             |  <style type="text/css">
-            |    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&amp;display=swap');
             |    .card { 
             |      fill: #ffffff; 
             |      stroke: #e1e1e1; 
@@ -42,37 +19,37 @@ class AdrSvgGenerator {
             |      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
             |    }
             |    .title { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 600; 
             |      font-size: 20px; 
             |      fill: #000000; 
             |    }
             |    .subtitle { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 500; 
             |      font-size: 16px; 
             |      fill: #666666; 
             |    }
             |    .status { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 500; 
             |      font-size: 14px; 
             |      fill: #ffffff; 
             |    }
             |    .content { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 400; 
             |      font-size: 14px; 
             |      fill: #333333; 
             |    }
             |    .section-title { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 600; 
             |      font-size: 16px; 
             |      fill: #333333; 
             |    }
             |    .participant-name { 
-            |      font-family: 'SF Pro Display', sans-serif; 
+            |      font-family: Arial, Helvetica,  sans-serif; 
             |      font-weight: 400; 
             |      font-size: 12px; 
             |      fill: #333333; 
@@ -81,12 +58,13 @@ class AdrSvgGenerator {
             |  </style>
             |  <!-- Font Awesome style user icon -->
             |  <symbol id="user-icon" viewBox="0 0 448 512">
-            |    <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
+            |    <path stroke="%s" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
             |  </symbol>
             |</defs>""".trimMargin()
 
         private const val SVG_FOOTER = "</svg>"
 
+        private const val BACK_CARD = """<rect x="0" y="0" width="100%" height="100%" class="card" rx="10" ry="10"/>"""
         // Default dimensions and spacing
         private const val DEFAULT_WIDTH = 700
         private const val DEFAULT_PADDING = 20
@@ -263,9 +241,10 @@ class AdrSvgGenerator {
     /**
      * Renders a participant with icon and name.
      */
-    private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int): Int {
+    private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int, status: AdrStatus): Int {
         // Icon
-        svg.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="#007AFF" />""")
+        val color = STATUS_COLORS[status] ?: "#999999"
+        svg.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" />""")
 
         // Name (centered under icon)
         val escapedName = escapeXml(name)
@@ -308,8 +287,12 @@ class AdrSvgGenerator {
         val totalHeight = titleHeight + contextHeight + decisionHeight + consequencesHeight + 
                           participantsHeight + (4 * CARD_SPACING) + (2 * DEFAULT_PADDING)
 
+        val color = STATUS_COLORS[adr.status] ?: "#999999"
         // Add SVG header
-        svg.append(String.format(SVG_HEADER, width, totalHeight, width, totalHeight))
+        svg.append(String.format(SVG_HEADER, width, totalHeight, width, totalHeight, color))
+
+        // Add background card
+        svg.append(BACK_CARD)
 
         // Title Card
         svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" class="card" rx="10" ry="10"/>""")
@@ -356,7 +339,7 @@ class AdrSvgGenerator {
                     participantX = contentX
                 }
 
-                renderParticipant(svg, participant, participantX, participantY, participantWidth)
+                renderParticipant(svg, participant, participantX, participantY, participantWidth, adr.status)
                 participantX += participantWidth
             }
         }
