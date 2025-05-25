@@ -41,7 +41,11 @@ A shield includes:
 
 == AsciiDoctor Syntax for Shields
 
-To include shields in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+To include shields in your AsciiDoctor document, you use a special macro syntax. The extension supports two input formats: pipe-delimited and JSON.
+
+=== Pipe-Delimited Format
+
+Here's the basic format for pipe-delimited input:
 
 [source,asciidoc]
 ....
@@ -52,6 +56,36 @@ Label|Message|URL|LabelColor|MessageColor|Logo|FontColor
 ....
 
 The macro processes the pipe-delimited configuration and generates an SVG representation of the shield that is embedded in your document.
+
+=== JSON Format
+
+Alternatively, you can use JSON format for more complex configurations:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+[
+  {
+    "label": "Status",
+    "message": "Stable",
+    "labelColor": "#3C3D37",
+    "messageColor": "#4CC9F0"
+  },
+  {
+    "label": "Version",
+    "message": "1.0.0",
+    "labelColor": "#0D47A1",
+    "messageColor": "#2196F3",
+    "url": "https://example.com/version",
+    "logo": "<tag>",
+    "fontColor": "#fcfcfc"
+  }
+]
+----
+....
+
+The JSON format allows you to specify multiple badges with all available properties in a structured format.
 
 === Shield Properties
 
@@ -321,7 +355,9 @@ Enterprise|Solution||#283593|#3F51B5|<building>|#fcfcfc
 
 == Conclusion
 
-The DocOps Shield Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing badges and shields. By using the pipe-delimited configuration format, you can create customized shields that match your document's style and purpose.
+The DocOps Shield Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing badges and shields. By using either the pipe-delimited or JSON configuration format, you can create customized shields that match your document's style and purpose.
+
+The pipe-delimited format offers a simple, concise syntax for basic shield configurations, while the JSON format provides a more structured approach for complex configurations with multiple badges.
 
 The extension supports various customization options, including custom colors, logos, links, and dark mode, allowing you to create shields that effectively communicate status information and metadata in your documentation.
 

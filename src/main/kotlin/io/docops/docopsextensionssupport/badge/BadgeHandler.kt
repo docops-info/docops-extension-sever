@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.badge
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
@@ -23,6 +25,75 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         val badges = mutableListOf<Badge>()
         val isPdf = backend == "pdf"
 
+        // Try to parse as JSON first
+        try {
+            // Check if the data looks like JSON (starts with [ for array or { for object)
+            if (data.trim().startsWith("[") || data.trim().startsWith("{")) {
+                // If it starts with [, it's a JSON array of badges
+                if (data.trim().startsWith("[")) {
+                    val badgeList = Json.decodeFromString<List<Badge>>(data)
+                    badges.addAll(badgeList.map { 
+                        Badge(
+                            label = it.label,
+                            message = it.message,
+                            labelColor = it.labelColor,
+                            messageColor = it.messageColor,
+                            url = it.url,
+                            logo = it.logo,
+                            fontColor = it.fontColor,
+                            isPdf = isPdf
+                        )
+                    })
+                } 
+                // If it starts with {, it's a single JSON badge
+                else {
+                    val badge = Json.decodeFromString<Badge>(data)
+                    badges.add(
+                        Badge(
+                            label = badge.label,
+                            message = badge.message,
+                            labelColor = badge.labelColor,
+                            messageColor = badge.messageColor,
+                            url = badge.url,
+                            logo = badge.logo,
+                            fontColor = badge.fontColor,
+                            isPdf = isPdf
+                        )
+                    )
+                }
+            } 
+            // If it doesn't look like JSON, process as pipe-delimited
+            else {
+                processPipeDelimitedData(data, badges, isPdf)
+            }
+        } 
+        // If JSON parsing fails, fall back to pipe-delimited processing
+        catch (e: Exception) {
+            processPipeDelimitedData(data, badges, isPdf)
+        }
+
+        var rows= 1
+        if(badges.size>3) {
+            rows = badges.size / 3 + 1
+        }
+        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges=badges)
+        val svg = StringBuilder()
+        //language=svg
+        svg.append("""
+            <svg width='${svgSrc.second}' height='${rows*20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
+        """.trimIndent())
+        svg.append(svgSrc.first)
+        svg.append("</svg>")
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+        return ResponseEntity(joinXmlLines(svg.toString()).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
+
+    /**
+     * Process pipe-delimited data format
+     */
+    private fun processPipeDelimitedData(data: String, badges: MutableList<Badge>, isPdf: Boolean) {
         data.lines().forEach { line ->
             val split = line.split("|")
             if(line.isNotEmpty()) {
@@ -61,22 +132,5 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                 }
             }}
         }
-
-        var rows= 1
-        if(badges.size>3) {
-            rows = badges.size / 3 + 1
-        }
-        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges=badges)
-        val svg = StringBuilder()
-        //language=svg
-        svg.append("""
-            <svg width='${svgSrc.second}' height='${rows*20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
-        """.trimIndent())
-        svg.append(svgSrc.first)
-        svg.append("</svg>")
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-        return ResponseEntity(joinXmlLines(svg.toString()).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 }
