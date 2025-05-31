@@ -11,16 +11,16 @@ import java.util.*
 
 class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG", val isPdf: Boolean = false) {
 
-    private var bgColor = "#fcfcfc"
-    private var fgColor = "#111111"
+    private var bgColor = "#f2f2f7" // iOS light gray background
+    private var fgColor = "#1d1d1f" // iOS dark text color
     private val colors = mutableListOf<String>()
 
     private var useGrad = true
 
     fun makePlacerMat(): ShapeResponse {
         if(placeMatRequest.useDark) {
-            bgColor = "#17242b"
-            fgColor = "#fcfcfc"
+            bgColor = "#17242b" // Keep dark mode background
+            fgColor = "#fcfcfc" // Keep dark mode text color
         }
 
         val width: Float = (placeMatRequest.placeMats.chunked(5)[0].size * 250).toFloat() + 60
@@ -97,15 +97,16 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             val lines = conn.textToLines()
             val textY = lines.second
 
-            // Enhanced text styling with better class
-            val str = StringBuilder("""<text x="135" y="$textY" text-anchor="middle" class="placemat-text" style="fill:$textColor; font-size:22px;">""")
+            // Enhanced text styling with iOS-style class
+            val str = StringBuilder("""<text x="135" y="$textY" text-anchor="middle" class="boxText" style="fill:$textColor;">""")
             var newLine = false
 
             lines.first.forEachIndexed {
                     j, content ->
                 var dy=""
                 if(j>0) {
-                    dy = "dy=\"24\""
+                    // Reduce line spacing from 24px to 18-20px for better text density
+                    dy = if (lines.first.size > 2) "dy=\"18\"" else "dy=\"20\""
                 }
                 str.append("""<tspan x="135" $dy>$content</tspan>""")
             }
@@ -114,13 +115,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                     newLine = true
                 }
 
-                // Enhanced rectangle with better styling
+                // iOS-style card with no stroke border
                 sb.append(
                     """
             <g transform="translate($x,$y)" >
-                <rect x="10" y="10" class="placemat-box" width="250" height="90" ry="20" rx="20" 
-                      style="fill: ${grad}; stroke: ${placeMatRequest.config.colorFromLegendName(conn.legend).color};
-                      stroke-width: $strokeWidth; stroke-opacity: 0.8;"/>
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16" 
+                      style="fill: ${grad}; stroke: none;"/>
                 $str
             """.trimIndent()
                 )
@@ -155,12 +155,21 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         placeMatRequest.config.legend.forEach {
             item ->
-            // Create simplified 2-stop gradient instead of using SVGColor's 5-stop gradient
-            val colorMap = gradientFromColor(item.color)
+            // Create iOS-style gradients with updated colors
+            val gradientColors = when(item.legendAsStyle()) {
+                "Business_Capability" -> Pair("#ff6b6b", "#ff5252") // Updated iOS-style gradient
+                "Engineering" -> Pair("#4fc3f7", "#29b6f6") // Updated iOS-style gradient
+                "Both" -> Pair("#ba68c8", "#ab47bc") // Updated iOS-style gradient
+                else -> {
+                    val colorMap = gradientFromColor(item.color)
+                    Pair(colorMap["color1"] ?: "#000000", colorMap["color3"] ?: "#000000")
+                }
+            }
+
             val simplifiedGradient = """
                 <linearGradient id="grad_${item.legendAsStyle()}_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:${colorMap["color1"]}" stop-opacity="1.0"/>
-                    <stop offset="100%" style="stop-color:${colorMap["color3"]}" stop-opacity="0.9"/>
+                    <stop offset="0%" style="stop-color:${gradientColors.first}" stop-opacity="1.0"/>
+                    <stop offset="100%" style="stop-color:${gradientColors.second}" stop-opacity="0.9"/>
                 </linearGradient>
             """.trimIndent()
             grad.append(simplifiedGradient)
@@ -171,58 +180,62 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         return """
             <defs>
             $grad
-        <filter id="filter">
-            <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
-            <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"/>
+        <!-- iOS-style shadow filter with two layers -->
+        <filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="rgba(0,0,0,0.15)" flood-opacity="1"/>
+            <feDropShadow dx="0" dy="4" stdDeviation="16" flood-color="rgba(0,0,0,0.1)" flood-opacity="1"/>
         </filter>
-        <filter id="enhanced-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="2" dy="2" stdDeviation="4" flood-opacity="0.3" />
+
+        <!-- Subtle inner highlight for depth -->
+        <filter id="inner-highlight">
+            <feFlood flood-color="rgba(255,255,255,0.2)"/>
+            <feComposite operator="in" in2="SourceGraphic"/>
         </filter>
-        <filter id="inner-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
-            <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />
-            <feFlood flood-color="#ffffff" flood-opacity="0.5" result="glowColor" />
-            <feComposite in="glowColor" in2="offsetBlur" operator="in" result="innerGlow" />
-            <feComposite in="SourceGraphic" in2="innerGlow" operator="over" />
-        </filter>
-        <filter id="soft-highlight" x="0" y="0" width="100%" height="100%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-            <feOffset in="blur" dx="0" dy="-2" result="offsetBlur" />
-            <feFlood flood-color="#ffffff" flood-opacity="0.3" result="highlightColor" />
-            <feComposite in="highlightColor" in2="offsetBlur" operator="in" result="highlight" />
-            <feComposite in="SourceGraphic" in2="highlight" operator="over" />
-        </filter>
+
         <style>
-            #diag_$id .shadowed {
-                filter: url(#enhanced-shadow);
+            #diag_$id .ios-card {
+                filter: url(#ios-shadow);
+                transition: all 0.2s ease-in-out;
             }
-            #diag_$id .placemat-box {
-                filter: url(#enhanced-shadow);
+
+            #diag_$id .ios-card:hover {
+                filter: url(#ios-shadow) brightness(1.05);
+                transform: translateY(-2px);
             }
-            #diag_$id .placemat-text {
-                font-family: Arial, sans-serif;
+
+            #diag_$id .boxText {
+                font-size: 20px;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 font-weight: 600;
-                fill-opacity: 1;
+                letter-spacing: -0.02em;
             }
+
             #diag_$id .title-text {
-                font-family: Arial, sans-serif;
+                font-size: 28px;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 font-weight: 700;
+                letter-spacing: -0.03em;
             }
+
             #diag_$id .legend-box {
-                filter: url(#enhanced-shadow);
+                filter: url(#ios-shadow);
                 opacity: 1;
             }
+
             #diag_$id .legend-text {
-                font-family: Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 font-weight: 600;
+                letter-spacing: -0.02em;
             }
+
             #diag_$id .legend-title {
-                font-family: Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 font-weight: 700;
+                letter-spacing: -0.03em;
             }
         </style>
         <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" />
-        <rect id="bbox" class="placemat-box" width="250" height="90" ry="20" rx="20" />
+        <rect id="ios-card" class="ios-card" width="250" height="90" ry="16" rx="16" />
         <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         </defs>
@@ -262,12 +275,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val itemHeight = 150 // Height of legend items with padding (increased from 130)
         val legendHeight = titleHeight + itemHeight + 90 // Additional bottom padding (increased to match 300px total)
 
-        // Calculate the scale factor based on the number of legend items
-        // Use a smaller scale for many items, larger for few
+        // Reduce legend scale to 0.12 as per iOS design requirements
+        // Adjust based on number of items for better proportions
         val scaleFactor = when {
-            placeMatRequest.config.legend.size > 5 -> 0.16
-            placeMatRequest.config.legend.size <= 3 -> 0.20
-            else -> 0.18
+            placeMatRequest.config.legend.size > 5 -> 0.10
+            placeMatRequest.config.legend.size <= 3 -> 0.14
+            else -> 0.12
         }
 
         // Center the legend group horizontally
@@ -282,7 +295,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                       fill="${if(placeMatRequest.useDark) "#2a3a4a" else "#f5f5f7"}" 
                       opacity="0.4" class="legend-background"/>""")
 
-        // Center the legend title
+        // iOS-style legend title
         sb.append("""<text x="${legendGroupWidth/2}" y="45" text-anchor="middle" font-size="120" 
                       class="legend-title" fill="$fgColor">Legend</text>""")
 
@@ -299,12 +312,12 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
             // Calculate proper width for the legend item rectangle
             val rectWidth = textLen + 40 // Add more padding around text
 
-            // Enhanced legend items with modern styling
+            // iOS-style legend items with 16px border radius
             sb.append("""
-            <g transform="translate($start,70)" font-size="96">
-                <rect x="0" y="0" width="$rectWidth" height="150" fill="$grad" rx="15" ry="15" 
-                      class="legend-box" filter="url(#enhanced-shadow)"/>
-                <text text-anchor="middle" class="legend-text" style="fill: $textColor;" 
+            <g transform="translate($start,70)" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="100" font-weight="600">
+                <rect x="0" y="0" width="$rectWidth" height="150" fill="$grad" rx="16" ry="16" 
+                      class="ios-card"/>
+                <text text-anchor="middle" style="fill: $textColor; letter-spacing: -0.02em;" 
                       x="${rectWidth/2}" y="90">${item.legend}</text>
             </g>
             """.trimIndent())
@@ -329,7 +342,7 @@ fun main() {
         ColorLegendConfig("#c9d7e4","Company"),
         ColorLegendConfig("#F34F1C","Vendor"),
         ColorLegendConfig("#01A6F0", "Both"))
-    ), title = "Impacted Applications - Internal", fill = true, useDark = true), "SVG")
+    ), title = "Impacted Applications - Internal", fill = true, useDark = false), "SVG")
     val svg = pmm.makePlacerMat()
     val f = File("gen/place.svg")
     f.writeText(svg.shapeSvg)

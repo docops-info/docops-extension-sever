@@ -1,105 +1,201 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1310.0" height="440.0" viewBox="0 0 1310.0 440.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_37cc8d01-f063-4623-ac65-058f365caa15">           <defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1310.0" height="440.0" viewBox="0 0 1310.0 440.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_37cc8d01-f063-4623-ac65-058f365caa15">
+    <defs>
+        <!-- Updated gradients with more subtle iOS-style colors -->
         <linearGradient id="grad_Business_Capability_37cc8d01-f063-4623-ac65-058f365caa15" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#e18585"></stop>
-            <stop class="stop2" offset="100%" stop-color="hsl(0.0,88.5%,40.8%)"></stop>
-        </linearGradient> <linearGradient id="grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#7f9db5"></stop>
-            <stop class="stop2" offset="100%" stop-color="hsl(207.0,100.0%,21.0%)"></stop>
-        </linearGradient> <linearGradient id="grad_Both_37cc8d01-f063-4623-ac65-058f365caa15" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffadd6"></stop>
-            <stop class="stop2" offset="100%" stop-color="hsl(330.0,100.0%,67.8%)"></stop>
+            <stop class="stop1" offset="0%" stop-color="#ff6b6b"></stop>
+            <stop class="stop2" offset="100%" stop-color="#ff5252"></stop>
         </linearGradient>
-        <filter id="filter">
-            <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"></feMorphology>
-            <feComposite operator="out" in="OUTLINE" in2="SourceAlpha"></feComposite>
+        <linearGradient id="grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#4fc3f7"></stop>
+            <stop class="stop2" offset="100%" stop-color="#29b6f6"></stop>
+        </linearGradient>
+        <linearGradient id="grad_Both_37cc8d01-f063-4623-ac65-058f365caa15" x2="0%" y2="100%">
+            <stop class="stop1" offset="0%" stop-color="#ba68c8"></stop>
+            <stop class="stop2" offset="100%" stop-color="#ab47bc"></stop>
+        </linearGradient>
+
+        <!-- iOS-style shadow filter -->
+        <filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="rgba(0,0,0,0.15)" flood-opacity="1"/>
+            <feDropShadow dx="0" dy="4" stdDeviation="16" flood-color="rgba(0,0,0,0.1)" flood-opacity="1"/>
         </filter>
-        <filter id="poly" x="0" y="0" width="200%" height="200%">
-            <feOffset result="offOut" in="SourceGraphic" dx="10" dy="15"></feOffset>
-            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5"></feGaussianBlur>
-            <feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>
+
+        <!-- Subtle inner highlight for depth -->
+        <filter id="inner-highlight">
+            <feFlood flood-color="rgba(255,255,255,0.2)"/>
+            <feComposite operator="in" in2="SourceGraphic"/>
         </filter>
-        <filter id="shadow2">
-            <feDropShadow dx="-0.8" dy="-0.8" stdDeviation="0" flood-color="pink" flood-opacity="0.5"></feDropShadow>
-        </filter>
+
         <style>
-            #diag_37cc8d01-f063-4623-ac65-058f365caa15 .shadowed {
-            -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
-            filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
-            }
-            #diag_37cc8d01-f063-4623-ac65-058f365caa15  .filtered {
-            filter: url(#filter);
-            fill: black;
-            font-family: 'Ultra', serif;
-            font-size: 100px;
-
-            }
-            #diag_37cc8d01-f063-4623-ac65-058f365caa15  .filtered-small {
-            filter: url(#filter);
-            fill: black;
-            font-family: 'Ultra', serif;
-            font-size: 14px;
-
+            #diag_37cc8d01-f063-4623-ac65-058f365caa15 .ios-card {
+                filter: url(#ios-shadow);
+                transition: all 0.2s ease-in-out;
             }
 
-            .glass:after,.glass:before{content:"";display:block;position:absolute}.glass{overflow:hidden;color:#fff;text-shadow:0
-            1px 2px rgba(0,0,0,.7);background-image:radial-gradient(circle at
-            center,rgba(0,167,225,.25),rgba(0,110,149,.5));box-shadow:0 5px 10px rgba(0,0,0,.75),inset 0 0 0 2px
-            rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2);position:relative}.glass:after{background:rgba(0,167,225,.2);z-index:0;height:100%;width:100%;top:0;left:0;backdrop-filter:blur(3px)
-            saturate(400%);-webkit-backdrop-filter:blur(3px) saturate(400%)}.glass:before{width:calc(100% -
-            4px);height:35px;background-image:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,0));top:2px;left:2px;border-radius:30px
-            30px 200px 200px;opacity:.7}.glass:hover{text-shadow:0 1px 2px
-            rgba(0,0,0,.9)}.glass:hover:before{opacity:1}.glass:active{text-shadow:0 0 2px rgba(0,0,0,.9);box-shadow:0
-            3px 8px rgba(0,0,0,.75),inset 0 0 0 2px rgba(0,0,0,.3),inset 0 -6px 6px -3px
-            rgba(0,129,174,.2)}.glass:active:before{height:25px}
+            #diag_37cc8d01-f063-4623-ac65-058f365caa15 .ios-card:hover {
+                filter: url(#ios-shadow) brightness(1.05);
+                transform: translateY(-2px);
+            }
 
-            #diag_37cc8d01-f063-4623-ac65-058f365caa15  .boxText {
-            font-size:24px;
-            font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-variant: small-caps;
-            font-weight: bold;
+            #diag_37cc8d01-f063-4623-ac65-058f365caa15 .boxText {
+                font-size: 20px;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 600;
+                letter-spacing: -0.02em;
+            }
+
+            #diag_37cc8d01-f063-4623-ac65-058f365caa15 .title-text {
+                font-size: 28px;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 700;
+                letter-spacing: -0.03em;
             }
         </style>
-        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"></polygon>
-        <rect id="bbox" class="shadowed" width="250" height="90" ry="18" rx="18"></rect>
-        <path id="hconnector" d="M260,50.0 h34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path id="vconnector" d="M135,100 v34" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-    </defs><rect width="100%" height="100%" fill="#17242b" stroke="#111111" stroke-width="3"></rect><g transform="translate(0,0)"><g transform="translate(0,0)">
-            <text x="20" y="24" text-anchor="start" font-size="24" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="#fcfcfc">Observability</text>
+
+        <rect id="ios-card" class="ios-card" width="250" height="90" ry="16" rx="16"></rect>
+    </defs>
+
+    <!-- Background with iOS-style color -->
+    <rect width="100%" height="100%" fill="#f2f2f7" stroke="none"></rect>
+
+    <g transform="translate(0,0)">
+        <g transform="translate(0,0)">
+            <text x="20" y="30" text-anchor="start" class="title-text" fill="#1d1d1f">Observability</text>
         </g>
-        <g transform="translate(0,50)"><g transform="translate(0,0)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Audit</tspan></text></g><g transform="translate(260,0)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Traceability</tspan></text></g><g transform="translate(520,0)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #FF5BAE;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Subscription</tspan></text></g><g transform="translate(780,0)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #FF5BAE;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Automation</tspan></text></g><g transform="translate(1040,0)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Metrics</tspan></text></g><g transform="translate(0,110)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Business_Capability_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #C40C0C;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="45" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Software</tspan><tspan x="135" dy="24">Milestone</tspan></text></g><g transform="translate(260,110)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Monitoring</tspan></text></g><g transform="translate(520,110)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Flakiness</tspan></text></g><g transform="translate(780,110)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="45" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Performance</tspan><tspan x="135" dy="24">Regression</tspan></text></g><g transform="translate(1040,110)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #003b6b;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Misconfigurations</tspan></text></g><g transform="translate(0,220)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #FF5BAE;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="65" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">MTTR</tspan></text></g><g transform="translate(260,220)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #FF5BAE;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="36" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Change</tspan><tspan x="135" dy="24">Failure</tspan><tspan x="135" dy="24">Rate</tspan></text></g><g transform="translate(520,220)">
-                <rect x="10" y="10" class="shadowed" width="250" height="90" ry="18" rx="18" style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: #FF5BAE;stroke-width: 1;"></rect>
-                <text x="135" fill="#111111" y="45" text-anchor="middle" style="fill:#111111; font-family: 'Ultra', serif;font-size:24px;font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;font-variant: small-caps;font-weight: bold;"><tspan x="135">Deployment</tspan><tspan x="135" dy="24">Frequency</tspan></text></g><g transform="translate(20,350.0),scale(0.15)"><text x="10" font-size="110" font-family="Arial,DejaVu Sans,sans-serif" font-variant="small-caps" fill="#fcfcfc">Legend</text><g transform="translate(10.0,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
-                    <rect x="0" y="0" width="1129.6665" height="110" fill="url(#grad_Business_Capability_37cc8d01-f063-4623-ac65-058f365caa15)"></rect>
-                    <text text-anchor="middle" style="fill:#fcfcfc" x="564.83325" y="90" textLength="1119.6665">Business Capability</text>
-                </g><g transform="translate(1179.66650390625,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
-                    <rect x="0" y="0" width="701.3333" height="110" fill="url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15)"></rect>
-                    <text text-anchor="middle" style="fill:#fcfcfc" x="350.66666" y="90" textLength="691.3333">Engineering</text>
-                </g><g transform="translate(1920.9998168945312,40)" font-family="Arial,DejaVu Sans,sans-serif" font-size="110">
-                    <rect x="0" y="0" width="266.0001" height="110" fill="url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15)"></rect>
-                    <text text-anchor="middle" style="fill:#fcfcfc" x="133.00005" y="90" textLength="256.0001">Both</text>
-                </g></g></g></g></svg>
+
+        <g transform="translate(0,50)">
+            <!-- Row 1 -->
+            <g transform="translate(0,0)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Audit</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(260,0)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Traceability</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(520,0)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Subscription</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(780,0)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Automation</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(1040,0)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Metrics</tspan>
+                </text>
+            </g>
+
+            <!-- Row 2 -->
+            <g transform="translate(0,110)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Business_Capability_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="50" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Software</tspan>
+                    <tspan x="135" dy="20">Milestone</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(260,110)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Monitoring</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(520,110)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Flakiness</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(780,110)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="50" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Performance</tspan>
+                    <tspan x="135" dy="20">Regression</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(1040,110)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Misconfigurations</tspan>
+                </text>
+            </g>
+
+            <!-- Row 3 -->
+            <g transform="translate(0,220)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="65" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">MTTR</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(260,220)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="40" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Change</tspan>
+                    <tspan x="135" dy="18">Failure</tspan>
+                    <tspan x="135" dy="18">Rate</tspan>
+                </text>
+            </g>
+
+            <g transform="translate(520,220)">
+                <rect x="10" y="10" class="ios-card" width="250" height="90" ry="16" rx="16"
+                      style="fill: url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15); stroke: none;"></rect>
+                <text x="135" y="50" text-anchor="middle" class="boxText" fill="white">
+                    <tspan x="135">Deployment</tspan>
+                    <tspan x="135" dy="20">Frequency</tspan>
+                </text>
+            </g>
+
+            <!-- Legend with iOS styling -->
+            <g transform="translate(20,350.0),scale(0.12)">
+                <text x="10" font-size="120" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
+                      font-weight="700" fill="#1d1d1f">Legend</text>
+
+                <g transform="translate(10.0,50)" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="100" font-weight="600">
+                    <rect x="0" y="0" width="1000" height="90" fill="url(#grad_Business_Capability_37cc8d01-f063-4623-ac65-058f365caa15)" rx="12" ry="12" filter="url(#ios-shadow)"></rect>
+                    <text text-anchor="middle" style="fill:white" x="500" y="70">Business Capability</text>
+                </g>
+
+                <g transform="translate(1050,50)" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="100" font-weight="600">
+                    <rect x="0" y="0" width="650" height="90" fill="url(#grad_Engineering_37cc8d01-f063-4623-ac65-058f365caa15)" rx="12" ry="12" filter="url(#ios-shadow)"></rect>
+                    <text text-anchor="middle" style="fill:white" x="325" y="70">Engineering</text>
+                </g>
+
+                <g transform="translate(1750,50)" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="100" font-weight="600">
+                    <rect x="0" y="0" width="250" height="90" fill="url(#grad_Both_37cc8d01-f063-4623-ac65-058f365caa15)" rx="12" ry="12" filter="url(#ios-shadow)"></rect>
+                    <text text-anchor="middle" style="fill:white" x="125" y="70">Both</text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
