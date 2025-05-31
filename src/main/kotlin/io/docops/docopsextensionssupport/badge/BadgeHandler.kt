@@ -22,9 +22,17 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
     fun handleSVG(payload: String, backend: String) : ResponseEntity<ByteArray>  {
 
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
-        val badges = mutableListOf<Badge>()
+
         val isPdf = backend == "pdf"
 
+        return createBadgeFromString(data, isPdf)
+    }
+
+    public fun createBadgeFromString(
+        data: String,
+        isPdf: Boolean
+    ): ResponseEntity<ByteArray> {
+        val badges = mutableListOf<Badge>()
         // Try to parse as JSON first
         try {
             // Check if the data looks like JSON (starts with [ for array or { for object)
@@ -32,7 +40,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                 // If it starts with [, it's a JSON array of badges
                 if (data.trim().startsWith("[")) {
                     val badgeList = Json.decodeFromString<List<Badge>>(data)
-                    badges.addAll(badgeList.map { 
+                    badges.addAll(badgeList.map {
                         Badge(
                             label = it.label,
                             message = it.message,
@@ -44,7 +52,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                             isPdf = isPdf
                         )
                     })
-                } 
+                }
                 // If it starts with {, it's a single JSON badge
                 else {
                     val badge = Json.decodeFromString<Badge>(data)
@@ -61,27 +69,29 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                         )
                     )
                 }
-            } 
+            }
             // If it doesn't look like JSON, process as pipe-delimited
             else {
                 processPipeDelimitedData(data, badges, isPdf)
             }
-        } 
+        }
         // If JSON parsing fails, fall back to pipe-delimited processing
         catch (e: Exception) {
             processPipeDelimitedData(data, badges, isPdf)
         }
 
-        var rows= 1
-        if(badges.size>3) {
+        var rows = 1
+        if (badges.size > 3) {
             rows = badges.size / 3 + 1
         }
-        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges=badges)
+        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges = badges)
         val svg = StringBuilder()
         //language=svg
-        svg.append("""
-            <svg width='${svgSrc.second}' height='${rows*20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
-        """.trimIndent())
+        svg.append(
+            """
+                <svg width='${svgSrc.second}' height='${rows * 20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
+            """.trimIndent()
+        )
         svg.append(svgSrc.first)
         svg.append("</svg>")
         val headers = HttpHeaders()
