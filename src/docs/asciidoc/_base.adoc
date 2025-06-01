@@ -13,9 +13,8 @@
 :favicon: ../images/favicon.svg?v=2025.0.0
 
 ++++
-<!-- Add this to your AsciiDoc document or template -->
 <script>
-class ThemeToggle {
+class ThemeToggleTop {
     constructor() {
         this.init();
     }
@@ -41,7 +40,7 @@ class ThemeToggle {
     setupEventListeners() {
         this.toggleButton.addEventListener('click', () => this.toggleTheme());
 
-        // Listen for system theme changes
+        // Listen for system theme changes only when in auto mode
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (this.getThemePreference() === 'auto') {
                 this.updateTheme();
@@ -60,8 +59,17 @@ class ThemeToggle {
             case 'dark':
                 newTheme = 'auto';
                 break;
-            default:
+            case 'auto':
                 newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
         }
 
         this.setTheme(newTheme);
@@ -73,7 +81,19 @@ class ThemeToggle {
     }
 
     getThemePreference() {
-        return localStorage.getItem('theme') || 'auto';
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
     }
 
     updateTheme() {
@@ -109,9 +129,9 @@ class ThemeToggle {
 
 // Initialize theme toggle when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ThemeToggle());
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
 } else {
-    new ThemeToggle();
+    new ThemeToggleTop();
 }
 </script>
 ++++
