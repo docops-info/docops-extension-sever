@@ -45,7 +45,7 @@ enum class ReleaseEnum {
             else -> "#136e33"
         }
     }
-    
+
     fun clazz(releaseEnum: ReleaseEnum): String{
         return when (releaseEnum) {
             in arrayOf(M1,M2,M3,M4,M5,M6,M7,M8,M9) -> {
@@ -146,7 +146,7 @@ fun Release.fillColor(releaseStrategy: ReleaseStrategy) : String {
  * @property carColors The list of colors to be used for cars in the display. Defaults to ["#fcfcfc", "#000000", "#ff0000"].
  */
 @Serializable
-class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#5f57ff", "#2563eb", "#7149c6"), val circleColors : List<String> = mutableListOf("#fc86be", "#dc93f6", "#aeb1ed"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"), val notesVisible: Boolean =false)
+class DisplayConfig (val fontColor: String = "#fcfcfc", val milestoneColor: String= "#fcfcfc", val colors : List<String> = mutableListOf("#007AFF", "#34C759", "#AF52DE"), val circleColors : List<String> = mutableListOf("#5AC8FA", "#FF9500", "#FF2D55"), val carColors : List<String> = mutableListOf("#fcfcfc", "#000000", "#ff0000"), val notesVisible: Boolean =false)
 
 open class LineType(val text: String)
 class BulletLine(text: String): LineType(text)
@@ -201,7 +201,7 @@ fun ReleaseStrategy.asciidocTable(): String {
 [%header]
 !===
 |Date |Type |Goal |Content
-      
+
 """.trimIndent()
 val sb = StringBuilder(header)
     releases.forEachIndexed { index, release ->

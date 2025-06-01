@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'selector',
     content: [
         "src/main/resources/**/*.{html,js,ftlh}",
         "./src/**/*.html",  // Add this to ensure all HTML files are scanned

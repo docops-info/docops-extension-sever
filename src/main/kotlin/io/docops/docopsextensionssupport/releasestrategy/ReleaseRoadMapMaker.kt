@@ -41,100 +41,230 @@ class ReleaseRoadMapMaker {
     private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String): String {
         val id = UUID.randomUUID().toString()
         val str = StringBuilder()
-        var startY = -125
-        var height = 350
-        if (releaseStrategy.releases.size > 1) {
-            height += (220 * (releaseStrategy.releases.size - 1))
+
+        // Calculate height based on number of releases
+        // Each iOS card is 160px tall (140px + 20px margin)
+        var startY = 0
+        var height = 80 // Title area
+        if (releaseStrategy.releases.isNotEmpty()) {
+            height += (160 * releaseStrategy.releases.size) + 40 // Add padding at bottom
         }
+
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(strat(release, startY, index, animate, id, releaseStrategy))
-            startY += 225
+            startY += 160 // Each card is 160px tall (140px + 20px margin)
         }
-        var titleFill = "#000000"
-        var backgroundFill = "#f8f9fa"
-        if(releaseStrategy.useDark) {
-            titleFill = "#fcfcfc"
-            backgroundFill = "url(#dmode1)"
-        }
+
+        // Determine colors based on dark mode
+        var iosBgColor = if(releaseStrategy.useDark) "#000000" else "#f2f2f7"
+        var iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
+
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  width="${releaseStrategy.scale * 1200}" height="${height * releaseStrategy.scale}"
                  viewBox="0 0 ${releaseStrategy.scale * 1200} ${height * releaseStrategy.scale}">
-                 <desc>https://docops.io/extension</desc>
+                 <desc>iOS Card Style Release Roadmap - https://docops.io/extension</desc>
                  ${svgDefs(isPdf,releaseStrategy)}
                  <g transform="scale(${releaseStrategy.scale})">
-                 <rect width="1200" height="$height" fill="$backgroundFill"/>
-                <text x="600" text-anchor="middle" y="44" font-size="32px" font-family="Arial, Helvetica, sans-serif" fill="$titleFill">${releaseStrategy.title.escapeXml()}</text>
-                $str
-                </g>
+                 <!-- iOS-style background -->
+                 <rect width="1200" height="$height" fill="$iosBgColor" class="ios-bg"/>
+
+                 <!-- Title -->
+                 <text x="600" text-anchor="middle" y="40" font-size="28px"
+                       font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                       font-weight="600" fill="$iosTextColor" class="ios-text">${releaseStrategy.title.escapeXml()}</text>
+                 $str
+                 </g>
             </svg>
         """.trimIndent()
     }
 
     private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy): String {
-        var yAni = 236
-        var ani = ""
-        if("ON".equals(animate, true)) {
-            yAni = 340
-            ani =  """<animateMotion dur="${release.type.speed(release.type)}" repeatCount="indefinite"
-                        path="M 110 60 L 1200 60"/>"""
-        }
-        val str = StringBuilder(
-            """<g id="detail_${id}_$index" transform="translate(-1000,0)">
-                <text x="420" y="208" font-family="Arial, Helvetica, sans-serif" font-size="16px" fill="${releaseStrategy.displayConfig.fontColor}">""".trimIndent()
-        )
+        // Determine colors based on dark mode
+        val iosCardBg = if(releaseStrategy.useDark) "#1c1c1e" else "#ffffff"
+        val iosCardStroke = if(releaseStrategy.useDark) "#38383a" else "#e5e5ea"
+        val iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
+        val iosSecondaryText = if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"
+
+        // Build detail content
+        val detailContent = StringBuilder()
         release.lines.forEach {
-            str.append("<tspan x=\"420\" dy=\"18\">* $it</tspan>")
+            detailContent.append("<tspan x=\"280\" dy=\"16\">• $it</tspan>")
         }
-        str.append("</text></g>")
+
+        // Prepare goal content
         val itemArray = itemTextWidth(release.goal, 900F, 24)
         val lines = linesToUrlIfExist(itemArray, mutableMapOf())
-        val tspans = linesToSpanText(lines,24,400)
-        val startTextY = 300 - (lines.size * 12)
-        var completed = ""
+
+        // Determine milestone color based on release type
+        val milestoneColor = releaseStroke(release, releaseStrategy)
+
+        // Check if completed
+        var completedMark = ""
         if(release.completed) {
-            completed = "<use xlink:href=\"#completedCheck\" x=\"300\" y=\"315\" fill=\"#fcfcfc\" width=\"24\" height=\"24\"/>"
+            completedMark = "<use xlink:href=\"#iosCheck\" x=\"1020\" y=\"75\" width=\"20\" height=\"20\"/>"
         }
-        
-        // Determine colors based on dark mode
-        val rectStroke = if(releaseStrategy.useDark) "#444444" else "#cccccc"
-        val circleFill = if(releaseStrategy.useDark) "#2c3033" else "#ffffff"
-        val textColor = if(releaseStrategy.useDark) "#e6e6e6" else "#073763"
-        
-        //language=svg
-        return """<g transform="translate(-200,$startY)" cursor="pointer" onclick="toggleItem('detail_${id}_$index', 'goal_${id}_$index')">
-            <rect x="0" y="200" height="235" width="1400" fill="url(#${linearColor(release)})" stroke='$rectStroke' class='row'/>
-            <g>
-            <circle cx="325" cy="310" r="84.5" fill-opacity="0.15" filter="url(#filter1)"/>
-            <circle class="${release.type.clazz(release.type)}" cx="323" cy="307" r="73" fill="${releaseStroke(release, releaseStrategy)}" filter="url(#Bevel)"/>
-            <circle cx="323" cy="307" r="66" fill="$circleFill"/>
-             <text class="milestoneDate" fill="$textColor"><textPath text-anchor="middle" startOffset="25%" xlink:href="#curve">${release.date}</textPath></text>
-            <text x="325" y="315" dominant-baseline="middle" stroke-width="1px" text-anchor="middle" class="milestone"
-            fill="$textColor">${release.type}
-            </text>
+
+        // iOS-style card with toggle functionality
+        return """
+            <g id="card${id}_$index" transform="translate(0,${startY + 80})" class="ios-card" onclick="toggleCardDetail('card${id}_$index')">
+                <rect x="100" y="20" height="140" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
+                      rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-bg"/>
+
+                <!-- iOS-style milestone indicator -->
+                <g class="ios-milestone">
+                    <circle cx="200" cy="90" r="35" fill="$milestoneColor" opacity="0.1"/>
+                    <circle cx="200" cy="90" r="30" fill="$milestoneColor" stroke="#ffffff" stroke-width="3"/>
+                    <text x="200" y="96" dominant-baseline="middle" text-anchor="middle"
+                          font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                          font-weight="600" font-size="12px" fill="white">${release.type}</text>
+                </g>
+
+                <!-- Release date -->
+                <text x="200" y="140" text-anchor="middle"
+                      font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                      font-size="12px" font-weight="500" fill="$iosSecondaryText" class="ios-secondary-text">${release.date}</text>
+
+                <!-- Goal Content (Default View) -->
+                <g class="goal-content">
+                    <text x="280" y="75" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                          font-size="18px" font-weight="500" fill="$iosTextColor" class="ios-text">
+                        <tspan x="280" dy="0">${lines.firstOrNull() ?: ""}</tspan>
+                        ${if (lines.size > 1) "<tspan x=\"280\" dy=\"22\">${lines.getOrNull(1) ?: ""}</tspan>" else ""}
+                    </text>
+
+                    <!-- Completion indicator -->
+                    $completedMark
+
+                    <!-- iOS-style chevron -->
+                    <path class="chevron-right" d="M1050 85 L1060 90 L1050 95" stroke="$iosSecondaryText" stroke-width="2"
+                          fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                </g>
+
+                <!-- Detail Content (Hidden by default) -->
+                <g class="detail-content">
+                    <!-- Back button -->
+                    <g class="back-button" transform="translate(1020, 75)">
+                        <circle r="15" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"/>
+                        <path d="M5 0 L-5 0 M0 -5 L-5 0 L0 5" stroke="#007aff" stroke-width="2"
+                              fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+
+                    <text x="280" y="55" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                          font-size="14px" font-weight="400" fill="$iosTextColor" class="ios-text">
+                        $detailContent
+                    </text>
+                </g>
             </g>
-            
-            $str
-            <g id="goal_${id}_$index" transform="translate(450,$startTextY)" text-anchor="middle">
-                <text x="400" y="0" font-family="Arial, Helvetica, sans-serif" font-size="25px" fill="${releaseStrategy.displayConfig.fontColor}">
-                    $tspans
-                </text>
-            </g>
-            $completed
-            <path d="M 420 430 L 1400 430" stroke="none" stroke-width="1"/>
-            </g>
-        """.trimMargin()
+        """.trimIndent()
     }
 
     private fun svgDefs(isPdf: Boolean, releaseStrategy: ReleaseStrategy): String {
         val ani = """ fill: transparent; stroke-width: 10px; stroke-dasharray: 471; stroke-dashoffset: 471; animation: clock-animation 2s linear infinite;""".trimIndent()
+        // Determine hover colors based on dark mode
+        val hoverFill = if(releaseStrategy.useDark) "lightblue" else "#2563eb"
+        val shadowOpacity = if(releaseStrategy.useDark) "0.4" else "0.2"
+
+        // iOS-style colors
+        val iosBgColor = if(releaseStrategy.useDark) "#000000" else "#f2f2f7"
+        val iosCardBg = if(releaseStrategy.useDark) "#1c1c1e" else "#ffffff"
+        val iosCardStroke = if(releaseStrategy.useDark) "#38383a" else "#e5e5ea"
+        val iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
+        val iosSecondaryText = if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"
+
         var style = """
             <style>
-                    .milestone:hover { cursor: pointer; /* calculate using: (2 * PI * R) */ stroke-width: 16; stroke-opacity: 1; fill: lightblue; }
-                    .milestone { font-size: 60px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
-                    .milestoneDate { font-size: 18px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; }
-                    .bev:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[0]}; } .bev2:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[1]}; } .bev3:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[2]}; }
-                    .row { filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); }
+                    /* iOS-style card styling */
+                    .ios-card {
+                        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                        cursor: pointer;
+                    }
+                    .ios-card:hover .ios-card-bg {
+                        filter: url(#iosCardHoverShadow);
+                        transform: translateY(-1px);
+                    }
+                    .ios-card:hover .ios-milestone circle:last-child {
+                        transform: scale(1.05);
+                        transition: transform 0.2s ease;
+                    }
+
+                    /* Content transition states */
+                    .goal-content {
+                        opacity: 1;
+                        transition: opacity 0.3s ease;
+                    }
+                    .detail-content {
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                        pointer-events: none;
+                    }
+
+                    /* When detail is active */
+                    .detail-active .goal-content {
+                        opacity: 0;
+                        pointer-events: none;
+                    }
+                    .detail-active .detail-content {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+                    .detail-active .chevron-right {
+                        opacity: 0;
+                    }
+                    .detail-active .back-button {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+
+                    /* Back button states */
+                    .back-button {
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity 0.3s ease;
+                        cursor: pointer;
+                    }
+                    .back-button:hover circle {
+                        fill: ${if(releaseStrategy.useDark) "#2c2c2e" else "#f0f0f0"};
+                    }
+
+                    /* Chevron states */
+                    .chevron-right {
+                        transition: opacity 0.3s ease;
+                    }
+
+                    /* Legacy styling with improved readability */
+                    .milestone:hover { cursor: pointer; stroke-width: 16; stroke-opacity: 1; fill: $hoverFill; }
+                    .milestone { font-size: 60px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+                    .milestoneDate { font-size: 18px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+                    .bev:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[0]}; } 
+                    .bev2:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[1]}; } 
+                    .bev3:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[2]}; }
+                    .row { filter: drop-shadow(3px 5px 2px rgb(0 0 0 / $shadowOpacity)); transition: all 0.3s ease; }
+                    .row:hover { filter: drop-shadow(4px 6px 3px rgb(0 0 0 / ${shadowOpacity.toDouble() + 0.1})); }
+
+                    /* Support for light/dark mode */
+                    @media (prefers-color-scheme: dark) {
+                        .auto-dark-text { fill: #fcfcfc !important; }
+                        .auto-dark-bg { fill: url(#dmode1) !important; }
+                        .auto-dark-stroke { stroke: #444444 !important; }
+                        .auto-dark-circle { fill: #2c3033 !important; }
+                        .ios-bg { fill: #000000 !important; }
+                        .ios-card-bg { fill: #1c1c1e !important; stroke: #38383a !important; }
+                        .ios-text { fill: #ffffff !important; }
+                        .ios-secondary-text { fill: #8e8e93 !important; }
+                    }
+
+                    @media (prefers-color-scheme: light) {
+                        .auto-dark-text { fill: #073763 !important; }
+                        .auto-dark-bg { fill: url(#lmode1) !important; }
+                        .auto-dark-stroke { stroke: #cccccc !important; }
+                        .auto-dark-circle { fill: #ffffff !important; }
+                        .ios-bg { fill: #f2f2f7 !important; }
+                        .ios-card-bg { fill: #ffffff !important; stroke: #e5e5ea !important; }
+                        .ios-text { fill: #1c1c1e !important; }
+                        .ios-secondary-text { fill: #8e8e93 !important; }
+                    }
+
                     @keyframes clock-animation {
                         0% {
                             stroke-dashoffset: 471;
@@ -152,6 +282,20 @@ class ReleaseRoadMapMaker {
                         elem2.classList.toggle("box2Clicked");
                         var elem = document.querySelector("#"+item1);
                         elem.classList.toggle("box1Clicked");
+                    }
+
+                    function toggleCardDetail(cardId) {
+                        const card = document.getElementById(cardId);
+                        card.classList.toggle('detail-active');
+                    }
+
+                    // Function to toggle between light and dark mode manually
+                    function toggleDarkMode() {
+                        document.body.classList.toggle('dark-mode');
+                        const elements = document.querySelectorAll('.auto-dark-text, .auto-dark-bg, .auto-dark-stroke, .auto-dark-circle, .ios-bg, .ios-card-bg, .ios-text, .ios-secondary-text');
+                        elements.forEach(el => {
+                            el.classList.toggle('dark-active');
+                        });
                     }
              </script>
         """.trimIndent()
@@ -192,15 +336,58 @@ class ReleaseRoadMapMaker {
                         <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
                                      result="litPaint"/>
                     </filter>
+                    <!-- Modern drop shadow filter -->
+                    <filter id="modern-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.3" flood-color="#000000"/>
+                    </filter>
+
+                    <!-- iOS-style shadows -->
+                    <filter id="iosCardShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                        <feOffset dx="0" dy="1" result="offset"/>
+                        <feFlood flood-color="#000000" flood-opacity="0.04"/>
+                        <feComposite in2="offset" operator="in"/>
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <filter id="iosCardHoverShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+                        <feOffset dx="0" dy="4" result="offset"/>
+                        <feFlood flood-color="#000000" flood-opacity="0.08"/>
+                        <feComposite in2="offset" operator="in"/>
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+
+                    <!-- iOS Check Icon -->
+                    <g id="iosCheck">
+                        <circle r="10" fill="#34c759"/>
+                        <polyline points="4 10 8 14 16 6" fill="none" stroke="#ffffff" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+
+                    <!-- Improved circle check gradient -->
                     <linearGradient id="circlecheck" x2="1" y2="1">
                         <stop class="stop1" offset="0%" stop-color="#a9d99a"/>
                         <stop class="stop2" offset="50%" stop-color="#7ec667"/>
                         <stop class="stop3" offset="100%" stop-color="#54B435"/>
                     </linearGradient>
+                    <!-- Dark mode background gradient - modernized -->
                     <linearGradient id="dmode1" x2="0%" y2="100%">
-                        <stop class="stop1" offset="0%" stop-color="#222627"/>
-                        <stop class="stop2" offset="50%" stop-color="#1d2021"/>
-                        <stop class="stop3" offset="100%" stop-color="#17191a"/>
+                        <stop class="stop1" offset="0%" stop-color="#2d3748"/>
+                        <stop class="stop2" offset="50%" stop-color="#1a202c"/>
+                        <stop class="stop3" offset="100%" stop-color="#171923"/>
+                    </linearGradient>
+                    <!-- Light mode background gradient - modernized -->
+                    <linearGradient id="lmode1" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="#ffffff"/>
+                        <stop class="stop2" offset="50%" stop-color="#f8f9fa"/>
+                        <stop class="stop3" offset="100%" stop-color="#f1f3f5"/>
                     </linearGradient>
                     <filter id="filter-2">
                         <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="OUTLINE"/>
@@ -234,7 +421,7 @@ class ReleaseRoadMapMaker {
     private fun linesToSpanText(lines: MutableList<String>, dy: Int, x: Int): String {
         val text = StringBuilder()
         lines.forEach {
-            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="24" font-weight="normal">$it</tspan>""")
+            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif" font-size="24" font-weight="normal" class="auto-dark-text">$it</tspan>""")
         }
         return text.toString()
     }
