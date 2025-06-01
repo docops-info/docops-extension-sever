@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <link rel="shortcut icon" href="${favicon}" type="image/x-icon"/>
+    <link href="../css/output.css" rel="stylesheet">
+    <script src="../js/htmx.min.2.0.4.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="${logoUrl}" alt="${logoAlt}" class="w-10 h-10" />
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">${headerTitle}</h1>
+                    <p class="text-sm text-gray-600">${headerDescription}</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <a href="#get-started" class="text-white">${getStartedButtonText}</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="${githubUrl}">${githubButtonText}</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl font-bold mb-6">${heroTitle}</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            ${heroDescription}
+        </p>
+        <div class="flex justify-center flex-wrap gap-2">
+            <!-- ${heroTags} -->
+            <a href="#bar-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
+            <a href="#badges-shields-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
+            <!-- Add more tags as needed -->
+        </div>
+    </div>
+</section>
+
+<!-- Get Started Section -->
+<section id="get-started" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-8">${getStartedTitle}</h3>
+        <div class="max-w-4xl mx-auto">
+            <p class="text-lg text-gray-700 mb-6">
+                ${getStartedDescription}
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4">${mavenTitle}</h4>
+                    <div class="bg-gray-900 p-4 rounded-md">
+                        <pre class="text-sm text-white"><code>${mavenCode}</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4">${gradleTitle}</h4>
+                    <div class="bg-gray-900 p-4 rounded-md">
+                        <pre class="text-sm text-white"><code>${gradleCode}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h4 class="text-xl font-semibold mb-4">${usageTitle}</h4>
+                <p class="text-gray-700 mb-4">
+                    ${usageDescription}
+                </p>
+                <div class="bg-gray-900 p-4 rounded-md">
+                    <pre class="text-sm text-white"><code>${usageCode}</code></pre>
+                </div>
+                <p class="text-gray-700 mt-4">
+                    ${usageFooter}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-12">${featuresTitle}</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            ${featureItems}
+        </div>
+    </div>
+</section>
+
+<!-- Usage Examples -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-12">${examplesTitle}</h3>
+
+        ${exampleItems}
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="${footerLogoUrl}" alt="${footerLogoAlt}" class="w-8 h-8" />
+                    <span class="font-bold text-lg">${footerTitle}</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    ${footerDescription}
+                </p>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">${footerCol1Title}</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    ${footerCol1Links}
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">${footerCol2Title}</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    ${footerCol2Links}
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">${footerCol3Title}</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    ${footerCol3Links}
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>${copyright}</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
