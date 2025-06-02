@@ -277,7 +277,7 @@ fun main() {
         "lines": [
           "Team will leverage CICD pipeline to deploy latest code",
           "Team will enable OAuth security on the API Gateway",
-          "Team will make the application communication private and local to the API Gateway",
+          "Team will make the application communication private and local to the API Gateway. Then switch out the config for the new API Gateway",
           "Team will enable API throttling at the Gateway layer",
           "Team will have QA do initial testing."
         ],

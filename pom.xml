@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.docops</groupId>
@@ -61,7 +61,7 @@
         <maven-gpg.version>3.0.1</maven-gpg.version>
         <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
 
     <organization>
@@ -292,6 +292,11 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -300,7 +305,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.5</version>
+                <version>3.5.0</version>
                 <configuration>
                     <mainClass>io.docops.docopsextensionssupport.DocopsExtensionsSupportApplicationKt</mainClass>
                     <requiresUnpack>
@@ -538,6 +543,8 @@
                 </dependencies>
                 <configuration>
                     <attributes>
+                        <icons>font</icons>
+                        <iconSet>fas</iconSet>
                         <panel-server>https://roach.gy/extension/</panel-server>
                         <panel-webserver>https://roach.gy/extension/</panel-webserver>
                     </attributes>
@@ -556,6 +563,7 @@
                                 <dataUri/>
                                 <toc>left</toc>
                                 <icons>font</icons>
+                                <iconSet>fas</iconSet>
                                 <sectanchors>true</sectanchors>
                                 <idprefix/>
                                 <idseparator>-</idseparator>

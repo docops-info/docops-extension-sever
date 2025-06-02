@@ -51,7 +51,7 @@ class ReleaseRoadMapMaker {
         }
 
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(strat(release, startY, index, animate, id, releaseStrategy))
+            str.append(strat(release, startY, index, animate, id, releaseStrategy, isPdf))
             startY += 160 // Each card is 160px tall (140px + 20px margin)
         }
 
@@ -79,17 +79,48 @@ class ReleaseRoadMapMaker {
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy): String {
+    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String {
         // Determine colors based on dark mode
         val iosCardBg = if(releaseStrategy.useDark) "#1c1c1e" else "#ffffff"
         val iosCardStroke = if(releaseStrategy.useDark) "#38383a" else "#e5e5ea"
         val iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
         val iosSecondaryText = if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"
 
-        // Build detail content
+        // Build detail content with text wrapping and limit for PDF compatibility
         val detailContent = StringBuilder()
-        release.lines.forEach {
-            detailContent.append("<tspan x=\"280\" dy=\"16\">• $it</tspan>")
+        val maxLines = if (isPdf) 8 else 12 // Limit number of lines for PDF output
+        var lineCount = 0
+        var hasMoreContent = false
+
+        // Process each line
+        outer@ for (line in release.lines) {
+            // Apply text wrapping to each line
+            val wrappedLines = itemTextWidth(line, 700F, 14)
+
+            // First line with bullet point
+            if (lineCount < maxLines) {
+                detailContent.append("<tspan x=\"280\" dy=\"16\">• ${wrappedLines.firstOrNull() ?: ""}</tspan>")
+                lineCount++
+            } else {
+                hasMoreContent = true
+                break@outer
+            }
+
+            // Subsequent lines indented
+            for (wrappedLine in wrappedLines.drop(1)) {
+                if (lineCount < maxLines) {
+                    detailContent.append("<tspan x=\"295\" dy=\"16\">$wrappedLine</tspan>")
+                    lineCount++
+                } else {
+                    hasMoreContent = true
+                    break@outer
+                }
+            }
+        }
+
+        // Add "show more" indicator if content was truncated
+        if (hasMoreContent) {
+            detailContent.append("<tspan x=\"280\" dy=\"20\" font-style=\"italic\" fill=\"${if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"}\">... (more details available)</tspan>")
         }
 
         // Prepare goal content
@@ -110,6 +141,9 @@ class ReleaseRoadMapMaker {
             <g id="card${id}_$index" transform="translate(0,${startY + 80})" class="ios-card" onclick="toggleCardDetail('card${id}_$index')">
                 <rect x="100" y="20" height="140" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
                       rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-bg"/>
+                <!-- This rect expands when detail view is active -->
+                <rect x="100" y="20" height="0" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
+                      rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-expand-bg"/>
 
                 <!-- iOS-style milestone indicator -->
                 <g class="ios-milestone">
@@ -150,8 +184,9 @@ class ReleaseRoadMapMaker {
                               fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                     </g>
 
-                    <text x="280" y="55" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                          font-size="14px" font-weight="400" fill="$iosTextColor" class="ios-text">
+                    <!-- Detail content using native SVG text for PDF compatibility -->
+                    <text x="280" y="70" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                          font-size="14px" font-weight="400" fill="${if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"}" class="ios-text detail-text">
                         $detailContent
                     </text>
                 </g>
@@ -172,6 +207,7 @@ class ReleaseRoadMapMaker {
         val iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
         val iosSecondaryText = if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"
 
+        //language=html
         var style = """
             <style>
                     /* iOS-style card styling */
@@ -214,6 +250,29 @@ class ReleaseRoadMapMaker {
                     .detail-active .back-button {
                         opacity: 1;
                         pointer-events: auto;
+                    }
+
+                    /* Card expansion when detail is active */
+                    .ios-card-expand-bg {
+                        height: 0;
+                        /*opacity: 0;*/
+                        transition: height 0.3s ease, opacity 0.3s ease;
+                    }
+                    .detail-active .ios-card-expand-bg {
+                        height: ${if(isPdf) "80px" else "120px"};
+                        opacity: 1;
+                    }
+                    .detail-active .ios-card-bg {
+                        height: ${if(isPdf) "220px" else "260px"};
+                    }
+
+                    /* Detail text styles for PDF compatibility */
+                    .detail-text {
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    }
+                    .detail-active .detail-text {
+                        opacity: 1;
                     }
 
                     /* Back button states */
