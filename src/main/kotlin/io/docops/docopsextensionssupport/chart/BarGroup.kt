@@ -38,13 +38,13 @@ class Group(val label: String, val series: MutableList<Series>)
 fun BarGroup.calcWidth(): Int {
     val count = this.groups.sumOf { it.series.size }
     // Calculate total width based on:
-    // - Initial offset: 40 pixels
+    // - Initial offset: 110 pixels (increased from 90 to accommodate y-axis label and tick marks)
     // - Bar width: 40 pixels
     // - Spacing between bars: 45 pixels (includes the bar width)
     // - Group spacing: 2 pixels
     val totalBarsWidth = count * 45.0
     val totalGroupSpacing = (groups.size - 1) * 2.0
-    val sum = (40.0 + totalBarsWidth + totalGroupSpacing).toInt()
+    val sum = (110.0 + totalBarsWidth + totalGroupSpacing).toInt()
 
     // Ensure minimum width of 800 pixels
     if (sum <= 800) {
