@@ -40,7 +40,8 @@ class ReleaseRoadMapMaker {
     }
     private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String): String {
         val id = UUID.randomUUID().toString()
-        val str = StringBuilder()
+        val cardsStr = StringBuilder()
+        val detailPanelsStr = StringBuilder()
 
         // Calculate height based on number of releases
         // Each iOS card is 160px tall (140px + 20px margin)
@@ -51,7 +52,9 @@ class ReleaseRoadMapMaker {
         }
 
         releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(strat(release, startY, index, animate, id, releaseStrategy, isPdf))
+            val (cardContent, detailPanelContent) = stratWithDetailPanel(release, startY, index, animate, id, releaseStrategy, isPdf)
+            cardsStr.append(cardContent)
+            detailPanelsStr.append(detailPanelContent)
             startY += 160 // Each card is 160px tall (140px + 20px margin)
         }
 
@@ -69,17 +72,21 @@ class ReleaseRoadMapMaker {
                  <!-- iOS-style background -->
                  <rect width="1200" height="$height" fill="$iosBgColor" class="ios-bg"/>
 
+
                  <!-- Title -->
                  <text x="600" text-anchor="middle" y="40" font-size="28px"
                        font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
                        font-weight="600" fill="$iosTextColor" class="ios-text">${releaseStrategy.title.escapeXml()}</text>
-                 $str
+                 $cardsStr
+                 
+                 <!-- Detail panels collected at this location -->
+                 $detailPanelsStr
                  </g>
             </svg>
         """.trimIndent()
     }
 
-    private fun strat(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String {
+    private fun stratWithDetailPanel(release: Release, startY: Int, index: Int, animate: String, id: String, releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): Pair<String, String> {
         // Determine colors based on dark mode
         val iosCardBg = if(releaseStrategy.useDark) "#1c1c1e" else "#ffffff"
         val iosCardStroke = if(releaseStrategy.useDark) "#38383a" else "#e5e5ea"
@@ -99,7 +106,7 @@ class ReleaseRoadMapMaker {
 
             // First line with bullet point
             if (lineCount < maxLines) {
-                detailContent.append("<tspan x=\"280\" dy=\"16\">• ${wrappedLines.firstOrNull() ?: ""}</tspan>")
+                detailContent.append("<tspan x=\"0\" dy=\"16\">• ${wrappedLines.firstOrNull() ?: ""}</tspan>")
                 lineCount++
             } else {
                 hasMoreContent = true
@@ -109,7 +116,7 @@ class ReleaseRoadMapMaker {
             // Subsequent lines indented
             for (wrappedLine in wrappedLines.drop(1)) {
                 if (lineCount < maxLines) {
-                    detailContent.append("<tspan x=\"295\" dy=\"16\">$wrappedLine</tspan>")
+                    detailContent.append("<tspan x=\"15\" dy=\"16\">$wrappedLine</tspan>")
                     lineCount++
                 } else {
                     hasMoreContent = true
@@ -120,7 +127,7 @@ class ReleaseRoadMapMaker {
 
         // Add "show more" indicator if content was truncated
         if (hasMoreContent) {
-            detailContent.append("<tspan x=\"280\" dy=\"20\" font-style=\"italic\" fill=\"${if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"}\">... (more details available)</tspan>")
+            detailContent.append("<tspan x=\"0\" dy=\"20\" font-style=\"italic\" fill=\"${if(releaseStrategy.useDark) "#8e8e93" else "#8e8e93"}\">... (more details available)</tspan>")
         }
 
         // Prepare goal content
@@ -136,14 +143,11 @@ class ReleaseRoadMapMaker {
             completedMark = "<use xlink:href=\"#iosCheck\" x=\"1020\" y=\"75\" width=\"20\" height=\"20\"/>"
         }
 
-        // iOS-style card with toggle functionality
-        return """
+        // iOS-style card without detail panel
+        val cardContent = """
             <g id="card${id}_$index" transform="translate(0,${startY + 80})" class="ios-card" onclick="toggleCardDetail('card${id}_$index')">
                 <rect x="100" y="20" height="140" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
                       rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-bg"/>
-                <!-- This rect expands when detail view is active -->
-                <rect x="100" y="20" height="0" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
-                      rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-expand-bg"/>
 
                 <!-- iOS-style milestone indicator -->
                 <g class="ios-milestone">
@@ -174,24 +178,41 @@ class ReleaseRoadMapMaker {
                     <path class="chevron-right" d="M1050 85 L1060 90 L1050 95" stroke="$iosSecondaryText" stroke-width="2"
                           fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
                 </g>
+            </g>
+        """.trimIndent()
 
-                <!-- Detail Content (Hidden by default) -->
-                <g class="detail-content">
-                    <!-- Back button -->
-                    <g class="back-button" transform="translate(1020, 75)">
-                        <circle r="15" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"/>
-                        <path d="M5 0 L-5 0 M0 -5 L-5 0 L0 5" stroke="#007aff" stroke-width="2"
-                              fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
+        // Detail panel for this card (separate from the card)
+        val detailPanelContent = """
+            <!-- Detail panel for this card -->
+            <g id="detail-panel-${id}_$index" class="detail-panel" style="display:none;">
+                <!-- Gray background with rounded corners -->
+                <rect x="100" y="180" width="1000" height="260" fill="#444444" rx="16" ry="16" class="detail-panel-bg"/>
 
-                    <!-- Detail content using native SVG text for PDF compatibility -->
-                    <text x="280" y="70" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                          font-size="14px" font-weight="400" fill="${if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"}" class="ios-text detail-text">
+                <!-- Dark header bar -->
+                <rect x="100" y="180" width="1000" height="50" fill="#333333" rx="16" ry="16" class="detail-panel-header"/>
+                <rect x="100" y="210" width="1000" height="20" fill="#333333" class="detail-panel-header-bottom"/>
+
+                <!-- Title -->
+                <text x="120" y="210" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                      font-size="20px" font-weight="600" fill="#ffffff" class="detail-panel-title">${lines.firstOrNull() ?: ""}</text>
+
+                <!-- Content area -->
+                <g class="detail-panel-content" transform="translate(120, 240)">
+                    <text class="detail-text" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif">
                         $detailContent
                     </text>
                 </g>
+
+                <!-- Close button -->
+                <g class="detail-panel-close" onclick="toggleCardDetail('card${id}_$index')">
+                    <circle cx="1060" cy="205" r="15" fill="#666666"/>
+                    <path d="M1053 198 L1067 212 M1067 198 L1053 212" stroke="#ffffff" stroke-width="2"
+                          fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
             </g>
         """.trimIndent()
+
+        return Pair(cardContent, detailPanelContent)
     }
 
     private fun svgDefs(isPdf: Boolean, releaseStrategy: ReleaseStrategy): String {
@@ -235,44 +256,40 @@ class ReleaseRoadMapMaker {
                         pointer-events: none;
                     }
 
-                    /* When detail is active */
+                    /* When detail is active - only affects the detail panel, not the cards */
                     .detail-active .goal-content {
-                        opacity: 0;
-                        pointer-events: none;
+                        /* No longer hiding goal content in the card */
                     }
                     .detail-active .detail-content {
-                        opacity: 1;
-                        pointer-events: auto;
+                        /* Detail content is now in the detail panel */
                     }
                     .detail-active .chevron-right {
-                        opacity: 0;
-                    }
-                    .detail-active .back-button {
-                        opacity: 1;
-                        pointer-events: auto;
-                    }
-
-                    /* Card expansion when detail is active */
-                    .ios-card-expand-bg {
-                        height: 0;
-                        /*opacity: 0;*/
-                        transition: height 0.3s ease, opacity 0.3s ease;
-                    }
-                    .detail-active .ios-card-expand-bg {
-                        height: ${if(isPdf) "80px" else "120px"};
-                        opacity: 1;
-                    }
-                    .detail-active .ios-card-bg {
-                        height: ${if(isPdf) "220px" else "260px"};
+                        /* Keep chevron visible */
                     }
 
                     /* Detail text styles for PDF compatibility */
                     .detail-text {
-                        opacity: 0;
                         transition: opacity 0.3s ease;
                     }
                     .detail-active .detail-text {
-                        opacity: 1;
+                        /* No opacity change needed */
+                    }
+
+                    /* Detail panel styles */
+                    .detail-panel {
+                        position: absolute;
+                        left: 0;
+                        z-index: 100;
+                        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+                    }
+                    .detail-panel-close {
+                        cursor: pointer;
+                    }
+                    .detail-panel-close:hover circle {
+                        fill: #888888;
+                    }
+                    .detail-panel-content text {
+                        fill: #ffffff;
                     }
 
                     /* Back button states */
@@ -344,8 +361,46 @@ class ReleaseRoadMapMaker {
                     }
 
                     function toggleCardDetail(cardId) {
+                        // Get the card and its detail panel
                         const card = document.getElementById(cardId);
-                        card.classList.toggle('detail-active');
+
+                        // Extract the id_index part from the cardId (remove the 'card' prefix)
+                        const idIndex = cardId.substring(4); // Remove 'card' prefix
+                        const detailPanelId = 'detail-panel-' + idIndex;
+
+                        console.log('Card ID:', cardId);
+                        console.log('Detail Panel ID:', detailPanelId);
+
+                        const detailPanel = document.getElementById(detailPanelId);
+
+                        if (!detailPanel) {
+                            console.error('Detail panel not found with ID:', detailPanelId);
+                            return; // Exit the function if detailPanel is null
+                        }
+
+                        // Check if this card is already active
+                        const isActive = card.classList.contains('detail-active');
+
+                        // Hide all detail panels first
+                        const allDetailPanels = document.querySelectorAll('.detail-panel');
+                        allDetailPanels.forEach(panel => {
+                            panel.style.display = 'none';
+                        });
+
+                        // Remove active class from all cards
+                        const allCards = document.querySelectorAll('.detail-active');
+                        allCards.forEach(activeCard => {
+                            activeCard.classList.remove('detail-active');
+                        });
+
+                        // If this card wasn't active, show its detail panel
+                        if (!isActive) {
+                            card.classList.add('detail-active');
+                            detailPanel.style.display = 'block';
+
+                            // Scroll to top to ensure the detail panel is visible
+                            window.scrollTo(0, 0);
+                        }
                     }
 
                     // Function to toggle between light and dark mode manually
