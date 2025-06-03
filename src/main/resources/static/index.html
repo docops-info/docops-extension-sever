@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/xml.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900">
 <!-- Header -->
@@ -58,6 +62,7 @@
             <a href="#release-strategy-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🚀 Release Strategy</a>
             <a href="#scorecard-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
             <a href="#timeline-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
+            <a href="#color-gradient-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🎨 Color Gradients(SVG)</a>
         </div>
 
     </div>
@@ -220,6 +225,17 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <p class="text-gray-600 mb-4">Create interactive timelines for project history, roadmaps, and planning.</p>
                 <div class="text-sm text-green-600 font-medium">
                     • <a href="#timeline-example" class="hover:underline">Project Timelines</a> • <a href="#timeline-example" class="hover:underline">Historical Views</a> • <a href="#timeline-example" class="hover:underline">Milestone Tracking</a>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <span class="text-2xl">🎨</span>
+                </div>
+                <h4 class="text-xl font-semibold mb-3"><a href="#color-gradient-example" class="hover:text-purple-600">Color Gradients</a></h4>
+                <p class="text-gray-600 mb-4">Generate beautiful color gradients from hex color codes for your designs.</p>
+                <div class="text-sm text-purple-600 font-medium">
+                    • <a href="#color-gradient-example" class="hover:underline">Gradient Generator</a> • <a href="#color-gradient-example" class="hover:underline">Color Palettes</a> • <a href="#color-gradient-example" class="hover:underline">SVG Gradients</a>
                 </div>
             </div>
         </div>
@@ -978,6 +994,52 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
             </div>
         </div>
 
+        <div class="mb-16" id="color-gradient-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-purple-500 rounded mr-3"></span>
+                        Color Gradient Generator
+                    </h4>
+                    <p class="text-gray-600 mt-1">Generate beautiful color gradients from a hex color code</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">Enter Hex Color Code</span>
+                        </div>
+                        <div class="mb-4">
+                            <form id="colorForm" class="flex flex-col space-y-4">
+                                <div class="flex items-center">
+                                    <input type="text" id="hexColor" name="gradColor" placeholder="#4361ee" 
+                                           class="bg-gray-800 text-white px-4 py-2 rounded-l-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                           pattern="^#([A-Fa-f0-9]{6})$" title="Please enter a valid hex color code (e.g., #4361ee)">
+                                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                                        Generate
+                                    </button>
+                                </div>
+                                <div class="text-gray-400 text-xs">
+                                    Examples: #4361ee or #FF5733 or #2ecc71
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Gradient Result</span>
+                        </div>
+                        <div id="gradientResult" class="bg-gray-50 rounded-lg p-4 min-h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Enter a hex color code and click Generate to see the result</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </section>
@@ -1030,5 +1092,56 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
         </div>
     </div>
 </footer>
+<script>
+    // Color Gradient Generator Form Handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorForm = document.getElementById('colorForm');
+        const gradientResult = document.getElementById('gradientResult');
+
+        if (colorForm) {
+            colorForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const hexColor = document.getElementById('hexColor').value;
+                // Validate hex color format
+                const hexRegex = /^#([A-Fa-f0-9]{6})$/;
+                if (!hexRegex.test(hexColor)) {
+                    gradientResult.innerHTML = '<p class="text-red-500">Please enter a valid hex color code (e.g., #4361ee)</p>';
+                    return;
+                }
+
+                // Show loading state
+                gradientResult.innerHTML = '<p class="text-gray-500">Generating gradient...</p>';
+
+                // Make API request to the putColors endpoint
+                fetch('api/grad?' + new URLSearchParams({
+                    gradColor: hexColor
+                }), {
+                    method: 'PUT'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Display the result
+                    gradientResult.innerHTML = data;
+
+                    // Initialize syntax highlighting if needed
+                    if (window.hljs) {
+                        document.querySelectorAll('pre code').forEach((el) => {
+                            hljs.highlightElement(el);
+                        });
+                    }
+                })
+                .catch(error => {
+                    gradientResult.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+                });
+            });
+        }
+    });
+</script>
 </body>
 </html>
