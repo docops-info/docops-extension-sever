@@ -398,8 +398,7 @@ class ReleaseRoadMapMaker {
                             card.classList.add('detail-active');
                             detailPanel.style.display = 'block';
 
-                            // Scroll to top to ensure the detail panel is visible
-                            window.scrollTo(0, 0);
+                           
                         }
                     }
 
