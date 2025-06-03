@@ -242,7 +242,44 @@ Here's a simple example of a horizontal bar chart:
 ----
 ....
 
-image::horizontalbar.svg[opts=inline]
+[docops,bar]
+----
+{
+  "title": "Monthly Sales Performance",
+  "yLabel": "Revenue ($)",
+  "xLabel": "Month",
+  "series": [
+    {
+      "label": "January",
+      "value": 120.0
+    },
+    {
+      "label": "February",
+      "value": 334.0
+    },
+    {
+      "label": "March",
+      "value": 455.0
+    },
+    {
+      "label": "April",
+      "value": 244.0
+    },
+    {
+      "label": "May",
+      "value": 256.0
+    },
+    {
+      "label": "June",
+      "value": 223.0
+    }
+  ],
+  "display": {
+    "baseColor": "#4cc9f0",
+    "type": "R"
+  }
+}
+----
 
 === Vertical Bar Chart Example
 
@@ -290,7 +327,44 @@ You can create vertical bar charts by setting the `vBar` property to `true`:
 ----
 ....
 
-image::verticalbar.svg[opts=inline]
+[docops,bar]
+----
+{
+  "title": "Berry Picking by Month 2024",
+  "yLabel": "Number of Sales",
+  "xLabel": "Month",
+  "series": [
+    {
+      "label": "Jan",
+      "value": 120.0
+    },
+    {
+      "label": "Feb",
+      "value": 334.0
+    },
+    {
+      "label": "Mar",
+      "value": 455.0
+    },
+    {
+      "label": "Apr",
+      "value": 244.0
+    },
+    {
+      "label": "May",
+      "value": 256.0
+    },
+    {
+      "label": "Jun",
+      "value": 223.0
+    }
+  ],
+  "display": {
+    "baseColor": "#4361ee",
+    "vBar": true
+  }
+}
+----
 
 === Cylinder-Style Bar Chart Example
 
@@ -379,7 +453,45 @@ You can create dark mode bar charts by setting the `useDark` property to `true`:
 ----
 ....
 
-image::darkmodebar.svg[opts=inline]
+[docops,bar]
+----
+{
+  "title": "Monthly Sales Performance (Dark Mode)",
+  "yLabel": "Revenue ($)",
+  "xLabel": "Month",
+  "series": [
+    {
+      "label": "January",
+      "value": 120.0
+    },
+    {
+      "label": "February",
+      "value": 334.0
+    },
+    {
+      "label": "March",
+      "value": 455.0
+    },
+    {
+      "label": "April",
+      "value": 244.0
+    },
+    {
+      "label": "May",
+      "value": 256.0
+    },
+    {
+      "label": "June",
+      "value": 223.0
+    }
+  ],
+  "display": {
+    "baseColor": "#4cc9f0",
+    "useDark": true,
+    "type": "R"
+  }
+}
+----
 
 === Grouped Bar Chart Example
 
@@ -445,7 +557,62 @@ Here's an example of a grouped bar chart:
 ----
 ....
 
-image::groupbar.svg[opts=inline]
+[docops,bargroup]
+----
+{
+  "title": "Annual Product Sales Report",
+  "yLabel": "Sales (USD)",
+  "xLabel": "Quarters",
+  "groups": [
+    {
+      "label": "Product A",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 5000.0
+        },
+        {
+          "label": "Q2",
+          "value": 7000.0
+        },
+        {
+          "label": "Q3",
+          "value": 8000.0
+        },
+        {
+          "label": "Q4",
+          "value": 6000.0
+        }
+      ]
+    },
+    {
+      "label": "Product B",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 6000.0
+        },
+        {
+          "label": "Q2",
+          "value": 8000.0
+        },
+        {
+          "label": "Q3",
+          "value": 7000.0
+        },
+        {
+          "label": "Q4",
+          "value": 9000.0
+        }
+      ]
+    }
+  ],
+  "display": {
+    "lineColor": "#921A40",
+    "baseColor": "#F3EDED"
+  }
+}
+----
 
 === Vertical Grouped Bar Chart Example
 
@@ -512,7 +679,64 @@ You can create vertical grouped bar charts by setting the `vBar` property to `tr
 ----
 ....
 
-image::verticalgrouped.svg[opts=inline]
+[docops,bargroup]
+----
+{
+  "title": "Annual Product Sales Report",
+  "yLabel": "Sales (USD)",
+  "xLabel": "Quarters",
+  "groups": [
+    {
+      "label": "Product A",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 5000.0
+        },
+        {
+          "label": "Q2",
+          "value": 7000.0
+        },
+        {
+          "label": "Q3",
+          "value": 8000.0
+        },
+        {
+          "label": "Q4",
+          "value": 6000.0
+        }
+      ]
+    },
+    {
+      "label": "Product B",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 6000.0
+        },
+        {
+          "label": "Q2",
+          "value": 8000.0
+        },
+        {
+          "label": "Q3",
+          "value": 7000.0
+        },
+        {
+          "label": "Q4",
+          "value": 9000.0
+        }
+      ]
+    }
+  ],
+  "display": {
+    "lineColor": "#921A40",
+    "baseColor": "#F3EDED",
+    "vBar": true
+  }
+}
+----
+
 === Condensed Grouped Bar Chart Example
 
 You can create condensed grouped bar charts by setting the `condensed` property to `true`:
@@ -578,7 +802,63 @@ You can create condensed grouped bar charts by setting the `condensed` property 
 ----
 ....
 
-image::condensedbar.svg[opts=inline]
+[docops,bargroup]
+----
+{
+  "title": "Annual Product Sales Report",
+  "yLabel": "Sales (USD)",
+  "xLabel": "Quarters",
+  "groups": [
+    {
+      "label": "Product A",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 5000.0
+        },
+        {
+          "label": "Q2",
+          "value": 7000.0
+        },
+        {
+          "label": "Q3",
+          "value": 8000.0
+        },
+        {
+          "label": "Q4",
+          "value": 6000.0
+        }
+      ]
+    },
+    {
+      "label": "Product B",
+      "series": [
+        {
+          "label": "Q1",
+          "value": 6000.0
+        },
+        {
+          "label": "Q2",
+          "value": 8000.0
+        },
+        {
+          "label": "Q3",
+          "value": 7000.0
+        },
+        {
+          "label": "Q4",
+          "value": 9000.0
+        }
+      ]
+    }
+  ],
+  "display": {
+    "lineColor": "#921A40",
+    "baseColor": "#F3EDED",
+    "condensed": true
+  }
+}
+----
 
 == Conclusion
 
