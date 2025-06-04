@@ -29,7 +29,7 @@ class LineController {
     fun getEditMode(): ResponseEntity<String> {
         val defaultLineChartJson = """
         title=Department Performance
-        width=800
+        width=650
         smooth=true
         darkMode=false
         ---
