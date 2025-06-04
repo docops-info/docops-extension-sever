@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
-import java.util.UUID
+import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -151,7 +150,7 @@ class PieChartImproved {
         val legendBorderColor = if (darkMode) "#475569" else "#ccc"
 
         val id = UUID.randomUUID().toString()
-        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\">")
+        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
         // Add background if in dark mode
         if (darkMode) {
@@ -269,9 +268,9 @@ class PieChartImproved {
 
                 // Wrap each legend item in a group for hover effects if enabled
                 if (enableHoverEffects) {
-                    svgBuilder.append("<g class='legend-item' data-segment='segment-$index' onmouseover='highlightSegment(\"segment-$index\")' onmouseout='resetSegment(\"segment-$index\")'>");
+                    svgBuilder.append("<g class='legend-item' data-segment='segment-$index' onmouseover='highlightSegment(\"segment-$index\")' onmouseout='resetSegment(\"segment-$index\")'>")
                 } else {
-                    svgBuilder.append("<g>");
+                    svgBuilder.append("<g>")
                 }
 
                 // Legend color box with tooltip

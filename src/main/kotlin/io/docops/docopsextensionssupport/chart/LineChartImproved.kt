@@ -187,7 +187,7 @@ class LineChartImproved {
         val pointStrokeColor = if (darkMode) "#1e293b" else "white"
 
         val id = UUID.randomUUID().toString()
-        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\">")
+        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
         // Add background if in dark mode
         if (darkMode) {
