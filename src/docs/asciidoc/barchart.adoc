@@ -58,28 +58,17 @@ To include bar charts in your AsciiDoctor document, you use a special macro synt
 ....
 [docops,bar]
 ----
-{
-  "title": "Chart Title",
-  "yLabel": "Y-Axis Label",
-  "xLabel": "X-Axis Label",
-  "series": [
-    {
-      "label": "Category 1",
-      "value": 120.0
-    },
-    {
-      "label": "Category 2",
-      "value": 334.0
-    }
-    // More data points...
-  ],
-  "display": {
-    "baseColor": "#4361ee",
-    "vBar": false,
-    "useDark": false,
-    "type": "R"
-  }
-}
+title=Chart Title
+yLabel=Y-Axis Label
+xLabel=X-Axis Label
+baseColor=#4361ee
+vBar=false
+useDark=false
+type=R
+---
+Category 1 | 120.0
+Category 2 | 334.0
+// More data points...
 ----
 ....
 
@@ -89,75 +78,33 @@ For grouped bar charts, use the following format:
 ....
 [docops,bargroup]
 ----
-{
-  "title": "Chart Title",
-  "yLabel": "Y-Axis Label",
-  "xLabel": "X-Axis Label",
-  "groups": [
-    {
-      "label": "Group 1",
-      "series": [
-        {
-          "label": "Category 1",
-          "value": 5000.0
-        },
-        {
-          "label": "Category 2",
-          "value": 7000.0
-        }
-        // More data points...
-      ]
-    },
-    {
-      "label": "Group 2",
-      "series": [
-        {
-          "label": "Category 1",
-          "value": 6000.0
-        },
-        {
-          "label": "Category 2",
-          "value": 8000.0
-        }
-        // More data points...
-      ]
-    }
-    // More groups...
-  ],
-  "display": {
-    "baseColor": "#D988B9",
-    "vBar": false,
-    "condensed": false,
-    "useDark": false
-  }
-}
+title=Chart Title
+yLabel=Y-Axis Label
+xLabel=X-Axis Label
+baseColor=#D988B9
+vBar=false
+condensed=false
+useDark=false
+---
+Group 1 | Category 1 | 5000.0
+Group 1 | Category 2 | 7000.0
+// More data points...
+Group 2 | Category 1 | 6000.0
+Group 2 | Category 2 | 8000.0
+// More data points...
+// More groups...
 ----
 ....
 
-The macro processes the JSON configuration and generates an SVG representation of the bar chart that is embedded in your document.
+The macro processes the configuration and data and generates an SVG representation of the bar chart that is embedded in your document.
 
 === Regular Bar Chart Properties
 
-==== Main Properties
+==== Configuration Properties
 
 * `title` (required): The main heading of the chart
 * `yLabel` (optional): The label for the Y-axis
 * `xLabel` (optional): The label for the X-axis
-* `series` (required): An array of data points
-* `display` (optional): Settings for customizing the appearance
-
-==== Series Properties
-
-Each data point in the `series` array has the following properties:
-
-* `label` (required): The category label for the data point
-* `value` (required): The numerical value for the data point
-* `itemDisplay` (optional): Custom display settings for this specific data point
-
-==== Display Properties
-
-The `display` object can have the following properties:
-
 * `baseColor` (optional): The base color for the bars (default: "#FE7A36")
 * `type` (optional): The style of the bars ("R" for regular, "C" for cylinder)
 * `vBar` (optional): Whether to display vertical bars (default: false)
@@ -165,34 +112,44 @@ The `display` object can have the following properties:
 * `sorted` (optional): Whether to sort the bars by value (default: false)
 * `scale` (optional): A scaling factor for the chart (default: 1.0)
 
+==== Data Format
+
+After the configuration section and the separator line (`---`), each line represents a data point with the following format:
+
+```
+Label | Value [| Color]
+```
+
+* `Label` (required): The category label for the data point
+* `Value` (required): The numerical value for the data point
+* `Color` (optional): A custom color for this specific data point
+
 === Grouped Bar Chart Properties
 
-==== Main Properties
+==== Configuration Properties
 
 * `title` (required): The main heading of the chart
 * `yLabel` (optional): The label for the Y-axis
 * `xLabel` (optional): The label for the X-axis
-* `groups` (required): An array of group objects
-* `display` (optional): Settings for customizing the appearance
-
-==== Group Properties
-
-Each group in the `groups` array has the following properties:
-
-* `label` (required): The name of the group
-* `series` (required): An array of data points
-
-==== Display Properties
-
-The `display` object for grouped bar charts can have the following properties:
-
 * `baseColor` (optional): The base color for the chart (default: "#D988B9")
 * `lineColor` (optional): The color for grid lines (default: "#FFBB5C")
 * `vBar` (optional): Whether to display vertical bars (default: false)
 * `condensed` (optional): Whether to use condensed mode (default: false)
 * `useDark` (optional): Whether to use dark mode (default: false)
 * `scale` (optional): A scaling factor for the chart (default: 1.0)
-* Various font style properties for customizing text appearance
+
+==== Data Format
+
+After the configuration section and the separator line (`---`), each line represents a data point with the following format:
+
+```
+Group | Label | Value [| Color]
+```
+
+* `Group` (required): The name of the group
+* `Label` (required): The category label for the data point
+* `Value` (required): The numerical value for the data point
+* `Color` (optional): A custom color for this specific data point
 
 == Examples
 
@@ -204,81 +161,35 @@ Here's a simple example of a horizontal bar chart:
 ....
 [docops,bar]
 ----
-{
-  "title": "Monthly Sales Performance",
-  "yLabel": "Revenue ($)",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "January",
-      "value": 120.0
-    },
-    {
-      "label": "February",
-      "value": 334.0
-    },
-    {
-      "label": "March",
-      "value": 455.0
-    },
-    {
-      "label": "April",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "June",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4cc9f0",
-    "type": "R"
-  }
-}
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
 ----
 ....
 
 [docops,bar]
 ----
-{
-  "title": "Monthly Sales Performance",
-  "yLabel": "Revenue ($)",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "January",
-      "value": 120.0
-    },
-    {
-      "label": "February",
-      "value": 334.0
-    },
-    {
-      "label": "March",
-      "value": 455.0
-    },
-    {
-      "label": "April",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "June",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4cc9f0",
-    "type": "R"
-  }
-}
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
 ----
 
 === Vertical Bar Chart Example
@@ -289,81 +200,35 @@ You can create vertical bar charts by setting the `vBar` property to `true`:
 ....
 [docops,bar]
 ----
-{
-  "title": "Berry Picking by Month 2024",
-  "yLabel": "Number of Sales",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "Jan",
-      "value": 120.0
-    },
-    {
-      "label": "Feb",
-      "value": 334.0
-    },
-    {
-      "label": "Mar",
-      "value": 455.0
-    },
-    {
-      "label": "Apr",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "Jun",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4361ee",
-    "vBar": true
-  }
-}
+title=Berry Picking by Month 2024
+yLabel=Number of Sales
+xLabel=Month
+baseColor=#4361ee
+vBar=true
+---
+Jan | 120.0
+Feb | 334.0
+Mar | 455.0
+Apr | 244.0
+May | 256.0
+Jun | 223.0
 ----
 ....
 
 [docops,bar]
 ----
-{
-  "title": "Berry Picking by Month 2024",
-  "yLabel": "Number of Sales",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "Jan",
-      "value": 120.0
-    },
-    {
-      "label": "Feb",
-      "value": 334.0
-    },
-    {
-      "label": "Mar",
-      "value": 455.0
-    },
-    {
-      "label": "Apr",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "Jun",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4361ee",
-    "vBar": true
-  }
-}
+title=Berry Picking by Month 2024
+yLabel=Number of Sales
+xLabel=Month
+baseColor=#4361ee
+vBar=true
+---
+Jan | 120.0
+Feb | 334.0
+Mar | 455.0
+Apr | 244.0
+May | 256.0
+Jun | 223.0
 ----
 
 === Cylinder-Style Bar Chart Example
@@ -372,35 +237,18 @@ You can create cylinder-style bar charts by setting the `type` property to `"C"`
 
 [source,asciidoc]
 ....
-[docops,barchart]
+[docops,bar]
 ----
-{
-  "title": "Quarterly Performance",
-  "yLabel": "Revenue ($)",
-  "xLabel": "Quarter",
-  "series": [
-    {
-      "label": "Q1",
-      "value": 320.0
-    },
-    {
-      "label": "Q2",
-      "value": 480.0
-    },
-    {
-      "label": "Q3",
-      "value": 290.0
-    },
-    {
-      "label": "Q4",
-      "value": 410.0
-    }
-  ],
-  "display": {
-    "baseColor": "#f72585",
-    "type": "C"
-  }
-}
+title=Quarterly Performance
+yLabel=Revenue ($)
+xLabel=Quarter
+baseColor=#f72585
+type=C
+---
+Q1 | 320.0
+Q2 | 480.0
+Q3 | 290.0
+Q4 | 410.0
 ----
 ....
 
@@ -414,83 +262,37 @@ You can create dark mode bar charts by setting the `useDark` property to `true`:
 ....
 [docops,bar]
 ----
-{
-  "title": "Monthly Sales Performance (Dark Mode)",
-  "yLabel": "Revenue ($)",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "January",
-      "value": 120.0
-    },
-    {
-      "label": "February",
-      "value": 334.0
-    },
-    {
-      "label": "March",
-      "value": 455.0
-    },
-    {
-      "label": "April",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "June",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4cc9f0",
-    "useDark": true,
-    "type": "R"
-  }
-}
+title=Monthly Sales Performance (Dark Mode)
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+useDark=true
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
 ----
 ....
 
 [docops,bar]
 ----
-{
-  "title": "Monthly Sales Performance (Dark Mode)",
-  "yLabel": "Revenue ($)",
-  "xLabel": "Month",
-  "series": [
-    {
-      "label": "January",
-      "value": 120.0
-    },
-    {
-      "label": "February",
-      "value": 334.0
-    },
-    {
-      "label": "March",
-      "value": 455.0
-    },
-    {
-      "label": "April",
-      "value": 244.0
-    },
-    {
-      "label": "May",
-      "value": 256.0
-    },
-    {
-      "label": "June",
-      "value": 223.0
-    }
-  ],
-  "display": {
-    "baseColor": "#4cc9f0",
-    "useDark": true,
-    "type": "R"
-  }
-}
+title=Monthly Sales Performance (Dark Mode)
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+useDark=true
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
 ----
 
 === Grouped Bar Chart Example
@@ -501,117 +303,39 @@ Here's an example of a grouped bar chart:
 ....
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED"
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 ....
 
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED"
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 
 === Vertical Grouped Bar Chart Example
@@ -622,119 +346,41 @@ You can create vertical grouped bar charts by setting the `vBar` property to `tr
 ....
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED",
-    "vBar": true
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+vBar=true
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 ....
 
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED",
-    "vBar": true
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+vBar=true
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 
 === Condensed Grouped Bar Chart Example
@@ -745,123 +391,45 @@ You can create condensed grouped bar charts by setting the `condensed` property 
 ....
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED",
-    "condensed": true
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+condensed=true
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 ....
 
 [docops,bargroup]
 ----
-{
-  "title": "Annual Product Sales Report",
-  "yLabel": "Sales (USD)",
-  "xLabel": "Quarters",
-  "groups": [
-    {
-      "label": "Product A",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 5000.0
-        },
-        {
-          "label": "Q2",
-          "value": 7000.0
-        },
-        {
-          "label": "Q3",
-          "value": 8000.0
-        },
-        {
-          "label": "Q4",
-          "value": 6000.0
-        }
-      ]
-    },
-    {
-      "label": "Product B",
-      "series": [
-        {
-          "label": "Q1",
-          "value": 6000.0
-        },
-        {
-          "label": "Q2",
-          "value": 8000.0
-        },
-        {
-          "label": "Q3",
-          "value": 7000.0
-        },
-        {
-          "label": "Q4",
-          "value": 9000.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "lineColor": "#921A40",
-    "baseColor": "#F3EDED",
-    "condensed": true
-  }
-}
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+lineColor=#921A40
+baseColor=#F3EDED
+condensed=true
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
 ----
 
 == Conclusion
 
-The DocOps Bar Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing bar charts. By using the JSON configuration format, you can create customized charts that match your document's style and purpose.
+The DocOps Bar Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing bar charts. By using the simple key-value configuration format and pipe-separated data, you can create customized charts that match your document's style and purpose.
 
 The extension supports both regular and grouped bar charts, with various display options including horizontal/vertical orientation, cylinder style, dark mode, and condensed mode for grouped charts.

@@ -1,12 +1,10 @@
 package io.docops.docopsextensionssupport.chart
 
-
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.json.Json
 import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
@@ -29,20 +27,18 @@ class BarController {
     @ResponseBody
     fun getEditMode(): ResponseEntity<String> {
         val defaultBarChartJson = """
-        {
-          "title": "Berry Picking by Month 2024",
-          "yLabel": "Number of Sales",
-          "xLabel": "Month",
-          "series": [
-            {"label": "Jan","value": 120.0},
-            {"label": "Feb","value": 334.0},
-            {"label": "Mar","value": 455.0},
-            {"label": "Apr","value": 244.0},
-            {"label": "May","value": 256.0},
-            {"label": "Jun","value": 223.0}
-          ],
-          "display": {"baseColor": "#4361ee","vBar": true}
-        }
+        title=Berry Picking by Month 2024
+        yLabel=Number of Sales
+        xLabel=Month
+        baseColor=#4361ee
+        vBar=true
+        ---
+        Jan | 120.0
+        Feb | 334.0
+        Mar | 455.0
+        Apr | 244.0
+        May | 256.0
+        Jun | 223.0
         """.trimIndent()
 
         val editModeHtml = """
@@ -100,16 +96,9 @@ class BarController {
     @Timed(value = "docops.barchart.put", description="Creating a barchart using http put", percentiles=[0.5, 0.9])
     fun makeBarChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
-            var contents = httpServletRequest.getParameter("content")
-            val barMaker = BarMaker()
-            val bars = Json.decodeFromString<Bar>(contents)
-            var svg = ""
-            if(bars.display.vBar) {
-                svg = barMaker.makeVerticalBar(bars)
-
-            } else {
-                svg = barMaker.makeHorizontalBar(bars)
-            }
+            val contents = httpServletRequest.getParameter("content")
+            val barChartImproved = BarChartImproved()
+            val svg = barChartImproved.makeBarSvg(contents)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -119,13 +108,13 @@ class BarController {
                 $svg
                 </div>
                 <script>
-                var adrSource = `[diag,scale="0.7",role="center"]\n----\n${contents}\n----`;
+                var adrSource = `[docops,bar]\n----\n${contents}\n----`;
                 </script>
 
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info{"makeDiag executed in ${timings.duration.inWholeMilliseconds}ms "}
+        log.info{"barchart executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
     }
 
@@ -135,17 +124,10 @@ class BarController {
     @Timed(value = "docops.groupbarchart.put", description="Creating a groupbarchart using http put", percentiles=[0.5, 0.9])
     fun makeBarGroupChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
-            var contents = httpServletRequest.getParameter("content")
-            val maker = BarGroupMaker()
-            val bars = Json.decodeFromString<BarGroup>(contents)
-            val svg = if(bars.display.vBar) {
-                maker.makeVGroupBar(bars)
-            } else if (bars.display.condensed) {
-                maker.makeCondensed(bars)
-            }
-            else {
-                maker.makeBar(bars)
-            }
+            val contents = httpServletRequest.getParameter("content")
+            val barChartImproved = BarChartImproved()
+            val svg = barChartImproved.makeGroupBarSvg(contents)
+
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -154,12 +136,12 @@ class BarController {
                 $svg
                 </div>
                 <script>
-                var adrSource = `[diag,scale="0.7",role="center"]\n----\n${contents}\n----`;
+                var adrSource = `[docops,bargroup]\n----\n${contents}\n----`;
                 </script>
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info{"makeDiag executed in ${timings.duration.inWholeMilliseconds}ms "}
+        log.info{"bargroup executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
     }
 }
