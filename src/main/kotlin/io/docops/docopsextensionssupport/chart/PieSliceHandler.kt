@@ -14,7 +14,7 @@ class PieSliceHandler {
 
     fun handleSVG(payload: String, isPdf: Boolean) : ResponseEntity<ByteArray>{
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val slices = Json.decodeFromString<PieSlices>(data)
+        /*val slices = Json.decodeFromString<PieSlices>(data)
         var svg = ""
         if(!slices.display.donut || isPdf) {
             val maker = PieSliceMaker()
@@ -22,7 +22,9 @@ class PieSliceHandler {
         } else {
             val maker = DonutMaker()
              svg = maker.makeDonut(slices)
-        }
+        }*/
+        val pieChartImproved = PieChartImproved()
+        val svg = pieChartImproved.makePieSvg(data)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

@@ -23,494 +23,308 @@ The extension supports two main types of pie charts:
 
 * Regular Pie Charts - A traditional circular chart divided into slices
 * Donut Charts - Similar to pie charts but with a hole in the center
-* Multiple Pie Charts - A collection of small pie charts displayed together
 
 Each type can be displayed in various styles, including:
 
 * Custom colors for slices
-* Dark mode charts
 * Interactive hover effects
-* Animated transitions
+* Percentage labels
 
 === Pie Chart Components
 
-==== Regular Pie Charts and Donut Charts
-
-A regular pie chart or donut chart includes:
+A pie chart or donut chart includes:
 
 * A title
-* A series of slices, each with a label and value (amount)
-* Display settings for visual appearance
-
-==== Multiple Pie Charts
-
-A multiple pie chart visualization includes:
-
-* Multiple small pie charts, each showing a percentage
-* Labels for each pie chart
-* Display settings for visual appearance
+* A series of slices, each with a label and value
+* Optional configuration parameters for visual appearance
 
 == AsciiDoctor Syntax for Pie Charts
 
-To include pie charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format for regular pie charts and donut charts:
+To include pie charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
 
 [source,asciidoc]
 ....
 [docops,pieslice]
 ----
-{
-  "title": "Chart Title",
-  "slices": [
-    {
-      "label": "Category 1",
-      "amount": 16.0
-    },
-    {
-      "label": "Category 2",
-      "amount": 4.0
-    }
-    // More slices...
-  ],
-  "display": {
-    "donut": false,
-    "legendRows": 3
-  }
-}
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 ----
 ....
 
-For multiple pie charts, use the following format:
+For more customization, you can add configuration parameters:
 
 [source,asciidoc]
 ....
-[docops,pie]
+[docops,pieslice]
 ----
-{
-  "pies": [
-    {
-      "percent": 70.0,
-      "label": "Category 1"
-    },
-    {
-      "percent": 22.0,
-      "label": "Category 2"
-    }
-    // More pies...
-  ],
-  "pieDisplay": {
-    "baseColor": "#111111",
-    "outlineColor": "#FF77B7",
-    "useDark": false,
-    "scale": 1
-  }
-}
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 ----
 ....
 
-The macro processes the JSON configuration and generates an SVG representation of the pie chart that is embedded in your document.
+The macro processes the configuration and data to generate an SVG representation of the pie chart that is embedded in your document.
 
-=== Regular Pie Chart and Donut Chart Properties
+=== Configuration Parameters
 
-==== Main Properties
+The following configuration parameters are available:
 
-* `title` (required): The main heading of the chart
-* `slices` (required): An array of data slices
-* `display` (optional): Settings for customizing the appearance
-
-==== Slice Properties
-
-Each slice in the `slices` array has the following properties:
-
-* `label` (required): The category label for the slice
-* `amount` (required): The numerical value for the slice
-
-==== Display Properties
-
-The `display` object can have the following properties:
-
+* `title` (optional): The main heading of the chart (default: "Pie Chart")
+* `width` (optional): The width of the chart in pixels (default: 500)
+* `height` (optional): The height of the chart in pixels (default: 500)
+* `legend` (optional): Whether to display a legend (default: true)
+* `percentages` (optional): Whether to display percentage values (default: true)
+* `hover` (optional): Whether to enable hover effects (default: true)
 * `donut` (optional): Whether to display as a donut chart (default: false)
-* `legendRows` (optional): Number of rows in the legend (default: 3)
+* `colors` (optional): A comma-separated list of custom colors for the chart
 
-=== Multiple Pie Charts Properties
+=== Data Format
 
-==== Main Properties
+The data for the pie chart is specified in a simple format:
 
-* `pies` (required): An array of pie objects
-* `pieDisplay` (optional): Settings for customizing the appearance
+```
+Label | Value [| Color]
+```
 
-==== Pie Properties
+Where:
+* `Label` is the category name
+* `Value` is the numerical value for the slice
+* `Color` (optional) is a custom color for this specific slice (e.g., #ff5733)
 
-Each pie in the `pies` array has the following properties:
-
-* `label` (required): The label for the pie
-* `percent` (required): The percentage value for the pie (0-100)
-
-==== PieDisplay Properties
-
-The `pieDisplay` object can have the following properties:
-
-* `baseColor` (optional): The base color for the pies (default: "#A6AEBF")
-* `outlineColor` (optional): The outline color for the pies (default: "#050C9C")
-* `useDark` (optional): Whether to use dark mode (default: false)
-* `scale` (optional): A scaling factor for the chart (default: 1.0)
+If you include configuration parameters, you must separate them from the data with a line containing three dashes (`---`).
 
 == Examples
 
 === Basic Pie Chart Example
 
-Here's a simple example of a regular pie chart:
+Here's a simple example of a pie chart with minimal configuration:
 
 [source,asciidoc]
 ....
 [docops,pieslice]
 ----
-{
-  "title": "Favorite Anime",
-  "slices": [
-    {
-      "label": "Naruto",
-      "amount": 16.0
-    },
-    {
-      "label": "Bleach",
-      "amount": 4.0
-    },
-    {
-      "label": "One Piece",
-      "amount": 9.0
-    },
-    {
-      "label": "One Punch Man",
-      "amount": 7.0
-    },
-    {
-      "label": "My Hero Academia",
-      "amount": 6.0
-    },
-    {
-      "label": "Demon Slayer",
-      "amount": 10.0
-    }
-  ],
-  "display": {
-    "donut": false
-  }
-}
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 ----
 ....
 
 [docops,pieslice]
 ----
-{
-  "title": "Favorite Anime",
-  "slices": [
-    {
-      "label": "Naruto",
-      "amount": 16.0
-    },
-    {
-      "label": "Bleach",
-      "amount": 4.0
-    },
-    {
-      "label": "One Piece",
-      "amount": 9.0
-    },
-    {
-      "label": "One Punch Man",
-      "amount": 7.0
-    },
-    {
-      "label": "My Hero Academia",
-      "amount": 6.0
-    },
-    {
-      "label": "Demon Slayer",
-      "amount": 10.0
-    }
-  ],
-  "display": {
-    "donut": false
-  }
-}
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+
+=== Pie Chart with Configuration
+
+Here's an example with configuration parameters:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+[docops,pieslice]
+----
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+
+=== Pie Chart with Positioning
+
+You can position your chart using the `role` attribute:
+
+[source,asciidoc]
+....
+.Pie Chart
+[docops,pieslice, role=left]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+....
+
+.Pie Chart
+[docops,pieslice, role=left]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
 ----
 
 === Donut Chart Example
 
-You can create donut charts by setting the `donut` property to `true`:
+You can create donut charts by setting the `donut` parameter to `true`:
+
+[source,asciidoc]
+....
+.Pie Chart
+[docops,pieslice, role=left]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=true
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+....
+
+.Pie Chart
+[docops,pieslice, role=left]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=true
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+
+=== Custom Colors for Individual Slices
+
+You can specify custom colors for individual slices:
+
+[source,asciidoc]
+....
+[docops,pieslice, title="Sales Distribution with Custom Colors"]
+----
+Product A | 30 | #ff5733
+Product B | 25 | #33ff57
+Product C | 20 | #3357ff
+Product D | 15 | #f3ff33
+Product E | 10 | #ff33f3
+----
+....
+
+[docops,pieslice, title="Sales Distribution with Custom Colors"]
+----
+Product A | 30 | #ff5733
+Product B | 25 | #33ff57
+Product C | 20 | #3357ff
+Product D | 15 | #f3ff33
+Product E | 10 | #ff33f3
+----
+
+=== Custom Color Palette
+
+You can specify a custom color palette for the entire chart:
 
 [source,asciidoc]
 ....
 [docops,pieslice]
 ----
-{
-  "title": "Favorite Anime",
-  "slices": [
-    {
-      "label": "Naruto",
-      "amount": 16.0
-    },
-    {
-      "label": "Bleach",
-      "amount": 4.0
-    },
-    {
-      "label": "One Piece",
-      "amount": 9.0
-    },
-    {
-      "label": "One Punch Man",
-      "amount": 7.0
-    },
-    {
-      "label": "My Hero Academia",
-      "amount": 6.0
-    },
-    {
-      "label": "Demon Slayer",
-      "amount": 10.0
-    }
-  ],
-  "display": {
-    "donut": true
-  }
-}
+title=Sales with Custom Palette
+colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 ----
 ....
 
 [docops,pieslice]
 ----
-{
-  "title": "Favorite Anime",
-  "slices": [
-    {
-      "label": "Naruto",
-      "amount": 16.0
-    },
-    {
-      "label": "Bleach",
-      "amount": 4.0
-    },
-    {
-      "label": "One Piece",
-      "amount": 9.0
-    },
-    {
-      "label": "One Punch Man",
-      "amount": 7.0
-    },
-    {
-      "label": "My Hero Academia",
-      "amount": 6.0
-    },
-    {
-      "label": "Demon Slayer",
-      "amount": 10.0
-    }
-  ],
-  "display": {
-    "donut": true
-  }
-}
-----
-
-=== Multiple Pie Charts Example
-
-Here's an example of multiple pie charts:
-
-[source,asciidoc]
-....
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 14,
-      "label": "Toys"
-    },
-    {
-      "percent": 43,
-      "label": "Furniture"
-    },
-    {
-      "percent": 15.0,
-      "label": "Home Decoration"
-    },
-    {
-      "percent": 28.0,
-      "label": "Electronics"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#A6AEBF",
-    "outlineColor": "#FA4032",
-    "scale": 2,
-    "useDark": true
-  }
-}
-----
-....
-
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 14,
-      "label": "Toys"
-    },
-    {
-      "percent": 43,
-      "label": "Furniture"
-    },
-    {
-      "percent": 15.0,
-      "label": "Home Decoration"
-    },
-    {
-      "percent": 28.0,
-      "label": "Electronics"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#A6AEBF",
-    "outlineColor": "#FA4032",
-    "scale": 2,
-    "useDark": true
-  }
-}
-----
-
-=== Dark Mode Multiple Pie Charts Example
-
-You can create dark mode multiple pie charts by setting the `useDark` property to `true`:
-
-[source,asciidoc]
-....
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 70.0,
-      "label": "Windows"
-    },
-    {
-      "percent": 22.0,
-      "label": "Macos"
-    },
-    {
-      "percent": 8.0,
-      "label": "Linux"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#111111",
-    "outlineColor": "#FF77B7",
-    "useDark": true,
-    "scale": 1
-  }
-}
-----
-....
-
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 70.0,
-      "label": "Windows"
-    },
-    {
-      "percent": 22.0,
-      "label": "Macos"
-    },
-    {
-      "percent": 8.0,
-      "label": "Linux"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#111111",
-    "outlineColor": "#FF77B7",
-    "useDark": true,
-    "scale": 1
-  }
-}
-----
-
-=== Custom Colors Example
-
-You can customize the colors of your pie charts:
-
-[source,asciidoc]
-....
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 70.0,
-      "label": "Windows"
-    },
-    {
-      "percent": 22.0,
-      "label": "Macos"
-    },
-    {
-      "percent": 8.0,
-      "label": "Linux"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#4cc9f0",
-    "outlineColor": "#f72585",
-    "useDark": false,
-    "scale": 1
-  }
-}
-----
-....
-
-[docops,pie]
-----
-{
-  "pies": [
-    {
-      "percent": 70.0,
-      "label": "Windows"
-    },
-    {
-      "percent": 22.0,
-      "label": "Macos"
-    },
-    {
-      "percent": 8.0,
-      "label": "Linux"
-    }
-  ],
-  "pieDisplay": {
-    "baseColor": "#4cc9f0",
-    "outlineColor": "#f72585",
-    "useDark": false,
-    "scale": 1
-  }
-}
+title=Sales with Custom Palette
+colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 ----
 
 == Interactive Features
 
 Pie charts in the DocOps extension include several interactive features:
 
-* **Hover Effects**: Pie slices and charts have hover effects for better visibility
+* **Hover Effects**: Pie slices have hover effects for better visibility
 * **Tooltips**: Hover over slices to see detailed information
-* **Animations**: Charts animate when they first appear on the page
+* **Legend Interaction**: Hovering over legend items highlights the corresponding slice
 
 These interactive features enhance the user experience and make it easier to interpret the data in your charts.
 
 == Conclusion
 
-The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the JSON configuration format, you can create customized charts that match your document's style and purpose.
+The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the simple pipe-separated format and configuration parameters, you can create customized charts that match your document's style and purpose.
 
-The extension supports both regular pie charts, donut charts, and multiple pie charts, with various display options including custom colors, dark mode, and interactive features.
+The extension supports both regular pie charts and donut charts, with various display options including custom colors and interactive features.

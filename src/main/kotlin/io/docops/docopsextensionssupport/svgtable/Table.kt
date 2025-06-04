@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.Serializable
+import java.io.File
 
 /**
  * Represents a table that can be rendered as SVG.
@@ -47,8 +48,15 @@ class Table(
             }
         }
         val headSvg = thead?.toSvg(cellWidths) ?: Pair("", 0f)
-        val bodySvg = TBody(rows, maxOf(headSvg.second,18f), cellWidths).toSvg()
-        return makeHead(display, cellWidths) + makeDefs() + """<g transform="scale(${display.scale})">""" + headSvg.first + bodySvg + "</g>" +endSvg()
+        val bodySvg = TBody(
+            rows = rows, 
+            headerHeight = maxOf(headSvg.second, 18f), 
+            cellWidths = cellWidths,
+            alternateRowColors = display.alternateRowColors,
+            evenRowColor = display.evenRowColor,
+            oddRowColor = display.oddRowColor
+        ).toSvg()
+        return makeHead(display, cellWidths) + makeDefs(display.modernStyle) + """<g transform="scale(${display.scale})">""" + headSvg.first + bodySvg + "</g>" +endSvg()
     }
 
     private fun makeHead(display: TableConfig, cellWidths: MutableList<CellWidth>): String {
@@ -66,7 +74,40 @@ class Table(
         return "</svg>"
     }
 
-    private fun makeDefs(): String {
+    private fun makeDefs(modernStyle: Boolean = true): String {
+        val modernCss = if (modernStyle) {
+            """
+            .table-header {
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                font-size: 12px;
+            }
+
+            .table-cell {
+                transition: all 0.2s ease-in-out;
+            }
+
+            .table-cell:hover {
+                filter: brightness(0.95);
+            }
+
+            .table-row:nth-child(even) {
+                background-color: #f9fafb;
+            }
+
+            .table-row:nth-child(odd) {
+                background-color: #f3f4f6;
+            }
+
+            .table-row:hover {
+                background-color: #e5e7eb;
+            }
+            """
+        } else {
+            ""
+        }
+
         return """
             <defs>
             ${getColorGradients()}
@@ -85,13 +126,17 @@ class Table(
                 <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1"/>
             </filter>
 
-            <style>.rowShade {
+            <style>
+            .rowShade {
                 pointer-events: bounding-box;
             }
 
             .rowShade:hover {
                 filter: grayscale(100%) sepia(100%);
-            }</style>
+            }
+
+            ${modernCss}
+            </style>
             </defs>
         """.trimMargin()
     }
@@ -145,50 +190,163 @@ class THead(val rows: MutableList<Row>, val display: DisplayConfig = DisplayConf
         require(rows.isNotEmpty()) { "Table must contain at least one row" }
         val sb = StringBuilder()
         var currentY = INITIAL_OFFSET
-        var maxLines = 0
-        rows.forEach { row ->
-                row.cells.forEachIndexed { i, cell ->
-                    val x = cell.toLines(cellWidths[i].width-4)
-                    maxLines = maxOf(maxLines, x.size)
+
+        // Create a grid to track cell spans
+        val rowCount = rows.size
+        val colCount = cellWidths.size
+        val grid = Array(rowCount) { Array(colCount) { false } }
+
+        // Calculate max lines for each row to determine row heights
+        val rowHeights = mutableListOf<Float>()
+        rows.forEachIndexed { rowIndex, row ->
+            var maxLines = 0
+            var colIndex = 0
+            row.cells.forEach { cell ->
+                // Find next available position in grid
+                while (colIndex < colCount && grid[rowIndex][colIndex]) {
+                    colIndex++
                 }
+
+                if (colIndex < colCount) {
+                    // Mark cells as occupied based on rowSpan and colSpan
+                    for (r in rowIndex until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                            grid[r][c] = true
+                        }
+                    }
+
+                    // Calculate width for this cell based on colSpan
+                    var cellWidth = 0f
+                    for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                        cellWidth += cellWidths[c].width
+                    }
+
+                    // Calculate lines based on available width and wrap setting
+                    val lines = if (cell.wrap) {
+                        cell.toLines(cellWidth - 4)
+                    } else {
+                        mutableListOf(cell.data)
+                    }
+
+                    maxLines = maxOf(maxLines, lines.size)
+
+                    // Move to next column position
+                    colIndex += cell.colSpan
+                }
+            }
+
+            val rowHeight = maxLines * 14.0f + 10.0f
+            rowHeights.add(rowHeight)
         }
-        val rowHeight = maxLines * 14.0f + 10.0f
-        rows.forEach { row ->
-            sb.append("<g aria-label=\"Header\">")
+
+        // Reset grid for rendering
+        for (r in 0 until rowCount) {
+            for (c in 0 until colCount) {
+                grid[r][c] = false
+            }
+        }
+
+        // Render header rows
+        rows.forEachIndexed { rowIndex, row ->
+            sb.append("<g aria-label=\"Header\" class=\"table-header\">")
             var currentX = INITIAL_OFFSET
             val rowColor = row.display.fill
             sb.append("<g aria-label=\"Header Row\">")
-            sb.append("""<rect x="1" y="0" width="100%" height="$HEADER_ROW_HEIGHT" fill="url(#headerGradient)" rx="4" ry="4"/>""")
 
+            // Draw row background if specified in row display
+            if (!row.display.isDefault) {
+                sb.append("""<rect x="1" y="${currentY - 2}" width="100%" height="${rowHeights[rowIndex]}" fill="${row.display.fill.color}" rx="4" ry="4"/>""")
+            } else {
+                sb.append("""<rect x="1" y="${currentY - 2}" width="100%" height="${rowHeights[rowIndex]}" fill="url(#headerGradient)" rx="4" ry="4"/>""")
+            }
+
+            var colIndex = 0
             var startX = 1.0
-            row.cells.forEachIndexed { i, cell ->
-                var cellColor = getColorForNumber(i)
-                if(!cell.display.isDefault) {
-                    cellColor = cell.display.fill.color
+
+            row.cells.forEach { cell ->
+                // Find next available position in grid
+                while (colIndex < colCount && grid[rowIndex][colIndex]) {
+                    colIndex++
+                    startX += cellWidths[colIndex - 1].width
                 }
-                val fontColor = determineTextColor(cellColor)
-                val fontStyle = cell.display.parseFontStyle()
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[i].width), (startX+2).toFloat(), currentY, style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: ${fontStyle.size}px; fill: ${fontColor}; letter-spacing: 0.5px;", dy = fontStyle.size)
-                sb.append("<g class=\"rowShade\" aria-label=\"header column ${i+1} cellcolor $cellColor $fontColor\">")
-                sb.append("""<rect x="$startX" y="0" fill="$cellColor" width="${cellWidths[i].width}" height="${maxOf(rowHeight,18f)}" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
-                sb.append(lines)
-                currentX += cellWidths[i].width + CELL_PADDING
-                startX += cellWidths[i].width
-                sb.append("</g>")
+
+                if (colIndex < colCount) {
+                    // Mark cells as occupied based on rowSpan and colSpan
+                    for (r in rowIndex until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                            grid[r][c] = true
+                        }
+                    }
+
+                    // Calculate width for this cell based on colSpan
+                    var cellWidth = 0f
+                    for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                        cellWidth += cellWidths[c].width
+                    }
+
+                    // Determine cell color
+                    var cellColor = getColorForNumber(colIndex)
+                    if (!cell.display.isDefault) {
+                        cellColor = cell.display.fill.color
+                    }
+
+                    val fontColor = determineTextColor(cellColor)
+                    val fontStyle = cell.display.parseFontStyle()
+
+                    // Calculate cell height based on rowSpan
+                    var cellHeight = rowHeights[rowIndex]
+                    for (r in rowIndex + 1 until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        cellHeight += rowHeights[r] + ROW_PADDING
+                    }
+
+                    // Generate text lines based on wrap setting
+                    val lines = if (cell.wrap) {
+                        cell.toLines(cellWidth - 4)
+                    } else {
+                        mutableListOf(cell.data)
+                    }
+
+                    val textSpans = cell.toTextSpans(
+                        lines, 
+                        (startX + 2).toFloat(), 
+                        currentY, 
+                        style = "font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: ${fontStyle.size}px; fill: ${fontColor}; letter-spacing: 0.5px;", 
+                        dy = fontStyle.size
+                    )
+
+                    sb.append("<g class=\"rowShade table-cell\" aria-label=\"header column ${colIndex + 1} cellcolor $cellColor $fontColor\">")
+                    sb.append("""<rect x="$startX" y="${currentY - 2}" fill="$cellColor" width="$cellWidth" height="$cellHeight" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
+                    sb.append(textSpans)
+                    sb.append("</g>")
+
+                    // Move to next column position
+                    startX += cellWidth
+                    colIndex += cell.colSpan
+                }
             }
 
             sb.append("</g></g>")
-            currentY += (row.cells.maxOfOrNull { it.height() } ?: 0.0f) + ROW_PADDING
+            currentY += rowHeights[rowIndex] + ROW_PADDING
         }
 
-        return Pair(sb.toString(), rowHeight)
+        // Calculate total header height
+        val totalHeaderHeight = rowHeights.sum() + (rowHeights.size - 1) * ROW_PADDING
+
+        return Pair(sb.toString(), totalHeaderHeight)
     }
 }
 /**
  * Internal implementation class for SVG table rendering.
  * @property rows List of rows to render
  */
-internal class TBody(private val rows: MutableList<Row>, val headerHeight: Float, val cellWidths: MutableList<CellWidth>) {
+internal class TBody(
+    private val rows: MutableList<Row>, 
+    val headerHeight: Float, 
+    val cellWidths: MutableList<CellWidth>,
+    val alternateRowColors: Boolean = true,
+    val evenRowColor: String = "#f9fafb",
+    val oddRowColor: String = "#f3f4f6"
+) {
     companion object {
         private const val INITIAL_OFFSET = 8.0f
         private const val CELL_PADDING = 5.0f
@@ -213,39 +371,147 @@ internal class TBody(private val rows: MutableList<Row>, val headerHeight: Float
         require(rows.isNotEmpty()) { "Table must contain at least one row" }
 
         val sb = StringBuilder()
-        var currentY =  headerHeight
-        rows.forEach { row ->
-            row.cells.forEachIndexed { i, cell ->
-                cell.toLines(cellWidths[i].width)
-            }
-        }
-        var i=0
-        rows.forEachIndexed { j, row ->
-            var startX = 1.0
-            sb.append("<g>")
-            sb.append("<g aria-label=\"Row ${j+1}\">")
-            var currentX = INITIAL_OFFSET
-            sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${row.rowHeight()}" fill="url(#backgroundGradient)" filter="url(#shadowFilter)" rx="4" ry="4"/>""")
-            row.cells.forEachIndexed { k, cell ->
-                var cellColor = "#f9fafb"
-                var fontColor = "374151"
-                if(!cell.display.isDefault) {
-                    cellColor = cell.display.fill.color
-                    fontColor = determineTextColor(cellColor)
+        var currentY = headerHeight
+
+        // Create a grid to track cell spans
+        val rowCount = rows.size
+        val colCount = cellWidths.size
+        val grid = Array(rowCount) { Array(colCount) { false } }
+
+        // Pre-calculate row heights and process cell lines
+        val rowHeights = mutableListOf<Float>()
+        rows.forEachIndexed { rowIndex, row ->
+            var maxLines = 0
+            var colIndex = 0
+
+            row.cells.forEach { cell ->
+                // Find next available position in grid
+                while (colIndex < colCount && grid[rowIndex][colIndex]) {
+                    colIndex++
                 }
 
-                val lines = cell.toTextSpans(cell.toLines(cellWidths[k].width+2), (startX+2.0).toFloat(), (currentY+4.0).toFloat(), style = "font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12px; fill: $fontColor; letter-spacing: 0.2px;",)
-                sb.append("<g class=\"rowShade\" aria-label=\"Row ${j+1} column ${k+1}\">")
-                sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="${cellWidths[k].width}" height="${row.rowHeight()+2}" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
-                sb.append(lines)
-                currentX += cellWidths[k].width + CELL_PADDING
-                sb.append("</g>")
-                startX += cellWidths[k].width
+                if (colIndex < colCount) {
+                    // Mark cells as occupied based on rowSpan and colSpan
+                    for (r in rowIndex until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                            grid[r][c] = true
+                        }
+                    }
+
+                    // Calculate width for this cell based on colSpan
+                    var cellWidth = 0f
+                    for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                        cellWidth += cellWidths[c].width
+                    }
+
+                    // Calculate lines based on available width and wrap setting
+                    val lines = if (cell.wrap) {
+                        cell.toLines(cellWidth - 4)
+                    } else {
+                        mutableListOf(cell.data)
+                    }
+
+                    maxLines = maxOf(maxLines, lines.size)
+
+                    // Move to next column position
+                    colIndex += cell.colSpan
+                }
+            }
+
+            val rowHeight = maxLines * 14.0f + 10.0f
+            rowHeights.add(rowHeight)
+        }
+
+        // Reset grid for rendering
+        for (r in 0 until rowCount) {
+            for (c in 0 until colCount) {
+                grid[r][c] = false
+            }
+        }
+
+        // Render table body rows
+        rows.forEachIndexed { rowIndex, row ->
+            var startX = 1.0
+            sb.append("<g>")
+            sb.append("<g class=\"table-row\" aria-label=\"Row ${rowIndex+1}\">")
+
+            // Determine row background color
+            val rowBackgroundColor = if (!row.display.isDefault) {
+                row.display.fill.color
+            } else if (alternateRowColors) {
+                if (rowIndex % 2 == 0) evenRowColor else oddRowColor
+            } else {
+                "#f9fafb" // Default color
+            }
+
+            // Draw row background
+            sb.append("""<rect x="1" y="${currentY-2}" width="100%" height="${rowHeights[rowIndex]}" fill="$rowBackgroundColor" filter="url(#shadowFilter)" rx="4" ry="4"/>""")
+
+            var colIndex = 0
+
+            row.cells.forEach { cell ->
+                // Find next available position in grid
+                while (colIndex < colCount && grid[rowIndex][colIndex]) {
+                    colIndex++
+                    startX += cellWidths[colIndex - 1].width
+                }
+
+                if (colIndex < colCount) {
+                    // Mark cells as occupied based on rowSpan and colSpan
+                    for (r in rowIndex until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                            grid[r][c] = true
+                        }
+                    }
+
+                    // Calculate width for this cell based on colSpan
+                    var cellWidth = 0f
+                    for (c in colIndex until minOf(colIndex + cell.colSpan, colCount)) {
+                        cellWidth += cellWidths[c].width
+                    }
+
+                    // Determine cell color
+                    var cellColor = rowBackgroundColor
+                    var fontColor = "#374151"
+                    if (!cell.display.isDefault) {
+                        cellColor = cell.display.fill.color
+                        fontColor = determineTextColor(cellColor)
+                    }
+
+                    // Calculate cell height based on rowSpan
+                    var cellHeight = rowHeights[rowIndex]
+                    for (r in rowIndex + 1 until minOf(rowIndex + cell.rowSpan, rowCount)) {
+                        cellHeight += rowHeights[r] + ROW_PADDING
+                    }
+
+                    // Generate text lines based on wrap setting
+                    val lines = if (cell.wrap) {
+                        cell.toLines(cellWidth - 4)
+                    } else {
+                        mutableListOf(cell.data)
+                    }
+
+                    val fontStyle = cell.display.parseFontStyle()
+                    val textSpans = cell.toTextSpans(
+                        lines, 
+                        (startX + 2.0).toFloat(), 
+                        (currentY + 4.0).toFloat(), 
+                        style = "font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: ${fontStyle.size}px; fill: $fontColor; letter-spacing: 0.2px;"
+                    )
+
+                    sb.append("<g class=\"rowShade table-cell\" aria-label=\"Row ${rowIndex+1} column ${colIndex+1}\">")
+                    sb.append("""<rect x="$startX" y="${currentY-2}" fill="$cellColor" width="$cellWidth" height="$cellHeight" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/>""")
+                    sb.append(textSpans)
+                    sb.append("</g>")
+
+                    // Move to next column position
+                    startX += cellWidth
+                    colIndex += cell.colSpan
+                }
             }
 
             sb.append("</g></g>")
-            currentY += (row.cells.maxOfOrNull { it.height() } ?: 0.0f) + ROW_PADDING
-            i++
+            currentY += rowHeights[rowIndex] + ROW_PADDING
         }
 
         return sb.toString()
@@ -294,7 +560,10 @@ class Row(val cells: MutableList<Cell> = mutableListOf(), val display: DisplayCo
 @Serializable
 class Cell(
     val data: String = "",
-    val display: DisplayConfig = DisplayConfig()
+    val display: DisplayConfig = DisplayConfig(),
+    val colSpan: Int = 1,
+    val rowSpan: Int = 1,
+    val wrap: Boolean = true
 ) {
     private var lineSize: Float = 0.0f
 
@@ -411,13 +680,20 @@ class DisplayConfig(
 @Serializable
 class ParsedFont(val name: String, val size: Float)
 @Serializable
-class TableConfig(val cellWidths: MutableList<Float> = mutableListOf(), val scale: Float = 1.0f)
+class TableConfig(
+    val cellWidths: MutableList<Float> = mutableListOf(), 
+    val scale: Float = 1.0f,
+    val alternateRowColors: Boolean = true,
+    val evenRowColor: String = "#f9fafb",
+    val oddRowColor: String = "#f3f4f6",
+    val modernStyle: Boolean = true
+)
 
 @Serializable
 class CellWidth(val index: Int, val width: Float)
 
 fun main() {
-    val table = Table(display = TableConfig(mutableListOf(0.25f,0.25f,0.25f,0.25f)))
+    val table = Table(display = TableConfig(mutableListOf(0.25f,0.25f,0.25f,0.25f), modernStyle = true))
 
     // Create header row and assign it to thead
     val headerCells = listOf(
@@ -476,9 +752,11 @@ fun main() {
     )
     table.addRow(Row(cells5.toMutableList()))
 
-    println(table.toSvg())
+    val f = File("gen/table.svg")
+    f.writeBytes(table.toSvg().toByteArray())
 
-    /*val prettyJson = Json { // this returns the JsonBuilder
+    /*val prettyJson = Json { // this returns
+    the JsonBuilder
         prettyPrint = true
     }
     val json = prettyJson.encodeToString(table)
