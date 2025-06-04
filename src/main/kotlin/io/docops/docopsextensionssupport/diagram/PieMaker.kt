@@ -31,7 +31,7 @@ class PieMaker {
         sb.append("</defs>")
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
-            sb.append("""<g transform="translate($x,0)" class="pie-container">""")
+            sb.append("""<g transform="translate($x,5)" class="pie-container">""")
             sb.append(makePieSvg(pie, pies.pieDisplay, index))
             sb.append(makeLabel(pie, pies.pieDisplay, index))
             sb.append("</g>")
@@ -57,7 +57,7 @@ class PieMaker {
             backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="#ffffff" filter="url(#dropShadow)"/>"""
         }
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="${height+10}" viewBox="0 0 $width ${height+10}" >
             $backgroundColor
             """
     }

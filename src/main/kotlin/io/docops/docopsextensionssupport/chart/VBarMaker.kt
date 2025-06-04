@@ -79,7 +79,10 @@ class VBarMaker {
                     <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
                     <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
                 </rect>
-                <text x="${barX + barWidth/2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">${series.label}</text>
+                <!-- Create wrapped label text -->
+                <text x="${barX + barWidth/2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
+                    ${createWrappedLabel(series.label, barWidth)}
+                </text>
                 <text x="${barX + barWidth/2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
             """.trimIndent())
         }
@@ -95,16 +98,18 @@ class VBarMaker {
     }
 
     private fun getColorForIndex(index: Int, position: Int): String {
-        // Return colors that match the bar.svg gradient pairs
-        return when (index % 6) {
-            0 -> if (position == 0) "#4361ee" else "#3a0ca3" // Blue to dark blue
-            1 -> if (position == 0) "#4cc9f0" else "#4361ee" // Light blue to blue
-            2 -> if (position == 0) "#f72585" else "#b5179e" // Pink to purple
-            3 -> if (position == 0) "#7209b7" else "#560bad" // Purple to dark purple
-            4 -> if (position == 0) "#f77f00" else "#d62828" // Orange to red
-            5 -> if (position == 0) "#2a9d8f" else "#264653" // Teal to dark teal
-            else -> if (position == 0) "#4361ee" else "#3a0ca3" // Default
-        }
+        // Define color palettes exactly matching bar.svg gradients
+        val modernColors = listOf(
+            Triple("#4361ee", "#3a0ca3", "#4361ee"), // Bar 1: Blue to Purple
+            Triple("#4cc9f0", "#4361ee", "#4cc9f0"), // Bar 2: Light Blue to Blue
+            Triple("#f72585", "#b5179e", "#f72585"), // Bar 3: Pink to Purple
+            Triple("#7209b7", "#560bad", "#7209b7"), // Bar 4: Purple to Dark Purple
+            Triple("#f77f00", "#d62828", "#f77f00"), // Bar 5: Orange to Red
+            Triple("#2a9d8f", "#264653", "#2a9d8f")  // Bar 6: Teal to Dark Blue
+        )
+
+        val colorSet = modernColors[index % modernColors.size]
+        return if (position == 0) colorSet.first else colorSet.second
     }
 
     private fun addGrid(bar: Bar): String {
@@ -201,6 +206,59 @@ class VBarMaker {
         // We're now adding the x-axis label directly in the addBars method
         // This method is kept for potential future enhancements like adding a color legend
         return ""
+    }
+
+    /**
+     * Creates wrapped label text using tspan elements for SVG
+     * @param label The original label text
+     * @param maxWidth The maximum width to determine when to wrap
+     * @return SVG tspan elements with wrapped text
+     */
+    private fun createWrappedLabel(label: String?, maxWidth: Int): String {
+        // Handle null or empty labels
+        if (label.isNullOrEmpty()) {
+            return ""
+        }
+
+        // If label is short enough, return it as is
+        if (label.length <= 10) {
+            return label.escapeXml()
+        }
+
+        // Split label into words
+        val words = label.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        // Create lines with approximately equal length, targeting 2 lines for most labels
+        val targetLineLength = (label.length / 2) + 2
+
+        for (word in words) {
+            if (currentLine.length + word.length > targetLineLength && currentLine.isNotEmpty()) {
+                lines.add(currentLine.toString().trim())
+                currentLine = StringBuilder(word)
+            } else {
+                if (currentLine.isNotEmpty()) {
+                    currentLine.append(" ")
+                }
+                currentLine.append(word)
+            }
+        }
+
+        // Add the last line if not empty
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine.toString().trim())
+        }
+
+        // Create tspan elements
+        val result = StringBuilder()
+        lines.forEachIndexed { index, line ->
+            val dy = if (index == 0) "0" else "1.2em"
+            // Don't specify x attribute to inherit from parent text element
+            result.append("<tspan dy=\"$dy\" text-anchor=\"middle\">${line.escapeXml()}</tspan>")
+        }
+
+        return result.toString()
     }
 
     private fun addDefs(bar: Bar): String {

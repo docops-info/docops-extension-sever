@@ -1,19 +1,17 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.Point
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
-import java.io.File
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
 import kotlin.math.PI
 import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 open class PieSliceMaker {
 
