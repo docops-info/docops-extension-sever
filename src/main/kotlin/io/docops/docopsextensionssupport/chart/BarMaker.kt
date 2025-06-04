@@ -47,7 +47,7 @@ class BarMaker {
         val backgroundColor = if (bar.display.useDark) "#1f2937" else "#f8f9fa"
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg id="id_${bar.display.id}" width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg">
+            <svg id="id_${bar.display.id}" width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: BarChart'>
                 <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """.trimIndent()
     }
@@ -64,14 +64,14 @@ class BarMaker {
 
         // Add y-axis label
         sb.append("""
-            <text x="15" y="250" text-anchor="middle" transform="rotate(-90, 15, 250)" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.yLabel}</text>
+            <text x="25" y="250" text-anchor="middle" transform="rotate(-90, 25, 250)" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.yLabel}</text>
         """.trimIndent())
 
         while(i < maxV ) {
             val y = 500 - bar.scaleUp(i)
             sb.append("""
-                <line x1="24" x2="30" y1="$y" y2="$y" stroke="$textColor" stroke-width="2"/>
-                <text x="20" y="${y+4}" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 12px; font-weight: 500;">${bar.valueFmt(i)}</text>
+                <line x1="74" x2="80" y1="$y" y2="$y" stroke="$textColor" stroke-width="2"/>
+                <text x="70" y="${y+4}" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 12px; font-weight: 500;">${bar.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -122,13 +122,13 @@ class BarMaker {
     }
 
     private fun addGroupStart(bar: Bar) : String {
-        var x = 0
+        var x = 10  // Increased from 0 to provide more space
         if(bar.calcWidth() > 512)
         {
-            x = 56
+            x = 66  // Increased from 56 to provide more space
         }
          return """<g transform="translate($x,0)">
-            <g transform="translate(${bar.innerX()},500) rotate(-90) ">
+            <g transform="translate(20,500) rotate(-90) ">
         """.trimMargin()
     }
     private fun endGroup(bar: Bar) : String {
@@ -137,8 +137,6 @@ class BarMaker {
         return """
             </g>
         </g>
-        <text x="250" y="-10" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill:$fontColor;text-anchor: middle;" transform="rotate(90)">${bar.yLabel}</text>
-        <text x="$center" y="520" style="font-family: Arial,Helvetica, sans-serif; font-size:10px; fill: $fontColor;text-anchor: middle;">${bar.xLabel}</text>
         """
     }
     private fun addTitle(bar: Bar): String {
@@ -173,7 +171,7 @@ class BarMaker {
 
         // Add horizontal grid lines (reduced number for cleaner look)
         for (i in 1..4) {
-            elements.append("""<line x1="30" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>""")
+            elements.append("""<line x1="90" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>""")
         }
 
         // Add vertical grid lines for each data point
@@ -185,8 +183,8 @@ class BarMaker {
 
         // Add main axes with better styling
         elements.append("""
-            <line x1="30" x2="${bar.calcWidth()}" y1="500" y2="500" stroke="$axisColor" stroke-width="2"/>
-            <line x1="30" x2="30" y1="12" y2="501" stroke="$axisColor" stroke-width="2"/>
+            <line x1="90" x2="${bar.calcWidth()}" y1="500" y2="500" stroke="$axisColor" stroke-width="2"/>
+            <line x1="90" x2="90" y1="12" y2="501" stroke="$axisColor" stroke-width="2"/>
         """.trimIndent())
 
         return elements.toString()

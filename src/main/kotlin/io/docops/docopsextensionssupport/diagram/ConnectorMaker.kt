@@ -145,7 +145,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         return sb.toString()
     }
     private fun head(height: Float, width: Float, scale: Float = 1.0f, id: String)  = """
-        <svg xmlns="http://www.w3.org/2000/svg" width="${(width*scale) / DISPLAY_RATIO_16_9}" height="${(height*scale) /DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${(width*scale) / DISPLAY_RATIO_16_9}" height="${(height*scale) /DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id" preserveAspectRatio="xMidYMid meet">
     """.trimIndent()
 
     private fun tail() = "</svg>"

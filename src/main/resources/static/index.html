@@ -1142,6 +1142,26 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
             });
         }
     });
+
+    // Button Type Dropdown Handling
+    function updateButtonType(buttonType) {
+        const contentTextarea = document.getElementById('content');
+        if (contentTextarea) {
+            try {
+                // Parse the current JSON content
+                const jsonContent = JSON.parse(contentTextarea.value);
+
+                // Update the buttonType property
+                jsonContent.buttonType = buttonType;
+
+                // Update the textarea with the modified JSON
+                contentTextarea.value = JSON.stringify(jsonContent, null, 2);
+            } catch (error) {
+                console.error('Error updating button type:', error);
+                alert('Error updating button type. Please check the JSON format.');
+            }
+        }
+    }
 </script>
 </body>
 </html>

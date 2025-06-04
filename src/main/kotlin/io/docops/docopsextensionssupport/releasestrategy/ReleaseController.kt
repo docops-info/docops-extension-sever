@@ -111,6 +111,19 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                         <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Release Strategy JSON:</label>
                         <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultReleaseJson}</textarea>
                     </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Style:</label>
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="styleToggle" value="TLS" class="form-radio h-4 w-4 text-blue-600" checked onclick="updateStyle('TLS')">
+                                <span class="ml-2 text-sm text-gray-700">TLS</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="styleToggle" value="R" class="form-radio h-4 w-4 text-blue-600" onclick="updateStyle('R')">
+                                <span class="ml-2 text-sm text-gray-700">R</span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="flex justify-between">
                         <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
                             Update Strategy
@@ -127,6 +140,14 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                             Click "Update Strategy" to see the preview
                         </div>
                     </div>
+                    <script>
+                        function updateStyle(style) {
+                            const textarea = document.getElementById('content');
+                            let jsonContent = JSON.parse(textarea.value);
+                            jsonContent.style = style;
+                            textarea.value = JSON.stringify(jsonContent, null, 2);
+                        }
+                    </script>
                 </form>
             </div>
         """.trimIndent()

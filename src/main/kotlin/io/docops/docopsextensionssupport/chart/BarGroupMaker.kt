@@ -226,7 +226,7 @@ class BarGroupMaker {
         val svgHeight = 650 // Increased from 600 to 650 to accommodate legend
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg">
+            <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
         """.trimIndent()
     }
 

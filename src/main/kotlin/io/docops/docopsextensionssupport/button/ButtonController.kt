@@ -83,6 +83,20 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
                         <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Buttons JSON:</label>
                         <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultButtonsJson}</textarea>
                     </div>
+                    <div>
+                        <label for="buttonType" class="block text-sm font-medium text-gray-700 mb-1">Button Type:</label>
+                        <select id="buttonType" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" onchange="updateButtonType(this.value)">
+                            <option value="HEX">HEX</option>
+                            <option value="REGULAR">REGULAR</option>
+                            <option value="SLIM">SLIM</option>
+                            <option value="ROUND">ROUND</option>
+                            <option value="CIRCLE">CIRCLE</option>
+                            <option value="RECTANGLE">RECTANGLE</option>
+                            <option value="LARGE">LARGE</option>
+                            <option value="PILL">PILL</option>
+                            <option value="OVAL">OVAL</option>
+                        </select>
+                    </div>
                     <div class="flex justify-between">
                         <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center">
                             Update Buttons
@@ -99,6 +113,23 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
                             Click "Update Buttons" to see the preview
                         </div>
                     </div>
+                    <script>
+                        // Initialize the dropdown with the current button type
+                        document.addEventListener('DOMContentLoaded', function() {
+                            try {
+                                const contentTextarea = document.getElementById('content');
+                                const buttonTypeSelect = document.getElementById('buttonType');
+                                if (contentTextarea && buttonTypeSelect) {
+                                    const jsonContent = JSON.parse(contentTextarea.value);
+                                    if (jsonContent.buttonType) {
+                                        buttonTypeSelect.value = jsonContent.buttonType;
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error initializing button type dropdown:', error);
+                            }
+                        });
+                    </script>
                 </form>
             </div>
         """.trimIndent()
