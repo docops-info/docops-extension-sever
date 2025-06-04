@@ -28,11 +28,7 @@ class BarChartImproved {
         
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
-        return if (bar.display.vBar) {
-            barMaker.makeVerticalBar(bar)
-        } else {
-            barMaker.makeHorizontalBar(bar)
-        }
+        return barMaker.makeVerticalBar(bar)
     }
 
     fun makeGroupBarSvg(payload: String): String {
