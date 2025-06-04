@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import java.util.UUID
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -32,6 +34,7 @@ class PieChartImproved {
         val enableHoverEffects = config["hover"]?.toBoolean() ?: true
         val isDonut = config["donut"]?.toBoolean() ?: true
 
+        val darkMode = config["darkMode"]?.toBoolean() ?: false
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
 
@@ -45,7 +48,7 @@ class PieChartImproved {
             showPercentages,
             customColors ?: defaultColors,
             enableHoverEffects,
-            isDonut
+            isDonut, darkMode
         )
         return svg.trimIndent()
     }
@@ -124,7 +127,8 @@ class PieChartImproved {
         showPercentages: Boolean,
         colors: List<String>,
         enableHoverEffects: Boolean,
-        isDonut: Boolean
+        isDonut: Boolean,
+        darkMode: Boolean = false
     ): String {
         if (segments.isEmpty()) {
             return "<svg width='$width' height='$height'><text x='${width/2}' y='${height/2}' text-anchor='middle'>No data</text></svg>"
@@ -137,7 +141,22 @@ class PieChartImproved {
         val centerY = if (showLegend) height * 0.5 else height * 0.55
 
         val svgBuilder = StringBuilder()
-        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg'>")
+
+        // Define colors based on dark mode
+        val backgroundColor = if (darkMode) "#1e293b" else "transparent"
+        val textColor = if (darkMode) "#f8fafc" else "#000000"
+        val segmentStrokeColor = if (darkMode) "#1e293b" else "white"
+        val donutHoleColor = if (darkMode) "#1e293b" else "white"
+        val donutBorderColor = if (darkMode) "#334155" else "#f0f0f0"
+        val legendBorderColor = if (darkMode) "#475569" else "#ccc"
+
+        val id = UUID.randomUUID().toString()
+        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\">")
+
+        // Add background if in dark mode
+        if (darkMode) {
+            svgBuilder.append("<rect width='$width' height='$height' fill='$backgroundColor' />")
+        }
 
         // Add CSS styles for hover effects if enabled
         if (enableHoverEffects) {
@@ -166,7 +185,7 @@ class PieChartImproved {
         }
 
         // Add title
-        svgBuilder.append("<text x='${width/2}' y='30' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold'>$title</text>")
+        svgBuilder.append("<text x='${width/2}' y='30' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' fill='$textColor'>$title</text>")
 
         // Draw pie segments
         var startAngle = 0.0
@@ -200,7 +219,7 @@ class PieChartImproved {
             } else {
                 svgBuilder.append("<path d='M$centerX,$centerY L$x1,$y1 A$pieRadius,$pieRadius 0 $largeArcFlag,1 $x2,$y2 Z' ")
             }
-            svgBuilder.append("fill='$color' stroke='white' stroke-width='1'>")
+            svgBuilder.append("fill='$color' stroke='$segmentStrokeColor' stroke-width='1'>")
             // Add title element for tooltip
             svgBuilder.append("<title>${segment.label}: ${segment.value} (${String.format("%.1f", percentage * 100)}%)</title>")
             svgBuilder.append("</path>")
@@ -226,13 +245,13 @@ class PieChartImproved {
 
         // Add donut hole if donut chart is enabled
         if (isDonut) {
-            // Create a white circle in the center to make the "hole"
+            // Create a circle in the center to make the "hole"
             // The hole size is typically 50-60% of the pie radius
             val holeRadius = pieRadius * 0.55
-            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='white' />")
+            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='$donutHoleColor' />")
 
             // Optional: Add a subtle border to the hole
-            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='none' stroke='#f0f0f0' stroke-width='1' />")
+            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='none' stroke='$donutBorderColor' stroke-width='1' />")
         }
 
         // Add legend if enabled
@@ -257,13 +276,13 @@ class PieChartImproved {
 
                 // Legend color box with tooltip
                 svgBuilder.append("<rect x='${legendX - 15}' y='${yPos - 10}' width='15' height='15' ")
-                svgBuilder.append("fill='${segmentWithAngles.color}' stroke='#ccc'>")
+                svgBuilder.append("fill='${segmentWithAngles.color}' stroke='$legendBorderColor'>")
                 svgBuilder.append("<title>${segment.label}: ${segment.value} (${String.format("%.1f", segmentWithAngles.percentage * 100)}%)</title>")
                 svgBuilder.append("</rect>")
 
                 // Legend text
                 val percentText = "%.1f%%".format(segmentWithAngles.percentage * 100)
-                svgBuilder.append("<text x='$legendX' y='$yPos' font-family='Arial' font-size='12' text-anchor='start'>")
+                svgBuilder.append("<text x='$legendX' y='$yPos' font-family='Arial' font-size='12' text-anchor='start' fill='$textColor'>")
                 svgBuilder.append("${segment.label} ($percentText)</text>")
 
                 svgBuilder.append("</g>")

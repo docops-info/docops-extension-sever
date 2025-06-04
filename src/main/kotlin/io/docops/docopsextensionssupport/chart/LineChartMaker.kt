@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 
+@Deprecated("Use LineChartImproved instead")
 /**
  * The `LineChartMaker` class is responsible for creating a line chart in SVG format. This class handles the
  * generation of the SVG elements required to display a line chart with various customization options.

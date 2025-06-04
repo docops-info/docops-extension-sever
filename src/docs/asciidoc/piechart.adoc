@@ -29,6 +29,7 @@ Each type can be displayed in various styles, including:
 * Custom colors for slices
 * Interactive hover effects
 * Percentage labels
+* Dark mode support for better visibility in dark-themed documents
 
 === Pie Chart Components
 
@@ -89,6 +90,7 @@ The following configuration parameters are available:
 * `hover` (optional): Whether to enable hover effects (default: true)
 * `donut` (optional): Whether to display as a donut chart (default: false)
 * `colors` (optional): A comma-separated list of custom colors for the chart
+* `darkMode` (optional): Whether to use dark mode styling (default: false)
 
 === Data Format
 
@@ -313,6 +315,41 @@ Product D | 15
 Product E | 10
 ----
 
+=== Dark Mode Example
+
+You can enable dark mode for better visibility in dark-themed documents:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+title=Market Share Distribution
+width=600
+height=400
+darkMode=true
+---
+Product A | 35
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 5
+----
+....
+
+[docops,pieslice]
+----
+title=Market Share Distribution
+width=600
+height=400
+darkMode=true
+---
+Product A | 35
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 5
+----
+
 == Interactive Features
 
 Pie charts in the DocOps extension include several interactive features:
@@ -327,4 +364,4 @@ These interactive features enhance the user experience and make it easier to int
 
 The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the simple pipe-separated format and configuration parameters, you can create customized charts that match your document's style and purpose.
 
-The extension supports both regular pie charts and donut charts, with various display options including custom colors and interactive features.
+The extension supports both regular pie charts and donut charts, with various display options including custom colors, interactive features, and dark mode. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.

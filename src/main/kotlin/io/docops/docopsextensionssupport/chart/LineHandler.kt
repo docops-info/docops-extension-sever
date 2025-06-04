@@ -14,9 +14,11 @@ class LineHandler {
 
     fun handleSVG(payload: String, isPdf: Boolean) : ResponseEntity<ByteArray>{
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val maker = LineChartMaker(isPdf)
+        val lineChartImproved= LineChartImproved()
+        val svg = lineChartImproved.makeLineSvg(data)
+        /*val maker = LineChartMaker(isPdf)
         val chart = Json.decodeFromString<LineChart>(data)
-        val svg = maker.makeLineChart(chart)
+        val svg = maker.makeLineChart(chart)*/
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

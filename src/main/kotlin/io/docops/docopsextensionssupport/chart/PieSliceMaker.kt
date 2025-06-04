@@ -13,6 +13,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
+@Deprecated("Use PieChartImproved instead")
 open class PieSliceMaker {
 
     protected var width: Double = 600.0

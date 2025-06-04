@@ -24,9 +24,9 @@ The extension supports various styles of line charts, including:
 
 * Multiple data series on a single chart
 * Smooth curved lines or straight line segments
-* Optional area fill under the lines
 * Interactive tooltips on hover
 * Customizable colors and backgrounds
+* Dark mode support for better visibility in dark-themed documents
 
 === Line Chart Components
 
@@ -42,499 +42,104 @@ A line chart includes:
 
 == AsciiDoctor Syntax for Line Charts
 
-To include line charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+To include line charts in your AsciiDoctor document, you use a special macro syntax. The DocOps extension now supports a simpler tabular format for line charts:
 
 [source,asciidoc]
 ....
 [docops,line]
 ----
-{
-  "title": "Chart Title",
-  "points": [
-    {
-      "label": "Series 1",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 40.0
-        },
-        {
-          "label": "Feb",
-          "y": 70.0
-        }
-        // More data points...
-      ]
-    },
-    {
-      "label": "Series 2",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 22.0
-        },
-        {
-          "label": "Feb",
-          "y": 33.0
-        }
-        // More data points...
-      ]
-    }
-    // More series...
-  ],
-  "display": {
-    "backgroundColor": "#F5F5F5",
-    "smoothLines": true,
-    "showArea": true
-  }
-}
+title=Chart Title
+width=900
+darkMode=false
+---
+Series 1 | Jan | 40
+Series 1 | Feb | 70
+Series 1 | Mar | 90
+Series 2 | Jan | 22
+Series 2 | Feb | 33
+Series 2 | Mar | 44
 ----
 ....
 
-The macro processes the JSON configuration and generates an SVG representation of the line chart that is embedded in your document.
+The macro processes this tabular data and generates an SVG representation of the line chart that is embedded in your document.
 
-=== Line Chart Properties
+=== Line Chart Configuration
 
-==== Main Properties
+The configuration parameters are specified at the beginning of the content, followed by a separator line (`---`), and then the actual chart data.
 
-* `title` (required): The main heading of the chart
-* `points` (required): An array of data series
-* `display` (optional): Settings for customizing the appearance
+==== Configuration Parameters
 
-==== Series Properties
+* `title` (optional): The main heading of the chart (default: "Line Chart")
+* `width` (optional): The width of the chart in pixels (default: 500)
+* `height` (optional): The height of the chart in pixels (default: 500)
+* `legend` (optional): Whether to display a legend (default: true)
+* `hover` (optional): Whether to enable hover effects (default: true)
+* `smooth` (optional): Whether to display smooth curved lines (true) or straight line segments (false) (default: true)
+* `points` (optional): Whether to display data points (default: true)
+* `grid` (optional): Whether to display grid lines (default: true)
+* `xAxisLabel` (optional): Label for the x-axis
+* `yAxisLabel` (optional): Label for the y-axis
+* `darkMode` (optional): Whether to use dark mode styling (default: false)
+* `colors` (optional): A comma-separated list of custom colors for the chart
 
-Each data series in the `points` array has the following properties:
+==== Data Format
 
-* `label` (required): The name of the data series (shown in the legend)
-* `points` (required): An array of data points for this series
+The data for the line chart is specified in a simple tabular format:
 
-==== Data Point Properties
+```
+Series Name | X-Label | Y-Value
+```
 
-Each data point in a series has the following properties:
-
-* `label` (required): The x-axis label for this data point (typically a time period)
-* `y` (required): The numerical y-value for this data point
-
-==== Display Properties
-
-The `display` object can have the following properties:
-
-* `backgroundColor` (optional): The background color for the chart (default: "#F5F5F5")
-* `smoothLines` (optional): Whether to display smooth curved lines (true) or straight line segments (false) (default: false)
-* `showArea` (optional): Whether to show a filled area under the lines (default: true)
+Where:
+* `Series Name` is the name of the data series (shown in the legend)
+* `X-Label` is the label for the x-axis point
+* `Y-Value` is the numerical value for the data point
 
 == Examples
 
 === Basic Line Chart Example
 
-Here's a simple example of a line chart with multiple data series:
+Here's a simple example of a line chart with multiple data series using the new tabular format:
 
 [source,asciidoc]
 ....
 [docops,line]
 ----
-{
-  "title": "Monthly Performance Metrics",
-  "points": [
-    {
-      "label": "Sales",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 40.0
-        },
-        {
-          "label": "Feb",
-          "y": 70.0
-        },
-        {
-          "label": "Mar",
-          "y": 90.0
-        },
-        {
-          "label": "Apr",
-          "y": 70.0
-        },
-        {
-          "label": "May",
-          "y": 40.0
-        },
-        {
-          "label": "Jun",
-          "y": 30.0
-        }
-      ]
-    },
-    {
-      "label": "Marketing",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 22.0
-        },
-        {
-          "label": "Feb",
-          "y": 33.0
-        },
-        {
-          "label": "Mar",
-          "y": 44.0
-        },
-        {
-          "label": "Apr",
-          "y": 55.0
-        },
-        {
-          "label": "May",
-          "y": 66.0
-        },
-        {
-          "label": "Jun",
-          "y": 77.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F5F5F5"
-  }
-}
+title=Monthly Performance Metrics
+width=800
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
 ----
 ....
 
 [docops,line]
 ----
-{
-  "title": "Monthly Performance Metrics",
-  "points": [
-    {
-      "label": "Sales",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 40.0
-        },
-        {
-          "label": "Feb",
-          "y": 70.0
-        },
-        {
-          "label": "Mar",
-          "y": 90.0
-        },
-        {
-          "label": "Apr",
-          "y": 70.0
-        },
-        {
-          "label": "May",
-          "y": 40.0
-        },
-        {
-          "label": "Jun",
-          "y": 30.0
-        }
-      ]
-    },
-    {
-      "label": "Marketing",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 22.0
-        },
-        {
-          "label": "Feb",
-          "y": 33.0
-        },
-        {
-          "label": "Mar",
-          "y": 44.0
-        },
-        {
-          "label": "Apr",
-          "y": 55.0
-        },
-        {
-          "label": "May",
-          "y": 66.0
-        },
-        {
-          "label": "Jun",
-          "y": 77.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F5F5F5"
-  }
-}
-----
-
-=== Smooth Line Chart Example
-
-You can create smooth curved lines by setting the `smoothLines` property to `true`:
-
-[source,asciidoc]
-....
-[docops,line]
-----
-{
-  "title": "Product Performance Trends",
-  "points": [
-    {
-      "label": "Affordable Segment",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 173
-        },
-        {
-          "label": "Feb",
-          "y": 153
-        },
-        {
-          "label": "Mar",
-          "y": 195
-        },
-        {
-          "label": "Apr",
-          "y": 147
-        },
-        {
-          "label": "May",
-          "y": 120
-        },
-        {
-          "label": "Jun",
-          "y": 144
-        }
-      ]
-    },
-    {
-      "label": "Luxury Segment",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 189.0
-        },
-        {
-          "label": "Feb",
-          "y": 189.0
-        },
-        {
-          "label": "Mar",
-          "y": 105.0
-        },
-        {
-          "label": "Apr",
-          "y": 112.0
-        },
-        {
-          "label": "May",
-          "y": 173.0
-        },
-        {
-          "label": "Jun",
-          "y": 109.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F9F9F9",
-    "smoothLines": true
-  }
-}
-----
-....
-
-[docops,line]
-----
-{
-  "title": "Product Performance Trends",
-  "points": [
-    {
-      "label": "Affordable Segment",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 173
-        },
-        {
-          "label": "Feb",
-          "y": 153
-        },
-        {
-          "label": "Mar",
-          "y": 195
-        },
-        {
-          "label": "Apr",
-          "y": 147
-        },
-        {
-          "label": "May",
-          "y": 120
-        },
-        {
-          "label": "Jun",
-          "y": 144
-        }
-      ]
-    },
-    {
-      "label": "Luxury Segment",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 189.0
-        },
-        {
-          "label": "Feb",
-          "y": 189.0
-        },
-        {
-          "label": "Mar",
-          "y": 105.0
-        },
-        {
-          "label": "Apr",
-          "y": 112.0
-        },
-        {
-          "label": "May",
-          "y": 173.0
-        },
-        {
-          "label": "Jun",
-          "y": 109.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F9F9F9",
-    "smoothLines": true
-  }
-}
-----
-
-=== Line Chart Without Area Fill
-
-You can disable the area fill under the lines by setting the `showArea` property to `false`:
-
-[source,asciidoc]
-....
-[docops,line]
-----
-{
-  "title": "Quarterly Revenue Comparison",
-  "points": [
-    {
-      "label": "2023",
-      "points": [
-        {
-          "label": "Q1",
-          "y": 120.0
-        },
-        {
-          "label": "Q2",
-          "y": 150.0
-        },
-        {
-          "label": "Q3",
-          "y": 180.0
-        },
-        {
-          "label": "Q4",
-          "y": 210.0
-        }
-      ]
-    },
-    {
-      "label": "2024",
-      "points": [
-        {
-          "label": "Q1",
-          "y": 140.0
-        },
-        {
-          "label": "Q2",
-          "y": 170.0
-        },
-        {
-          "label": "Q3",
-          "y": 200.0
-        },
-        {
-          "label": "Q4",
-          "y": 230.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#FFFFFF",
-    "showArea": false
-  }
-}
-----
-....
-
-[docops,line]
-----
-{
-  "title": "Quarterly Revenue Comparison",
-  "points": [
-    {
-      "label": "2023",
-      "points": [
-        {
-          "label": "Q1",
-          "y": 120.0
-        },
-        {
-          "label": "Q2",
-          "y": 150.0
-        },
-        {
-          "label": "Q3",
-          "y": 180.0
-        },
-        {
-          "label": "Q4",
-          "y": 210.0
-        }
-      ]
-    },
-    {
-      "label": "2024",
-      "points": [
-        {
-          "label": "Q1",
-          "y": 140.0
-        },
-        {
-          "label": "Q2",
-          "y": 170.0
-        },
-        {
-          "label": "Q3",
-          "y": 200.0
-        },
-        {
-          "label": "Q4",
-          "y": 230.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#FFFFFF",
-    "showArea": false
-  }
-}
+title=Monthly Performance Metrics
+width=800
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
 ----
 
 === Multi-Series Line Chart Example
@@ -545,350 +150,252 @@ Here's an example of a line chart with three data series:
 ....
 [docops,line]
 ----
-{
-  "title": "Department Performance Metrics",
-  "points": [
-    {
-      "label": "Sales",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 40.0
-        },
-        {
-          "label": "Feb",
-          "y": 70.0
-        },
-        {
-          "label": "Mar",
-          "y": 90.0
-        },
-        {
-          "label": "Apr",
-          "y": 70.0
-        },
-        {
-          "label": "May",
-          "y": 40.0
-        },
-        {
-          "label": "Jun",
-          "y": 30.0
-        },
-        {
-          "label": "Jul",
-          "y": 60.0
-        },
-        {
-          "label": "Aug",
-          "y": 90.0
-        },
-        {
-          "label": "Sept",
-          "y": 70.0
-        }
-      ]
-    },
-    {
-      "label": "Marketing",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 22.0
-        },
-        {
-          "label": "Feb",
-          "y": 33.0
-        },
-        {
-          "label": "Mar",
-          "y": 44.0
-        },
-        {
-          "label": "Apr",
-          "y": 55.0
-        },
-        {
-          "label": "May",
-          "y": 66.0
-        },
-        {
-          "label": "Jun",
-          "y": 77.0
-        },
-        {
-          "label": "Jul",
-          "y": 88.0
-        },
-        {
-          "label": "Aug",
-          "y": 109.0
-        },
-        {
-          "label": "Sept",
-          "y": 110.0
-        }
-      ]
-    },
-    {
-      "label": "Development",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 56.0
-        },
-        {
-          "label": "Feb",
-          "y": 65.0
-        },
-        {
-          "label": "Mar",
-          "y": 78.0
-        },
-        {
-          "label": "Apr",
-          "y": 72.0
-        },
-        {
-          "label": "May",
-          "y": 56.0
-        },
-        {
-          "label": "Jun",
-          "y": 94.0
-        },
-        {
-          "label": "Jul",
-          "y": 86.0
-        },
-        {
-          "label": "Aug",
-          "y": 73.0
-        },
-        {
-          "label": "Sept",
-          "y": 70.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F5F5F5",
-    "smoothLines": true,
-    "showArea": true
-  }
-}
+title=Department Performance Metrics
+width=900
+smooth=true
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70
 ----
 ....
 
 [docops,line]
 ----
-{
-  "title": "Department Performance Metrics",
-  "points": [
-    {
-      "label": "Sales",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 40.0
-        },
-        {
-          "label": "Feb",
-          "y": 70.0
-        },
-        {
-          "label": "Mar",
-          "y": 90.0
-        },
-        {
-          "label": "Apr",
-          "y": 70.0
-        },
-        {
-          "label": "May",
-          "y": 40.0
-        },
-        {
-          "label": "Jun",
-          "y": 30.0
-        },
-        {
-          "label": "Jul",
-          "y": 60.0
-        },
-        {
-          "label": "Aug",
-          "y": 90.0
-        },
-        {
-          "label": "Sept",
-          "y": 70.0
-        }
-      ]
-    },
-    {
-      "label": "Marketing",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 22.0
-        },
-        {
-          "label": "Feb",
-          "y": 33.0
-        },
-        {
-          "label": "Mar",
-          "y": 44.0
-        },
-        {
-          "label": "Apr",
-          "y": 55.0
-        },
-        {
-          "label": "May",
-          "y": 66.0
-        },
-        {
-          "label": "Jun",
-          "y": 77.0
-        },
-        {
-          "label": "Jul",
-          "y": 88.0
-        },
-        {
-          "label": "Aug",
-          "y": 109.0
-        },
-        {
-          "label": "Sept",
-          "y": 110.0
-        }
-      ]
-    },
-    {
-      "label": "Development",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 56.0
-        },
-        {
-          "label": "Feb",
-          "y": 65.0
-        },
-        {
-          "label": "Mar",
-          "y": 78.0
-        },
-        {
-          "label": "Apr",
-          "y": 72.0
-        },
-        {
-          "label": "May",
-          "y": 56.0
-        },
-        {
-          "label": "Jun",
-          "y": 94.0
-        },
-        {
-          "label": "Jul",
-          "y": 86.0
-        },
-        {
-          "label": "Aug",
-          "y": 73.0
-        },
-        {
-          "label": "Sept",
-          "y": 70.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#F5F5F5",
-    "smoothLines": true,
-    "showArea": true
-  }
-}
+title=Department Performance Metrics
+width=900
+smooth=true
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70
 ----
 
-=== Custom Background Color Example
+=== Product Segment Performance Example
 
-You can customize the background color of your line chart:
+This example shows performance data for different product segments over a year:
+
+[source,asciidoc]
+....
+[docops,line, role=left, name=seg]
+----
+title=Product Segment Performance
+width=900
+darkMode=false
+---
+Affordable Segment | Jan | 173
+Affordable Segment | Feb | 153
+Affordable Segment | Mar | 195
+Affordable Segment | Apr | 147
+Affordable Segment | May | 120
+Affordable Segment | Jun | 144
+Affordable Segment | Jul | 148
+Affordable Segment | Aug | 109
+Affordable Segment | Sept | 174
+Affordable Segment | Oct | 130
+Affordable Segment | Nov | 172
+Affordable Segment | Dec | 132
+Luxury Segment | Jan | 189
+Luxury Segment | Feb | 189
+Luxury Segment | Mar | 105
+Luxury Segment | Apr | 112
+Luxury Segment | May | 173
+Luxury Segment | Jun | 109
+Luxury Segment | Jul | 151
+Luxury Segment | Aug | 197
+Luxury Segment | Sept | 174
+Luxury Segment | Oct | 145
+Luxury Segment | Nov | 177
+Luxury Segment | Dec | 167
+Super Luxury Segment | Jan | 185
+Super Luxury Segment | Feb | 185
+Super Luxury Segment | Mar | 126
+Super Luxury Segment | Apr | 134
+Super Luxury Segment | May | 196
+Super Luxury Segment | Jun | 153
+Super Luxury Segment | Jul | 112
+Super Luxury Segment | Aug | 133
+Super Luxury Segment | Sept | 200
+Super Luxury Segment | Oct | 145
+Super Luxury Segment | Nov | 167
+Super Luxury Segment | Dec | 110
+----
+....
+
+[docops,line, role=left, name=seg]
+----
+title=Product Segment Performance
+width=900
+darkMode=false
+---
+Affordable Segment | Jan | 173
+Affordable Segment | Feb | 153
+Affordable Segment | Mar | 195
+Affordable Segment | Apr | 147
+Affordable Segment | May | 120
+Affordable Segment | Jun | 144
+Affordable Segment | Jul | 148
+Affordable Segment | Aug | 109
+Affordable Segment | Sept | 174
+Affordable Segment | Oct | 130
+Affordable Segment | Nov | 172
+Affordable Segment | Dec | 132
+Luxury Segment | Jan | 189
+Luxury Segment | Feb | 189
+Luxury Segment | Mar | 105
+Luxury Segment | Apr | 112
+Luxury Segment | May | 173
+Luxury Segment | Jun | 109
+Luxury Segment | Jul | 151
+Luxury Segment | Aug | 197
+Luxury Segment | Sept | 174
+Luxury Segment | Oct | 145
+Luxury Segment | Nov | 177
+Luxury Segment | Dec | 167
+Super Luxury Segment | Jan | 185
+Super Luxury Segment | Feb | 185
+Super Luxury Segment | Mar | 126
+Super Luxury Segment | Apr | 134
+Super Luxury Segment | May | 196
+Super Luxury Segment | Jun | 153
+Super Luxury Segment | Jul | 112
+Super Luxury Segment | Aug | 133
+Super Luxury Segment | Sept | 200
+Super Luxury Segment | Oct | 145
+Super Luxury Segment | Nov | 167
+Super Luxury Segment | Dec | 110
+----
+
+=== Dark Mode Line Chart Example
+
+You can enable dark mode for better visibility in dark-themed documents:
 
 [source,asciidoc]
 ....
 [docops,line]
 ----
-{
-  "title": "Monthly Sales Performance",
-  "points": [
-    {
-      "label": "2023",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 120.0
-        },
-        {
-          "label": "Feb",
-          "y": 150.0
-        },
-        {
-          "label": "Mar",
-          "y": 180.0
-        },
-        {
-          "label": "Apr",
-          "y": 210.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#EDFFFA"
-  }
-}
+title=Series Comparison
+width=800
+darkMode=true
+---
+Series A | 1 | 10
+Series A | 2 | 15
+Series A | 3 | 13
+Series A | 4 | 17
+Series A | 5 | 20
+Series B | 1 | 5
+Series B | 2 | 7
+Series B | 3 | 10
+Series B | 4 | 12
+Series B | 5 | 15
 ----
 ....
 
 [docops,line]
 ----
-{
-  "title": "Monthly Sales Performance",
-  "points": [
-    {
-      "label": "2023",
-      "points": [
-        {
-          "label": "Jan",
-          "y": 120.0
-        },
-        {
-          "label": "Feb",
-          "y": 150.0
-        },
-        {
-          "label": "Mar",
-          "y": 180.0
-        },
-        {
-          "label": "Apr",
-          "y": 210.0
-        }
-      ]
-    }
-  ],
-  "display": {
-    "backgroundColor": "#EDFFFA"
-  }
-}
+title=Series Comparison
+width=800
+darkMode=true
+---
+Series A | 1 | 10
+Series A | 2 | 15
+Series A | 3 | 13
+Series A | 4 | 17
+Series A | 5 | 20
+Series B | 1 | 5
+Series B | 2 | 7
+Series B | 3 | 10
+Series B | 4 | 12
+Series B | 5 | 15
+----
+
+=== Custom Colors Example
+
+You can specify custom colors for your line chart:
+
+[source,asciidoc]
+....
+[docops,line]
+----
+title=Quarterly Performance
+width=800
+colors=#6a0dad,#0da6a0,#daad0d
+---
+Q1 2023 | Jan | 120
+Q1 2023 | Feb | 150
+Q1 2023 | Mar | 180
+Q2 2023 | Apr | 140
+Q2 2023 | May | 170
+Q2 2023 | Jun | 200
+Q3 2023 | Jul | 160
+Q3 2023 | Aug | 190
+Q3 2023 | Sep | 220
+----
+....
+
+[docops,line]
+----
+title=Quarterly Performance
+width=800
+colors=#6a0dad,#0da6a0,#daad0d
+---
+Q1 2023 | Jan | 120
+Q1 2023 | Feb | 150
+Q1 2023 | Mar | 180
+Q2 2023 | Apr | 140
+Q2 2023 | May | 170
+Q2 2023 | Jun | 200
+Q3 2023 | Jul | 160
+Q3 2023 | Aug | 190
+Q3 2023 | Sep | 220
 ----
 == Interactive Features
 
@@ -902,6 +409,6 @@ These interactive features enhance the user experience and make it easier to int
 
 == Conclusion
 
-The DocOps Line Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing line charts. By using the JSON configuration format, you can create customized charts that match your document's style and purpose.
+The DocOps Line Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing line charts. The new tabular data format makes it easier to create and maintain line charts compared to the previous JSON format.
 
-The extension supports multiple data series, smooth or straight lines, area fills, and interactive features, giving you flexibility in how you present your time-series data.
+The extension supports multiple data series, smooth or straight lines, interactive features, and dark mode, giving you flexibility in how you present your time-series data. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.

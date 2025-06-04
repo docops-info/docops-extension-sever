@@ -28,53 +28,38 @@ class LineController {
     @ResponseBody
     fun getEditMode(): ResponseEntity<String> {
         val defaultLineChartJson = """
-        {
-          "title": "Point on graph",
-          "points": [
-            {
-              "label": "Sales",
-              "points": [
-                {"label": "Jan","y": 40.0},
-                {"label": "Feb","y": 70.0},
-                {"label": "Mar","y": 90.0},
-                {"label": "Apr","y": 70.0},
-                {"label": "May","y": 40.0},
-                {"label": "Jun","y": 30.0},
-                {"label": "Jul","y": 60.0},
-                {"label": "Aug","y": 90.0},
-                {"label": "Sept","y": 70.0}
-              ]
-            },
-            {
-              "label": "Marketing",
-              "points": [
-                {"label": "Jan","y": 22.0},
-                {"label": "Feb","y": 33.0},
-                {"label": "Mar","y": 44.0},
-                {"label": "Apr","y": 55.0},
-                {"label": "May","y": 66.0},
-                {"label": "Jun","y": 77.0},
-                {"label": "Jul","y": 88.0},
-                {"label": "Aug","y": 109.0},
-                {"label": "Sept","y": 110.0}
-              ]
-            },
-            {
-              "label": "Divest",
-              "points": [
-                {"label": "Jan","y": 56.0},
-                {"label": "Feb","y": 65.0},
-                {"label": "Mar","y": 78.0},
-                {"label": "Apr","y": 72.0},
-                {"label": "May","y": 56.0},
-                {"label": "Jun","y": 94.0},
-                {"label": "Jul","y": 86.0},
-                {"label": "Aug","y": 73.0},
-                {"label": "Sept","y": 70.0}
-              ]
-            }
-          ], "display": {"smoothLines": true}
-        }
+        title=Department Performance
+        width=800
+        smooth=true
+        darkMode=false
+        ---
+        Sales | Jan | 40
+        Sales | Feb | 70
+        Sales | Mar | 90
+        Sales | Apr | 70
+        Sales | May | 40
+        Sales | Jun | 30
+        Sales | Jul | 60
+        Sales | Aug | 90
+        Sales | Sept | 70
+        Marketing | Jan | 22
+        Marketing | Feb | 33
+        Marketing | Mar | 44
+        Marketing | Apr | 55
+        Marketing | May | 66
+        Marketing | Jun | 77
+        Marketing | Jul | 88
+        Marketing | Aug | 109
+        Marketing | Sept | 110
+        Development | Jan | 56
+        Development | Feb | 65
+        Development | Mar | 78
+        Development | Apr | 72
+        Development | May | 56
+        Development | Jun | 94
+        Development | Jul | 86
+        Development | Aug | 73
+        Development | Sept | 70
         """.trimIndent()
 
         val editModeHtml = """
@@ -132,9 +117,8 @@ class LineController {
     fun makeLineChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
-            val maker = LineChartMaker(false)
-            val chart = Json.decodeFromString<LineChart>(contents)
-            val svg = maker.makeLineChart(chart)
+            val lineChartImproved = LineChartImproved()
+            val svg = lineChartImproved.makeLineSvg(contents)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -143,7 +127,7 @@ class LineController {
                 $svg
                 </div>
                 <script>
-                var adrSource = `[diag,scale="0.7",role="center"]\n----\n${contents}\n----`;
+                var adrSource = `[docops,line]\n----\n${contents}\n----`;
                 </script>
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
