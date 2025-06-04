@@ -53,12 +53,12 @@
             Lightweight, flexible, and powerful.
         </p>
         <div class="flex justify-center flex-wrap gap-2">
+            <a href="#adr-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
             <a href="#bar-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
             <a href="#badges-shields-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
             <a href="#buttons-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔘 Buttons</a>
             <a href="#connectors-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔄 Connectors</a>
             <a href="#placemat-planner-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📋 Placemat & Planner</a>
-            <a href="#adr-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
             <a href="#release-strategy-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🚀 Release Strategy</a>
             <a href="#scorecard-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
             <a href="#timeline-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
@@ -130,6 +130,17 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
         <h3 class="text-3xl font-bold text-center mb-12">Core Capabilities</h3>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                    <span class="text-2xl">📝</span>
+                </div>
+                <h4 class="text-xl font-semibold mb-3"><a href="#adr-example" class="hover:text-indigo-600">ADR</a></h4>
+                <p class="text-gray-600 mb-4">Architecture Decision Records with visual representation and tracking.</p>
+                <div class="text-sm text-indigo-600 font-medium">
+                    • <a href="#adr-example" class="hover:underline">Decision Documentation</a> • <a href="#adr-example" class="hover:underline">Architecture Records</a> • <a href="#adr-example" class="hover:underline">Visual Status</a>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">📊</span>
                 </div>
@@ -185,17 +196,6 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
             </div>
 
             <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">📝</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#adr-example" class="hover:text-indigo-600">ADR</a></h4>
-                <p class="text-gray-600 mb-4">Architecture Decision Records with visual representation and tracking.</p>
-                <div class="text-sm text-indigo-600 font-medium">
-                    • <a href="#adr-example" class="hover:underline">Decision Documentation</a> • <a href="#adr-example" class="hover:underline">Architecture Records</a> • <a href="#adr-example" class="hover:underline">Visual Status</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">🚀</span>
                 </div>
@@ -247,6 +247,70 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h3 class="text-3xl font-bold text-center mb-12">Usage Examples</h3>
 
+
+        <div class="mb-16" id="adr-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-indigo-500 rounded mr-3"></span>
+                        Architecture Decision Records (ADR)
+                    </h4>
+                    <p class="text-gray-600 mt-1">Document and visualize architecture decisions with context, rationale, and status. (See <a href="docs/adr.html" class="text-blue-600 hover:underline">adr.html</a> for more examples)</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants:
+Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryAdrButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/adr/edit-mode"
+                                        hx-target="#adrContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
+                            <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
+                            </object>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="mb-16" id="bar-chart-example">
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -550,70 +614,6 @@ AsciiDoctor|Documentation||#acacac|#4CC9FE|&lt;asciidoctor&gt;|#fcfcfc
                         <div id="connectorContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/connector.svg" type="image/svg+xml" height="100%" width="100%">
                             <img src="images/connector.svg" alt="Flow Connectors" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="adr-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-indigo-500 rounded mr-3"></span>
-                        Architecture Decision Records (ADR)
-                    </h4>
-                    <p class="text-gray-600 mt-1">Document and visualize architecture decisions with context, rationale, and status. (See <a href="docs/adr.html" class="text-blue-600 hover:underline">adr.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,adr,useDark=false,role=center]
-----
-title: Use Elasticsearch for Search Functionality
-status: Accepted
-date: 2024-05-15
-context:
-- Our application needs robust search capabilities across multiple data types
-- We need to support full-text search with relevance ranking
-- The search functionality must scale with growing data volumes
-- We need to support faceted search and filtering
-decision:
-- We will use Elasticsearch as our search engine
-- We will integrate it with our existing PostgreSQL database
-- We will implement a synchronization mechanism to keep data in sync
-consequences:
-- Improved search performance and capabilities
-- Additional infrastructure to maintain
-- Need for expertise in Elasticsearch configuration and optimization
-- Potential complexity in keeping data synchronized
-participants:
-Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryAdrButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/adr/edit-mode"
-                                        hx-target="#adrContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
-                            <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
                             </object>
                         </div>
                     </div>
