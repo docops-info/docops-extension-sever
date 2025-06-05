@@ -1,0 +1,337 @@
+<svg id='treeChart_6fac4991-e4aa-45e8-a932-c78349ba7c04' width='800' height='600'
+     xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 1220 620'
+     xmlns:xlink='http://www.w3.org/1999/xlink'
+   >
+
+    <rect width='1220' height='620' fill='#1e293b'/>
+    <text x='610' y='30' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' fill='#f8fafc'>
+        Project Dependencies
+    </text>
+    <style>
+        .node {
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .node:hover {
+            filter: brightness(1.1);
+        }
+
+        .node-circle {
+            stroke: #334155;
+            stroke-width: 2px;
+        }
+
+        .node-label {
+            font-family: Arial;
+            font-size: 11px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+        }
+
+        .link {
+            fill: none;
+            stroke: #64748b;
+            stroke-width: 1.5px;
+        }
+
+        .collapse-icon {
+            fill: #f8fafc;
+            font-family: Arial;
+            font-size: 10px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+<![CDATA[
+        (function () {
+            // Text wrapping function
+            function wrapText(text, maxCharsPerLine = 12) {
+                if (text.length <= maxCharsPerLine) {
+                    return [text];
+                }
+
+                const words = text.split(' ');
+                const lines = [];
+                let currentLine = '';
+
+                for (const word of words) {
+                    if (currentLine.length + word.length + (currentLine.length > 0 ? 1 : 0) > maxCharsPerLine) {
+                        if (currentLine.length > 0) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            if (word.length > maxCharsPerLine) {
+                                lines.push(word.substring(0, maxCharsPerLine));
+                                currentLine = word.substring(maxCharsPerLine);
+                            } else {
+                                currentLine = word;
+                            }
+                        }
+                    } else {
+                        if (currentLine.length > 0) {
+                            currentLine += ' ';
+                        }
+                        currentLine += word;
+                    }
+                }
+
+                if (currentLine.length > 0) {
+                    lines.push(currentLine);
+                }
+
+                return lines;
+            }
+
+            // Tree data
+            const treeData = {
+                "name": "Main Project",
+                "color": "#3498db",
+                "children": [{
+                    "name": "Core Library",
+                    "color": "#2ecc71",
+                    "children": [{
+                        "name": "Utilities",
+                        "color": "#e74c3c",
+                        "children": null
+                    }, {
+                        "name": "Data Models",
+                        "color": "#f39c12",
+                        "children": null
+                    }]
+                }, {
+                    "name": "UI Components",
+                    "color": "#e74c3c",
+                    "children": [{
+                        "name": "Buttons",
+                        "color": "#f39c12",
+                        "children": null
+                    }, {
+                        "name": "Forms",
+                        "color": "#9b59b6",
+                        "children": null
+                    }, {
+                        "name": "Tables",
+                        "color": "#1abc9c",
+                        "children": null
+                    }]
+                }, {
+                    "name": "API Client",
+                    "color": "#f39c12",
+                    "children": [{
+                        "name": "Authentication",
+                        "color": "#9b59b6",
+                        "children": null
+                    }, {
+                        "name": "Endpoints",
+                        "color": "#1abc9c",
+                        "children": null
+                    }, {
+                        "name": "Data Fetching",
+                        "color": "#34495e",
+                        "children": null
+                    }]
+                }]
+            };
+
+            // Constants for layout
+            const margin = {top: 60, right: 40, bottom: 30, left: 40};
+            const innerWidth = 1220 - margin.left - margin.right;
+            const innerHeight = 620 - margin.top - margin.bottom;
+            const nodeRadius = 20; // Increased for wrapped text
+            const orientation = "vertical";
+            const initiallyExpanded = true;
+            const collapsible = true;
+            const treeChartId = "#treeChart_6fac4991-e4aa-45e8-a932-c78349ba7c04";
+
+            // Create the tree layout
+            function createTreeLayout() {
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                g.setAttribute("transform", "translate(" + margin.left + "," + margin.top + ")");
+                document.querySelector(treeChartId).appendChild(g);
+
+                // Process the data to create a tree structure
+                const root = treeData;
+                root.x0 = innerWidth / 2;
+                root.y0 = 0;
+                root.parent = null;
+
+                // Initialize children visibility based on initiallyExpanded
+                function initialize(node) {
+                    if (node.children) {
+                        node._children = node.children;
+                        if (!initiallyExpanded) {
+                            node.children = null;
+                        }
+                        node._children.forEach(child => {
+                            child.parent = node;
+                            initialize(child);
+                        });
+                    }
+                }
+
+                if (collapsible) {
+                    initialize(root);
+                }
+
+                update(root);
+
+                function update(source) {
+                    const nodes = [];
+                    const links = [];
+                    const levelNodes = {};
+
+                    function buildLevelMap(node, level) {
+                        if (!levelNodes[level]) {
+                            levelNodes[level] = [];
+                        }
+                        levelNodes[level].push(node);
+
+                        if (node.children) {
+                            node.children.forEach(child => {
+                                buildLevelMap(child, level + 1);
+                            });
+                        }
+                    }
+
+                    buildLevelMap(root, 0);
+
+                    function calculateNodePositions(node, level, indexInLevel = 0) {
+                        nodes.push(node);
+                        const currentLevelNodes = levelNodes[level];
+                        const totalNodesInLevel = currentLevelNodes.length;
+
+                        if (orientation === "vertical") {
+                            node.y = level * 120; // Increased spacing
+                            if (totalNodesInLevel === 1) {
+                                node.x = innerWidth / 2;
+                            } else {
+                                const spacing = innerWidth / (totalNodesInLevel + 1);
+                                node.x = spacing * (indexInLevel + 1);
+                            }
+                        } else {
+                            node.x = level * 140; // Increased spacing
+                            if (totalNodesInLevel === 1) {
+                                node.y = innerHeight / 2;
+                            } else {
+                                const spacing = innerHeight / (totalNodesInLevel + 1);
+                                node.y = spacing * (indexInLevel + 1);
+                            }
+                        }
+
+                        if (node.children) {
+                            node.children.forEach((child, i) => {
+                                child.parent = node;
+                                const childLevel = level + 1;
+                                const childLevelNodes = levelNodes[childLevel];
+                                const childIndexInLevel = childLevelNodes.indexOf(child);
+                                calculateNodePositions(child, childLevel, childIndexInLevel);
+                            });
+                        }
+                    }
+
+                    calculateNodePositions(root, 0, 0);
+
+                    nodes.forEach(function (d) {
+                        if (d.parent) {
+                            links.push({
+                                source: d.parent,
+                                target: d
+                            });
+                        }
+                    });
+
+                    g.innerHTML = "";
+
+                    // Add links
+                    links.forEach(function (d) {
+                        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        path.setAttribute("class", "link");
+
+                        let pathData;
+                        if (orientation === "vertical") {
+                            const midY = (d.source.y + d.target.y) / 2;
+                            pathData = "M" + d.source.x + "," + (d.source.y + nodeRadius) +
+                                    " C" + d.source.x + "," + midY +
+                                    " " + d.target.x + "," + midY +
+                                    " " + d.target.x + "," + (d.target.y - nodeRadius);
+                        } else {
+                            const midX = (d.source.x + d.target.x) / 2;
+                            pathData = "M" + (d.source.x + nodeRadius) + "," + d.source.y +
+                                    " C" + midX + "," + d.source.y +
+                                    " " + midX + "," + d.target.y +
+                                    " " + (d.target.x - nodeRadius) + "," + d.target.y;
+                        }
+
+                        path.setAttribute("d", pathData);
+                        g.appendChild(path);
+                    });
+
+                    // Add nodes with wrapped text
+                    nodes.forEach(function (d) {
+                        const nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        nodeGroup.setAttribute("class", "node");
+                        nodeGroup.setAttribute("transform", "translate(" + d.x + "," + d.y + ")");
+
+                        if (collapsible) {
+                            nodeGroup.onclick = function () {
+                                if (d.children) {
+                                    d._children = d.children;
+                                    d.children = null;
+                                } else if (d._children) {
+                                    d.children = d._children;
+                                    d.children.forEach(child => {
+                                        child.parent = d;
+                                    });
+                                }
+                                update(d);
+                            };
+                        }
+
+                        // Node circle
+                        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                        circle.setAttribute("class", "node-circle");
+                        circle.setAttribute("r", nodeRadius);
+                        circle.setAttribute("fill", d.color);
+                        nodeGroup.appendChild(circle);
+
+                        // Wrapped text
+                        const wrappedLines = wrapText(d.name);
+                        const lineHeight = 12;
+                        const startY = wrappedLines.length === 1 ? 0 : -(wrappedLines.length - 1) * lineHeight / 2;
+
+                        wrappedLines.forEach((line, index) => {
+                            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                            text.setAttribute("class", "node-label");
+                            text.setAttribute("fill", "#f8fafc");
+                            text.setAttribute("y", startY + (index * lineHeight));
+                            text.textContent = line;
+                            nodeGroup.appendChild(text);
+                        });
+
+                        // Add collapse/expand icon if needed
+                        if (collapsible && (d.children || d._children)) {
+                            const icon = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                            icon.setAttribute("class", "collapse-icon");
+                            icon.setAttribute("x", 0);
+                            icon.setAttribute("y", nodeRadius + 15);
+                            icon.textContent = d.children ? "-" : "+";
+                            nodeGroup.appendChild(icon);
+                        }
+
+                        g.appendChild(nodeGroup);
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", createTreeLayout);
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                setTimeout(createTreeLayout, 1);
+            }
+        })();
+        ]]>
+            </script>
+</svg>

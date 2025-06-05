@@ -50,17 +50,16 @@ class TreeMaker {
         val svg = generateTreeChartSvg(
             treeData,
             title,
-            adjustedWidth,
-            adjustedHeight,
+            width.toInt(),
+            height.toInt(),
             customColors ?: defaultColors,
             enableHoverEffects,
             darkMode,
             collapsible,
             initiallyExpanded,
             orientation,
-            isPdf
+            isPdf, adjustedWidth, adjustedHeight
         )
-        println(svg)
         return svg
     }
 
@@ -245,7 +244,7 @@ class TreeMaker {
         collapsible: Boolean = true,
         initiallyExpanded: Boolean = true,
         orientation: String = "vertical",
-        isPdf: Boolean = false
+        isPdf: Boolean = false, adjustedWidth: Int, adjustedHeight: Int
     ): String {
         // Define colors based on dark mode
         val backgroundColor = if (darkMode) "#1e293b" else "transparent"
@@ -257,7 +256,7 @@ class TreeMaker {
 
         val id = UUID.randomUUID().toString()
         // Start SVG
-        svgBuilder.append("<svg id='treeChart_$id' width='$width' height='$height' xmlns='http://www.w3.org/2000/svg'>")
+        svgBuilder.append("<svg id='treeChart_$id' width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 $adjustedWidth $adjustedHeight'>")
 
         // Add background if in dark mode
         if (darkMode) {
