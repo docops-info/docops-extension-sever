@@ -1,88 +1,244 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="575.9999999928" height="93.37499999883282" viewBox="0 0 1024.0 166.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-            <linearGradient id="c39603d7-d3ad-46be-88b2-acbd511dbae8" x1='0%' y1='0%' x2='0%' y2='100%'>
-    <stop offset="0%" style="stop-color:#ffffff" stop-opacity="1.0"/>
-    <stop offset="25%" style="stop-color:#f6f6f8" stop-opacity="0.975"/>
-    <stop offset="50%" style="stop-color:#f3f4f6" stop-opacity="0.95"/>
-    <stop offset="75%" style="stop-color:#cecfd0" stop-opacity="0.925"/>
-    <stop offset="100%" style="stop-color:#c2c3c4" stop-opacity="0.9"/>
-</linearGradient><linearGradient id="e9c1b768-fbab-403f-ac9c-bffa4f4445e0" x1='0%' y1='0%' x2='0%' y2='100%'>
-    <stop offset="0%" style="stop-color:#ffffff" stop-opacity="1.0"/>
-    <stop offset="25%" style="stop-color:#f6f6f8" stop-opacity="0.975"/>
-    <stop offset="50%" style="stop-color:#f3f4f6" stop-opacity="0.95"/>
-    <stop offset="75%" style="stop-color:#cecfd0" stop-opacity="0.925"/>
-    <stop offset="100%" style="stop-color:#c2c3c4" stop-opacity="0.9"/>
-</linearGradient><linearGradient id="5cdc5f0d-9df0-4e57-b635-51303c42b425" x1='0%' y1='0%' x2='0%' y2='100%'>
-    <stop offset="0%" style="stop-color:#ffffff" stop-opacity="1.0"/>
-    <stop offset="25%" style="stop-color:#f6f6f8" stop-opacity="0.975"/>
-    <stop offset="50%" style="stop-color:#f3f4f6" stop-opacity="0.95"/>
-    <stop offset="75%" style="stop-color:#cecfd0" stop-opacity="0.925"/>
-    <stop offset="100%" style="stop-color:#c2c3c4" stop-opacity="0.9"/>
-</linearGradient><linearGradient id="317987f3-cf9d-46b7-bf9d-730b3f142fe6" x1='0%' y1='0%' x2='0%' y2='100%'>
-    <stop offset="0%" style="stop-color:#ffffff" stop-opacity="1.0"/>
-    <stop offset="25%" style="stop-color:#f6f6f8" stop-opacity="0.975"/>
-    <stop offset="50%" style="stop-color:#f3f4f6" stop-opacity="0.95"/>
-    <stop offset="75%" style="stop-color:#cecfd0" stop-opacity="0.925"/>
-    <stop offset="100%" style="stop-color:#c2c3c4" stop-opacity="0.9"/>
-</linearGradient><linearGradient id="7a0eda10-944a-45dd-86e0-42fbb47e1caf" x1='0%' y1='0%' x2='0%' y2='100%'>
-    <stop offset="0%" style="stop-color:#ffffff" stop-opacity="1.0"/>
-    <stop offset="25%" style="stop-color:#f6f6f8" stop-opacity="0.975"/>
-    <stop offset="50%" style="stop-color:#f3f4f6" stop-opacity="0.95"/>
-    <stop offset="75%" style="stop-color:#cecfd0" stop-opacity="0.925"/>
-    <stop offset="100%" style="stop-color:#c2c3c4" stop-opacity="0.9"/>
-</linearGradient>
-            <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop class="stop1" offset="0%" stop-color="#2563eb" stop-opacity="1"/>
-                <stop class="stop2" offset="100%" stop-color="#9333ea" stop-opacity="1"/>
-            </linearGradient>
+<svg width='800' height='600' xmlns='http://www.w3.org/2000/svg'>
+    <text x='400' y='30' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' fill='#000000'>Tree
+        Chart
+    </text>
+    <style>
+        .node {
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
 
-            <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop class="stop3" offset="0%" stop-color="#fafafa" stop-opacity="1"/>
-                <stop class="stop2" offset="50%" stop-color="#f9fafb" stop-opacity="1"/>
-                <stop class="stop1" offset="100%" stop-color="#f3f4f6" stop-opacity="1"/>
-            </linearGradient>
+        .node:hover {
+            filter: brightness(1.1);
+        }
 
-            <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
-                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.1"/>
-            </filter>
+        .node-circle {
+            stroke: #e2e8f0;
+            stroke-width: 2px;
+        }
 
-            <style>
-            .rowShade {
-                pointer-events: bounding-box;
+        .node-label {
+            font-family: Arial;
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+        }
+
+        .link {
+            fill: none;
+            stroke: #94a3b8;
+            stroke-width: 1.5px;
+        }
+
+        .collapse-icon {
+            fill: #000000;
+            font-family: Arial;
+            font-size: 10px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        <![CDATA[
+        // Tree data
+        const treeData = {
+            "name": "Root Node",
+            "color": "#3498db",
+            "children": [{
+                "name": "Child Node 1",
+                "color": "#2ecc71",
+                "children": [{
+                    "name": "Grandchild 1.1",
+                    "color": "#e74c3c",
+                    "children": null
+                }, {
+                    "name": "Grandchild 1.2",
+                    "color": "#f39c12",
+                    "children": null
+                }]
+            }, {
+                "name": "Child Node 2",
+                "color": "#e74c3c",
+                "children": [{
+                    "name": "Grandchild 2.1",
+                    "color": "#f39c12",
+                    "children": null
+                }]
+            }, {
+                "name": "Child Node 3",
+                "color": "#f39c12",
+                "children": null
+            }]
+        };
+
+        // Constants for layout
+        const margin = {top: 60, right: 20, bottom: 30, left: 20};
+        const innerWidth = 800 - margin.left - margin.right;
+        const innerHeight = 600 - margin.top - margin.bottom;
+        const nodeRadius = 15;
+        const orientation = "vertical";
+        const initiallyExpanded = true;
+        const collapsible = true;
+
+        // Create the tree layout
+        function createTreeLayout() {
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            g.setAttribute("transform", "translate('" + margin.left +"','"+margin.top+"')");
+            document.querySelector("svg").appendChild(g);
+
+            // Process the data to create a tree structure
+            const root = treeData;
+            root.x0 = innerWidth / 2;
+            root.y0 = 0;
+
+            // Initialize children visibility based on initiallyExpanded
+            function initialize(node) {
+                if (node.children) {
+                    node._children = node.children;
+                    if (!initiallyExpanded) {
+                        node.children = null;
+                    }
+                    node._children.forEach(initialize);
+                }
             }
 
-            .rowShade:hover {
-                filter: grayscale(100%) sepia(100%);
+            if (collapsible) {
+                initialize(root);
             }
 
-            
-            .table-header {
-                font-weight: 600;
-                letter-spacing: 0.5px;
-                text-transform: uppercase;
-                font-size: 12px;
-            }
+            update(root);
 
-            .table-cell {
-                transition: all 0.2s ease-in-out;
-            }
+            // Function to update the tree visualization
+            function update(source) {
+                // Compute the new tree layout
+                const nodes = [];
+                const links = [];
 
-            .table-cell:hover {
-                filter: brightness(0.95);
-            }
+                // Normalize for fixed-depth
+                let levelWidth = [1];
+                let childCount = function (level, node) {
+                    if (node.children && node.children.length > 0) {
+                        if (levelWidth.length <= level + 1) levelWidth.push(0);
+                        levelWidth[level + 1] += node.children.length;
+                        node.children.forEach(function (d) {
+                            childCount(level + 1, d);
+                        });
+                    }
+                };
+                childCount(0, root);
 
-            .table-row:nth-child(even) {
-                background-color: #f9fafb;
-            }
+                // Calculate node positions
+                function calculateNodePositions(node, level, index, totalAtLevel) {
+                    nodes.push(node);
 
-            .table-row:nth-child(odd) {
-                background-color: #f3f4f6;
-            }
+                    if (orientation === "vertical") {
+                        // Vertical layout (top to bottom)
+                        node.y = level * 100;
+                        node.x = innerWidth * (index + 0.5) / totalAtLevel;
+                    } else {
+                        // Horizontal layout (left to right)
+                        node.x = level * 100;
+                        node.y = innerHeight * (index + 0.5) / totalAtLevel;
+                    }
 
-            .table-row:hover {
-                background-color: #e5e7eb;
+                    if (node.children) {
+                        const childrenCount = node.children.length;
+                        node.children.forEach((child, i) => {
+                            calculateNodePositions(child, level + 1, index * childrenCount + i, totalAtLevel * childrenCount);
+                        });
+                    }
+                }
+
+                calculateNodePositions(root, 0, 0, 1);
+
+                // Create links between nodes
+                nodes.forEach(function (d) {
+                    if (d.parent) {
+                        links.push({
+                            source: d.parent,
+                            target: d
+                        });
+                    }
+                });
+
+                // Remove all existing elements
+                g.innerHTML = "";
+
+                // Add links
+                links.forEach(function (d) {
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    path.setAttribute("class", "link");
+
+                    let pathData;
+                    if (orientation === "vertical") {
+                        // Vertical layout (top to bottom)
+                        pathData = `M\$\{d.source.x\},\$\{d.source.y\} C\$\{d.source.x\},\$\{(d.source.y + d.target.y) / 2\}
+        \$\{d.target.x\},\$\{(d.source.y + d.target.y) / 2\} \$\{d.target.x\},\$\{d.target.y\}`;
+                    } else {
+                        // Horizontal layout (left to right)
+                        pathData = `M\$\{d.source.x\},\$\{d.source.y\} C\$\{(d.source.x + d.target.x) / 2\},\$\{d.source.y\}
+        \$\{(d.source.x + d.target.x) / 2\},\$\{d.target.y\} \$\{d.target.x\},\$\{d.target.y\}`;
+                    }
+
+                    path.setAttribute("d", pathData);
+                    g.appendChild(path);
+                });
+
+                // Add nodes
+                nodes.forEach(function (d) {
+                    const nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    nodeGroup.setAttribute("class", "node");
+
+                    nodeGroup.setAttribute("transform", "translate('"+d.x+"','"+d.y+"')");
+
+                    if (collapsible) {
+                        nodeGroup.onclick = function () {
+                            if (d.children) {
+                                d._children = d.children;
+                                d.children = null;
+                            } else if (d._children) {
+                                d.children = d._children;
+                            }
+                            update(d);
+                        };
+                    }
+
+                    // Node circle
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("class", "node-circle");
+                    circle.setAttribute("r", nodeRadius);
+                    circle.setAttribute("fill", d.color);
+                    nodeGroup.appendChild(circle);
+
+                    // Node label
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("class", "node-label");
+                    text.setAttribute("fill", "#000000");
+                    text.textContent = d.name;
+                    nodeGroup.appendChild(text);
+
+                    // Add collapse/expand icon if the node has children
+                    if (collapsible && (d.children || d._children)) {
+                        const icon = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        icon.setAttribute("class", "collapse-icon");
+                        icon.setAttribute("x", 0);
+                        icon.setAttribute("y", nodeRadius + 15);
+                        icon.textContent = d.children ? "-" : "+";
+                        nodeGroup.appendChild(icon);
+                    }
+
+                    g.appendChild(nodeGroup);
+                });
             }
-            
-            </style>
-            </defs><g transform="scale(1.0)"><g aria-label="Header" class="table-header"><g aria-label="Header Row"><rect x="1" y="6.0" width="100%" height="24.0" fill="#f3f4f6" rx="4" ry="4"/><g class="rowShade table-cell" aria-label="header column 1 cellcolor #f3f4f6 #000000"><rect x="1.0" y="6.0" fill="#f3f4f6" width="256.0" height="24.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="3.0" y="8.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: 12.0px; fill: #000000; letter-spacing: 0.5px;"><tspan x="3.0" dy="8">Header 1</tspan></text></g><g class="rowShade table-cell" aria-label="header column 2 cellcolor #f3f4f6 #000000"><rect x="257.0" y="6.0" fill="#f3f4f6" width="256.0" height="24.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="259.0" y="8.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: 12.0px; fill: #000000; letter-spacing: 0.5px;"><tspan x="259.0" dy="8">Header 2</tspan></text></g><g class="rowShade table-cell" aria-label="header column 3 cellcolor #f3f4f6 #000000"><rect x="513.0" y="6.0" fill="#f3f4f6" width="256.0" height="24.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="515.0" y="8.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: 12.0px; fill: #000000; letter-spacing: 0.5px;"><tspan x="515.0" dy="8">Header 3</tspan></text></g><g class="rowShade table-cell" aria-label="header column 4 cellcolor #f3f4f6 #000000"><rect x="769.0" y="6.0" fill="#f3f4f6" width="256.0" height="24.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="771.0" y="8.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: 600; font-size: 12.0px; fill: #000000; letter-spacing: 0.5px;"><tspan x="771.0" dy="8">Header 4</tspan></text></g></g></g><g><g class="table-row" aria-label="Row 1"><rect x="1" y="22.0" width="100%" height="52.0" fill="#f9fafb" filter="url(#shadowFilter)" rx="4" ry="4"/><g class="rowShade table-cell" aria-label="Row 1 column 1"><rect x="1.0" y="22.0" fill="#f9fafb" width="256.0" height="52.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="3.0" y="28.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="3.0" dy="8">Row 1, Cell 1 with longer text that will wrap to </tspan><tspan x="3.0" dy="12">demonstrate the modern styling of wrapped </tspan><tspan x="3.0" dy="12">text in table cells </tspan></text></g><g class="rowShade table-cell" aria-label="Row 1 column 2"><rect x="257.0" y="22.0" fill="#f9fafb" width="256.0" height="52.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="259.0" y="28.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="259.0" dy="8">Row 1, Cell 2</tspan></text></g><g class="rowShade table-cell" aria-label="Row 1 column 3"><rect x="513.0" y="22.0" fill="#f9fafb" width="256.0" height="52.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="515.0" y="28.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="515.0" dy="8">Row 1, Cell 3</tspan></text></g><g class="rowShade table-cell" aria-label="Row 1 column 4"><rect x="769.0" y="22.0" fill="#f9fafb" width="256.0" height="52.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="771.0" y="28.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="771.0" dy="8">Row 1, Cell 4</tspan></text></g></g></g><g><g class="table-row" aria-label="Row 2"><rect x="1" y="84.0" width="100%" height="38.0" fill="#f3f4f6" filter="url(#shadowFilter)" rx="4" ry="4"/><g class="rowShade table-cell" aria-label="Row 2 column 1"><rect x="1.0" y="84.0" fill="#f3f4f6" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="3.0" y="90.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="3.0" dy="8">Row 2, Cell 1</tspan></text></g><g class="rowShade table-cell" aria-label="Row 2 column 2"><rect x="257.0" y="84.0" fill="#f3f4f6" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="259.0" y="90.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="259.0" dy="8">Row 2, Cell 2</tspan></text></g><g class="rowShade table-cell" aria-label="Row 2 column 3"><rect x="513.0" y="84.0" fill="#f3f4f6" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="515.0" y="90.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="515.0" dy="8">Row 2, Cell 3 with some additional text to </tspan><tspan x="515.0" dy="12">demonstrate wrapping </tspan></text></g><g class="rowShade table-cell" aria-label="Row 2 column 4"><rect x="769.0" y="84.0" fill="#f3f4f6" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="771.0" y="90.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="771.0" dy="8">Row 2, Cell 4</tspan></text></g></g></g><g><g class="table-row" aria-label="Row 3"><rect x="1" y="132.0" width="100%" height="38.0" fill="#f9fafb" filter="url(#shadowFilter)" rx="4" ry="4"/><g class="rowShade table-cell" aria-label="Row 3 column 1"><rect x="1.0" y="132.0" fill="#f9fafb" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="3.0" y="138.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="3.0" dy="8">Row 3, Cell 1 with <a xlink:href="https://example.com" target="_blank" style="fill: #0000EE; text-decoration: underline;">Example</a> to test link </tspan><tspan x="3.0" dy="12">styling </tspan></text></g><g class="rowShade table-cell" aria-label="Row 3 column 2"><rect x="257.0" y="132.0" fill="#f9fafb" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="259.0" y="138.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="259.0" dy="8">Row 3, Cell 2</tspan></text></g><g class="rowShade table-cell" aria-label="Row 3 column 3"><rect x="513.0" y="132.0" fill="#f9fafb" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="515.0" y="138.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="515.0" dy="8">Row 3, Cell 3</tspan></text></g><g class="rowShade table-cell" aria-label="Row 3 column 4"><rect x="769.0" y="132.0" fill="#f9fafb" width="256.0" height="38.0" stroke="#e5e7eb" stroke-width="1" rx="4" ry="4"/><text x="771.0" y="138.0" style="font-family: 'Segoe UI', Arial, sans-serif; font-weight: normal; font-size: 12.0px; fill: #374151; letter-spacing: 0.2px;"><tspan x="771.0" dy="8">Row 3, Cell 4</tspan></text></g></g></g></g></svg>
+        }
+
+        // Initialize the tree layout when the SVG is loaded
+        document.addEventListener("DOMContentLoaded", createTreeLayout);
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            setTimeout(createTreeLayout, 1);
+        }
+        ]]>
+    </script>
+</svg>

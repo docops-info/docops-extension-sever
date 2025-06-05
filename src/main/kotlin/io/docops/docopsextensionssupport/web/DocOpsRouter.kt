@@ -11,6 +11,7 @@ import io.docops.docopsextensionssupport.chart.PieSliceHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PieHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
+import io.docops.docopsextensionssupport.diagram.TreeChartHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
@@ -216,6 +217,16 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             }
             logger.info{"table handler executed in ${timing.duration.inWholeMilliseconds}ms"}
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("table", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
+        else if("treechart".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = TreeChartHandler()
+                handler.handleSVG(payload=payload, "pdf".equals(backend, ignoreCase = true) )
+            }
+            logger.info{"treechart handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("treechart", timing.duration.inWholeMilliseconds))
 
             return timing.value
         }
