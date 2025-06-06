@@ -1,0 +1,265 @@
+include::_base.adoc[]
+= DocOps WordCloud Extension
+
+== Overview
+
+The DocOps WordCloud Extension allows you to create visually appealing word clouds to highlight key terms and their relative importance. Word clouds are a great way to visualize text data where the size of each word indicates its frequency or importance.
+
+== Features
+
+* Interactive SVG-based word clouds
+* Customizable dimensions, colors, and font sizes
+* Individual color assignment for each word
+* Hover effects for better user interaction
+* Support for both light and dark themes
+* Automatic word placement algorithm to avoid overlaps
+
+== Usage
+
+To create a word cloud, use the `wordcloud` block type in your AsciiDoc document:
+
+[source,asciidoc]
+....
+[docops,wordcloud]
+----
+title= My Word Cloud Title
+width= 600
+height= 300
+minFontSize= 12
+maxFontSize= 60
+---
+Word 1 | 85 | #3498db
+Word 2 | 92 | #9b59b6
+Word 3 | 78 | #2ecc71
+----
+....
+
+[docops,wordcloud]
+----
+title= My Word Cloud Title
+width= 600
+height= 300
+minFontSize= 12
+maxFontSize= 60
+---
+Word 1 | 85 | #3498db
+Word 2 | 92 | #9b59b6
+Word 3 | 78 | #2ecc71
+----
+
+== Configuration Parameters
+
+The word cloud can be customized using the following configuration parameters:
+
+[cols="1,1,3"]
+|===
+|Parameter |Default |Description
+
+|title
+|Word Cloud
+|The title displayed at the top of the word cloud
+
+|width
+|800
+|The width of the word cloud in pixels
+
+|height
+|600
+|The height of the word cloud in pixels
+
+|minFontSize
+|10
+|The minimum font size for words with the lowest weight
+
+|maxFontSize
+|60
+|The maximum font size for words with the highest weight
+
+|darkMode
+|false
+|Whether to use a dark theme (true) or light theme (false)
+
+|baseColor
+|#3498db
+|The default color for words without a specific color
+
+|shape
+|rectangle
+|The shape of the word cloud (currently supports "rectangle")
+
+|scale
+|1.0
+|A scaling factor for the entire word cloud
+|===
+
+== Word Data Format
+
+After the configuration section and the separator line (`---`), each line represents a word in the format:
+
+[source]
+----
+Word | Weight | Color
+----
+
+Where:
+
+* `Word` is the text to display
+* `Weight` is a numeric value that determines the relative size of the word (higher values = larger font)
+* `Color` is an optional hex color code (e.g., #3498db) for the word
+
+== Examples
+
+=== Basic Word Cloud
+
+[source,asciidoc]
+....
+[docops,wordcloud]
+----
+title= Programming Languages 2024
+width= 600
+height= 400
+---
+JavaScript | 90 | #f1e05a
+Python | 85 | #3572A5
+Java | 80 | #b07219
+TypeScript | 75 | #2b7489
+C# | 70 | #178600
+PHP | 65 | #4F5D95
+C++ | 60 | #f34b7d
+Ruby | 55 | #701516
+Go | 50 | #00ADD8
+Rust | 45 | #dea584
+----
+....
+
+
+[docops,wordcloud]
+----
+title= Programming Languages 2024
+width= 600
+height= 400
+---
+JavaScript | 90 | #f1e05a
+Python | 85 | #3572A5
+Java | 80 | #b07219
+TypeScript | 75 | #2b7489
+C# | 70 | #178600
+PHP | 65 | #4F5D95
+C++ | 60 | #f34b7d
+Ruby | 55 | #701516
+Go | 50 | #00ADD8
+Rust | 45 | #dea584
+----
+
+
+=== Technology Trends Word Cloud
+
+[source,asciidoc]
+....
+[docops,wordcloud]
+----
+title= Technology Trends 2024
+width= 800
+height= 600
+minFontSize= 12
+maxFontSize= 60
+---
+Cloud Computing | 85 | #3498db
+Artificial Intelligence | 92 | #9b59b6
+Machine Learning | 78 | #2ecc71
+Blockchain | 65 | #e74c3c
+IoT | 70 | #f39c12
+Cybersecurity | 88 | #1abc9c
+Big Data | 75 | #34495e
+DevOps | 68 | #e67e22
+Quantum Computing | 55 | #27ae60
+Edge Computing | 60 | #d35400
+5G | 72 | #3498db
+AR/VR | 58 | #9b59b6
+----
+....
+
+[docops,wordcloud]
+----
+title= Technology Trends 2024
+width= 800
+height= 600
+minFontSize= 12
+maxFontSize= 60
+---
+Cloud Computing | 85 | #3498db
+Artificial Intelligence | 92 | #9b59b6
+Machine Learning | 78 | #2ecc71
+Blockchain | 65 | #e74c3c
+IoT | 70 | #f39c12
+Cybersecurity | 88 | #1abc9c
+Big Data | 75 | #34495e
+DevOps | 68 | #e67e22
+Quantum Computing | 55 | #27ae60
+Edge Computing | 60 | #d35400
+5G | 72 | #3498db
+AR/VR | 58 | #9b59b6
+----
+
+
+=== Dark Mode Word Cloud
+
+[source,asciidoc]
+....
+[docops,wordcloud]
+----
+title= Software Development Concepts
+width= 700
+height= 500
+minFontSize= 14
+maxFontSize= 50
+darkMode= true
+---
+Agile | 90 | #ff7979
+CI/CD | 85 | #7ed6df
+Testing | 80 | #f6e58d
+Microservices | 75 | #badc58
+Containers | 70 | #ffbe76
+Serverless | 65 | #ff9ff3
+API | 60 | #f9ca24
+Refactoring | 55 | #686de0
+Clean Code | 50 | #be2edd
+Design Patterns | 45 | #eb4d4b
+----
+....
+
+[docops,wordcloud]
+----
+title= Software Development Concepts
+width= 700
+height= 500
+minFontSize= 14
+maxFontSize= 50
+darkMode= true
+---
+Agile | 90 | #ff7979
+CI/CD | 85 | #7ed6df
+Testing | 80 | #f6e58d
+Microservices | 75 | #badc58
+Containers | 70 | #ffbe76
+Serverless | 65 | #ff9ff3
+API | 60 | #f9ca24
+Refactoring | 55 | #686de0
+Clean Code | 50 | #be2edd
+Design Patterns | 45 | #eb4d4b
+----
+
+== Technical Implementation
+
+The word cloud is generated as an SVG with the following features:
+
+* Words are arranged in a spiral pattern to maximize space usage
+* A collision detection algorithm ensures words don't overlap
+* Each word has a gradient effect based on its color
+* Words have a subtle drop shadow for depth
+* Interactive hover effects (scaling and brightness change)
+* Random rotation of some words for visual interest
+
+== Integration
+
+The word cloud extension integrates seamlessly with AsciiDoctor documents and can be used in any DocOps-enabled documentation.

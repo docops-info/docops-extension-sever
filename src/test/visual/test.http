@@ -405,3 +405,115 @@ releases%5B0%5D.lines%5B0%5D = tried &
 releases%5B0%5D.lines%5B1%5D = true
 
 ###
+
+### Test Metrics Callout
+GET http://localhost:8010/extension/api/docops/svg?kind=callout&type=metrics&payload=title%3D%20Q2%202024%20Business%20Performance%0Atype%3Dmetrics%0A---%0AMetric%20%7C%20Value%0ARevenue%20%7C%20%242.4M%0AGrowth%20%7C%2018%25%0ANew%20Customers%20%7C%20156%0ACustomer%20Retention%20%7C%2094%25%0ANPS%20Score%20%7C%2072%0AAverage%20Deal%20Size%20%7C%20%2415%2C400%0ASales%20Cycle%20%7C%2032%20days%0AMarketing%20ROI%20%7C%203.2x
+
+> {%
+client.test("Metrics callout generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("Q2 2024 Business Performance") >= 0, "Response does not contain the correct title");
+    client.assert(response.body.indexOf("Revenue") >= 0, "Response does not contain the metric 'Revenue'");
+    client.assert(response.body.indexOf("$2.4M") >= 0, "Response does not contain the value '$2.4M'");
+});
+%}
+
+###
+
+### Test Metrics Callout with Many Items (Dynamic Height)
+GET http://localhost:8010/extension/api/docops/svg?kind=callout&type=metrics&payload=title%3D%20Annual%20Performance%20Metrics%0Atype%3Dmetrics%0A---%0AMetric%20%7C%20Value%0ARevenue%20%7C%20%2412.7M%0AGrowth%20%7C%2023%25%0ANew%20Customers%20%7C%20856%0ACustomer%20Retention%20%7C%2096%25%0ANPS%20Score%20%7C%2078%0AAverage%20Deal%20Size%20%7C%20%2418%2C400%0ASales%20Cycle%20%7C%2028%20days%0AMarketing%20ROI%20%7C%204.2x%0AEmployee%20Satisfaction%20%7C%2092%25%0AProduct%20Releases%20%7C%2015%0ABug%20Fix%20Rate%20%7C%2097%25%0ASupport%20Tickets%20Resolved%20%7C%203%2C450%0AAverage%20Resolution%20Time%20%7C%204.2%20hours%0AWebsite%20Traffic%20%7C%202.3M%20visitors%0AConversion%20Rate%20%7C%203.8%25%0ASocial%20Media%20Followers%20%7C%20125K%0AEngagement%20Rate%20%7C%204.7%25%0AEmail%20Open%20Rate%20%7C%2032%25%0AClick-Through%20Rate%20%7C%208.5%25
+
+> {%
+client.test("Metrics callout with many items generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("Annual Performance Metrics") >= 0, "Response does not contain the correct title");
+    // Check for the last metric to ensure all metrics are included
+    client.assert(response.body.indexOf("Click-Through Rate") >= 0, "Response does not contain all metrics");
+});
+%}
+
+###
+
+### Test Systematic Callout with Many Steps (Dynamic Height)
+GET http://localhost:8010/extension/api/docops/svg?kind=callout&type=systematic&payload=title%3D%20Enterprise%20Software%20Implementation%20Process%0Atype%3Dsystematic%0A---%0APhase%20%7C%20Action%20%7C%20Result%20%7C%20Improvement%0ANeeds%20Assessment%20%7C%20Gather%20requirements%20from%20stakeholders%20%7C%20Comprehensive%20requirements%20document%20%7C%20Earlier%20involvement%20of%20end%20users%0ABusiness%20Case%20%7C%20Calculate%20ROI%20and%20prepare%20proposal%20%7C%20Approved%20project%20with%20budget%20%7C%20More%20detailed%20cost%20analysis%0AVendor%20Selection%20%7C%20Evaluate%20potential%20solutions%20%7C%20Selected%20optimal%20software%20vendor%20%7C%20Broader%20market%20research%0AProject%20Planning%20%7C%20Define%20scope%2C%20timeline%2C%20and%20resources%20%7C%20Detailed%20project%20plan%20%7C%20More%20buffer%20time%20for%20contingencies%0ASystem%20Design%20%7C%20Create%20technical%20specifications%20%7C%20Approved%20system%20architecture%20%7C%20More%20focus%20on%20scalability%0AConfiguration%20%7C%20Set%20up%20system%20according%20to%20requirements%20%7C%20Configured%20base%20system%20%7C%20Better%20documentation%20of%20configuration%20decisions%0ACustomization%20%7C%20Develop%20custom%20features%20%7C%20Enhanced%20system%20with%20custom%20functionality%20%7C%20Less%20customization%2C%20more%20standard%20features%0AData%20Migration%20%7C%20Transfer%20data%20from%20legacy%20systems%20%7C%20Clean%2C%20validated%20data%20in%20new%20system%20%7C%20More%20thorough%20data%20cleansing%20before%20migration%0AIntegration%20%7C%20Connect%20with%20other%20enterprise%20systems%20%7C%20Fully%20integrated%20ecosystem%20%7C%20Better%20API%20management%20strategy%0ATesting%20%7C%20Perform%20unit%2C%20integration%2C%20and%20UAT%20testing%20%7C%20Validated%20system%20ready%20for%20deployment%20%7C%20More%20automated%20testing%0ATraining%20%7C%20Educate%20users%20on%20new%20system%20%7C%20Competent%20user%20base%20%7C%20More%20role-specific%20training%20materials%0ADeployment%20%7C%20Go%20live%20with%20new%20system%20%7C%20Operational%20system%20in%20production%20%7C%20Phased%20rollout%20approach%0AHypercare%20%7C%20Provide%20intensive%20support%20post-launch%20%7C%20Stable%20system%20with%20minor%20issues%20resolved%20%7C%20Longer%20hypercare%20period%0AOptimization%20%7C%20Fine-tune%20system%20based%20on%20user%20feedback%20%7C%2015%25%20efficiency%20improvement%20%7C%20More%20user%20feedback%20sessions
+
+> {%
+client.test("Systematic callout with many steps generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("Enterprise Software Implementation Process") >= 0, "Response does not contain the correct title");
+    // Check for the last step to ensure all steps are included
+    client.assert(response.body.indexOf("Optimization") >= 0, "Response does not contain all steps");
+});
+%}
+
+###
+
+### Test Timeline Callout with Many Steps (Dynamic Height)
+GET http://localhost:8010/extension/api/docops/svg?kind=callout&type=timeline&payload=title%3D%20Company%20Growth%20Timeline%0Atype%3Dtimeline%0A---%0APhase%20%7C%20Action%20%7C%20Result%20%7C%20Improvement%0A2010%20%7C%20Company%20founded%20with%203%20employees%20%7C%20Initial%20product%20concept%20developed%20%7C%20Could%20have%20secured%20more%20seed%20funding%0A2011%20%7C%20First%20product%20launch%20%7C%20Acquired%20first%20100%20customers%20%7C%20More%20beta%20testing%20before%20launch%0A2012%20%7C%20Secured%20Series%20A%20funding%20%7C%20%242M%20investment%20for%20expansion%20%7C%20Better%20valuation%20negotiation%0A2013%20%7C%20Expanded%20to%2015%20employees%20%7C%20Enhanced%20product%20features%20%7C%20More%20focus%20on%20engineering%20talent%0A2014%20%7C%20Opened%20first%20international%20office%20%7C%20Entered%20European%20market%20%7C%20Earlier%20international%20expansion%0A2015%20%7C%20Launched%20second%20product%20line%20%7C%20Diversified%20revenue%20streams%20%7C%20More%20market%20research%20before%20launch%0A2016%20%7C%20Secured%20Series%20B%20funding%20%7C%20%2410M%20investment%20for%20scaling%20%7C%20Could%20have%20raised%20more%20capital%0A2017%20%7C%20Acquired%20competitor%20%7C%20Increased%20market%20share%20by%2015%25%20%7C%20Better%20post-acquisition%20integration%0A2018%20%7C%20Reached%20100%20employees%20%7C%20Established%20formal%20departments%20%7C%20Earlier%20implementation%20of%20HR%20systems%0A2019%20%7C%20IPO%20preparation%20%7C%20Restructured%20for%20public%20offering%20%7C%20More%20thorough%20financial%20audits%0A2020%20%7C%20Navigated%20global%20pandemic%20%7C%20Successfully%20transitioned%20to%20remote%20work%20%7C%20Better%20crisis%20management%20plan%0A2021%20%7C%20Launched%20enterprise%20solution%20%7C%20Secured%20first%20Fortune%20500%20clients%20%7C%20More%20enterprise-specific%20features%0A2022%20%7C%20Expanded%20to%20Asia-Pacific%20region%20%7C%20Established%20presence%20in%205%20new%20countries%20%7C%20Better%20localization%20strategy%0A2023%20%7C%20Reached%20%24100M%20annual%20revenue%20%7C%20Achieved%20profitability%20targets%20%7C%20More%20focus%20on%20margin%20improvement%0A2024%20%7C%20Successful%20IPO%20%7C%20Raised%20%24300M%20in%20public%20offering%20%7C%20Earlier%20preparation%20for%20public%20market%20scrutiny
+
+> {%
+client.test("Timeline callout with many steps generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("Company Growth Timeline") >= 0, "Response does not contain the correct title");
+    // Check for the last step to ensure all steps are included
+    client.assert(response.body.indexOf("2024") >= 0, "Response does not contain all timeline steps");
+});
+%}
+
+###
+
+### Test MetricsCard with JSON
+GET http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload={"title":"Performance Metrics","metrics":[{"value":"97%","label":"Query Cost Reduction","sublabel":"(12,000 → 405)"},{"value":"32%","label":"CPU Utilization Drop","sublabel":"(88% → 60%)"},{"value":"3","label":"Optimization Phases","sublabel":"Systematic Approach"}]}
+
+> {%
+client.test("MetricsCard with JSON generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("97%") >= 0, "Response does not contain the value '97%'");
+    client.assert(response.body.indexOf("Query Cost Reduction") >= 0, "Response does not contain the label 'Query Cost Reduction'");
+    client.assert(response.body.indexOf("(12,000 → 405)") >= 0, "Response does not contain the sublabel '(12,000 → 405)'");
+});
+%}
+
+###
+
+### Test MetricsCard with Table Format
+GET http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=title%3D%20Performance%20Metrics%0A---%0AMetric%20%7C%20Value%20%7C%20Sublabel%0AQuery%20Cost%20Reduction%20%7C%2097%25%20%7C%20(12%2C000%20%E2%86%92%20405)%0ACPU%20Utilization%20Drop%20%7C%2032%25%20%7C%20(88%25%20%E2%86%92%2060%25)%0AOptimization%20Phases%20%7C%203%20%7C%20Systematic%20Approach
+
+> {%
+client.test("MetricsCard with table format generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("97%") >= 0, "Response does not contain the value '97%'");
+    client.assert(response.body.indexOf("Query Cost Reduction") >= 0, "Response does not contain the label 'Query Cost Reduction'");
+    client.assert(response.body.indexOf("(12,000 → 405)") >= 0, "Response does not contain the sublabel '(12,000 → 405)'");
+});
+%}
+
+###
+
+### Test MetricsCard with Table Format (No Sublabel)
+GET http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=title%3D%20Q2%202024%20Performance%0A---%0AMetric%20%7C%20Value%0ARevenue%20Growth%20%7C%2018%25%0ANew%20Customers%20%7C%20156%0ACustomer%20Retention%20%7C%2094%25%0ANPS%20Score%20%7C%2072
+
+> {%
+client.test("MetricsCard with table format (no sublabel) generated successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.contentType.mimeType === "image/svg+xml", "Expected 'image/svg+xml' but received '" + response.contentType.mimeType + "'");
+    client.assert(response.body.indexOf("<svg") >= 0, "Response does not contain SVG");
+    client.assert(response.body.indexOf("18%") >= 0, "Response does not contain the value '18%'");
+    client.assert(response.body.indexOf("Revenue Growth") >= 0, "Response does not contain the label 'Revenue Growth'");
+    client.assert(response.body.indexOf("Q2 2024 Performance") >= 0, "Response does not contain the title 'Q2 2024 Performance'");
+});
+%}
+
+###

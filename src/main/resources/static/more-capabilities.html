@@ -49,11 +49,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-4xl font-bold mb-6">Additional DocOps Extension Capabilities</h2>
         <p class="text-xl mb-8 max-w-3xl mx-auto">
-            Explore more powerful visualizations for your AsciiDoctor documents including callouts, metrics cards, color utilities, and tree charts.
+            Explore more powerful visualizations for your AsciiDoctor documents including callouts, metrics cards, word clouds, color utilities, and tree charts.
         </p>
         <div class="flex justify-center flex-wrap gap-2">
             <a href="#callout-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📣 Callouts</a>
             <a href="#metrics-card-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Metrics Cards</a>
+            <a href="#word-cloud-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">☁️ Word Cloud</a>
             <a href="#color-gradient-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🎨 Color Gradients</a>
             <a href="#tree-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🌳 Tree Chart</a>
         </div>
@@ -161,6 +162,65 @@ NPS Score | 72 | Industry Leading
                         </div>
                         <div id="metricsCardContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <p class="text-gray-500">Click "Try It" to generate a metrics card visualization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16" id="word-cloud-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-green-500 rounded mr-3"></span>
+                        Word Cloud
+                    </h4>
+                    <p class="text-gray-600 mt-1">Create visually appealing word clouds to highlight key terms and their relative importance. See <a href="docs/wordcloud.html" class="text-blue-600 hover:underline">Docs</a> for more examples.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,wordcloud]
+----
+title= Technology Trends 2024
+width= 800
+height= 600
+minFontSize= 12
+maxFontSize= 60
+---
+Cloud Computing | 85 | #3498db
+Artificial Intelligence | 92 | #9b59b6
+Machine Learning | 78 | #2ecc71
+Blockchain | 65 | #e74c3c
+IoT | 70 | #f39c12
+Cybersecurity | 88 | #1abc9c
+Big Data | 75 | #34495e
+DevOps | 68 | #e67e22
+Quantum Computing | 55 | #27ae60
+Edge Computing | 60 | #d35400
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryWordCloudButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/wordcloud/edit-mode"
+                                        hx-target="#wordCloudContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="wordCloudContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Click "Try It" to generate a word cloud visualization</p>
                         </div>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
+import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
@@ -247,6 +248,16 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
             val timing = measureTimedValue {
                 val handler = MetricsCardHandler()
                 handler.handleSVG(payload=payload, type=type, scale=scale, useDark=useDark)
+            }
+            logger.info{"metricscard handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("metricscard", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
+        else if("wordcloud".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = WordCloudHandler()
+                handler.handleSVG(payload=payload)
             }
             logger.info{"metricscard handler executed in ${timing.duration.inWholeMilliseconds}ms"}
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("metricscard", timing.duration.inWholeMilliseconds))
