@@ -12,13 +12,6 @@ class BarHandler {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val barChartImproved = BarChartImproved()
         val svg = barChartImproved.makeBarSvg(data)
-        /*val barMaker = BarMaker()
-        val bar = Json.decodeFromString<Bar>(data)
-        val svg = if(bar.display.vBar) {
-            barMaker.makeVerticalBar(bar)
-        } else {
-            barMaker.makeHorizontalBar(bar)
-        }*/
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

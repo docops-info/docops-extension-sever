@@ -4,10 +4,12 @@ import io.docops.docopsextensionssupport.adr.AdrHandler
 import io.docops.docopsextensionssupport.badge.BadgeHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
+import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.BarGroupHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
 import io.docops.docopsextensionssupport.chart.LineHandler
 import io.docops.docopsextensionssupport.chart.PieSliceHandler
+import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PieHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
@@ -230,13 +232,29 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
 
             return timing.value
         }
+        else if("callout".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = CalloutHandler()
+                val svg = handler.makeCalloutSvg(payload=payload, outputFormat=type)
+                ResponseEntity(svg.toByteArray(), HttpStatus.OK)
+            }
+            logger.info{"callout handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("callout", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
+        else if("metricscard".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue {
+                val handler = MetricsCardHandler()
+                handler.handleSVG(payload=payload, type=type, scale=scale, useDark=useDark)
+            }
+            logger.info{"metricscard handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("metricscard", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
         return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
     }
 
 
 }
-
-
-
-
-

@@ -1,0 +1,380 @@
+include::_base.adoc[]
+= DocOps Metrics Card
+
+== Introduction
+
+The DocOps Metrics Card Extension allows you to create visually appealing and informative metric visualizations in your AsciiDoctor documents. Metrics cards are useful for highlighting key performance indicators, statistics, and other numerical data in a clean, modern format.
+
+This guide will help you understand the basic concepts of metrics cards, how to include them in your AsciiDoctor documents, and provide examples of different ways to use metrics cards effectively.
+
+== Basic Concepts
+
+=== What are Metrics Cards?
+
+Metrics Cards in the DocOps extension are SVG-based visual elements that display numerical data in a clean, card-based layout. Each metrics card collection has:
+
+* A title (optional)
+* A collection of individual metric cards
+* Each metric card contains:
+  * A value (the primary data point)
+  * A label (describing what the value represents)
+  * An optional sublabel (providing additional context)
+
+The extension currently supports an iOS-inspired design theme that presents metrics in a visually appealing way with clean typography and subtle shadows.
+
+=== Metrics Card Components
+
+==== Individual Metric Card Properties
+
+An individual metric card includes:
+
+* `value` (required) - The primary data point to display (e.g., "97%", "$1.2M", "32 days")
+* `label` (required) - A short description of what the value represents
+* `sublabel` (optional) - Additional context or explanation for the metric
+
+==== Metrics Card Collection Properties
+
+The overall metrics card collection has:
+
+* `title` (optional) - The title for the entire metrics card collection (defaults to "Metrics")
+* `metrics` - An array of individual metric cards
+* `theme` (optional) - The visual theme to use (currently only "ios" is supported)
+
+== AsciiDoctor Syntax for Metrics Cards
+
+To include metrics cards in your AsciiDoctor document, you use a special macro syntax. The extension supports two input formats: JSON and table format.
+
+=== JSON Format
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+{
+  "title": "Performance Metrics",
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
+    }
+  ],
+  "theme": "ios"
+}
+----
+....
+
+=== Table Format
+
+Alternatively, you can use a more human-readable table format:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Performance Metrics
+---
+Metric | Value | Sublabel
+Query Cost Reduction | 97% | (12,000 → 405)
+CPU Utilization Drop | 32% | (88% → 60%)
+Optimization Phases | 3 | Systematic Approach
+----
+....
+
+You can also use a simpler table format without sublabels:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Key Statistics
+---
+Metric | Value
+Active Users | 1.2M
+Conversion Rate | 3.8%
+Retention | 92%
+----
+....
+
+=== Metrics Card Parameters
+
+==== Block Macro Parameters
+
+* `width` (optional): The width of the SVG in pixels. Default is 800.
+* `height` (optional): The height of the SVG in pixels. Default is 400.
+* `scale` (optional): A scaling factor for the entire visualization. Default is 1.0.
+* `useDark` (optional): Whether to use a dark theme. Default is false.
+
+== Examples
+
+=== Basic Metrics Card Example
+
+Here's a simple example of a metrics card showing performance improvements:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+{
+  "title": "Performance Improvements",
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
+    }
+  ]
+}
+----
+....
+
+[docops,metricscard]
+----
+{
+  "title": "Performance Improvements",
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
+    }
+  ]
+}
+----
+
+=== Business Metrics Example
+
+Here's an example using the table format to show business metrics:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Q2 2024 Business Metrics
+---
+Metric | Value | Sublabel
+Revenue | $4.2M | 18% YoY Growth
+New Customers | 156 | 42 Enterprise
+Customer Retention | 94% | 2% Improvement
+NPS Score | 72 | Industry Leading
+----
+....
+
+[docops,metricscard]
+----
+title= Q2 2024 Business Metrics
+---
+Metric | Value | Sublabel
+Revenue | $4.2M | 18% YoY Growth
+New Customers | 156 | 42 Enterprise
+Customer Retention | 94% | 2% Improvement
+NPS Score | 72 | Industry Leading
+----
+
+=== Website Performance Metrics
+
+Use metrics cards to display website performance statistics:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Website Performance
+---
+Metric | Value | Sublabel
+Page Load Time | 1.2s | 40% Faster
+First Contentful Paint | 0.8s | 90th Percentile
+Time to Interactive | 2.1s | Mobile Devices
+Bounce Rate | 24% | -5% vs Last Month
+Conversion Rate | 3.8% | +0.7% vs Last Month
+----
+....
+
+[docops,metricscard]
+----
+title= Website Performance
+---
+Metric | Value | Sublabel
+Page Load Time | 1.2s | 40% Faster
+First Contentful Paint | 0.8s | 90th Percentile
+Time to Interactive | 2.1s | Mobile Devices
+Bounce Rate | 24% | -5% vs Last Month
+Conversion Rate | 3.8% | +0.7% vs Last Month
+----
+
+=== Project Status Metrics
+
+Use metrics cards to provide a quick overview of project status:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Project Status Dashboard
+---
+Metric | Value | Sublabel
+Completion | 78% | On Schedule
+Budget Utilized | 65% | Under Budget
+Open Issues | 12 | 3 Critical
+Team Velocity | 42 | Story Points/Sprint
+Code Coverage | 92% | +5% This Month
+----
+....
+
+[docops,metricscard]
+----
+title= Project Status Dashboard
+---
+Metric | Value | Sublabel
+Completion | 78% | On Schedule
+Budget Utilized | 65% | Under Budget
+Open Issues | 12 | 3 Critical
+Team Velocity | 42 | Story Points/Sprint
+Code Coverage | 92% | +5% This Month
+----
+
+=== Health and Fitness Metrics
+
+Use metrics cards to track health and fitness progress:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Fitness Progress
+---
+Metric | Value | Sublabel
+Weight Loss | 12 lbs | 8-Week Program
+Body Fat Reduction | 4.2% | From 22% to 17.8%
+Muscle Mass Increase | 2.8 lbs | Primarily Upper Body
+Resting Heart Rate | 62 bpm | -8 bpm Improvement
+VO2 Max | 42.3 | +5.3 ml/kg/min
+----
+....
+
+[docops,metricscard]
+----
+title= Fitness Progress
+---
+Metric | Value | Sublabel
+Weight Loss | 12 lbs | 8-Week Program
+Body Fat Reduction | 4.2% | From 22% to 17.8%
+Muscle Mass Increase | 2.8 lbs | Primarily Upper Body
+Resting Heart Rate | 62 bpm | -8 bpm Improvement
+VO2 Max | 42.3 | +5.3 ml/kg/min
+----
+
+=== Environmental Impact Metrics
+
+Use metrics cards to highlight environmental sustainability efforts:
+
+[source,asciidoc]
+....
+[docops,metricscard]
+----
+title= Sustainability Achievements
+---
+Metric | Value | Sublabel
+Carbon Reduction | 28% | vs. 2020 Baseline
+Renewable Energy | 72% | Of Total Consumption
+Water Conservation | 350K | Gallons Saved
+Waste Diverted | 94% | From Landfill
+Paper Reduction | 65% | Digital Transformation
+----
+....
+
+[docops,metricscard]
+----
+title= Sustainability Achievements
+---
+Metric | Value | Sublabel
+Carbon Reduction | 28% | vs. 2020 Baseline
+Renewable Energy | 72% | Of Total Consumption
+Water Conservation | 350K | Gallons Saved
+Waste Diverted | 94% | From Landfill
+Paper Reduction | 65% | Digital Transformation
+----
+
+== Advanced Usage
+
+=== Using the API Directly
+
+For programmatic use, you can call the metrics card API directly:
+
+[source]
+----
+GET /api/docops/svg?kind=metricscard&payload={encoded-json-or-table-data}&width=800&height=400&scale=1.0&useDark=false
+----
+
+The API accepts the following parameters:
+
+* `kind` (required): Must be "metricscard"
+* `payload` (required): The metrics card data in JSON or table format (URL-encoded)
+* `width` (optional): The width of the SVG in pixels
+* `height` (optional): The height of the SVG in pixels
+* `scale` (optional): A scaling factor for the entire visualization
+* `useDark` (optional): Whether to use a dark theme
+* `type` (optional): The output format (default is "SVG")
+
+=== Embedding in Other Applications
+
+The metrics card SVG can be embedded in various applications:
+
+* **Web Applications**: Use an iframe or img tag to embed the SVG
+* **Presentations**: Export the SVG and import it into presentation software
+* **Reports**: Include the SVG in PDF reports
+* **Dashboards**: Integrate with dashboard tools for real-time metrics display
+
+== Best Practices
+
+=== Design Tips
+
+* **Keep it Simple**: Limit the number of metrics to 3-5 for better readability
+* **Use Clear Labels**: Make sure your labels clearly describe what the metric represents
+* **Provide Context**: Use sublabels to provide additional context or comparison
+* **Consistent Units**: Use consistent units of measurement across related metrics
+* **Highlight Important Metrics**: Place the most important metrics first
+
+=== Content Guidelines
+
+* **Be Precise**: Use specific numbers rather than vague statements
+* **Show Trends**: Indicate whether metrics are improving or declining
+* **Use Appropriate Precision**: Don't show more decimal places than necessary
+* **Include Time Periods**: Specify the time period the metrics cover
+* **Explain Abbreviations**: Define any abbreviations or technical terms
+
+== Conclusion
+
+The DocOps Metrics Card Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing and informative metric visualizations. By using either the JSON format or table format, you can create customized metrics cards that effectively communicate key data points.
+
+Whether you're documenting business performance, project status, technical improvements, or any other metrics-driven content, the Metrics Card Extension helps you present information in a clear, engaging, and professional way.
