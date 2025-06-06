@@ -32,6 +32,10 @@ class MetricsCardMaker {
     fun createMetricsCardSvg(data: String, width: Int = 800, height: Int = 400): String {
         val uncompressedData = uncompressString(data)
 
+        return createCards(uncompressedData, width, height)
+    }
+
+    fun createCards(uncompressedData: String, width: Int, height: Int): String {
         // Determine if the data is in table format or JSON format
         val metricsCardData = if (isTableFormat(uncompressedData)) {
             // Parse table format
@@ -112,7 +116,7 @@ class MetricsCardMaker {
         return buildString {
             val id = UUID.randomUUID().toString()
             append("""
-            <svg id="ID_$id" width="$finalWidth" height="$height" xmlns="http://www.w3.org/2000/svg">
+            <svg id="ID_$id" width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
                 <defs>
                     <filter id="iosShadow">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>

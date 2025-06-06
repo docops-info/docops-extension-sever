@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.callout
 
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
 /**
  * Generic class for creating callout SVGs
@@ -144,8 +145,9 @@ open class CalloutMaker {
         val finalHeight = calculatedHeight.coerceAtLeast(height)
 
         return buildString {
+            val id = UUID.randomUUID().toString()
             append("""
-                <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg">
+                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
                     <defs>
                         <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#0A84FF;stop-opacity:1" />

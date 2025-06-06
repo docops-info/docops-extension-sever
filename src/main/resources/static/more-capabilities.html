@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More DocOps.io Extension Capabilities</title>
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.4.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/xml.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-10 h-10" />
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">More DocOps.io Extension Capabilities</h1>
+                    <p class="text-sm text-gray-600">Additional visualizations to supplement AsciiDoctor documents.</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <a href="index.html" class="text-white">Main Page</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="https://github.com/docops-info/docops-extension-sever">GitHub</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="template/customize">Customize Template</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl font-bold mb-6">Additional DocOps Extension Capabilities</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            Explore more powerful visualizations for your AsciiDoctor documents including callouts, metrics cards, color utilities, and tree charts.
+        </p>
+        <div class="flex justify-center flex-wrap gap-2">
+            <a href="#callout-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📣 Callouts</a>
+            <a href="#metrics-card-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Metrics Cards</a>
+            <a href="#color-gradient-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🎨 Color Gradients</a>
+            <a href="#tree-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🌳 Tree Chart</a>
+        </div>
+    </div>
+</section>
+
+<!-- Usage Examples -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-12">Additional Capabilities</h3>
+
+        <div class="mb-16" id="callout-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-indigo-500 rounded mr-3"></span>
+                        Callouts
+                    </h4>
+                    <p class="text-gray-600 mt-1">Create visually appealing and informative callout visualizations for processes, metrics, and timelines. See <a href="docs/callout.html" class="text-blue-600 hover:underline">Docs</a> for more examples.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,callout]
+----
+title: Software Development Process
+type=systematic
+---
+Phase | Action | Result | Improvement
+Requirements | Gather user needs and system requirements | Detailed requirements document | Involve end-users earlier in the process
+Design | Create system architecture and UI/UX designs | Technical specifications and wireframes | Use more design thinking workshops
+Development | Implement features according to specifications | Working code with unit tests | Increase pair programming sessions
+Testing | Perform QA and user acceptance testing | Bug reports and validation results | Automate more test cases
+Deployment | Release to production environment | Live application | Implement more robust CI/CD pipeline
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryCalloutButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/callout/edit-mode"
+                                        hx-target="#calloutContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="calloutContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Click "Try It" to generate a callout visualization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16" id="metrics-card-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-blue-500 rounded mr-3"></span>
+                        Metrics Cards
+                    </h4>
+                    <p class="text-gray-600 mt-1">Create visually appealing metric visualizations to highlight key performance indicators and statistics. See <a href="docs/metricscard.html" class="text-blue-600 hover:underline">Docs</a> for more examples.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,metricscard]
+----
+title= Q2 2024 Business Metrics
+---
+Metric | Value | Sublabel
+Revenue | $4.2M | 18% YoY Growth
+New Customers | 156 | 42 Enterprise
+Customer Retention | 94% | 2% Improvement
+NPS Score | 72 | Industry Leading
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryMetricsCardButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/metricscard/edit-mode"
+                                        hx-target="#metricsCardContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="metricsCardContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Click "Try It" to generate a metrics card visualization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16" id="color-gradient-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-purple-500 rounded mr-3"></span>
+                        Color Gradient Generator
+                    </h4>
+                    <p class="text-gray-600 mt-1">Generate beautiful color gradients from a hex color code</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">Enter Hex Color Code</span>
+                        </div>
+                        <div class="mb-4">
+                            <form id="colorForm" class="flex flex-col space-y-4">
+                                <div class="flex items-center">
+                                    <input type="text" id="hexColor" name="gradColor" placeholder="#4361ee" 
+                                           class="bg-gray-800 text-white px-4 py-2 rounded-l-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                           pattern="^#([A-Fa-f0-9]{6})$" title="Please enter a valid hex color code (e.g., #4361ee)">
+                                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                                        Generate
+                                    </button>
+                                </div>
+                                <div class="text-gray-400 text-xs">
+                                    Examples: #4361ee, #FF5733, #2ecc71
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Gradient Result</span>
+                        </div>
+                        <div id="gradientResult" class="bg-gray-50 rounded-lg p-4 min-h-64 flex items-center justify-center">
+                            <p class="text-gray-500">Enter a hex color code and click Generate to see the result</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16" id="tree-chart-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-teal-500 rounded mr-3"></span>
+                        Tree Chart
+                    </h4>
+                    <p class="text-gray-600 mt-1">Create interactive hierarchical tree diagrams to visualize relationships and structures. See <a href="docs/treechart.html" class="text-blue-600 hover:underline">Docs</a> for examples. </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,treechart]
+----
+title=Organization Chart
+width=800
+height=600
+orientation=vertical
+collapsible=true
+expanded=true
+darkMode=false
+---
+CEO
+    CTO | #3498db
+        Engineering Manager
+            Senior Developer
+            Developer
+            Junior Developer
+        QA Manager
+            QA Engineer
+            QA Analyst
+    CFO | #2ecc71
+        Finance Manager
+            Accountant
+            Financial Analyst
+    CMO | #e74c3c
+        Marketing Manager
+            Marketing Specialist
+            Content Creator
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryTreeChartButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/treechart/edit-mode"
+                                        hx-target="#treeChartContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="treeChartContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <object data="images/treechart.svg" type="image/svg+xml" height="100%" width="100%">
+                            <img src="images/treechart.svg" alt="Tree Chart" class="max-h-full max-w-full" />
+                            </object>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-8 h-8" />
+                    <span class="font-bold text-lg">DocOps.io</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Modern data visualization library for the web. Create beautiful, interactive charts with ease.
+                </p>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Documentation</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="index.html" class="hover:text-white">Main Page</a></li>
+                    <li><a href="#" class="hover:text-white">API Reference</a></li>
+                    <li><a href="docs/examples.html" class="hover:text-white">Examples</a></li>
+                    <li><a href="#" class="hover:text-white">Tutorials</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Community</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white">GitHub</a></li>
+                    <li><a href="#" class="hover:text-white">Discord</a></li>
+                    <li><a href="#" class="hover:text-white">Stack Overflow</a></li>
+                    <li><a href="#" class="hover:text-white">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Resources</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="changelog.html" class="hover:text-white">Changelog</a></li>
+                    <li><a href="#" class="hover:text-white">Roadmap</a></li>
+                    <li><a href="#" class="hover:text-white">Support</a></li>
+                    <li><a href="#" class="hover:text-white">License</a></li>
+                    <li><a href="template/customize" class="hover:text-white">Customize Template</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2025 DocOps.io. All rights reserved. Built with ❤️ for developers.</p>
+        </div>
+    </div>
+</footer>
+<script>
+    // Color Gradient Generator Form Handling
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorForm = document.getElementById('colorForm');
+        const gradientResult = document.getElementById('gradientResult');
+
+        if (colorForm) {
+            colorForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const hexColor = document.getElementById('hexColor').value;
+                // Validate hex color format
+                const hexRegex = /^#([A-Fa-f0-9]{6})$/;
+                if (!hexRegex.test(hexColor)) {
+                    gradientResult.innerHTML = '<p class="text-red-500">Please enter a valid hex color code (e.g., #4361ee)</p>';
+                    return;
+                }
+
+                // Show loading state
+                gradientResult.innerHTML = '<p class="text-gray-500">Generating gradient...</p>';
+
+                // Make API request to the putColors endpoint
+                fetch('api/grad?' + new URLSearchParams({
+                    gradColor: hexColor
+                }), {
+                    method: 'PUT'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Display the result
+                    gradientResult.innerHTML = data;
+
+                    // Initialize syntax highlighting if needed
+                    if (window.hljs) {
+                        document.querySelectorAll('pre code').forEach((el) => {
+                            hljs.highlightElement(el);
+                        });
+                    }
+                })
+                .catch(error => {
+                    gradientResult.innerHTML = '<p class="text-red-500">Error: ' + error.message + '</p>';
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

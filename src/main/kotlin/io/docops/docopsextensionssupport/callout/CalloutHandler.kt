@@ -12,8 +12,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Generic handler for callout visualizations
  */
-@Controller
-@RequestMapping("/api/callout")
+
 class CalloutHandler {
 
     /**
@@ -61,6 +60,10 @@ class CalloutHandler {
         height: Int = 600
     ): String {
         val uncompressedPayload = uncompressString(payload)
+        return makeSvgPlainText(uncompressedPayload, width, height)
+    }
+
+    fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int): String {
         val maker = CalloutMaker()
 
         // Parse the callout type from the uncompressed payload
@@ -86,22 +89,5 @@ class CalloutHandler {
         return svg
     }
 
-    /**
-     * POST endpoint for creating callout SVGs
-     */
-    @PostMapping("/svg")
-    @ResponseBody
-    fun makeCalloutSvgPost(
-        @RequestBody payload: String,
-        @RequestParam(name = "type", defaultValue = "SVG") outputFormat: String,
-        @RequestParam(name = "width", defaultValue = "800") width: Int,
-        @RequestParam(name = "height", defaultValue = "600") height: Int,
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ): String {
-        response.contentType = "image/svg+xml"
-        response.setHeader(HttpHeaders.CACHE_CONTROL, CacheControl.maxAge(1, TimeUnit.HOURS).cachePrivate().headerValue)
 
-        return makeCalloutSvg(payload, outputFormat, width, height)
-    }
 }
