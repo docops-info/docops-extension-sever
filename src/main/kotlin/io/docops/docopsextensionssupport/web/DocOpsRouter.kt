@@ -13,6 +13,7 @@ import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.diagram.ConnectorHandler
 import io.docops.docopsextensionssupport.diagram.PieHandler
 import io.docops.docopsextensionssupport.diagram.PlacematHandler
+import io.docops.docopsextensionssupport.diagram.QuadrantHandler
 import io.docops.docopsextensionssupport.diagram.TreeChartHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
@@ -259,8 +260,18 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                 val handler = WordCloudHandler()
                 handler.handleSVG(payload=payload)
             }
-            logger.info{"metricscard handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("metricscard", timing.duration.inWholeMilliseconds))
+            logger.info{"wordcloud handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("wordcloud", timing.duration.inWholeMilliseconds))
+
+            return timing.value
+        }
+        else if("quadrant".equals(kind, ignoreCase = true)) {
+            val timing = measureTimedValue<ResponseEntity<ByteArray>> {
+                val handler = QuadrantHandler()
+                handler.handleSVG(payload, type, scale, useDark, title, numChars, backend)
+            }
+            logger.info{"quadrant handler executed in ${timing.duration.inWholeMilliseconds}ms"}
+            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("quadrant", timing.duration.inWholeMilliseconds))
 
             return timing.value
         }

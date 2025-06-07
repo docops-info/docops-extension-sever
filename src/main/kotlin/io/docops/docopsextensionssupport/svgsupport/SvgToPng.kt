@@ -228,30 +228,80 @@ fun String.makeLines(): List<String> {
     return this.split(" ")
 }
 
+/**
+ * Decompresses a string that may be in one of several formats:
+ * 1. URL-safe base64 encoded, gzipped data (original expected format)
+ * 2. URL-safe base64 encoded data (without gzip)
+ * 3. Standard base64 encoded, gzipped data
+ * 4. Standard base64 encoded data (without gzip)
+ * 5. Plain text
+ *
+ * This function attempts to handle all these formats, making it more robust
+ * for browser-based clients that may not implement gzip compression.
+ *
+ * @param zippedBase64Str The input string which may be compressed and/or encoded
+ * @return The decompressed/decoded string
+ */
 fun uncompressString(zippedBase64Str: String): String {
+    // First try to decode as URL-safe base64
     try {
         val decoder = Base64.getUrlDecoder()
         val bytes: ByteArray = decoder.decode(zippedBase64Str)
-        var zi: GZIPInputStream? = null
-        zi = GZIPInputStream(ByteArrayInputStream(bytes))
-        val reader = InputStreamReader(zi, Charset.defaultCharset())
-        val input = BufferedReader(reader)
 
-        val content = StringBuilder()
+        // Try to decompress as GZIP
         try {
-            var line = input.readLine()
-            while (line != null) {
-                content.append(line + "\n")
-                line = input.readLine()
+            val zi = GZIPInputStream(ByteArrayInputStream(bytes))
+            val reader = InputStreamReader(zi, Charset.defaultCharset())
+            val input = BufferedReader(reader)
+
+            val content = StringBuilder()
+            try {
+                var line = input.readLine()
+                while (line != null) {
+                    content.append(line + "\n")
+                    line = input.readLine()
+                }
+            } finally {
+                reader.close()
             }
-        } finally {
-            reader.close()
+            return content.toString()
+        } catch (gzipEx: Exception) {
+            // If GZIP decompression fails, assume it's just base64 encoded text
+            return String(bytes, Charset.defaultCharset())
         }
-        return content.toString()
     } catch (e: Exception) {
-        e.printStackTrace()
+        // If URL-safe base64 decoding fails, try standard base64
+        try {
+            val decoder = Base64.getDecoder()
+            val bytes: ByteArray = decoder.decode(zippedBase64Str)
+
+            // Try to decompress as GZIP
+            try {
+                val zi = GZIPInputStream(ByteArrayInputStream(bytes))
+                val reader = InputStreamReader(zi, Charset.defaultCharset())
+                val input = BufferedReader(reader)
+
+                val content = StringBuilder()
+                try {
+                    var line = input.readLine()
+                    while (line != null) {
+                        content.append(line + "\n")
+                        line = input.readLine()
+                    }
+                } finally {
+                    reader.close()
+                }
+                return content.toString()
+            } catch (gzipEx: Exception) {
+                // If GZIP decompression fails, assume it's just base64 encoded text
+                return String(bytes, Charset.defaultCharset())
+            }
+        } catch (b64Ex: Exception) {
+            // If both base64 decodings fail, return the original string
+            // This allows for plain text input to be passed through
+            return zippedBase64Str
+        }
     }
-    return ""
 }
 fun compressString(body: String): String {
     val baos = ByteArrayOutputStream()
