@@ -201,8 +201,8 @@ class BoxyController {
 
     fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
         val handler = ConnectorHandler()
-        val response = handler.handleSVG(contents, "SVG", scale.toString(), useDark)
-        return String(response.body ?: ByteArray(0))
+        val response = handler.fromRequestToConnector(contents, scale = scale, useDark)
+        return response.shapeSvg
     }
     /**
      * Retrieves the connector based on the provided payload, scale, type, useDark, and outlineColor parameters.

@@ -48,7 +48,7 @@ class ConnectorHandler {
 
 
 
-    private fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
+    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
         val connectors = if (isTableFormat(contents)) {
             parseTableData(contents)
         } else {
