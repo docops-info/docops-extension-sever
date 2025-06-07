@@ -81,7 +81,9 @@ class WordCloudController {
     fun getViewMode(): ResponseEntity<String> {
         val viewModeHtml = """
             <div id="wordCloudContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                <p class="text-gray-500">Click "Try It" to generate a word cloud visualization</p>
+                 <object data="images/wordcloud.svg" type="image/svg+xml" height="100%" width="100%">
+                    <img src="images/wordcloud.svg" alt="Scorecard" class="max-h-full max-w-full" />
+                </object>
             </div>
         """.trimIndent()
 

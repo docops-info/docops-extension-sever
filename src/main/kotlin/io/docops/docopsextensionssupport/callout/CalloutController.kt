@@ -71,7 +71,9 @@ class CalloutController  {
     fun getViewMode(): ResponseEntity<String> {
         val viewModeHtml = """
             <div id="calloutContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                <p class="text-gray-500">Click "Try It" to generate a callout visualization</p>
+                <object data="images/callout.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/callout.svg" alt="Scorecard" class="max-h-full max-w-full" />
+                </object>
             </div>
         """.trimIndent()
 

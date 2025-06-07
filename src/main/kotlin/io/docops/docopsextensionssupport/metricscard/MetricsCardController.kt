@@ -70,7 +70,9 @@ class MetricsCardController {
     fun getViewMode(): ResponseEntity<String> {
         val viewModeHtml = """
             <div id="metricsCardContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                <p class="text-gray-500">Click "Try It" to generate a metrics card visualization</p>
+                <object data="images/metrics.svg" type="image/svg+xml" height="100%" width="100%">
+                <img src="images/metrics.svg" alt="Scorecard" class="max-h-full max-w-full" />
+                </object>
             </div>
         """.trimIndent()
 
