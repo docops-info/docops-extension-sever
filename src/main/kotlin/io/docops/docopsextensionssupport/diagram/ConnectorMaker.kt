@@ -118,10 +118,11 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")
         var y = 0
-        val textColor = "#374151"
+        var textColor = "#374151"
         var stroke = "rgba(0,0,0,0.08)"
         if(useDark){
             stroke = "#fcfcfc"
+            textColor = "#F3F4F6"
         }
 
         connectors.forEachIndexed {

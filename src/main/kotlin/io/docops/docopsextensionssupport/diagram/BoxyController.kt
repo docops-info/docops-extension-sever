@@ -34,6 +34,7 @@ import kotlin.time.measureTimedValue
 
 /**
  * The BoxyController class handles HTTP requests related to boxy connectors and images.
+ * Supports both JSON and table format for connectors.
  */
 @Controller
 @RequestMapping("/api/connector")
@@ -57,11 +58,32 @@ class BoxyController {
         }
         """.trimIndent()
 
+        val defaultTableFormat = """
+        ---
+        Text | Description | Color
+        Engineer | Creates tests | #E14D2A
+        Unit Tests | Run Unit Tests | #3E6D9C
+        GitHub | Upload to Github | #7286D3
+        Test Engine | GitHub webhook plugged into engine | #8EA7E9
+        GitHub | Results stored in Github | #7286D3
+        API Documentation | API documentation ready for consumption | #FFA41B
+        """.trimIndent()
+
         val editModeHtml = """
             <div id="connectorContainer" class="bg-gray-50 rounded-lg p-4 h-auto">
                 <form hx-put="api/connector/" hx-target="#connectorPreview" class="space-y-4">
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Edit Connector JSON:</label>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="formatSelector" class="block text-sm font-medium text-gray-700">Format:</label>
+                            <div class="flex space-x-2">
+                                <button type="button" id="jsonFormatBtn" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 text-center active">
+                                    JSON
+                                </button>
+                                <button type="button" id="tableFormatBtn" class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1 text-center">
+                                    Table
+                                </button>
+                            </div>
+                        </div>
                         <textarea id="content" name="content" rows="12" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">${defaultConnectorJson}</textarea>
                     </div>
                     <div class="flex justify-between">
@@ -80,6 +102,23 @@ class BoxyController {
                             Click "Update Connector" to see the preview
                         </div>
                     </div>
+                    <script>
+                        document.getElementById('jsonFormatBtn').addEventListener('click', function() {
+                            document.getElementById('content').value = `${defaultConnectorJson.replace("`", "\\`")}`;
+                            document.getElementById('jsonFormatBtn').classList.add('text-white', 'bg-blue-600', 'hover:bg-blue-700');
+                            document.getElementById('jsonFormatBtn').classList.remove('text-gray-700', 'bg-gray-200', 'hover:bg-gray-300');
+                            document.getElementById('tableFormatBtn').classList.add('text-gray-700', 'bg-gray-200', 'hover:bg-gray-300');
+                            document.getElementById('tableFormatBtn').classList.remove('text-white', 'bg-blue-600', 'hover:bg-blue-700');
+                        });
+
+                        document.getElementById('tableFormatBtn').addEventListener('click', function() {
+                            document.getElementById('content').value = `${defaultTableFormat.replace("`", "\\`")}`;
+                            document.getElementById('tableFormatBtn').classList.add('text-white', 'bg-blue-600', 'hover:bg-blue-700');
+                            document.getElementById('tableFormatBtn').classList.remove('text-gray-700', 'bg-gray-200', 'hover:bg-gray-300');
+                            document.getElementById('jsonFormatBtn').classList.add('text-gray-700', 'bg-gray-200', 'hover:bg-gray-300');
+                            document.getElementById('jsonFormatBtn').classList.remove('text-white', 'bg-blue-600', 'hover:bg-blue-700');
+                        });
+                    </script>
                 </form>
             </div>
         """.trimIndent()
@@ -161,10 +200,9 @@ class BoxyController {
     }
 
     fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
-        val connectors = Json.decodeFromString<Connectors>(contents)
-        val maker = ConnectorMaker(connectors = connectors.connectors, useDark = useDark, "SVG")
-        val svg = maker.makeConnectorImage(scale = scale)
-        return svg.shapeSvg
+        val handler = ConnectorHandler()
+        val response = handler.handleSVG(contents, "SVG", scale.toString(), useDark)
+        return String(response.body ?: ByteArray(0))
     }
     /**
      * Retrieves the connector based on the provided payload, scale, type, useDark, and outlineColor parameters.

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets
 
 /**
  * ConnectorHandler class is responsible for handling requests related to SVG and PNG images.
+ * Supports both JSON and table format for connectors.
  */
 class ConnectorHandler {
 
@@ -48,9 +49,56 @@ class ConnectorHandler {
 
 
     private fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
-        val connectors = decodeFromJson(contents)
+        val connectors = if (isTableFormat(contents)) {
+            parseTableData(contents)
+        } else {
+            decodeFromJson(contents)
+        }
         val maker = createConnectorMaker(connectors.connectors, useDark, type)
         return makeConnectorImage(maker, scale)
+    }
+
+    /**
+     * Determines if the data is in table format
+     */
+    private fun isTableFormat(data: String): Boolean {
+        return data.contains("---") || (!data.trim().startsWith("{") && data.contains("|"))
+    }
+
+    /**
+     * Parses table-like data into Connectors object
+     */
+    private fun parseTableData(data: String): Connectors {
+        val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+        val connectorsList = mutableListOf<Connector>()
+        var inDataSection = false
+
+        for (line in lines) {
+            when {
+                line == "---" -> inDataSection = true
+                inDataSection && line.contains("|") && !isHeaderRow(line) -> {
+                    val parts = line.split("|").map { it.trim() }
+                    if (parts.size >= 1) {
+                        val text = parts[0]
+                        val description = if (parts.size > 1) parts[1] else ""
+                        val baseColor = if (parts.size > 2) parts[2] else "#E14D2A"
+                        connectorsList.add(Connector(text = text, description = description, baseColor = baseColor))
+                    }
+                }
+            }
+        }
+
+        return Connectors(connectors = connectorsList)
+    }
+
+    /**
+     * Helper function to detect header rows in table format
+     */
+    private fun isHeaderRow(line: String): Boolean {
+        val lowerLine = line.lowercase()
+        return lowerLine.contains("text") || 
+               lowerLine.contains("description") || 
+               lowerLine.contains("color")
     }
 
     private fun decodeFromJson(contents: String): Connectors {
