@@ -3,17 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocOps.io Extension Server</title>
+    <!-- SEO Meta Tags -->
+    <title>DocOps Extension Server - AsciiDoctor Visualizations & Extensions</title>
+    <meta name="description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents. Open source extensions for enhanced documentation.">
+    <meta name="keywords" content="AsciiDoctor, documentation, visualizations, charts, badges, timeline, Java, Kotlin, Maven, Gradle, technical documentation">
+    <meta name="author" content="DocOps.io">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://docops.io/">
+    <meta property="og:title" content="DocOps Extension Server - AsciiDoctor Visualizations">
+    <meta property="og:description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents.">
+    <meta property="og:image" content="https://docops.io/images/docops-social.png">
+    <meta property="og:site_name" content="DocOps.io">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://docops.io/">
+    <meta property="twitter:title" content="DocOps Extension Server - AsciiDoctor Visualizations">
+    <meta property="twitter:description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents.">
+    <meta property="twitter:image" content="https://docops.io/images/docops-social.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://docops.io/">
+
+    <!-- Favicon improvements -->
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "DocOps Extension Server",
+            "description": "AsciiDoctor extensions for creating data visualizations, charts, badges, timelines, and interactive documentation elements",
+            "url": "https://docops.io",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Cross-platform",
+            "programmingLanguage": ["Java", "Kotlin"],
+            "author": {
+                "@type": "Organization",
+                "name": "DocOps.io"
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "downloadUrl": "https://central.sonatype.com/artifact/io.docops/asciidoctorj-docops-panel",
+            "codeRepository": "https://github.com/docops-info/docops-extension-sever"
+        }
+    </script>
+
+
     <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
     <link href="css/output.css" rel="stylesheet">
     <script src="js/htmx.min.2.0.4.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/xml.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900">
 <!-- Header -->
@@ -307,7 +364,13 @@ Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
                         </div>
                         <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
                             <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
-                            <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
+                                <img src="images/adr.svg"
+                                     alt="Architecture Decision Record visualization showing decision context, rationale and consequences"
+                                     class="rounded-t-lg"
+                                     loading="lazy"
+                                     width="400"
+                                     height="300" />
+
                             </object>
                         </div>
                     </div>
