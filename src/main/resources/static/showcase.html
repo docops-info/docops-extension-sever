@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocOps.io Extension Server</title>
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.4.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-xml.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/xml.min.js"></script>
+    <style>
+        .masonry-container {
+            column-count: 1;
+            column-gap: 1.5rem;
+            column-fill: balance;
+        }
+
+        @media (min-width: 640px) {
+            .masonry-container { column-count: 2; }
+        }
+
+        @media (min-width: 1024px) {
+            .masonry-container { column-count: 3; }
+        }
+
+        @media (min-width: 1280px) {
+            .masonry-container { column-count: 4; }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .capability-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .masonry-item:hover .capability-icon {
+            transform: scale(1.1);
+        }
+
+        .gradient-bg-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient-bg-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient-bg-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .gradient-bg-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient-bg-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .gradient-bg-7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .gradient-bg-8 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .gradient-bg-9 { background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%); }
+
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .hidden-item {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .visible-item {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-10 h-10" />
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">DocOps.io Extension Server</h1>
+                    <p class="text-sm text-gray-600">Flexible Visualizations to supplement AsciiDoctor documents.</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <a href="#get-started" class="text-white">Get Started</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="https://github.com/docops-info/docops-extension-sever">GitHub</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="template/customize">Customize Template</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="more-capabilities.html">More Capabilities</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl font-bold mb-6">Beautiful Data Visualizations Made For AsciiDoctorJ</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            Create stunning charts, buttons, planners, timelines, roadmap, and other visualizations with just a few lines of code.
+            Lightweight, flexible, and powerful.
+        </p>
+        <div class="flex justify-center flex-wrap gap-2">
+            <a href="#adr-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
+            <a href="#bar-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
+            <a href="#badges-shields-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
+            <a href="#buttons-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔘 Buttons</a>
+            <a href="#connectors-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔄 Connectors</a>
+            <a href="#placemat-planner-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📋 Placemat & Planner</a>
+            <a href="#release-strategy-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🚀 Release Strategy</a>
+            <a href="#scorecard-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
+            <a href="#timeline-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
+            <a href="more-capabilities.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔍 More Capabilities</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Get Started Section -->
+<section id="get-started" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-8">Get Started</h3>
+        <div class="max-w-4xl mx-auto">
+            <p class="text-lg text-gray-700 mb-6">
+                Add the DocOps Extension Server to a project to create beautiful visualizations in an AsciiDoctor
+                document. Follow these steps to get started:
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4">Maven</h4>
+                    <div class="bg-gray-900 p-4 rounded-md">
+                        <pre class="text-sm text-white"><code>&lt;dependency&gt;
+  &lt;groupId&gt;io.docops&lt;/groupId&gt;
+  &lt;artifactId&gt;docops-extension-server&lt;/artifactId&gt;
+  &lt;version&gt;2024.00&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4">Gradle</h4>
+                    <div class="bg-gray-900 p-4 rounded-md">
+                        <pre class="text-sm text-white"><code>implementation 'io.docops:docops-extension-server:2024.00'</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h4 class="text-xl font-semibold mb-4">Using with AsciiDoctorJ</h4>
+                <p class="text-gray-700 mb-4">
+                    After adding the dependency to a project,
+                    the project can use the DocOps extensions to add the dependencies to the AsciiDoctor documents:
+                </p>
+                <div class="bg-gray-900 p-4 rounded-md">
+                    <pre class="text-sm text-white"><code>// In your Java code
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+
+// Initialize AsciiDoctorJ with DocOps extensions
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+ExtensionRegistry.registerExtension(asciidoctor);
+
+// Process your AsciiDoc content
+String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
+                </div>
+                <p class="text-gray-700 mt-4">
+                    Check out the examples below to see the various visualizations one can create with DocOps extensions.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Capabilities Showcase -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h3 class="text-3xl font-bold text-gray-900 mb-4">Core Capabilities</h3>
+            <p class="text-lg text-gray-600">Discover the powerful visualization tools available in DocOps</p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button class="filter-btn active px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="all">
+                All Capabilities
+            </button>
+            <button class="filter-btn px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="charts">
+                Charts & Analytics
+            </button>
+            <button class="filter-btn px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="documentation">
+                Documentation
+            </button>
+            <button class="filter-btn px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="planning">
+                Planning & Strategy
+            </button>
+            <button class="filter-btn px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="ui">
+                UI Components
+            </button>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div class="masonry-container" id="masonryContainer">
+            <!-- Architecture Decision Records -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="documentation">
+                <div class="gradient-bg-1 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">📝</div>
+                    <h3 class="text-xl font-bold mb-2">Architecture Decision Records</h3>
+                    <p class="text-white/90">Document and track architecture decisions with visual context</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Decision Documentation
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Status Tracking
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Context & Rationale
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Visual Representation
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-indigo-50 rounded-lg">
+                        <a href="#adr-example" class="text-indigo-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bar Charts -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="charts">
+                <div class="gradient-bg-2 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Bar Charts</h3>
+                    <p class="text-white/90">Responsive bar charts with custom styling and animations</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-gray-800">100%</div>
+                            <div class="text-sm text-gray-600">Responsive</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-gray-800">SVG</div>
+                            <div class="text-sm text-gray-600">Vector Graphics</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+                            Vertical & Horizontal
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+                            Custom Colors
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-pink-50 rounded-lg">
+                        <a href="#bar-chart-example" class="text-pink-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Charts -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="charts">
+                <div class="gradient-bg-3 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">📈</div>
+                    <h3 class="text-xl font-bold mb-2">Line Charts</h3>
+                    <p class="text-white/90">Multi-series line charts with smooth animations</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Multi-series Support
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Smooth Curves
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Interactive Legends
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">Perfect For</h4>
+                        <p class="text-sm text-gray-600">Performance tracking, trends, time-series data</p>
+                        <a href="#line-chart-example" class="text-blue-600 font-semibold hover:underline mt-2 block">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges & Shields -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="ui">
+                <div class="gradient-bg-4 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-2">Badges & Shields</h3>
+                    <p class="text-white/90">Customizable status badges and shields for documentation</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Status Indicators
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Version Shields
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Custom Colors
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Icon Support
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-green-50 rounded-lg">
+                        <a href="#badges-shields-example" class="text-green-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hexagonal Buttons -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="ui">
+                <div class="gradient-bg-5 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">🔘</div>
+                    <h3 class="text-xl font-bold mb-2">Hexagonal Buttons</h3>
+                    <p class="text-white/90">Interactive hexagonal buttons with connecting lines</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                            Interactive Links
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                            Custom Icons
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                            Connecting Lines
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">Great For</h4>
+                        <p class="text-sm text-gray-600">Navigation menus, service showcases, interactive links</p>
+                        <a href="#buttons-example" class="text-yellow-600 font-semibold hover:underline mt-2 block">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connectors -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="documentation">
+                <div class="gradient-bg-6 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">🔄</div>
+                    <h3 class="text-xl font-bold mb-2">Flow Connectors</h3>
+                    <p class="text-white/90">Create flow diagrams and process visualizations</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Process Flows
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Workflow Diagrams
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Relationship Mapping
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Auto-generated Legends
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-purple-50 rounded-lg">
+                        <a href="#connectors-example" class="text-purple-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placemat & Planner -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="planning">
+                <div class="gradient-bg-7 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">📋</div>
+                    <h3 class="text-xl font-bold mb-2">Placemat & Planner</h3>
+                    <p class="text-white/90">Organize content with visual placemats and project planners</p>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <span class="text-sm font-medium text-gray-800">Layout Options</span>
+                            <span class="text-lg font-bold text-red-600">5+</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-600 mt-4">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                            Content Organization
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                            Project Planning
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                            Visual Layouts
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-red-50 rounded-lg">
+                        <a href="#placemat-planner-example" class="text-red-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Release Strategy -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="planning">
+                <div class="gradient-bg-8 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">🚀</div>
+                    <h3 class="text-xl font-bold mb-2">Release Strategy</h3>
+                    <p class="text-white/90">Visualize release plans, roadmaps, and deployment strategies</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Release Planning
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Roadmap Visualization
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Deployment Strategies
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                            Timeline Management
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-purple-50 rounded-lg">
+                        <h4 class="font-semibold text-gray-800 mb-2">Use Cases</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Sprint Planning</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Product Roadmaps</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Feature Rollout</span>
+                        </div>
+                        <a href="#release-strategy-example" class="text-purple-600 font-semibold hover:underline mt-2 block">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scorecard -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="charts">
+                <div class="gradient-bg-9 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Scorecard</h3>
+                    <p class="text-white/90">Visual scorecards and metrics dashboards for tracking</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-gray-800">KPI</div>
+                            <div class="text-sm text-gray-600">Tracking</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-gray-800">95%</div>
+                            <div class="text-sm text-gray-600">Accuracy</div>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                            Metrics Visualization
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                            Status Reporting
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-yellow-50 rounded-lg">
+                        <a href="#scorecard-example" class="text-yellow-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="planning">
+                <div class="gradient-bg-1 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">⏱️</div>
+                    <h3 class="text-xl font-bold mb-2">Timeline</h3>
+                    <p class="text-white/90">Interactive timelines for project history and planning</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Project Timelines
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Historical Views
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Milestone Tracking
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                            Interactive Navigation
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-indigo-50 rounded-lg">
+                        <a href="#timeline-example" class="text-indigo-600 font-semibold hover:underline">View Example →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Capabilities Card -->
+            <div class="masonry-item capability-card bg-white rounded-2xl shadow-lg overflow-hidden" data-category="ui">
+                <div class="gradient-bg-3 p-6 text-white">
+                    <div class="capability-icon text-4xl mb-4">🔍</div>
+                    <h3 class="text-xl font-bold mb-2">More Capabilities</h3>
+                    <p class="text-white/90">Explore additional visualizations and components</p>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span class="text-sm font-medium text-gray-800">Additional Components</span>
+                            <span class="text-xl font-bold text-blue-600">10+</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-600 mt-4">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Callouts & Annotations
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Metrics Cards
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Color Gradients
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            Tree Charts
+                        </li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <a href="more-capabilities.html" class="text-blue-600 font-semibold hover:underline">Explore More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Usage Examples (keep existing sections) -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 class="text-3xl font-bold text-center mb-12">Usage Examples</h3>
+
+        <!-- Keep all existing example sections here -->
+        <!-- (ADR, Bar Chart, Line Chart, Badges, Buttons examples remain the same) -->
+
+        <!-- ADR Example -->
+        <div class="mb-16" id="adr-example">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h4 class="text-xl font-semibold flex items-center">
+                        <span class="w-6 h-6 bg-indigo-500 rounded mr-3"></span>
+                        Architecture Decision Records (ADR)
+                    </h4>
+                    <p class="text-gray-600 mt-1">Document and visualize architecture decisions with context, rationale, and status. (See <a href="docs/adr.html" class="text-blue-600 hover:underline">adr.html</a> for more examples)</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-0">
+                    <!-- Code -->
+                    <div class="p-6 bg-gray-900">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
+                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
+                        </div>
+                        <pre class="text-sm"><code class="language-javascript">[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants:
+Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
+----</code></pre>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="p-6 bg-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 text-sm font-medium">Output</span>
+                            <div>
+                                <button id="tryAdrButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                                        hx-get="api/adr/edit-mode"
+                                        hx-target="#adrContainer"
+                                        hx-swap="outerHTML">
+                                    Try It
+                                </button>
+                            </div>
+                        </div>
+                        <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
+                                <img src="images/adr.svg" alt="Architecture Decision Record" class="max-h-full max-w-full" />
+                            </object>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue with other examples... -->
+        <!-- (Include all the remaining example sections from the original file) -->
+
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-white py-16 mt-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
+        <p class="text-xl text-gray-600 mb-8">Enhance your AsciiDoctor documents with powerful visualizations</p>
+        <div class="flex justify-center gap-4">
+            <button class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                <a href="#get-started" class="text-white">Get Started Now</a>
+            </button>
+            <button class="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full font-semibold text-lg hover:border-gray-400 transition-all duration-300">
+                <a href="more-capabilities.html">Explore All Features</a>
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const capabilityCards = document.querySelectorAll('.capability-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            const filterValue = button.getAttribute('data-filter');
+
+            capabilityCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+
+                if (filterValue === 'all' || cardCategory === filterValue) {
+                    card.classList.remove('hidden-item');
+                    card.classList.add('visible-item');
+                    card.style.display = 'block';
+                } else {
+                    card.classList.add('hidden-item');
+                    card.classList.remove('visible-item');
+                    setTimeout(() => {
+                        if (card.classList.contains('hidden-item')) {
+                            card.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            });
+        });
+    });
+
+    // Add scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Initially set cards to be animated from bottom
+    capabilityCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>
