@@ -155,13 +155,37 @@ class RoadmapPlanController {
             val rmm = PlannerMaker()
 
             val svg = rmm.makePlannerImage(contents, title, "1.0")
+            val compressedPayload = compressString(contents)
+            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=roadmap&payload=${compressedPayload}&type=SVG&useDark=false&title=$title&numChars=$numChars&scale=$scale&filename=planner.svg"
 
             div = """
-            <div>$svg</div>
-            <div class="divider"></div> 
-            <div>
-               <a class="btn btn-outline" href="api/roadmap/?payload=${compressString(contents)}&title=$title&numChars=$numChars&scale=$scale&type=svg" target="_blank">Open Url</a>
+            <div id='imageblock'>
+                $svg
             </div>
+            <div class="mb-4">
+                <h3>Image Request</h3>
+                <div class="flex items-center">
+                    <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                    <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                        Copy URL
+                    </button>
+                </div>
+            </div>
+            <script>
+                function copyToClipboard(elementId) {
+                    const element = document.getElementById(elementId);
+                    element.select();
+                    document.execCommand('copy');
+
+                    // Show a temporary "Copied!" message
+                    const button = element.nextElementSibling;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                }
+            </script>
         """.trimIndent()
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }

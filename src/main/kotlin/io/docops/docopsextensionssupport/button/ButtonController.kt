@@ -19,7 +19,9 @@ package io.docops.docopsextensionssupport.button
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.util.UrlUtil
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -72,7 +74,7 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
             }
           ],
           "buttonType": "HEX",
-          "theme": {"hexLinesEnabled": true,"strokeColor": "#7695FF","colors": ["#353d4b"],"scale": 1,"columns": 3}
+          "theme": {"hexLinesEnabled": true,"strokeColor": "#2c3e50","colors": ["#3498db"],"scale": 1,"columns": 3}
         }
         """.trimIndent()
 
@@ -184,15 +186,15 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
     @Counted(value="docops.button.put.fromJsonToButtonForm.count", description="Success Fail count of fromJsonToButtonForm")
     @PutMapping("/buttons/form")
     @ResponseBody
-    fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme", required = false) theme: String): ResponseEntity<ByteArray> {
+    fun fromJsonToButtonForm(@RequestParam(name = "payload") payload: String, @RequestParam(name = "theme", required = false) theme: String, request: HttpServletRequest): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
-             fromRequestParameter(payload, theme)
+             fromRequestParameter(payload, theme, request)
         }
         log.info("fromJsonToButtonForm executed in ${timing.duration.inWholeMilliseconds}ms ")
         return timing.value
     }
 
-    private fun fromRequestParameter(payload: String, theme: String?): ResponseEntity<ByteArray> {
+    private fun fromRequestParameter(payload: String, theme: String?, request: HttpServletRequest): ResponseEntity<ByteArray> {
         try {
 
             var newPayload = "{}"
@@ -217,11 +219,38 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
             buttons.useDark = false
             val buttonShape = buttons.createSVGShape()
             val imgSrc = buttonShape.drawShape("SVG")
+            val compressedPayload = compressString(newPayload)
+            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=buttons&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=buttons.svg"
+
             val div = """
                 <div id='imageblock'>
                 $imgSrc
                 </div>
-                <div id="themeBox"  data-hx-swap-oob="true">$themeStr</div>
+                <div class="mb-4">
+                    <h3>Image Request</h3>
+                    <div class="flex items-center">
+                        <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                        <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                            Copy URL
+                        </button>
+                    </div>
+                </div>
+                <div id="themeBox" data-hx-swap-oob="true">$themeStr</div>
+                <script>
+                function copyToClipboard(elementId) {
+                    const element = document.getElementById(elementId);
+                    element.select();
+                    document.execCommand('copy');
+
+                    // Show a temporary "Copied!" message
+                    const button = element.nextElementSibling;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                }
+                </script>
             """.trimIndent()
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

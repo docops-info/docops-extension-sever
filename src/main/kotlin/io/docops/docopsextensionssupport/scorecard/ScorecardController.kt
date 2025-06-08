@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -202,8 +203,44 @@ class ScorecardController {
             val svg = sm.make(scoreCard = scoreCard)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-            return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+            headers.contentType = MediaType.TEXT_HTML
+
+            val compressedPayload = compressString(payload)
+            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=scorecard&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=scorecard.svg"
+
+            val div = """
+                <div id='imageblock'>
+                $svg
+                </div>
+                <div class="mb-4">
+                    <h3>Image Request</h3>
+                    <div class="flex items-center">
+                        <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                        <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                            Copy URL
+                        </button>
+                    </div>
+                </div>
+                <script>
+                var adrSource = `[docops,scorecard]\n----\n${payload}\n----`;
+
+                function copyToClipboard(elementId) {
+                    const element = document.getElementById(elementId);
+                    element.select();
+                    document.execCommand('copy');
+
+                    // Show a temporary "Copied!" message
+                    const button = element.nextElementSibling;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                }
+                </script>
+            """.trimIndent()
+
+            return ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         } catch (e: Exception) {
             e.printStackTrace()
             throw e

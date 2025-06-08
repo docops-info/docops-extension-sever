@@ -17,10 +17,13 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.util.UrlUtil
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
@@ -173,7 +176,7 @@ AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc"""
     @ResponseBody
     @Counted(value = "docops.badge.put", description= "Number of times create a badge using put method")
     @Timed(value = "docops.badge.put", description= "Time taken to create a badge using put method", percentiles=[0.5, 0.9])
-    fun getBadgeByForm(@RequestBody badge: FormBadge, servletResponse: HttpServletResponse) {
+    fun getBadgeByForm(@RequestBody badge: FormBadge, servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
         var fillColor = badge.messageColor
         if (null == fillColor) {
             fillColor = "GREEN"
@@ -191,7 +194,7 @@ AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc"""
 ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${badge.logo}|${badge.fontColor}|
 ----
 """.trimIndent()
-        val contents = makeBadgeAndSource(badgeSource, svg)
+        val contents = makeBadgeAndSource(badgeSource, svg, servletRequest)
         servletResponse.contentType = "text/html"
         servletResponse.characterEncoding = "UTF-8"
         servletResponse.status = 200
@@ -200,12 +203,32 @@ ${badge.label}|${badge.message}|${badge.url}|${badge.labelColor}|$fillColor|${ba
         writer.flush()
     }
 
-    fun makeBadgeAndSource(txt: String, svg: String): String {
+    fun makeBadgeAndSource(txt: String, svg: String, request: HttpServletRequest): String {
+        val compressedPayload = compressString(txt)
+        val imageUrl = UrlUtil.getImageUrl(
+            request = request,
+            kind = "badge",
+            payload = compressedPayload,
+            type = "SVG",
+            useDark = false,
+            title = "Title",
+            numChars = "24",
+            filename = "badge.svg"
+        )
+
         return """
         <div id='imageblock'>
         $svg
         </div>
-        <br/>
+        <div class="mb-4">
+            <h3>Image Request</h3>
+            <div class="flex items-center">
+                <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                    Copy URL
+                </button>
+            </div>
+        </div>
         <h3>Badge Source</h3>
         <div class='mb-5'>
         <pre>
@@ -215,6 +238,20 @@ $txt
         </pre>
         <script>
         var badgeSource = `${txt}`;
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+
+            // Show a temporary "Copied!" message
+            const button = element.nextElementSibling;
+            const originalText = button.textContent;
+            button.textContent = "Copied!";
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
         </script>
         </div>
     """.trimIndent()
@@ -415,4 +452,3 @@ fun unescape(text: String): String {
     }
     return result.toString()
 }
-

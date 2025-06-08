@@ -21,6 +21,7 @@ import io.docops.docopsextensionssupport.adr.AdrParser
 import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.util.UrlUtil
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -187,7 +188,7 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
                 val adr = AdrParser().parseContent(adrText)
                 val svg = generator.generate(adr)
 
-                val results = makeAdrSource(adrText, svg).lines().joinToString(transform = String::trim, separator = "\n")
+                val results = makeAdrSource(adrText, svg, servletRequest).lines().joinToString(transform = String::trim, separator = "\n")
                 servletResponse.contentType = "text/html"
                 servletResponse.characterEncoding = "UTF-8"
                 //servletResponse.addHeader("HX-Push-Url", "adrbuilder.html")
@@ -223,10 +224,19 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
         return adrText
     }
 
-    fun makeAdrSource(txt: String, svg: String): String {
+    fun makeAdrSource(txt: String, svg: String, request: HttpServletRequest): String {
         //language=html
         val compressedPayload = compressString(txt)
-        val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=adr&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=adr.svg"
+        val imageUrl = UrlUtil.getImageUrl(
+            request = request,
+            kind = "adr",
+            payload = compressedPayload,
+            type = "SVG",
+            useDark = false,
+            title = "Title",
+            numChars = "24",
+            filename = "adr.svg"
+        )
 
         return """
             <div id='imageblock'>

@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.docopsextensionssupport.diagram.PlaceMatMaker
 import io.docops.docopsextensionssupport.diagram.PlaceMatRequest
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
@@ -203,12 +204,38 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
+            val compressedPayload = compressString(contents)
+            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=release&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=release.svg"
+
             val div = """
                 <div id='imageblock'>
                 $svg
                 </div>
+                <div class="mb-4">
+                    <h3>Image Request</h3>
+                    <div class="flex items-center">
+                        <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                        <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                            Copy URL
+                        </button>
+                    </div>
+                </div>
                 <script>
                 var adrSource = `[docops,release]\n----\n${contents}\n----`;
+
+                function copyToClipboard(elementId) {
+                    const element = document.getElementById(elementId);
+                    element.select();
+                    document.execCommand('copy');
+
+                    // Show a temporary "Copied!" message
+                    const button = element.nextElementSibling;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                }
                 </script>
             """.trimIndent()
 
