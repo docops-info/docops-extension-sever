@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.web
 
 import io.docops.docopsextensionssupport.adr.AdrParser
 import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
+import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -224,10 +225,22 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
 
     fun makeAdrSource(txt: String, svg: String): String {
         //language=html
+        val compressedPayload = compressString(txt)
+        val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=adr&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=adr.svg"
+
         return """
             <div id='imageblock'>
                 $svg
              </div>
+            <div class="mb-4">
+                <h3>Image Request</h3>
+                <div class="flex items-center">
+                    <input id="imageUrlInput" type="text" value="$imageUrl" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                    <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                        Copy URL
+                    </button>
+                </div>
+            </div>
             <div class="">
                 <h3>Adr Source</h3>
                 <div>
@@ -243,8 +256,22 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
                 <script>
                 var adrSource = `[docops,adr]\n----\n${txt}\n----`;
                 document.querySelectorAll('pre code').forEach((el) => {
-                hljs.highlightElement(el);
+                    hljs.highlightElement(el);
                 });
+
+                function copyToClipboard(elementId) {
+                    const element = document.getElementById(elementId);
+                    element.select();
+                    document.execCommand('copy');
+
+                    // Show a temporary "Copied!" message
+                    const button = element.nextElementSibling;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                }
                 </script>
             </div>
 
