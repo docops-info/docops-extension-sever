@@ -50,12 +50,12 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
 
     @GetMapping("/edit-mode")
     @ResponseBody
-    fun getEditMode(): ResponseEntity<String> {
+    fun getEditMode(@RequestParam(required = false, defaultValue = "TLS") style: String): ResponseEntity<String> {
         //language=json
         val defaultReleaseJson = """
         {
   "title": "Product Release Strategy",
-  "style": "TLS", "scale": 0.5,
+  "style": "$style", "scale": 0.5,
   "releases": [
     {
       "type": "M1",
@@ -116,11 +116,17 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                         <label class="block text-sm font-medium text-gray-700 mb-1">Style:</label>
                         <div class="flex space-x-4">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="styleToggle" value="TLS" class="form-radio h-4 w-4 text-blue-600" checked onclick="updateStyle('TLS')">
+                                <input type="radio" name="styleToggle" value="TLS" class="form-radio h-4 w-4 text-blue-600" ${if (style == "TLS") "checked" else ""} 
+                                       hx-get="api/release/edit-mode?style=TLS" 
+                                       hx-target="#releaseContainer" 
+                                       hx-swap="outerHTML">
                                 <span class="ml-2 text-sm text-gray-700">TLS</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="styleToggle" value="R" class="form-radio h-4 w-4 text-blue-600" onclick="updateStyle('R')">
+                                <input type="radio" name="styleToggle" value="R" class="form-radio h-4 w-4 text-blue-600" ${if (style == "R") "checked" else ""} 
+                                       hx-get="api/release/edit-mode?style=R" 
+                                       hx-target="#releaseContainer" 
+                                       hx-swap="outerHTML">
                                 <span class="ml-2 text-sm text-gray-700">R</span>
                             </label>
                         </div>
@@ -141,14 +147,6 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
                             Click "Update Strategy" to see the preview
                         </div>
                     </div>
-                    <script>
-                        function updateStyle(style) {
-                            const textarea = document.getElementById('content');
-                            let jsonContent = JSON.parse(textarea.value);
-                            jsonContent.style = style;
-                            textarea.value = JSON.stringify(jsonContent, null, 2);
-                        }
-                    </script>
                 </form>
             </div>
         """.trimIndent()
