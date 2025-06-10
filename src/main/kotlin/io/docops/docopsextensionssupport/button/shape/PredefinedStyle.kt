@@ -103,15 +103,6 @@ fun filters() = """
             <feComposite in="glow" in2="blur" operator="in" result="softGlow" />
             <feComposite in="SourceGraphic" in2="softGlow" operator="over" />
         </filter>
-
-        <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
-            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white">
-                <fePointLight x="-5000" y="-10000" z="0000"/>
-            </feSpecularLighting>
-            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-            <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
-        </filter>
         <circle id="myCircle" cx="0" cy="0" r="60" class="card" stroke-width="1"/>
         """
 

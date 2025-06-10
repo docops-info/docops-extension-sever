@@ -552,7 +552,7 @@ class Buttons(
                 Oval(this)
             }
             ButtonType.HEX -> {
-                HoneyComb(this)
+                Hex(this)
             }
         }
         return creator

@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.button.shape
 
-import io.docops.docopsextensionssupport.badge.manipulateSVG
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.ButtonDisplay
 import io.docops.docopsextensionssupport.button.Buttons
@@ -8,13 +7,10 @@ import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import org.silentsoft.simpleicons.SimpleIcons
-import java.io.ByteArrayInputStream
-import java.util.Base64
-import javax.xml.parsers.DocumentBuilderFactory
 
-class HoneyComb(buttons: Buttons) : Regular(buttons) {
+class Hex(buttons: Buttons) : Regular(buttons) {
 
-    companion object {
+    companion object Companion {
         const val BUTTON_HEIGHT: Int = 255
         const val BUTTON_WIDTH = 295
         const val BUTTON_PADDING = 10
@@ -97,10 +93,10 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
                 win = "_blank"
             }
         }
-        var filter = "filter=\"url(#Bevel2)\""
+        var filter = ""
         var fill = "${button.color}"
         if(!isPdf) {
-            filter = ""
+            filter = "filter=\"url(#Bevel2)\""
             fill = "url(#btn_${button.id})"
         }
         val btnLook = """fill="$fill" $filter"""
@@ -158,19 +154,23 @@ class HoneyComb(buttons: Buttons) : Regular(buttons) {
     private fun getIcon(icon: String) : String {
         var logo = icon
         val simpleIcon = SimpleIcons.get(icon.replace("<", "").replace(">", ""))
+        var filter = ""
+        if (!isPdf) {
+            filter = "filter=\"url(#Bevel2)\""
+        }
         if (simpleIcon != null) {
             val ico = simpleIcon.svg
             if(ico.isNotBlank()) {
                 return """
                     <svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}" filter="url(#Bevel2)"/>
+                    <path d="${simpleIcon.path}" fill="#${simpleIcon.hex}" $filter/>
                     </svg>
                 """.trimIndent()
 
             }
         }
         return """
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" filter="url(#Bevel2)">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" $filter>
                     <image width='50' height="50" xlink:href="$logo" href="$logo" />
             </svg>
             """.trimIndent()
