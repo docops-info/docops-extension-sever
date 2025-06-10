@@ -98,5 +98,16 @@ fun MigrationScoreCard.calcWidth(): Int {
 }
 
 fun MigrationScoreCard.calcHeight(): Int {
-    return (1100 * scale).toInt()
+    // Calculate the number of rows needed for key optimizations in two columns
+    val itemsPerColumn = (keyOptimizations.size + 1) / 2
+    val totalRows = Math.max(1, itemsPerColumn)
+
+    // Calculate the footer position based on the content
+    val footerY = 750 + (performanceMetrics.size + 1) / 2 * 180 + totalRows * 60
+
+    // Add the footer height (40) and some buffer (50) to ensure it's fully visible
+    val dynamicHeight = footerY + 90
+
+    // Use the maximum of the dynamic height and the original fixed height to ensure backward compatibility
+    return (Math.max(dynamicHeight, 1100) * scale).toInt()
 }

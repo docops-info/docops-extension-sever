@@ -81,10 +81,16 @@ class ScoreCardParser {
             }
         }
 
-        // Save the last section - THIS WAS MISSING
-        sections[currentSection] = sectionContent.toString().trim()
+        // Save the last section - THIS IS CRITICAL FOR FOOTER
+        if (currentSection.isNotBlank()) {
+            val content = sectionContent.toString().trim()
+            if (content.isNotBlank()) {
+                sections[currentSection] = content
+            }
+        }
 
-        return sections.filter { it.key.isNotBlank() && it.value.isNotBlank() }
+
+        return sections
     }
     /**
      * Parses the configuration section.
@@ -281,35 +287,21 @@ class ScoreCardParser {
     private fun parseOptimizations(optimizationsSection: String): List<Optimization> {
         val optimizations = mutableListOf<Optimization>()
 
-        println("[DEBUG] Raw optimizations section: '$optimizationsSection'")
-        println("[DEBUG] Raw section length: ${optimizationsSection.length}")
-        println("[DEBUG] Raw section bytes: ${optimizationsSection.toByteArray().contentToString()}")
 
         val lines = optimizationsSection.split("\n").filter { it.isNotBlank() }
 
-        println("[DEBUG] Split lines: $lines")
-        println("[DEBUG] Number of non-blank lines: ${lines.size}")
 
         for ((index, line) in lines.withIndex()) {
-            println("[DEBUG] Processing line $index: '$line'")
             val parts = line.split("|").map { it.trim() }
-            println("[DEBUG] Line parts: $parts, Size: ${parts.size}")
 
             if (parts.size >= 3) {
                 val number = parts[0].toIntOrNull() ?: 0
                 val title = parts[1]
                 val description = parts[2]
-                println("[DEBUG] Creating optimization: number=$number, title='$title', description='$description'")
                 optimizations.add(Optimization(number, title, description))
-            } else {
-                println("[DEBUG] Skipping line due to insufficient parts")
             }
         }
 
-        println("[DEBUG] Final parsed optimizations: ${optimizations.size}")
-        optimizations.forEachIndexed { index, opt ->
-            println("[DEBUG] Optimization $index: number=${opt.number}, title='${opt.title}', description='${opt.description}'")
-        }
 
         return optimizations
     }
@@ -320,10 +312,20 @@ class ScoreCardParser {
      * @return A MigrationSummary object
      */
     private fun parseSummary(summarySection: String): MigrationSummary {
-        val parts = summarySection.lines().firstOrNull()?.split("|")?.map { it.trim() }
+        // Process all lines of the summary section, not just the first one
+        val lines = summarySection.lines().filter { it.isNotBlank() }
 
-        return if (parts != null && parts.size >= 3) {
-            // Fix: highlights start from index 2, not 3
+        // If there are no lines, return a default summary
+        if (lines.isEmpty()) {
+            return MigrationSummary(0, "Unknown", emptyList())
+        }
+
+        // Process the first line to extract the overall improvement and status
+        val firstLine = lines[0]
+        val parts = firstLine.split("|").map { it.trim() }
+
+        return if (parts.size >= 3) {
+            // Extract highlights from all parts starting from index 2
             val highlights = if (parts.size > 2) parts.subList(2, parts.size) else emptyList()
 
             MigrationSummary(

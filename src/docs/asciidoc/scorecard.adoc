@@ -80,7 +80,7 @@ Migration Duration: 8 weeks | Team: 3 DBAs + 2 developers | Downtime: 4 hours
 title=Database Migration ScoreCard: Oracle → AWS Aurora PostgreSQL
 subtitle=On-Premise to Cloud Migration with SQL Optimization & Performance Tuning
 headerTitle=Database Architecture Transformation & Query Optimization Results
-scale=0.6
+scale=0.7
 ---
 [before]
 title=BEFORE: On-Premise Oracle Database
@@ -294,6 +294,56 @@ Migration Duration: 6 weeks | Team: 2 DBAs + 3 developers | Downtime: None
 ----
 ....
 
+[docops,scorecard]
+----
+title=Database Migration ScoreCard: MongoDB → Amazon DocumentDB
+subtitle=NoSQL Database Migration with Performance Optimization
+headerTitle=Document Database Migration Results
+scale=0.7
+backgroundColor=#f5f5f5
+---
+[before]
+title=BEFORE: Self-Hosted MongoDB
+---
+[before.items]
+MongoDB 4.2 (Self-Hosted) | Manual sharding, complex maintenance, scaling issues | critical | !
+Inconsistent Backup Strategy | Weekly backups, manual process, recovery gaps | warning | !
+Limited Monitoring | Basic metrics only, no proactive alerts | warning | !
+---
+[before.performance]
+Baseline Performance | 40 | #e74c3c
+---
+[after]
+title=AFTER: Amazon DocumentDB
+---
+[after.items]
+Amazon DocumentDB | Managed service, automatic scaling, MongoDB-compatible | good | ✓
+Automated Backups | Continuous backups, point-in-time recovery | good | ✓
+Enhanced Monitoring | CloudWatch integration, custom dashboards | good | ✓
+---
+[after.performance]
+Enhanced Performance | 85 | #27ae60
+---
+[metrics]
+Query Performance | #3498db
+---
+[metrics.items]
+Read Operations | -65% latency
+Write Operations | -42% latency
+Index Utilization | +85% efficiency
+---
+[optimizations]
+1 | Index Optimization | Created compound indexes for common query patterns
+2 | Connection Pooling | Implemented proper connection management
+3 | Document Structure | Redesigned document schema for better query performance
+---
+[summary]
+88 | EXCELLENT | Zero-downtime migration | 65% latency reduction | 40% cost savings
+---
+[footer]
+Migration Duration: 6 weeks | Team: 2 DBAs + 3 developers | Downtime: None
+----
+
 === Application Modernization ScoreCard
 
 This example shows how to use the ScoreCard for tracking application modernization efforts:
@@ -364,6 +414,68 @@ Modernization Duration: 9 months | Team: 12 developers | Approach: Strangler Pat
 ----
 ....
 
+[docops,scorecard]
+----
+title=Application Modernization ScoreCard: Monolith to Microservices
+subtitle=Legacy Java Application Transformation to Cloud-Native Architecture
+headerTitle=Application Architecture Transformation Results
+scale=0.7
+backgroundColor=#f0f7ff
+titleColor=#0a2540
+headerColor=#4a56e2
+beforeSectionColor=#e63946
+afterSectionColor=#2a9d8f
+---
+[before]
+title=BEFORE: Monolithic Java Application
+---
+[before.items]
+Monolithic Architecture | Single codebase, tightly coupled components, difficult to scale | critical | !
+Java EE 6 + Oracle | Legacy technology stack with vendor lock-in | critical | !
+Manual Deployment | Complex, error-prone deployment process, 2-day release cycle | warning | !
+---
+[before.performance]
+Legacy Application | 35 | #e63946
+---
+[after]
+title=AFTER: Microservices Architecture
+---
+[after.items]
+Microservices | Decoupled services, independent scaling, resilient architecture | good | ✓
+Spring Boot + Kubernetes | Modern cloud-native stack with containerization | good | ✓
+CI/CD Pipeline | Automated testing and deployment, multiple releases per day | good | ✓
+---
+[after.performance]
+Modernized Application | 92 | #2a9d8f
+---
+[metrics]
+Performance Improvements | #4a56e2
+---
+[metrics.items]
+Response Time | -70%
+Throughput | +300%
+Resource Utilization | -45%
+---
+[metrics]
+Development Metrics | #4361ee
+---
+[metrics.items]
+Deployment Frequency | Daily (was bi-weekly)
+Lead Time for Changes | 2 hours (was 3 days)
+Change Failure Rate | 4% (was 23%)
+---
+[optimizations]
+1 | Domain-Driven Design | Restructured services around business domains
+2 | Event-Driven Architecture | Implemented message queues for asynchronous processing
+3 | API Gateway | Centralized routing, authentication, and rate limiting
+4 | Observability | Implemented distributed tracing and centralized logging
+---
+[summary]
+92 | EXCEPTIONAL | Scalable architecture | 70% faster response times | 85% faster releases
+---
+[footer]
+Modernization Duration: 9 months | Team: 12 developers | Approach: Strangler Pattern
+----
 === DevOps Transformation ScoreCard
 
 This example demonstrates tracking DevOps transformation progress:
@@ -426,6 +538,60 @@ Transformation Duration: 12 months | Approach: Incremental | Training: 24 worksh
 ----
 ....
 
+[docops,scorecard]
+----
+title=DevOps Transformation ScoreCard
+subtitle=From Traditional Development to DevOps Culture and Practices
+headerTitle=Software Delivery Performance Transformation
+scale=1.0
+backgroundColor=#f8f9fa
+headerColor=#6610f2
+beforeSectionColor=#dc3545
+afterSectionColor=#198754
+---
+[before]
+title=BEFORE: Traditional Development Process
+---
+[before.items]
+Siloed Teams | Separate dev and ops teams with conflicting goals | critical | !
+Manual Processes | Manual testing, deployments, and infrastructure management | critical | !
+Quarterly Releases | Long release cycles with large batches of changes | warning | !
+---
+[before.performance]
+Delivery Performance | 25 | #dc3545
+---
+[after]
+title=AFTER: DevOps Implementation
+---
+[after.items]
+Cross-Functional Teams | Integrated teams with shared responsibility | good | ✓
+Automation | CI/CD pipelines, infrastructure as code, automated testing | good | ✓
+Continuous Delivery | Small, frequent releases with fast feedback | good | ✓
+---
+[after.performance]
+Delivery Performance | 88 | #198754
+---
+[metrics]
+DORA Metrics | #6610f2
+---
+[metrics.items]
+Deployment Frequency | 25x per day (was 1x per quarter)
+Lead Time for Changes | 2.5 hours (was 45 days)
+Mean Time to Recovery | 30 minutes (was 24 hours)
+Change Failure Rate | 5% (was 35%)
+---
+[optimizations]
+1 | CI/CD Implementation | Jenkins pipelines with automated testing and deployment
+2 | Infrastructure as Code | Terraform for infrastructure provisioning and management
+3 | Monitoring & Observability | Prometheus, Grafana, and ELK stack implementation
+4 | Feature Flags | Implemented feature toggles for safer deployments
+---
+[summary]
+88 | EXCELLENT | 98% reduction in lead time | 85% reduction in failures | 25x more deployments
+---
+[footer]
+Transformation Duration: 12 months | Approach: Incremental | Training: 24 workshops
+----
 === Website Redesign ScoreCard
 
 This example shows how to track website redesign projects:
@@ -494,6 +660,68 @@ Mobile Traffic | +145%
 Project Duration: 14 weeks | Team: 3 designers, 4 developers | A/B Testing: 12 experiments
 ----
 ....
+
+[docops,scorecard]
+----
+title=Website Redesign ScoreCard
+subtitle=E-Commerce Platform Modernization and UX Enhancement
+headerTitle=Digital Experience Transformation Results
+scale=1.0
+backgroundColor=#ffffff
+headerColor=#6c5ce7
+beforeSectionColor=#e84393
+afterSectionColor=#00b894
+---
+[before]
+title=BEFORE: Legacy Website
+---
+[before.items]
+Outdated Design | Non-responsive, desktop-only experience | critical | !
+Slow Performance | 6.2s average page load time | critical | !
+Poor Conversion | 1.2% conversion rate, high bounce rate | warning | !
+---
+[before.performance]
+User Experience Score | 32 | #e84393
+---
+[after]
+title=AFTER: Redesigned Website
+---
+[after.items]
+Modern Design | Responsive, mobile-first approach | good | ✓
+Optimized Performance | 1.8s average page load time | good | ✓
+Enhanced Conversion | 3.8% conversion rate, lower bounce rate | good | ✓
+---
+[after.performance]
+User Experience Score | 89 | #00b894
+---
+[metrics]
+Performance Metrics | #6c5ce7
+---
+[metrics.items]
+Page Load Time | -71%
+Time to Interactive | -68%
+First Contentful Paint | -75%
+---
+[metrics]
+Business Metrics | #6c5ce7
+---
+[metrics.items]
+Conversion Rate | +217%
+Average Order Value | +28%
+Mobile Traffic | +145%
+---
+[optimizations]
+1 | Image Optimization | Implemented WebP format and lazy loading
+2 | Code Splitting | Reduced JavaScript bundle size with dynamic imports
+3 | Server-Side Rendering | Improved initial load time and SEO
+4 | Streamlined Checkout | Reduced checkout steps from 5 to 2
+---
+[summary]
+89 | EXCEPTIONAL | 71% faster loading | 217% higher conversion | 28% higher AOV
+---
+[footer]
+Project Duration: 14 weeks | Team: 3 designers, 4 developers | A/B Testing: 12 experiments
+----
 
 === Security Enhancement ScoreCard
 
@@ -564,6 +792,67 @@ Initiative Duration: 10 months | Investment: $1.2M | ROI: 320% (breach preventio
 ----
 ....
 
+[docops,scorecard]
+----
+title=Security Enhancement ScoreCard
+subtitle=Enterprise Security Posture Improvement Initiative
+headerTitle=Cybersecurity Resilience Transformation
+scale=1.0
+backgroundColor=#f5f5f5
+headerColor=#3a0ca3
+beforeSectionColor=#f72585
+afterSectionColor=#4cc9f0
+---
+[before]
+title=BEFORE: Security Vulnerabilities
+---
+[before.items]
+Outdated Authentication | Password-only auth, no MFA | critical | !
+Unpatched Systems | 68% of systems behind on security patches | critical | !
+Limited Monitoring | No 24/7 monitoring, basic logging | warning | !
+---
+[before.performance]
+Security Posture | 28 | #f72585
+---
+[after]
+title=AFTER: Enhanced Security
+---
+[after.items]
+Modern Authentication | SSO with MFA and conditional access | good | ✓
+Patch Management | Automated patching, 99.5% compliance | good | ✓
+Advanced Monitoring | 24/7 SOC, SIEM implementation | good | ✓
+---
+[after.performance]
+Security Posture | 94 | #4cc9f0
+---
+[metrics]
+Vulnerability Metrics | #3a0ca3
+---
+[metrics.items]
+Critical Vulnerabilities | -98%
+Mean Time to Patch | -92%
+Security Incidents | -85%
+---
+[metrics]
+Compliance Metrics | #3a0ca3
+---
+[metrics.items]
+Compliance Score | +215%
+Audit Findings | -90%
+Risk Score | -75%
+---
+[optimizations]
+1 | Zero Trust Architecture | Implemented least privilege access and network segmentation
+2 | Automated Security Testing | Integrated SAST/DAST into CI/CD pipeline
+3 | Security Awareness Training | Monthly training and simulated phishing campaigns
+4 | Endpoint Detection & Response | Deployed EDR solution across all endpoints
+---
+[summary]
+94 | EXCEPTIONAL | 98% fewer vulnerabilities | 85% fewer incidents | 90% fewer audit findings
+---
+[footer]
+Initiative Duration: 10 months | Investment: $1.2M | ROI: 320% (breach prevention)
+----
 === AI/ML Implementation ScoreCard
 
 This example shows how to track AI/ML implementation projects:
@@ -633,6 +922,67 @@ Implementation: 7 months | Data Scientists: 3 | Customer Data: 2.5M historical t
 ----
 ....
 
+[docops,scorecard]
+----
+title=AI/ML Implementation ScoreCard
+subtitle=Customer Service Automation with Machine Learning
+headerTitle=Intelligent Automation Transformation Results
+scale=1.0
+backgroundColor=#f0f0f0
+headerColor=#7209b7
+beforeSectionColor=#f94144
+afterSectionColor=#43aa8b
+---
+[before]
+title=BEFORE: Manual Customer Service
+---
+[before.items]
+Manual Ticket Routing | Human agents manually categorizing tickets | critical | !
+No Predictive Capabilities | Reactive approach to customer issues | warning | !
+Limited Self-Service | Basic FAQ, no intelligent assistance | warning | !
+---
+[before.performance]
+Service Efficiency | 35 | #f94144
+---
+[after]
+title=AFTER: AI-Enhanced Customer Service
+---
+[after.items]
+ML-Based Ticket Routing | Automatic categorization and priority assignment | good | ✓
+Predictive Analytics | Proactive issue detection and resolution | good | ✓
+AI-Powered Chatbot | 24/7 intelligent virtual assistant | good | ✓
+---
+[after.performance]
+Service Efficiency | 92 | #43aa8b
+---
+[metrics]
+Operational Metrics | #7209b7
+---
+[metrics.items]
+First Response Time | -72%
+Resolution Time | -68%
+Agent Productivity | +85%
+---
+[metrics]
+Business Impact | #7209b7
+---
+[metrics.items]
+Customer Satisfaction | +45%
+Self-Service Rate | +320%
+Cost per Ticket | -62%
+---
+[optimizations]
+1 | NLP Model Training | Custom model trained on historical support data
+2 | Sentiment Analysis | Real-time customer sentiment detection
+3 | Knowledge Graph | Connected knowledge base for contextual responses
+4 | Continuous Learning | Feedback loops for ongoing model improvement
+---
+[summary]
+92 | EXCEPTIONAL | 72% faster responses | 68% faster resolution | 62% lower cost per ticket
+---
+[footer]
+Implementation: 7 months | Data Scientists: 3 | Customer Data: 2.5M historical tickets
+----
 === Cloud Migration ScoreCard
 
 This example demonstrates tracking cloud migration projects:
@@ -702,6 +1052,67 @@ Migration Duration: 8 months | Workloads: 85 applications | Approach: 6R Strateg
 ----
 ....
 
+[docops,scorecard]
+----
+title=Cloud Migration ScoreCard: On-Premise to AWS
+subtitle=Enterprise Infrastructure Transformation to Cloud-Native Architecture
+headerTitle=Digital Infrastructure Modernization Results
+scale=0.7
+backgroundColor=#f7f7f7
+headerColor=#0077b6
+beforeSectionColor=#ef476f
+afterSectionColor=#06d6a0
+---
+[before]
+title=BEFORE: On-Premise Data Center
+---
+[before.items]
+Physical Infrastructure | Hardware refresh cycles, capital expenses | critical | $
+Limited Scalability | Manual scaling, capacity planning challenges | warning | !
+High Maintenance | 65% of IT time spent on "keeping the lights on" | critical | !
+---
+[before.performance]
+Infrastructure Agility | 30 | #ef476f
+---
+[after]
+title=AFTER: AWS Cloud Environment
+---
+[after.items]
+Cloud Infrastructure | Pay-as-you-go model, operational expenses | good | $
+Auto-Scaling | Dynamic resource allocation based on demand | good | ✓
+Managed Services | 70% reduction in maintenance overhead | good | ✓
+---
+[after.performance]
+Infrastructure Agility | 88 | #06d6a0
+---
+[metrics]
+Performance Metrics | #0077b6
+---
+[metrics.items]
+Provisioning Time | -95% (days to minutes)
+System Availability | +2.1% (99.9% to 99.99%)
+Disaster Recovery | RTO reduced by 85%
+---
+[metrics]
+Financial Metrics | #0077b6
+---
+[metrics.items]
+Infrastructure Costs | -32%
+Operational Overhead | -65%
+Innovation Capacity | +120%
+---
+[optimizations]
+1 | Infrastructure as Code | Terraform for automated provisioning
+2 | Containerization | Docker and Kubernetes for application deployment
+3 | Serverless Architecture | Lambda functions for event-driven workloads
+4 | Cloud-Native Security | Defense-in-depth security architecture
+---
+[summary]
+88 | EXCELLENT | 32% cost reduction | 95% faster provisioning | 65% less operational overhead
+---
+[footer]
+Migration Duration: 8 months | Workloads: 85 applications | Approach: 6R Strategy
+----
 == Best Practices and Creative Uses
 
 === Best Practices for Creating Effective Scorecards
