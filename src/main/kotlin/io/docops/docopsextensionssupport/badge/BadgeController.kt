@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.chart.BarChartImproved
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.util.UrlUtil
@@ -385,6 +386,10 @@ $txt
         return badgeHandler.createBadgeFromString(decodedPayload,  isPdf = false)
     }
 
+    @PostMapping("badge", produces = ["image/svg+xml"])
+    fun badgeFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        return badges(payload, "SVG")
+    }
 
     @GetMapping("/badge")
     fun  getFormBadge(

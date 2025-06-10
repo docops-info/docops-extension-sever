@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.adr.AdrParser
+import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.util.UrlUtil
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -15,9 +17,12 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -216,4 +221,13 @@ class BarController {
         log.info{"bargroup executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
     }
+    @PostMapping("", produces = ["image/svg+xml"])
+    fun barFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        val barChartImproved = BarChartImproved()
+        val svg = barChartImproved.makeBarSvg(payload)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+    }
 }
+

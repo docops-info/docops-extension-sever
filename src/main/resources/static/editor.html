@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocOps Extension Server - Editor</title>
+    <meta name="description" content="Create and edit visualizations for AsciiDoctor documents. Try different capabilities with custom payloads.">
+    <meta name="keywords" content="AsciiDoctor, documentation, visualizations, editor, charts, badges, timeline, Java, Kotlin">
+    <meta name="author" content="DocOps.io">
+    
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.4.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-10 h-10" />
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">DocOps.io Extension Server</h1>
+                    <p class="text-sm text-gray-600">Visualization Editor</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <a href="index.html" class="text-white">Main Page</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="https://github.com/docops-info/docops-extension-sever">GitHub</a>
+                </button>
+                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
+                    <a href="more-capabilities.html">More Capabilities</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Visualization Editor</h2>
+        <p class="text-lg text-gray-700 mb-8 text-center">
+            Create and customize visualizations by selecting a capability and editing the payload.
+        </p>
+        
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                <form id="editorForm" class="space-y-6">
+                    <div>
+                        <label for="capability" class="block text-sm font-medium text-gray-700 mb-1">Select Capability:</label>
+                        <select id="capability" name="capability" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm" onchange="loadCapabilityTemplate()">
+                            <option value="">-- Select a capability --</option>
+                            <option value="adr">Architecture Decision Records (ADR)</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="linechart">Line Chart</option>
+                            <option value="badge">Badges & Shields</option>
+                            <option value="buttons">Buttons</option>
+                            <option value="connector">Connectors</option>
+                            <option value="placemat">Placemat</option>
+                            <option value="roadmap">Roadmap/Planner</option>
+                            <option value="release">Release Strategy</option>
+                            <option value="scorecard">Scorecard</option>
+                            <option value="timeline">Timeline</option>
+                            <option value="callout">Callout</option>
+                            <option value="metricscard">Metrics Card</option>
+                            <option value="wordcloud">Word Cloud</option>
+                            <option value="treechart">Tree Chart</option>
+                            <option value="quadrant">Quadrant Chart</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="payload" class="block text-sm font-medium text-gray-700 mb-1">Edit Payload:</label>
+                        <textarea id="payload" name="payload" rows="20" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm font-mono"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button type="button" id="generateButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-4 py-2 text-center" onclick="generateVisualization()">
+                            Generate Visualization
+                        </button>
+                        <button type="button" class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center" onclick="resetForm()">
+                            Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-semibold mb-4">Output</h3>
+                
+                <div id="visualizationOutput" class="bg-white rounded-lg p-4 mb-6 min-h-[300px] flex items-center justify-center border border-gray-200">
+                    <div class="text-center text-gray-500">
+                        <p>Select a capability and generate a visualization to see the output here.</p>
+                    </div>
+                </div>
+                
+                <div id="imageRequestSection" class="mb-6 hidden">
+                    <h4 class="text-md font-semibold mb-2">Image Request</h4>
+                    <div class="flex items-center">
+                        <input id="imageUrlInput" type="text" value="" readonly class="w-full p-2 border border-gray-300 rounded-l-md text-sm bg-gray-50">
+                        <button onclick="copyToClipboard('imageUrlInput')" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                            Copy URL
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="sourceCodeSection" class="hidden">
+                    <h4 class="text-md font-semibold mb-2">Source Code</h4>
+                    <pre id="sourceCode" class="bg-gray-900 text-white p-4 rounded-md text-sm overflow-auto max-h-[200px]"><code></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-gray-900 text-white py-12 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-8 h-8" />
+                    <span class="font-bold text-lg">DocOps.io</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Modern data visualization library for the web. Create beautiful, interactive charts with ease.
+                </p>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Documentation</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="index.html#get-started" class="hover:text-white">Getting Started</a></li>
+                    <li><a href="#" class="hover:text-white">API Reference</a></li>
+                    <li><a href="docs/examples.html" class="hover:text-white">Examples</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Community</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="https://github.com/docops-info/docops-extension-sever" class="hover:text-white">GitHub</a></li>
+                    <li><a href="#" class="hover:text-white">Discord</a></li>
+                    <li><a href="#" class="hover:text-white">Stack Overflow</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Resources</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="changelog.html" class="hover:text-white">Changelog</a></li>
+                    <li><a href="#" class="hover:text-white">Roadmap</a></li>
+                    <li><a href="#" class="hover:text-white">Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2025 DocOps.io. All rights reserved. Built with ❤️ for developers.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Template examples for each capability
+    const templates = {
+        adr: `title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants: Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)`,
+        
+        bar: `----
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
+----`,
+        
+        linechart: `title=Department Performance
+width=800
+smooth=true
+darkMode=false
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70`,
+        
+        badge: `Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<Java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc`,
+        
+        buttons: `{
+  "buttons": [
+    {
+      "label": "Amazon",
+      "link": "https://www.amazon.com",
+      "description": "E-commerce, cloud computing, digital streaming",
+      "embeddedImage": {"ref": "<Amazon>"}
+    },
+    {
+      "label": "Apple",
+      "link": "https://www.apple.com",
+      "description": "Consumer electronics, software and services",
+      "embeddedImage": {"ref": "<Apple>"}
+    },
+    {
+      "label": "DocOps.io",
+      "link": "https://docops.io",
+      "description": "Documentation experience for developers",
+      "embeddedImage": {"ref": "images/docops.svg"}
+    }
+  ],
+  "buttonType": "HEX",
+  "theme": {"hexLinesEnabled": true,"strokeColor": "#7695FF","colors": ["#353d4b"],"scale": 1,"columns": 3}
+}`,
+        
+        connector: `---
+Text | Description | Color
+Developer | Writes unit tests | #E14D2A
+Unit Tests | Unit tests produces excel | #82CD47
+Microsoft Excel | Excel is stored in test engine | #687EFF
+Test Engine | Test Engine write documentation | #C02739
+API Documentation Output | Documentation is committed | #FEC260`,
+        
+        placemat: `{
+  "title": "System Architecture Overview",
+  "placeMats": [
+    {"name": "Frontend","legend": "UI"},
+    {"name": "Backend","legend": "API"},
+    {"name": "Database","legend": "DATA"}
+  ],
+  "config": {
+  "legend": [
+    {"legend": "UI","color": "#4361ee"},
+    {"legend": "API","color": "#3a0ca3"},
+    {"legend": "DATA","color": "#7209b7"}
+  ]}
+}`,
+        
+        roadmap: `- now Authentication
+* Implement user authentication system
+* Set up CI/CD pipeline
+* Create database schema
+- next REST
+* Develop REST API endpoints
+* Build frontend components
+* Implement search functionality
+- later Analytics
+* Add analytics dashboard
+* Optimize performance
+* Implement advanced features
+- done Requirements
+* Project requirements gathering
+* Architecture design
+* Technology stack selection`,
+        
+        release: `{
+  "title": "Product Release Strategy",
+  "style": "TLS", "scale": 0.5,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
+        "Define release scope and objectives",
+        "Identify key features and enhancements",
+        "Create detailed project timeline",
+        "Allocate resources and responsibilities"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
+        "Code development and unit testing",
+        "Integration of components",
+        "Documentation updates",
+        "Internal code reviews"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
+        "Functional testing",
+        "Performance testing",
+        "Security testing",
+        "User acceptance testing"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
+        "Final approval and sign-off",
+        "Production deployment",
+        "Post-deployment verification",
+        "Monitoring and support"
+      ]
+    }
+  ]
+}`,
+        
+        scorecard: `{
+  "title": "Technology Comparison",
+  "initiativeTitle": "Current Solution",
+  "outcomeTitle": "Proposed Solution",
+  "initiativeItems": [
+    {"displayText":"Limited scalability"},
+    {"displayText":"High maintenance costs"},
+    {"displayText":"Manual deployment process"},
+    {"displayText":"Minimal monitoring capabilities"},
+    {"displayText":"Difficult to extend"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Highly scalable architecture"},
+    {"displayText":"Reduced operational costs"},
+    {"displayText":"Automated CI/CD pipeline"},
+    {"displayText":"Comprehensive monitoring"},
+    {"displayText":"Modular and extensible design"}
+  ]
+}`,
+        
+        timeline: `-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+-
+date: September 1st, 2023
+text: DocOps.io will begin work on revamping the asciidoctorj converter.
+With the asciidoctorj 3.0.0 release coming we will need to migrate
+custom plug-ins to the new version.`,
+        
+        callout: `{
+  "title": "Important Security Notice",
+  "text": "All users must update their passwords by the end of the month. This is a mandatory security requirement.",
+  "type": "warning"
+}`,
+        
+        metricscard: `{
+  "title": "Q2 Performance Metrics",
+  "metrics": [
+    {"name": "Revenue", "value": "$1.2M", "change": "+15%", "status": "up"},
+    {"name": "New Customers", "value": "250", "change": "+8%", "status": "up"},
+    {"name": "Churn Rate", "value": "2.1%", "change": "-0.5%", "status": "up"},
+    {"name": "Support Tickets", "value": "450", "change": "-12%", "status": "up"}
+  ]
+}`,
+        
+        wordcloud: `{
+  "title": "Popular Programming Languages 2024",
+  "words": [
+    {"text": "JavaScript", "size": 100},
+    {"text": "Python", "size": 95},
+    {"text": "Java", "size": 85},
+    {"text": "TypeScript", "size": 80},
+    {"text": "C#", "size": 75},
+    {"text": "PHP", "size": 70},
+    {"text": "C++", "size": 65},
+    {"text": "Kotlin", "size": 60},
+    {"text": "Swift", "size": 55},
+    {"text": "Go", "size": 50},
+    {"text": "Rust", "size": 45},
+    {"text": "Ruby", "size": 40}
+  ]
+}`,
+        
+        treechart: `{
+  "title": "Organization Structure",
+  "root": {
+    "name": "CEO",
+    "children": [
+      {
+        "name": "CTO",
+        "children": [
+          {"name": "Engineering Manager", "children": [
+            {"name": "Senior Developer"},
+            {"name": "Developer"},
+            {"name": "Junior Developer"}
+          ]},
+          {"name": "QA Manager", "children": [
+            {"name": "QA Engineer"},
+            {"name": "Test Automation"}
+          ]}
+        ]
+      },
+      {
+        "name": "CFO",
+        "children": [
+          {"name": "Finance Manager"},
+          {"name": "Accounting"}
+        ]
+      },
+      {
+        "name": "CMO",
+        "children": [
+          {"name": "Marketing Manager"},
+          {"name": "Social Media"}
+        ]
+      }
+    ]
+  }
+}`,
+        
+        quadrant: `{
+  "title": "Technology Evaluation Matrix",
+  "xAxisTitle": "Effort",
+  "yAxisTitle": "Impact",
+  "quadrants": {
+    "q1": "Strategic",
+    "q2": "Quick Wins",
+    "q3": "Fill-ins",
+    "q4": "Thankless Tasks"
+  },
+  "items": [
+    {"name": "Cloud Migration", "x": 80, "y": 85, "quadrant": "q1"},
+    {"name": "CI/CD Pipeline", "x": 60, "y": 90, "quadrant": "q1"},
+    {"name": "Documentation", "x": 30, "y": 75, "quadrant": "q2"},
+    {"name": "Bug Fixes", "x": 20, "y": 65, "quadrant": "q2"},
+    {"name": "UI Redesign", "x": 70, "y": 40, "quadrant": "q4"},
+    {"name": "Legacy System", "x": 85, "y": 30, "quadrant": "q4"},
+    {"name": "Monitoring", "x": 40, "y": 45, "quadrant": "q3"},
+    {"name": "Testing", "x": 35, "y": 50, "quadrant": "q3"}
+  ]
+}`
+    };
+    
+    // Load template for selected capability
+    function loadCapabilityTemplate() {
+        const capability = document.getElementById('capability').value;
+        const payloadTextarea = document.getElementById('payload');
+        
+        if (capability && templates[capability]) {
+            payloadTextarea.value = templates[capability];
+        } else {
+            payloadTextarea.value = '';
+        }
+    }
+    
+    // Generate visualization based on selected capability and payload
+    function generateVisualization() {
+        const capability = document.getElementById('capability').value;
+        const payload = document.getElementById('payload').value;
+        
+        if (!capability) {
+            alert('Please select a capability first.');
+            return;
+        }
+        
+        if (!payload.trim()) {
+            alert('Please enter a payload.');
+            return;
+        }
+        
+        // Show loading state
+        document.getElementById('visualizationOutput').innerHTML = '<div class="text-center text-gray-500"><p>Generating visualization...</p></div>';
+        
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('payload', payload);
+        
+        // Make API request to the appropriate endpoint
+        fetch(`api/${capability}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Display the SVG result
+            document.getElementById('visualizationOutput').innerHTML = data;
+            
+            // Show the image request section
+            document.getElementById('imageRequestSection').classList.remove('hidden');
+            
+            // Generate and display the image URL
+            const compressedPayload = btoa(encodeURIComponent(payload));
+            const imageUrl = `${window.location.origin}/extension/api/docops/svg?kind=${capability}&payload=${compressedPayload}&type=SVG&useDark=false&title=Title&numChars=24&backend=html5&filename=visualization.svg`;
+            document.getElementById('imageUrlInput').value = imageUrl;
+            
+            // Show the source code section
+            document.getElementById('sourceCodeSection').classList.remove('hidden');
+            
+            // Display the source code
+            const sourceCode = `[docops,${capability}]\n----\n${payload}\n----`;
+            document.getElementById('sourceCode').textContent = sourceCode;
+            
+            // Initialize syntax highlighting if needed
+            if (window.Prism) {
+                Prism.highlightAll();
+            }
+        })
+        .catch(error => {
+            document.getElementById('visualizationOutput').innerHTML = `<div class="text-center text-red-500"><p>Error: ${error.message}</p></div>`;
+        });
+    }
+    
+    // Reset the form
+    function resetForm() {
+        document.getElementById('capability').value = '';
+        document.getElementById('payload').value = '';
+        document.getElementById('visualizationOutput').innerHTML = '<div class="text-center text-gray-500"><p>Select a capability and generate a visualization to see the output here.</p></div>';
+        document.getElementById('imageRequestSection').classList.add('hidden');
+        document.getElementById('sourceCodeSection').classList.add('hidden');
+    }
+    
+    // Copy to clipboard function
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        element.select();
+        document.execCommand('copy');
+        
+        // Show a temporary "Copied!" message
+        const button = element.nextElementSibling;
+        const originalText = button.textContent;
+        button.textContent = "Copied!";
+        setTimeout(() => {
+            button.textContent = originalText;
+        }, 2000);
+    }
+</script>
+</body>
+</html>

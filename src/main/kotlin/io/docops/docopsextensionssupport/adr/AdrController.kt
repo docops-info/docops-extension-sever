@@ -1,24 +1,5 @@
-/*
- * Copyright (c) 2023. The DocOps Consortium
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
+package io.docops.docopsextensionssupport.adr
 
-package io.docops.docopsextensionssupport.web
-
-
-import io.docops.docopsextensionssupport.adr.AdrParser
-import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.util.UrlUtil
@@ -27,9 +8,19 @@ import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.*
+import org.springframework.http.CacheControl
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import java.lang.Exception
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -180,7 +171,8 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
             @RequestParam("consequences") consequences: String,
             @RequestParam("participants") participants: String,
             @RequestParam("context") context: String,
-        servletRequest: HttpServletRequest, servletResponse: HttpServletResponse) {
+            servletRequest: HttpServletRequest, servletResponse: HttpServletResponse
+    ) {
 
             try {
                 val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
@@ -313,7 +305,7 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
         @RequestParam("lineSize", required = false, defaultValue = "80") lineSize: String,
         @RequestParam("scale", required = false, defaultValue = "1.0") scale: String,
         servletResponse: HttpServletResponse
-    ): ResponseEntity<ByteArray>{
+    ): ResponseEntity<ByteArray> {
         val contents = uncompressString(data)
         val generator = AdrSvgGenerator()
         val adr = AdrParser().parseContent(contents)
@@ -334,5 +326,15 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.TEXT_PLAIN
         return ResponseEntity("${adr.title}~${adr.participants}~${adr.date}".toByteArray(), headers, HttpStatus.OK)
+    }
+
+    @PostMapping("/adr", produces = ["image/svg+xml"])
+    fun adrFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        val generator = AdrSvgGenerator()
+        val adr = AdrParser().parseContent(payload)
+        val svg = generator.generate(adr, width = 700)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 }

@@ -231,6 +231,19 @@ class BoxyController {
         val response = handler.fromRequestToConnector(contents, scale = scale, useDark)
         return response.shapeSvg
     }
+
+    @Traceable
+    @PostMapping("")
+    @ResponseBody
+    @Counted(value="docops.boxy.put", description="Creating a Button using http put")
+    @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
+    fun connectorFromContent(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val resp = fromRequestToConnector(contents = payload, scale = 1.0f, useDark = false)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.parseMediaType("image/svg+xml")
+        return ResponseEntity(resp.toByteArray(), headers, HttpStatus.OK)
+    }
     /**
      * Retrieves the connector based on the provided payload, scale, type, useDark, and outlineColor parameters.
      *

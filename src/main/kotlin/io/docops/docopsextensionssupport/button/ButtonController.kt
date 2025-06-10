@@ -285,12 +285,15 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
     @PutMapping("/buttons")
     @ResponseBody
     fun fromJsonToButton(httpServletRequest : HttpServletRequest): ResponseEntity<ByteArray> {
+        val contents = httpServletRequest.getParameter("content")
+        return sharedButtonCreate(contents)
+    }
+    private fun sharedButtonCreate(contents: String ) : ResponseEntity<ByteArray> {
         try {
             val timing = measureTimedValue {
-                val contents = httpServletRequest.getParameter("content")
                 if(contents.isNotEmpty()) {
                     val buttons = Json.decodeFromString<Buttons>(contents)
-                     createResponse(buttons, false, "SVG")
+                    createResponse(buttons, false, "SVG")
 
                 } else {
                     ResponseEntity.badRequest().body("No Payload Found".toByteArray(StandardCharsets.UTF_8))
@@ -302,6 +305,15 @@ class ButtonController @Autowired constructor(private val applicationContext: Ap
             e.printStackTrace()
             throw e
         }
+    }
+
+    @Traceable
+    @Timed(value="Docops.ButtonController.put.fromJsonToButton.time", description="Creating a Button using Form Submission JSON")
+    @Counted(value="Docops.ButtonController.put.fromJsonToButton.count", description="Success Fail count of fromJsonToButton")
+    @PostMapping("/buttons")
+    @ResponseBody
+    fun buttonFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        return sharedButtonCreate(payload)
     }
 
     /**
