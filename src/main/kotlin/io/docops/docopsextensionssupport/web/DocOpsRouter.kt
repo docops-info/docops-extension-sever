@@ -268,7 +268,7 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
         else if("quadrant".equals(kind, ignoreCase = true)) {
             val timing = measureTimedValue<ResponseEntity<ByteArray>> {
                 val handler = QuadrantHandler()
-                handler.handleSVG(payload, type, scale, useDark, title, numChars, backend)
+                handler.handleSVG(payload, type, scale, useDark, title, backend)
             }
             logger.info{"quadrant handler executed in ${timing.duration.inWholeMilliseconds}ms"}
             applicationEventPublisher.publishEvent(DocOpsExtensionEvent("quadrant", timing.duration.inWholeMilliseconds))

@@ -31,14 +31,13 @@ class QuadrantHandler {
         scale: String, 
         useDark: Boolean, 
         title: String = "",
-        numChars: String = "24",
         backend: String = "html"
     ): ResponseEntity<ByteArray> {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = fromRequestToQuadrant(data, scale = scale.toFloat(), useDark = useDark, title = title, numChars = numChars.toInt(), backend = backend)
+        val svg = fromRequestToQuadrant(data, scale = scale.toFloat(), useDark = useDark, title = title, backend = backend)
         return ResponseEntity(svg.shapeSvg.toByteArray(), headers, HttpStatus.OK)
     }
 
@@ -58,7 +57,6 @@ class QuadrantHandler {
         scale: Float, 
         useDark: Boolean, 
         title: String = "",
-        numChars: Int = 24,
         backend: String = "html"
     ): ShapeResponse {
         val quadrantChart = if (isTableFormat(contents)) {

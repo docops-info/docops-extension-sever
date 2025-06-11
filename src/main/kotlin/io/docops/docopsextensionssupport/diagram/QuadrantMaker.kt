@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import java.util.*
 
@@ -16,7 +17,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
     private var subtitleColor = "#6b7280"
     private var gridColor = "#e2e8f0"
     private var axisColor = "#475569"
-    
+
     // Quadrant colors
     private val q1GradientStart = "#10b981"
     private val q1GradientEnd = "#059669"
@@ -26,7 +27,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
     private val q3GradientEnd = "#d97706"
     private val q4GradientStart = "#ef4444"
     private val q4GradientEnd = "#dc2626"
-    
+
     // Default dimensions
     private val width = 800f
     private val height = 600f
@@ -35,7 +36,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
     private val chartHeight = height - 2 * margin
     private val halfWidth = chartWidth / 2
     private val halfHeight = chartHeight / 2
-    
+
     /**
      * Generates the SVG for the quadrant chart.
      *
@@ -50,52 +51,52 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             gridColor = "#374151"
             axisColor = "#9CA3AF"
         }
-        
+
         val sb = StringBuilder()
         val id = UUID.randomUUID().toString()
-        
+
         // Start SVG
         sb.append(head(scale, id))
-        
+
         // Add definitions (gradients, filters)
         sb.append(defs())
-        
+
         // Background
         sb.append("""<rect width="$width" height="$height" fill="url(#bgGradient)"/>""")
-        
+
         // Chart container with shadow
         sb.append("""<rect x="$margin" y="$margin" width="$chartWidth" height="$chartHeight" fill="white" rx="12" filter="url(#shadow)"/>""")
-        
+
         // Quadrant backgrounds
         sb.append(quadrantBackgrounds())
-        
+
         // Grid lines
         sb.append(gridLines())
-        
+
         // Main axes
         sb.append(mainAxes())
-        
+
         // Quadrant labels
         sb.append(quadrantLabels())
-        
+
         // Data points
         sb.append(dataPoints())
-        
+
         // Axis labels
         sb.append(axisLabels())
-        
+
         // Chart title
         sb.append(chartTitle())
-        
+
         // Legend
         sb.append(legend())
-        
+
         // End SVG
         sb.append("</svg>")
-        
+
         return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
     }
-    
+
     /**
      * Generates the SVG header.
      */
@@ -105,7 +106,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <svg id="quad_$id" width="${width * scale}" height="${height * scale}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
         """.trimIndent()
     }
-    
+
     /**
      * Generates the SVG definitions (gradients, filters).
      */
@@ -155,14 +156,14 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             </defs>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the quadrant backgrounds.
      */
     private fun quadrantBackgrounds(): String {
         val midX = margin + halfWidth
         val midY = margin + halfHeight
-        
+
         return """
             <!-- Quadrant backgrounds -->
             <!-- Top-right (Q1) -->
@@ -178,7 +179,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <rect x="$midX" y="$midY" width="$halfWidth" height="$halfHeight" fill="url(#q4Gradient)" rx="12" ry="0"/>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the grid lines.
      */
@@ -189,7 +190,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <g stroke="$gridColor" stroke-width="1" opacity="0.6">
                 <!-- Vertical grid lines -->
         """.trimIndent())
-        
+
         // Vertical grid lines
         val vStep = halfWidth / 3
         for (i in 1..2) {
@@ -198,18 +199,18 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
                 <line x1="$x" y1="$margin" x2="$x" y2="${margin + chartHeight}"/>
             """.trimIndent())
         }
-        
+
         for (i in 1..2) {
             val x = margin + halfWidth + i * vStep
             sb.append("""
                 <line x1="$x" y1="$margin" x2="$x" y2="${margin + chartHeight}"/>
             """.trimIndent())
         }
-        
+
         sb.append("""
                 <!-- Horizontal grid lines -->
         """.trimIndent())
-        
+
         // Horizontal grid lines
         val hStep = halfHeight / 3
         for (i in 1..2) {
@@ -218,28 +219,28 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
                 <line x1="$margin" y1="$y" x2="${margin + chartWidth}" y2="$y"/>
             """.trimIndent())
         }
-        
+
         for (i in 1..2) {
             val y = margin + halfHeight + i * hStep
             sb.append("""
                 <line x1="$margin" y1="$y" x2="${margin + chartWidth}" y2="$y"/>
             """.trimIndent())
         }
-        
+
         sb.append("""
             </g>
         """.trimIndent())
-        
+
         return sb.toString()
     }
-    
+
     /**
      * Generates the main axes.
      */
     private fun mainAxes(): String {
         val midX = margin + halfWidth
         val midY = margin + halfHeight
-        
+
         return """
             <!-- Main axes -->
             <g stroke="$axisColor" stroke-width="3">
@@ -250,7 +251,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             </g>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the quadrant labels.
      */
@@ -265,7 +266,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
         val descY = margin + 60
         val bottomLabelY = margin + chartHeight - 30
         val bottomDescY = midY + 60
-        
+
         return """
             <!-- Quadrant labels with modern styling -->
             <!-- Q1 Label -->
@@ -289,38 +290,107 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <text x="$q4X" y="$bottomDescY" text-anchor="middle" fill="$q4GradientEnd" font-family="Arial, sans-serif" font-size="12" font-weight="500">${chart.q4Description}</text>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the data points.
      */
     private fun dataPoints(): String {
         val sb = StringBuilder()
         sb.append("<!-- Data points -->")
-        
+
+        // Data structure to track label positions for collision detection
+        data class LabelPosition(val x: Float, val y: Float, val width: Int, val height: Int)
+        val labelPositions = mutableListOf<LabelPosition>()
+
+        // Sort points by y-coordinate to prioritize points at the top
+        val sortedPoints = chart.points.sortedByDescending { it.y }
+
         // Map x and y values from 0-100 to chart coordinates
-        chart.points.forEach { point ->
+        sortedPoints.forEach { point ->
             val x = margin + (point.x / 100f) * chartWidth
             // Invert y-axis (0 is bottom, 100 is top)
             val y = margin + chartHeight - (point.y / 100f) * chartHeight
-            
+
             // Determine color based on quadrant if not specified
             val color = point.color ?: getColorForPosition(point.x, point.y)
-            
+
             sb.append("""
                 <circle cx="$x" cy="$y" r="${point.size}" fill="$color" filter="url(#glow)"/>
             """.trimIndent())
-            
+
             // Add label if provided
             if (point.label.isNotEmpty()) {
+                // Calculate label width
+                val labelWidth = point.label.textWidth("Arial", 12)
+                val labelHeight = 14 // Approximate height of the text
+
+                // Default position
+                var labelX = x + point.size + 5
+                var labelY = y + 5
+
+                // Check for collisions with existing labels
+                var collision = true
+                val positions = listOf(
+                    Pair(x + point.size + 5, y + 5),           // Right
+                    Pair(x - point.size - 5 - labelWidth, y + 5), // Left
+                    Pair(x - labelWidth / 2, y - point.size - 10), // Top
+                    Pair(x - labelWidth / 2, y + point.size + 15)  // Bottom
+                )
+
+                // Try different positions to avoid collisions
+                for (pos in positions) {
+                    val testX = pos.first
+                    val testY = pos.second
+
+                    // Check if this position collides with any existing label
+                    collision = labelPositions.any { existing ->
+                        testX < existing.x + existing.width &&
+                        testX + labelWidth > existing.x &&
+                        testY - labelHeight < existing.y + existing.height &&
+                        testY > existing.y - labelHeight
+                    }
+
+                    // Also check if the label would go outside the chart area
+                    val outsideChart = testX < margin || 
+                                      testX + labelWidth > margin + chartWidth ||
+                                      testY - labelHeight < margin ||
+                                      testY > margin + chartHeight
+
+                    if (!collision && !outsideChart) {
+                        labelX = testX
+                        labelY = testY
+                        break
+                    }
+                }
+
+                // Add the label position to our tracking list
+                labelPositions.add(LabelPosition(labelX, labelY - labelHeight, labelWidth, labelHeight))
+
+                // Determine text-anchor based on position
+                val textAnchor = when {
+                    labelX < x -> "end"
+                    labelX > x + point.size -> "start"
+                    else -> "middle"
+                }
+
+                // Add the label
                 sb.append("""
-                    <text x="${x + point.size + 5}" y="${y + 5}" fill="$textColor" font-family="Arial, sans-serif" font-size="12">${point.label}</text>
+                    <text x="$labelX" y="$labelY" text-anchor="$textAnchor" fill="$textColor" font-family="Arial, sans-serif" font-size="12">${point.label}</text>
                 """.trimIndent())
+
+                // Add description if available
+                if (point.description.isNotEmpty()) {
+                    val descY = labelY + 14 // Position description below label
+                    sb.append("""
+                        <text x="$labelX" y="$descY" text-anchor="$textAnchor" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="10" font-style="italic">${point.description}</text>
+                    """.trimIndent())
+                }
             }
         }
-        
+
         return sb.toString()
     }
-    
+
     /**
      * Determines the color for a point based on its position in the quadrant.
      */
@@ -332,7 +402,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             else -> q4GradientEnd                // Q4: Low Impact, High Effort
         }
     }
-    
+
     /**
      * Generates the axis labels.
      */
@@ -341,16 +411,16 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <!-- Axis labels -->
             <text x="${width / 2}" y="${height - 25}" text-anchor="middle" fill="$textColor" font-family="Arial, sans-serif" font-size="16" font-weight="600">${chart.xAxisLabel}</text>
             <text x="20" y="${height / 2}" text-anchor="middle" fill="$textColor" font-family="Arial, sans-serif" font-size="16" font-weight="600" transform="rotate(-90, 20, ${height / 2})">${chart.yAxisLabel}</text>
-            
+
             <!-- Axis value labels -->
             <text x="${margin + halfWidth / 2}" y="${height - 35}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">Low</text>
             <text x="${margin + halfWidth + halfWidth / 2}" y="${height - 35}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">High</text>
-            
+
             <text x="45" y="${margin + chartHeight}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">Low</text>
             <text x="45" y="${margin + 15}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">High</text>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the chart title.
      */
@@ -361,7 +431,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
             <text x="${width / 2}" y="60" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="14">${chart.subtitle}</text>
         """.trimIndent()
     }
-    
+
     /**
      * Generates the legend.
      */
