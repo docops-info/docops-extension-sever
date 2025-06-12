@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
@@ -49,7 +50,7 @@ class PieChartImproved {
             enableHoverEffects,
             isDonut, darkMode
         )
-        return svg.trimIndent()
+        return addSvgMetadata( svg.trimIndent())
     }
 
 

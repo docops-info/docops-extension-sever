@@ -9,7 +9,6 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-@Deprecated("Use BarChartImproved instead")
 class BarMaker {
 
     private var fontColor = "#fcfcfc"

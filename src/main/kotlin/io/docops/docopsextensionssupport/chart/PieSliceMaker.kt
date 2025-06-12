@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.Point
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.encodeToString
@@ -36,7 +37,7 @@ open class PieSliceMaker {
         sb.append("</g>")
         //sb.append(makeLabels(pieSlices))
         sb.append(endSvg())
-        return joinXmlLines(sb.toString())
+        return joinXmlLines(addSvgMetadata(sb.toString()))
     }
 
     private fun makePaths(pieSlices: PieSlices) : String {
