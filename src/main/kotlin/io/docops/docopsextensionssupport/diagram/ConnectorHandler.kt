@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
@@ -31,7 +32,8 @@ class ConnectorHandler {
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val svg = fromRequestToConnector(data, scale = scale.toFloat(), useDark = useDark)
-        return ResponseEntity(svg.shapeSvg.toByteArray(), headers, HttpStatus.OK)
+        val results = addSvgMetadata(svg.shapeSvg)
+        return ResponseEntity(results.toByteArray(), headers, HttpStatus.OK)
     }
 
 
