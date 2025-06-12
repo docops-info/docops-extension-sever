@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.aop
 
 import io.micrometer.context.ContextExecutorService
 import io.micrometer.context.ContextSnapshot
+import io.micrometer.context.ContextSnapshotFactory
 import io.micrometer.core.aop.TimedAspect
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.observation.ObservationRegistry
@@ -91,13 +92,13 @@ class AutoTimingConfiguration {
     @EnableAsync
     internal class AsyncConfig : AsyncConfigurer, WebMvcConfigurer {
         override fun getAsyncExecutor(): Executor {
-            return ContextExecutorService.wrap(Executors.newCachedThreadPool(), ContextSnapshot::captureAll)
+            return ContextExecutorService.wrap(Executors.newCachedThreadPool()) { ContextSnapshotFactory.builder().build().captureAll() }
         }
 
         override fun configureAsyncSupport(configurer: AsyncSupportConfigurer) {
             configurer.setTaskExecutor(SimpleAsyncTaskExecutor(ThreadFactory { r: Runnable ->
                 Thread(
-                    ContextSnapshot.captureAll().wrap(r)
+                    ContextSnapshotFactory.builder().build().captureAll().wrap(r)
                 )
             }))
         }
@@ -138,6 +139,6 @@ class DocOpsThreadPoolTaskScheduler : ThreadPoolTaskScheduler() {
         rejectedExecutionHandler: RejectedExecutionHandler
     ): ExecutorService {
         val executorService = super.initializeExecutor(threadFactory, rejectedExecutionHandler)
-        return ContextExecutorService.wrap(executorService, ContextSnapshot::captureAll)
+        return ContextExecutorService.wrap(executorService) { ContextSnapshotFactory.builder().build().captureAll() }
     }
 }
