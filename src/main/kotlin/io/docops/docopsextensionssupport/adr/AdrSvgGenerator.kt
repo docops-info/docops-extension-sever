@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
+
 
 /**
  * Generates SVG diagrams for Architecture Decision Records (ADRs).
@@ -346,8 +348,8 @@ class AdrSvgGenerator {
 
         // Close SVG
         svg.append(SVG_FOOTER)
-
-        return svg.toString()
+        val result = addSvgMetadata(svg.toString())
+        return result
     }
 
     /**

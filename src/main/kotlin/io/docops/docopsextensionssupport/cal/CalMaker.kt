@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.cal
 
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -8,10 +9,10 @@ class CalMaker {
     fun makeCalendar(entry: CalEntry?): String{
         val monFmt = DateTimeFormatter.ofPattern("MMM")
         val today = LocalDate.now()
-        var month = entry?.month ?: monFmt.format(today)
-        var year = entry?.year ?: today.year
+        val month = entry?.month ?: monFmt.format(today)
+        val year = entry?.year ?: today.year
 
-        return """
+        val svg = """
     <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"
      aria-label="Calendar" role="img" viewBox="0 0 512 512">
     <defs>
@@ -44,6 +45,7 @@ class CalMaker {
     </g>
 </svg>
         """.trimIndent()
+        return addSvgMetadata(svg)
     }
 
 }

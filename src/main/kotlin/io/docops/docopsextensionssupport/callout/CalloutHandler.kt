@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.callout
 
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -86,7 +87,7 @@ class CalloutHandler {
             }
         }
 
-        return svg
+        return addSvgMetadata(svg)
     }
 
 

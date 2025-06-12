@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.sercasti.tracing.Traceable
 import kotlinx.serialization.json.Json
@@ -97,7 +98,8 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-        return ResponseEntity(joinXmlLines(svg.toString()).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        val xml = addSvgMetadata(svg.toString())
+        return ResponseEntity(joinXmlLines(xml).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 
     /**
