@@ -18,7 +18,6 @@ package io.docops.docopsextensionssupport.button.shape
 
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 
 /**
  * Defines the contract for rendering different button shapes in SVG format.
@@ -99,8 +98,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
         if("PDF".equals(type, true)) {
             isPdf = true
         }
-        val svg = addSvgMetadata(createShape(type))
-        return joinXmlLines(svg)
+        return joinXmlLines(createShape(type))
     }
 
     /**

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.metricscard
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlinx.serialization.json.Json
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import java.util.UUID
@@ -49,8 +50,8 @@ class MetricsCardMaker {
                 createDefaultMetricsCardData()
             }
         }
-
-        return generateMetricsCardSvg(metricsCardData, width, height)
+        val svg = generateMetricsCardSvg(metricsCardData, width, height)
+        return svg
     }
 
     /**
@@ -155,13 +156,13 @@ class MetricsCardMaker {
                         <text x="${cardWidth/2}" y="80" 
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="36" font-weight="700" text-anchor="middle" 
-                              fill="#007AFF">${metric.value}</text>
+                              fill="#007AFF">${metric.value.escapeXml()}</text>
 
                         <!-- Metric Label -->
                         <text x="${cardWidth/2}" y="120" 
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="16" font-weight="600" text-anchor="middle" 
-                              fill="#1C1C1E">${metric.label}</text>
+                              fill="#1C1C1E">${metric.label.escapeXml()}</text>
                 """.trimIndent())
 
                 // Add sublabel if present
@@ -172,7 +173,7 @@ class MetricsCardMaker {
                         <text x="${cardWidth/2}" y="145" 
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="14" font-weight="400" text-anchor="middle" 
-                              fill="#8E8E93">${metric.sublabel}</text>
+                              fill="#8E8E93">${metric.sublabel.escapeXml()}</text>
                     """.trimIndent())
                 }
 

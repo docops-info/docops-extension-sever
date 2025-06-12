@@ -1,26 +1,20 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.sercasti.tracing.Traceable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 @Component
-class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator) {
+class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator) : DocOpsHandler{
 
     @Traceable
-    fun handleSVG(payload: String, backend: String) : ResponseEntity<ByteArray>  {
+    fun handleSVG(payload: String, backend: String) : String  {
 
         val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
 
@@ -29,10 +23,10 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         return createBadgeFromString(data, isPdf)
     }
 
-    public fun createBadgeFromString(
+     fun createBadgeFromString(
         data: String,
         isPdf: Boolean
-    ): ResponseEntity<ByteArray> {
+    ): String {
         val badges = mutableListOf<Badge>()
         // Try to parse as JSON first
         try {
@@ -95,11 +89,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         )
         svg.append(svgSrc.first)
         svg.append("</svg>")
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-        val xml = addSvgMetadata(svg.toString())
-        return ResponseEntity(joinXmlLines(xml).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        return joinXmlLines(svg.toString())
     }
 
     /**
@@ -122,7 +112,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                     if (c.isNotEmpty()) {
                         mcolor = c
                     }
-                    var logo = split[5].trim()
+                    val logo = split[5].trim()
 
                     var fontColor = "#ffffff"
                     if (split.size == 7) {
@@ -144,5 +134,12 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
                 }
             }}
         }
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, context.backend)
     }
 }

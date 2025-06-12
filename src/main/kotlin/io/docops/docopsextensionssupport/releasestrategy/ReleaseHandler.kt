@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.serialization.json.Json
@@ -12,10 +14,9 @@ import org.springframework.http.ResponseEntity
 import java.net.URLDecoder
 import kotlin.time.measureTimedValue
 
-class ReleaseHandler {
+class ReleaseHandler : DocOpsHandler{
     val log = KotlinLogging.logger {}
-    fun handleSVG(payload: String, useDark: Boolean, backend: String) : ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
+    fun handleSVG(payload: String, useDark: Boolean, backend: String) : String {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val release = Json.decodeFromString<ReleaseStrategy>(data)
             release.useDark = useDark
@@ -39,18 +40,7 @@ class ReleaseHandler {
                 }
             }
 
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            withLoggingContext("useDark" to "$useDark", "backend" to backend, "style" to release.style)
-            {
-                log.info{"Generated release strategy"}
-            }
-            ResponseEntity(output.toByteArray(), headers, OK)
-
-        }
-        log.info{"getRelease executed in ${timing.duration.inWholeMilliseconds}ms "}
-        return timing.value
+        return output
     }
 
     fun createTimelineSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineMaker().make(releaseStrategy, isPdf)
@@ -59,5 +49,11 @@ class ReleaseHandler {
 
     fun createTimelineGrouped(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false): String = ReleaseTimelineGroupedMaker().make(releaseStrategy, isPdf)
     fun createRoadMap(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String = "ON"): String = ReleaseRoadMapMaker().make(releaseStrategy, isPdf, animate)
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, context.useDark, context.backend)
+    }
 
 }

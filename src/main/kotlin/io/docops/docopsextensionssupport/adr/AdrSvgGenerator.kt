@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.adr
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 
 
 /**
@@ -348,8 +347,7 @@ class AdrSvgGenerator {
 
         // Close SVG
         svg.append(SVG_FOOTER)
-        val result = addSvgMetadata(svg.toString())
-        return result
+        return svg.toString()
     }
 
     /**

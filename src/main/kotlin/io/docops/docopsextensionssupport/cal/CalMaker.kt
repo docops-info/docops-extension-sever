@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.cal
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -45,7 +44,7 @@ class CalMaker {
     </g>
 </svg>
         """.trimIndent()
-        return addSvgMetadata(svg)
+        return svg
     }
 
 }

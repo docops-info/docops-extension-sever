@@ -33,7 +33,7 @@ class PieController {
     @Timed(value = "docops.boxy.put", description="Creating a Button using http put", percentiles=[0.5, 0.9])
     fun makePieChart(httpServletRequest: HttpServletRequest) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
-            var contents = httpServletRequest.getParameter("content")
+            val contents = httpServletRequest.getParameter("content")
             val calMaker = PieMaker()
             val pies = Json.decodeFromString<Pies>(contents)
             val svg = calMaker.makePies(pies)

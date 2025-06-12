@@ -141,6 +141,6 @@ class TreeChartController {
             handler.handleSVG(payload, "pdf".equals(backend, ignoreCase = true))
         }
         log.info{"getTreeChart executed in ${timing.duration.inWholeMilliseconds}ms "}
-        return timing.value
+        return ResponseEntity(timing.value.toByteArray(), HttpStatus.OK)
     }
 }

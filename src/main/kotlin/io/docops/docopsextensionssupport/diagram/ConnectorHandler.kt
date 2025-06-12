@@ -1,19 +1,18 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
-import org.springframework.http.*
 import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 
 /**
  * ConnectorHandler class is responsible for handling requests related to SVG and PNG images.
  * Supports both JSON and table format for connectors.
  */
-class ConnectorHandler {
+class ConnectorHandler: DocOpsHandler {
 
 
 
@@ -26,26 +25,10 @@ class ConnectorHandler {
      * @param useDark A boolean indicating whether to use dark mode for the SVG image.
      * @return The ResponseEntity containing the SVG image as a byte array.
      */
-    fun handleSVG(payload: String, type: String, scale: String, useDark: Boolean): ResponseEntity<ByteArray> {
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
+    fun handleSVG(payload: String, type: String, scale: String, useDark: Boolean): String {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val svg = fromRequestToConnector(data, scale = scale.toFloat(), useDark = useDark)
-        val results = addSvgMetadata(svg.shapeSvg)
-        return ResponseEntity(results.toByteArray(), headers, HttpStatus.OK)
-    }
-
-
-    private fun createHeaders(): HttpHeaders {
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "png", StandardCharsets.UTF_8)
-        return headers
-    }
-
-    private fun getSvgFromPayload(contents: String, scale: Float, useDark: Boolean, type: String = "SVG"): ShapeResponse {
-        return fromRequestToConnector(contents, scale, useDark, type)
+        return svg.shapeSvg
     }
 
 
@@ -117,6 +100,13 @@ class ConnectorHandler {
 
     private fun makeConnectorImage(maker: ConnectorMaker, scale: Float): ShapeResponse {
         return maker.makeConnectorImage(scale)
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, context.type, context.scale, context.useDark)
     }
 
 }

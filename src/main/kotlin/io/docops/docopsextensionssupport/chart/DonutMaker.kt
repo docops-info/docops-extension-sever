@@ -1,13 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.ToolTip
-import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
-import io.docops.docopsextensionssupport.svgsupport.textWidth
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import java.io.File
 import java.lang.Math.toRadians
 import kotlin.math.cos
@@ -50,7 +45,7 @@ class DonutMaker : PieSliceMaker(){
         sb.append("</g>")
 
         sb.append(endSvg())
-        return addSvgMetadata( sb.toString())
+        return sb.toString()
     }
 
     private fun createEnhancedDefs(pieSlices: PieSlices) : String {

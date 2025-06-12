@@ -3,14 +3,9 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.Point
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.File
 import kotlin.math.PI
-import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -37,7 +32,7 @@ open class PieSliceMaker {
         sb.append("</g>")
         //sb.append(makeLabels(pieSlices))
         sb.append(endSvg())
-        return joinXmlLines(addSvgMetadata(sb.toString()))
+        return joinXmlLines(sb.toString())
     }
 
     private fun makePaths(pieSlices: PieSlices) : String {
@@ -219,48 +214,4 @@ fun Double.round(decimals: Int): Double {
 
 }
 
-fun main() {
-    val pieSlices = PieSlices(title = "Favorite Anime",mutableListOf(PieSlice(label= "Naruto", amount = 5.0),
-        PieSlice(label = "Bleach", amount = 4.0),
-        PieSlice(label = "One Piece", amount = 9.0),
-        PieSlice(label = "One Punch Man", amount = 7.0),
-        PieSlice(label = "My Hero Academia", amount = 6.0),
-        PieSlice(label = "Demon Slayer", amount = 10.0),
-    ), SliceDisplay(donut = false, scale = 1.5f) )
-    var svg = ""
-    if(!pieSlices.display.donut){
-        val maker= PieSliceMaker()
-         svg = maker.makePie(pieSlices)
-    }
-    else {
-        val maker = DonutMaker()
-        svg = maker.makeDonut(pieSlices)
-    }
-    val str = Json.encodeToString(pieSlices)
-    println(str)
-    val outfile2 = File("gen/pieslice2.svg")
-    outfile2.writeBytes(svg.toByteArray())
 
-    val startArc = Point(354.1043187201574, 432.6865001584483)
-    val endArc = Point(248.07822183293365, 490.341663999371)
-
-    // Given radius
-    val radius = 200.0
-
-    val midPoint = findArcCenter(radius, startArc, endArc, 210.0, 294.0)
-
-}
-
-fun findArcCenter(radius: Double, start: Point, end: Point, cx: Double, cy: Double): Point {
-
-    // Mid angle calculation
-    val startAngle = atan2(start.y - cy, start.x - cx)
-    val endAngle = atan2(end.y - cy, end.x - cx)
-    val midAngle = (startAngle + endAngle) / 2
-
-    // Mid point on the arc
-    val midPointX = cx + radius * cos(midAngle)
-    val midPointY = cy + radius * sin(midAngle)
-
-    return Point(midPointX, midPointY)
-}

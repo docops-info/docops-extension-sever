@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.metricscard
 
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import org.springframework.http.ResponseEntity
 import org.springframework.http.MediaType
 import org.springframework.http.HttpHeaders
@@ -9,7 +11,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Handler for metrics card visualizations
  */
-class MetricsCardHandler {
+class MetricsCardHandler : DocOpsHandler{
 
     /**
      * Handles the creation of metrics card SVGs
@@ -21,16 +23,20 @@ class MetricsCardHandler {
         useDark: Boolean = false,
         width: Int = 800,
         height: Int = 400
-    ): ResponseEntity<ByteArray> {
+    ): String {
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
 
         val maker = MetricsCardMaker()
         val svg = maker.createMetricsCardSvg(payload, width, height)
+        return svg
+    }
 
-        return ResponseEntity.ok()
-            .headers(headers)
-            .body(svg.toByteArray())
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, context.type, context.scale, context.useDark)
     }
 }

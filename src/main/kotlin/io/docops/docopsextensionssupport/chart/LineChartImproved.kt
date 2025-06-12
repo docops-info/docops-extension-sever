@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import java.util.UUID
 
 class LineChartImproved {
@@ -57,7 +56,7 @@ class LineChartImproved {
             yAxisLabel,
             darkMode
         )
-        return addSvgMetadata(svg)
+        return svg
     }
 
     /**

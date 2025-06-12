@@ -1,20 +1,14 @@
 package io.docops.docopsextensionssupport.callout
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
-import java.util.concurrent.TimeUnit
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 
 /**
  * Generic handler for callout visualizations
  */
 
-class CalloutHandler {
+class CalloutHandler : DocOpsHandler{
 
     /**
      * Extracts the callout type from the uncompressed payload
@@ -87,7 +81,14 @@ class CalloutHandler {
             }
         }
 
-        return addSvgMetadata(svg)
+        return svg
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return makeCalloutSvg(payload=payload, outputFormat= context.type)
     }
 
 

@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -36,7 +35,7 @@ class BarGroupMaker {
         sb.append(addTicks(barGroup))
         sb.append(addLegend(startX + ((barGroup.calcWidth() - startX)/2), barGroup))
         sb.append(end())
-        return addSvgMetadata( sb.toString())
+        return  sb.toString()
     }
 
     private fun addLegend(d: Double, group: BarGroup): String {

@@ -1,24 +1,23 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.chart.BarChartImproved
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
-class TreeChartHandler {
+class TreeChartHandler : DocOpsHandler{
 
-    fun handleSVG(payload: String, isPdf: Boolean = false) : ResponseEntity<ByteArray> {
+    fun handleSVG(payload: String, isPdf: Boolean = false) : String {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val treeMaker = TreeMaker()
         val svg = treeMaker.makeTree(data, isPdf)
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        return svg
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, "pdf".equals(context.backend, ignoreCase = true))
     }
 }

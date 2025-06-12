@@ -9,24 +9,19 @@ import io.docops.docopsextensionssupport.chart.BarGroupHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
 import io.docops.docopsextensionssupport.chart.LineHandler
 import io.docops.docopsextensionssupport.chart.PieSliceHandler
+import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
-import io.docops.docopsextensionssupport.diagram.ConnectorHandler
-import io.docops.docopsextensionssupport.diagram.PieHandler
-import io.docops.docopsextensionssupport.diagram.PlacematHandler
-import io.docops.docopsextensionssupport.diagram.QuadrantHandler
-import io.docops.docopsextensionssupport.diagram.TreeChartHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
+import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
-import io.micrometer.core.instrument.MeterRegistry
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
@@ -37,12 +32,39 @@ import kotlin.time.measureTimedValue
 
 @Controller
 @RequestMapping("/api/docops")
-class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegistry,
-                                          private val applicationEventPublisher: ApplicationEventPublisher,
+class DocOpsRouter (
+    private val applicationEventPublisher: ApplicationEventPublisher,
     private val badgeHandler: BadgeHandler) {
 
 
     private val logger = KotlinLogging.logger {}
+
+    // Registry of handlers by kind
+    private val handlers: Map<String, DocOpsHandler> = mapOf(
+        "connector" to ConnectorHandler(),
+        "placemat" to PlacematHandler(),
+        "timeline" to TimelineHandler(),
+        "scorecard" to ScorecardHandler(),
+        "release" to ReleaseHandler(),
+        "cal" to CalHandler(),
+        "badge" to badgeHandler,
+        "buttons" to ButtonHandler(),
+        "adr" to AdrHandler(),
+        "roadmap" to RoadmapHandler(),
+        "pie" to PieHandler(),
+        "pieslice" to PieSliceHandler(),
+        "bar" to BarHandler(),
+        "bargroup" to BarGroupHandler(),
+        "line" to LineHandler(),
+        "comp" to ComparisonChartHandler(),
+        "table" to TableHandler(),
+        "treechart" to TreeChartHandler(),
+        "callout" to CalloutHandler(),
+        "metricscard" to MetricsCardHandler(),
+        "wordcloud" to WordCloudHandler(),
+        "quadrant" to QuadrantHandler()
+        // Add more handlers as needed
+    )
 
     @Traceable
     @GetMapping("/svg")
@@ -57,225 +79,27 @@ class DocOpsRouter @Autowired constructor(private val meterRegistry: MeterRegist
                @RequestParam("outlineColor", defaultValue = "#37cdbe") outlineColor: String,
                @RequestParam("backend", required = false, defaultValue = "html") backend: String
     ) : ResponseEntity<ByteArray> {
-        val headers = HttpHeaders()
+        val context = DocOpsContext(
+            scale = scale,
+            type = type,
+            title = title,
+            numChars = numChars,
+            useDark = useDark,
+            outlineColor = outlineColor,
+            backend = backend
+        )
 
+        val headers = HttpHeaders()
+        val handler = handlers[kind.lowercase()]
+            ?: throw IllegalArgumentException("Unknown handler kind: $kind")
+        val timing = measureTimedValue {
+            addSvgMetadata(handler.handleSVG(payload, context))
+        }
+        logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
+        applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds))
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        if("connector".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ConnectorHandler()
-                handler.handleSVG(payload = payload, type, scale = scale, useDark = useDark)
-            }
-
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("connector", timing.duration.inWholeMilliseconds))
-            return timing.value
-        }
-        else if("placemat".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = PlacematHandler()
-                handler.handleSVG(payload=payload, type = type, backend = backend)
-            }
-            logger.info{"getConnector executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("placemat", timing.duration.inWholeMilliseconds))
-            return timing.value
-        }
-        else if("timeline".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = TimelineHandler()
-                handler.handleSVG(payload, type= type, title = title, useDark = useDark, outlineColor = outlineColor, scale = scale, numChars = numChars, backend = backend)
-            }
-            logger.info{"timeline executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("timeline", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        } else if("scorecard".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ScorecardHandler()
-                handler.handleSVG(payload, backend)
-            }
-            logger.info{"scorecard executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("scorecard", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        } else if("roadmap".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = RoadmapHandler()
-                handler.handleSVG(payload, useDark = useDark, type = type, title = title, scale = scale, numChars = numChars)
-            }
-            logger.info{"roadmap executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("roadmap", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }else if ("buttons".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ButtonHandler()
-                handler.handleSVG(payload, useDark = useDark, type = type, backend = backend)
-            }
-            logger.info{"buttons executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("buttons", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }else if ("release".equals(kind, true)) {
-            val timing = measureTimedValue {
-                val handler = ReleaseHandler()
-                handler.handleSVG(payload, useDark = useDark, backend)
-            }
-            logger.info{"release executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("release", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("adr".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = AdrHandler()
-                handler.handleSVG(payload = payload, scale = scale, useDark = useDark, backEnd = backend)
-            }
-            logger.info{"adr executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("adr", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("badge".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                badgeHandler.handleSVG(payload=payload, backend = backend)
-            }
-            logger.info{"buttons executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("badge", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("cal".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = CalHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"calendar executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("calendar", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("pie".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = PieHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"pie handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("pie", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("pieslice".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = PieSliceHandler()
-                handler.handleSVG(payload=payload, "pdf".equals(backend, ignoreCase = true))
-            }
-            logger.info{"pie handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("pieslice", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("bar".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = BarHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"bar handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("bar", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("bargroup".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = BarGroupHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"bar handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("bargroup", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("line".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = LineHandler()
-                handler.handleSVG(payload=payload, backend.equals("PDF", true))
-            }
-            logger.info{"line handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("line", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("comp".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = ComparisonChartHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"line handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("comparison", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("table".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = TableHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"table handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("table", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("treechart".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = TreeChartHandler()
-                handler.handleSVG(payload=payload, "pdf".equals(backend, ignoreCase = true) )
-            }
-            logger.info{"treechart handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("treechart", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("callout".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = CalloutHandler()
-                val svg = handler.makeCalloutSvg(payload=payload, outputFormat=type)
-                ResponseEntity(svg.toByteArray(), HttpStatus.OK)
-            }
-            logger.info{"callout handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("callout", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("metricscard".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = MetricsCardHandler()
-                handler.handleSVG(payload=payload, type=type, scale=scale, useDark=useDark)
-            }
-            logger.info{"metricscard handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("metricscard", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("wordcloud".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue {
-                val handler = WordCloudHandler()
-                handler.handleSVG(payload=payload)
-            }
-            logger.info{"wordcloud handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("wordcloud", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        else if("quadrant".equals(kind, ignoreCase = true)) {
-            val timing = measureTimedValue<ResponseEntity<ByteArray>> {
-                val handler = QuadrantHandler()
-                handler.handleSVG(payload, type, scale, useDark, title, backend)
-            }
-            logger.info{"quadrant handler executed in ${timing.duration.inWholeMilliseconds}ms"}
-            applicationEventPublisher.publishEvent(DocOpsExtensionEvent("quadrant", timing.duration.inWholeMilliseconds))
-
-            return timing.value
-        }
-        return ResponseEntity("$kind Not Found".toByteArray(), HttpStatus.NOT_FOUND)
+        return ResponseEntity(timing.value.toByteArray(), headers, HttpStatus.OK)
     }
 
 

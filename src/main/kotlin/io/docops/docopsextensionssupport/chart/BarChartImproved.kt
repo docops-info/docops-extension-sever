@@ -1,7 +1,5 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
-import kotlinx.serialization.json.Json
 import java.util.UUID
 
 class BarChartImproved {
@@ -29,7 +27,7 @@ class BarChartImproved {
         
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
-        return addSvgMetadata( barMaker.makeVerticalBar(bar))
+        return barMaker.makeVerticalBar(bar)
     }
 
     fun makeGroupBarSvg(payload: String): String {
@@ -42,11 +40,11 @@ class BarChartImproved {
         // Use existing BarGroupMaker to generate SVG
         val barGroupMaker = BarGroupMaker()
         return if (barGroup.display.vBar) {
-            addSvgMetadata(barGroupMaker.makeVGroupBar(barGroup))
+            barGroupMaker.makeVGroupBar(barGroup)
         } else if (barGroup.display.condensed) {
-            addSvgMetadata(barGroupMaker.makeCondensed(barGroup))
+            barGroupMaker.makeCondensed(barGroup)
         } else {
-            addSvgMetadata(barGroupMaker.makeBar(barGroup))
+            barGroupMaker.makeBar(barGroup)
         }
     }
 

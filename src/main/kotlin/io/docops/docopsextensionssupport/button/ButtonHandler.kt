@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.json.Json
 import org.springframework.http.*
@@ -18,7 +20,7 @@ import kotlin.time.measureTimedValue
  * 
  * The handler measures and logs the execution time of operations for performance monitoring.
  */
-class ButtonHandler {
+class ButtonHandler : DocOpsHandler{
 
     val log = KotlinLogging.logger {}
 
@@ -34,14 +36,10 @@ class ButtonHandler {
      * @param backend The backend rendering type to use
      * @return A [ResponseEntity] containing the SVG representation as a byte array with appropriate HTTP headers
      */
-    fun handleSVG(payload: String, useDark: Boolean, type: String , backend: String): ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
+    fun handleSVG(payload: String, useDark: Boolean, type: String , backend: String): String {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val content = Json.decodeFromString<Buttons>(data)
-            createResponse(content, useDark, backend)
-        }
-        log.info{"getButton executed in ${timing.duration.inWholeMilliseconds}ms "}
-        return timing.value
+         return   createResponse(content, useDark, backend)
     }
 
     /**
@@ -55,13 +53,17 @@ class ButtonHandler {
      * @param type The type of output format (e.g., "SVG")
      * @return A [ResponseEntity] containing the SVG representation as a byte array with appropriate HTTP headers
      */
-    private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): ResponseEntity<ByteArray> {
+    private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): String {
         buttons.useDark = useDark
         val buttonShape = buttons.createSVGShape()
         val imgSrc = buttonShape.drawShape(type)
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-        return ResponseEntity(imgSrc.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        return imgSrc
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload, context.useDark, context.type, context.backend)
     }
 }

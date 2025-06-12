@@ -1,19 +1,25 @@
 package io.docops.docopsextensionssupport.wordcloud
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.DocOpsHandler
 import org.springframework.http.*
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
-class WordCloudHandler {
+class WordCloudHandler : DocOpsHandler {
 
-    fun handleSVG(payload: String): ResponseEntity<ByteArray> {
+    fun handleSVG(payload: String): String {
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val wordCloudImproved = WordCloudImproved()
         val svg = wordCloudImproved.makeWordCloudSvg(data)
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        return svg
+    }
+
+    override fun handleSVG(
+        payload: String,
+        context: DocOpsContext
+    ): String {
+        return handleSVG(payload)
     }
 }

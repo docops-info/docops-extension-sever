@@ -382,8 +382,8 @@ $txt
         else if (decodedPayload.startsWith("format=json&payload=")) {
             decodedPayload = decodedPayload.substringAfter("format=json&payload=")
         }
-
-        return badgeHandler.createBadgeFromString(decodedPayload,  isPdf = false)
+        val svg = badgeHandler.createBadgeFromString(decodedPayload,  isPdf = false)
+        return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), HttpStatus.OK)
     }
 
     @PostMapping("badge", produces = ["image/svg+xml"])
