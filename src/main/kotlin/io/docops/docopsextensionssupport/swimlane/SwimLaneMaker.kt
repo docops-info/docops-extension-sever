@@ -203,7 +203,6 @@ class SwimLaneMaker {
 
         // Add dynamic theme application via JavaScript
         sb.append("""
-            <!-- Dynamic theme application via JavaScript -->
             <script type="text/javascript">
             <![CDATA[
                 function applyTheme() {
@@ -214,7 +213,6 @@ class SwimLaneMaker {
                     const cardGroups = document.querySelectorAll('.swimlane-card');
 
                     if (isDark) {
-                        // Apply dark theme
                         cards.forEach(card => {
                             card.setAttribute('fill', 'url(#cardGradientDark)');
                             card.setAttribute('stroke', '#38383a');
@@ -229,7 +227,6 @@ class SwimLaneMaker {
                             group.setAttribute('filter', 'url(#cardShadowDark)');
                         });
                     } else {
-                        // Apply light theme
                         cards.forEach(card => {
                             card.setAttribute('fill', 'url(#cardGradientLight)');
                             card.setAttribute('stroke', '#e5e5e5');
@@ -246,10 +243,8 @@ class SwimLaneMaker {
                     }
                 }
 
-                // Apply theme on load
                 applyTheme();
 
-                // Listen for theme changes
                 if (window.matchMedia) {
                     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
                 }

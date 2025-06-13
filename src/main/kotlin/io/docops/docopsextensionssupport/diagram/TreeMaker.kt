@@ -444,7 +444,6 @@ class TreeMaker {
             <script type="text/javascript">
             <![CDATA[
             (function() {
-                // Text wrapping function
                 function wrapText(text, maxCharsPerLine = 12) {
                     if (text.length <= maxCharsPerLine) {
                         return [text];
@@ -482,32 +481,27 @@ class TreeMaker {
                     return lines;
                 }
 
-                // Tree data
                 const treeData = ${serializeTreeToJson(root, colors)};
 
-                // Constants for layout
                 const margin = {top: 60, right: 40, bottom: 30, left: 40};
                 const innerWidth = $width - margin.left - margin.right;
                 const innerHeight = $height - margin.top - margin.bottom;
-                const nodeRadius = 20; // Increased for wrapped text
+                const nodeRadius = 20; 
                 const orientation = "$orientation";
                 const initiallyExpanded = $initiallyExpanded;
                 const collapsible = $collapsible;
                 const treeChartId = "#treeChart_$id";
 
-                // Create the tree layout
                 function createTreeLayout() {
                     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                     g.setAttribute("transform", "translate("+ margin.left+ ","+margin.top+")");
                     document.querySelector(treeChartId).appendChild(g);
 
-                    // Process the data to create a tree structure
                     const root = treeData;
                     root.x0 = innerWidth / 2;
                     root.y0 = 0;
                     root.parent = null;
 
-                    // Initialize children visibility based on initiallyExpanded
                     function initialize(node) {
                         if (node.children) {
                             node._children = node.children;
@@ -553,7 +547,7 @@ class TreeMaker {
                             const totalNodesInLevel = currentLevelNodes.length;
 
                             if (orientation === "vertical") {
-                                node.y = level * 120; // Increased spacing
+                                node.y = level * 120; 
                                 if (totalNodesInLevel === 1) {
                                     node.x = innerWidth / 2;
                                 } else {
@@ -561,7 +555,7 @@ class TreeMaker {
                                     node.x = spacing * (indexInLevel + 1);
                                 }
                             } else {
-                                node.x = level * 140; // Increased spacing
+                                node.x = level * 140; 
                                 if (totalNodesInLevel === 1) {
                                     node.y = innerHeight / 2;
                                 } else {
@@ -594,7 +588,6 @@ class TreeMaker {
 
                         g.innerHTML = "";
 
-                        // Add links
                         links.forEach(function(d) {
                             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                             path.setAttribute("class", "link");
@@ -618,7 +611,6 @@ class TreeMaker {
                             g.appendChild(path);
                         });
 
-                        // Add nodes with wrapped text
                         nodes.forEach(function(d) {
                             const nodeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
                             nodeGroup.setAttribute("class", "node");
@@ -639,14 +631,12 @@ class TreeMaker {
                                 };
                             }
 
-                            // Node circle
                             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                             circle.setAttribute("class", "node-circle");
                             circle.setAttribute("r", nodeRadius);
                             circle.setAttribute("fill", d.color);
                             nodeGroup.appendChild(circle);
 
-                            // Wrapped text
                             const wrappedLines = wrapText(d.name);
                             const lineHeight = 12;
                             const startY = wrappedLines.length === 1 ? 0 : -(wrappedLines.length - 1) * lineHeight / 2;
@@ -660,7 +650,6 @@ class TreeMaker {
                                 nodeGroup.appendChild(text);
                             });
 
-                            // Add collapse/expand icon if needed
                             if (collapsible && (d.children || d._children)) {
                                 const icon = document.createElementNS("http://www.w3.org/2000/svg", "text");
                                 icon.setAttribute("class", "collapse-icon");
