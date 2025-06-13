@@ -181,119 +181,6 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         }.joinToString("\n")
     }
 
-    private fun modernDefs(isPdf: Boolean, id: String): Pair<String, List<String>> {
-        val colors = DEFAULT_COLORS.shuffled()
-
-        // Enhanced shadow filter with better depth
-        val shadowFilter = if (useDark) {
-            """
-        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-            <feOffset dx="0" dy="6" result="offset"/>
-            <feFlood flood-color="#000000" flood-opacity="0.4"/>
-            <feComposite in2="offset" operator="in"/>
-            <feMerge> 
-                <feMergeNode/>
-                <feMergeNode in="SourceGraphic"/> 
-            </feMerge>
-        </filter>
-        """
-        } else {
-            """
-        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
-            <feOffset dx="0" dy="4" result="offset"/>
-            <feFlood flood-color="#000000" flood-opacity="0.15"/>
-            <feComposite in2="offset" operator="in"/>
-            <feMerge> 
-                <feMergeNode/>
-                <feMergeNode in="SourceGraphic"/> 
-            </feMerge>
-        </filter>
-        """
-        }
-
-        // Use SVGColor for enhanced gradients
-        val gradientDefs = colors.mapIndexed { index, color ->
-            val svgColor = SVGColor(color, "timeline_grad_$index", "to bottom right", 1.0, 0.95, 0.85)
-            svgColor.linearGradient
-        }.joinToString("\n")
-
-        val linkStyle = if (!isPdf) {
-            """
-        .timeline-link {
-            fill: #007AFF;
-            text-decoration: underline;
-            cursor: pointer;
-            transition: fill 0.2s ease;
-        }
-        .timeline-link:hover {
-            fill: #0056CC;
-        }
-        """
-        } else ""
-
-        val defs = """
-    <defs>
-        <style>
-            .timeline-card {
-                fill: $cardBackgroundColor;
-                stroke: $separatorColor;
-                stroke-width: 0.5;
-                filter: url(#cardShadow);
-                transition: transform 0.2s ease;
-            }
-            .timeline-card:hover {
-                transform: translateY(-2px);
-            }
-            .timeline-text {
-                font-family: $DEFAULT_FONT_FAMILY;
-                fill: $textColor;
-                text-rendering: optimizeLegibility;
-            }
-            .timeline-title {
-                font-size: 32px;
-                font-weight: 800;
-                letter-spacing: -1px;
-                fill: $textColor;
-            }
-            .timeline-date {
-                font-size: 13px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            .timeline-content {
-                font-size: 15px;
-                font-weight: 400;
-                line-height: 1.5;
-                fill: $textColor;
-            }
-            .timeline-spine {
-                stroke: $separatorColor;
-                stroke-width: 2;
-                stroke-linecap: round;
-            }
-            .timeline-dot {
-                stroke: $cardBackgroundColor;
-                stroke-width: 3;
-                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-            }
-            .timeline-connector {
-                stroke: $separatorColor;
-                stroke-width: 1.5;
-                stroke-dasharray: 3,3;
-                opacity: 0.6;
-            }
-            $linkStyle
-        </style>
-        $shadowFilter
-        $gradientDefs
-    </defs>
-    """.trimIndent()
-
-        return Pair(defs, colors)
-    }
 
     private fun modernEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
         val isLeft = index % 2 == 0
@@ -383,21 +270,22 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
         val sb = StringBuilder()
         val id = UUID.randomUUID().toString()
 
-        // Refined layout constants
+        // Normalize scale
+        val scaleF = maxOf(0.1f, minOf(5.0f, scale.toFloatOrNull() ?: 1.0f))
+
+        // Calculate base dimensions
         val cardWidth = 300
         val cardPadding = 18
         val contentWidth = cardWidth - (cardPadding * 2)
         val fontSize = 14
         val lineHeight = 20
 
-        // Elegant spacing
         val sideMargin = 50
         val spineWidth = 80
         val cardSpacing = 35
         val topMargin = 100
         val bottomMargin = 50
 
-        // Calculate total width with proper spacing
         val totalWidth = sideMargin + cardWidth + spineWidth + cardWidth + sideMargin
 
         // Pre-calculate card heights
@@ -409,48 +297,57 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             cardHeights.add(cardHeight)
         }
 
-        // Calculate total height
         val totalHeight = if (entries.isNotEmpty()) {
             topMargin + cardHeights.sum() + (cardSpacing * maxOf(0, entries.size - 1)) + bottomMargin
         } else {
             300
         }
 
-        // SVG with enhanced styling
+        // Calculate scaled dimensions
+        val scaledWidth = (totalWidth * scaleF).toInt()
+        val scaledHeight = (totalHeight * scaleF).toInt()
+
+        // SVG WITHOUT background styling in the element itself
         sb.append("""
-    <svg width="$totalWidth" height="$totalHeight" 
+    <svg width="$scaledWidth" height="$scaledHeight" 
          viewBox="0 0 $totalWidth $totalHeight"
          xmlns="http://www.w3.org/2000/svg" 
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         style="background: linear-gradient(135deg, $fillColor 0%, ${if (useDark) "#0a0a0a" else "#fafafa"} 100%); font-family: $DEFAULT_FONT_FAMILY;">
+         xmlns:xlink="http://www.w3.org/1999/xlink">
     """.trimIndent())
 
         val defs = modernDefs(isPdf, id)
         sb.append(defs.first)
         val colors = defs.second
 
-        // Elegant title with subtle styling
+        // Add the background as a scalable SVG rectangle instead of CSS style
+        val backgroundGradient = if (useDark) "#0a0a0a" else "#fafafa"
         sb.append("""
-    <g transform="scale($scale)">
-        <text x="${totalWidth/2}" y="50" 
-              text-anchor="middle" 
-              class="timeline-title">
-              ${title.escapeXml()}
-        </text>
+    <!-- Scalable background -->
+    <rect width="$totalWidth" height="$totalHeight" 
+          fill="url(#backgroundGradient)"/>
     """.trimIndent())
 
-        // Refined timeline spine
+        // Title and content
+        sb.append("""
+    <text x="${totalWidth/2}" y="50" 
+          text-anchor="middle" 
+          class="timeline-title">
+          ${title.escapeXml()}
+    </text>
+    """.trimIndent())
+
+        // Timeline spine
         val spineX = sideMargin + cardWidth + (spineWidth / 2)
         val spineStartY = topMargin - 30
         val spineEndY = totalHeight - bottomMargin + 30
 
         sb.append("""
-    <!-- Elegant timeline spine -->
+    <!-- Timeline spine -->
     <line x1="$spineX" y1="$spineStartY" x2="$spineX" y2="$spineEndY" 
           class="timeline-spine"/>
     """.trimIndent())
 
-        // Generate refined timeline entries
+        // Generate timeline entries
         var currentY = topMargin
         entries.forEachIndexed { index, entry ->
             val gradIndex = index % colors.size
@@ -465,10 +362,130 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
             currentY += cardHeight + cardSpacing
         }
 
-        sb.append("</g>")
         sb.append("</svg>")
-
         return sb.toString()
+    }
+
+    private fun modernDefs(isPdf: Boolean, id: String): Pair<String, List<String>> {
+        val colors = DEFAULT_COLORS.shuffled()
+
+        val shadowFilter = if (useDark) {
+            """
+        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="0" dy="6" result="offset"/>
+            <feFlood flood-color="#000000" flood-opacity="0.4"/>
+            <feComposite in2="offset" operator="in"/>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+        """
+        } else {
+            """
+        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+            <feOffset dx="0" dy="4" result="offset"/>
+            <feFlood flood-color="#000000" flood-opacity="0.15"/>
+            <feComposite in2="offset" operator="in"/>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+        """
+        }
+
+        // Add background gradient definition
+        val backgroundGradient = """
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:$fillColor;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:${if (useDark) "#0a0a0a" else "#fafafa"};stop-opacity:1" />
+    </linearGradient>
+    """
+
+        // Use SVGColor for enhanced gradients
+        val gradientDefs = colors.mapIndexed { index, color ->
+            val svgColor = SVGColor(color, "timeline_grad_$index", "to bottom right", 1.0, 0.95, 0.85)
+            svgColor.linearGradient
+        }.joinToString("\n")
+
+        val linkStyle = if (!isPdf) {
+            """
+        .timeline-link {
+            fill: #007AFF;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: fill 0.2s ease;
+        }
+        .timeline-link:hover {
+            fill: #0056CC;
+        }
+        """
+        } else ""
+
+        val defs = """
+    <defs>
+        <style>
+            .timeline-card {
+                fill: $cardBackgroundColor;
+                stroke: $separatorColor;
+                stroke-width: 0.5;
+                filter: url(#cardShadow);
+                transition: transform 0.2s ease;
+            }
+            .timeline-card:hover {
+                transform: translateY(-2px);
+            }
+            .timeline-text {
+                font-family: $DEFAULT_FONT_FAMILY;
+                fill: $textColor;
+                text-rendering: optimizeLegibility;
+            }
+            .timeline-title {
+                font-size: 32px;
+                font-weight: 800;
+                letter-spacing: -1px;
+                fill: $textColor;
+            }
+            .timeline-date {
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .timeline-content {
+                font-size: 15px;
+                font-weight: 400;
+                line-height: 1.5;
+                fill: $textColor;
+            }
+            .timeline-spine {
+                stroke: $separatorColor;
+                stroke-width: 2;
+                stroke-linecap: round;
+            }
+            .timeline-dot {
+                stroke: $cardBackgroundColor;
+                stroke-width: 3;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            }
+            .timeline-connector {
+                stroke: $separatorColor;
+                stroke-width: 1.5;
+                stroke-dasharray: 3,3;
+                opacity: 0.6;
+            }
+            $linkStyle
+        </style>
+        $shadowFilter
+        $backgroundGradient
+        $gradientDefs
+    </defs>
+    """.trimIndent()
+
+        return Pair(defs, colors)
     }
 
     private fun refinedEntry(
@@ -558,7 +575,7 @@ Challenges the distinction between high and low culture and emphasizes fragmenta
 
     // Test normal output
     val maker = TimelineMaker(false, "#a1d975")
-    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "1", false, "30")
+    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "0.6", false, "30")
     val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
 
