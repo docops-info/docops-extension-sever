@@ -16,6 +16,7 @@ import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
@@ -93,7 +94,7 @@ class DocOpsRouter (
         val handler = handlers[kind.lowercase()]
             ?: throw IllegalArgumentException("Unknown handler kind: $kind")
         val timing = measureTimedValue {
-            addSvgMetadata(handler.handleSVG(payload, context))
+            joinXmlLines(addSvgMetadata(handler.handleSVG(payload, context)))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
         applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds))

@@ -142,10 +142,10 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
         }
         sb.append("</g>")
         sb.append(tail())
-        return joinXmlLines(sb.toString())
+        return sb.toString()
     }
 
-    private fun joinXmlLines(str: String): String {
+    /*private fun joinXmlLines(str: String): String {
         val sb = StringBuilder()
         var previousLine = ""
 
@@ -198,7 +198,7 @@ class RoadMapMaker(val useDark: Boolean = false, val index: Int = 26) {
             .replace("\"transform=", "\" transform=")
             .replace("\"viewBox=", "\" viewBox=")
             .replace("\"xmlns=", "\" xmlns=")
-    }
+    }*/
 
     private fun doDone(
         done: MutableList<MutableList<String>>,

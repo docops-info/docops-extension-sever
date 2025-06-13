@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 
 class VBarMaker {
     private var fontColor = ""
@@ -30,7 +29,7 @@ class VBarMaker {
         sb.append(addTitle(bar))
         sb.append(addLegend(bar))
         sb.append(tail())
-        return joinXmlLines(sb.toString())
+        return sb.toString()
     }
 
     private fun addBars(bar: Bar): String {

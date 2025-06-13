@@ -1,9 +1,6 @@
 package io.docops.docopsextensionssupport.web
 
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.chart.valueFmt
 import io.docops.docopsextensionssupport.svgsupport.ToolTip
-import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.event.EventListener
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.time.Duration
-import java.time.LocalTime
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArraySet
 import java.util.function.Consumer

@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.timeline
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType

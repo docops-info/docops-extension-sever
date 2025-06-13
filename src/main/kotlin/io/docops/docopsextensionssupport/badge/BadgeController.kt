@@ -410,7 +410,7 @@ $txt
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
-        return ResponseEntity(joinXmlLines(svg.toString()).toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
+        return ResponseEntity(svg.toString().toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
     }
 }
 

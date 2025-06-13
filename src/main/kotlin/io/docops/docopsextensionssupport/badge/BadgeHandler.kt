@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
@@ -89,7 +88,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         )
         svg.append(svgSrc.first)
         svg.append("</svg>")
-        return joinXmlLines(svg.toString())
+        return svg.toString()
     }
 
     /**

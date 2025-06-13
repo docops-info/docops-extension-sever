@@ -31,7 +31,7 @@ class ComparisonTableMaker {
             evenOdd++
         }
         sb.append(tail(comparisonChart))
-        return joinXmlLines(sb.toString())
+        return sb.toString()
     }
 
     private fun isEven(number: Int): Boolean {

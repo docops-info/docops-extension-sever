@@ -58,62 +58,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         sb.append("</g>")
         sb.append(descriptions(height))
         sb.append(tail())
-        return ShapeResponse(shapeSvg = joinXmlLines(sb.toString()), height = height, width = width)
+        return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
     }
-    private fun joinXmlLines(str: String): String {
-        val sb = StringBuilder()
-        var previousLine = ""
 
-        str.lines().forEach { line ->
-            val trimmedLine = line.trim()
-            if (trimmedLine.isEmpty()) {
-                return@forEach
-            }
-
-            // Add a space if the previous line ends with a quote and the current line starts with an attribute
-            if (previousLine.endsWith("\"") && 
-                (trimmedLine.startsWith("style=") || 
-                 trimmedLine.matches(Regex("^[a-zA-Z-]+=.*")))) {
-                sb.append(" ")
-            }
-
-            // If the previous line doesn't end with a tag closing character, quote, or space,
-            // and the current line doesn't start with a tag opening character, quote, or space,
-            // then add a space to prevent content from running together
-            else if (previousLine.isNotEmpty() && 
-                    !previousLine.endsWith(">") && 
-                    !previousLine.endsWith("\"") && 
-                    !previousLine.endsWith("'") && 
-                    !previousLine.endsWith(" ") &&
-                    trimmedLine.isNotEmpty() && 
-                    !trimmedLine.startsWith("<") && 
-                    !trimmedLine.startsWith("\"") && 
-                    !trimmedLine.startsWith("'") && 
-                    !trimmedLine.startsWith(" ")) {
-                sb.append(" ")
-            }
-
-            sb.append(trimmedLine)
-            previousLine = trimmedLine
-        }
-
-        // Fix any remaining attribute issues by ensuring there's a space between quotes and attributes
-        return sb.toString().replace("\"style=", "\" style=")
-            .replace("\"class=", "\" class=")
-            .replace("\"id=", "\" id=")
-            .replace("\"width=", "\" width=")
-            .replace("\"height=", "\" height=")
-            .replace("\"x=", "\" x=")
-            .replace("\"y=", "\" y=")
-            .replace("\"rx=", "\" rx=")
-            .replace("\"ry=", "\" ry=")
-            .replace("\"fill=", "\" fill=")
-            .replace("\"stroke=", "\" stroke=")
-            .replace("\"d=", "\" d=")
-            .replace("\"transform=", "\" transform=")
-            .replace("\"viewBox=", "\" viewBox=")
-            .replace("\"xmlns=", "\" xmlns=")
-    }
 
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,$start)'>")

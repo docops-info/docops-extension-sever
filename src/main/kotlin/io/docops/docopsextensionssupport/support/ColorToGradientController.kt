@@ -63,7 +63,7 @@ class ColorToGradientController {
                  $sb
             </svg>
         """.trimIndent()
-    return ResponseEntity.ok(joinXmlLines( str))
+    return ResponseEntity.ok( str)
 
     }
     @PutMapping("/grad")

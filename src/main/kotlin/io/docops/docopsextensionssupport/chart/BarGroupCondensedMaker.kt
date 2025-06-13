@@ -5,7 +5,6 @@ import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.util.UUID
 
@@ -53,7 +52,7 @@ class BarGroupCondensedMaker {
 
         sb.append("</g>")
         sb.append(end())
-        return joinXmlLines(sb.toString())
+        return sb.toString()
     }
     private fun addGroup(barGroup: BarGroup, added: Group): String {
         val sb = StringBuilder()

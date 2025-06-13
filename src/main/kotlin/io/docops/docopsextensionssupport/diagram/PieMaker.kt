@@ -38,7 +38,7 @@ class PieMaker {
         }
         sb.append(tail())
 
-        return joinXmlLines(sb.toString())
+        return sb.toString()
     }
 
     private fun makeHead(width: Int, pies: Pies) : String {
