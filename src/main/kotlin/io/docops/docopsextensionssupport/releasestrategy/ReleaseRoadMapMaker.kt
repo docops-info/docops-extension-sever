@@ -361,11 +361,9 @@ class ReleaseRoadMapMaker {
                     }
 
                     function toggleCardDetail(cardId) {
-                        // Get the card and its detail panel
                         const card = document.getElementById(cardId);
 
-                        // Extract the id_index part from the cardId (remove the 'card' prefix)
-                        const idIndex = cardId.substring(4); // Remove 'card' prefix
+                        const idIndex = cardId.substring(4); 
                         const detailPanelId = 'detail-panel-' + idIndex;
 
                         console.log('Card ID:', cardId);
@@ -375,25 +373,21 @@ class ReleaseRoadMapMaker {
 
                         if (!detailPanel) {
                             console.error('Detail panel not found with ID:', detailPanelId);
-                            return; // Exit the function if detailPanel is null
+                            return; 
                         }
 
-                        // Check if this card is already active
                         const isActive = card.classList.contains('detail-active');
 
-                        // Hide all detail panels first
                         const allDetailPanels = document.querySelectorAll('.detail-panel');
                         allDetailPanels.forEach(panel => {
                             panel.style.display = 'none';
                         });
 
-                        // Remove active class from all cards
                         const allCards = document.querySelectorAll('.detail-active');
                         allCards.forEach(activeCard => {
                             activeCard.classList.remove('detail-active');
                         });
 
-                        // If this card wasn't active, show its detail panel
                         if (!isActive) {
                             card.classList.add('detail-active');
                             detailPanel.style.display = 'block';
@@ -402,7 +396,6 @@ class ReleaseRoadMapMaker {
                         }
                     }
 
-                    // Function to toggle between light and dark mode manually
                     function toggleDarkMode() {
                         document.body.classList.toggle('dark-mode');
                         const elements = document.querySelectorAll('.auto-dark-text, .auto-dark-bg, .auto-dark-stroke, .auto-dark-circle, .ios-bg, .ios-card-bg, .ios-text, .ios-secondary-text');
