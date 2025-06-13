@@ -32,269 +32,505 @@ import java.util.*
 class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boolean = false, val id: String = UUID.randomUUID().toString()) {
     private var textColor: String = "#000000"
     private var fillColor = ""
+    private var cardBackgroundColor = ""
+    private var separatorColor = ""
+
     init {
         if(useDark) {
-            textColor = "#fcfcfc"
-            fillColor ="#21252B"
+            textColor = "#ffffff"
+            fillColor = "#000000"
+            cardBackgroundColor = "#1c1c1e"
+            separatorColor = "#38383a"
         } else {
-            fillColor = "#fcfcfc"
+            textColor = "#1d1d1f"
+            fillColor = "#f2f2f7"
+            cardBackgroundColor = "#ffffff"
+            separatorColor = "#e5e5e5"
         }
     }
+
     companion object {
-         val DEFAULT_COLORS = mutableListOf(
-             "#4285F4", // Google Blue
-             "#EA4335", // Google Red
-             "#FBBC05", // Google Yellow
-             "#34A853", // Google Green
-             "#5E35B1", // Deep Purple
-             "#00ACC1", // Cyan
-             "#FB8C00", // Orange
-             "#43A047", // Green
-             "#E91E63", // Pink
-             "#3949AB"  // Indigo
-         )
+        val DEFAULT_COLORS = mutableListOf(
+            "#007AFF", "#FF3B30", "#FF9500", "#34C759", "#5856D6",
+            "#00C7BE", "#FF2D92", "#A2845E", "#8E8E93", "#AF52DE"
+        )
         val DEFAULT_HEIGHT: Float = 660.0F
-        const val DEFAULT_FONT_FAMILY = "Roboto, sans-serif"
+        const val DEFAULT_FONT_FAMILY = "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Arial, sans-serif"
     }
 
-    /**
-     * Generates an SVG timeline for the given source.
-     *
-     * @param source The timeline source.
-     * @param title The title of the timeline.
-     * @param scale The scale of the timeline.
-     * @param isPdf Indicates whether the timeline is for PDF output.
-     * @param chars The character set to be used.
-     * @return The SVG representation of the timeline.
-     */
-    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String) : String {
+    data class WikiLink(val url: String, val label: String)
+    data class TextSegment(val text: String, val isLink: Boolean = false, val url: String = "")
 
+    private fun parseWikiLinks(text: String): List<TextSegment> {
+        val segments = mutableListOf<TextSegment>()
+        val linkPattern = "\\[\\[(.*?)\\s+(.*?)\\]\\]".toRegex()
+        var lastIndex = 0
+
+        linkPattern.findAll(text).forEach { matchResult ->
+            // Add text before the link
+            if (matchResult.range.first > lastIndex) {
+                val beforeText = text.substring(lastIndex, matchResult.range.first)
+                if (beforeText.isNotEmpty()) {
+                    segments.add(TextSegment(beforeText))
+                }
+            }
+
+            // Add the link
+            val (url, label) = matchResult.destructured
+            segments.add(TextSegment(label, true, url))
+            lastIndex = matchResult.range.last + 1
+        }
+
+        // Add remaining text after the last link
+        if (lastIndex < text.length) {
+            val remainingText = text.substring(lastIndex)
+            if (remainingText.isNotEmpty()) {
+                segments.add(TextSegment(remainingText))
+            }
+        }
+
+        // If no links were found, return the original text as a single segment
+        if (segments.isEmpty()) {
+            segments.add(TextSegment(text))
+        }
+
+        return segments
+    }
+
+    private fun calculateTextHeight(text: String, maxWidth: Int, fontSize: Int, lineHeight: Int): Int {
+        val segments = parseWikiLinks(text)
+        val lines = mutableListOf<String>()
+        var currentLine = ""
+        val avgCharWidth = fontSize * 0.6 // Approximate character width
+
+        for (segment in segments) {
+            val words = segment.text.split(" ")
+            for (word in words) {
+                val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
+                if (testLine.length * avgCharWidth <= maxWidth) {
+                    currentLine = testLine
+                } else {
+                    if (currentLine.isNotEmpty()) {
+                        lines.add(currentLine)
+                        currentLine = word
+                    } else {
+                        lines.add(word)
+                    }
+                }
+            }
+        }
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine)
+        }
+
+        return lines.size * lineHeight + 20 // Add padding
+    }
+
+    private fun wrapTextWithLinksToTspans(text: String, x: Int, y: Int, maxWidth: Int, lineHeight: Int, fontSize: Int = 16): String {
+        val segments = parseWikiLinks(text)
+        val lines = mutableListOf<List<TextSegment>>()
+        var currentLine = mutableListOf<TextSegment>()
+        var currentLineWidth = 0.0 // Changed to Double
+        val avgCharWidth = fontSize * 0.6
+
+        for (segment in segments) {
+            val words = segment.text.split(" ")
+            for (word in words) {
+                val wordWidth = word.length * avgCharWidth
+
+                if (currentLineWidth + wordWidth <= maxWidth) {
+                    if (currentLine.isNotEmpty() && currentLine.last().text.isNotEmpty()) {
+                        // Add space to previous segment or create new segment for space
+                        val lastSegment = currentLine.last()
+                        if (lastSegment.isLink == segment.isLink && lastSegment.url == segment.url) {
+                            currentLine[currentLine.size - 1] = lastSegment.copy(text = "${lastSegment.text} $word")
+                        } else {
+                            currentLine.add(segment.copy(text = word))
+                        }
+                    } else {
+                        currentLine.add(segment.copy(text = word))
+                    }
+                    currentLineWidth += wordWidth
+                } else {
+                    if (currentLine.isNotEmpty()) {
+                        lines.add(currentLine)
+                        currentLine = mutableListOf(segment.copy(text = word))
+                        currentLineWidth = wordWidth
+                    } else {
+                        currentLine.add(segment.copy(text = word))
+                        currentLineWidth = wordWidth
+                    }
+                }
+            }
+        }
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine)
+        }
+
+        return lines.mapIndexed { lineIndex, lineSegments ->
+            val dy = if (lineIndex == 0) "0" else lineHeight.toString()
+            val tspans = lineSegments.joinToString("") { segment ->
+                if (segment.isLink && !pdf) {
+                    """<tspan fill="#007AFF" text-decoration="underline" style="cursor: pointer;" onclick="window.open('${segment.url.escapeXml()}', '_blank')">${segment.text.escapeXml()}</tspan>"""
+                } else {
+                    """<tspan>${segment.text.escapeXml()}</tspan>"""
+                }
+            }
+
+            """<tspan x="$x" dy="$dy">$tspans</tspan>"""
+        }.joinToString("\n")
+    }
+
+    private fun modernDefs(isPdf: Boolean, id: String): Pair<String, List<String>> {
+        val colors = DEFAULT_COLORS.shuffled()
+
+        // Enhanced shadow filter with better depth
+        val shadowFilter = if (useDark) {
+            """
+        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="0" dy="6" result="offset"/>
+            <feFlood flood-color="#000000" flood-opacity="0.4"/>
+            <feComposite in2="offset" operator="in"/>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+        """
+        } else {
+            """
+        <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+            <feOffset dx="0" dy="4" result="offset"/>
+            <feFlood flood-color="#000000" flood-opacity="0.15"/>
+            <feComposite in2="offset" operator="in"/>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+        """
+        }
+
+        // Use SVGColor for enhanced gradients
+        val gradientDefs = colors.mapIndexed { index, color ->
+            val svgColor = SVGColor(color, "timeline_grad_$index", "to bottom right", 1.0, 0.95, 0.85)
+            svgColor.linearGradient
+        }.joinToString("\n")
+
+        val linkStyle = if (!isPdf) {
+            """
+        .timeline-link {
+            fill: #007AFF;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: fill 0.2s ease;
+        }
+        .timeline-link:hover {
+            fill: #0056CC;
+        }
+        """
+        } else ""
+
+        val defs = """
+    <defs>
+        <style>
+            .timeline-card {
+                fill: $cardBackgroundColor;
+                stroke: $separatorColor;
+                stroke-width: 0.5;
+                filter: url(#cardShadow);
+                transition: transform 0.2s ease;
+            }
+            .timeline-card:hover {
+                transform: translateY(-2px);
+            }
+            .timeline-text {
+                font-family: $DEFAULT_FONT_FAMILY;
+                fill: $textColor;
+                text-rendering: optimizeLegibility;
+            }
+            .timeline-title {
+                font-size: 32px;
+                font-weight: 800;
+                letter-spacing: -1px;
+                fill: $textColor;
+            }
+            .timeline-date {
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .timeline-content {
+                font-size: 15px;
+                font-weight: 400;
+                line-height: 1.5;
+                fill: $textColor;
+            }
+            .timeline-spine {
+                stroke: $separatorColor;
+                stroke-width: 2;
+                stroke-linecap: round;
+            }
+            .timeline-dot {
+                stroke: $cardBackgroundColor;
+                stroke-width: 3;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            }
+            .timeline-connector {
+                stroke: $separatorColor;
+                stroke-width: 1.5;
+                stroke-dasharray: 3,3;
+                opacity: 0.6;
+            }
+            $linkStyle
+        </style>
+        $shadowFilter
+        $gradientDefs
+    </defs>
+    """.trimIndent()
+
+        return Pair(defs, colors)
+    }
+
+    private fun modernEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
+        val isLeft = index % 2 == 0
+        val cardWidth = 320
+        val cardPadding = 20
+        val contentWidth = cardWidth - (cardPadding * 2)
+        val fontSize = 16
+        val lineHeight = 20
+
+        // Calculate dynamic height based on text content
+        val textHeight = calculateTextHeight(entry.text, contentWidth, fontSize, lineHeight)
+        val headerHeight = 40
+        val cardHeight = maxOf(100, headerHeight + textHeight + 20) // Minimum 100px
+
+        val yPosition = 120 + (index * (cardHeight + 40)) // Add spacing between cards
+        val xPosition = if (isLeft) 50 else 650
+
+        // iOS-style rounded rectangle
+        val cardRadius = 16
+
+        // Timeline connector dot
+        val dotX = 500
+        val dotY = yPosition + (cardHeight / 2)
+
+        return """
+        <!-- Timeline Entry ${index + 1} -->
+        <g class="timeline-entry">
+            <!-- Connector line to timeline -->
+            <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" 
+                  y1="$dotY" 
+                  x2="$dotX" 
+                  y2="$dotY" 
+                  stroke="$separatorColor" 
+                  stroke-width="2"/>
+            
+            <!-- Timeline dot -->
+            <circle cx="$dotX" cy="$dotY" r="8" 
+                    fill="url(#timeline_grad_$gradIndex)" 
+                    stroke="$cardBackgroundColor" 
+                    stroke-width="3"/>
+            
+            <!-- Card background -->
+            <rect x="$xPosition" y="$yPosition" 
+                  width="$cardWidth" height="$cardHeight" 
+                  rx="$cardRadius" ry="$cardRadius" 
+                  class="timeline-card"/>
+            
+            <!-- Date header -->
+            <rect x="$xPosition" y="$yPosition" 
+                  width="$cardWidth" height="$headerHeight" 
+                  rx="$cardRadius" ry="$cardRadius" 
+                  fill="url(#timeline_grad_$gradIndex)"/>
+            <rect x="$xPosition" y="${yPosition + 25}" 
+                  width="$cardWidth" height="15" 
+                  fill="url(#timeline_grad_$gradIndex)"/>
+            
+            <!-- Date text -->
+            <text x="${xPosition + cardPadding}" y="${yPosition + 28}" 
+                  class="timeline-text timeline-date" 
+                  fill="white">
+                ${entry.date.escapeXml()}
+            </text>
+            
+            <!-- Content text with links -->
+            <text x="${xPosition + cardPadding}" y="${yPosition + headerHeight + 25}" 
+                  class="timeline-text timeline-content">
+                ${wrapTextWithLinksToTspans(entry.text, xPosition + cardPadding, yPosition + headerHeight + 25, contentWidth, lineHeight, fontSize)}
+            </text>
+        </g>
+        """.trimIndent()
+    }
+
+    private fun modernRoad(width: Int): String {
+        return """
+        <!-- Main timeline spine -->
+        <line x1="500" y1="100" x2="500" y2="800" 
+              stroke="$separatorColor" 
+              stroke-width="4" 
+              stroke-linecap="round"/>
+        """.trimIndent()
+    }
+
+
+    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String): String {
         this.pdf = isPdf
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val id = UUID.randomUUID().toString()
-        val head = head(entries, scale, id)
-        sb.append(head.first)
-        val defs = defs(isPdf, id)
-        val colors = defs.second
+
+        // Refined layout constants
+        val cardWidth = 300
+        val cardPadding = 18
+        val contentWidth = cardWidth - (cardPadding * 2)
+        val fontSize = 14
+        val lineHeight = 20
+
+        // Elegant spacing
+        val sideMargin = 50
+        val spineWidth = 80
+        val cardSpacing = 35
+        val topMargin = 100
+        val bottomMargin = 50
+
+        // Calculate total width with proper spacing
+        val totalWidth = sideMargin + cardWidth + spineWidth + cardWidth + sideMargin
+
+        // Pre-calculate card heights
+        val cardHeights = mutableListOf<Int>()
+        entries.forEach { entry ->
+            val textHeight = calculateTextHeight(entry.text, contentWidth, fontSize, lineHeight)
+            val headerHeight = 45
+            val cardHeight = maxOf(90, headerHeight + textHeight + cardPadding)
+            cardHeights.add(cardHeight)
+        }
+
+        // Calculate total height
+        val totalHeight = if (entries.isNotEmpty()) {
+            topMargin + cardHeights.sum() + (cardSpacing * maxOf(0, entries.size - 1)) + bottomMargin
+        } else {
+            300
+        }
+
+        // SVG with enhanced styling
+        sb.append("""
+    <svg width="$totalWidth" height="$totalHeight" 
+         viewBox="0 0 $totalWidth $totalHeight"
+         xmlns="http://www.w3.org/2000/svg" 
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         style="background: linear-gradient(135deg, $fillColor 0%, ${if (useDark) "#0a0a0a" else "#fafafa"} 100%); font-family: $DEFAULT_FONT_FAMILY;">
+    """.trimIndent())
+
+        val defs = modernDefs(isPdf, id)
         sb.append(defs.first)
+        val colors = defs.second
 
+        // Elegant title with subtle styling
+        sb.append("""
+    <g transform="scale($scale)">
+        <text x="${totalWidth/2}" y="50" 
+              text-anchor="middle" 
+              class="timeline-title">
+              ${title.escapeXml()}
+        </text>
+    """.trimIndent())
 
-        sb.append("<rect fill='$fillColor' width='100%' height='100%'/>")
+        // Refined timeline spine
+        val spineX = sideMargin + cardWidth + (spineWidth / 2)
+        val spineStartY = topMargin - 30
+        val spineEndY = totalHeight - bottomMargin + 30
 
-        sb.append("<g transform=\"scale($scale)\">")
+        sb.append("""
+    <!-- Elegant timeline spine -->
+    <line x1="$spineX" y1="$spineStartY" x2="$spineX" y2="$spineEndY" 
+          class="timeline-spine"/>
+    """.trimIndent())
 
-        sb.append("""<text x="${head.second/2}" y="30" text-anchor="middle" style="font-size: 28px; font-family: ${DEFAULT_FONT_FAMILY}; font-variant: small-caps; font-weight: 600; letter-spacing: 0.5px;" class="edge tm_title" fill="$textColor" >${title.escapeXml()}</text>""")
-        sb.append("""<g transform="translate(0,24) scale(1.0)">""")
-
-        sb.append(buildRoad(head.second-100))
-        val gradIndex = (0 until entries.size).random()
-
+        // Generate refined timeline entries
+        var currentY = topMargin
         entries.forEachIndexed { index, entry ->
-            val color  = outlineColor.ifBlank {
-                DEFAULT_COLORS[gradIndex]
-            }
+            val gradIndex = index % colors.size
+            val cardHeight = cardHeights[index]
 
-            sb.append(makeEntry(index, entry, color= color, chars = chars, gradIndex =gradIndex, id= id))
+            sb.append(refinedEntry(
+                index, entry, colors[gradIndex], gradIndex, id,
+                currentY, cardHeight, totalWidth, cardWidth, cardPadding,
+                contentWidth, fontSize, lineHeight, sideMargin, spineX
+            ))
 
+            currentY += cardHeight + cardSpacing
         }
+
         sb.append("</g>")
-        sb.append("</g>")
-        sb.append(tail())
+        sb.append("</svg>")
+
         return sb.toString()
     }
 
-    private fun makeEntry(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
-        return if(index % 2 == 0) {
-            odd(index,entry, color, chars, gradIndex, id)
-        } else{
-            even(index, entry, color, chars, gradIndex, id)
-        }
-    }
-    private fun odd(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
+    private fun refinedEntry(
+        index: Int, entry: Entry, color: String, gradIndex: Int, id: String,
+        yPosition: Int, cardHeight: Int, totalWidth: Int, cardWidth: Int,
+        cardPadding: Int, contentWidth: Int, fontSize: Int, lineHeight: Int,
+        sideMargin: Int, spineX: Int
+    ): String {
+        val isLeft = index % 2 == 0
+        val xPosition = if (isLeft) sideMargin else totalWidth - sideMargin - cardWidth
+        val headerHeight = 45
+        val cardRadius = 16
+        val dotY = yPosition + (cardHeight / 2)
 
-        var x = 0
-        if(index>0)
-        {
-            x +=  125 * index
-        }
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 70, "odd timeline-text", 14, "#21252B")
-        var fill = "url(#topBar_$id)"
-
-        //language=svg
         return """
-      <g transform="translate($x,0)" class="odd timeline-entry">
-        <g transform="translate(125,320)" class="timeline-marker">
-            <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
-             <g transform="translate(-135,-182)">
-                <path d="M135,100 v62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
-            </g>
-            <g transform="translate(-3,-86),rotate(-90)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
-            </g>
-        </g>
-        <rect x="10" y="20" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="8" ry="8" class="edge" />
-        <rect x="10" y="20" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="8" ry="8" />
-        <text x="125" y="50" fill='#000000' text-anchor='middle'
-                  style="font-family: ${DEFAULT_FONT_FAMILY}; text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: 0.5px; font-weight: bold; font-variant: small-caps;"
-                  class="glass raiseText timeline-date">
-                  ${entry.date}
+    <!-- Timeline Entry ${index + 1} -->
+    <g class="timeline-entry">
+        <!-- Dashed connector line -->
+        <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" 
+              y1="$dotY" 
+              x2="$spineX" 
+              y2="$dotY" 
+              class="timeline-connector"/>
+        
+        <!-- Enhanced timeline dot -->
+        <circle cx="$spineX" cy="$dotY" r="8" 
+                fill="url(#timeline_grad_$gradIndex)" 
+                class="timeline-dot"/>
+        
+        <!-- Elegant card with enhanced shadow -->
+        <rect x="$xPosition" y="$yPosition" 
+              width="$cardWidth" height="$cardHeight" 
+              rx="$cardRadius" ry="$cardRadius" 
+              class="timeline-card"/>
+        
+        <!-- Gradient header with subtle design -->
+        <rect x="$xPosition" y="$yPosition" 
+              width="$cardWidth" height="$headerHeight" 
+              rx="$cardRadius" ry="$cardRadius" 
+              fill="url(#timeline_grad_$gradIndex)"/>
+        <rect x="$xPosition" y="${yPosition + cardRadius}" 
+              width="$cardWidth" height="${headerHeight - cardRadius}" 
+              fill="url(#timeline_grad_$gradIndex)"/>
+        
+        <!-- Refined date text -->
+        <text x="${xPosition + cardPadding}" y="${yPosition + 28}" 
+              class="timeline-text timeline-date" 
+              fill="white">
+              ${entry.date.escapeXml()}
         </text>
-        $text
-    </g>
-
-        """.trimIndent()
-    }
-    private fun even(index: Int, entry: Entry, color: String, chars: String, gradIndex: Int, id: String): String {
-        var x = 0
-        if(index>0)
-        {
-            x += 125 * index
-        }
-
-        val text = entry.toTextWithSpan(chars.toFloat(), 20, 470, "even timeline-text", dy=14, "#21252B")
-        var fill = "url(#topBar_$id)"
-
-
-        //language=svg
-        return """
-        <g transform="translate($x,0)" class="even timeline-entry">
-        <g transform="translate(125,320)" class="timeline-marker">
-            <circle cx="0" cy="0" r="20" fill="#fcfcfc" />
-            <circle cx="0" cy="0" r="17" fill="url(#outlineGradient_$id)" />
-             <g transform="translate(-134,-80)">
-                <path d="M135,100 v62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="$outlineColor"/>
-            </g>
-            <g transform="translate(3,86),rotate(90)">
-                <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7" stroke="url(#outlineGradient_$id)"/>
-            </g>
-        </g>
-
-        <rect x="10" y="420" width="225" height="200" fill='#fcfcfc' stroke="$color" stroke-width="2" rx="8" ry="8" class="edge" />
-        <rect x="10" y="420" width="225" height="40" fill="$fill" stroke="$color" stroke-width="2" rx="8" ry="8" />
-
-        <text x="125" y="450" fill='#000000' text-anchor='middle'
-                  style="font-family: ${DEFAULT_FONT_FAMILY}; text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: 0.5px; font-weight: bold; font-variant: small-caps;"
-                  class="glass raiseText timeline-date">
-                  ${entry.date}
+        
+        <!-- Content with enhanced typography -->
+        <text x="${xPosition + cardPadding}" y="${yPosition + headerHeight + 25}" 
+              class="timeline-text timeline-content">
+              ${wrapTextWithLinksToTspans(entry.text, xPosition + cardPadding, yPosition + headerHeight + 25, contentWidth, lineHeight, fontSize)}
         </text>
-        $text
     </g>
-
-        """.trimIndent()
-    }
-    private fun dateTotSpan(date: String, x: Int, dy: Int, textColor: String) : String {
-        val sp = date.split(" ")
-        val sb=StringBuilder()
-        sp.forEach {
-            sb.append("""<tspan x="$x" dy="$dy" fill="$textColor">${it.escapeXml()}</tspan>""")
-        }
-        return sb.toString()
-    }
-    private fun buildRoad(width: Int): String {
-        return """
-            <g transform="translate(30,320)" class="timeline-road">
-            <path d="M0,0 h$width" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor_$id)" class="raise"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="10" y1="0" x2="$width" y2="0" stroke="#fcfcfc"
-                  stroke-width="10" fill="#ffffff" stroke-dasharray="24 24 24" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-            <g transform="translate($width,-2)">
-                <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor_$id)" stroke-width="35" fill="url(#arrowColor_$id)"
-                />
-            </g>
-        </g>
-        """.trimIndent()
-    }
-    private fun head(entries: MutableList<Entry>, scale: String, id: String) : Pair<String, Int> {
-        var width = 0
-        entries.forEachIndexed { index, entry ->
-            width = 140 * index + 80
-        }
-        width += 140
-        val scaleF = scale.toFloat()
-        val height = DEFAULT_HEIGHT * scale.toFloat()
-        return Pair("""
-        <svg width="${(width * scaleF) / DISPLAY_RATIO_16_9}" height="${height/ DISPLAY_RATIO_16_9}" viewBox="0 0 ${width * scaleF} $height"
-        preserveAspectRatio="xMidYMin slice"
-        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="id_$id">
-        <desc>https://docops.io/extension</desc>
-    """.trimIndent(),width)
+    """.trimIndent()
     }
 
-    private fun tail() : String = "</svg>"
-
-    private fun defs(isPdf: Boolean, id: String): Pair<String, MutableMap<Int, String>> {
-        val colors = mutableMapOf<Int, String>()
-        val sb = StringBuilder()
-
-        val colorMap = SVGColor(outlineColor)
-        val hsl = hexToHsl(outlineColor, pdf)
-        sb.append("""<radialGradient id="outlineGradient_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:${colorMap.lighter()}; stop-opacity:1" />
-            <stop offset="60%" style="stop-color:$outlineColor; stop-opacity:1" />
-        </radialGradient>""")
-        //language=html
-        var style = """
-        <style>
-            #id_$id .edge { filter: drop-shadow(0 2mm 2mm rgba(0, 0, 0, 0.2)); }
-            #id_$id .cricleedge { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.15)); }
-            #id_$id .odd { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
-            #id_$id .even { font-size:14px; font-family: ${DEFAULT_FONT_FAMILY}; fill: #000000; }
-            #id_$id .rmLink { fill: #1a73e8; text-decoration: underline; }
-            #id_$id .main_pane { fill: #f8f9fa; }
-            #id_$id .each_tm { fill: #fcfcfc; }
-            #id_$id .tm_title { fill: rgba(0, 0, 0, 0.87); font-weight: 500; }
-            #id_$id .timeline-entry { transition: transform 0.3s ease; }
-            #id_$id .timeline-entry:hover {  }
-            #id_$id .timeline-date { font-weight: 600; letter-spacing: 0.5px; }
-            #id_$id .timeline-text { line-height: 1.5; }
-            #id_$id .timeline-marker { filter: drop-shadow(0 1mm 1mm rgba(0, 0, 0, 0.1)); }
-            #id_$id .timeline-road { filter: drop-shadow(0 1mm 2mm rgba(0, 0, 0, 0.1)); }
-        </style>
-        """.trimIndent()
-        if(isPdf) {
-            style = ""
-        }
-        return Pair("""
-        <defs>
-
-        <linearGradient id="panelBack" x2="1" y2="1">
-            <stop class="stop1" offset="0%" stop-color="#939393"/>
-            <stop class="stop2" offset="50%" stop-color="#5d5d5d"/>
-            <stop class="stop3" offset="100%" stop-color="#282828"/>
-        </linearGradient>
-        <linearGradient id="arrowColor_$id" x2="0%" y2="100%">
-            <stop stop-color="${colorMap.lighter()}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-        <linearGradient id="topBar_$id" x2="0%" y2="100%">
-            <stop stop-color="${colorMap.lighter()}" stop-opacity="1" offset="0%"/>
-            <stop stop-color="$hsl" stop-opacity="1" offset="100%"/>
-        </linearGradient>
-        <marker
-                id="triangle"
-                viewBox="0 0 10 10"
-                refX="1"
-                refY="5"
-                markerUnits="strokeWidth"
-                markerWidth="5"
-                markerHeight="5"
-                orient="auto">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa" />
-         </marker>   
-        $sb
-        $style
-
-
-    </defs>
-
-    """.trimIndent(),colors)
-    }
 
 }
-
 fun main() {
     // Test with the content from the issue description
     val entry = """

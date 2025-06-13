@@ -1,417 +1,330 @@
-<svg width="480.0" height="264.0" viewBox="0 0 480.0 264.0" preserveAspectRatio="xMidYMin slice"
-     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <desc>https://docops.io/extension</desc>
+<svg width="1000" height="800" xmlns="http://www.w3.org/2000/svg"
+     style="background: #f2f2f7; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Arial, sans-serif;">
     <defs>
-        <filter id="buttonBlur">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-            <feOffset in="blur" dy="2" result="offsetBlur"/>
-            <feMerge>
-                <feMergeNode in="offsetBlur"/>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-        </filter>
-
-        <linearGradient id="overlayGrad" gradientUnits="userSpaceOnUse" x1="95" y1="-20" x2="95" y2="70">
-            <stop offset="0" stop-color="#000000" stop-opacity="0.5"></stop>
-            <stop offset="1" stop-color="#000000" stop-opacity="0"></stop>
-        </linearGradient>
-
-        <filter id="topshineBlur">
-            <feGaussianBlur stdDeviation="0.93"></feGaussianBlur>
-        </filter>
-
-        <linearGradient id="topshineGrad" gradientUnits="userSpaceOnUse" x1="95" y1="0" x2="95" y2="40">
-            <stop offset="0" stop-color="#ffffff" stop-opacity="1"></stop>
-            <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
-        </linearGradient>
-
-        <filter id="bottomshine">
-            <feGaussianBlur stdDeviation="0.95"></feGaussianBlur>
-        </filter>
-        <linearGradient id="panelBack" x2="1" y2="1">
-            <stop class="stop1" offset="0%" stop-color="#939393"></stop>
-            <stop class="stop2" offset="50%" stop-color="#5d5d5d"></stop>
-            <stop class="stop3" offset="100%" stop-color="#282828"></stop>
-        </linearGradient>
-        <linearGradient id="arrowColor" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#89b1ef"></stop>
-            <stop class="stop2" offset="50%" stop-color="#4e8ae7"></stop>
-            <stop class="stop3" offset="100%" stop-color="#1363DF"></stop>
-        </linearGradient>
-        <linearGradient id="topBar" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#89b1ef"></stop>
-            <stop class="stop2" offset="50%" stop-color="#4e8ae7"></stop>
-            <stop class="stop3" offset="100%" stop-color="#1363DF"></stop>
-        </linearGradient>
-        <marker id="triangle" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" markerWidth="5"
-                markerHeight="5" orient="auto">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa"></path>
-        </marker>
-        <radialGradient id="grad0" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#a2b0c6; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#45618E; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline0" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#a2b0c6"></stop>
-            <stop class="stop2" offset="50%" stop-color="#7388aa"></stop>
-            <stop class="stop3" offset="100%" stop-color="#45618E"></stop>
-        </linearGradient>
-        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#d19d9d; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#A43B3B; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline1" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#d19d9d"></stop>
-            <stop class="stop2" offset="50%" stop-color="#ba6c6c"></stop>
-            <stop class="stop3" offset="100%" stop-color="#A43B3B"></stop>
-        </linearGradient>
-        <radialGradient id="grad2" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#ffe9b9; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#FFD373; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline2" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffe9b9"></stop>
-            <stop class="stop2" offset="50%" stop-color="#ffde96"></stop>
-            <stop class="stop3" offset="100%" stop-color="#FFD373"></stop>
-        </linearGradient>
-        <radialGradient id="grad3" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#fbf2bc; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#F7E67A; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline3" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#fbf2bc"></stop>
-            <stop class="stop2" offset="50%" stop-color="#f9ec9b"></stop>
-            <stop class="stop3" offset="100%" stop-color="#F7E67A"></stop>
-        </linearGradient>
-        <radialGradient id="grad4" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#80ffc7; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#01FF90; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline4" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#80ffc7"></stop>
-            <stop class="stop2" offset="50%" stop-color="#40ffab"></stop>
-            <stop class="stop3" offset="100%" stop-color="#01FF90"></stop>
-        </linearGradient>
-        <radialGradient id="grad5" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#ffb79a; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#FF6F36; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline5" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffb79a"></stop>
-            <stop class="stop2" offset="50%" stop-color="#ff9368"></stop>
-            <stop class="stop3" offset="100%" stop-color="#FF6F36"></stop>
-        </linearGradient>
-        <radialGradient id="grad6" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#f4d089; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#EAA213; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline6" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#f4d089"></stop>
-            <stop class="stop2" offset="50%" stop-color="#efb94e"></stop>
-            <stop class="stop3" offset="100%" stop-color="#EAA213"></stop>
-        </linearGradient>
-        <radialGradient id="grad7" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#ffd787; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#FFAF10; stop-opacity:1"></stop>
-        </radialGradient>
-        <linearGradient id="headerTimeline7" x2="0%" y2="100%">
-            <stop class="stop1" offset="0%" stop-color="#ffd787"></stop>
-            <stop class="stop2" offset="50%" stop-color="#ffc34b"></stop>
-            <stop class="stop3" offset="100%" stop-color="#FFAF10"></stop>
-        </linearGradient>
-        <radialGradient id="outlineGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="20%">
-            <stop offset="30%" style="stop-color:#89b1ef; stop-opacity:1"></stop>
-            <stop offset="60%" style="stop-color:#1363DF; stop-opacity:1"></stop>
-        </radialGradient>
         <style>
-            .edge {
-                filter: drop-shadow(0 2mm 2mm #66557c);
+      <![CDATA[
+            /* iOS Theme Variables */
+            :root {
+                --ios-bg-light: #f2f2f7;
+                --ios-bg-dark: #000000;
+                --ios-card-light: #ffffff;
+                --ios-card-dark: #1c1c1e;
+                --ios-text-primary-light: #1d1d1f;
+                --ios-text-primary-dark: #ffffff;
+                --ios-text-secondary-light: #6d6d70;
+                --ios-text-secondary-dark: #8e8e93;
+                --ios-separator-light: #e5e5e5;
+                --ios-separator-dark: #38383a;
+                --ios-blue: #007AFF;
+                --ios-green: #34C759;
+                --ios-orange: #FF9500;
+                --ios-red: #FF3B30;
+                --ios-purple: #5856D6;
+                --ios-pink: #FF2D92;
             }
 
-            .cricleedge {
-                filter: drop-shadow(0 2mm 2mm #a899bd);
+            /* iOS Card Styling */
+            .timeline-card {
+                fill: var(--ios-card-light);
+                stroke: var(--ios-separator-light);
+                stroke-width: 1;
+                filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
             }
 
-            .odd {
-                font-size: 10px;
-                font-family: Arial, sans-serif;
-                fill: #fcfcfc;
+            .timeline-text {
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Arial, sans-serif;
+                fill: var(--ios-text-primary-light);
+                text-rendering: optimizeLegibility;
             }
 
-            .even {
-                font-size: 10px;
-                font-family: Arial, sans-serif;
-                fill: #fcfcfc;
+            .timeline-title {
+                font-size: 32px;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+                fill: var(--ios-text-primary-light);
             }
 
-            .rmLink {
-                fill: #7dc4e6;
-                text-decoration: underline;
+            .timeline-date {
+                font-size: 16px;
+                font-weight: 600;
+                fill: white;
             }
 
-            .main_pane {
-                fill: #f1f5f8;
+            .timeline-content {
+                font-size: 15px;
+                font-weight: 400;
+                line-height: 1.4;
+                fill: var(--ios-text-primary-light);
             }
 
-            .each_tm {
-                fill: #fcfcfc;
+            .timeline-spine {
+                stroke: var(--ios-separator-light);
+                stroke-width: 4;
+                stroke-linecap: round;
             }
 
+            .timeline-connector {
+                stroke: var(--ios-separator-light);
+                stroke-width: 2;
+                stroke-linecap: round;
+            }
 
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --ios-bg-light: var(--ios-bg-dark);
+                    --ios-card-light: var(--ios-card-dark);
+                    --ios-text-primary-light: var(--ios-text-primary-dark);
+                    --ios-text-secondary-light: var(--ios-text-secondary-dark);
+                    --ios-separator-light: var(--ios-separator-dark);
+                }
 
-        </style>
-        <path id="vconnector" d="M135,100 v62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="7"/>
+                .timeline-card {
+                    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+                }
+            }
 
+            /* Hover effects */
+            .timeline-entry:hover .timeline-card {
+                transform: translateY(-2px);
+                filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.15));
+                transition: all 0.3s ease;
+            }
+            ]]>
+    </style>
+
+        <!-- iOS Color Gradients -->
+        <linearGradient id="iosBlueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#4FC3F7"/>
+            <stop offset="50%" style="stop-color:#007AFF"/>
+            <stop offset="100%" style="stop-color:#0056CC"/>
+        </linearGradient>
+
+        <linearGradient id="iosGreenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#66BB6A"/>
+            <stop offset="50%" style="stop-color:#34C759"/>
+            <stop offset="100%" style="stop-color:#248A3D"/>
+        </linearGradient>
+
+        <linearGradient id="iosOrangeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFB74D"/>
+            <stop offset="50%" style="stop-color:#FF9500"/>
+            <stop offset="100%" style="stop-color:#CC7700"/>
+        </linearGradient>
+
+        <linearGradient id="iosPurpleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#9575CD"/>
+            <stop offset="50%" style="stop-color:#5856D6"/>
+            <stop offset="100%" style="stop-color:#4340AA"/>
+        </linearGradient>
+
+        <linearGradient id="iosPinkGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#F06292"/>
+            <stop offset="50%" style="stop-color:#FF2D92"/>
+            <stop offset="100%" style="stop-color:#CC2474"/>
+        </linearGradient>
+
+        <!-- Modern shadow filters -->
+        <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#000000" flood-opacity="0.1"/>
+        </filter>
+
+        <filter id="dotShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000000" flood-opacity="0.15"/>
+        </filter>
     </defs>
-    <rect class="main_pane" width="100%" height="100%" rx="5" ry="5"/>
-    <g transform="scale(0.4)">
-        <text x="600" y="30" text-anchor="middle"
-              style="font-size: 24px;font-family: Arial, sans-serif; font-variant:small-caps" class="edge"
-              fill="#fcfcfc">title
+
+    <!-- Background -->
+    <rect width="100%" height="100%" fill="#f2f2f7"/>
+
+    <!-- Modern iOS Timeline -->
+    <g>
+        <!-- Title -->
+        <text x="500" y="50" text-anchor="middle" class="timeline-text timeline-title">
+            Project Timeline
         </text>
-        <g transform="translate(0,24) scale(1.0)">
-            <g transform="translate(30,320)">
-                <path d="M0,0 h1100" stroke="#aaaaaa" stroke-width="28" fill="url(#arrowColor)" class="raise"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="10" y1="0" x2="1100" y2="0" stroke="#fcfcfc" stroke-width="10" fill="#ffffff"
-                      stroke-dasharray="24 24 24" stroke-linecap="round" stroke-linejoin="round"/>
-                <g transform="translate(1100,-2)">
-                    <polygon points="0,5 0,0 5,2.5" stroke="url(#arrowColor)" stroke-width="35"
-                             fill="url(#arrowColor)"/>
-                </g>
-            </g>
-            <g transform="translate(0,0)" class="odd">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"></circle>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"></circle>
-                    <g transform="translate(-135,-182)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"></use>
-                    </g>
-                    <g transform="translate(-3,-86),rotate(-90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"></use>
-                    </g>
-                </g>
-                <rect x="10" y="20" width="225" height="200" class="each_tm" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <text x="125" y="50" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    1891
-                </text>
-                <text x="20" y="70" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14">Mailbox, invented by</tspan>
-                    <tspan x="20" dy="14">Phillip Downing</tspan>
-                </text>
-            </g>
-            <g transform="translate(125,0)" class="even">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"/>
-                    <g transform="translate(-134,-80)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"/>
-                    </g>
-                    <g transform="translate(3,86),rotate(90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"/>
-                    </g>
-                </g>
 
-                <rect x="10" y="420" width="225" height="200" class="each_tm" stroke="#1363DF" stroke-width="2" rx="5"/>
-                <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5"/>
+        <!-- Timeline spine -->
+        <line x1="500" y1="100" x2="500" y2="750" class="timeline-spine"/>
 
-                <text x="125" y="450" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    1923
-                </text>
-                <text x="20" y="470" class="even" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14">The Three-Light Traffic</tspan>
-                    <tspan x="20" dy="14">Signal, invented by</tspan>
-                    <tspan x="20" dy="14">Garrett Morgan</tspan>
-                </text>
-            </g>
-            <g transform="translate(250,0)" class="odd">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"/>
-                    <g transform="translate(-135,-182)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"/>
-                    </g>
-                    <g transform="translate(-3,-86),rotate(-90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"/>
-                    </g>
-                </g>
-                <rect x="10" y="20" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2" rx="5"/>
-                <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="#1363DF" stroke-width="2"
-                      rx="5"/>
-                <text x="125" y="50" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    July 23rd, 2023
-                </text>
-                <text x="20" y="70" class="odd" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14" fill="#fcfcfc">DocOps extension Server</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">releases a new feature,</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">Timeline Maker for</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc"><a xlink:href="https://github.com/asciidoctor/asciidoctorj"
-                                                            target="_blank" class="rmLink">asciidoctorj</a>. With a
-                    </tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">simple text markup block</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">you can create very</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">powerful timeline images.</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">Enjoy!</tspan>
-                </text>
-            </g>
-            <g transform="translate(375,0)" class="even">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"/>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"/>
-                    <g transform="translate(-134,-80)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"/>
-                    </g>
-                    <g transform="translate(3,86),rotate(90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"/>
-                    </g>
-                </g>
+        <!-- Timeline Entry 1 (Left) -->
+        <g class="timeline-entry">
+            <!-- Connector line -->
+            <line x1="370" y1="170" x2="500" y2="170" class="timeline-connector"/>
 
-                <rect x="10" y="420" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2" rx="5"/>
-                <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5"/>
+            <!-- Timeline dot -->
+            <circle cx="500" cy="170" r="8"
+                    fill="url(#iosBlueGradient)"
+                    stroke="white"
+                    stroke-width="3"
+                    filter="url(#dotShadow)"/>
 
-                <text x="125" y="450" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    August 15th, 2023
-                </text>
-                <text x="20" y="470" class="even" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14">DocOps.io revamping</tspan>
-                    <tspan x="20" dy="14">website with updated</tspan>
-                    <tspan x="20" dy="14">documentation. All our</tspan>
-                    <tspan x="20" dy="14">work will be updated with</tspan>
-                    <tspan x="20" dy="14">latest documentation for</tspan>
-                    <tspan x="20" dy="14">Panels, for extension</tspan>
-                    <tspan x="20" dy="14">server are the various</tspan>
-                    <tspan x="20" dy="14">plug-ing for</tspan>
-                    <tspan x="20" dy="14">asciidoctorj.</tspan>
-                </text>
-            </g>
-            <g transform="translate(500,0)" class="odd">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"></circle>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"></circle>
-                    <g transform="translate(-135,-182)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"></use>
-                    </g>
-                    <g transform="translate(-3,-86),rotate(-90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"></use>
-                    </g>
-                </g>
-                <rect x="10" y="20" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <text x="125" y="50" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    September 1st, 2023
-                </text>
-                <text x="20" y="70" class="odd" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14" fill="#fcfcfc">DocOps.io will begin</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">work on revamping the</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">asciidoctorj converter.</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">With the asciidoctorj</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">3.0.0 release coming we</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">will need to migrate</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">custom plug-ins to the</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">new version.</tspan>
-                </text>
-            </g>
-            <g transform="translate(625,0)" class="even">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"></circle>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"></circle>
-                    <g transform="translate(-134,-80)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"></use>
-                    </g>
-                    <g transform="translate(3,86),rotate(90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"></use>
-                    </g>
-                </g>
+            <!-- Card -->
+            <rect x="50" y="120" width="320" height="100"
+                  rx="16" ry="16"
+                  class="timeline-card"/>
 
-                <rect x="10" y="420" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5"></rect>
+            <!-- Header -->
+            <rect x="50" y="120" width="320" height="35"
+                  rx="16" ry="16"
+                  fill="url(#iosBlueGradient)"/>
+            <rect x="50" y="140" width="320" height="15"
+                  fill="url(#iosBlueGradient)"/>
 
-                <text x="125" y="450" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    October 18th, 2023
-                </text>
-                <text x="20" y="470" class="even" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14" fill="#fcfcfc">Time to reimagine the</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">future. Is it possible to</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">write a lexer parser for</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">custom language?</tspan>
-                </text>
-            </g>
-            <g transform="translate(750,0)" class="odd">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"></circle>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"></circle>
-                    <g transform="translate(-135,-182)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"></use>
-                    </g>
-                    <g transform="translate(-3,-86),rotate(-90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"></use>
-                    </g>
-                </g>
-                <rect x="10" y="20" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <rect x="10" y="20" width="225" height="40" fill="url(#topBar)" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <text x="125" y="50" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    December 11th, 2023
-                </text>
-                <text x="20" y="70" class="odd" fill="#fcfcfc" font-family="Arial, Helvetica, sans-serif" font-size="14px">
-                    <tspan x="20" dy="14" fill="#fcfcfc">Annual start of</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">vacation, time to relax</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">and plugin the</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">controller.</tspan>
-                </text>
-            </g>
-            <g transform="translate(875,0)" class="even">
-                <g transform="translate(125,320)">
-                    <circle cx="0" cy="0" r="20" fill="#fcfcfc"></circle>
-                    <circle cx="0" cy="0" r="17" fill="url(#outlineGradient)"></circle>
-                    <g transform="translate(-134,-80)">
-                        <use xlink:href="#vconnector" stroke="#1363DF"></use>
-                    </g>
-                    <g transform="translate(3,86),rotate(90)">
-                        <use xlink:href="#ppoint" stroke-width="7" stroke="url(#outlineGradient)"></use>
-                    </g>
-                </g>
+            <!-- Date text -->
+            <text x="70" y="143" class="timeline-text timeline-date">
+                Q1 2024
+            </text>
 
-                <rect x="10" y="420" width="225" height="200" fill="#17242b" stroke="#1363DF" stroke-width="2"
-                      rx="5"></rect>
-                <rect x="10" y="420" width="225" height="40" fill="url(#topBar)" stroke-width="2" rx="5"></rect>
+            <!-- Content -->
+            <text x="70" y="175" class="timeline-text timeline-content">
+                <tspan x="70" dy="0">Project initiation and planning phase.</tspan>
+                <tspan x="70" dy="16">Team formation and requirements gathering.</tspan>
+            </text>
+        </g>
 
-                <text x="125" y="450" fill="#000000" text-anchor="middle"
-                      style="font-family: Arial, Helvetica, sans-serif;  text-anchor:middle; font-size: 20px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;font-variant: small-caps;"
-                      class="glass raiseText">
-                    01/01/2024
-                </text>
-                <text x="20" y="470" class="even">
-                    <tspan x="20" dy="14" fill="#fcfcfc">First entry where we</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">show text is wrapping or</tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">not and the
-                        <a xlink:href="https://roach.gy" target="_blank" class="rmLink">roach.gy</a>
-                    </tspan>
-                    <tspan x="20" dy="14" fill="#fcfcfc">aligning properly</tspan>
-                </text>
-            </g>
+        <!-- Timeline Entry 2 (Right) -->
+        <g class="timeline-entry">
+            <!-- Connector line -->
+            <line x1="500" y1="270" x2="630" y2="270" class="timeline-connector"/>
+
+            <!-- Timeline dot -->
+            <circle cx="500" cy="270" r="8"
+                    fill="url(#iosGreenGradient)"
+                    stroke="white"
+                    stroke-width="3"
+                    filter="url(#dotShadow)"/>
+
+            <!-- Card -->
+            <rect x="630" y="220" width="320" height="100"
+                  rx="16" ry="16"
+                  class="timeline-card"/>
+
+            <!-- Header -->
+            <rect x="630" y="220" width="320" height="35"
+                  rx="16" ry="16"
+                  fill="url(#iosGreenGradient)"/>
+            <rect x="630" y="240" width="320" height="15"
+                  fill="url(#iosGreenGradient)"/>
+
+            <!-- Date text -->
+            <text x="650" y="243" class="timeline-text timeline-date">
+                Q2 2024
+            </text>
+
+            <!-- Content -->
+            <text x="650" y="275" class="timeline-text timeline-content">
+                <tspan x="650" dy="0">Development and implementation.</tspan>
+                <tspan x="650" dy="16">Core features and infrastructure setup.</tspan>
+            </text>
+        </g>
+
+        <!-- Timeline Entry 3 (Left) -->
+        <g class="timeline-entry">
+            <!-- Connector line -->
+            <line x1="370" y1="370" x2="500" y2="370" class="timeline-connector"/>
+
+            <!-- Timeline dot -->
+            <circle cx="500" cy="370" r="8"
+                    fill="url(#iosOrangeGradient)"
+                    stroke="white"
+                    stroke-width="3"
+                    filter="url(#dotShadow)"/>
+
+            <!-- Card -->
+            <rect x="50" y="320" width="320" height="100"
+                  rx="16" ry="16"
+                  class="timeline-card"/>
+
+            <!-- Header -->
+            <rect x="50" y="320" width="320" height="35"
+                  rx="16" ry="16"
+                  fill="url(#iosOrangeGradient)"/>
+            <rect x="50" y="340" width="320" height="15"
+                  fill="url(#iosOrangeGradient)"/>
+
+            <!-- Date text -->
+            <text x="70" y="343" class="timeline-text timeline-date">
+                Q3 2024
+            </text>
+
+            <!-- Content -->
+            <text x="70" y="375" class="timeline-text timeline-content">
+                <tspan x="70" dy="0">Testing and quality assurance.</tspan>
+                <tspan x="70" dy="16">Bug fixes and performance optimization.</tspan>
+            </text>
+        </g>
+
+        <!-- Timeline Entry 4 (Right) -->
+        <g class="timeline-entry">
+            <!-- Connector line -->
+            <line x1="500" y1="470" x2="630" y2="470" class="timeline-connector"/>
+
+            <!-- Timeline dot -->
+            <circle cx="500" cy="470" r="8"
+                    fill="url(#iosPurpleGradient)"
+                    stroke="white"
+                    stroke-width="3"
+                    filter="url(#dotShadow)"/>
+
+            <!-- Card -->
+            <rect x="630" y="420" width="320" height="100"
+                  rx="16" ry="16"
+                  class="timeline-card"/>
+
+            <!-- Header -->
+            <rect x="630" y="420" width="320" height="35"
+                  rx="16" ry="16"
+                  fill="url(#iosPurpleGradient)"/>
+            <rect x="630" y="440" width="320" height="15"
+                  fill="url(#iosPurpleGradient)"/>
+
+            <!-- Date text -->
+            <text x="650" y="443" class="timeline-text timeline-date">
+                Q4 2024
+            </text>
+
+            <!-- Content -->
+            <text x="650" y="475" class="timeline-text timeline-content">
+                <tspan x="650" dy="0">Product launch and deployment.</tspan>
+                <tspan x="650" dy="16">Marketing campaign and user onboarding.</tspan>
+            </text>
+        </g>
+
+        <!-- Timeline Entry 5 (Left) -->
+        <g class="timeline-entry">
+            <!-- Connector line -->
+            <line x1="370" y1="570" x2="500" y2="570" class="timeline-connector"/>
+
+            <!-- Timeline dot -->
+            <circle cx="500" cy="570" r="8"
+                    fill="url(#iosPinkGradient)"
+                    stroke="white"
+                    stroke-width="3"
+                    filter="url(#dotShadow)"/>
+
+            <!-- Card -->
+            <rect x="50" y="520" width="320" height="100"
+                  rx="16" ry="16"
+                  class="timeline-card"/>
+
+            <!-- Header -->
+            <rect x="50" y="520" width="320" height="35"
+                  rx="16" ry="16"
+                  fill="url(#iosPinkGradient)"/>
+            <rect x="50" y="540" width="320" height="15"
+                  fill="url(#iosPinkGradient)"/>
+
+            <!-- Date text -->
+            <text x="70" y="543" class="timeline-text timeline-date">
+                Q1 2025
+            </text>
+
+            <!-- Content -->
+            <text x="70" y="575" class="timeline-text timeline-content">
+                <tspan x="70" dy="0">Post-launch support and iteration.</tspan>
+                <tspan x="70" dy="16">Feature enhancements and scaling.</tspan>
+            </text>
         </g>
     </g>
 </svg>
