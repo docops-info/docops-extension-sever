@@ -1,10 +1,10 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.Point
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin

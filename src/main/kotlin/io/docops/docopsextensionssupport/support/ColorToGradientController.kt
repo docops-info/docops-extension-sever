@@ -16,14 +16,13 @@
 
 package io.docops.docopsextensionssupport.support
 
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.accepted
 import org.springframework.web.bind.annotation.*
 import java.awt.Color
-import java.util.Base64
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt

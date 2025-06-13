@@ -16,9 +16,8 @@
 
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.chart.BarChartImproved
 import io.docops.docopsextensionssupport.svgsupport.compressString
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.util.UrlUtil
 import io.github.sercasti.tracing.Traceable

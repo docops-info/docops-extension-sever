@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import org.silentsoft.simpleicons.SimpleIcons
 
 class Hex(buttons: Buttons) : Regular(buttons) {

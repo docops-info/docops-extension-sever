@@ -1,6 +1,6 @@
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler

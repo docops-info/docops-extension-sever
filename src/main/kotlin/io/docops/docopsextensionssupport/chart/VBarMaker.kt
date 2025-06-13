@@ -1,12 +1,9 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import kotlin.math.max
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 
 class VBarMaker {
     private var fontColor = ""

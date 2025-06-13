@@ -1,15 +1,14 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.button.shape.joinXmlLines
-import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.svgGradient
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.File
 import java.awt.Font
+import java.io.File
 
 class ComparisonTableMaker {
     fun make(comparisonChart: ComparisonChart): String {

@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.button.shape
 
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 
 /**
  * Defines the contract for rendering different button shapes in SVG format.
@@ -266,69 +267,3 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     }
 }
 
-/**
- * Joins multiple lines of XML into a single line by removing whitespace.
- * 
- * This utility function is used to clean up SVG output by removing unnecessary
- * whitespace and line breaks, which can cause issues in some SVG renderers.
- * It's particularly important when the SVG is embedded in HTML or other documents.
- * 
- * The function preserves necessary spaces between XML attributes when joining lines.
- *
- * @param str The multi-line XML string to join
- * @return A single-line XML string with whitespace removed but preserving attribute spacing
- */
-fun joinXmlLines(str: String): String {
-    val sb = StringBuilder()
-    var previousLine = ""
-
-    str.lines().forEach { line ->
-        val trimmedLine = line.trim()
-        if (trimmedLine.isEmpty()) {
-            return@forEach
-        }
-
-        // Add a space if the previous line ends with a quote and the current line starts with an attribute
-        if (previousLine.endsWith("\"") && 
-            (trimmedLine.startsWith("style=") || 
-             trimmedLine.matches(Regex("^[a-zA-Z-]+=.*")))) {
-            sb.append(" ")
-        }
-
-        // If the previous line doesn't end with a tag closing character, quote, or space,
-        // and the current line doesn't start with a tag opening character, quote, or space,
-        // then add a space to prevent content from running together
-        else if (previousLine.isNotEmpty() && 
-                !previousLine.endsWith(">") && 
-                !previousLine.endsWith("\"") && 
-                !previousLine.endsWith("'") && 
-                !previousLine.endsWith(" ") &&
-                trimmedLine.isNotEmpty() && 
-                !trimmedLine.startsWith("<") && 
-                !trimmedLine.startsWith("\"") && 
-                !trimmedLine.startsWith("'") && 
-                !trimmedLine.startsWith(" ")) {
-            sb.append(" ")
-        }
-
-        sb.append(trimmedLine)
-        previousLine = trimmedLine
-    }
-
-    // Fix any remaining attribute issues by ensuring there's a space between quotes and attributes
-    return sb.toString().replace("\"style=", "\" style=")
-        .replace("\"class=", "\" class=")
-        .replace("\"id=", "\" id=")
-        .replace("\"width=", "\" width=")
-        .replace("\"height=", "\" height=")
-        .replace("\"x=", "\" x=")
-        .replace("\"y=", "\" y=")
-        .replace("\"rx=", "\" rx=")
-        .replace("\"ry=", "\" ry=")
-        .replace("\"fill=", "\" fill=")
-        .replace("\"stroke=", "\" stroke=")
-        .replace("\"d=", "\" d=")
-        .replace("\"transform=", "\" transform=")
-        .replace("\"viewBox=", "\" viewBox=")
-        .replace("\"xmlns=", "\" xmlns=")
-}
