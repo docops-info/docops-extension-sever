@@ -31,9 +31,9 @@ class MetricsCardMaker {
      * Creates an SVG for metrics cards from JSON or table-like data
      */
     fun createMetricsCardSvg(data: String, width: Int = 800, height: Int = 400): String {
-        val uncompressedData = uncompressString(data)
 
-        return createCards(uncompressedData, width, height)
+
+        return createCards(data, width, height)
     }
 
     fun createCards(uncompressedData: String, width: Int, height: Int): String {

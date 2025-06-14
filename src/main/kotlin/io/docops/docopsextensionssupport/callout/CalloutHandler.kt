@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.callout
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 
@@ -54,8 +53,8 @@ class CalloutHandler : DocOpsHandler{
         width: Int = 800,
         height: Int = 600
     ): String {
-        val uncompressedPayload = uncompressString(payload)
-        return makeSvgPlainText(uncompressedPayload, width, height)
+
+        return makeSvgPlainText(payload, width, height)
     }
 
     fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int): String {

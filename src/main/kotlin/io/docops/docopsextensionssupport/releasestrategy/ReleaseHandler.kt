@@ -1,24 +1,14 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.github.oshai.kotlinlogging.withLoggingContext
 import kotlinx.serialization.json.Json
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus.OK
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import java.net.URLDecoder
-import kotlin.time.measureTimedValue
 
 class ReleaseHandler : DocOpsHandler{
     val log = KotlinLogging.logger {}
     fun handleSVG(payload: String, useDark: Boolean, backend: String) : String {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val release = Json.decodeFromString<ReleaseStrategy>(data)
+            val release = Json.decodeFromString<ReleaseStrategy>(payload)
             release.useDark = useDark
             val isPdf = backend == "pdf"
             var output = ""

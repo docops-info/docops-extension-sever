@@ -8,9 +8,8 @@ import java.net.URLDecoder
 class LineHandler : DocOpsHandler{
 
     fun handleSVG(payload: String) : String {
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val lineChartImproved= LineChartImproved()
-        val svg = lineChartImproved.makeLineSvg(data)
+        val svg = lineChartImproved.makeLineSvg(payload)
         return svg
     }
 

@@ -1,11 +1,9 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
-import java.net.URLDecoder
 
 
 /**
@@ -26,8 +24,7 @@ class ConnectorHandler: DocOpsHandler {
      * @return The ResponseEntity containing the SVG image as a byte array.
      */
     fun handleSVG(payload: String, type: String, scale: String, useDark: Boolean): String {
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = fromRequestToConnector(data, scale = scale.toFloat(), useDark = useDark)
+        val svg = fromRequestToConnector(payload, scale = scale.toFloat(), useDark = useDark)
         return svg.shapeSvg
     }
 

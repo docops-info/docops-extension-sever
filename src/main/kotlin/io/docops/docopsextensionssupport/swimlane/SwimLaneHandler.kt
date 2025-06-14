@@ -1,11 +1,8 @@
 package io.docops.docopsextensionssupport.swimlane
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import kotlinx.serialization.json.Json
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 /**
  * Handler for swimlane diagrams
@@ -19,19 +16,18 @@ class SwimLaneHandler : DocOpsHandler {
      * Main handler method that processes the payload and generates SVG
      */
     fun handleSVG(payload: String): String {
-        val data = uncompressString(URLDecoder.decode(payload, StandardCharsets.UTF_8.name()))
 
         // Determine if the data is in JSON or table format
-        val swimLaneData = if (data.trim().startsWith("{") && data.trim().endsWith("}")) {
+        val swimLaneData = if (payload.trim().startsWith("{") && payload.trim().endsWith("}")) {
             // JSON format
             try {
-                json.decodeFromString<SwimLaneData>(data)
+                json.decodeFromString<SwimLaneData>(payload)
             } catch (e: Exception) {
                 maker.createDefaultSwimLaneData()
             }
         } else {
             // Table format
-            parseTableData(data)
+            parseTableData(payload)
         }
 
         return maker.generateSvg(swimLaneData)
@@ -53,7 +49,7 @@ class SwimLaneHandler : DocOpsHandler {
         // Current lane and item being processed
         var currentLane: String? = null
         var currentItemTitle: String? = null
-        var currentItemContent = mutableListOf<String>()
+        val currentItemContent = mutableListOf<String>()
 
         // Parse configuration and content
         var inDataSection = false

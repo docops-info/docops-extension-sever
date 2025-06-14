@@ -1,14 +1,9 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
@@ -26,8 +21,7 @@ class ScorecardHandler : DocOpsHandler{
         try {
                 val isPdf = backend == "pdf"
                 val parser = ScoreCardParser()
-                val data = uncompressString(payload)
-                val migrationScorecard = parser.parse(data)
+                val migrationScorecard = parser.parse(payload)
                 val maker = ScoreCardMaker()
                 val svg = maker.make(migrationScorecard, isPdf)
                 return svg

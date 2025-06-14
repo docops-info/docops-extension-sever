@@ -18,6 +18,7 @@ import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.net.URLDecoder
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -96,7 +98,8 @@ class DocOpsRouter (
         val handler = handlers[kind.lowercase()]
             ?: throw IllegalArgumentException("Unknown handler kind: $kind")
         val timing = measureTimedValue {
-            joinXmlLines(addSvgMetadata(handler.handleSVG(payload, context)))
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            joinXmlLines(addSvgMetadata(handler.handleSVG(data, context)))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
         applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds))

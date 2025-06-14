@@ -15,11 +15,10 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
     @Traceable
     fun handleSVG(payload: String, backend: String) : String  {
 
-        val data = uncompressString(URLDecoder.decode(payload,"UTF-8"))
 
         val isPdf = backend == "pdf"
 
-        return createBadgeFromString(data, isPdf)
+        return createBadgeFromString(payload, isPdf)
     }
 
      fun createBadgeFromString(

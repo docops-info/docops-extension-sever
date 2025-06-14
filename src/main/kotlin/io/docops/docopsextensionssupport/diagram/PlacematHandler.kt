@@ -1,17 +1,14 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
-import java.net.URLDecoder
 
 class PlacematHandler : DocOpsHandler{
     fun handleSVG(payload: String, type: String, backend: String): String {
         val isPDF = backend == "pdf"
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = fromRequestToPlaceMat(data, type, isPDF)
+        val svg = fromRequestToPlaceMat(payload, type, isPDF)
         return svg.shapeSvg
     }
 

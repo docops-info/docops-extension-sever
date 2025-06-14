@@ -1,13 +1,9 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
-import org.springframework.http.*
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 /**
  * QuadrantHandler class is responsible for handling requests related to quadrant chart SVG images.
@@ -35,11 +31,7 @@ class QuadrantHandler : DocOpsHandler{
         title: String = "",
         backend: String = "html"
     ): String {
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-        val svg = fromRequestToQuadrant(data, scale = scale.toFloat(), useDark = useDark, title = title, backend = backend)
+        val svg = fromRequestToQuadrant(payload, scale = scale.toFloat(), useDark = useDark, title = title, backend = backend)
         return svg.shapeSvg
     }
 
