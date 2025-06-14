@@ -1,3 +1,3 @@
 package io.docops.docopsextensionssupport.web
 
-class DocOpsExtensionEvent(val eventName: String, val duration: Long, val status: Boolean = true)
+class DocOpsExtensionEvent(val eventName: String, val duration: Long, val status: Boolean = true, val count: Int = 1)

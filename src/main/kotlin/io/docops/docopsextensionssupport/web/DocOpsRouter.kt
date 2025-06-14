@@ -43,6 +43,9 @@ class DocOpsRouter (
 
     private val logger = KotlinLogging.logger {}
 
+    // Map to track execution counts for each event
+    private val eventCounts = mutableMapOf<String, Int>()
+
     // Registry of handlers by kind
     private val handlers: Map<String, DocOpsHandler> = mapOf(
         "connector" to ConnectorHandler(),
@@ -103,7 +106,13 @@ class DocOpsRouter (
             joinXmlLines(addSvgMetadata(handler.handleSVG(decodedPayload, context)))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
-        applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds))
+
+        // Increment the count for this event
+        val count = eventCounts.getOrDefault(kind, 0) + 1
+        eventCounts[kind] = count
+
+        // Publish the event with the count
+        applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds, true, count))
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")
         return ResponseEntity(timing.value.toByteArray(), headers, HttpStatus.OK)

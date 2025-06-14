@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocOps Stats Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --bg-color: #f3f4f6;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-badge.disconnected {
+            background-color: var(--error-color);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .card-stat {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+        
+        .card-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-right: 8px;
+        }
+        
+        .card-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .card-stat-unit {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-left: 4px;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+        
+        .test-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 12px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: background-color 0.2s;
+        }
+        
+        .test-button:hover {
+            background-color: var(--primary-hover);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <h1>DocOps Events Dashboard</h1>
+    <div id="connection-status" class="status-badge disconnected">Disconnected</div>
+</div>
+
+<div id="cards-container" class="cards-container">
+</div>
+
+<button id="test-button" class="test-button" onclick="triggerEvent()">Trigger Test Event</button>
+
+<script>
+    let stompClient = null;
+    // Store events by kind
+    const eventsByKind = new Map();
+    
+    function updateConnectionStatus(status, isConnected = false) {
+        const statusBadge = document.getElementById('connection-status');
+        statusBadge.textContent = status;
+        
+        if (isConnected) {
+            statusBadge.classList.remove('disconnected');
+        } else {
+            statusBadge.classList.add('disconnected');
+        }
+    }
+    
+    function createOrUpdateEventCard(eventData) {
+        const { eventName, duration, status, count, time } = eventData;
+        
+        // Check if we already have a card for this event kind
+        let card = document.getElementById(`card-${eventName}`);
+        
+        if (!card) {
+            // Create a new card if one doesn't exist
+            card = document.createElement('div');
+            card.id = `card-${eventName}`;
+            card.className = 'card';
+            
+            // Add the card to the container
+            document.getElementById('cards-container').appendChild(card);
+            
+            // Initialize the event in our tracking map
+            eventsByKind.set(eventName, { count, duration, lastUpdate: time });
+        } else {
+            // Update our tracking data
+            eventsByKind.set(eventName, { count, duration, lastUpdate: time });
+        }
+        
+        // Update the card content
+        card.innerHTML = `
+            <h2 class="card-title">${eventName}</h2>
+            
+            <div class="card-stat">
+                <span class="card-stat-label">Count:</span>
+                <span class="card-stat-value">${count}</span>
+            </div>
+            
+            <div class="card-stat">
+                <span class="card-stat-label">Duration:</span>
+                <span class="card-stat-value">${duration}</span>
+                <span class="card-stat-unit">ms</span>
+            </div>
+            
+            <div class="card-footer">
+                <span>Status: ${status ? '✅ Success' : '❌ Failed'}</span>
+                <span>Last update: ${new Date(time).toLocaleTimeString()}</span>
+            </div>
+        `;
+    }
+    
+    function connect() {
+        if (stompClient && stompClient.connected) {
+            return;
+        }
+        
+        updateConnectionStatus('Connecting...', false);
+        
+        // Create SockJS connection to the WebSocket endpoint
+        const socket = new SockJS('/extension/api/stats/ws');
+        
+        // Create STOMP client over the SockJS connection
+        stompClient = Stomp.over(socket);
+        
+        // Disable debug logging from STOMP
+        stompClient.debug = null;
+        
+        // Connect to the STOMP broker
+        stompClient.connect({}, function(frame) {
+            updateConnectionStatus('Connected', true);
+            
+            // Subscribe to the stats topic
+            stompClient.subscribe('/topic/stats', function(message) {
+                const payload = JSON.parse(message.body);
+                
+                if (payload.type === 'message') {
+                    const eventData = payload.data;
+                    createOrUpdateEventCard(eventData);
+                }
+            });
+        }, function(error) {
+            updateConnectionStatus('Connection Error', false);
+            
+            // Try to reconnect after 5 seconds
+            setTimeout(connect, 5000);
+        });
+    }
+    
+    function triggerEvent() {
+        // Get a random count between 1 and 20 for testing
+        const count = Math.floor(Math.random() * 20) + 1;
+        
+        fetch(`/extension/api/stats/trigger-test-event?count=${count}`)
+            .catch(error => {
+                console.error('Error triggering test event:', error);
+            });
+    }
+    
+    // Auto-connect when page loads
+    window.addEventListener('load', function() {
+        connect();
+    });
+</script>
+</body>
+</html>
