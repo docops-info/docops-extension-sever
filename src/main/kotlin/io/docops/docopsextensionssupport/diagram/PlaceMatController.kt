@@ -180,4 +180,17 @@ class PlaceMatController {
         log.info{"getConnector executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
+
+    @PostMapping("")
+    fun editorFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val svg = fromRequestToPlaceMat(data, useDark = false)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+        }
+        return timing.value
+    }
 }

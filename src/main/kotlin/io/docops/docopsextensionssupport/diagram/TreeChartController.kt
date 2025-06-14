@@ -143,4 +143,13 @@ class TreeChartController {
         log.info{"getTreeChart executed in ${timing.duration.inWholeMilliseconds}ms "}
         return ResponseEntity(timing.value.toByteArray(), HttpStatus.OK)
     }
+    @PostMapping("")
+    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val handler = TreeChartHandler()
+            handler.handleSVG(payload, false)
+        }
+        log.info{"editFormSubmission executed in ${timing.duration.inWholeMilliseconds}ms "}
+        return ResponseEntity(timing.value.toByteArray(), HttpStatus.OK)
+    }
 }

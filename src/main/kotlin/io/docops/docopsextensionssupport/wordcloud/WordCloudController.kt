@@ -9,8 +9,10 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import kotlin.time.measureTimedValue
 
@@ -115,5 +117,15 @@ class WordCloudController {
         }
         log.info{"word cloud render executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
+    }
+
+    @PostMapping("")
+    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val wordCloudImproved = WordCloudImproved()
+        val svg = wordCloudImproved.makeWordCloudSvg(payload)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.parseMediaType("text/html")
+        return ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
     }
 }

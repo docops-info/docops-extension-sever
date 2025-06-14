@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.CacheControl
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -105,5 +107,15 @@ class CalloutController  {
         }
         log.info{"callout render executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
+    }
+
+    @PostMapping("")
+    fun editorFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val calloutHandler = CalloutHandler()
+        val svg = calloutHandler.makeSvgPlainText(payload, 600,400)
+        val headers = HttpHeaders()
+        headers.cacheControl = CacheControl.noCache().headerValue
+        headers.contentType = MediaType.parseMediaType("text/html")
+        return ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
     }
 }

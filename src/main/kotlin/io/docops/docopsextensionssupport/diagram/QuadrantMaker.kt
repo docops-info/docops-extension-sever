@@ -113,13 +113,11 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
     private fun defs(): String {
         return """
             <defs>
-                <!-- Gradient definitions -->
                 <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
                     <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
                 </linearGradient>
 
-                <!-- Quadrant gradients -->
                 <linearGradient id="q1Gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:$q1GradientStart;stop-opacity:0.15" />
                     <stop offset="100%" style="stop-color:$q1GradientEnd;stop-opacity:0.25" />
@@ -140,12 +138,10 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
                     <stop offset="100%" style="stop-color:$q4GradientEnd;stop-opacity:0.25" />
                 </linearGradient>
 
-                <!-- Shadow filter -->
                 <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
                     <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#64748b" flood-opacity="0.15"/>
                 </filter>
 
-                <!-- Glow filter for data points -->
                 <filter id="glow">
                     <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
                     <feMerge>
@@ -165,17 +161,12 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
         val midY = margin + halfHeight
 
         return """
-            <!-- Quadrant backgrounds -->
-            <!-- Top-right (Q1) -->
             <rect x="$midX" y="$margin" width="$halfWidth" height="$halfHeight" fill="url(#q1Gradient)" rx="12" ry="0"/>
 
-            <!-- Top-left (Q2) -->
             <rect x="$margin" y="$margin" width="$halfWidth" height="$halfHeight" fill="url(#q2Gradient)" rx="12" ry="0"/>
 
-            <!-- Bottom-left (Q3) -->
             <rect x="$margin" y="$midY" width="$halfWidth" height="$halfHeight" fill="url(#q3Gradient)" rx="12" ry="0"/>
 
-            <!-- Bottom-right (Q4) -->
             <rect x="$midX" y="$midY" width="$halfWidth" height="$halfHeight" fill="url(#q4Gradient)" rx="12" ry="0"/>
         """.trimIndent()
     }
@@ -186,9 +177,7 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
     private fun gridLines(): String {
         val sb = StringBuilder()
         sb.append("""
-            <!-- Grid lines -->
             <g stroke="$gridColor" stroke-width="1" opacity="0.6">
-                <!-- Vertical grid lines -->
         """.trimIndent())
 
         // Vertical grid lines
@@ -208,7 +197,6 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
         }
 
         sb.append("""
-                <!-- Horizontal grid lines -->
         """.trimIndent())
 
         // Horizontal grid lines
@@ -242,11 +230,8 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
         val midY = margin + halfHeight
 
         return """
-            <!-- Main axes -->
             <g stroke="$axisColor" stroke-width="3">
-                <!-- Vertical axis -->
                 <line x1="$midX" y1="$margin" x2="$midX" y2="${margin + chartHeight}"/>
-                <!-- Horizontal axis -->
                 <line x1="$margin" y1="$midY" x2="${margin + chartWidth}" y2="$midY"/>
             </g>
         """.trimIndent()
@@ -268,23 +253,18 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
         val bottomDescY = midY + 60
 
         return """
-            <!-- Quadrant labels with modern styling -->
-            <!-- Q1 Label -->
             <rect x="${q1X - 80}" y="${labelY - 20}" width="160" height="32" fill="$q1GradientStart" rx="16" opacity="0.9"/>
             <text x="$q1X" y="$labelY" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">${chart.q1Label}</text>
             <text x="$q1X" y="$descY" text-anchor="middle" fill="$q1GradientEnd" font-family="Arial, sans-serif" font-size="12" font-weight="500">${chart.q1Description}</text>
 
-            <!-- Q2 Label -->
             <rect x="${q2X - 80}" y="${labelY - 20}" width="160" height="32" fill="$q2GradientStart" rx="16" opacity="0.9"/>
             <text x="$q2X" y="$labelY" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">${chart.q2Label}</text>
             <text x="$q2X" y="$descY" text-anchor="middle" fill="$q2GradientEnd" font-family="Arial, sans-serif" font-size="12" font-weight="500">${chart.q2Description}</text>
 
-            <!-- Q3 Label -->
             <rect x="${q3X - 80}" y="${bottomLabelY - 20}" width="160" height="32" fill="$q3GradientStart" rx="16" opacity="0.9"/>
             <text x="$q3X" y="$bottomLabelY" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">${chart.q3Label}</text>
             <text x="$q3X" y="$bottomDescY" text-anchor="middle" fill="$q3GradientEnd" font-family="Arial, sans-serif" font-size="12" font-weight="500">${chart.q3Description}</text>
 
-            <!-- Q4 Label -->
             <rect x="${q4X - 80}" y="${bottomLabelY - 20}" width="160" height="32" fill="$q4GradientStart" rx="16" opacity="0.9"/>
             <text x="$q4X" y="$bottomLabelY" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">${chart.q4Label}</text>
             <text x="$q4X" y="$bottomDescY" text-anchor="middle" fill="$q4GradientEnd" font-family="Arial, sans-serif" font-size="12" font-weight="500">${chart.q4Description}</text>
@@ -296,7 +276,6 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
      */
     private fun dataPoints(): String {
         val sb = StringBuilder()
-        sb.append("<!-- Data points -->")
 
         // Data structure to track label positions for collision detection
         data class LabelPosition(val x: Float, val y: Float, val width: Int, val height: Int)
@@ -408,11 +387,9 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
      */
     private fun axisLabels(): String {
         return """
-            <!-- Axis labels -->
             <text x="${width / 2}" y="${height - 25}" text-anchor="middle" fill="$textColor" font-family="Arial, sans-serif" font-size="16" font-weight="600">${chart.xAxisLabel}</text>
             <text x="20" y="${height / 2}" text-anchor="middle" fill="$textColor" font-family="Arial, sans-serif" font-size="16" font-weight="600" transform="rotate(-90, 20, ${height / 2})">${chart.yAxisLabel}</text>
 
-            <!-- Axis value labels -->
             <text x="${margin + halfWidth / 2}" y="${height - 35}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">Low</text>
             <text x="${margin + halfWidth + halfWidth / 2}" y="${height - 35}" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="12">High</text>
 
@@ -426,7 +403,6 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
      */
     private fun chartTitle(): String {
         return """
-            <!-- Chart title -->
             <text x="${width / 2}" y="40" text-anchor="middle" fill="$textColor" font-family="Arial, sans-serif" font-size="24" font-weight="bold">${chart.title}</text>
             <text x="${width / 2}" y="60" text-anchor="middle" fill="$subtitleColor" font-family="Arial, sans-serif" font-size="14">${chart.subtitle}</text>
         """.trimIndent()
@@ -437,7 +413,6 @@ class QuadrantMaker(val chart: QuadrantChart, val useDark: Boolean = false, val 
      */
     private fun legend(): String {
         return """
-            <!-- Legend -->
             <g transform="translate(50, 350)">
                 <rect x="0" y="0" width="20" height="60" fill="white" rx="4" stroke="#e5e7eb" stroke-width="1"/>
                 <text x="30" y="15" fill="$textColor" font-family="Arial, sans-serif" font-size="11" font-weight="600">Legend:</text>

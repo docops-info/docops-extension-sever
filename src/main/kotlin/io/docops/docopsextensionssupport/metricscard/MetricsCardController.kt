@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.CacheControl
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -104,6 +106,19 @@ class MetricsCardController {
             ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
         log.info{"metrics card render executed in ${timings.duration.inWholeMilliseconds}ms "}
+        return timings.value
+    }
+
+    @PostMapping("")
+    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timings = measureTimedValue {
+            val maker = MetricsCardMaker()
+            val svg = maker.createCards(payload, 650, 300)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("text/html")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+        }
         return timings.value
     }
 }

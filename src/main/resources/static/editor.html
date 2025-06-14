@@ -359,25 +359,47 @@ API Documentation Output | Documentation is committed | #FEC260`,
   ]
 }`,
         
-        scorecard: `{
-  "title": "Technology Comparison",
-  "initiativeTitle": "Current Solution",
-  "outcomeTitle": "Proposed Solution",
-  "initiativeItems": [
-    {"displayText":"Limited scalability"},
-    {"displayText":"High maintenance costs"},
-    {"displayText":"Manual deployment process"},
-    {"displayText":"Minimal monitoring capabilities"},
-    {"displayText":"Difficult to extend"}
-  ],
-  "outcomeItems": [
-    {"displayText":"Highly scalable architecture"},
-    {"displayText":"Reduced operational costs"},
-    {"displayText":"Automated CI/CD pipeline"},
-    {"displayText":"Comprehensive monitoring"},
-    {"displayText":"Modular and extensible design"}
-  ]
-}`,
+        scorecard: `title=Database Migration ScoreCard: Oracle → AWS Aurora PostgreSQL
+subtitle=On-Premise to Cloud Migration with SQL Optimization & Performance Tuning
+headerTitle=Database Architecture Transformation & Query Optimization Results
+scale=0.6
+---
+[before]
+title=BEFORE: On-Premise Oracle Database
+---
+[before.items]
+Oracle Database 19c (On-Premise) | Physical server, manual scaling, high licensing costs | critical | !
+Cross-Datacenter Communication | App in cloud, DB on-premise (high latency) | critical | !
+---
+[before.performance]
+Legacy Performance Baseline | 30 | #e74c3c
+---
+[after]
+title=AFTER: AWS Aurora PostgreSQL
+---
+[after.items]
+Aurora PostgreSQL (AWS Managed) | Auto-scaling, managed service, no licensing fees | good | ✓
+Same-Region Communication | App and DB both in AWS (low latency) | good | ✓
+---
+[after.performance]
+Enhanced Performance | 90 | #27ae60
+---
+[metrics]
+Query Performance Gains | #e74c3c
+---
+[metrics.items]
+Average Query Time | -78%
+Full Table Scans | -95%
+---
+[optimizations]
+1 | Removed UPPER() Functions | App handles case conversion, eliminated function overhead
+2 | Composite Indexes | Multi-column indexes for complex WHERE clauses
+---
+[summary]
+93 | EXCEPTIONAL | Zero data loss migration | 78% query improvement | 68% cost reduction
+---
+[footer]
+Migration Duration: 8 weeks | Team: 3 DBAs + 2 developers | Downtime: 4 hours`,
         
         timeline: `-
 date: 1891
@@ -403,11 +425,16 @@ text: DocOps.io will begin work on revamping the asciidoctorj converter.
 With the asciidoctorj 3.0.0 release coming we will need to migrate
 custom plug-ins to the new version.`,
         
-        callout: `{
-  "title": "Important Security Notice",
-  "text": "All users must update their passwords by the end of the month. This is a mandatory security requirement.",
-  "type": "warning"
-}`,
+        callout: `title: Software Development Process
+type=systematic
+---
+Phase | Action | Result | Improvement
+Requirements | Gather user needs and system requirements | Detailed requirements document | Involve end-users earlier in the process
+Design | Create system architecture and UI/UX designs | Technical specifications and wireframes | Use more design thinking workshops
+Development | Implement features according to specifications | Working code with unit tests | Increase pair programming sessions
+Testing | Perform QA and user acceptance testing | Bug reports and validation results | Automate more test cases
+Deployment | Release to production environment | Live application | Implement more robust CI/CD pipeline
+Maintenance | Monitor performance and fix issues | Stable system with ongoing improvements | Establish better feedback loops`,
         
         metricscard: `{
   "title": "Q2 Performance Metrics",
@@ -419,23 +446,15 @@ custom plug-ins to the new version.`,
   ]
 }`,
         
-        wordcloud: `{
-  "title": "Popular Programming Languages 2024",
-  "words": [
-    {"text": "JavaScript", "size": 100},
-    {"text": "Python", "size": 95},
-    {"text": "Java", "size": 85},
-    {"text": "TypeScript", "size": 80},
-    {"text": "C#", "size": 75},
-    {"text": "PHP", "size": 70},
-    {"text": "C++", "size": 65},
-    {"text": "Kotlin", "size": 60},
-    {"text": "Swift", "size": 55},
-    {"text": "Go", "size": 50},
-    {"text": "Rust", "size": 45},
-    {"text": "Ruby", "size": 40}
-  ]
-}`,
+        wordcloud: `title= My Word Cloud Title
+width= 600
+height= 300
+minFontSize= 12
+maxFontSize= 60
+---
+Word 1 | 85 | #3498db
+Word 2 | 92 | #9b59b6
+Word 3 | 78 | #2ecc71`,
         
         treechart: `{
   "title": "Organization Structure",

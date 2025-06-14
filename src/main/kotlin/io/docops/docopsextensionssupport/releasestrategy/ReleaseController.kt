@@ -602,5 +602,17 @@ class ReleaseController @Autowired constructor(val freeMarkerConfigurer: FreeMar
         return releases
     }
 
-
+    @PostMapping("")
+    fun editFormSubmit(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val release = Json.decodeFromString<ReleaseStrategy>(data)
+            val contents = processReleaseStrategy(release)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.TEXT_PLAIN
+            ResponseEntity(contents.toByteArray(), headers, HttpStatus.OK)
+        }
+        return timing.value
+    }
 }

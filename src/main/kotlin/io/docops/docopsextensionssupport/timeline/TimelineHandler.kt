@@ -22,7 +22,7 @@ class TimelineHandler : DocOpsHandler {
         val isPdf = backend == "pdf"
         val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
         val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
-        val svg = tm.makeTimelineSvg(data, title, scale, isPdf = isPdf, numChars)
+        val svg = tm.makeTimelineSvg(data, title, scale, isPdf = isPdf)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("image/svg+xml")

@@ -237,4 +237,19 @@ Item 2 | 30 | 85 | 10 | #3b82f6 | Description for Item 2
         log.info{"getQuadrant executed in ${timing.duration.inWholeMilliseconds}ms "}
         return timing.value
     }
+
+    @PostMapping("")
+    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val handler = QuadrantHandler()
+            val response = handler.fromRequestToQuadrant(data, 0.6f, useDark = false, title = "title")
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(response.shapeSvg.toByteArray(), headers, HttpStatus.OK)
+        }
+        log.info{"editFormSubmission executed in ${timing.duration.inWholeMilliseconds}ms "}
+        return timing.value
+    }
 }

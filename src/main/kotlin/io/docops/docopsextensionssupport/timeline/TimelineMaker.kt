@@ -29,7 +29,7 @@ import java.util.*
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boolean = false, val id: String = UUID.randomUUID().toString()) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString()) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     private var cardBackgroundColor = ""
@@ -264,7 +264,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String, var pdf: Boo
     }
 
 
-    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean, chars: String): String {
+    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean): String {
         this.pdf = isPdf
         val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
@@ -575,13 +575,13 @@ Challenges the distinction between high and low culture and emphasizes fragmenta
 
     // Test normal output
     val maker = TimelineMaker(false, "#a1d975")
-    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "0.6", false, "30")
+    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "0.6", false)
     val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
 
     // Test PDF output
     val makerPdf = TimelineMaker(false, "#a1d975")
-    val svgPdf = makerPdf.makeTimelineSvg(entry, "Literary Periods", "1", true, "30")
+    val svgPdf = makerPdf.makeTimelineSvg(entry, "Literary Periods", "1", true)
     val fPdf = File("gen/timeline_pdf.svg")
     fPdf.writeBytes(svgPdf.toByteArray())
 

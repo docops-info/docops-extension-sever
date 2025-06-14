@@ -242,4 +242,22 @@ class RoadmapPlanController {
     }
 
 
+    @PostMapping("")
+    fun editFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val rmm = PlannerMaker()
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val svg = rmm.makePlannerImage(data, "title", "0.6")
+            val headers = HttpHeaders()
+
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.parseMediaType("image/svg+xml")
+            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+
+        }
+        log.info("getRoadMap executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.CacheControl
@@ -9,9 +10,12 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.net.URLDecoder
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -167,9 +171,19 @@ class ScorecardController {
     fun renderScorecard(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
-            return scoreCardHandler.handleHTML(content)
+            scoreCardHandler.handleHTML(content)
         }
         
+        log.info{"scorecard render executed in ${timings.duration.inWholeMilliseconds}ms "}
+        return timings.value
+    }
+
+    @PostMapping("")
+    fun editorFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timings = measureTimedValue {
+            scoreCardHandler.handleHTML(payload)
+        }
+
         log.info{"scorecard render executed in ${timings.duration.inWholeMilliseconds}ms "}
         return timings.value
     }

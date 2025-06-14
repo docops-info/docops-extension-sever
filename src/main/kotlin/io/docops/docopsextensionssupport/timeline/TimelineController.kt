@@ -137,20 +137,16 @@ class TimelineController {
                 title = httpServletRequest.getParameter("title")
             }
             val scale = httpServletRequest.getParameter("scale")?: "0.5"
-            val numChars = httpServletRequest.getParameter("numChars")
-            var chars = numChars
-            if (numChars == null || numChars.isEmpty()) {
-                chars = "24"
-            }
+
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3")
-            val svg = tm.makeTimelineSvg(contents, title, scale, false, chars)
+            val svg = tm.makeTimelineSvg(contents, title, scale, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
             val compressedPayload = compressString(contents)
-            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=timeline&payload=${compressedPayload}&type=SVG&useDark=false&title=$title&numChars=$chars&scale=$scale&filename=timeline.svg"
+            val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=timeline&payload=${compressedPayload}&type=SVG&useDark=false&title=$title&numChars=34&scale=$scale&filename=timeline.svg"
 
             val div = """
                 <div id='imageblock'>
@@ -223,7 +219,7 @@ class TimelineController {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
             val isPdf = "PDF" == type
-            val svg = tm.makeTimelineSvg(data, title, scale, isPdf, numChars)
+            val svg = tm.makeTimelineSvg(data, title, scale, isPdf)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -266,6 +262,20 @@ class TimelineController {
             ResponseEntity(sb.toString().toByteArray(), headers, HttpStatus.OK)
         }
         log.info("getTimeLineTable executed in ${timing.duration.inWholeMilliseconds}ms ")
+        return timing.value
+    }
+
+    @PostMapping("")
+    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
+        val timing = measureTimedValue {
+            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
+            val tm = TimelineMaker(false )
+            val svg = tm.makeTimelineSvg(data, "title", "0.6", false)
+            val headers = HttpHeaders()
+            headers.cacheControl = CacheControl.noCache().headerValue
+            headers.contentType = MediaType.TEXT_PLAIN
+            ResponseEntity(svg.toString().toByteArray(), headers, HttpStatus.OK)
+        }
         return timing.value
     }
 }
