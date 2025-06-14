@@ -46,6 +46,9 @@ class DocOpsRouter (
     // Map to track execution counts for each event
     private val eventCounts = mutableMapOf<String, Int>()
 
+    // Getter for eventCounts map
+    fun getEventCounts(): Map<String, Int> = eventCounts.toMap()
+
     // Registry of handlers by kind
     private val handlers: Map<String, DocOpsHandler> = mapOf(
         "connector" to ConnectorHandler(),

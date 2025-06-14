@@ -3,227 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocOps Stats Dashboard</title>
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --card-bg: #ffffff;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
-            --text-tertiary: #6b7280;
-            --bg-color: #f3f4f6;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            background-color: var(--success-color);
-            color: white;
-        }
-        
-        .status-badge.disconnected {
-            background-color: var(--error-color);
-        }
-        
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            padding: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-        }
-        
-        .card-stat {
-            display: flex;
-            align-items: baseline;
-            margin-bottom: 8px;
-        }
-        
-        .card-stat-label {
-            font-size: 0.875rem;
-            color: var(--text-tertiary);
-            margin-right: 8px;
-        }
-        
-        .card-stat-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .card-stat-unit {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-left: 4px;
-        }
-        
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 16px;
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-        
-        .test-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 9999px;
-            padding: 12px 24px;
-            font-weight: 500;
-            cursor: pointer;
-            box-shadow: var(--card-shadow);
-            transition: background-color 0.2s;
-        }
-        
-        .test-button:hover {
-            background-color: var(--primary-hover);
-        }
-    </style>
+    <!-- SEO Meta Tags -->
+    <title>DocOps Stats Dashboard - Event Monitoring</title>
+    <meta name="description" content="Monitor DocOps extension events in real-time. Track execution counts, durations, and status of all extension operations.">
+    <meta name="keywords" content="DocOps, monitoring, events, dashboard, statistics, real-time">
+    <meta name="author" content="DocOps.io">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://docops.io/statsview.html">
+    <meta property="og:title" content="DocOps Stats Dashboard - Event Monitoring">
+    <meta property="og:description" content="Monitor DocOps extension events in real-time. Track execution counts, durations, and status of all extension operations.">
+    <meta property="og:image" content="https://docops.io/images/docops-social.png">
+    <meta property="og:site_name" content="DocOps.io">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://docops.io/statsview.html">
+    <meta property="twitter:title" content="DocOps Stats Dashboard - Event Monitoring">
+    <meta property="twitter:description" content="Monitor DocOps extension events in real-time. Track execution counts, durations, and status of all extension operations.">
+    <meta property="twitter:image" content="https://docops.io/images/docops-social.png">
+
+    <!-- Favicon improvements -->
+    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.4.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js"></script>
 </head>
-<body>
-<div class="header">
-    <h1>DocOps Events Dashboard</h1>
-    <div id="connection-status" class="status-badge disconnected">Disconnected</div>
-</div>
+<body class="bg-gray-50 text-gray-900">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-10 h-10" />
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">DocOps.io Event Dashboard</h1>
+                    <p class="text-sm text-gray-600">Real-time monitoring of extension events and performance metrics.</p>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    <a href="index.html" class="text-white">Back to Main</a>
+                </button>
+                <div id="connection-status" class="px-4 py-2 rounded-md bg-red-500 text-white">Disconnected</div>
+            </div>
+        </div>
+    </div>
+</header>
 
-<div id="cards-container" class="cards-container">
-</div>
+<!-- Main Content -->
+<section class="py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-center mb-2">Extension Events Monitor</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto">
+                Track all DocOps extension events in real-time. View execution counts, processing times, and operation status.
+            </p>
+        </div>
 
-<button id="test-button" class="test-button" onclick="triggerEvent()">Trigger Test Event</button>
+        <div id="cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Cards will be dynamically inserted here by JavaScript -->
+        </div>
+    </div>
+</section>
+
+<button id="test-button" onclick="triggerEvent()" class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full p-4 shadow-lg transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+</button>
 
 <script>
     let stompClient = null;
     // Store events by kind
     const eventsByKind = new Map();
-    
+
     function updateConnectionStatus(status, isConnected = false) {
         const statusBadge = document.getElementById('connection-status');
         statusBadge.textContent = status;
-        
+
         if (isConnected) {
-            statusBadge.classList.remove('disconnected');
+            statusBadge.classList.remove('bg-red-500');
+            statusBadge.classList.add('bg-green-500');
         } else {
-            statusBadge.classList.add('disconnected');
+            statusBadge.classList.remove('bg-green-500');
+            statusBadge.classList.add('bg-red-500');
         }
     }
-    
+
     function createOrUpdateEventCard(eventData) {
         const { eventName, duration, status, count, time } = eventData;
-        
+
         // Check if we already have a card for this event kind
         let card = document.getElementById(`card-${eventName}`);
-        
+
         if (!card) {
             // Create a new card if one doesn't exist
             card = document.createElement('div');
             card.id = `card-${eventName}`;
-            card.className = 'card';
-            
+            card.className = 'bg-white rounded-lg shadow-sm overflow-hidden transition-all hover:shadow-md hover:-translate-y-1';
+
             // Add the card to the container
             document.getElementById('cards-container').appendChild(card);
-            
+
             // Initialize the event in our tracking map
             eventsByKind.set(eventName, { count, duration, lastUpdate: time });
         } else {
             // Update our tracking data
             eventsByKind.set(eventName, { count, duration, lastUpdate: time });
         }
-        
+
+        // Determine status color
+        const statusColor = status ? 'text-green-500' : 'text-red-500';
+
         // Update the card content
         card.innerHTML = `
-            <h2 class="card-title">${eventName}</h2>
-            
-            <div class="card-stat">
-                <span class="card-stat-label">Count:</span>
-                <span class="card-stat-value">${count}</span>
+            <div class="px-6 py-4 border-b bg-gray-50">
+                <h3 class="text-xl font-semibold text-gray-900">${eventName}</h3>
             </div>
-            
-            <div class="card-stat">
-                <span class="card-stat-label">Duration:</span>
-                <span class="card-stat-value">${duration}</span>
-                <span class="card-stat-unit">ms</span>
-            </div>
-            
-            <div class="card-footer">
-                <span>Status: ${status ? '✅ Success' : '❌ Failed'}</span>
-                <span>Last update: ${new Date(time).toLocaleTimeString()}</span>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex flex-col">
+                        <span class="text-sm text-gray-500">Count</span>
+                        <span class="text-2xl font-bold text-blue-600">${count}</span>
+                    </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-sm text-gray-500">Duration</span>
+                        <span class="text-2xl font-bold text-indigo-600">${duration}<span class="text-sm font-normal">ms</span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center text-sm mt-4 pt-4 border-t border-gray-100">
+                    <span class="${statusColor} font-medium">
+                        ${status ? '✅ Success' : '❌ Failed'}
+                    </span>
+                    <span class="text-gray-500">
+                        ${new Date(time).toLocaleTimeString()}
+                    </span>
+                </div>
             </div>
         `;
     }
-    
+
     function connect() {
         if (stompClient && stompClient.connected) {
             return;
         }
-        
+
         updateConnectionStatus('Connecting...', false);
-        
+
         // Create SockJS connection to the WebSocket endpoint
         const socket = new SockJS('/extension/api/stats/ws');
-        
+
         // Create STOMP client over the SockJS connection
         stompClient = Stomp.over(socket);
-        
+
         // Disable debug logging from STOMP
         stompClient.debug = null;
-        
+
         // Connect to the STOMP broker
         stompClient.connect({}, function(frame) {
             updateConnectionStatus('Connected', true);
-            
+
             // Subscribe to the stats topic
             stompClient.subscribe('/topic/stats', function(message) {
                 const payload = JSON.parse(message.body);
-                
+
                 if (payload.type === 'message') {
                     const eventData = payload.data;
                     createOrUpdateEventCard(eventData);
@@ -231,26 +186,91 @@
             });
         }, function(error) {
             updateConnectionStatus('Connection Error', false);
-            
+
             // Try to reconnect after 5 seconds
             setTimeout(connect, 5000);
         });
     }
-    
+
     function triggerEvent() {
         // Get a random count between 1 and 20 for testing
         const count = Math.floor(Math.random() * 20) + 1;
-        
+
         fetch(`/extension/api/stats/trigger-test-event?count=${count}`)
             .catch(error => {
                 console.error('Error triggering test event:', error);
             });
     }
-    
+
+    // Fetch initial event counts
+    function fetchInitialEventCounts() {
+        fetch('/extension/api/stats/event-counts')
+            .then(response => response.json())
+            .then(events => {
+                if (events && events.length > 0) {
+                    events.forEach(eventData => {
+                        createOrUpdateEventCard(eventData);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching initial event counts:', error);
+            });
+    }
+
     // Auto-connect when page loads
     window.addEventListener('load', function() {
         connect();
+        fetchInitialEventCounts();
     });
 </script>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="images/docops.svg" alt="DocOps Logo" class="w-8 h-8" />
+                    <span class="font-bold text-lg">DocOps.io</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Modern data visualization library for the web. Create beautiful, interactive charts with ease.
+                </p>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Documentation</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="index.html#get-started" class="hover:text-white">Getting Started</a></li>
+                    <li><a href="#" class="hover:text-white">API Reference</a></li>
+                    <li><a href="docs/examples.html" class="hover:text-white">Examples</a></li>
+                    <li><a href="#" class="hover:text-white">Tutorials</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Community</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="https://github.com/docops-info/docops-extension-sever" class="hover:text-white">GitHub</a></li>
+                    <li><a href="#" class="hover:text-white">Discord</a></li>
+                    <li><a href="#" class="hover:text-white">Stack Overflow</a></li>
+                    <li><a href="#" class="hover:text-white">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-3">Resources</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="changelog.html" class="hover:text-white">Changelog</a></li>
+                    <li><a href="#" class="hover:text-white">Roadmap</a></li>
+                    <li><a href="#" class="hover:text-white">Support</a></li>
+                    <li><a href="#" class="hover:text-white">License</a></li>
+                    <li><a href="template/customize" class="hover:text-white">Customize Template</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2025 DocOps.io. All rights reserved. Built with ❤️ for developers.</p>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import java.time.LocalDateTime
 import java.util.UUID
 
 
 @Controller
 @RequestMapping("/api")
-class StatsController @Autowired constructor(private val applicationEventPublisher: ApplicationEventPublisher) {
+class StatsController @Autowired constructor(
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val docOpsRouter: DocOpsRouter
+) {
 
     @GetMapping("/stats/trigger-test-event")
     @ResponseBody
@@ -22,6 +26,23 @@ class StatsController @Autowired constructor(private val applicationEventPublish
         val event = DocOpsExtensionEvent("Test Event", 123, true, count)
         applicationEventPublisher.publishEvent(event)
         return "Test event triggered with count: $count"
+    }
+
+    @GetMapping("/stats/event-counts")
+    @ResponseBody
+    fun getEventCounts(): List<Map<String, Any>> {
+        val eventCounts = docOpsRouter.getEventCounts()
+        val now = LocalDateTime.now().toString()
+
+        return eventCounts.map { (eventName, count) ->
+            mapOf(
+                "eventName" to eventName,
+                "duration" to 0L, // We don't have duration for initial state
+                "status" to true, // Assume success for initial state
+                "count" to count,
+                "time" to now
+            )
+        }
     }
 
     @GetMapping("/stats/doc", produces = ["image/svg+xml"])
