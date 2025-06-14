@@ -2,9 +2,6 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 
 class AdrHandler : DocOpsHandler{
 
@@ -18,9 +15,6 @@ class AdrHandler : DocOpsHandler{
         //adr.urlMap.forEach { (t, u) ->
         //    svg = svg.replace("_${t}_", u)
        // }
-        val headers = HttpHeaders()
-        headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
         return svg
     }
 

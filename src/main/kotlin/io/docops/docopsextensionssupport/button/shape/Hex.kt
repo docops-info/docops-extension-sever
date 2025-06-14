@@ -96,10 +96,10 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var filter = ""
         var fill = "${button.color}"
         if(!isPdf) {
-            filter = "filter=\"url(#Bevel2)\""
+            filter = "url(#Bevel2)"
             fill = "url(#btn_${button.id})"
         }
-        val btnLook = """fill="$fill" $filter"""
+        val btnLook = """fill="$fill""""
         val title = descriptionOrLabel(button)
         val textColor = determineTextColor(button.color!!)
         var img = ""

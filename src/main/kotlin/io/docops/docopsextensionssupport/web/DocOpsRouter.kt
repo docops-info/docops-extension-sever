@@ -99,7 +99,8 @@ class DocOpsRouter (
             ?: throw IllegalArgumentException("Unknown handler kind: $kind")
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            joinXmlLines(addSvgMetadata(handler.handleSVG(data, context)))
+            val decodedPayload = decodePayloadIfNeeded(data)
+            joinXmlLines(addSvgMetadata(handler.handleSVG(decodedPayload, context)))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
         applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds))
@@ -108,5 +109,23 @@ class DocOpsRouter (
         return ResponseEntity(timing.value.toByteArray(), headers, HttpStatus.OK)
     }
 
+    private fun isUrlEncoded(payload: String): Boolean {
+        // Check for common URL encoded characters
+        val urlEncodedPattern = Regex("%[0-9A-Fa-f]{2}")
+        return urlEncodedPattern.containsMatchIn(payload) ||
+                payload.contains("+") && payload.contains("%") ||
+                payload.contains("%20") || // encoded space
+                payload.contains("%2B") || // encoded +
+                payload.contains("%2F") || // encoded /
+                payload.contains("%3D")    // encoded =
+    }
+
+    private fun decodePayloadIfNeeded(payload: String): String {
+        return if (isUrlEncoded(payload)) {
+            URLDecoder.decode(payload, "UTF-8")
+        } else {
+            payload
+        }
+    }
 
 }

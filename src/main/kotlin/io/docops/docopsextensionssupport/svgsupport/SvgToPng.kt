@@ -336,9 +336,7 @@ fun String.escapeXml(): String {
 
     val metadata = """
         <metadata>
-            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                     xmlns:dc="http://purl.org/dc/elements/1.1/"
-                     xmlns:cc="http://creativecommons.org/ns#">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#">
                 <cc:Work rdf:about="">
                     <dc:creator>DocOps.io</dc:creator>
                     <dc:rights>MIT License</dc:rights>

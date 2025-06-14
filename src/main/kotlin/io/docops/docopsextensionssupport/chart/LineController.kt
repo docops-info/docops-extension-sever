@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
 @Controller
-@RequestMapping("/api/linechart")
+@RequestMapping("/api/linechart", "/api/line")
 class LineController {
     private val log = KotlinLogging.logger {  }
 
