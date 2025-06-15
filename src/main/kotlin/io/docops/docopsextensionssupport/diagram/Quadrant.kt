@@ -12,15 +12,7 @@ import kotlinx.serialization.Serializable
  * @property color The color of the data point (optional)
  * @property description Additional description for the data point (optional)
  */
-@Serializable
-data class QuadrantPoint(
-    val label: String,
-    val x: Float,
-    val y: Float,
-    val size: Float = 8f,
-    val color: String? = null,
-    val description: String = ""
-)
+
 
 /**
  * Represents a quadrant chart with title, labels, and data points.
@@ -65,3 +57,29 @@ data class QuadrantChart(
 data class QuadrantCharts(
     val charts: List<QuadrantChart> = emptyList()
 )
+@Serializable
+data class QuadrantPoint(
+    val x: Double,
+    val y: Double,
+    val label: String,
+    val category: String? = null
+)
+
+@Serializable
+data class QuadrantConfig(
+    val width: Int = 800,
+    val height: Int = 600,
+    val margin: Int = 60,
+    val title: String = "Quadrant Chart",
+    val xAxisLabel: String = "X Axis",
+    val yAxisLabel: String = "Y Axis",
+    val quadrantLabels: Map<String, String> = mapOf(
+        "top-right" to "High X, High Y",
+        "top-left" to "Low X, High Y",
+        "bottom-left" to "Low X, Low Y",
+        "bottom-right" to "High X, Low Y"
+    )
+)
+
+@Serializable
+data class DataRange(val min: Double, val max: Double)

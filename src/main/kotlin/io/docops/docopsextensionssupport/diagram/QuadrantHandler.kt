@@ -4,12 +4,14 @@ import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
 
 /**
  * QuadrantHandler class is responsible for handling requests related to quadrant chart SVG images.
  * Supports both JSON and table format for quadrant charts.
+ * Updated to use QuadrantChartGenerator for better chart generation.
  */
-class QuadrantHandler : DocOpsHandler{
+class QuadrantHandler : DocOpsHandler {
 
     /**
      * Handles the SVG request and returns the SVG image as a byte array.
@@ -19,15 +21,14 @@ class QuadrantHandler : DocOpsHandler{
      * @param scale The scale of the SVG image.
      * @param useDark A boolean indicating whether to use dark mode for the SVG image.
      * @param title The title of the quadrant chart.
-     * @param numChars The number of characters to display in labels.
      * @param backend The backend to use for rendering.
      * @return The ResponseEntity containing the SVG image as a byte array.
      */
     fun handleSVG(
-        payload: String, 
-        type: String, 
-        scale: String, 
-        useDark: Boolean, 
+        payload: String,
+        type: String,
+        scale: String,
+        useDark: Boolean,
         title: String = "",
         backend: String = "html"
     ): String {
@@ -36,30 +37,32 @@ class QuadrantHandler : DocOpsHandler{
     }
 
     /**
-     * Converts the request payload to a quadrant chart and generates the SVG.
+     * Converts the request payload to a quadrant chart and generates the SVG using QuadrantChartGenerator.
      *
      * @param contents The uncompressed payload content.
      * @param scale The scale of the SVG image.
      * @param useDark A boolean indicating whether to use dark mode for the SVG image.
      * @param title The title of the quadrant chart.
-     * @param numChars The number of characters to display in labels.
      * @param backend The backend to use for rendering.
      * @return The ShapeResponse containing the SVG content.
      */
     fun fromRequestToQuadrant(
-        contents: String, 
-        scale: Float, 
-        useDark: Boolean, 
+        contents: String,
+        scale: Float,
+        useDark: Boolean,
         title: String = "",
         backend: String = "html"
     ): ShapeResponse {
-        val quadrantChart = if (isTableFormat(contents)) {
-            parseTableData(contents, title)
+        val (points, config) = if (isTableFormat(contents)) {
+            parseTableData(contents, title, useDark)
         } else {
-            decodeFromJson(contents)
+            parseJsonData(contents, title, useDark)
         }
-        val maker = QuadrantMaker(quadrantChart, useDark, type = backend)
-        return maker.makeQuadrantImage(scale)
+
+        val generator = QuadrantChartGenerator()
+        val svgContent = generator.generateSVG(points, config)
+
+        return ShapeResponse(svgContent, width=800f, height= 1000f)
     }
 
     /**
@@ -70,23 +73,23 @@ class QuadrantHandler : DocOpsHandler{
     }
 
     /**
-     * Parses table-like data into QuadrantChart object
+     * Parses table-like data into QuadrantPoint list and QuadrantConfig
      */
-    private fun parseTableData(data: String, title: String): QuadrantChart {
+    private fun parseTableData(data: String, title: String, useDark: Boolean): Pair<List<QuadrantPoint>, QuadrantConfig> {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         val points = mutableListOf<QuadrantPoint>()
+
+        // Default configuration
         var chartTitle = title.ifEmpty { "Strategic Priority Matrix" }
         var chartSubtitle = "Impact vs. Effort Analysis"
         var xAxisLabel = "EFFORT REQUIRED"
         var yAxisLabel = "IMPACT LEVEL"
-        var q1Label = "HIGH IMPACT"
-        var q2Label = "STRATEGIC"
-        var q3Label = "FILL-INS"
-        var q4Label = "THANKLESS"
-        var q1Description = "Low Effort"
-        var q2Description = "High Effort"
-        var q3Description = "Low Impact"
-        var q4Description = "High Effort"
+        var quadrantLabels = mapOf(
+            "top-right" to "HIGH IMPACT\nHigh Effort",
+            "top-left" to "STRATEGIC\nLow Effort",
+            "bottom-left" to "FILL-INS\nLow Impact",
+            "bottom-right" to "THANKLESS\nHigh Effort"
+        )
 
         var inDataSection = false
 
@@ -106,14 +109,10 @@ class QuadrantHandler : DocOpsHandler{
                             "subtitle" -> chartSubtitle = value
                             "xaxislabel" -> xAxisLabel = value
                             "yaxislabel" -> yAxisLabel = value
-                            "q1label" -> q1Label = value
-                            "q2label" -> q2Label = value
-                            "q3label" -> q3Label = value
-                            "q4label" -> q4Label = value
-                            "q1description" -> q1Description = value
-                            "q2description" -> q2Description = value
-                            "q3description" -> q3Description = value
-                            "q4description" -> q4Description = value
+                            "q1label" -> quadrantLabels = quadrantLabels + ("top-right" to value)
+                            "q2label" -> quadrantLabels = quadrantLabels + ("top-left" to value)
+                            "q3label" -> quadrantLabels = quadrantLabels + ("bottom-left" to value)
+                            "q4label" -> quadrantLabels = quadrantLabels + ("bottom-right" to value)
                         }
                     }
                 }
@@ -122,62 +121,106 @@ class QuadrantHandler : DocOpsHandler{
                     val parts = line.split("|").map { it.trim() }.filter { it.isNotEmpty() }
                     if (parts.size >= 3) {
                         val label = parts[0]
-                        val x = parts[1].toFloatOrNull() ?: 50f
-                        val y = parts[2].toFloatOrNull() ?: 50f
-                        val size = if (parts.size > 3) parts[3].toFloatOrNull() ?: 8f else 8f
-                        val color = if (parts.size > 4) parts[4] else null
-                        val description = if (parts.size > 5) parts[5] else ""
-                        points.add(QuadrantPoint(label, x, y, size, color, description))
+                        val x = parts[1].toDoubleOrNull() ?: 50.0
+                        val y = parts[2].toDoubleOrNull() ?: 50.0
+                        val category = if (parts.size > 3) parts[3] else null
+                        points.add(QuadrantPoint(x, y, label, category))
                     }
                 }
             }
         }
 
-        return QuadrantChart(
+        val config = QuadrantConfig(
             title = chartTitle,
-            subtitle = chartSubtitle,
             xAxisLabel = xAxisLabel,
             yAxisLabel = yAxisLabel,
-            q1Label = q1Label,
-            q2Label = q2Label,
-            q3Label = q3Label,
-            q4Label = q4Label,
-            q1Description = q1Description,
-            q2Description = q2Description,
-            q3Description = q3Description,
-            q4Description = q4Description,
-            points = points
+            quadrantLabels = quadrantLabels
         )
+
+        return Pair(points, config)
+    }
+
+    /**
+     * Parses JSON data into QuadrantPoint list and QuadrantConfig
+     */
+    private fun parseJsonData(contents: String, title: String, useDark: Boolean): Pair<List<QuadrantPoint>, QuadrantConfig> {
+        return try {
+            // Try to parse as QuadrantCharts first (multiple charts)
+            val charts = Json.decodeFromString<QuadrantCharts>(contents)
+            val chart = if (charts.charts.isNotEmpty()) charts.charts[0] else QuadrantChart()
+            convertToPointsAndConfig(chart, title, useDark)
+        } catch (e: Exception) {
+            try {
+                // Try to parse as single QuadrantChart
+                val chart = Json.decodeFromString<QuadrantChart>(contents)
+                convertToPointsAndConfig(chart, title, useDark)
+            } catch (e: Exception) {
+                // Fallback to empty data
+                val defaultConfig = QuadrantConfig(title = title.ifEmpty { "Quadrant Chart" })
+                Pair(emptyList(), defaultConfig)
+            }
+        }
+    }
+
+    /**
+     * Converts QuadrantChart to QuadrantPoint list and QuadrantConfig
+     */
+    private fun convertToPointsAndConfig(chart: QuadrantChart, title: String, useDark: Boolean): Pair<List<QuadrantPoint>, QuadrantConfig> {
+        // Convert old QuadrantChart points to new QuadrantPoint format
+        val points = chart.points.map { oldPoint ->
+            QuadrantPoint(
+                x = oldPoint.x.toDouble(),
+                y = oldPoint.y.toDouble(),
+                label = oldPoint.label,
+            )
+        }
+
+        val config = QuadrantConfig(
+            title = title.ifEmpty { chart.title },
+            xAxisLabel = chart.xAxisLabel,
+            yAxisLabel = chart.yAxisLabel,
+            quadrantLabels = mapOf(
+                "top-right" to "${chart.q1Label}\n${chart.q1Description}",
+                "top-left" to "${chart.q2Label}\n${chart.q2Description}",
+                "bottom-left" to "${chart.q3Label}\n${chart.q3Description}",
+                "bottom-right" to "${chart.q4Label}\n${chart.q4Description}"
+            )
+        )
+
+        return Pair(points, config)
     }
 
     /**
      * Helper function to detect header rows in table format
      */
     private fun isHeaderRow(line: String): Boolean {
-        val lowerLine = line.lowercase()
-        return lowerLine.contains("label") || 
-               lowerLine.contains("x") || 
-               lowerLine.contains("y") ||
-               lowerLine.contains("size") ||
-               lowerLine.contains("color") ||
-               lowerLine.contains("description")
-    }
+        val trimmedLine = line.trim()
 
-    /**
-     * Decodes JSON data into QuadrantChart object
-     */
-    private fun decodeFromJson(contents: String): QuadrantChart {
-        return try {
-            val charts = Json.decodeFromString<QuadrantCharts>(contents)
-            if (charts.charts.isNotEmpty()) charts.charts[0] else QuadrantChart()
-        } catch (e: Exception) {
-            try {
-                Json.decodeFromString<QuadrantChart>(contents)
-            } catch (e: Exception) {
-                QuadrantChart()
+        // Check for markdown table separator rows
+        if (trimmedLine.matches(Regex("^\\|[\\s\\-\\|]+\\|$"))) {
+            return true
+        }
+
+        // Check if this is an actual header row (contains common header keywords AND no numeric data)
+        val parts = line.split("|").map { it.trim() }.filter { it.isNotEmpty() }
+        if (parts.size >= 3) {
+            val lowerLine = line.lowercase()
+            val hasHeaderKeywords = lowerLine.contains("label") ||
+                    lowerLine.contains("category") ||
+                    (lowerLine.contains("x") && lowerLine.contains("y"))
+
+            // If it has header keywords and no numeric values in expected positions, it's a header
+            if (hasHeaderKeywords) {
+                val secondPart = parts.getOrNull(1)?.toDoubleOrNull()
+                val thirdPart = parts.getOrNull(2)?.toDoubleOrNull()
+                return secondPart == null && thirdPart == null
             }
         }
+
+        return false
     }
+
+
 
     override fun handleSVG(
         payload: String,

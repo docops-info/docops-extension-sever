@@ -1,13 +1,45 @@
 include::_base.adoc[]
-= DocOps Quadrant
+= DocOps Quadrant Charts
+:imagesdir: images
 
-== Overview
+== Introduction
 
-The DocOps Quadrant Chart is a powerful visualization tool for creating strategic priority matrices and impact vs. effort analysis charts. It helps teams prioritize work by plotting items on a two-dimensional grid based on their impact and effort.
+The DocOps Quadrant Chart Extension allows you to create visually appealing quadrant charts in your AsciiDoctor documents. Quadrant charts are powerful visualization tools for creating strategic priority matrices and impact vs. effort analysis charts. They help teams prioritize work by plotting items on a two-dimensional grid based on their relative importance.
 
-== Usage
+This guide will help you understand the basic concepts of quadrant charts, how to include them in your AsciiDoctor documents, and provide examples of different configurations.
 
-To create a quadrant chart, use the following syntax in your AsciiDoc document:
+== Basic Concepts
+
+=== What are Quadrant Charts?
+
+Quadrant charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each quadrant chart has:
+
+* A title (the main heading of the chart)
+* A subtitle (optional)
+* X and Y axis labels (typically "Effort" and "Impact")
+* Four quadrants, each with its own label and description
+* A series of data points plotted on the grid
+
+Quadrant charts are particularly useful for:
+
+* Strategic priority matrices
+* Impact vs. effort analysis
+* Risk assessment
+* Opportunity evaluation
+* Feature prioritization
+
+=== Quadrant Chart Components
+
+A quadrant chart includes:
+
+* A title and optional subtitle
+* X and Y axis labels
+* Four quadrants with labels and descriptions
+* Data points, each with a label, x-coordinate, y-coordinate, and optional category
+
+== AsciiDoctor Syntax for Quadrant Charts
+
+To include quadrant charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
 
 [source,asciidoc]
 ....
@@ -15,308 +47,204 @@ To create a quadrant chart, use the following syntax in your AsciiDoc document:
 ----
 title: Strategic Priority Matrix
 subtitle: Impact vs. Effort Analysis
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
+q1Label: HIGH IMPACT
+q2Label: STRATEGIC
+q3Label: FILL-INS
+q4Label: THANKLESS
 ---
-Label | X | Y | Size | Color | Description
-Feature A | 75 | 80 | 8 | #10b981 | High impact, low effort
-Feature B | 30 | 85 | 10 | #3b82f6 | High impact, high effort
-Feature C | 20 | 30 | 7 | #f59e0b | Low impact, low effort
-Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
 ----
 ....
 
-== Parameters
+The macro processes the configuration and data and generates an SVG representation of the quadrant chart that is embedded in your document.
 
-The quadrant chart supports the following parameters:
+=== Configuration Parameters
 
-=== Chart Configuration
+The following configuration parameters are available:
 
-[cols="1,3,1"]
-|===
-|Parameter |Description |Default
+* `title` (optional): The main heading of the chart (default: "Strategic Priority Matrix")
+* `subtitle` (optional): The subtitle of the chart (default: "Impact vs. Effort Analysis")
+* `xAxisLabel` (optional): The label for the X-axis (default: "EFFORT REQUIRED")
+* `yAxisLabel` (optional): The label for the Y-axis (default: "IMPACT LEVEL")
+* `q1Label` (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")
+* `q2Label` (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")
+* `q3Label` (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")
+* `q4Label` (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")
 
-|title
-|The title of the quadrant chart
-|Strategic Priority Matrix
+=== Data Format
 
-|subtitle
-|The subtitle of the quadrant chart
-|Impact vs. Effort Analysis
+After the configuration section and the separator line (`---`), each line represents a data point with the following format:
 
-|xAxisLabel
-|The label for the x-axis
-|EFFORT REQUIRED
+```
+Label | X | Y [| Category]
+```
 
-|yAxisLabel
-|The label for the y-axis
-|IMPACT LEVEL
-
-|q1Label
-|The label for quadrant 1 (top-right)
-|HIGH IMPACT
-
-|q2Label
-|The label for quadrant 2 (top-left)
-|STRATEGIC
-
-|q3Label
-|The label for quadrant 3 (bottom-left)
-|FILL-INS
-
-|q4Label
-|The label for quadrant 4 (bottom-right)
-|THANKLESS
-
-|q1Description
-|The description for quadrant 1
-|Low Effort
-
-|q2Description
-|The description for quadrant 2
-|High Effort
-
-|q3Description
-|The description for quadrant 3
-|Low Impact
-
-|q4Description
-|The description for quadrant 4
-|High Effort
-|===
-
-=== Data Points
-
-Each data point in the quadrant chart is defined by a row in the table with the following columns:
-
-[cols="1,3,1"]
-|===
-|Column |Description |Required
-
-|Label
-|The label for the data point
-|Yes
-
-|X
-|The x-coordinate (effort) value from 0 to 100
-|Yes
-
-|Y
-|The y-coordinate (impact) value from 0 to 100
-|Yes
-
-|Size
-|The size of the data point
-|No (default: 8)
-
-|Color
-|The color of the data point (hex code)
-|No (default: based on quadrant)
-
-|Description
-|Additional description for the data point
-|No
-|===
+* `Label` (required): The name or description of the data point
+* `X` (required): The X-coordinate (effort) value from 0 to 100
+* `Y` (required): The Y-coordinate (impact) value from 0 to 100
+* `Category` (optional): A category for the data point, which can be used for grouping or coloring
 
 == Examples
 
-=== Basic Quadrant Chart
+=== Basic Quadrant Chart Example
+
+Here's a simple example of a quadrant chart:
 
 [source,asciidoc]
 ....
 [docops,quadrant]
 ----
-title: Project Prioritization
-subtitle: Q3 2025 Planning
+title: Strategic Priority Matrix
+subtitle: Impact vs. Effort Analysis
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
 ---
-Label | X | Y
-Feature A | 75 | 80
-Feature B | 30 | 85
-Feature C | 20 | 30
-Feature D | 85 | 25
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
 ----
 ....
 
 [docops,quadrant]
 ----
-title: Project Prioritization
-subtitle: Q3 2025 Planning
+title: Strategic Priority Matrix
+subtitle: Impact vs. Effort Analysis
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
 ---
-Label | X | Y
-Feature A | 75 | 80
-Feature B | 30 | 85
-Feature C | 20 | 30
-Feature D | 85 | 25
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
 ----
-=== Customized Quadrant Chart
+
+=== Customized Quadrant Labels Example
+
+You can customize the labels for each quadrant:
 
 [source,asciidoc]
 ....
 [docops,quadrant]
 ----
-title: Technology Investment Matrix
-subtitle: Annual Planning
-xAxisLabel: IMPLEMENTATION COMPLEXITY
+title: Product Feature Prioritization
+subtitle: Value vs. Complexity
+xAxisLabel: COMPLEXITY
 yAxisLabel: BUSINESS VALUE
 q1Label: QUICK WINS
-q2Label: STRATEGIC PROJECTS
-q3Label: NICE TO HAVE
-q4Label: RECONSIDER
-q1Description: Low Complexity
-q2Description: High Complexity
-q3Description: Low Value
-q4Description: High Complexity
+q2Label: BIG BETS
+q3Label: MONEY PITS
+q4Label: INCREMENTAL
 ---
-Label | X | Y | Size | Color | Description
-Cloud Migration | 75 | 90 | 12 | #10b981 | Move infrastructure to cloud
-Legacy System Replacement | 20 | 85 | 14 | #3b82f6 | Replace outdated core systems
-UI Refresh | 80 | 40 | 8 | #ef4444 | Update user interface design
-Data Warehouse | 30 | 30 | 10 | #f59e0b | Implement new data warehouse
-Mobile App | 60 | 70 | 9 | #10b981 | Develop mobile application
-AI Chatbot | 40 | 60 | 8 | #3b82f6 | Implement customer service chatbot
+Feature A | 25 | 85 | Core
+Feature B | 70 | 80 | Enhancement
+Feature C | 80 | 30 | Nice-to-have
+Feature D | 30 | 20 | Optional
+Feature E | 50 | 50 | Maintenance
 ----
 ....
 
-
 [docops,quadrant]
 ----
-title: Technology Investment Matrix
-subtitle: Annual Planning
-xAxisLabel: IMPLEMENTATION COMPLEXITY
+title: Product Feature Prioritization
+subtitle: Value vs. Complexity
+xAxisLabel: COMPLEXITY
 yAxisLabel: BUSINESS VALUE
 q1Label: QUICK WINS
-q2Label: STRATEGIC PROJECTS
-q3Label: NICE TO HAVE
-q4Label: RECONSIDER
-q1Description: Low Complexity
-q2Description: High Complexity
-q3Description: Low Value
-q4Description: High Complexity
+q2Label: BIG BETS
+q3Label: MONEY PITS
+q4Label: INCREMENTAL
 ---
-Label | X | Y | Size | Color | Description
-Cloud Migration | 75 | 90 | 12 | #10b981 | Move infrastructure to cloud
-Legacy System Replacement | 20 | 85 | 14 | #3b82f6 | Replace outdated core systems
-UI Refresh | 80 | 40 | 8 | #ef4444 | Update user interface design
-Data Warehouse | 30 | 30 | 10 | #f59e0b | Implement new data warehouse
-Mobile App | 60 | 70 | 9 | #10b981 | Develop mobile application
-AI Chatbot | 40 | 60 | 8 | #3b82f6 | Implement customer service chatbot
+Feature A | 25 | 85 | Core
+Feature B | 70 | 80 | Enhancement
+Feature C | 80 | 30 | Nice-to-have
+Feature D | 30 | 20 | Optional
+Feature E | 50 | 50 | Maintenance
 ----
 
-== JSON Format
+=== Project Risk Assessment Example
 
-You can also provide data in JSON format:
+Quadrant charts can also be used for risk assessment:
 
-[source,json]
+[source,asciidoc]
+....
+[docops,quadrant]
 ----
-{
-  "title": "Strategic Priority Matrix",
-  "subtitle": "Impact vs. Effort Analysis",
-  "xAxisLabel": "EFFORT REQUIRED",
-  "yAxisLabel": "IMPACT LEVEL",
-  "q1Label": "HIGH IMPACT",
-  "q2Label": "STRATEGIC",
-  "q3Label": "FILL-INS",
-  "q4Label": "THANKLESS",
-  "q1Description": "Low Effort",
-  "q2Description": "High Effort",
-  "q3Description": "Low Impact",
-  "q4Description": "High Effort",
-  "points": [
-    {
-      "label": "Feature A",
-      "x": 75,
-      "y": 80,
-      "size": 8,
-      "color": "#10b981",
-      "description": "High impact, low effort"
-    },
-    {
-      "label": "Feature B",
-      "x": 30,
-      "y": 85,
-      "size": 10,
-      "color": "#3b82f6",
-      "description": "High impact, high effort"
-    },
-    {
-      "label": "Feature C",
-      "x": 20,
-      "y": 30,
-      "size": 7,
-      "color": "#f59e0b",
-      "description": "Low impact, low effort"
-    },
-    {
-      "label": "Feature D",
-      "x": 85,
-      "y": 25,
-      "size": 9,
-      "color": "#ef4444",
-      "description": "Low impact, high effort"
-    }
-  ]
-}
+title: Project Risk Assessment
+subtitle: Probability vs. Impact
+xAxisLabel: PROBABILITY
+yAxisLabel: IMPACT
+q1Label: HIGH PRIORITY
+q2Label: CRITICAL
+q3Label: LOW PRIORITY
+q4Label: MEDIUM PRIORITY
+---
+Security Breach | 30 | 95 | Security
+Budget Overrun | 70 | 75 | Financial
+Schedule Delay | 80 | 60 | Timeline
+Scope Creep | 85 | 50 | Management
+Resource Shortage | 60 | 70 | Staffing
+Technical Failure | 40 | 85 | Technical
 ----
+....
+
+[docops,quadrant]
+----
+title: Project Risk Assessment
+subtitle: Probability vs. Impact
+xAxisLabel: PROBABILITY
+yAxisLabel: IMPACT
+q1label: HIGH PRIORITY
+q2label: CRITICAL
+q3label: LOW PRIORITY
+q4label: MEDIUM PRIORITY
+---
+| Label | X | Y | Category |
+|-------|---|---|----------|
+| Security Breach | 30 | 95 | Security |
+| Budget Overrun | 70 | 75 | Financial |
+| Schedule Delay | 80 | 60 | Timeline |
+| Scope Creep | 85 | 50 | Management |
+| Resource Shortage | 60 | 70 | Staffing |
+| Technical Failure | 40 | 85 | Technical |
+
+----
+
 
 [docops,quadrant]
 ----
 {
-  "title": "Strategic Priority Matrix",
-  "subtitle": "Impact vs. Effort Analysis",
-  "xAxisLabel": "EFFORT REQUIRED",
-  "yAxisLabel": "IMPACT LEVEL",
-  "q1Label": "HIGH IMPACT",
-  "q2Label": "STRATEGIC",
-  "q3Label": "FILL-INS",
-  "q4Label": "THANKLESS",
-  "q1Description": "Low Effort",
-  "q2Description": "High Effort",
-  "q3Description": "Low Impact",
-  "q4Description": "High Effort",
+  "title": "Project Risk Assessment",
+  "subtitle": "Probability vs. Impact",
+  "xAxisLabel": "PROBABILITY",
+  "yAxisLabel": "IMPACT",
+  "q1Label": "HIGH PRIORITY",
+  "q2Label": "CRITICAL",
+  "q3Label": "LOW PRIORITY",
+  "q4Label": "MEDIUM PRIORITY",
+  "q1Description": "",
+  "q2Description": "",
+  "q3Description": "",
+  "q4Description": "",
   "points": [
-    {
-      "label": "Feature A",
-      "x": 75,
-      "y": 80,
-      "size": 8,
-      "color": "#10b981",
-      "description": "High impact, low effort"
-    },
-    {
-      "label": "Feature B",
-      "x": 30,
-      "y": 85,
-      "size": 10,
-      "color": "#3b82f6",
-      "description": "High impact, high effort"
-    },
-    {
-      "label": "Feature C",
-      "x": 20,
-      "y": 30,
-      "size": 7,
-      "color": "#f59e0b",
-      "description": "Low impact, low effort"
-    },
-    {
-      "label": "Feature D",
-      "x": 85,
-      "y": 25,
-      "size": 9,
-      "color": "#ef4444",
-      "description": "Low impact, high effort"
-    }
+    {"x": 30, "y": 95, "label": "Security Breach"},
+    {"x": 70, "y": 75, "label": "Budget Overrun"},
+    {"x": 80, "y": 60, "label": "Schedule Delay"},
+    {"x": 85, "y": 50, "label": "Scope Creep"},
+    {"x": 60, "y": 70, "label": "Resource Shortage"},
+    {"x": 40, "y": 85, "label": "Technical Failure"}
   ]
 }
+
 ----
 
-== Interpretation
+== Conclusion
 
-The quadrant chart divides the space into four quadrants:
+The DocOps Quadrant Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing quadrant charts. By using the simple key-value configuration format and pipe-separated data, you can create customized charts that match your document's style and purpose.
 
-* **Quadrant 1 (Top-Right)**: High Impact, Low Effort - These are "quick wins" that should be prioritized.
-* **Quadrant 2 (Top-Left)**: High Impact, High Effort - These are strategic projects that require significant investment but deliver high value.
-* **Quadrant 3 (Bottom-Left)**: Low Impact, Low Effort - These are "fill-ins" that can be done if resources are available.
-* **Quadrant 4 (Bottom-Right)**: Low Impact, High Effort - These are "thankless" tasks that should be reconsidered or deprioritized.
-
-== Try It
-
-You can try creating your own quadrant chart using the interactive editor on the https://docops.io/more-capabilities.html#quadrant-example[DocOps More Capabilities] page.
+Quadrant charts are versatile tools that can be used for various purposes, including strategic planning, feature prioritization, risk assessment, and more. The extension makes it easy to create these charts without requiring any external tools or complex setup.

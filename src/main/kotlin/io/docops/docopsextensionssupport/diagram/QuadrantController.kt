@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -16,11 +17,13 @@ import kotlin.time.measureTimedValue
 
 /**
  * Controller for handling quadrant chart requests.
+ * Updated to use QuadrantHandler with QuadrantChartGenerator for improved chart generation.
  */
 @Controller
 @RequestMapping("/api/quadrant")
 class QuadrantController {
     private val log = KotlinLogging.logger {}
+    private val quadrantHandler = QuadrantHandler()
 
     /**
      * Returns the edit mode HTML for the quadrant chart.
@@ -28,105 +31,96 @@ class QuadrantController {
     @GetMapping("/edit-mode")
     @ResponseBody
     fun getEditMode(): ResponseEntity<String> {
-        val editModeHtml = """
-            <div id="quadrantContainer" class="bg-gray-50 rounded-lg p-4">
-                <div class="mb-4">
-                    <div class="flex flex-wrap -mx-2">
-                        <div class="w-full px-2 mb-4">
-                            <textarea id="quadrantInput" rows="12" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter quadrant data...">title: Strategic Priority Matrix
-subtitle: Impact vs. Effort Analysis
+        val editModeContent = """
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Quadrant Chart Editor</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    .container { max-width: 1200px; margin: 0 auto; }
+                    .editor { display: flex; gap: 20px; }
+                    .input-panel { flex: 1; }
+                    .preview-panel { flex: 1; }
+                    textarea { width: 100%; height: 400px; font-family: monospace; }
+                    button { padding: 10px 20px; margin: 5px; }
+                    .preview { border: 1px solid #ccc; min-height: 400px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Quadrant Chart Editor</h1>
+                    <div class="editor">
+                        <div class="input-panel">
+                            <h3>Input Data</h3>
+                            <textarea id="payload" placeholder="Enter your quadrant data in table or JSON format...">
+title: Product Feature Priority Matrix
+subtitle: Q4 2024 Planning Session
+xAxisLabel: Implementation Effort (Days)
+yAxisLabel: Business Impact Score
+q1label: Quick Wins
+q2label: Major Projects
+q3label: Fill-ins
+q4label: Thankless Tasks
 ---
-Label | X | Y | Size | Color | Description
-Feature A | 75 | 80 | 8 | #10b981 | High impact, low effort
-Feature B | 30 | 85 | 10 | #3b82f6 | High impact, high effort
-Feature C | 20 | 30 | 7 | #f59e0b | Low impact, low effort
-Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort</textarea>
-                        </div>
-                        <div class="w-full md:w-1/2 px-2 mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="scaleInput">
-                                Scale
-                            </label>
-                            <input id="scaleInput" type="number" min="0.1" max="2" step="0.1" value="1.0" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div class="w-full md:w-1/2 px-2 mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="darkModeCheckbox">
-                                Dark Mode
-                            </label>
-                            <div class="flex items-center">
-                                <input id="darkModeCheckbox" type="checkbox" class="form-checkbox h-5 w-5 text-blue-600">
-                                <span class="ml-2 text-gray-700">Enable Dark Mode</span>
+| Label | X | Y | Category |
+|-------|---|---|----------|
+| User Authentication | 15 | 85 | security |
+| Mobile App | 45 | 90 | mobile |
+| Dark Mode | 8 | 70 | ui |
+| Database Migration | 30 | 40 | infrastructure |
+| Bug Fixes | 5 | 30 | maintenance |
+                            </textarea>
+                            <div>
+                                <button onclick="generateChart()">Generate Chart</button>
+                                <button onclick="clearInput()">Clear</button>
                             </div>
                         </div>
+                        <div class="preview-panel">
+                            <h3>Preview</h3>
+                            <div id="preview" class="preview"></div>
+                        </div>
                     </div>
-                    <div class="flex justify-end">
-                        <button id="generateQuadrantButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Generate Quadrant Chart
-                        </button>
-                    </div>
                 </div>
-                <div id="quadrantResult" class="mt-4 border rounded-lg p-4 min-h-64 flex items-center justify-center">
-                    <p class="text-gray-500">Quadrant chart will appear here...</p>
-                </div>
-                <div class="mt-4">
-                    <h3 class="text-lg font-semibold mb-2">How to Use</h3>
-                    <p class="text-gray-700 mb-2">Enter your quadrant data in the text area above. You can use the following format:</p>
-                    <pre class="bg-gray-100 p-2 rounded text-sm mb-2">
-title: Your Chart Title
-subtitle: Your Chart Subtitle
-q1Label: Custom Q1 Label
-q2Label: Custom Q2 Label
-q3Label: Custom Q3 Label
-q4Label: Custom Q4 Label
-q1Description: Custom Q1 Description
-q2Description: Custom Q2 Description
-q3Description: Custom Q3 Description
-q4Description: Custom Q4 Description
----
-Label | X | Y | Size | Color | Description
-Item 1 | 75 | 80 | 8 | #10b981 | Description for Item 1
-Item 2 | 30 | 85 | 10 | #3b82f6 | Description for Item 2
-                    </pre>
-                    <p class="text-gray-700">
-                        <strong>X and Y values:</strong> Range from 0 to 100, where X represents effort (0 = low, 100 = high) and Y represents impact (0 = low, 100 = high).<br>
-                        <strong>Size:</strong> Optional. Size of the data point (default is 8).<br>
-                        <strong>Color:</strong> Optional. Hex color code for the data point.<br>
-                        <strong>Description:</strong> Optional. Additional description for the data point.
-                    </p>
-                </div>
-            </div>
-            <script>
-                document.getElementById('generateQuadrantButton').addEventListener('click', function() {
-                    const quadrantInput = document.getElementById('quadrantInput').value;
-                    const scale = document.getElementById('scaleInput').value;
-                    const useDark = document.getElementById('darkModeCheckbox').checked;
-                    const quadrantResult = document.getElementById('quadrantResult');
-
-                    quadrantResult.innerHTML = '<p class="text-gray-500">Generating quadrant chart...</p>';
-
-                    // Compress and encode the input
-                    const compressedInput = btoa(quadrantInput);
-
-                    // Make the API request
-                    fetch('api/docops/svg?kind=quadrant&payload=' + encodeURIComponent(compressedInput) + '&scale=' + scale + '&useDark=' + useDark)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.text();
-                        })
-                        .then(data => {
-                            quadrantResult.innerHTML = data;
-                        })
-                        .catch(error => {
-                            quadrantResult.innerHTML = '<p class="text-red-500">Error: ' + error.message + '</p>';
-                        });
-                });
-            </script>
+                
+                <script>
+                    function generateChart() {
+                        const payload = document.getElementById('payload').value;
+                        const encodedPayload = encodeURIComponent(payload);
+                        const url = `/extension/api/quadrant/?payload=${'$'}{encodedPayload}&scale=1.0&useDark=false`;
+                        
+                        fetch(url)
+                            .then(response => response.arrayBuffer())
+                            .then(data => {
+                                const blob = new Blob([data], { type: 'image/svg+xml' });
+                                const url = URL.createObjectURL(blob);
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.style.maxWidth = '100%';
+                                const preview = document.getElementById('preview');
+                                preview.innerHTML = '';
+                                preview.appendChild(img);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                document.getElementById('preview').innerHTML = '<p>Error generating chart</p>';
+                            });
+                    }
+                    
+                    function clearInput() {
+                        document.getElementById('payload').value = '';
+                        document.getElementById('preview').innerHTML = '';
+                    }
+                </script>
+            </body>
+            </html>
         """.trimIndent()
 
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.TEXT_HTML
-        return ResponseEntity(editModeHtml, headers, HttpStatus.OK)
+        return ResponseEntity.ok()
+            .contentType(MediaType.TEXT_HTML)
+            .body(editModeContent)
     }
 
     /**
@@ -135,17 +129,105 @@ Item 2 | 30 | 85 | 10 | #3b82f6 | Description for Item 2
     @GetMapping("/view-mode")
     @ResponseBody
     fun getViewMode(): ResponseEntity<String> {
-        val viewModeHtml = """
-            <div id="quadrantContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                <object data="images/quad1.svg" type="image/svg+xml" height="100%" width="100%">
-                <img src="images/quad1.svg" alt="Quadrant Chart" class="max-h-full max-w-full" />
-                </object>
-            </div>
+        val viewModeContent = """
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Quadrant Chart Viewer</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
+                    .container { max-width: 1000px; margin: 0 auto; }
+                    .chart-container { margin: 20px 0; }
+                    .controls { margin: 20px 0; }
+                    button { padding: 10px 20px; margin: 5px; }
+                    input { margin: 5px; padding: 5px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Quadrant Chart Viewer</h1>
+                    <div class="controls">
+                        <input type="file" id="fileInput" accept=".json,.txt" onchange="loadFile()">
+                        <button onclick="loadSample()">Load Sample</button>
+                        <label>
+                            <input type="checkbox" id="darkMode" onchange="updateChart()"> Dark Mode
+                        </label>
+                        <label>
+                            Scale: <input type="range" id="scaleSlider" min="0.5" max="2.0" step="0.1" value="1.0" onchange="updateChart()">
+                            <span id="scaleValue">1.0</span>
+                        </label>
+                    </div>
+                    <div id="chartContainer" class="chart-container">
+                        <p>Load a file or use the sample to view a quadrant chart</p>
+                    </div>
+                </div>
+                
+                <script>
+                    let currentPayload = '';
+                    
+                    function loadFile() {
+                        const file = document.getElementById('fileInput').files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                currentPayload = e.target.result;
+                                updateChart();
+                            };
+                            reader.readAsText(file);
+                        }
+                    }
+                    
+                    function loadSample() {
+                        currentPayload = `title: Strategic Priority Matrix
+xAxisLabel: Effort Required
+yAxisLabel: Impact Level
+---
+| Label | X | Y |
+|-------|---|---|
+| Quick Win 1 | 20 | 80 |
+| Major Project | 80 | 90 |
+| Low Priority | 30 | 30 |
+| Avoid This | 90 | 20 |`;
+                        updateChart();
+                    }
+                    
+                    function updateChart() {
+                        if (!currentPayload) return;
+                        
+                        const scale = document.getElementById('scaleSlider').value;
+                        const useDark = document.getElementById('darkMode').checked;
+                        document.getElementById('scaleValue').textContent = scale;
+                        
+                        const encodedPayload = encodeURIComponent(currentPayload);
+                        const url = `/extension/api/quadrant/?payload=${'$'}{encodedPayload}&scale=${'$'}{scale}&useDark=${'$'}{useDark}`;
+                        
+                        fetch(url)
+                            .then(response => response.arrayBuffer())
+                            .then(data => {
+                                const blob = new Blob([data], { type: 'image/svg+xml' });
+                                const url = URL.createObjectURL(blob);
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.style.maxWidth = '100%';
+                                const container = document.getElementById('chartContainer');
+                                container.innerHTML = '';
+                                container.appendChild(img);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                document.getElementById('chartContainer').innerHTML = '<p>Error loading chart</p>';
+                            });
+                    }
+                </script>
+            </body>
+            </html>
         """.trimIndent()
 
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.TEXT_HTML
-        return ResponseEntity(viewModeHtml, headers, HttpStatus.OK)
+        return ResponseEntity.ok()
+            .contentType(MediaType.TEXT_HTML)
+            .body(viewModeContent)
     }
 
     /**
@@ -157,56 +239,37 @@ Item 2 | 30 | 85 | 10 | #3b82f6 | Description for Item 2
     @Counted(value="docops.quadrant.put", description="Creating a Quadrant Chart using http put")
     @Timed(value = "docops.quadrant.put", description="Creating a Quadrant Chart using http put", percentiles=[0.5, 0.9])
     fun makeQuadrant(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
-        val timings = measureTimedValue {
-            var contents = httpServletRequest.getParameter("content")
-            var title = "title"
-            if (contents.isNullOrEmpty()) {
-                contents = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
-                title = httpServletRequest.getParameter("title") ?: ""
+        val (svg, duration) = measureTimedValue {
+            try {
+                val body = StreamUtils.copyToString(httpServletRequest.inputStream, Charset.defaultCharset())
+                log.info { "Received quadrant request with body length: ${body.length}" }
+                fromRequestToQuadrant(body, 1.0f, false)
+            } catch (e: Exception) {
+                log.error(e) { "Error processing quadrant chart request" }
+                throw e
             }
-            var scale = httpServletRequest.getParameter("scale")
-            if(scale.isNullOrEmpty()) {
-                scale = "1.0"
-            }
-            val useDarkInput = httpServletRequest.getParameter("useDark")
-            val svg = fromRequestToQuadrant(contents = contents, scale = scale.toFloat(), useDark = "on" == useDarkInput, title = title)
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("text/html")
-            val div = """
-                <div id='imageblock'>
-                $svg
-                </div>
-                <div class="collapse-content">
-                    <h3>Quadrant Source</h3>
-                    <div>
-                    <pre>
-                    <code class="json">
-                     $contents
-                    </code>
-                    </pre>
-                    </div>
-                    <script>
-                    var quadrantSource = `[quadrant,scale="0.7",role="center"]\n----\n${contents}\n----`;
-                    document.querySelectorAll('pre code').forEach((el) => {
-                        hljs.highlightElement(el);
-                    });
-                    </script>
-                </div>
-            """.lines().joinToString(transform = String::trim, separator = "\n")
-            ResponseEntity(div.toByteArray(), headers, HttpStatus.OK)
         }
-        log.info{"makeQuadrant executed in ${timings.duration.inWholeMilliseconds}ms "}
-        return timings.value
+
+        log.info { "Generated quadrant chart in ${duration.inWholeMilliseconds}ms" }
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("image/svg+xml"))
+            .body(svg.toByteArray())
     }
 
     /**
-     * Converts the request payload to a quadrant chart and generates the SVG.
+     * Converts the request payload to a quadrant chart and generates the SVG using QuadrantChartGenerator.
      */
     fun fromRequestToQuadrant(contents: String, scale: Float, useDark: Boolean, title: String = ""): String {
-        val handler = QuadrantHandler()
-        val response = handler.fromRequestToQuadrant(contents, scale = scale, useDark = useDark, title = title)
-        return response.shapeSvg
+        val context = DocOpsContext(
+            type = "SVG",
+            scale = scale.toString(),
+            useDark = useDark,
+            title = title,
+            backend = "html"
+        )
+
+        return quadrantHandler.handleSVG(contents, context)
     }
 
     /**
@@ -226,30 +289,62 @@ Item 2 | 30 | 85 | 10 | #3b82f6 | Description for Item 2
         @RequestParam(name = "numChars", defaultValue = "24") numChars: String,
         @RequestParam(name = "backend", defaultValue = "html") backend: String
     ): ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val svg = fromRequestToQuadrant(data, scale = scale.toFloat(), useDark = useDark, title = title)
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+        val (svg, duration) = measureTimedValue {
+            try {
+                val decodedPayload = URLDecoder.decode(payload, "UTF-8")
+                val uncompressedPayload = uncompressString(decodedPayload)
+                log.info { "Processing quadrant GET request with payload length: ${uncompressedPayload.length}" }
+
+                val context = DocOpsContext(
+                    type = type,
+                    scale = scale,
+                    useDark = useDark,
+                    title = title,
+                    backend = backend
+                )
+
+                quadrantHandler.handleSVG(uncompressedPayload, context)
+            } catch (e: Exception) {
+                log.error(e) { "Error processing quadrant chart GET request" }
+                throw e
+            }
         }
-        log.info{"getQuadrant executed in ${timing.duration.inWholeMilliseconds}ms "}
-        return timing.value
+
+        log.info { "Generated quadrant chart in ${duration.inWholeMilliseconds}ms" }
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("image/svg+xml"))
+            .body(svg.toByteArray())
     }
 
+    /**
+     * Handles form submission for editing quadrant charts.
+     */
     @PostMapping("")
-    fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
-        val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val handler = QuadrantHandler()
-            val response = handler.fromRequestToQuadrant(data, 0.6f, useDark = false, title = "title")
-            val headers = HttpHeaders()
-            headers.cacheControl = CacheControl.noCache().headerValue
-            headers.contentType = MediaType.parseMediaType("image/svg+xml")
-            ResponseEntity(response.shapeSvg.toByteArray(), headers, HttpStatus.OK)
+    fun editFormSubmission(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
+        val (svg, duration) = measureTimedValue {
+            try {
+                log.info { "Processing quadrant POST request with payload length: ${payload.length}" }
+
+                val context = DocOpsContext(
+                    type = "SVG",
+                    scale = "1.0",
+                    useDark = false,
+                    title = "",
+                    backend = "html"
+                )
+
+                quadrantHandler.handleSVG(payload, context)
+            } catch (e: Exception) {
+                log.error(e) { "Error processing quadrant chart POST request" }
+                throw e
+            }
         }
-        log.info{"editFormSubmission executed in ${timing.duration.inWholeMilliseconds}ms "}
-        return timing.value
+
+        log.info { "Generated quadrant chart from form submission in ${duration.inWholeMilliseconds}ms" }
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("image/svg+xml"))
+            .body(svg.toByteArray())
     }
 }
