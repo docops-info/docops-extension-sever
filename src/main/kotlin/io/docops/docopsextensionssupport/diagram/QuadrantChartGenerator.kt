@@ -74,48 +74,64 @@ class QuadrantChartGenerator {
 
         // Add overall background with iOS-style rounded corners
         element("rect", mapOf(
-            "x" to 30,  // Keep as Int since it's a literal
-            "y" to 30,  // Keep as Int since it's a literal
-            "width" to (config.width - 60),  // Both Int - works fine
-            "height" to (config.height - 60), // Both Int - works fine
+            "x" to 30,
+            "y" to 30,
+            "width" to (config.width - 60),
+            "height" to (config.height - 60),
             "class" to "chart-background",
             "filter" to "url(#ios-shadow)"
         ))
 
         group(mapOf("class" to "quadrant-backgrounds")) {
-            // Top-left quadrant (Critical)
+            // Top-left quadrant (High Impact, Low Effort) - Light Green
             element("rect", mapOf(
                 "x" to config.margin,
                 "y" to config.margin,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
+                "stroke" to "rgba(255,255,255,0.5)",
+                "stroke-width" to 1,
+                "rx" to 16,
+                "ry" to 16,
                 "class" to "quadrant-bg quadrant-top-left"
             ))
 
-            // Top-right quadrant (High Priority)
+            // Top-right quadrant (High Impact, High Effort) - Soft Blue
             element("rect", mapOf(
                 "x" to centerX,
                 "y" to config.margin,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
+                "stroke" to "rgba(255,255,255,0.5)",
+                "stroke-width" to 1,
+                "rx" to 16,
+                "ry" to 16,
                 "class" to "quadrant-bg quadrant-top-right"
             ))
 
-            // Bottom-left quadrant (Low Priority)
+            // Bottom-left quadrant (Low Impact, Low Effort) - Soft Yellow
             element("rect", mapOf(
                 "x" to config.margin,
                 "y" to centerY,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
+                "stroke" to "rgba(255,255,255,0.5)",
+                "stroke-width" to 1,
+                "rx" to 16,
+                "ry" to 16,
                 "class" to "quadrant-bg quadrant-bottom-left"
             ))
 
-            // Bottom-right quadrant (Medium Priority)
+            // Bottom-right quadrant (Low Impact, High Effort) - Light Red
             element("rect", mapOf(
                 "x" to centerX,
                 "y" to centerY,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
+                "stroke" to "rgba(255,255,255,0.5)",
+                "stroke-width" to 1,
+                "rx" to 16,
+                "ry" to 16,
                 "class" to "quadrant-bg quadrant-bottom-right"
             ))
         }
@@ -387,12 +403,11 @@ class QuadrantChartGenerator {
             stroke-width: 2;
             cursor: pointer;
             filter: url(#ios-shadow);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: filter 0.3s ease, stroke-width 0.3s ease;
         }
 
         .data-point:hover {
             filter: url(#glow);
-            transform: scale(1.15);
             stroke-width: 3;
         }
 
@@ -412,17 +427,15 @@ class QuadrantChartGenerator {
         .point-group .point-label,
         .point-group .point-category,
         .point-group .point-label-card {
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform: translateY(5px);
+            opacity: 1;
+            transition: filter 0.3s ease;
             pointer-events: none;
         }
 
         .point-group:hover .point-label,
         .point-group:hover .point-category,
         .point-group:hover .point-label-card {
-            opacity: 1;
-            transform: translateY(0);
+            filter: url(#ios-shadow);
         }
 
         .point-label {
@@ -479,11 +492,12 @@ class QuadrantChartGenerator {
             .point-group:hover .point-label,
             .point-group:hover .point-category,
             .point-group:hover .point-label-card {
-                opacity: 1;
+                filter: none !important;
             }
 
             .data-point:hover {
-                transform: scale(1.05) !important;
+                filter: none !important;
+                stroke-width: 3;
             }
         }
     ]]>
