@@ -37,6 +37,9 @@ class ScoreCardParser {
         // Parse summary
         val summary = parseSummary(sections["summary"] ?: "")
 
+        // Parse team members
+        val teamMembers = parseTeamMembers(sections["team"] ?: "")
+
         // Create and return the MigrationScoreCard
         return MigrationScoreCard(
             title = config["title"] ?: "Migration ScoreCard",
@@ -44,12 +47,9 @@ class ScoreCardParser {
             headerTitle = config["headerTitle"] ?: "",
             beforeSection = beforeSection,
             afterSection = afterSection,
-            performanceMetrics = metricsCategories,
-            keyOptimizations = optimizations,
-            migrationSummary = summary,
-            footerText = sections["footer"] ?: "",
             scale = config["scale"]?.toFloatOrNull() ?: 1.0f,
-            theme = parseTheme(config)
+            theme = parseTheme(config),
+            teamMembers = teamMembers
         )
     }
 
@@ -239,7 +239,6 @@ class ScoreCardParser {
 
                         categories.add(MetricCategory(
                             title = categoryName,
-                            borderColor = categoryColor,
                             headerColor = categoryColor, // or derive from borderColor
                             metrics = metrics
                         ))
@@ -317,7 +316,7 @@ class ScoreCardParser {
 
         // If there are no lines, return a default summary
         if (lines.isEmpty()) {
-            return MigrationSummary(0, "Unknown", emptyList())
+            return MigrationSummary( "Unknown")
         }
 
         // Process the first line to extract the overall improvement and status
@@ -329,12 +328,10 @@ class ScoreCardParser {
             val highlights = if (parts.size > 2) parts.subList(2, parts.size) else emptyList()
 
             MigrationSummary(
-                overallImprovement = parts[0].toIntOrNull() ?: 0,
-                status = parts[1],
-                highlights = highlights
+                status = parts[1]
             )
         } else {
-            MigrationSummary(0, "Unknown", emptyList())
+            MigrationSummary("Unknown",)
         }
     }
     /**
@@ -347,10 +344,44 @@ class ScoreCardParser {
         return MigrationScoreCardTheme(
             backgroundColor = config["backgroundColor"] ?: "#f8f9fa",
             titleColor = config["titleColor"] ?: "#2c3e50",
-            subtitleColor = config["subtitleColor"] ?: "#7f8c8d",
             headerColor = config["headerColor"] ?: "#8e44ad",
-            beforeSectionColor = config["beforeSectionColor"] ?: "#e74c3c",
-            afterSectionColor = config["afterSectionColor"] ?: "#27ae60"
         )
+    }
+
+    /**
+     * Parses team members.
+     *
+     * @param teamSection The team section content
+     * @return A list of TeamMember objects
+     */
+    private fun parseTeamMembers(teamSection: String): List<TeamMember> {
+        val teamMembers = mutableListOf<TeamMember>()
+
+        teamSection.lines().forEach { line ->
+            if (line.isNotBlank()) {
+                val parts = line.split("|").map { it.trim() }
+                if (parts.size >= 3) {
+                    teamMembers.add(
+                        TeamMember(
+                            initials = parts[0],
+                            emoji = parts[1],
+                            color = parts[2]
+                        )
+                    )
+                }
+            }
+        }
+
+        // If no team members are specified, return a default list
+        if (teamMembers.isEmpty()) {
+            return listOf(
+                TeamMember("JS", "👨‍💻", "url(#blueGradient)"),
+                TeamMember("AM", "👩‍💻", "#AF52DE"),
+                TeamMember("MK", "👨‍💻", "url(#orangeGradient)"),
+                TeamMember("SR", "👩‍💻", "url(#greenGradient)")
+            )
+        }
+
+        return teamMembers
     }
 }

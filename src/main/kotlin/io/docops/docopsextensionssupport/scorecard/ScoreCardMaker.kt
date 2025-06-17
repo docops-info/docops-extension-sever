@@ -2,11 +2,13 @@ package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.roadmap.wrapText
+import kotlin.math.max
 
 class ScoreCardMaker {
 
     /**
-     * Generates an SVG representation of the migration scorecard.
+     * Generates an SVG representation of the migration scorecard using iOS-style design.
      *
      * @param scorecard The MigrationScoreCard object
      * @param isPdf Whether the SVG is being generated for PDF output
@@ -15,18 +17,55 @@ class ScoreCardMaker {
     fun make(scorecard: MigrationScoreCard, isPdf: Boolean = false): String {
         val svg = StringBuilder()
 
-        // Add SVG header
+        // Add SVG header with iOS-style gradients and filters
         svg.append("""
-            <svg width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" viewBox="0 0 1400 1100" xmlns="http://www.w3.org/2000/svg">
-                <!-- Background -->
-                <rect width="1400" height="1100" fill="${scorecard.theme.backgroundColor}"/>
+            <svg width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" xmlns="http://www.w3.org/2000/svg">
+                <!-- iOS-style background with subtle gradient -->
+                <defs>
+                    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- iOS-style shadows -->
+                    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/>
+                    </filter>
+
+                    <filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
+                    </filter>
+
+                    <!-- iOS System Blue gradient -->
+                    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- iOS System Green gradient -->
+                    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#30D158;stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- iOS System Red -->
+                    <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- iOS System Orange -->
+                    <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+
+                <rect width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" fill="url(#bgGradient)"/>
         """.trimIndent())
 
         // Add title and subtitle
         svg.append(generateTitle(scorecard))
-
-        // Add header
-        svg.append(generateHeader(scorecard))
 
         // Add before section
         svg.append(generateBeforeSection(scorecard))
@@ -37,20 +76,11 @@ class ScoreCardMaker {
         // Add after section
         svg.append(generateAfterSection(scorecard))
 
-        // Add performance metrics section
-        svg.append(generatePerformanceMetricsSection(scorecard))
+        // Add key improvements summary
+        svg.append(generateKeyImprovements(scorecard))
 
-        // Add metrics grid
-        svg.append(generateMetricsGrid(scorecard))
-
-        // Add key optimizations
-        svg.append(generateKeyOptimizations(scorecard))
-
-        // Add migration summary
-        svg.append(generateMigrationSummary(scorecard))
-
-        // Add footer
-        svg.append(generateFooter(scorecard))
+        // Add team avatars
+        svg.append(generateTeamAvatars(scorecard))
 
         // Close SVG
         svg.append("</svg>")
@@ -59,16 +89,23 @@ class ScoreCardMaker {
     }
 
     /**
-     * Generates the title and subtitle section of the SVG.
+     * Generates the iOS-style title and subtitle section of the SVG.
      *
      * @param scorecard The MigrationScoreCard object
      * @return The SVG fragment as a string
      */
     private fun generateTitle(scorecard: MigrationScoreCard): String {
         return """
-            <!-- Title and Subtitle -->
-            <text x="700" y="50" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="${scorecard.theme.titleColor}">${(scorecard.title.escapeXml())}</text>
-            <text x="700" y="80" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="${scorecard.theme.subtitleColor}">${(scorecard.subtitle.escapeXml())}</text>
+            <!-- iOS-style title -->
+            <text x="${scorecard.calcWidth() / 2}" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif"
+                  font-size="24" font-weight="600" fill="#1D1D1F">
+                ${(scorecard.title.escapeXml())}
+            </text>
+
+            <text x="${scorecard.calcWidth() / 2}" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                  font-size="17" font-weight="400" fill="#86868B">
+                ${(scorecard.subtitle.escapeXml())}
+            </text>
         """.trimIndent()
     }
 
@@ -87,7 +124,7 @@ class ScoreCardMaker {
     }
 
     /**
-     * Generates the before section of the SVG.
+     * Generates the iOS-style before section of the SVG.
      *
      * @param scorecard The MigrationScoreCard object
      * @return The SVG fragment as a string
@@ -96,62 +133,129 @@ class ScoreCardMaker {
         val beforeSection = scorecard.beforeSection
         val svg = StringBuilder()
 
-        // Before section header
+        // Before Card - iOS style with shadow
         svg.append("""
-            <!-- Before Section -->
-            <rect x="50" y="170" width="500" height="40" rx="5" fill="${scorecard.theme.beforeSectionColor}"/>
-            <text x="300" y="197" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">${(beforeSection.title.escapeXml())}</text>
+            <!-- Before Card -->
+            <g>
+                <rect x="40" y="100" width="300" height="380" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
+
+                <!-- Before Header -->
+                <rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/>
+                <text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="16" font-weight="600" fill="white">
+                    ${(beforeSection.title.escapeXml())}
+                </text>
         """.trimIndent())
 
-        // Before section items
+        // Legacy issues
         svg.append("""
-            <rect x="50" y="210" width="500" height="${60 + beforeSection.items.size * 60}" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+                <!-- Legacy issues -->
+                <g transform="translate(80, 190)">
         """.trimIndent())
 
-        // Add items
-        beforeSection.items.forEachIndexed { index, item ->
-            val y = 240 + index * 60
+        // Add items with iOS-style
+        var currentY = 0
+        beforeSection.items.forEach { item ->
             val statusColor = when (item.status) {
-                "critical" -> "#e74c3c"
-                "warning" -> "#f39c12"
-                "good" -> "#2ecc71"
+                "critical" -> "url(#redGradient)"
+                "warning" -> "url(#orangeGradient)"
+                "good" -> "url(#greenGradient)"
                 else -> "#cccccc"
             }
 
+            val emoji = when (item.statusIcon) {
+                "!" -> "⚠️"
+                "$" -> "💰"
+                "✓" -> "✅"
+                else -> item.statusIcon
+            }
+
+            // Wrap title and description text
+            val titleLines = wrapText(item.title, 20f)
+            val descLines = wrapText(item.description, 25f)
+
+            // Calculate y position for this item
+            val y = currentY
+
+            // Add circle and emoji
             svg.append("""
-                <text x="70" y="${y}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${(item.title.escapeXml())}</text>
-                <text x="70" y="${y + 20}" font-family="Arial, sans-serif" font-size="14" fill="#666">${(item.description.escapeXml())}</text>
-                <circle cx="520" cy="${y - 5}" r="15" fill="${statusColor}"/>
-                <text x="520" y="${y}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">${(item.statusIcon.escapeXml())}</text>
+                    <!-- ${item.title} -->
+                    <circle cx="12" cy="${y + 12}" r="8" fill="${statusColor}" opacity="0.15"/>
+                    <text x="12" y="${y + 17}" text-anchor="middle" font-size="10" fill="${statusColor}">${emoji}</text>
             """.trimIndent())
+
+            // Add title with multiple lines if needed
+            svg.append("""
+                    <text x="30" y="${y + 12}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                          font-size="15" font-weight="500" fill="#1D1D1F">
+            """.trimIndent())
+
+            titleLines.forEachIndexed { i, line ->
+                val lineY = if (i == 0) 0 else 18
+                svg.append("""
+                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+                """.trimIndent())
+            }
+
+            svg.append("</text>")
+
+            // Calculate y position for description based on number of title lines
+            val descY = y + 12 + (titleLines.size * 18)
+
+            // Add description with multiple lines if needed
+            svg.append("""
+                    <text x="30" y="${descY}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                          font-size="13" font-weight="400" fill="#86868B">
+            """.trimIndent())
+
+            descLines.forEachIndexed { i, line ->
+                val lineY = if (i == 0) 0 else 16
+                svg.append("""
+                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+                """.trimIndent())
+            }
+
+            svg.append("</text>")
+
+            // Update currentY for next item
+            currentY = y + 30 + (titleLines.size * 18) + (descLines.size * 16)
         }
 
-        // Performance baseline
+        svg.append("""
+                </g>
+        """.trimIndent())
+
+        // Legacy score indicator
         val baseline = beforeSection.performanceBaseline
         svg.append("""
-            <rect x="50" y="${210 + 60 + beforeSection.items.size * 60}" width="500" height="60" rx="5" fill="${baseline.color}" opacity="0.9"/>
-            <text x="70" y="${240 + 60 + beforeSection.items.size * 60}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">${(baseline.label.escapeXml())}</text>
-            <text x="500" y="${240 + 60 + beforeSection.items.size * 60}" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="end" fill="white">${baseline.percentage}%</text>
+                <!-- Legacy score indicator -->
+                <text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="12" font-weight="600" fill="#86868B">${(baseline.label.escapeXml())}</text>
+            </g>
         """.trimIndent())
 
         return svg.toString()
     }
 
     /**
-     * Generates the migration arrow between the before and after sections.
+     * Generates the iOS-style upgrade arrow between the before and after sections.
      *
      * @return The SVG fragment as a string
      */
     private fun generateMigrationArrow(): String {
         return """
-            <!-- Migration Arrow -->
-            <path d="M 570 300 L 830 300" stroke="#666" stroke-width="3" stroke-dasharray="10,5"/>
-            <polygon points="830,300 820,295 820,305" fill="#666"/>
+            <!-- iOS-style upgrade arrow -->
+            <g transform="translate(400, 290)">
+                <circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/>
+                <path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text>
+            </g>
         """.trimIndent()
     }
 
     /**
-     * Generates the after section of the SVG.
+     * Generates the iOS-style after section of the SVG.
      *
      * @param scorecard The MigrationScoreCard object
      * @return The SVG fragment as a string
@@ -160,225 +264,168 @@ class ScoreCardMaker {
         val afterSection = scorecard.afterSection
         val svg = StringBuilder()
 
-        // After section header
+        // After Card - iOS style with shadow
         svg.append("""
-            <!-- After Section -->
-            <rect x="850" y="170" width="500" height="40" rx="5" fill="${scorecard.theme.afterSectionColor}"/>
-            <text x="1100" y="197" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">${(afterSection.title.escapeXml())}</text>
+            <!-- After Card -->
+            <g>
+                <rect x="460" y="100" width="300" height="380" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
+
+                <!-- After Header -->
+                <rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/>
+                <text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="16" font-weight="600" fill="white">
+                    ${(afterSection.title.escapeXml())}
+                </text>
         """.trimIndent())
 
-        // After section items
+        // Modern improvements
         svg.append("""
-            <rect x="850" y="210" width="500" height="${60 + afterSection.items.size * 60}" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+                <!-- Modern improvements -->
+                <g transform="translate(500, 190)">
         """.trimIndent())
 
-        // Add items
-        afterSection.items.forEachIndexed { index, item ->
-            val y = 240 + index * 60
+        // Add items with iOS-style
+        var currentY = 0
+        afterSection.items.forEach { item ->
             val statusColor = when (item.status) {
-                "critical" -> "#e74c3c"
-                "warning" -> "#f39c12"
-                "good" -> "#2ecc71"
+                "critical" -> "url(#redGradient)"
+                "warning" -> "url(#orangeGradient)"
+                "good" -> "url(#greenGradient)"
                 else -> "#cccccc"
             }
 
+            val emoji = when (item.statusIcon) {
+                "!" -> "⚠️"
+                "$" -> "💰"
+                "✓" -> "✅"
+                else -> item.statusIcon
+            }
+
+            // Wrap title and description text
+            val titleLines = wrapText(item.title, 20f)
+            val descLines = wrapText(item.description, 25f)
+
+            // Calculate y position for this item
+            val y = currentY
+
+            // Add circle and emoji
             svg.append("""
-                <text x="870" y="${y}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${(item.title.escapeXml())}</text>
-                <text x="870" y="${y + 20}" font-family="Arial, sans-serif" font-size="14" fill="#666">${(item.description.escapeXml())}</text>
-                <circle cx="1320" cy="${y - 5}" r="15" fill="${statusColor}"/>
-                <text x="1320" y="${y}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">${(item.statusIcon.escapeXml())}</text>
+                    <!-- ${item.title} -->
+                    <circle cx="12" cy="${y + 12}" r="8" fill="${statusColor}" opacity="0.15"/>
+                    <text x="12" y="${y + 17}" text-anchor="middle" font-size="10" fill="${statusColor}">${emoji}</text>
             """.trimIndent())
+
+            // Add title with multiple lines if needed
+            svg.append("""
+                    <text x="30" y="${y + 12}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                          font-size="15" font-weight="500" fill="#1D1D1F">
+            """.trimIndent())
+
+            titleLines.forEachIndexed { i, line ->
+                val lineY = if (i == 0) 0 else 18
+                svg.append("""
+                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+                """.trimIndent())
+            }
+
+            svg.append("</text>")
+
+            // Calculate y position for description based on number of title lines
+            val descY = y + 12 + (titleLines.size * 18)
+
+            // Add description with multiple lines if needed
+            svg.append("""
+                    <text x="30" y="${descY}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                          font-size="13" font-weight="400" fill="#86868B">
+            """.trimIndent())
+
+            descLines.forEachIndexed { i, line ->
+                val lineY = if (i == 0) 0 else 16
+                svg.append("""
+                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+                """.trimIndent())
+            }
+
+            svg.append("</text>")
+
+            // Update currentY for next item
+            currentY = y + 30 + (titleLines.size * 18) + (descLines.size * 16)
         }
 
-        // Performance improvement
+        svg.append("""
+                </g>
+        """.trimIndent())
+
+        // Modern score indicator
         val improvement = afterSection.performanceImprovement
         svg.append("""
-            <rect x="850" y="${210 + 60 + afterSection.items.size * 60}" width="500" height="60" rx="5" fill="${improvement.color}" opacity="0.9"/>
-            <text x="870" y="${240 + 60 + afterSection.items.size * 60}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">${(improvement.label.escapeXml())}</text>
-            <text x="1300" y="${240 + 60 + afterSection.items.size * 60}" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="end" fill="white">${improvement.percentage}%</text>
+                <!-- Modern score indicator -->
+                <text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="12" font-weight="600" fill="#86868B">${(improvement.label.escapeXml())}</text>
+            </g>
         """.trimIndent())
 
         return svg.toString()
     }
 
+
+
     /**
-     * Generates the performance metrics section of the SVG.
+     * Generates the iOS-style key improvements summary section.
      *
      * @param scorecard The MigrationScoreCard object
      * @return The SVG fragment as a string
      */
-    private fun generatePerformanceMetricsSection(scorecard: MigrationScoreCard): String {
+    private fun generateKeyImprovements(scorecard: MigrationScoreCard): String {
         return """
-            <!-- Performance Metrics Header -->
-            <rect x="50" y="500" width="1300" height="40" rx="5" fill="#34495e"/>
-            <text x="700" y="527" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Performance Metrics &amp; Improvements</text>
+            <!-- Key improvements summary -->
+            <g transform="translate(200, 500)">
+                <rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/>
+                <text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text>
+                <text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text>
+            </g>
         """.trimIndent()
     }
 
     /**
-     * Generates the metrics grid section of the SVG.
+     * Generates the iOS-style team avatars section.
      *
      * @param scorecard The MigrationScoreCard object
      * @return The SVG fragment as a string
      */
-    private fun generateMetricsGrid(scorecard: MigrationScoreCard): String {
+    private fun generateTeamAvatars(scorecard: MigrationScoreCard): String {
         val svg = StringBuilder()
 
-        // Calculate grid layout
-        val numCategories = scorecard.performanceMetrics.size
-        val categoriesPerRow = 2
-        val numRows = (numCategories + categoriesPerRow - 1) / categoriesPerRow
+        svg.append("""
+            <!-- iOS-style team avatars with initials -->
+            <g transform="translate(260, 565)">
+        """.trimIndent())
 
-        // Add metrics grid
-        svg.append("<!-- Metrics Grid -->")
+        // Calculate the number of team members to display (max 4)
+        val teamMembers = scorecard.teamMembers.take(4)
 
-        scorecard.performanceMetrics.forEachIndexed { index, category ->
-            val row = index / categoriesPerRow
-            val col = index % categoriesPerRow
+        // Generate avatars for each team member
+        teamMembers.forEachIndexed { index, member ->
+            val x = 40 + (index * 60) // 60 pixels between avatars
 
-            val x = 50 + col * 650
-            val y = 550 + row * 180
-
-            // Category box
             svg.append("""
-                <rect x="${x}" y="${y}" width="630" height="170" rx="5" fill="white" stroke="${category.borderColor}" stroke-width="2"/>
-                <rect x="${x}" y="${y}" width="630" height="40" rx="5" fill="${category.headerColor}"/>
-                <text x="${x + 315}" y="${y + 27}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">${(category.title.escapeXml())}</text>
+                <!-- Team member ${index + 1} -->
+                <circle cx="${x}" cy="25" r="18" fill="${member.color}" filter="url(#lightShadow)"/>
+                <text x="${x}" y="31" text-anchor="middle" font-size="16">${member.emoji}</text>
+                <text x="${x}" y="52" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                      font-size="12" font-weight="500" fill="#86868B">${member.initials}</text>
             """.trimIndent())
 
-            // Metrics
-            category.metrics.forEachIndexed { metricIndex, metric ->
-                val metricX = x + 20 + (metricIndex % 3) * 200
-                val metricY = y + 70 + (metricIndex / 3) * 40
-
-                svg.append("""
-                    <text x="${metricX}" y="${metricY}" font-family="Arial, sans-serif" font-size="14" fill="#333">${(metric.label.escapeXml())}</text>
-                    <text x="${metricX}" y="${metricY + 20}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${(metric.value.escapeXml())}</text>
-                """.trimIndent())
+            // Add a newline between team members for better readability in the SVG
+            if (index < teamMembers.size - 1) {
+                svg.append("\n\n")
             }
         }
 
-        return svg.toString()
-    }
-
-    /**
-     * Generates the key optimizations section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateKeyOptimizations(scorecard: MigrationScoreCard): String {
-        val svg = StringBuilder()
-
-        // Key optimizations header
-        svg.append("""
-            <!-- Key Optimizations -->
-            <rect x="50" y="${550 + (scorecard.performanceMetrics.size + 1) / 2 * 180}" width="1300" height="40" rx="5" fill="#34495e"/>
-            <text x="700" y="${577 + (scorecard.performanceMetrics.size + 1) / 2 * 180}" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Key Optimizations</text>
-        """.trimIndent())
-
-        // Calculate rows needed for two columns
-        val itemsPerColumn = (scorecard.keyOptimizations.size + 1) / 2
-        val totalRows = Math.max(1, itemsPerColumn)
-
-        // Key optimizations content
-        svg.append("""
-            <rect x="50" y="${590 + (scorecard.performanceMetrics.size + 1) / 2 * 180}" width="1300" height="${totalRows * 60 + 20}" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
-        """.trimIndent())
-
-        // Add optimizations in two columns
-        scorecard.keyOptimizations.forEachIndexed { index, optimization ->
-            // Determine column (0 for left, 1 for right)
-            val column = index / itemsPerColumn
-            // Determine row within the column
-            val rowInColumn = index % itemsPerColumn
-
-            // Calculate x and y coordinates
-            val x = 50 + column * 650
-            val y = 620 + (scorecard.performanceMetrics.size + 1) / 2 * 180 + rowInColumn * 60
-
-            svg.append("""
-                <circle cx="${x + 30}" cy="${y}" r="20" fill="#3498db"/>
-                <text x="${x + 30}" y="${y + 5}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">${optimization.number}</text>
-                <text x="${x + 70}" y="${y}" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${(optimization.title.escapeXml())}</text>
-                <text x="${x + 70}" y="${y + 25}" font-family="Arial, sans-serif" font-size="14" fill="#666">${(optimization.description.escapeXml())}</text>
-            """.trimIndent())
-        }
+        svg.append("\n            </g>")
 
         return svg.toString()
-    }
-
-    /**
-     * Generates the migration summary section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateMigrationSummary(scorecard: MigrationScoreCard): String {
-        val summary = scorecard.migrationSummary
-        val itemsPerColumn = (scorecard.keyOptimizations.size + 1) / 2
-        val totalRows = Math.max(1, itemsPerColumn)
-        val summaryY = 610 + (scorecard.performanceMetrics.size + 1) / 2 * 180 + totalRows * 60
-
-        val statusColor = when (summary.status.uppercase()) {
-            "EXCEPTIONAL" -> "#27ae60"
-            "GOOD" -> "#2ecc71"
-            "SATISFACTORY" -> "#f39c12"
-            "NEEDS IMPROVEMENT" -> "#e74c3c"
-            else -> "#3498db"
-        }
-
-        val svg = StringBuilder()
-
-        // Summary header
-        svg.append("""
-            <!-- Migration Summary -->
-            <rect x="50" y="${summaryY}" width="1300" height="40" rx="5" fill="#34495e"/>
-            <text x="700" y="${summaryY + 27}" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">Migration Summary</text>
-        """.trimIndent())
-
-        // Summary content
-        svg.append("""
-            <rect x="50" y="${summaryY + 40}" width="1300" height="100" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
-        """.trimIndent())
-
-        // Overall improvement circle
-        svg.append("""
-            <circle cx="150" cy="${summaryY + 90}" r="50" fill="${statusColor}"/>
-            <text x="150" y="${summaryY + 90}" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">${summary.overallImprovement}%</text>
-            <text x="150" y="${summaryY + 110}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">Improvement</text>
-        """.trimIndent())
-
-        // Status
-        svg.append("""
-            <text x="250" y="${summaryY + 70}" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="${statusColor}">${(summary.status.escapeXml())}</text>
-        """.trimIndent())
-
-        // Highlights
-        summary.highlights.forEachIndexed { index, highlight ->
-            svg.append("""
-                <text x="250" y="${summaryY + 95 + index * 20}" font-family="Arial, sans-serif" font-size="14" fill="#666">• ${(highlight.escapeXml())}</text>
-            """.trimIndent())
-        }
-
-        return svg.toString()
-    }
-
-    /**
-     * Generates the footer section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateFooter(scorecard: MigrationScoreCard): String {
-        val itemsPerColumn = (scorecard.keyOptimizations.size + 1) / 2
-        val totalRows = Math.max(1, itemsPerColumn)
-        val footerY = 750 + (scorecard.performanceMetrics.size + 1) / 2 * 180 + totalRows * 60
-
-        return """
-            <!-- Footer -->
-            <rect x="50" y="${footerY}" width="1300" height="40" rx="5" fill="#f8f9fa" stroke="#ddd" stroke-width="1"/>
-            <text x="700" y="${footerY + 25}" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#666">${(scorecard.footerText.escapeXml())}</text>
-        """.trimIndent()
     }
 }

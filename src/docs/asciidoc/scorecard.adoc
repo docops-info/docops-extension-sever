@@ -15,12 +15,13 @@ The Migration ScoreCard Maker is a tool for creating visually appealing scorecar
 == Features
 
 * Dynamic SVG generation based on table-formatted input
+* iOS-style design with modern aesthetics
 * Customizable themes and colors
 * Sections for before and after states
 * Performance metrics visualization
 * Key optimizations display
 * Migration summary with overall improvement score
-* Responsive design with scaling options
+* Fixed dimensions (800x620 pixels) with scaling options
 
 == Usage
 
@@ -137,10 +138,10 @@ The ScoreCard Maker uses a simple table format for input, with sections denoted 
 |A subtitle or description
 
 |headerTitle
-|The title for the header section
+|The title for the header section (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)
 
 |scale
-|A scaling factor for the SVG (default: 1.0)
+|A scaling factor for the SVG (default: 1.0). The base dimensions are 800x620 pixels, which will be multiplied by this factor.
 
 |backgroundColor
 |Background color (default: #f8f9fa)
@@ -152,7 +153,7 @@ The ScoreCard Maker uses a simple table format for input, with sections denoted 
 |Subtitle text color (default: #7f8c8d)
 
 |headerColor
-|Header background color (default: #8e44ad)
+|Header background color (default: #8e44ad) (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)
 
 |beforeSectionColor
 |Before section header color (default: #e74c3c)
@@ -205,17 +206,21 @@ The ScoreCard Maker uses a simple table format for input, with sections denoted 
 
 For the `Status` field in `[before.items]` and `[after.items]`:
 
-* `critical` - Red indicator
-* `warning` - Yellow indicator
-* `good` - Green indicator
+* `critical` - iOS-style red gradient indicator
+* `warning` - iOS-style orange gradient indicator
+* `good` - iOS-style green gradient indicator
+
+In the new iOS-style design, these status values are displayed as subtle circular indicators with iOS system color gradients.
 
 ==== Icons
 
 Common icons used in the `Icon` field:
 
-* `!` - Exclamation mark for critical items
-* `$` - Dollar sign for cost-related items
-* `✓` - Check mark for good items
+* `!` - Converted to ⚠️ (warning emoji) in the iOS-style design
+* `$` - Converted to 💰 (money bag emoji) in the iOS-style design
+* `✓` - Converted to ✅ (check mark emoji) in the iOS-style design
+
+In the iOS-style design, these text icons are automatically converted to appropriate emojis for a more modern look.
 
 == API
 
@@ -1143,6 +1148,19 @@ Beyond the examples shown above, ScoreCards can be used for:
 9. **Compliance Improvements**: Track progress in meeting regulatory requirements.
 10. **Sustainability Initiatives**: Showcase environmental impact reductions.
 
+=== iOS-Style Design
+
+The ScoreCard Maker now uses an iOS-style design with the following elements:
+
+1. **Fixed Dimensions**: Each scorecard has fixed dimensions of 800x620 pixels, which can be scaled using the `scale` parameter.
+2. **Subtle Background Gradient**: A light gradient background for a modern, clean look.
+3. **Card-Based Layout**: Content is organized in card-like containers with rounded corners.
+4. **iOS-Style Shadows**: Subtle drop shadows add depth and dimension to the cards.
+5. **System Gradients**: iOS-style color gradients for headers and indicators (blue, green, red, orange).
+6. **Modern Typography**: Uses the San Francisco font family (or system equivalents) for a native iOS feel.
+7. **Team Avatars**: Includes a section for team member avatars with initials.
+8. **Key Improvements Summary**: A dedicated section highlighting the overall improvements.
+
 === Design Tips
 
 1. **Color Harmony**: Choose complementary colors for a visually appealing scorecard.
@@ -1156,9 +1174,10 @@ Beyond the examples shown above, ScoreCards can be used for:
 The ScoreCard Maker supports customization through various parameters:
 
 * Colors for different sections
-* Scaling for different display sizes
+* Scaling for different display sizes (base dimensions: 800x620 pixels)
 * Custom icons and status indicators
-* Flexible layout for different metrics and optimizations
+* iOS-style visual elements (gradients, shadows, rounded corners)
+* Fixed layout with consistent design elements
 
 == Integration
 
@@ -1289,6 +1308,8 @@ Error Rate | -85%
 * If colors are not displaying correctly, ensure they are valid hex color codes (e.g., `#3498db`)
 * If the layout seems off, try adjusting the `scale` parameter
 * If metrics aren't showing up, verify that you have both a `[metrics]` section and a corresponding `[metrics.items]` section
+* If the scorecard appears too small or too large, remember that the base dimensions are fixed at 800x620 pixels, which are then multiplied by the `scale` parameter
+* If icons don't appear as expected, note that in the iOS-style design, text icons (`!`, `$`, `✓`) are automatically converted to emojis
 
 === Support
 

@@ -3,6 +3,11 @@ package io.docops.docopsextensionssupport.scorecard
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
+/**
+ * Simplified MigrationScoreCard model to support the iOS-style design.
+ * This model focuses on the core elements needed for the design while maintaining
+ * backward compatibility with existing input formats.
+ */
 @Serializable
 class MigrationScoreCard(
     val id: String = UUID.randomUUID().toString(),
@@ -11,14 +16,14 @@ class MigrationScoreCard(
     val headerTitle: String,
     val beforeSection: BeforeSection,
     val afterSection: AfterSection,
-    val performanceMetrics: List<MetricCategory>,
-    val keyOptimizations: List<Optimization>,
-    val migrationSummary: MigrationSummary,
-    val footerText: String,
     val scale: Float = 1.0f,
-    val theme: MigrationScoreCardTheme = MigrationScoreCardTheme()
+    val theme: MigrationScoreCardTheme = MigrationScoreCardTheme(),
+    val teamMembers: List<TeamMember> = emptyList()
 )
 
+/**
+ * Represents the "before" section of the migration scorecard.
+ */
 @Serializable
 class BeforeSection(
     val title: String,
@@ -26,6 +31,9 @@ class BeforeSection(
     val performanceBaseline: PerformanceMetric
 )
 
+/**
+ * Represents the "after" section of the migration scorecard.
+ */
 @Serializable
 class AfterSection(
     val title: String,
@@ -33,6 +41,9 @@ class AfterSection(
     val performanceImprovement: PerformanceMetric
 )
 
+/**
+ * Represents an item in the before or after section.
+ */
 @Serializable
 class InfrastructureItem(
     val title: String,
@@ -41,6 +52,9 @@ class InfrastructureItem(
     val statusIcon: String // "!", "$", "✓", etc.
 )
 
+/**
+ * Represents a performance metric with a label, percentage, and color.
+ */
 @Serializable
 class PerformanceMetric(
     val label: String,
@@ -48,20 +62,31 @@ class PerformanceMetric(
     val color: String
 )
 
+/**
+ * Represents a category of metrics.
+ * This class is kept for backward compatibility but not used in the iOS-style design.
+ */
 @Serializable
 class MetricCategory(
     val title: String,
-    val borderColor: String,
     val headerColor: String,
     val metrics: List<Metric>
 )
 
+/**
+ * Represents a single metric with a label and value.
+ * This class is kept for backward compatibility but not used in the iOS-style design.
+ */
 @Serializable
 class Metric(
     val label: String,
     val value: String
 )
 
+/**
+ * Represents an optimization with a number, title, and description.
+ * This class is kept for backward compatibility but not used in the iOS-style design.
+ */
 @Serializable
 class Optimization(
     val number: Int,
@@ -69,45 +94,43 @@ class Optimization(
     val description: String
 )
 
+/**
+ * Represents a summary of the migration with an overall improvement percentage and status.
+ * The highlights property is kept for backward compatibility but not used in the iOS-style design.
+ */
 @Serializable
 class MigrationSummary(
-    val overallImprovement: Int,
-    val status: String,
-    val highlights: List<String>
+    val status: String
 )
 
+/**
+ * Represents the theme settings for the scorecard.
+ * Some properties are kept for backward compatibility but not used in the iOS-style design.
+ */
 @Serializable
 class MigrationScoreCardTheme(
     val backgroundColor: String = "#f8f9fa",
     val titleColor: String = "#2c3e50",
-    val subtitleColor: String = "#7f8c8d",
-    val headerColor: String = "#8e44ad",
-    val beforeSectionColor: String = "#e74c3c",
-    val afterSectionColor: String = "#27ae60",
-    val metricColors: Map<String, String> = mapOf(
-        "performance" to "#e74c3c",
-        "network" to "#3498db",
-        "sql" to "#27ae60",
-        "cost" to "#f39c12"
-    )
+    val headerColor: String = "#8e44ad"
+)
+
+/**
+ * Represents a team member with initials, emoji, and color.
+ */
+@Serializable
+class TeamMember(
+    val initials: String,
+    val emoji: String,
+    val color: String
 )
 
 // Extension functions for MigrationScoreCard
 fun MigrationScoreCard.calcWidth(): Int {
-    return (1400 * scale).toInt()
+    // For the iOS-style design, we use a fixed width that accommodates the design
+    return (800 * scale).toInt()
 }
 
 fun MigrationScoreCard.calcHeight(): Int {
-    // Calculate the number of rows needed for key optimizations in two columns
-    val itemsPerColumn = (keyOptimizations.size + 1) / 2
-    val totalRows = Math.max(1, itemsPerColumn)
-
-    // Calculate the footer position based on the content
-    val footerY = 750 + (performanceMetrics.size + 1) / 2 * 180 + totalRows * 60
-
-    // Add the footer height (40) and some buffer (50) to ensure it's fully visible
-    val dynamicHeight = footerY + 90
-
-    // Use the maximum of the dynamic height and the original fixed height to ensure backward compatibility
-    return (Math.max(dynamicHeight, 1100) * scale).toInt()
+    // For the iOS-style design, we use a fixed height that accommodates the design
+    return (620 * scale).toInt()
 }
