@@ -1,0 +1,761 @@
+include::_base.adoc[]
+= DocOps Extension Tutorial
+
+== Introduction
+
+The DocOps Extension Server provides a powerful way to enhance your AsciiDoctor documents with interactive visualizations, charts, diagrams, and other dynamic elements. This tutorial will guide you through the process of setting up and using the DocOps extension to create beautiful, informative documentation.
+
+Whether you're documenting architecture decisions, creating project timelines, visualizing data with charts, or designing interactive navigation elements, the DocOps extension offers a comprehensive set of tools to elevate your technical documentation.
+
+== Getting Started
+
+=== Prerequisites
+
+Before you begin using the DocOps extension, ensure you have:
+
+* Java 11 or higher installed
+* Maven or Gradle for dependency management
+* Basic familiarity with AsciiDoctor
+
+=== Installation
+
+==== Maven
+
+Add the DocOps extension dependency to your Maven project:
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.docops</groupId>
+  <artifactId>docops-extension-server</artifactId>
+  <version>2024.00</version>
+</dependency>
+----
+
+==== Gradle
+
+For Gradle projects, add the following to your build.gradle file:
+
+[source,groovy]
+----
+implementation 'io.docops:docops-extension-server:2024.00'
+----
+
+=== Integration with AsciiDoctorJ
+
+After adding the dependency to your project, you need to register the DocOps extensions with AsciiDoctorJ:
+
+....
+// In your Java code
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+
+// Initialize AsciiDoctorJ with DocOps extensions
+Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+// Register the DocOps extension
+ExtensionRegistry.registerExtension(asciidoctor);
+
+// Process your AsciiDoc content
+String html = asciidoctor.convert(asciiDocContent, options);
+....
+
+== Basic Usage
+
+The DocOps extension uses a special block syntax in your AsciiDoc documents. The general format is:
+
+[source,asciidoc]
+----
+[docops,kind="visualization_type"]
+----
+Your content here
+----
+----
+
+Where `visualization_type` is the type of visualization you want to create (e.g., "adr", "buttons", "timeline", etc.).
+
+=== Common Parameters
+
+Most DocOps visualizations support these common parameters:
+
+[cols="1,3"]
+|===
+|Parameter |Description
+
+|`kind`
+|The type of visualization (required)
+
+|`title`
+|Title for the visualization
+
+|`useDark`
+|Enable dark mode (true/false)
+
+|`scale`
+|Scaling factor for the output
+
+|`role`
+|Alignment (left/center/right)
+
+|`controls`
+|Show interactive controls (true/false)
+|===
+
+== Creating Visualizations
+
+Let's explore how to create different types of visualizations using the DocOps extension.
+
+=== Architecture Decision Records (ADR)
+
+ADRs help document important architectural decisions with their context, rationale, and consequences.
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+....
+
+==== ADR Parameters
+
+[cols="1,3"]
+|===
+|Parameter |Description
+
+|`title`
+|The main heading of the ADR (required)
+
+|`status`
+|Status of the decision: Proposed, Accepted, Superseded, Deprecated, or Rejected (required)
+
+|`date`
+|The date when the decision was made (required)
+
+|`context`
+|Factors that influenced the decision (required)
+
+|`decision`
+|The actual decision made (required)
+
+|`consequences`
+|Results of the decision (required)
+
+|`participants`
+|People involved in making the decision (optional)
+|===
+
+=== Charts
+
+The DocOps extension supports various chart types including bar charts, line charts, and pie charts.
+
+==== Bar Chart Example
+
+[source,asciidoc]
+....
+[docops,bar]
+----
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+baseColor=#4cc9f0
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
+----
+....
+
+==== Line Chart Example
+
+[source,asciidoc]
+....
+[docops,line]
+----
+title=Department Performance
+width=800
+smooth=true
+darkMode=false
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70
+----
+....
+
+=== Badges & Shields
+
+Create customizable status badges and shields for your documentation:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+Made With|Kotlin||#06133b|#6fc441|<Kotlin>|#fcfcfc
+JVM|Runtime||#acacac|#3B1E54|<Java>|#fcfcfc
+AsciiDoctor|Documentation||#acacac|#4CC9FE|<asciidoctor>|#fcfcfc
+----
+....
+
+The badge format is:
+`Label|Value||LeftColor|RightColor|IconReference|TextColor`
+
+=== Buttons
+
+Create interactive buttons for navigation and actions:
+
+[source,asciidoc]
+....
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "Documentation",
+      "link": "https://docops.io/docs",
+      "description": "View documentation",
+      "embeddedImage": {"ref": "images/docs.svg"}
+    },
+    {
+      "label": "GitHub",
+      "link": "https://github.com/docops-info",
+      "description": "View source code",
+      "embeddedImage": {"ref": "<GitHub>"}
+    },
+    {
+      "label": "Support",
+      "link": "https://docops.io/support",
+      "description": "Get help",
+      "embeddedImage": {"ref": "images/support.svg"}
+    }
+  ],
+  "buttonType": "HEX",
+  "theme": {"hexLinesEnabled": true,"strokeColor": "#7695FF","colors": ["#353d4b"],"scale": 1,"columns": 3}
+}
+----
+....
+
+==== Button Types
+
+The DocOps extension supports different button types:
+
+* `HEX` - Hexagonal buttons
+* `RECT` - Rectangular buttons
+* `ROUND` - Rounded buttons
+
+=== Flow Connectors
+
+Create flow diagrams and process maps:
+
+[source,asciidoc]
+....
+[docops,connector,useDark=false]
+----
+{
+  "connectors": [
+    {"text": "Engineer","description": "Creates tests"},
+    {"text": "Unit Tests","description": "Run Unit Tests"},
+    {"text": "GitHub","description": "Upload to Github"},
+    {"text": "Test Engine","description": "GitHub webhook plugged into engine"},
+    {"text": "GitHub","description": "Results stored in Github"},
+    {"text": "API Documentation","description": "API documentation ready for consumption"}
+  ]
+}
+----
+....
+
+=== Placemat & Planner
+
+Organize content with placemats:
+
+[source,asciidoc]
+....
+[docops,placemat,useDark=false]
+----
+{
+  "title": "System Architecture Overview",
+  "placeMats": [
+    {"name": "Frontend","legend": "UI"},
+    {"name": "Backend","legend": "API"},
+    {"name": "Database","legend": "DATA"}
+  ],
+  "config": {
+  "legend": [
+    {"legend": "UI","color": "#4361ee"},
+    {"legend": "API","color": "#3a0ca3"},
+    {"legend": "DATA","color": "#7209b7"}
+  ]}
+}
+----
+....
+
+=== Project Planner
+
+Create visual project planners with NOW/NEXT/LATER categories:
+
+[source,asciidoc]
+....
+[docops,roadmap,useDark=false, title="Q3 Development Roadmap", scale="2.2"]
+----
+- now Authentication
+* Implement user authentication system
+* Set up CI/CD pipeline
+* Create database schema
+- next REST
+* Develop REST API endpoints
+* Build frontend components
+* Implement search functionality
+- later Analytics
+* Add analytics dashboard
+* Optimize performance
+* Implement advanced features
+- done Requirements
+* Project requirements gathering
+* Architecture design
+* Technology stack selection
+----
+....
+
+=== Release Strategy
+
+Visualize release plans and deployment strategies:
+
+[source,asciidoc]
+....
+[docops,release]
+----
+{
+  "title": "Product Release Strategy",
+  "style": "TLS", "scale": 0.5,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
+        "Define release scope and objectives",
+        "Identify key features and enhancements",
+        "Create detailed project timeline",
+        "Allocate resources and responsibilities"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
+        "Code development and unit testing",
+        "Integration of components",
+        "Documentation updates",
+        "Internal code reviews"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
+        "Functional testing",
+        "Performance testing",
+        "Security testing",
+        "User acceptance testing"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
+        "Final approval and sign-off",
+        "Production deployment",
+        "Post-deployment verification",
+        "Monitoring and support"
+      ]
+    }
+  ]
+}
+----
+....
+
+=== Scorecard
+
+Create visual scorecards for comparison:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+{
+  "title": "Technology Comparison",
+  "initiativeTitle": "Current Solution",
+  "outcomeTitle": "Proposed Solution",
+  "initiativeItems": [
+    {"displayText":"Limited scalability"},
+    {"displayText":"High maintenance costs"},
+    {"displayText":"Manual deployment process"},
+    {"displayText":"Minimal monitoring capabilities"},
+    {"displayText":"Difficult to extend"}
+  ],
+  "outcomeItems": [
+    {"displayText":"Highly scalable architecture"},
+    {"displayText":"Reduced operational costs"},
+    {"displayText":"Automated CI/CD pipeline"},
+    {"displayText":"Comprehensive monitoring"},
+    {"displayText":"Modular and extensible design"}
+  ]
+}
+----
+....
+
+=== Timeline
+
+Create interactive timelines for project history and planning:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Timeline",scale="1",role="center"]
+----
+-
+date: 2023-01-15
+text: Project kickoff meeting
+-
+date: 2023-02-01
+text: Requirements gathering completed
+-
+date: 2023-03-15
+text: Design phase completed
+-
+date: 2023-04-30
+text: Development phase started
+-
+date: 2023-06-15
+text: Alpha release
+-
+date: 2023-08-01
+text: Beta testing
+-
+date: 2023-09-15
+text: Production release
+----
+....
+
+== Advanced Features
+
+=== Interactive Controls
+
+Add interactive controls to your visualizations:
+
+[source,asciidoc]
+....
+[docops,kind="buttons",controls=true,copy=true,zoom=true,expand=true]
+----
+Your content here
+----
+....
+
+The controls parameter adds a floating control panel with:
+
+* Zoom in/out buttons
+* Copy as SVG/PNG options
+* Fullscreen toggle
+
+=== Dark Mode Support
+
+Most visualizations support dark mode:
+
+[source,asciidoc]
+....
+[docops,kind="adr",useDark=true]
+----
+Your content here
+----
+....
+
+=== Custom Styling
+
+Many visualizations support custom styling options:
+
+[source,asciidoc]
+....
+[docops,buttons]
+----
+{
+  "buttons": [...],
+  "theme": {
+    "colors": ["#353d4b", "#4361ee"],
+    "strokeColor": "#7695FF",
+    "scale": 1.2
+  }
+}
+----
+....
+
+== Best Practices
+
+=== Performance Optimization
+
+* Use appropriate `scale` values to balance quality and file size
+* Consider PDF-specific optimizations for print output
+* Limit the number of complex visualizations per page
+
+=== Accessibility
+
+* Provide meaningful `title` attributes
+* Use sufficient color contrast in custom themes
+* Ensure keyboard navigation works with interactive controls
+
+=== Documentation Structure
+
+* Group related visualizations together
+* Provide context and explanation around visualizations
+* Use consistent styling across similar visualization types
+
+== Troubleshooting
+
+=== Common Issues
+
+[cols="1,2,2"]
+|===
+|Issue |Cause |Solution
+
+|"Parameter Error: Missing 'kind'"
+|Required `kind` parameter not provided
+|Add `kind` parameter: `[docops,kind="buttons"]`
+
+|"DocOps Server Unavailable! 😵"
+|Server not running or unreachable
+|Start DocOps server and verify network connectivity
+
+|Empty output
+|Invalid content or server error
+|Check server logs and enable `local-debug=true`
+
+|Controls not showing
+|`controls=false` or JavaScript disabled
+|Set `controls=true` and ensure JavaScript is enabled
+|===
+
+=== Debug Mode
+
+Enable debug logging by setting the document attribute:
+
+[source,asciidoc]
+----
+:local-debug: true
+----
+
+=== Server Configuration
+
+You can override the default server URL by setting document attributes:
+
+[source,asciidoc]
+----
+:panel-server: http://your-custom-server:8080/extension
+:panel-webserver: http://your-custom-webserver:8080
+----
+
+== Conclusion
+
+The DocOps Extension Server provides a powerful way to enhance your AsciiDoctor documents with interactive visualizations. By following this tutorial, you should now be able to create a variety of visualizations to improve your documentation.
+
+For more detailed information on specific visualization types, refer to the dedicated documentation below:
+
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "ADR",
+      "link": "adr.html",
+      "description": "Architecture Decision Records",
+      "type": "documentation"
+    },
+    {
+      "label": "Bar Charts",
+      "link": "barchart.html",
+      "description": "Bar Chart Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Buttons",
+      "link": "buttons.html",
+      "description": "Button Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Callout",
+      "link": "callout.html",
+      "description": "Callout Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Charts",
+      "link": "charts.html",
+      "description": "Charts Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Connectors",
+      "link": "connectors.html",
+      "description": "Connector Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "DocOps Core",
+      "link": "docops.html",
+      "description": "DocOps Block Processor Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Examples",
+      "link": "examples.html",
+      "description": "Examples Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Line Charts",
+      "link": "linechart.html",
+      "description": "Line Chart Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Metrics Card",
+      "link": "metricscard.html",
+      "description": "Metrics Card Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Pie Charts",
+      "link": "piechart.html",
+      "description": "Pie Chart Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Placemat",
+      "link": "placemat.html",
+      "description": "Placemat Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Planner",
+      "link": "planner.html",
+      "description": "Project Planner Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Quadrant",
+      "link": "quadrant.html",
+      "description": "Quadrant Chart Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Release Strategy",
+      "link": "releasestrategy.html",
+      "description": "Release Strategy Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Scorecard",
+      "link": "scorecard.html",
+      "description": "Scorecard Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Shield",
+      "link": "shield.html",
+      "description": "Shield Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Swimlane",
+      "link": "swimlane.html",
+      "description": "Swimlane Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Timeline",
+      "link": "timeline.html",
+      "description": "Timeline Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Tree Chart",
+      "link": "treechart.html",
+      "description": "Tree Chart Documentation",
+      "type": "documentation"
+    },
+    {
+      "label": "Word Cloud",
+      "link": "wordcloud.html",
+      "description": "Word Cloud Documentation",
+      "type": "documentation"
+    }
+  ],
+  "buttonType": "OVAL",
+  "theme": {
+    "colors": [
+      "#4361ee",
+      "#3a0ca3",
+      "#7209b7",
+      "#f72585",
+      "#4cc9f0",
+      "#4895ef",
+      "#4361ee",
+      "#3a0ca3"
+    ],
+    "columns": 3,
+    "scale": 1.0,
+    "buttonStyle": {
+      "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: normal;"
+    }
+  }
+}
+----
+
+
+Happy documenting!
