@@ -100,9 +100,17 @@ class DocOpsRouter (
         val handler = handlers[kind.lowercase()]
             ?: throw IllegalArgumentException("Unknown handler kind: $kind")
         val timing = measureTimedValue {
-            val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val decodedPayload = decodePayloadIfNeeded(data)
-            joinXmlLines(addSvgMetadata(handler.handleSVG(decodedPayload, context)))
+            // First try to URL decode the payload, if it fails, use the original payload
+            val decodedPayload = try {
+                URLDecoder.decode(payload, "UTF-8")
+            } catch (e: IllegalArgumentException) {
+                logger.warn { "Failed to URL decode payload: ${e.message}" }
+                payload
+            }
+
+            val data = uncompressString(decodedPayload)
+            val finalPayload = decodePayloadIfNeeded(data)
+            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context)))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
 
@@ -130,7 +138,12 @@ class DocOpsRouter (
 
     private fun decodePayloadIfNeeded(payload: String): String {
         return if (isUrlEncoded(payload)) {
-            URLDecoder.decode(payload, "UTF-8")
+            try {
+                URLDecoder.decode(payload, "UTF-8")
+            } catch (e: IllegalArgumentException) {
+                logger.warn { "Failed to URL decode payload in decodePayloadIfNeeded: ${e.message}" }
+                payload
+            }
         } else {
             payload
         }
