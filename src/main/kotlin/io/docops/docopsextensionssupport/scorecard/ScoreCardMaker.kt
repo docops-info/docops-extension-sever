@@ -17,6 +17,22 @@ class ScoreCardMaker {
     fun make(scorecard: MigrationScoreCard, isPdf: Boolean = false): String {
         val svg = StringBuilder()
 
+        // Calculate the heights of the before and after cards
+        val beforeItemsHeight = calculateItemsHeight(scorecard.beforeSection.items)
+        val afterItemsHeight = calculateItemsHeight(scorecard.afterSection.items)
+        val defaultCardHeight = 380
+        val beforeCardHeight = maxOf(defaultCardHeight, beforeItemsHeight)
+        val afterCardHeight = maxOf(defaultCardHeight, afterItemsHeight)
+
+        // Calculate the maximum card height
+        val maxCardHeight = maxOf(beforeCardHeight, afterCardHeight)
+
+        // Calculate the positions of the key improvements and team avatars sections
+        // The default position for key improvements is 500, which is 120px below the bottom of the cards (380 + 120 = 500)
+        // We'll maintain this spacing
+        val keyImprovementsY = 100 + maxCardHeight + 20
+        val teamAvatarsY = keyImprovementsY + 65
+
         // Add SVG header with iOS-style gradients and filters
         svg.append("""
             <svg width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" xmlns="http://www.w3.org/2000/svg">
@@ -77,10 +93,10 @@ class ScoreCardMaker {
         svg.append(generateAfterSection(scorecard))
 
         // Add key improvements summary
-        svg.append(generateKeyImprovements(scorecard))
+        svg.append(generateKeyImprovements(scorecard, keyImprovementsY))
 
         // Add team avatars
-        svg.append(generateTeamAvatars(scorecard))
+        svg.append(generateTeamAvatars(scorecard, teamAvatarsY))
 
         // Close SVG
         svg.append("</svg>")
@@ -133,11 +149,19 @@ class ScoreCardMaker {
         val beforeSection = scorecard.beforeSection
         val svg = StringBuilder()
 
+        // Calculate the height needed for the before section items
+        val beforeItemsHeight = calculateItemsHeight(beforeSection.items)
+
+        // The default card height is 380, which can accommodate about 4-5 items
+        // If we need more height, use the calculated height
+        val defaultCardHeight = 380
+        val cardHeight = maxOf(defaultCardHeight, beforeItemsHeight)
+
         // Before Card - iOS style with shadow
         svg.append("""
             <!-- Before Card -->
             <g>
-                <rect x="40" y="100" width="300" height="380" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
+                <rect x="40" y="100" width="300" height="${cardHeight}" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
 
                 <!-- Before Header -->
                 <rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/>
@@ -269,11 +293,19 @@ class ScoreCardMaker {
         val afterSection = scorecard.afterSection
         val svg = StringBuilder()
 
+        // Calculate the height needed for the after section items
+        val afterItemsHeight = calculateItemsHeight(afterSection.items)
+
+        // The default card height is 380, which can accommodate about 4-5 items
+        // If we need more height, use the calculated height
+        val defaultCardHeight = 380
+        val cardHeight = maxOf(defaultCardHeight, afterItemsHeight)
+
         // After Card - iOS style with shadow
         svg.append("""
             <!-- After Card -->
             <g>
-                <rect x="460" y="100" width="300" height="380" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
+                <rect x="460" y="100" width="300" height="${cardHeight}" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
 
                 <!-- After Header -->
                 <rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/>
@@ -384,12 +416,13 @@ class ScoreCardMaker {
      * Generates the iOS-style key improvements summary section.
      *
      * @param scorecard The MigrationScoreCard object
+     * @param yPosition The y-coordinate for the key improvements section
      * @return The SVG fragment as a string
      */
-    private fun generateKeyImprovements(scorecard: MigrationScoreCard): String {
+    private fun generateKeyImprovements(scorecard: MigrationScoreCard, yPosition: Int = 500): String {
         return """
             <!-- Key improvements summary -->
-            <g transform="translate(200, 500)">
+            <g transform="translate(200, ${yPosition})">
                 <rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/>
                 <text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
                       font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text>
@@ -403,9 +436,10 @@ class ScoreCardMaker {
      * Generates the iOS-style team avatars section.
      *
      * @param scorecard The MigrationScoreCard object
+     * @param yPosition The y-coordinate for the team avatars section
      * @return The SVG fragment as a string
      */
-    private fun generateTeamAvatars(scorecard: MigrationScoreCard): String {
+    private fun generateTeamAvatars(scorecard: MigrationScoreCard, yPosition: Int = 565): String {
         // If no team members are specified, don't generate any avatars
         if (scorecard.teamMembers.isEmpty()) {
             return ""
@@ -415,7 +449,7 @@ class ScoreCardMaker {
 
         svg.append("""
             <!-- iOS-style team avatars with initials -->
-            <g transform="translate(260, 565)">
+            <g transform="translate(260, ${yPosition})">
         """.trimIndent())
 
         // Calculate the number of team members to display (max 4)

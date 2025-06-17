@@ -131,6 +131,51 @@ fun MigrationScoreCard.calcWidth(): Int {
 }
 
 fun MigrationScoreCard.calcHeight(): Int {
-    // For the iOS-style design, we use a fixed height that accommodates the design
-    return (620 * scale).toInt()
+    // Calculate the base height (without items)
+    val baseHeight = 620
+
+    // Calculate the height needed for the before section items
+    val beforeItemsHeight = calculateItemsHeight(beforeSection.items)
+
+    // Calculate the height needed for the after section items
+    val afterItemsHeight = calculateItemsHeight(afterSection.items)
+
+    // Get the maximum height needed for either section
+    val maxItemsHeight = maxOf(beforeItemsHeight, afterItemsHeight)
+
+    // The default card height is 380, which can accommodate about 4-5 items
+    // If we need more height, add the difference to the base height
+    val defaultCardHeight = 380
+    val extraHeight = maxOf(0, maxItemsHeight - defaultCardHeight)
+
+    // Return the scaled height
+    return ((baseHeight + extraHeight) * scale).toInt()
+}
+
+/**
+ * Calculates the height needed for a list of items.
+ * 
+ * @param items The list of items
+ * @return The height needed in pixels
+ */
+fun calculateItemsHeight(items: List<InfrastructureItem>): Int {
+    // Start with the initial offset (190px from the top of the card)
+    var height = 190
+
+    // For each item, calculate its height based on title and description
+    items.forEach { item ->
+        // Estimate the number of lines in the title (assuming 20 chars per line)
+        val titleLines = (item.title.length / 20) + 1
+
+        // Estimate the number of lines in the description (assuming 25 chars per line)
+        val descLines = if (item.description.isBlank()) 0 else (item.description.length / 25) + 1
+
+        // Add the height for this item (12px for the circle, 18px per title line, 16px per desc line, 30px spacing)
+        height += 12 + (titleLines * 18) + (descLines * 16) + 30
+    }
+
+    // Add space for the performance label at the bottom (30px margin)
+    height += 30
+
+    return height
 }
