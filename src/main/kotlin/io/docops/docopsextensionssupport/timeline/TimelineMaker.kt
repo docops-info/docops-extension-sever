@@ -308,12 +308,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
         val scaledHeight = (totalHeight * scaleF).toInt()
 
         // SVG WITHOUT background styling in the element itself
-        sb.append("""
-    <svg width="$scaledWidth" height="$scaledHeight" 
-         viewBox="0 0 $totalWidth $totalHeight"
-         xmlns="http://www.w3.org/2000/svg" 
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-    """.trimIndent())
+        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">""".trimIndent())
 
         val defs = modernDefs(isPdf, id)
         sb.append(defs.first)
@@ -323,15 +318,12 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
         val backgroundGradient = if (useDark) "#0a0a0a" else "#fafafa"
         sb.append("""
     <!-- Scalable background -->
-    <rect width="$totalWidth" height="$totalHeight" 
-          fill="url(#backgroundGradient)"/>
+    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient)"/>
     """.trimIndent())
 
         // Title and content
         sb.append("""
-    <text x="${totalWidth/2}" y="50" 
-          text-anchor="middle" 
-          class="timeline-title">
+    <text x="${totalWidth/2}" y="50" text-anchor="middle" class="timeline-title">
           ${title.escapeXml()}
     </text>
     """.trimIndent())
@@ -343,8 +335,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
 
         sb.append("""
     <!-- Timeline spine -->
-    <line x1="$spineX" y1="$spineStartY" x2="$spineX" y2="$spineEndY" 
-          class="timeline-spine"/>
+    <line x1="$spineX" y1="$spineStartY" x2="$spineX" y2="$spineEndY" class="timeline-spine"/>
     """.trimIndent())
 
         // Generate timeline entries
@@ -504,22 +495,13 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
     <!-- Timeline Entry ${index + 1} -->
     <g class="timeline-entry">
         <!-- Dashed connector line -->
-        <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" 
-              y1="$dotY" 
-              x2="$spineX" 
-              y2="$dotY" 
-              class="timeline-connector"/>
+        <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" y1="$dotY"  x2="$spineX"  y2="$dotY" class="timeline-connector"/>
         
         <!-- Enhanced timeline dot -->
-        <circle cx="$spineX" cy="$dotY" r="8" 
-                fill="url(#timeline_grad_$gradIndex)" 
-                class="timeline-dot"/>
+        <circle cx="$spineX" cy="$dotY" r="8" fill="url(#timeline_grad_$gradIndex)" class="timeline-dot"/>
         
         <!-- Elegant card with enhanced shadow -->
-        <rect x="$xPosition" y="$yPosition" 
-              width="$cardWidth" height="$cardHeight" 
-              rx="$cardRadius" ry="$cardRadius" 
-              class="timeline-card"/>
+        <rect x="$xPosition" y="$yPosition" width="$cardWidth" height="$cardHeight" rx="$cardRadius" ry="$cardRadius"  class="timeline-card"/>
         
         <!-- Gradient header with subtle design -->
         <rect x="$xPosition" y="$yPosition" 
