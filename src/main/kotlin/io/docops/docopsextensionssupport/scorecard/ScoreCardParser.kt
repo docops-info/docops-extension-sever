@@ -372,16 +372,7 @@ class ScoreCardParser {
             }
         }
 
-        // If no team members are specified, return a default list
-        if (teamMembers.isEmpty()) {
-            return listOf(
-                TeamMember("JS", "👨‍💻", "url(#blueGradient)"),
-                TeamMember("AM", "👩‍💻", "#AF52DE"),
-                TeamMember("MK", "👨‍💻", "url(#orangeGradient)"),
-                TeamMember("SR", "👩‍💻", "url(#greenGradient)")
-            )
-        }
-
+        // Return the team members list, which will be empty if none are specified
         return teamMembers
     }
 }

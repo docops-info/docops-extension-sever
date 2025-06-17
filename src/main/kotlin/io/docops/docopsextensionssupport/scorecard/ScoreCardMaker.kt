@@ -227,9 +227,14 @@ class ScoreCardMaker {
 
         // Legacy score indicator
         val baseline = beforeSection.performanceBaseline
+
+        // Calculate the y position for the baseline label based on the last item's position
+        // Add a margin of 30 pixels between the last item and the baseline label
+        val baselineY = Math.min(450, 190 + currentY + 30)
+
         svg.append("""
                 <!-- Legacy score indicator -->
-                <text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                <text x="190" y="${baselineY}" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
                       font-size="12" font-weight="600" fill="#86868B">${(baseline.label.escapeXml())}</text>
             </g>
         """.trimIndent())
@@ -358,9 +363,14 @@ class ScoreCardMaker {
 
         // Modern score indicator
         val improvement = afterSection.performanceImprovement
+
+        // Calculate the y position for the improvement label based on the last item's position
+        // Add a margin of 30 pixels between the last item and the improvement label
+        val improvementY = Math.min(450, 190 + currentY + 30)
+
         svg.append("""
                 <!-- Modern score indicator -->
-                <text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
+                <text x="610" y="${improvementY}" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
                       font-size="12" font-weight="600" fill="#86868B">${(improvement.label.escapeXml())}</text>
             </g>
         """.trimIndent())
@@ -396,6 +406,11 @@ class ScoreCardMaker {
      * @return The SVG fragment as a string
      */
     private fun generateTeamAvatars(scorecard: MigrationScoreCard): String {
+        // If no team members are specified, don't generate any avatars
+        if (scorecard.teamMembers.isEmpty()) {
+            return ""
+        }
+
         val svg = StringBuilder()
 
         svg.append("""
