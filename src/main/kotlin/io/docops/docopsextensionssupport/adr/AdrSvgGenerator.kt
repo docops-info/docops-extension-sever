@@ -115,10 +115,23 @@ class AdrSvgGenerator {
     }
 
     /**
-     * Wraps text to fit within the specified width.
+     * Wraps text to fit within the specified width, preserving wiki links.
      */
     private fun wrapText(text: String, maxCharsPerLine: Int): List<String> {
-        val words = text.split(" ")
+        // First, extract wiki links and replace them with placeholders
+        val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
+        val links = mutableListOf<String>()
+        var modifiedText = text
+
+        linkPattern.findAll(text).forEach { matchResult ->
+            val link = matchResult.value
+            links.add(link)
+            // Replace the link with a placeholder that won't be split
+            modifiedText = modifiedText.replace(link, "LINK_PLACEHOLDER_${links.size - 1}")
+        }
+
+        // Now wrap the text with placeholders
+        val words = modifiedText.split(" ")
         val lines = mutableListOf<String>()
         var currentLine = kotlin.text.StringBuilder()
 
@@ -138,9 +151,21 @@ class AdrSvgGenerator {
             lines.add(currentLine.toString())
         }
 
-        return lines
+        // Finally, replace the placeholders with the actual links
+        val resultLines = lines.map { line ->
+            var result = line
+            for (i in links.indices) {
+                result = result.replace("LINK_PLACEHOLDER_$i", links[i])
+            }
+            result
+        }
+
+        return resultLines
     }
 
+    /**
+     * Renders a section of text with proper formatting for bullets and links.
+     */
     /**
      * Renders a section of text with proper formatting for bullets and links.
      */
@@ -161,14 +186,17 @@ class AdrSvgGenerator {
             val wrappedLines = wrapText(textToRender, CHARS_PER_LINE)
 
             for (wrappedLine in wrappedLines) {
-                // Check if this line contains wiki links
-                val containsWikiLink = adr.links.any { link ->
-                    wrappedLine.contains("[[${link.url} ${link.label}]]")
-                }
+                // Check if this line contains wiki links using the same pattern as AdrParser
+                // Pattern to match wiki links with format [[url label]]
+                // This pattern will match any characters for the URL until the first space,
+                // then capture the rest as the label until the closing brackets
+                val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
+                val containsWikiLink = linkPattern.containsMatchIn(wrappedLine)
+
 
                 if (containsWikiLink) {
                     // Render line with links
-                    renderLineWithLinks(svg, wrappedLine, textX, currentY, adr.links)
+                    renderLineWithLinks(svg, wrappedLine, textX, currentY, linkPattern)
                 } else {
                     // Render normal text
                     val escapedLine = escapeXml(wrappedLine)
@@ -185,42 +213,43 @@ class AdrSvgGenerator {
     /**
      * Renders a line of text that contains wiki-style links.
      */
-    private fun renderLineWithLinks(svg: StringBuilder, line: String, x: Int, y: Int, links: List<WikiLink>) {
+    private fun renderLineWithLinks(svg: StringBuilder, line: String, x: Int, y: Int, linkPattern: Regex) {
         // Create a text element as a container
         svg.append("""<text x="$x" y="$y" class="content">""")
 
-        var currentText = line
+        var remainingText = line
         var currentX = 0
 
-        // Process each link in the line
-        for (link in links) {
-            val linkPattern = "\\[\\[${Regex.escape(link.url)}\\s+${Regex.escape(link.label)}\\]\\]"
-            val parts = currentText.split(linkPattern.toRegex(), 2)
+        // Process all links in the line
+        while (true) {
+            val matchResult = linkPattern.find(remainingText)
 
-            if (parts.size > 1) {
-                // Add text before the link
-                if (parts[0].isNotEmpty()) {
-                    svg.append("""<tspan x="${x + currentX}">${escapeXml(parts[0])}</tspan>""")
-                    // Estimate width of text (very rough approximation)
-                    currentX += parts[0].length * 7
+            if (matchResult == null) {
+                // No more links, add remaining text
+                if (remainingText.isNotEmpty()) {
+                    svg.append("""<tspan>${escapeXml(remainingText)}</tspan>""")
                 }
-
-                // Add the link
-                svg.append("""<tspan x="${x + currentX}">""")
-                svg.append("""<a href="${escapeXml(link.url)}" target="_blank" style="fill:#007AFF">${escapeXml(link.label)}</a>""")
-                svg.append("""</tspan>""")
-
-                // Estimate width of link text
-                currentX += link.label.length * 7
-
-                // Update remaining text
-                currentText = parts[1]
+                break
             }
-        }
 
-        // Add any remaining text
-        if (currentText.isNotEmpty()) {
-            svg.append("""<tspan x="${x + currentX}">${escapeXml(currentText)}</tspan>""")
+            val beforeLink = remainingText.substring(0, matchResult.range.first)
+            val url = matchResult.groupValues[1]
+            val label = matchResult.groupValues[2]
+
+            // Add text before the link
+            if (beforeLink.isNotEmpty()) {
+                svg.append("""<tspan>${escapeXml(beforeLink)}</tspan>""")
+            }
+
+            // Add the link with proper SVG link styling
+            svg.append("""<tspan>""")
+            svg.append("""<a href="${escapeXml(url)}" target="_blank">""")
+            svg.append("""<tspan style="fill:#007AFF; text-decoration:underline;">${escapeXml(label)}</tspan>""")
+            svg.append("""</a>""")
+            svg.append("""</tspan>""")
+
+            // Update remaining text to everything after this match
+            remainingText = remainingText.substring(matchResult.range.last + 1)
         }
 
         svg.append("""</text>""")

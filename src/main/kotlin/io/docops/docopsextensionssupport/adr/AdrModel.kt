@@ -77,7 +77,10 @@ class AdrParser {
      * @param links The list to add the extracted links to
      */
     private fun extractWikiLinks(text: String, links: MutableList<WikiLink>) {
-        val linkPattern = "\\[\\[(.*?)\\s+(.*?)\\]\\]".toRegex()
+        // Pattern to match wiki links with format [[url label]]
+        // This pattern will match any characters for the URL until the first space,
+        // then capture the rest as the label until the closing brackets
+        val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
         linkPattern.findAll(text).forEach { matchResult ->
             val (url, label) = matchResult.destructured
             links.add(WikiLink(url, label))
@@ -141,6 +144,10 @@ class AdrParser {
                         extractWikiLinks(contextText, links)
                     }
                 }
+                trimmedLine.equals("context", true) -> {
+                    // Handle the case where the line is just "context" without a colon
+                    currentSection = "context"
+                }
                 trimmedLine.startsWith("decision:", true) -> {
                     currentSection = "decision"
                     // Extract any text that appears after "decision:" on the same line
@@ -151,6 +158,10 @@ class AdrParser {
                         extractWikiLinks(decisionText, links)
                     }
                 }
+                trimmedLine.equals("decision", true) -> {
+                    // Handle the case where the line is just "decision" without a colon
+                    currentSection = "decision"
+                }
                 trimmedLine.startsWith("consequences:", true) -> {
                     currentSection = "consequences"
                     // Extract any text that appears after "consequences:" on the same line
@@ -160,6 +171,10 @@ class AdrParser {
                         // Extract wiki links from the consequences text
                         extractWikiLinks(consequencesText, links)
                     }
+                }
+                trimmedLine.equals("consequences", true) -> {
+                    // Handle the case where the line is just "consequences" without a colon
+                    currentSection = "consequences"
                 }
                 trimmedLine.startsWith("participants:", true) -> {
                     // For participants, we'll take the whole line as it might be a comma-separated list
