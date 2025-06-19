@@ -56,6 +56,28 @@ class AdrSvgGenerator {
             |      fill: #333333; 
             |      text-anchor: middle; 
             |    }
+            |    .participant-container {
+            |      cursor: pointer;
+            |    }
+            |    .participant-container:hover .participant-icon {
+            |      filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5));
+            |      transition: filter 0.3s ease;
+            |    }
+            |    .participant-container:hover .participant-name {
+            |      fill: #007AFF;
+            |      transition: fill 0.3s ease;
+            |    }
+            |    .group-chat-link {
+            |      font-family: Arial, Helvetica, sans-serif;
+            |      font-weight: 400;
+            |      font-size: 12px;
+            |      fill: #007AFF;
+            |      text-decoration: underline;
+            |      cursor: pointer;
+            |    }
+            |    a {
+            |      cursor: pointer;
+            |    }
             |  </style>
             |  <!-- Font Awesome style user icon -->
             |  <symbol id="user-icon" viewBox="0 0 448 512">
@@ -269,12 +291,39 @@ class AdrSvgGenerator {
     }
 
     /**
+     * Detects if a participant name contains an email address.
+     * @return The email address if found, null otherwise
+     */
+    private fun extractEmail(name: String): String? {
+        // Simple regex to match email addresses
+        val emailRegex = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}".toRegex()
+        val matchResult = emailRegex.find(name)
+        return matchResult?.value
+    }
+
+    /**
      * Renders a participant with icon and name.
+     * If the participant name contains an email, adds a Microsoft Teams chat link.
+     * If the participant name contains a wiki link, applies the hover glow effect.
      */
     private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int, status: AdrStatus): Int {
+        // Check if name contains an email
+        val email = extractEmail(name)
+
+        // Check if name contains a wiki link
+        val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
+        val hasLink = linkPattern.containsMatchIn(name)
+
+        // Start participant container for hover effect if email is present or has link
+        if (email != null || hasLink) {
+            svg.append("""<g class="participant-container">""")
+        } else {
+            svg.append("""<g>""")
+        }
+
         // Icon
         val color = STATUS_COLORS[status] ?: "#999999"
-        svg.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" />""")
+        svg.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" class="participant-icon" />""")
 
         // Name (centered under icon)
         val escapedName = escapeXml(name)
@@ -282,9 +331,20 @@ class AdrSvgGenerator {
         var currentY = y + 40
 
         for (line in wrappedName) {
-            svg.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
+            if (email != null) {
+                // Create a Teams chat link if email is present
+                val teamsUrl = "https://teams.microsoft.com/l/chat/0/0?users=${escapeXml(email)}"
+                svg.append("""<a href="${teamsUrl}" target="_blank" title="Chat with ${escapeXml(email)}">""")
+                svg.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
+                svg.append("""</a>""")
+            } else {
+                svg.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
+            }
             currentY += 15
         }
+
+        // Close participant container
+        svg.append("""</g>""")
 
         return currentY + 10
     }
@@ -363,6 +423,26 @@ class AdrSvgGenerator {
             var participantY = currentY + 50
             var participantX = contentX
 
+            // Collect emails for group chat link
+            val participantEmails = mutableListOf<String>()
+
+            // First pass to collect emails
+            for (participant in adr.participants) {
+                val email = extractEmail(participant)
+                if (email != null) {
+                    participantEmails.add(email)
+                }
+            }
+
+            // Add group chat link if there are 2+ participants with emails
+            if (participantEmails.size >= 2) {
+                val groupChatUrl = "https://teams.microsoft.com/l/chat/0/0?users=${participantEmails.joinToString(",")}"
+                svg.append("""<a href="${escapeXml(groupChatUrl)}" target="_blank">""")
+                svg.append("""<text x="${contentX + MAX_CARD_WIDTH - 150}" y="${currentY + 25}" class="group-chat-link">Start Group Chat</text>""")
+                svg.append("""</a>""")
+            }
+
+            // Render participants
             for ((index, participant) in adr.participants.withIndex()) {
                 if (index > 0 && index % participantsPerRow == 0) {
                     participantY += 80

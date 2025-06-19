@@ -108,6 +108,32 @@ Alice Johnson (Product Manager)
 
 Both formats will be correctly parsed and displayed in the ADR visualization.
 
+==== Interactive Participants
+
+The participants section includes several interactive features to enhance collaboration:
+
+1. **Hover Effects**: When you hover over a participant, a subtle glow effect is applied to highlight the participant.
+
+2. **Email Detection**: The system automatically detects email addresses in participant names. For example:
++
+[source]
+----
+participants: Jane Smith (jane.smith@example.com), John Doe (john.doe@example.com)
+----
+
+3. **Microsoft Teams Chat Links**: Participants with email addresses are automatically linked to Microsoft Teams chat. Clicking on a participant with an email will open a new Teams chat with that person.
+
+4. **Group Chat Link**: When two or more participants have email addresses, a "Start Group Chat" link appears in the participants section. Clicking this link will open a Microsoft Teams group chat with all participants who have email addresses.
+
+[TIP]
+====
+To make the most of these interactive features:
+
+* Include email addresses in parentheses after participant names
+* Format: `Name (email@example.com)`
+* For organization-specific Teams integration, ensure you're using the correct email domain
+====
+
 ==== Status Options
 
 [TIP]
@@ -507,7 +533,18 @@ participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engi
 ----
 === Multiline Participants Example
 
-This example demonstrates how to format participants on multiple lines for better readability:
+This example demonstrates how to format participants on multiple lines for better readability and showcases the interactive participant features:
+
+[NOTE]
+====
+This example includes email addresses for all participants, which will:
+
+* Automatically create Microsoft Teams chat links for each participant
+* Add a "Start Group Chat" link at the top of the participants section
+* Enable the hover glow effect on participants
+
+When viewing the rendered ADR, you can hover over participants to see the glow effect and click on them to start a Teams chat.
+====
 
 [source,asciidoc]
 ....
@@ -532,11 +569,11 @@ consequences:
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
 participants:
-Rebecca Chen (Data Architect)
-Mark Johnson (Data Engineer)
-Priya Patel (Business Intelligence Lead)
-Thomas Garcia (Cloud Infrastructure Specialist)
-Sarah Kim (Data Governance Officer)
+Rebecca Chen (rebecca.chen@example.com)
+Mark Johnson (mark.johnson@example.com)
+Priya Patel (priya.patel@example.com)
+Thomas Garcia (thomas.garcia@example.com)
+Sarah Kim (sarah.kim@example.com)
 ----
 ....
 
@@ -561,11 +598,11 @@ consequences:
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
 participants:
-Rebecca Chen (Data Architect)
-Mark Johnson (Data Engineer)
-Priya Patel (Business Intelligence Lead)
-Thomas Garcia (Cloud Infrastructure Specialist)
-Sarah Kim (Data Governance Officer)
+Rebecca Chen (rebecca.chen@example.com)
+Mark Johnson (mark.johnson@example.com)
+Priya Patel (priya.patel@example.com)
+Thomas Garcia (thomas.garcia@example.com)
+Sarah Kim (sarah.kim@example.com)
 ----
 
 == Conclusion
