@@ -57,6 +57,18 @@ class AdrSvgGenerator {
             |      fill: #333333; 
             |      text-anchor: middle; 
             |    }
+            |    .participant-name-with-email {
+            |      font-family: Arial, Helvetica, sans-serif;
+            |      font-weight: 500;
+            |      font-size: 12px;
+            |      fill: #007AFF;  /* Use link blue to indicate clickability */
+            |      text-anchor: middle;
+            |      border-bottom: 1px dotted #007AFF;  /* Subtle underline */    
+            |    }
+            |    .participant-name-with-email:hover {
+            |      fill: #0056CC;
+            |      font-weight: 600;
+            |    }
             |    .participant-container {
             |      cursor: pointer;
             |    }
@@ -292,6 +304,41 @@ class AdrSvgGenerator {
     }
 
     /**
+     * Extracts email and display name from a participant string.
+     * @return A Pair of (displayName, email) where email may be null
+     */
+    private fun extractNameAndEmail(participant: String): Pair<String, String?> {
+        // Regex to match different email formats:
+        // 1. "Name <email@domain.com>"
+        // 2. "Name (email@domain.com)"
+        // 3. "Name email@domain.com"
+        val emailRegex = "([^<]+)<([^>]+)>|(.+?)\\s+\\(([^@)]+@[^)]+)\\)|(.+?)\\s+([^\\s]+@[^\\s]+)".toRegex()
+        val matchResult = emailRegex.find(participant)
+
+        val displayName: String
+        val email: String?
+
+        when {
+            matchResult != null -> {
+                // Format: "Name <email@domain.com>" or "Name (email@domain.com)" or "Name email@domain.com"
+                displayName = (matchResult.groupValues[1].takeIf { it.isNotBlank() } 
+                    ?: matchResult.groupValues[3].takeIf { it.isNotBlank() }
+                    ?: matchResult.groupValues[5].takeIf { it.isNotBlank() })?.trim() ?: participant
+                email = (matchResult.groupValues[2].takeIf { it.isNotBlank() }
+                    ?: matchResult.groupValues[4].takeIf { it.isNotBlank() }
+                    ?: matchResult.groupValues[6].takeIf { it.isNotBlank() })?.trim()
+            }
+            else -> {
+                // No email found, use the whole string as the display name
+                displayName = participant
+                email = null
+            }
+        }
+
+        return Pair(displayName, email)
+    }
+
+    /**
      * Detects if a participant name contains an email address.
      * @return The email address if found, null otherwise
      */
@@ -303,31 +350,32 @@ class AdrSvgGenerator {
     }
 
     /**
-     * Renders a participant with icon and name.
-     * If the participant name contains an email, adds a Microsoft Teams chat link.
-     * If the participant name contains a wiki link, applies the hover glow effect.
+     * Creates a participant element with icon and name.
+     * If the participant name contains an email, adds a Microsoft Teams chat link but only displays the name.
      */
-    private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int, status: AdrStatus): Int {
-        // Check if name contains an email
-        val email = extractEmail(name)
+    private fun createParticipantElement(participant: String, x: Int, y: Int, width: Int, status: AdrStatus): String {
+        // Extract name and email if present
+        val (displayName, email) = extractNameAndEmail(participant)
 
         // Check if name contains a wiki link
         val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-        val hasLink = linkPattern.containsMatchIn(name)
+        val hasLink = linkPattern.containsMatchIn(displayName)
+
+        val sb = StringBuilder()
 
         // Start participant container for hover effect if email is present or has link
         if (email != null || hasLink) {
-            svg.append("""<g class="participant-container">""")
+            sb.append("""<g class="participant-container">""")
         } else {
-            svg.append("""<g>""")
+            sb.append("""<g>""")
         }
 
         // Icon
         val color = STATUS_COLORS[status] ?: "#999999"
-        svg.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" class="participant-icon" />""")
+        sb.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" class="participant-icon" />""")
 
         // Name (centered under icon)
-        val escapedName = escapeXml(name)
+        val escapedName = escapeXml(displayName)
         val wrappedName = wrapText(escapedName, 20)
         var currentY = y + 40
 
@@ -335,17 +383,35 @@ class AdrSvgGenerator {
             if (email != null) {
                 // Create a Teams chat link if email is present
                 val teamsUrl = "https://teams.microsoft.com/l/chat/0/0?users=${escapeXml(email)}"
-                svg.append("""<a href="${teamsUrl}" target="_blank" title="Chat with ${escapeXml(email)}">""")
-                svg.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
-                svg.append("""</a>""")
+                sb.append("""<a href="${teamsUrl}" target="_blank" title="Chat with ${escapeXml(email)}">""")
+                sb.append("""<text x="${x + width/2}" y="$currentY" class="participant-name-with-email">$line</text>""")
+                sb.append("""</a>""")
             } else {
-                svg.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
+                sb.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
             }
             currentY += 15
         }
 
         // Close participant container
-        svg.append("""</g>""")
+        sb.append("""</g>""")
+
+        return sb.toString()
+    }
+
+    /**
+     * Renders a participant with icon and name.
+     * If the participant name contains an email, adds a Microsoft Teams chat link.
+     * If the participant name contains a wiki link, applies the hover glow effect.
+     */
+    private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int, status: AdrStatus): Int {
+        // Create the participant element
+        val participantElement = createParticipantElement(name, x, y, width, status)
+        svg.append(participantElement)
+
+        // Calculate the height based on the number of lines in the name
+        val (displayName, _) = extractNameAndEmail(name)
+        val wrappedName = wrapText(displayName, 20)
+        val currentY = y + 40 + (wrappedName.size * 15)
 
         return currentY + 10
     }
