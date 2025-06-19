@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.util
 
 import jakarta.servlet.http.HttpServletRequest
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * Utility class for URL-related operations.
@@ -78,4 +80,9 @@ object UrlUtil {
         
         return url.toString()
     }
+
+    fun String.urlEncode(): String {
+        return URLEncoder.encode(this, StandardCharsets.UTF_8)
+    }
+
 }

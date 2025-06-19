@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.util.UrlUtil.urlEncode
 
 
 /**
@@ -436,7 +437,7 @@ class AdrSvgGenerator {
 
             // Add group chat link if there are 2+ participants with emails
             if (participantEmails.size >= 2) {
-                val groupChatUrl = "https://teams.microsoft.com/l/chat/0/0?users=${participantEmails.joinToString(",")}"
+                val groupChatUrl = "https://teams.microsoft.com/l/chat/0/0?users=${participantEmails.joinToString(",")}&topicName=${adr.title.urlEncode()}"
                 svg.append("""<a href="${escapeXml(groupChatUrl)}" target="_blank">""")
                 svg.append("""<text x="${contentX + MAX_CARD_WIDTH - 150}" y="${currentY + 25}" class="group-chat-link">Start Group Chat</text>""")
                 svg.append("""</a>""")
