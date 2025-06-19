@@ -177,9 +177,18 @@ class AdrParser {
                     currentSection = "consequences"
                 }
                 trimmedLine.startsWith("participants:", true) -> {
-                    // For participants, we'll take the whole line as it might be a comma-separated list
-                    participantsLines.add(trimmedLine.substringAfter(trimmedLine.substring(0, 13), "").trim())
-                    currentSection = null
+                    currentSection = "participants"
+                    // Extract any text that appears after "participants:" on the same line
+                    val participantsText = trimmedLine.substringAfter(trimmedLine.substring(0, 13), "").trim()
+                    if (participantsText.isNotEmpty()) {
+                        participantsLines.add(participantsText)
+                        // Extract wiki links from the participants text
+                        extractWikiLinks(participantsText, links)
+                    }
+                }
+                trimmedLine.equals("participants", true) -> {
+                    // Handle the case where the line is just "participants" without a colon
+                    currentSection = "participants"
                 }
                 else -> {
                     // If we're in a section and the line is not empty, add it to the appropriate list
@@ -188,6 +197,7 @@ class AdrParser {
                             "context" -> contextLines.add(trimmedLine)
                             "decision" -> decisionLines.add(trimmedLine)
                             "consequences" -> consequencesLines.add(trimmedLine)
+                            "participants" -> participantsLines.add(trimmedLine)
                             // If we're not in a recognized section, it might be free-form text
                             // For now, we'll ignore it, but we could add it to a general notes field if needed
                         }

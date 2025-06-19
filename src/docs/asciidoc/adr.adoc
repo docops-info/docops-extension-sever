@@ -73,6 +73,40 @@ The macro processes the JSON configuration and generates an SVG representation o
 * `consequences` (required): An array of consequence statements
 * `participants` (optional): An array of participant names
 
+==== Multiline Participants
+
+The `participants` field supports multiline formatting, allowing you to list participants on separate lines for better readability. This is particularly useful when you have many participants or when participant names include roles or other information.
+
+You can format participants in two ways:
+
+1. **Single line with commas**:
++
+[source]
+----
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+
+2. **Multiple lines**:
++
+[source]
+----
+participants:
+Jane Smith (Architect),
+John Doe (Developer),
+Alice Johnson (Product Manager)
+----
++
+Or:
++
+[source]
+----
+participants:
+Jane Smith (Architect)
+John Doe (Developer)
+Alice Johnson (Product Manager)
+----
+
+Both formats will be correctly parsed and displayed in the ADR visualization.
 
 ==== Status Options
 
@@ -85,6 +119,66 @@ The `status` property can have one of the following values:
 * `Superseded`: Indicates a decision that has been replaced by a newer decision (amber)
 * `Deprecated`: Indicates a decision that is no longer relevant (red)
 * `Rejected`: Indicates a decision that was not approved (dark red)
+====
+
+=== Wiki Style Links
+
+The ADR extension supports wiki style links in all text fields. This allows you to add hyperlinks to external resources or internal references within your ADRs.
+
+==== Wiki Style Link Syntax
+
+To add a wiki style link, use the following syntax:
+
+[source]
+----
+[[URL LABEL]]
+----
+
+Where:
+
+* `URL` is the full URL of the linked resource
+* `LABEL` is the text that will be displayed and linked
+
+For example:
+
+[source]
+----
+[[https://www.example.com Example Website]]
+----
+
+This will render as a clickable link with "Example Website" as the visible text.
+
+==== Examples of Wiki Style Links in ADRs
+
+Wiki style links can be used in any text field of an ADR, including:
+
+* Context points
+* Decision points
+* Consequences
+* Participant information
+
+Example usage in a decision point:
+
+[source]
+----
+- We will use [[https://kubernetes.io/ Kubernetes]] for container orchestration
+----
+
+Example usage in a context point:
+
+[source]
+----
+- Our current architecture is described in [[https://internal-wiki.example.com/architecture Architecture Wiki]]
+----
+
+[TIP]
+====
+Wiki style links are particularly useful for:
+
+* Linking to technical documentation
+* Referencing design documents
+* Pointing to standards or best practices
+* Connecting to related ADRs
 ====
 
 == Examples
@@ -182,9 +276,9 @@ context:
 - Different components have different scaling requirements
 decision:
 - We will gradually migrate from monolith to microservices architecture
-- We will use domain-driven design to identify service boundaries
+- We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries
 - We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication
-- We will use containerization (Docker) and orchestration (Kubernetes)
+- We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])
 consequences:
 - Improved scalability and resilience
 - Faster development cycles and independent deployments
@@ -265,7 +359,7 @@ context:
 - We anticipate significant growth in data volume
 - We want to improve horizontal scalability
 decision:
-- We will not migrate from PostgreSQL to MongoDB
+- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
 - We will instead optimize our existing PostgreSQL setup
 - We will implement caching strategies for performance-critical queries
 - We will consider a hybrid approach for specific use cases
@@ -289,7 +383,7 @@ context:
 - We anticipate significant growth in data volume
 - We want to improve horizontal scalability
 decision:
-- We will not migrate from PostgreSQL to MongoDB
+- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
 - We will instead optimize our existing PostgreSQL setup
 - We will implement caching strategies for performance-critical queries
 - We will consider a hybrid approach for specific use cases
@@ -297,8 +391,11 @@ consequences:
 - Avoid disruption of existing systems and processes
 - Leverage team's existing SQL expertise
 - Miss potential benefits of NoSQL for certain data patterns
-- Need to invest in PostgreSQL optimization and tuning
-participants: Jennifer Lee (Database Administrator), Carlos Rodriguez (System Architect), Thomas Wright (Performance Engineer)
+- Need to invest in [[https://www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
+participants: 
+Jennifer Lee (Database Administrator), 
+Carlos Rodriguez (System Architect), 
+Thomas Wright (Performance Engineer)
 ----
 
 === Superseded Status ADR Example
@@ -315,10 +412,10 @@ date: 2023-11-15
 context:
 - We need a stateless authentication mechanism
 - We want to reduce database lookups for auth verification
-- We need to support authentication across multiple services
+- We need to support authentication across [[https://microservices.io/ multiple services]]
 - We need to include authorization claims in the token
 decision:
-- We will use JWT (JSON Web Tokens) for authentication
+- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
 - We will implement token refresh mechanism
 - We will store tokens in HTTP-only cookies
 - We will include basic user permissions in the token
@@ -339,10 +436,10 @@ date: 2023-11-15
 context:
 - We need a stateless authentication mechanism
 - We want to reduce database lookups for auth verification
-- We need to support authentication across multiple services
+- We need to support authentication across [[https://microservices.io/ multiple services]]
 - We need to include authorization claims in the token
 decision:
-- We will use JWT (JSON Web Tokens) for authentication
+- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
 - We will implement token refresh mechanism
 - We will store tokens in HTTP-only cookies
 - We will include basic user permissions in the token
@@ -408,6 +505,69 @@ consequences:
 - More complex deployment architecture
 participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
 ----
+=== Multiline Participants Example
+
+This example demonstrates how to format participants on multiple lines for better readability:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Implement Data Lake Architecture
+status: Accepted
+date: 2024-06-20
+context:
+- We need a centralized repository for all our data assets
+- Current data silos are preventing cross-functional analytics
+- We need to support both structured and unstructured data
+- Future machine learning initiatives require access to historical data
+decision:
+- We will implement a data lake architecture using cloud storage
+- We will use a layered approach (raw, cleansed, and curated zones)
+- We will implement data cataloging and metadata management
+- We will establish data governance policies for the lake
+consequences:
+- Improved data accessibility across the organization
+- Reduced data duplication and inconsistencies
+- Increased storage costs initially
+- Need for new skills in data engineering and governance
+participants:
+Rebecca Chen (Data Architect)
+Mark Johnson (Data Engineer)
+Priya Patel (Business Intelligence Lead)
+Thomas Garcia (Cloud Infrastructure Specialist)
+Sarah Kim (Data Governance Officer)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Implement Data Lake Architecture
+status: Accepted
+date: 2024-06-20
+context:
+- We need a centralized repository for all our data assets
+- Current data silos are preventing cross-functional analytics
+- We need to support both structured and unstructured data
+- Future machine learning initiatives require access to historical data
+decision:
+- We will implement a data lake architecture using cloud storage
+- We will use a layered approach (raw, cleansed, and curated zones)
+- We will implement data cataloging and metadata management
+- We will establish data governance policies for the lake
+consequences:
+- Improved data accessibility across the organization
+- Reduced data duplication and inconsistencies
+- Increased storage costs initially
+- Need for new skills in data engineering and governance
+participants:
+Rebecca Chen (Data Architect)
+Mark Johnson (Data Engineer)
+Priya Patel (Business Intelligence Lead)
+Thomas Garcia (Cloud Infrastructure Specialist)
+Sarah Kim (Data Governance Officer)
+----
+
 == Conclusion
 
 The DocOps ADR Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing architecture decision records. By using the JSON configuration format, you can create customized ADRs that document important architectural decisions in your projects.
