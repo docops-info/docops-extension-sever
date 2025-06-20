@@ -3,13 +3,39 @@ include::_base.adoc[]
 
 == Introduction
 
-The DocOps ADR (Architecture Decision Record) Extension allows you to create visually appealing architecture decision records in your AsciiDoctor documents. ADRs are a way to document important architectural decisions, their context, and consequences.
+Architecture Decision Records (ADRs) are documents that capture significant design choices made during software development. They provide a structured way to record the context, rationale, and consequences of these decisions, ensuring future understanding and traceability. Essentially, ADRs act as a log of important architectural choices, helping teams understand why a system is designed the way it is.
+
+=== What are Architecture Decision Records?
+
+ADRs are typically short, concise documents (often one or two pages) that describe a specific architectural decision. They detail the decision itself, the context surrounding it (constraints, stakeholder input, etc.), the potential consequences (both positive and negative), and the status of the decision (e.g., proposed, accepted, superseded).
+
+=== Why are ADRs useful?
+
+* *Contextual understanding:* ADRs help current and future team members understand the reasoning behind design choices, even years later.
+* *Improved communication:* They facilitate better communication and collaboration by providing a shared understanding of architectural decisions.
+* *Traceability:* ADRs allow teams to trace back to the reasons for specific design choices, making it easier to adapt and evolve the system.
+* *Reduced re-work:* By documenting decisions and their justifications, ADRs can prevent redundant discussions and re-evaluation of the same issues.
+* *Onboarding new team members:* ADRs provide a quick and efficient way for new team members to get up to speed on the system's architecture.
+
+=== How are ADRs used?
+
+ADRs are often stored alongside the code in a repository (e.g., as Markdown files) and can be integrated with project management tools.
+
+=== Key characteristics of ADRs
+
+* *Immutability:* Once accepted, ADRs are generally considered immutable, meaning they are not changed directly. If a decision needs to be revisited, a new ADR is created to supersede the previous one.
+* *Conciseness:* ADRs are meant to be concise and to the point, focusing on the key aspects of the decision.
+* *Focus on the "why":* The primary goal is to capture the rationale behind the decision, not just the decision itself.
+
+=== The DocOps ADR Extension
+
+The DocOps ADR (Architecture Decision Record) Extension allows you to create visually appealing architecture decision records in your AsciiDoctor documents. It provides a structured format for documenting important architectural decisions, their context, and consequences.
 
 This guide will help you understand the basic concepts of ADRs, how to include them in your AsciiDoctor documents, and provide examples of different types of ADR visualizations.
 
 == Basic Concepts
 
-=== What are Architecture Decision Records?
+=== What are DocOps Architecture Decision Records?
 
 Architecture Decision Records (ADRs) in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each ADR has:
 
