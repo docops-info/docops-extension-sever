@@ -20,6 +20,7 @@ Architecture Decision Records (ADRs) in the DocOps extension are SVG-based graph
 * Decision (the actual decision made)
 * Consequences (the results of the decision)
 * Participants (the people involved in making the decision)
+* References (optional links to related resources)
 
 The extension supports various display options, including:
 
@@ -37,6 +38,7 @@ An ADR includes:
 * Decision section
 * Consequences section
 * Participants section with stick figure representations
+* References section with clickable links to related resources (optional)
 
 == AsciiDoctor Syntax for ADRs
 
@@ -72,6 +74,32 @@ The macro processes the JSON configuration and generates an SVG representation o
 * `decision` (required): An array of decision statements
 * `consequences` (required): An array of consequence statements
 * `participants` (optional): An array of participant names
+* `references` (optional): A list of wiki-style links to related resources
+
+==== References Section
+
+The `references` field allows you to include wiki-style links to related resources. These links will be displayed in a dedicated "References" section after the participants section. Wiki-style links use the format +[[url label]]+ where "url" is the target URL and "label" is the display text for the link.
+
+You can format references in two ways:
+
+1. **Single line with multiple links**:
++
+[source]
+----
+references: [[https://example.com/architecture Architecture Overview]], [[https://example.com/standards Coding Standards]]
+----
+
+2. **Multiple lines**:
++
+[source]
+----
+references:
+[[https://example.com/architecture Architecture Overview]]
+[[https://example.com/standards Coding Standards]]
+[[https://example.com/patterns Design Patterns]]
+----
+
+The references will be displayed as clickable links in the ADR visualization.
 
 ==== Multiline Participants
 
@@ -252,6 +280,7 @@ Wiki style links can be used in any text field of an ADR, including:
 * Decision points
 * Consequences
 * Participant information
+* The dedicated references section
 
 Example usage in a decision point:
 
@@ -735,6 +764,75 @@ Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
 Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
 Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
 Sinclair Washington | Ops Lead | sinclair.washington@example.com | #511D43 | 👩‍
+----
+
+=== References Section Example
+
+This example demonstrates how to include references in your ADR:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt GraphQL for API Layer
+status: Accepted
+date: 2024-07-15
+context:
+- Our REST APIs have become complex with many endpoints
+- Mobile clients need to fetch data from multiple endpoints
+- Different clients need different data shapes
+- We need to reduce over-fetching and under-fetching of data
+decision:
+- We will adopt GraphQL for our API layer
+- We will maintain existing REST endpoints for backward compatibility
+- We will implement a gradual migration strategy
+- We will use Apollo Server for the GraphQL implementation
+consequences:
+- More efficient data fetching for clients
+- Improved developer experience with self-documenting API
+- Potential learning curve for the team
+- Need for new tooling and monitoring
+participants:
+Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
+Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
+David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
+references:
+[[https://graphql.org/ GraphQL Official Documentation]]
+[[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
+[[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
+[[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt GraphQL for API Layer
+status: Accepted
+date: 2024-07-15
+context:
+- Our REST APIs have become complex with many endpoints
+- Mobile clients need to fetch data from multiple endpoints
+- Different clients need different data shapes
+- We need to reduce over-fetching and under-fetching of data
+decision:
+- We will adopt GraphQL for our API layer
+- We will maintain existing REST endpoints for backward compatibility
+- We will implement a gradual migration strategy
+- We will use Apollo Server for the GraphQL implementation
+consequences:
+- More efficient data fetching for clients
+- Improved developer experience with self-documenting API
+- Potential learning curve for the team
+- Need for new tooling and monitoring
+participants:
+Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
+Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
+David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
+references:
+[[https://graphql.org/ GraphQL Official Documentation]]
+[[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
+[[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
+[[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
 ----
 
 == Conclusion

@@ -74,6 +74,7 @@ data class Adr(
     val decision: List<String>,
     val consequences: List<String>,
     val participants: List<Participant> = emptyList(),
+    val references: List<WikiLink> = emptyList(),
     val links: List<WikiLink> = emptyList()
 )
 
@@ -125,6 +126,7 @@ class AdrParser {
         val decisionLines = mutableListOf<String>()
         val consequencesLines = mutableListOf<String>()
         val participantsLines = mutableListOf<String>()
+        val referencesLines = mutableListOf<String>()
         val links = mutableListOf<WikiLink>()
 
         var currentSection: String? = null
@@ -201,6 +203,20 @@ class AdrParser {
                     // Handle the case where the line is just "participants" without a colon
                     currentSection = "participants"
                 }
+                trimmedLine.startsWith("references:", true) -> {
+                    currentSection = "references"
+                    // Extract any text that appears after "references:" on the same line
+                    val referencesText = trimmedLine.substringAfter(trimmedLine.substring(0, 11), "").trim()
+                    if (referencesText.isNotEmpty()) {
+                        referencesLines.add(referencesText)
+                        // Extract wiki links from the references text
+                        extractWikiLinks(referencesText, links)
+                    }
+                }
+                trimmedLine.equals("references", true) -> {
+                    // Handle the case where the line is just "references" without a colon
+                    currentSection = "references"
+                }
                 else -> {
                     // If we're in a section and the line is not empty, add it to the appropriate list
                     if (!trimmedLine.isEmpty()) {
@@ -209,6 +225,7 @@ class AdrParser {
                             "decision" -> decisionLines.add(trimmedLine)
                             "consequences" -> consequencesLines.add(trimmedLine)
                             "participants" -> participantsLines.add(trimmedLine)
+                            "references" -> referencesLines.add(trimmedLine)
                             // If we're not in a recognized section, it might be free-form text
                             // For now, we'll ignore it, but we could add it to a general notes field if needed
                         }
@@ -250,6 +267,12 @@ class AdrParser {
         // Parse status
         val status = AdrStatus.fromString(statusStr) ?: throw kotlin.IllegalArgumentException("Invalid status: $statusStr")
 
+        // Extract references from referencesLines
+        val references = mutableListOf<WikiLink>()
+        for (line in referencesLines) {
+            extractWikiLinks(line, references)
+        }
+
         return Adr(
             title = title,
             status = status,
@@ -258,6 +281,7 @@ class AdrParser {
             decision = decisionLines,
             consequences = consequencesLines,
             participants = participants,
+            references = references,
             links = links
         )
     }

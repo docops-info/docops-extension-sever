@@ -88,6 +88,18 @@ class AdrSvgGenerator {
             |      text-decoration: underline;
             |      cursor: pointer;
             |    }
+            |    .reference-link {
+            |      font-family: Arial, Helvetica, sans-serif;
+            |      font-weight: 400;
+            |      font-size: 14px;
+            |      fill: #007AFF;
+            |      text-decoration: underline;
+            |      cursor: pointer;
+            |    }
+            |    .reference-link:hover {
+            |      fill: #0056CC;
+            |      font-weight: 500;
+            |    }
             |    a {
             |      cursor: pointer;
             |    }
@@ -448,9 +460,13 @@ class AdrSvgGenerator {
         val participantRows = Math.ceil(adr.participants.size.toDouble() / participantsPerRow).toInt()
         val participantsHeight = if (adr.participants.isEmpty()) 0 else participantRows * 70 + 40
 
+        // Calculate references section height
+        val referencesHeight = if (adr.references.isEmpty()) 0 else 40 + (adr.references.size * 25)
+
         // Calculate total height
         val totalHeight = titleHeight + contextHeight + decisionHeight + consequencesHeight + 
-                          participantsHeight + (4 * CARD_SPACING) + (2 * DEFAULT_PADDING)
+                          participantsHeight + referencesHeight + 
+                          (if (adr.references.isEmpty()) 4 else 5) * CARD_SPACING + (2 * DEFAULT_PADDING)
 
         val color = STATUS_COLORS[adr.status] ?: "#999999"
         // Add SVG header
@@ -525,6 +541,24 @@ class AdrSvgGenerator {
 
                 renderParticipant(svg, participant, participantX, participantY, participantWidth, adr.status)
                 participantX += participantWidth
+            }
+        }
+
+        // References Card (if any)
+        if (adr.references.isNotEmpty()) {
+            currentY += participantsHeight + CARD_SPACING
+
+            svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$referencesHeight" class="card" rx="10" ry="10"/>""")
+            svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">References</text>""")
+
+            var linkY = currentY + 50
+
+            // Render each reference as a link
+            for (reference in adr.references) {
+                svg.append("""<a href="${escapeXml(reference.url)}" target="_blank">""")
+                svg.append("""<text x="$contentX" y="$linkY" class="reference-link">${escapeXml(reference.label)}</text>""")
+                svg.append("""</a>""")
+                linkY += 25
             }
         }
 
