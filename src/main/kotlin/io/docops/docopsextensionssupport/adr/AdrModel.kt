@@ -236,7 +236,8 @@ class AdrParser {
                         val title = if (parts.size > 1) parts[1] else ""
                         val email = if (parts.size > 2) parts[2] else ""
                         val color = if (parts.size > 3) parts[3] else "#6c757d"
-                        Participant(name, title, email, color)
+                        val emoji = if (parts.size > 4) parts[4] else "👤"
+                        Participant(name, title, email, color, emoji)
                     } else {
                         // Old format - just a name
                         Participant(name = participantStr)
