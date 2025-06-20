@@ -45,7 +45,7 @@ To include pie charts in your AsciiDoctor document, you use a special macro synt
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 Product A | 30
 Product B | 25
@@ -59,7 +59,7 @@ For more customization, you can add configuration parameters:
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Sales Distribution by Product
 width=600
@@ -96,9 +96,10 @@ The following configuration parameters are available:
 
 The data for the pie chart is specified in a simple format:
 
-```
+[source]
+----
 Label | Value [| Color]
-```
+----
 
 Where:
 * `Label` is the category name
@@ -115,7 +116,7 @@ Here's a simple example of a pie chart with minimal configuration:
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 Product A | 30
 Product B | 25
@@ -125,7 +126,7 @@ Product E | 10
 ----
 ....
 
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 Product A | 30
 Product B | 25
@@ -140,7 +141,7 @@ Here's an example with configuration parameters:
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Sales Distribution by Product
 width=600
@@ -157,7 +158,7 @@ Product E | 10
 ----
 ....
 
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Sales Distribution by Product
 width=600
@@ -180,7 +181,7 @@ You can position your chart using the `role` attribute:
 [source,asciidoc]
 ....
 .Pie Chart
-[docops,pieslice, role=left]
+[docops,pieslice, role=left,controls=true]
 ----
 title=Favorite Anime
 width=600
@@ -199,7 +200,7 @@ Demon Slayer | 10.0
 ....
 
 .Pie Chart
-[docops,pieslice, role=left]
+[docops,pieslice, role=left,controls=true]
 ----
 title=Favorite Anime
 width=600
@@ -223,7 +224,7 @@ You can create donut charts by setting the `donut` parameter to `true`:
 [source,asciidoc]
 ....
 .Pie Chart
-[docops,pieslice, role=left]
+[docops,pieslice, role=left,controls=true]
 ----
 title=Favorite Anime
 width=600
@@ -242,7 +243,7 @@ Demon Slayer | 10.0
 ....
 
 .Pie Chart
-[docops,pieslice, role=left]
+[docops,pieslice, role=left,controls=true]
 ----
 title=Favorite Anime
 width=600
@@ -265,7 +266,7 @@ You can specify custom colors for individual slices:
 
 [source,asciidoc]
 ....
-[docops,pieslice, title="Sales Distribution with Custom Colors"]
+[docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
 ----
 Product A | 30 | #ff5733
 Product B | 25 | #33ff57
@@ -275,7 +276,7 @@ Product E | 10 | #ff33f3
 ----
 ....
 
-[docops,pieslice, title="Sales Distribution with Custom Colors"]
+[docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
 ----
 Product A | 30 | #ff5733
 Product B | 25 | #33ff57
@@ -290,7 +291,7 @@ You can specify a custom color palette for the entire chart:
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Sales with Custom Palette
 colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
@@ -303,7 +304,7 @@ Product E | 10
 ----
 ....
 
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Sales with Custom Palette
 colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
@@ -321,7 +322,7 @@ You can enable dark mode for better visibility in dark-themed documents:
 
 [source,asciidoc]
 ....
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Market Share Distribution
 width=600
@@ -336,7 +337,7 @@ Product E | 5
 ----
 ....
 
-[docops,pieslice]
+[docops,pieslice,controls=true]
 ----
 title=Market Share Distribution
 width=600
