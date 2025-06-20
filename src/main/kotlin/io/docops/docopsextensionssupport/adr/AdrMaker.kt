@@ -503,31 +503,12 @@ class AdrMaker {
         // Calculate dimensions for person figures with more space for text
         val figureWidth = 150f // Increased width allocated for each person figure
         val figureHeight = 120f // Increased height needed for person figure + multi-line name
-        val participants = adr.participants.filter { it.isNotBlank() }
+        val participants = adr.participants.filter { it.name.isNotEmpty() }
 
         // Calculate content dimensions with fewer participants per row to accommodate longer text
         val maxParticipantsPerRow = 4 // Reduced from 6 to 4 participants per row
 
-        // Process participants: split comma-separated names into individual participants
-        val participantList = mutableListOf<String>()
-        adr.participants.forEach { participantEntry ->
-            // The input format is expected to be "Name (Role), Name (Role)"
-            // We need to be careful about splitting by commas that are not inside parentheses
-
-            // Use regex to match participants with their roles
-            // This regex matches: name followed by optional role in parentheses
-            val regex = """([^,]+(?:\([^)]*\))?)(?:,\s*|$)""".toRegex()
-            val matches = regex.findAll(participantEntry)
-
-            matches.forEach { match ->
-                val participant = match.groupValues[1].trim()
-                if (participant.isNotEmpty()) {
-                    participantList.add(participant)
-                }
-            }
-        }
-
-        val rows = (participantList.size + maxParticipantsPerRow - 1) / maxParticipantsPerRow // Ceiling division
+        val rows = (participants.size + maxParticipantsPerRow - 1) / maxParticipantsPerRow // Ceiling division
         val contentHeight = rows * figureHeight + 30 // Add more padding
 
         // Create content card with a lighter shade
@@ -539,7 +520,7 @@ class AdrMaker {
         """.trimIndent())
 
         // Add person figures for each participant
-        participantList.forEachIndexed { index, participant ->
+        participants.forEachIndexed { index, participant ->
             val row = index / maxParticipantsPerRow
             val col = index % maxParticipantsPerRow
 
@@ -547,7 +528,16 @@ class AdrMaker {
             val xPos = 30f + 75f + (col * figureWidth) // Start with padding + half figure width
             val yPos = contentY + 40f + (row * figureHeight) // Start with padding
 
-            text.append(createPersonFigure(xPos, yPos, participant.trim(), mapBgFromStatus(adr)))
+            // Use participant name and color if available, otherwise use status color
+            val participantColor = if (participant.color.isNotEmpty()) participant.color else mapBgFromStatus(adr)
+
+            // Create display name with title if available
+            val displayName = if (participant.title.isNotEmpty()) 
+                "${participant.name} (${participant.title})" 
+            else 
+                participant.name
+
+            text.append(createPersonFigure(xPos, yPos, displayName, participantColor))
         }
 
         return RowTextOutcome(text.toString(), contentY + contentHeight)

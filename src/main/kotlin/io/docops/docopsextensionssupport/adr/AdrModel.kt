@@ -53,6 +53,17 @@ data class WikiLink(
 )
 
 /**
+ * Represents a participant in an ADR.
+ */
+data class Participant(
+    val name: String,
+    val title: String = "",
+    val email: String = "",
+    val color: String = "#6c757d",
+    val emoji: String = "👤"
+)
+
+/**
  * Data class representing an Architecture Decision Record (ADR).
  */
 data class Adr(
@@ -62,7 +73,7 @@ data class Adr(
     val context: List<String>,
     val decision: List<String>,
     val consequences: List<String>,
-    val participants: List<String> = emptyList(),
+    val participants: List<Participant> = emptyList(),
     val links: List<WikiLink> = emptyList()
 )
 
@@ -215,6 +226,22 @@ class AdrParser {
                 .split(",")
                 .map { it.trim() }
                 .filter { it.isNotEmpty() } // Filter out empty entries
+                .map { participantStr ->
+                    // Check if the participant string uses the new format with pipe separators
+                    if (participantStr.contains("|")) {
+                        // Split by pipe and trim each part
+                        val parts = participantStr.split("|").map { it.trim() }
+                        // Extract the parts (name is required, others are optional)
+                        val name = parts[0]
+                        val title = if (parts.size > 1) parts[1] else ""
+                        val email = if (parts.size > 2) parts[2] else ""
+                        val color = if (parts.size > 3) parts[3] else "#6c757d"
+                        Participant(name, title, email, color)
+                    } else {
+                        // Old format - just a name
+                        Participant(name = participantStr)
+                    }
+                }
         } else {
             emptyList()
         }

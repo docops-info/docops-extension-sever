@@ -350,45 +350,49 @@ class AdrSvgGenerator {
     }
 
     /**
-     * Creates a participant element with icon and name.
-     * If the participant name contains an email, adds a Microsoft Teams chat link but only displays the name.
+     * Creates a participant element with emoji icon and name.
+     * If the participant has an email, adds a Microsoft Teams chat link but only displays the name.
      */
-    private fun createParticipantElement(participant: String, x: Int, y: Int, width: Int, status: AdrStatus): String {
-        // Extract name and email if present
-        val (displayName, email) = extractNameAndEmail(participant)
-
+    private fun createParticipantElement(participant: Participant, x: Int, y: Int, width: Int, status: AdrStatus): String {
         // Check if name contains a wiki link
         val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-        val hasLink = linkPattern.containsMatchIn(displayName)
+        val hasLink = linkPattern.containsMatchIn(participant.name)
 
         val sb = StringBuilder()
 
         // Start participant container for hover effect if email is present or has link
-        if (email != null || hasLink) {
+        if (participant.email.isNotEmpty() || hasLink) {
             sb.append("""<g class="participant-container">""")
         } else {
             sb.append("""<g>""")
         }
 
-        // Icon
-        val color = STATUS_COLORS[status] ?: "#999999"
-        sb.append("""<use href="#user-icon" x="${x + (width/2) - 15}" y="$y" width="30" height="30" fill="$color" class="participant-icon" />""")
+        // Emoji icon (centered)
+        val color = if (participant.color.isNotEmpty()) participant.color else (STATUS_COLORS[status] ?: "#999999")
+        sb.append("""<circle cx="${x + (width/2)}" cy="$y" r="15" fill="$color" class="participant-icon" />""")
+        sb.append("""<text x="${x + (width/2)}" y="${y + 5}" text-anchor="middle" font-size="16">${participant.emoji}</text>""")
 
         // Name (centered under icon)
-        val escapedName = escapeXml(displayName)
+        val escapedName = escapeXml(participant.name)
         val wrappedName = wrapText(escapedName, 20)
-        var currentY = y + 40
+        var currentY = y + 30
 
         for (line in wrappedName) {
-            if (email != null) {
+            if (participant.email.isNotEmpty()) {
                 // Create a Teams chat link if email is present
-                val teamsUrl = "https://teams.microsoft.com/l/chat/0/0?users=${escapeXml(email)}"
-                sb.append("""<a href="${teamsUrl}" target="_blank" title="Chat with ${escapeXml(email)}">""")
+                val teamsUrl = "https://teams.microsoft.com/l/chat/0/0?users=${escapeXml(participant.email)}"
+                sb.append("""<a href="${teamsUrl}" target="_blank" title="Chat with ${escapeXml(participant.email)}">""")
                 sb.append("""<text x="${x + width/2}" y="$currentY" class="participant-name-with-email">$line</text>""")
                 sb.append("""</a>""")
             } else {
                 sb.append("""<text x="${x + width/2}" y="$currentY" class="participant-name">$line</text>""")
             }
+            currentY += 15
+        }
+
+        // Add title if present
+        if (participant.title.isNotEmpty()) {
+            sb.append("""<text x="${x + width/2}" y="$currentY" class="participant-title" text-anchor="middle">${escapeXml(participant.title)}</text>""")
             currentY += 15
         }
 
@@ -399,19 +403,23 @@ class AdrSvgGenerator {
     }
 
     /**
-     * Renders a participant with icon and name.
-     * If the participant name contains an email, adds a Microsoft Teams chat link.
+     * Renders a participant with emoji icon and name.
+     * If the participant has an email, adds a Microsoft Teams chat link.
      * If the participant name contains a wiki link, applies the hover glow effect.
      */
-    private fun renderParticipant(svg: StringBuilder, name: String, x: Int, y: Int, width: Int, status: AdrStatus): Int {
+    private fun renderParticipant(svg: StringBuilder, participant: Participant, x: Int, y: Int, width: Int, status: AdrStatus): Int {
         // Create the participant element
-        val participantElement = createParticipantElement(name, x, y, width, status)
+        val participantElement = createParticipantElement(participant, x, y, width, status)
         svg.append(participantElement)
 
-        // Calculate the height based on the number of lines in the name
-        val (displayName, _) = extractNameAndEmail(name)
-        val wrappedName = wrapText(displayName, 20)
-        val currentY = y + 40 + (wrappedName.size * 15)
+        // Calculate the height based on the number of lines in the name and if title is present
+        val wrappedName = wrapText(participant.name, 20)
+        var currentY = y + 30 + (wrappedName.size * 15)
+
+        // Add extra height if title is present
+        if (participant.title.isNotEmpty()) {
+            currentY += 15
+        }
 
         return currentY + 10
     }
@@ -438,7 +446,7 @@ class AdrSvgGenerator {
         val participantsPerRow = 3
         val participantWidth = (MAX_CARD_WIDTH - 2 * CARD_PADDING) / participantsPerRow
         val participantRows = Math.ceil(adr.participants.size.toDouble() / participantsPerRow).toInt()
-        val participantsHeight = if (adr.participants.isEmpty()) 0 else participantRows * 80 + 40
+        val participantsHeight = if (adr.participants.isEmpty()) 0 else participantRows * 70 + 40
 
         // Calculate total height
         val totalHeight = titleHeight + contextHeight + decisionHeight + consequencesHeight + 
@@ -495,9 +503,8 @@ class AdrSvgGenerator {
 
             // First pass to collect emails
             for (participant in adr.participants) {
-                val email = extractEmail(participant)
-                if (email != null) {
-                    participantEmails.add(email)
+                if (participant.email.isNotEmpty()) {
+                    participantEmails.add(participant.email)
                 }
             }
 
@@ -512,7 +519,7 @@ class AdrSvgGenerator {
             // Render participants
             for ((index, participant) in adr.participants.withIndex()) {
                 if (index > 0 && index % participantsPerRow == 0) {
-                    participantY += 80
+                    participantY += 70
                     participantX = contentX
                 }
 

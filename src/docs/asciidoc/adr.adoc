@@ -108,17 +108,85 @@ Alice Johnson (Product Manager)
 
 Both formats will be correctly parsed and displayed in the ADR visualization.
 
+==== Structured Participant Format
+
+The ADR extension now supports a structured format for participants using pipe separators. This allows you to specify additional information for each participant in a structured way.
+
+The format is:
+
+[source]
+----
+Name | title | email | color | emoji
+----
+
+Where:
+
+* `Name` (required): The participant's name
+* `title` (optional): The participant's title or role
+* `email` (optional): The participant's email address
+* `color` (optional): A custom color for the participant's icon (hex code)
+* `emoji` (optional): A custom emoji character to represent the participant (defaults to 👤 if not specified)
+
+Examples:
+
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563
+----
+
+With a custom emoji:
+
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563 | 👩‍💻
+----
+
+Or with multiple participants and different emojis:
+
+[source]
+----
+participants:
+John Doe | Developer | john.doe@example.com | #10B981 | 👨‍💻
+Jane Smith | Architect | jane.smith@example.com | #6366F1 | 🏗️
+Alice Johnson | Product Manager | alice.johnson@example.com | #F59E0B | 📊
+----
+
+[NOTE]
+====
+* If you omit any optional parameters, you can still include the pipe separators:
++
+[source]
+----
+participants: John Doe | Developer | | #10B981 |
+----
+
+* If you don't specify a color, a default color will be used based on the ADR status.
+* If you don't specify an emoji, the default 👤 will be used.
+* You can use any standard emoji character, including composite emojis like 👩‍💻 or 👨‍🔬.
+* The structured format uses emoji icons instead of the traditional person icons.
+* Both the traditional format and the structured format are supported for backward compatibility.
+====
+
 ==== Interactive Participants
 
 The participants section includes several interactive features to enhance collaboration:
 
 1. **Hover Effects**: When you hover over a participant, a subtle glow effect is applied to highlight the participant.
 
-2. **Email Detection**: The system automatically detects email addresses in participant names. For example:
+2. **Email Detection**: The system automatically detects email addresses in participant information. You can specify emails in two ways:
++
+Using the traditional format:
 +
 [source]
 ----
 participants: Jane Smith (jane.smith@example.com), John Doe (john.doe@example.com)
+----
++
+Or using the structured format:
++
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563
 ----
 
 3. **Microsoft Teams Chat Links**: Participants with email addresses are automatically linked to Microsoft Teams chat. Clicking on a participant with an email will open a new Teams chat with that person.
@@ -129,9 +197,11 @@ participants: Jane Smith (jane.smith@example.com), John Doe (john.doe@example.co
 ====
 To make the most of these interactive features:
 
-* Include email addresses in parentheses after participant names
-* Format: `Name (email@example.com)`
+* Include email addresses either:
+** In parentheses after participant names: `Name (email@example.com)`
+** Or in the structured format: `Name | Title | email@example.com | color`
 * For organization-specific Teams integration, ensure you're using the correct email domain
+* The structured format provides more control over the participant's appearance and information
 ====
 
 ==== Status Options
@@ -569,11 +639,11 @@ consequences:
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
 participants:
-Rebecca Chen (rebecca.chen@example.com)
-Mark Johnson (mark.johnson@example.com)
-Priya Patel (priya.patel@example.com)
-Thomas Garcia (thomas.garcia@example.com)
-Sarah Kim (sarah.kim@example.com)
+Rebecca Chen ||(rebecca.chen@example.com)|
+Mark Johnson ||(mark.johnson@example.com)|
+Priya Patel || (priya.patel@example.com)|
+Thomas Garcia ||(thomas.garcia@example.com)|
+Sarah Kim ||(sarah.kim@example.com)|
 ----
 ....
 
@@ -598,11 +668,72 @@ consequences:
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
 participants:
-Rebecca Chen (rebecca.chen@example.com)
-Mark Johnson (mark.johnson@example.com)
-Priya Patel (priya.patel@example.com)
-Thomas Garcia (thomas.garcia@example.com)
-Sarah Kim (sarah.kim@example.com)
+Rebecca Chen ||(rebecca.chen@example.com)|
+Mark Johnson ||(mark.johnson@example.com)|
+Priya Patel || (priya.patel@example.com)|
+Thomas Garcia ||(thomas.garcia@example.com)|
+Sarah Kim ||(sarah.kim@example.com)|
+----
+
+=== Structured Participants Example
+
+This example demonstrates the new structured format for participants with custom emojis, titles, emails, and colors:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt Cloud-Native CI/CD Pipeline
+status: Accepted
+date: 2024-07-01
+context:
+- Our current CI/CD process is manual and error-prone
+- We need to improve deployment frequency and reliability
+- We want to standardize our deployment process across teams
+- We need better visibility into the deployment pipeline
+decision:
+- We will implement a cloud-native CI/CD pipeline
+- We will use GitOps principles for infrastructure and application deployments
+- We will implement automated testing at all stages
+- We will use containerization for consistent environments
+consequences:
+- Faster and more reliable deployments
+- Improved developer productivity
+- Better traceability of changes
+- Initial learning curve for teams
+participants:
+Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
+Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
+Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
+Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt Cloud-Native CI/CD Pipeline
+status: Accepted
+date: 2024-07-01
+context:
+- Our current CI/CD process is manual and error-prone
+- We need to improve deployment frequency and reliability
+- We want to standardize our deployment process across teams
+- We need better visibility into the deployment pipeline
+decision:
+- We will implement a cloud-native CI/CD pipeline
+- We will use GitOps principles for infrastructure and application deployments
+- We will implement automated testing at all stages
+- We will use containerization for consistent environments
+consequences:
+- Faster and more reliable deployments
+- Improved developer productivity
+- Better traceability of changes
+- Initial learning curve for teams
+participants:
+Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
+Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
+Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
+Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
 ----
 
 == Conclusion
