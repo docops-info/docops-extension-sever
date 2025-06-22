@@ -1,0 +1,515 @@
+include::_base.adoc[]
+= Timeline
+:imagesdir: images
+
+== Introduction
+
+The DocOps Timeline Extension allows you to create visually appealing timeline visualizations in your AsciiDoctor documents. Timelines are useful for displaying chronological events, project milestones, historical dates, and other time-based information.
+
+This guide will help you understand how to include timelines in your AsciiDoctor documents and provide examples of different timeline configurations.
+
+== Basic Concepts
+
+=== What are Timelines?
+
+Timelines in the DocOps extension are SVG-based graphical elements that display a series of events along a horizontal line. Each timeline has:
+
+* A title (the main heading of the timeline)
+* A series of events, each with a date and descriptive text
+* Events are displayed alternating above and below the timeline
+* Optional display settings for customizing the appearance
+
+=== Timeline Components
+
+A timeline includes:
+
+* A title
+* A horizontal timeline road with directional arrow
+* Multiple event entries, each containing:
+  ** A date
+  ** Descriptive text (which can include links)
+* Display settings for visual appearance
+
+== AsciiDoctor Syntax for Timelines
+
+To include timelines in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Timeline",scale="1",role="center",controls=true]
+----
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+----
+....
+
+The macro processes the timeline entries and generates an SVG representation that is embedded in your document.
+
+=== Timeline Properties
+
+==== Macro Properties
+
+* `title` (optional): The main heading of the timeline
+* `scale` (optional): A scaling factor for the timeline (default: 1.0)
+* `role` (optional): The role attribute for the timeline (e.g., "center" to center the timeline)
+* `useDark` (optional): Whether to use dark mode (default: false)
+* `outlineColor` (optional): The color for the timeline outline (default: "#37cdbe")
+
+
+==== Entry Properties
+
+Each entry in the timeline has the following properties:
+
+* `date` (required): The date or time label for the event
+* `text` (required): The descriptive text for the event
+
+=== Timeline Entry Syntax
+
+Each timeline entry starts with a `-` on a new line, followed by the date and text properties:
+
+[source,asciidoc]
+....
+-
+date: January 1, 2023
+text: This is the first event in the timeline
+-
+date: February 15, 2023
+text: This is the second event in the timeline
+....
+
+The text property can span multiple lines and can include links using the syntax `\[[url display_text]]` (without the backslash):
+
+[source,asciidoc]
+....
+-
+date: March 10, 2023
+text: This event includes a link to \[[https://docops.io DocOps.io]]
+and spans multiple lines for longer descriptions
+....
+
+== Examples
+
+=== Basic Timeline Example
+
+Here's a simple example of a timeline:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Timeline",scale="1",role="center",controls=true]
+----
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+----
+....
+
+[docops,timeline,title="Project Timeline",scale="1",role="center",controls=true]
+----
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+----
+
+=== Timeline with Multiple Events
+
+You can add as many events as needed to your timeline:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Timeline",scale="1",role="center"]
+----
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+-
+date: September 1st, 2023
+text: DocOps.io will begin work on revamping the asciidoctorj converter.
+With the asciidoctorj 3.0.0 release coming we will need to migrate
+custom plug-ins to the new version.
+-
+date: October 18th, 2023
+text: Time to reimagine the future. Is it possible
+to write a lexer parser for custom language?
+-
+date: December 11th, 2023
+text: Annual start of vacation, time to relax
+and plugin the controller.
+-
+date: 01/01/2024
+text: First entry where we show text is wrapping or not and the [[https://roach.gy roach.gy]] aligning properly
+----
+....
+
+[docops,timeline,title="Project Timeline",scale="1",role="center",controls=true]
+----
+-
+date: 1891
+text: Mailbox, invented by Phillip Downing
+-
+date: 1923
+text: The Three-Light Traffic Signal, invented by Garrett Morgan
+-
+date: 1932
+text: Automatic Gear Shift, invented by Richard Spikes
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+-
+date: September 1st, 2023
+text: DocOps.io will begin work on revamping the asciidoctorj converter.
+With the asciidoctorj 3.0.0 release coming we will need to migrate
+custom plug-ins to the new version.
+-
+date: October 18th, 2023
+text: Time to reimagine the future. Is it possible
+to write a lexer parser for custom language?
+-
+date: December 11th, 2023
+text: Annual start of vacation, time to relax
+and plugin the controller.
+-
+date: 01/01/2024
+text: First entry where we show text is wrapping or not and the [[https://roach.gy roach.gy]] aligning properly
+----
+
+=== Timeline with Links
+
+You can include links in your timeline entries using the `\[[url display_text]]` syntax (without the backslash):
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Timeline with Links",scale="1",role="center",controls=true]
+----
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: Visit [[https://docops.io DocOps.io]] for more information about
+our documentation tools and extensions.
+----
+....
+
+[docops,timeline,title="Project Timeline with Links",scale="1",role="center",controls=true]
+----
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: Visit [[https://docops.io DocOps.io]] for more information about
+our documentation tools and extensions.
+----
+
+
+=== Timeline with Dark Mode
+
+You can create a timeline with dark mode by setting the `useDark` parameter to `true`:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Space Exploration Timeline",scale="1",role="center",useDark="true"]
+----
+-
+date: April 12, 1961
+text: Yuri Gagarin becomes the first human to journey into outer space
+-
+date: July 20, 1969
+text: Neil Armstrong and Buzz Aldrin become the first humans to land on the Moon
+-
+date: April 12, 1981
+text: First launch of Space Shuttle Columbia
+-
+date: November 20, 1998
+text: Launch of the first module of the International Space Station
+-
+date: February 6, 2018
+text: SpaceX launches Falcon Heavy, sending a Tesla Roadster into space
+-
+date: May 30, 2020
+text: SpaceX Crew Dragon Demo-2 becomes the first private spacecraft to carry humans to the ISS
+----
+....
+
+[docops,timeline,title="Space Exploration Timeline",scale="1",role="center",useDark="true",controls=true]
+----
+-
+date: April 12, 1961
+text: Yuri Gagarin becomes the first human to journey into outer space
+-
+date: July 20, 1969
+text: Neil Armstrong and Buzz Aldrin become the first humans to land on the Moon
+-
+date: April 12, 1981
+text: First launch of Space Shuttle Columbia
+-
+date: November 20, 1998
+text: Launch of the first module of the International Space Station
+-
+date: February 6, 2018
+text: SpaceX launches Falcon Heavy, sending a Tesla Roadster into space
+-
+date: May 30, 2020
+text: SpaceX Crew Dragon Demo-2 becomes the first private spacecraft to carry humans to the ISS
+----
+
+=== Timeline with Custom Outline Color
+
+You can customize the timeline's appearance by changing the outline color:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Evolution of Computing",scale="1",role="center",outlineColor="#FF5733",controls=true]
+----
+-
+date: 1945
+text: ENIAC, the first general-purpose electronic computer, is completed
+-
+date: 1971
+text: Intel releases the 4004, the first commercial microprocessor
+-
+date: 1976
+text: Apple I computer is released by Steve Jobs and Steve Wozniak
+-
+date: 1981
+text: IBM introduces its first personal computer
+-
+date: 1991
+text: The World Wide Web is made available to the public
+-
+date: 2007
+text: Apple introduces the iPhone, revolutionizing mobile computing
+-
+date: 2023
+text: Generative AI becomes mainstream with tools like ChatGPT and DALL-E
+----
+....
+
+[docops,timeline,title="Evolution of Computing",scale="1",role="center",outlineColor="#FF5733",controls=true]
+----
+-
+date: 1945
+text: ENIAC, the first general-purpose electronic computer, is completed
+-
+date: 1971
+text: Intel releases the 4004, the first commercial microprocessor
+-
+date: 1976
+text: Apple I computer is released by Steve Jobs and Steve Wozniak
+-
+date: 1981
+text: IBM introduces its first personal computer
+-
+date: 1991
+text: The World Wide Web is made available to the public
+-
+date: 2007
+text: Apple introduces the iPhone, revolutionizing mobile computing
+-
+date: 2023
+text: Generative AI becomes mainstream with tools like ChatGPT and DALL-E
+----
+
+=== Educational Timeline Example
+
+Timelines are excellent for educational content, such as this timeline of literary movements:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Major Literary Movements",scale="1",role="center",outlineColor="#4B0082",controls=true]
+----
+-
+date: 1660-1798
+text: The Enlightenment/Neoclassical Period
+Literature focused on reason, logic, and scientific thought. Major writers include [[https://en.wikipedia.org/wiki/Alexander_Pope Alexander Pope]] and [[https://en.wikipedia.org/wiki/Jonathan_Swift Jonathan Swift]].
+-
+date: 1798-1832
+text: Romanticism
+Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]].
+-
+date: 1837-1901
+text: Victorian Era
+Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]].
+-
+date: 1914-1945
+text: Modernism
+Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]].
+-
+date: 1945-present
+text: Postmodernism
+Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]].
+----
+....
+
+[docops,timeline,title="Major Literary Movements",scale="1",role="center",outlineColor="#4B0082",controls=true]
+----
+-
+date: 1660-1798
+text: The Enlightenment/Neoclassical Period
+Literature focused on reason, logic, and scientific thought. Major writers include [[https://en.wikipedia.org/wiki/Alexander_Pope Alexander Pope]] and [[https://en.wikipedia.org/wiki/Jonathan_Swift Jonathan Swift]].
+-
+date: 1798-1832
+text: Romanticism
+Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]].
+-
+date: 1837-1901
+text: Victorian Era
+Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]].
+-
+date: 1914-1945
+text: Modernism
+Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]].
+-
+date: 1945-present
+text: Postmodernism
+Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]].
+----
+
+=== Product Roadmap Timeline
+
+Timelines are perfect for visualizing product roadmaps and future plans:
+
+[source,asciidoc]
+....
+[docops,timeline,title="DocOps Product Roadmap 2024",scale="1",role="center",outlineColor="#008080",controls=true]
+----
+-
+date: Q1 2024
+text: Release DocOps Extension Server v2.0
+• Enhanced timeline visualization
+• Improved performance
+• New documentation templates
+-
+date: Q2 2024
+text: Launch DocOps Cloud Service
+• Browser-based editing
+• Collaborative documentation
+• Automatic versioning
+-
+date: Q3 2024
+text: Mobile App Release
+• View documentation on-the-go
+• Offline access
+• Push notifications for updates
+-
+date: Q4 2024
+text: Enterprise Integration Suite
+• LDAP/Active Directory support
+• Advanced access controls
+• Custom branding options
+• Analytics dashboard
+-
+date: Q1 2025
+text: AI-Powered Documentation Assistant
+• Automated content suggestions
+• Quality and consistency checks
+• Smart search capabilities
+----
+....
+
+[docops,timeline,title="DocOps Product Roadmap 2024",scale="1",role="center",outlineColor="#008080",controls=true]
+----
+-
+date: Q1 2024
+text: Release DocOps Extension Server v2.0
+• Enhanced timeline visualization
+• Improved performance
+• New documentation templates
+-
+date: Q2 2024
+text: Launch DocOps Cloud Service
+• Browser-based editing
+• Collaborative documentation
+• Automatic versioning
+-
+date: Q3 2024
+text: Mobile App Release
+• View documentation on-the-go
+• Offline access
+• Push notifications for updates
+-
+date: Q4 2024
+text: Enterprise Integration Suite
+• LDAP/Active Directory support
+• Advanced access controls
+• Custom branding options
+• Analytics dashboard
+-
+date: Q1 2025
+text: AI-Powered Documentation Assistant
+• Automated content suggestions
+• Quality and consistency checks
+• Smart search capabilities
+----
+
+== Conclusion
+
+The DocOps Timeline Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing timelines. By using the simple text-based syntax, you can create customized timelines that display chronological events in a clear and engaging format.
+
+The extension supports various display options and allows for rich text content including links, making it versatile for different documentation needs.

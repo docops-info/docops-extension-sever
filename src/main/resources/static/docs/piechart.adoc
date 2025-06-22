@@ -1,0 +1,368 @@
+= DocOps Pie Charts
+:imagesdir: images
+
+
+== Introduction
+
+The DocOps Pie Chart Extension allows you to create visually appealing pie charts in your AsciiDoctor documents. Pie charts are useful for showing the proportion of different categories within a whole and comparing relative sizes of data.
+
+This guide will help you understand the basic concepts of pie charts, how to include them in your AsciiDoctor documents, and provide examples of different types of pie charts.
+
+== Basic Concepts
+
+=== What are Pie Charts?
+
+Pie charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each pie chart has:
+
+* A title (the main heading of the chart)
+* A series of slices, each representing a proportion of the whole
+* Labels for each slice
+* Optional display settings for customizing the appearance
+
+The extension supports two main types of pie charts:
+
+* Regular Pie Charts - A traditional circular chart divided into slices
+* Donut Charts - Similar to pie charts but with a hole in the center
+
+Each type can be displayed in various styles, including:
+
+* Custom colors for slices
+* Interactive hover effects
+* Percentage labels
+* Dark mode support for better visibility in dark-themed documents
+
+=== Pie Chart Components
+
+A pie chart or donut chart includes:
+
+* A title
+* A series of slices, each with a label and value
+* Optional configuration parameters for visual appearance
+
+== AsciiDoctor Syntax for Pie Charts
+
+To include pie charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+For more customization, you can add configuration parameters:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+The macro processes the configuration and data to generate an SVG representation of the pie chart that is embedded in your document.
+
+=== Configuration Parameters
+
+The following configuration parameters are available:
+
+* `title` (optional): The main heading of the chart (default: "Pie Chart")
+* `width` (optional): The width of the chart in pixels (default: 500)
+* `height` (optional): The height of the chart in pixels (default: 500)
+* `legend` (optional): Whether to display a legend (default: true)
+* `percentages` (optional): Whether to display percentage values (default: true)
+* `hover` (optional): Whether to enable hover effects (default: true)
+* `donut` (optional): Whether to display as a donut chart (default: false)
+* `colors` (optional): A comma-separated list of custom colors for the chart
+* `darkMode` (optional): Whether to use dark mode styling (default: false)
+
+=== Data Format
+
+The data for the pie chart is specified in a simple format:
+
+[source]
+----
+Label | Value [| Color]
+----
+
+Where:
+* `Label` is the category name
+* `Value` is the numerical value for the slice
+* `Color` (optional) is a custom color for this specific slice (e.g., #ff5733)
+
+If you include configuration parameters, you must separate them from the data with a line containing three dashes (`---`).
+
+== Examples
+
+=== Basic Pie Chart Example
+
+Here's a simple example of a pie chart with minimal configuration:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+[docops,pieslice,controls=true]
+----
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+
+=== Pie Chart with Configuration
+
+Here's an example with configuration parameters:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+[docops,pieslice,controls=true]
+----
+title=Sales Distribution by Product
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+
+=== Pie Chart with Positioning
+
+You can position your chart using the `role` attribute:
+
+[source,asciidoc]
+....
+.Pie Chart
+[docops,pieslice, role=left,controls=true]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+....
+
+.Pie Chart
+[docops,pieslice, role=left,controls=true]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=false
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+
+=== Donut Chart Example
+
+You can create donut charts by setting the `donut` parameter to `true`:
+
+[source,asciidoc]
+....
+.Pie Chart
+[docops,pieslice, role=left,controls=true]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=true
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+....
+
+.Pie Chart
+[docops,pieslice, role=left,controls=true]
+----
+title=Favorite Anime
+width=600
+height=400
+legend=true
+percentages=true
+donut=true
+---
+Naruto | 16.0
+Bleach | 4.0
+One Piece | 9.0
+One Punch Man | 7.0
+My Hero Academia | 6.0
+Demon Slayer | 10.0
+----
+
+=== Custom Colors for Individual Slices
+
+You can specify custom colors for individual slices:
+
+[source,asciidoc]
+....
+[docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
+----
+Product A | 30 | #ff5733
+Product B | 25 | #33ff57
+Product C | 20 | #3357ff
+Product D | 15 | #f3ff33
+Product E | 10 | #ff33f3
+----
+....
+
+[docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
+----
+Product A | 30 | #ff5733
+Product B | 25 | #33ff57
+Product C | 20 | #3357ff
+Product D | 15 | #f3ff33
+Product E | 10 | #ff33f3
+----
+
+=== Custom Color Palette
+
+You can specify a custom color palette for the entire chart:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+title=Sales with Custom Palette
+colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+[docops,pieslice,controls=true]
+----
+title=Sales with Custom Palette
+colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+
+=== Dark Mode Example
+
+You can enable dark mode for better visibility in dark-themed documents:
+
+[source,asciidoc]
+....
+[docops,pieslice,controls=true]
+----
+title=Market Share Distribution
+width=600
+height=400
+darkMode=true
+---
+Product A | 35
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 5
+----
+....
+
+[docops,pieslice,controls=true]
+----
+title=Market Share Distribution
+width=600
+height=400
+darkMode=true
+---
+Product A | 35
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 5
+----
+
+== Interactive Features
+
+Pie charts in the DocOps extension include several interactive features:
+
+* **Hover Effects**: Pie slices have hover effects for better visibility
+* **Tooltips**: Hover over slices to see detailed information
+* **Legend Interaction**: Hovering over legend items highlights the corresponding slice
+
+These interactive features enhance the user experience and make it easier to interpret the data in your charts.
+
+== Conclusion
+
+The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the simple pipe-separated format and configuration parameters, you can create customized charts that match your document's style and purpose.
+
+The extension supports both regular pie charts and donut charts, with various display options including custom colors, interactive features, and dark mode. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.

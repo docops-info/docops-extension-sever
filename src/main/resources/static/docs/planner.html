@@ -1,0 +1,4273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Planner</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/api/analytics/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_planner">DocOps Planner</a>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_basic_concepts">2. Basic Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_what_are_roadmaps">2.1. What are Roadmaps?</a></li>
+<li><a href="#_roadmap_components">2.2. Roadmap Components</a></li>
+</ul>
+</li>
+<li><a href="#_asciidoctor_syntax_for_roadmaps">3. AsciiDoctor Syntax for Roadmaps</a>
+<ul class="sectlevel2">
+<li><a href="#_roadmap_properties">3.1. Roadmap Properties</a>
+<ul class="sectlevel3">
+<li><a href="#_main_properties">3.1.1. Main Properties</a></li>
+<li><a href="#_content_format">3.1.2. Content Format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_examples">4. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_roadmap_example">4.1. Basic Roadmap Example</a></li>
+<li><a href="#_dark_mode_roadmap_example">4.2. Dark Mode Roadmap Example</a></li>
+<li><a href="#_project_management_roadmap_example">4.3. Project Management Roadmap Example</a></li>
+<li><a href="#_software_release_roadmap_example">4.4. Software Release Roadmap Example</a></li>
+<li><a href="#_personal_development_roadmap_example">4.5. Personal Development Roadmap Example</a></li>
+</ul>
+</li>
+<li><a href="#_interactive_features">5. Interactive Features</a></li>
+<li><a href="#_conclusion">6. Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_planner" class="sect0">DocOps Planner</h1>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Planner Extension allows you to create visually appealing roadmap visualizations in your AsciiDoctor documents. Roadmaps are useful for showing project timelines, development plans, and organizing tasks into different stages of completion.</p>
+</div>
+<div class="paragraph">
+<p>This guide will help you understand the basic concepts of roadmaps, how to include them in your AsciiDoctor documents, and provide examples of different types of roadmap visualizations.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_concepts">2. Basic Concepts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_are_roadmaps">2.1. What are Roadmaps?</h3>
+<div class="paragraph">
+<p>Roadmaps in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each roadmap has:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A title (the main heading of the roadmap)</p>
+</li>
+<li>
+<p>Multiple columns representing different stages (now, next, later, done)</p>
+</li>
+<li>
+<p>Tasks or items within each stage</p>
+</li>
+<li>
+<p>Optional display settings for customizing the appearance</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The extension supports various styles of roadmaps, including:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Custom colors for different stages</p>
+</li>
+<li>
+<p>Dark mode for better visibility in different environments</p>
+</li>
+<li>
+<p>Detailed task descriptions within each stage</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_roadmap_components">2.2. Roadmap Components</h3>
+<div class="paragraph">
+<p>A roadmap includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A title</p>
+</li>
+<li>
+<p>Multiple columns, each representing a stage:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>NOW - Current tasks being worked on</p>
+</li>
+<li>
+<p>NEXT - Tasks planned for the immediate future</p>
+</li>
+<li>
+<p>LATER - Tasks planned for a later time</p>
+</li>
+<li>
+<p>DONE - Completed tasks</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Tasks within each stage, with descriptions</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asciidoctor_syntax_for_roadmaps">3. AsciiDoctor Syntax for Roadmaps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To include roadmaps in your AsciiDoctor document, you use a special macro syntax. Here&#8217;s the basic format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Your Title", useDark=false,controls=true]
+----
+- now Task1
+Task1 description
+- next Task2
+Task2 description
+- later Task3
+Task3 description
+- done Task4
+Task4 description
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The macro processes the content and generates an SVG representation of the roadmap that is embedded in your document.</p>
+</div>
+<div class="sect2">
+<h3 id="_roadmap_properties">3.1. Roadmap Properties</h3>
+<div class="sect3">
+<h4 id="_main_properties">3.1.1. Main Properties</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>title</code> (optional): The main heading of the roadmap (default: "Roadmap")</p>
+</li>
+<li>
+<p><code>useDark</code> (optional): Whether to use dark mode (default: false)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_content_format">3.1.2. Content Format</h4>
+<div class="paragraph">
+<p>The content within the macro follows a specific format:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Each stage starts with a hyphen followed by the stage name (now, next, later, done)</p>
+</li>
+<li>
+<p>The stage name is followed by the task title on the same line</p>
+</li>
+<li>
+<p>The task description follows on subsequent lines until the next stage marker</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">4. Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_roadmap_example">4.1. Basic Roadmap Example</h3>
+<div class="paragraph">
+<p>Here&#8217;s a simple example of a roadmap with tasks in different stages:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Development Roadmap", useDark=false,controls=true]
+----
+- now Authentication
+Implement user authentication system
+Set up CI/CD pipeline
+Create database schema
+- next REST API
+Develop REST API endpoints
+Build frontend components
+Implement search functionality
+- later Analytics
+Add analytics dashboard
+Optimize performance
+Implement advanced features
+- done Requirements
+Project requirements gathering
+Architecture design
+Technology stack selection
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589507715" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.1249999918859" height="140.6249999982422" viewBox="0 0 2308 500" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1154" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Development Roadmap</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-2eee03e6-8882-4447-8a2d-2e119bf8b9f6" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-2eee03e6-8882-4447-8a2d-2e119bf8b9f6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-2eee03e6-8882-4447-8a2d-2e119bf8b9f6); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-2eee03e6-8882-4447-8a2d-2e119bf8b9f6);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Authentication</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Implement user authentication system Set up </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">CI/CD pipeline Create database schema </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-now" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-now);">NOW</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-cfd92463-1432-4b36-9176-abf9ecc5802e" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-cfd92463-1432-4b36-9176-abf9ecc5802e" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-cfd92463-1432-4b36-9176-abf9ecc5802e); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-cfd92463-1432-4b36-9176-abf9ecc5802e);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">REST API</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Develop REST API endpoints Build frontend </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">components Implement search functionality </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-next" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-next);">NEXT</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-4c96b727-5313-44e8-836c-50cbcd743843" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-4c96b727-5313-44e8-836c-50cbcd743843" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-4c96b727-5313-44e8-836c-50cbcd743843); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-4c96b727-5313-44e8-836c-50cbcd743843);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Analytics</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Add analytics dashboard Optimize </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">performance Implement advanced features </tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-later" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-later);">LATER</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-80bbb724-3b07-4dd1-90d5-1833476cac35" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-80bbb724-3b07-4dd1-90d5-1833476cac35" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-80bbb724-3b07-4dd1-90d5-1833476cac35); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-80bbb724-3b07-4dd1-90d5-1833476cac35);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Requirements</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Project requirements gathering Architecture </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">design Technology stack selection</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589507715')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589507715"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589507715')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589507715')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589507715')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589507715')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589507715')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589507715')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_dark_mode_roadmap_example">4.2. Dark Mode Roadmap Example</h3>
+<div class="paragraph">
+<p>You can create a dark mode roadmap by setting the <code>useDark</code> property to <code>true</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Product Launch Plan", useDark=true,controls=true]
+----
+- now Market Research
+Conduct competitor analysis
+Identify target audience
+Define unique selling points
+- next Product Development
+Create prototype
+Test with focus groups
+Refine based on feedback
+- later Marketing Campaign
+Develop marketing materials
+Plan social media strategy
+Prepare press releases
+- done Business Plan
+Define business model
+Secure initial funding
+Assemble core team
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589509120" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.1249999918859" height="140.6249999982422" viewBox="0 0 2308 500" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1154" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Product Launch Plan</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-cb40ebc0-8c58-4a97-a2be-375109a41ec3" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-cb40ebc0-8c58-4a97-a2be-375109a41ec3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-cb40ebc0-8c58-4a97-a2be-375109a41ec3); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-cb40ebc0-8c58-4a97-a2be-375109a41ec3);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Market Research</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Conduct competitor analysis Identify target </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">audience Define unique selling points </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-now" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-now);">NOW</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-4bc6666d-8826-430c-a503-4d2b4183477f" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-4bc6666d-8826-430c-a503-4d2b4183477f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-4bc6666d-8826-430c-a503-4d2b4183477f); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-4bc6666d-8826-430c-a503-4d2b4183477f);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Product Development</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Create prototype Test with focus groups Refine </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">based on feedback </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-next" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-next);">NEXT</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-742b3018-7970-4e47-a6b5-900524d3953e" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-742b3018-7970-4e47-a6b5-900524d3953e" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-742b3018-7970-4e47-a6b5-900524d3953e); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-742b3018-7970-4e47-a6b5-900524d3953e);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Marketing Campaign</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Develop marketing materials Plan social media </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">strategy Prepare press releases </tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-later" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-later);">LATER</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-e1ccfdb6-e500-4e97-8a06-8e9106b6420a" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-e1ccfdb6-e500-4e97-8a06-8e9106b6420a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-e1ccfdb6-e500-4e97-8a06-8e9106b6420a); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-e1ccfdb6-e500-4e97-8a06-8e9106b6420a);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Business Plan</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Define business model Secure initial </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">funding Assemble core team</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589509120')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589509120"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589509120')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589509120')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589509120')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589509120')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589509120')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589509120')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_project_management_roadmap_example">4.3. Project Management Roadmap Example</h3>
+<div class="paragraph">
+<p>Here&#8217;s an example of a roadmap for project management:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Website Redesign Project", useDark=false,controls=true]
+----
+- now Content Audit
+Review existing content
+Identify gaps and outdated information
+Create content migration plan
+- next Design Phase
+Create wireframes
+Develop visual design concepts
+Build interactive prototypes
+- later Development
+Set up development environment
+Implement frontend components
+Integrate with backend systems
+- done Planning
+Stakeholder interviews
+Requirements gathering
+Project scope definition
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589509129" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.1249999918859" height="140.6249999982422" viewBox="0 0 2308 500" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1154" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Website Redesign Project</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-c6e52d1d-8d1a-4de1-b9ce-9c56651f8202" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-c6e52d1d-8d1a-4de1-b9ce-9c56651f8202" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-c6e52d1d-8d1a-4de1-b9ce-9c56651f8202); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-c6e52d1d-8d1a-4de1-b9ce-9c56651f8202);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Content Audit</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Review existing content Identify gaps and </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">outdated information Create content migration </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">plan </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-now" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-now);">NOW</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-b93a9f15-dc1d-4bf0-8298-8e48cb6898d0" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-b93a9f15-dc1d-4bf0-8298-8e48cb6898d0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-b93a9f15-dc1d-4bf0-8298-8e48cb6898d0); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-b93a9f15-dc1d-4bf0-8298-8e48cb6898d0);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Design Phase</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Create wireframes Develop visual design </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">concepts Build interactive prototypes </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-next" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-next);">NEXT</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-7b7d248b-5763-46ac-b509-7da8ee055d07" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-7b7d248b-5763-46ac-b509-7da8ee055d07" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-7b7d248b-5763-46ac-b509-7da8ee055d07); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-7b7d248b-5763-46ac-b509-7da8ee055d07);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Development</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Set up development environment Implement </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">frontend components Integrate with backend </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">systems </tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-later" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-later);">LATER</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-11c973bb-9d85-41b9-8c18-f82ee686fa87" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-11c973bb-9d85-41b9-8c18-f82ee686fa87" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-11c973bb-9d85-41b9-8c18-f82ee686fa87); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-11c973bb-9d85-41b9-8c18-f82ee686fa87);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Planning</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Stakeholder interviews Requirements </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">gathering Project scope definition</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589509129')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589509129"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589509129')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589509129')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589509129')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589509129')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589509129')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589509129')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_software_release_roadmap_example">4.4. Software Release Roadmap Example</h3>
+<div class="paragraph">
+<p>Here&#8217;s an example of a roadmap for software releases:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Software Release Roadmap", useDark=false,controls=true]
+----
+- now Version 2.0
+Implement new user interface
+Add advanced search capabilities
+Improve performance
+- next Version 2.1
+Bug fixes from 2.0 release
+Minor feature enhancements
+Documentation updates
+- later Version 3.0
+Major architecture redesign
+Cloud integration features
+Mobile application support
+- done Version 1.0
+Core functionality
+Basic user management
+Initial deployment
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589509140" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.1249999918859" height="140.6249999982422" viewBox="0 0 2308 500" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1154" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Software Release Roadmap</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-11865e2f-be27-44c7-b9ec-5de0d7f29f66" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-11865e2f-be27-44c7-b9ec-5de0d7f29f66" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-11865e2f-be27-44c7-b9ec-5de0d7f29f66); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-11865e2f-be27-44c7-b9ec-5de0d7f29f66);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Version 2.0</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Implement new user interface Add advanced </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">search capabilities Improve performance </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-now" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-now);">NOW</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-5560118b-0a4c-42a6-a36e-c4e2c6a958fe" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-5560118b-0a4c-42a6-a36e-c4e2c6a958fe" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-5560118b-0a4c-42a6-a36e-c4e2c6a958fe); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-5560118b-0a4c-42a6-a36e-c4e2c6a958fe);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Version 2.1</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Bug fixes from 2.0 release Minor feature </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">enhancements Documentation updates </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-next" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-next);">NEXT</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-069b466d-db90-4991-b074-c0e2c9ac3b79" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-069b466d-db90-4991-b074-c0e2c9ac3b79" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-069b466d-db90-4991-b074-c0e2c9ac3b79); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-069b466d-db90-4991-b074-c0e2c9ac3b79);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Version 3.0</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Major architecture redesign Cloud integration </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">features Mobile application support </tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-later" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-later);">LATER</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-34f63c3b-648c-4b17-81ac-fada7487e03f" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-34f63c3b-648c-4b17-81ac-fada7487e03f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-34f63c3b-648c-4b17-81ac-fada7487e03f); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-34f63c3b-648c-4b17-81ac-fada7487e03f);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Version 1.0</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Core functionality Basic user management Initial </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">deployment</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589509140')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589509140"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589509140')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589509140')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589509140')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589509140')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589509140')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589509140')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_personal_development_roadmap_example">4.5. Personal Development Roadmap Example</h3>
+<div class="paragraph">
+<p>Here&#8217;s an example of a roadmap for personal development:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,roadmap,title="Learning Path: Full Stack Developer", useDark=true,controls=true]
+----
+- now Backend Development
+Learn Node.js and Express
+Master database design with MongoDB
+Implement authentication and authorization
+- next Frontend Frameworks
+Study React fundamentals
+Build interactive UIs
+State management with Redux
+- later DevOps Skills
+Docker containerization
+CI/CD pipeline setup
+Cloud deployment (AWS/Azure)
+- done Programming Basics
+HTML, CSS, JavaScript
+Git version control
+Basic algorithms and data structures
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589509153" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.1249999918859" height="140.6249999982422" viewBox="0 0 2308 500" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1154" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Learning Path: Full Stack Developer</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-b5835bb4-e4bb-47a8-bd54-10d9e586316f" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-b5835bb4-e4bb-47a8-bd54-10d9e586316f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-b5835bb4-e4bb-47a8-bd54-10d9e586316f); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-b5835bb4-e4bb-47a8-bd54-10d9e586316f);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Backend Development</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Learn Node.js and Express Master database </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">design with MongoDB Implement authentication </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">and authorization </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-now" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-now);">NOW</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-c4ce23aa-35d4-4e12-b8ba-ee644bf1b0d5" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-c4ce23aa-35d4-4e12-b8ba-ee644bf1b0d5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-c4ce23aa-35d4-4e12-b8ba-ee644bf1b0d5); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-c4ce23aa-35d4-4e12-b8ba-ee644bf1b0d5);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #FCFCFC; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Frontend Frameworks</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Study React fundamentals Build interactive </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">UIs State management with Redux </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-next" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-next);">NEXT</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-eb0f4c66-52b4-4665-ba54-2a9d114565fa" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-eb0f4c66-52b4-4665-ba54-2a9d114565fa" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-eb0f4c66-52b4-4665-ba54-2a9d114565fa); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-eb0f4c66-52b4-4665-ba54-2a9d114565fa);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">DevOps Skills</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Docker containerization CI/CD pipeline </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">setup Cloud deployment (AWS/Azure) </tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-later" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-later);">LATER</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-9b31cfd8-5f8c-498f-a116-5a9e42691eef" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-9b31cfd8-5f8c-498f-a116-5a9e42691eef" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-9b31cfd8-5f8c-498f-a116-5a9e42691eef); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-9b31cfd8-5f8c-498f-a116-5a9e42691eef);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Programming Basics</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">HTML, CSS, JavaScript Git version control Basic </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">algorithms and data structures</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589509153')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589509153"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589509153')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589509153')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589509153')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589509153')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589509153')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589509153')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589509161" data-theme="light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="809.999999989875" height="247.49999999690627" viewBox="0 0 2880 880" preserveAspectRatio="xMidYMin meet"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="planItem_0" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff1010" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#f00e0e" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#eb0e0e" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c70b0b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#bc0b0b" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_1" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#005499" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#004986" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#004680" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#003b6c" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#003866" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_2" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ff82f9" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ff72da" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#ff6dd0" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#d85cb0" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#cc57a6" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_3" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#ffff00" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#ece100" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#e6d800" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#c3b700" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#b8ac00" stop-opacity="0.9"/></linearGradient><linearGradient id="planItem_4" x1='0%' y1='0%' x2='0%' y2='100%'><stop offset="0%" style="stop-color:#60ffae" stop-opacity="1.0"/><stop offset="25%" style="stop-color:#54ee98" stop-opacity="0.975"/><stop offset="50%" style="stop-color:#50e991" stop-opacity="0.95"/><stop offset="75%" style="stop-color:#44c57b" stop-opacity="0.925"/><stop offset="100%" style="stop-color:#40ba74" stop-opacity="0.9"/></linearGradient></defs><g><defs><filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" /></filter><linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" /><stop offset="100%" style="stop-color:#3498db;stop-opacity:1" /></linearGradient></defs><text x="1440" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">Kanban</text><g transform="translate(0, 60)"><g transform="translate(20, 60)"><defs><filter id="shadow-67e36a36-7956-4d42-979e-a31fba1f11c2" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-67e36a36-7956-4d42-979e-a31fba1f11c2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-67e36a36-7956-4d42-979e-a31fba1f11c2); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-67e36a36-7956-4d42-979e-a31fba1f11c2);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_0)"/><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">&#8226; Create Documentation &#8226; Create </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Blog Post </tspan></text></g><g transform="translate(20, 10)"><filter id="glow-Todo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-Todo);">TODO</text></g><g transform="translate(592, 60)"><defs><filter id="shadow-c7f9ac7c-da7b-4406-854f-c7e2b1c526ed" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-c7f9ac7c-da7b-4406-854f-c7e2b1c526ed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-c7f9ac7c-da7b-4406-854f-c7e2b1c526ed); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-c7f9ac7c-da7b-4406-854f-c7e2b1c526ed);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_1)"/><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">&#8226; create a path for the roadmap to have </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">darkmode support </tspan></text></g><g transform="translate(592, 10)"><filter id="glow-Progressing" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-Progressing);">PROGRESSING</text></g><g transform="translate(1164, 60)"><defs><filter id="shadow-e32f1eae-851d-418b-a387-b6a912afa28a" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-e32f1eae-851d-418b-a387-b6a912afa28a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-e32f1eae-851d-418b-a387-b6a912afa28a); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-e32f1eae-851d-418b-a387-b6a912afa28a);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_2)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">for deployment</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">&#8226; Ready for deploy</tspan></text></g><g transform="translate(1164, 10)"><filter id="glow-Ready" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-Ready);">READY</text></g><g transform="translate(1736, 60)"><defs><filter id="shadow-b8f11b09-39ba-436f-b335-1f7485b0d4cc" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-b8f11b09-39ba-436f-b335-1f7485b0d4cc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-b8f11b09-39ba-436f-b335-1f7485b0d4cc); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-b8f11b09-39ba-436f-b335-1f7485b0d4cc);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_3)"/><text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #000000; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">Can't Reproduce</text><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Cant reproduce</tspan></text></g><g transform="translate(1736, 10)"><filter id="glow-Test" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-Test);">TEST</text></g><g transform="translate(2308, 60)"><defs><filter id="shadow-8ca6fe07-157b-49cc-9bc0-c169dbf694e9" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-8ca6fe07-157b-49cc-9bc0-c169dbf694e9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-8ca6fe07-157b-49cc-9bc0-c169dbf694e9); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-8ca6fe07-157b-49cc-9bc0-c169dbf694e9);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_4)"/><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">&#8226; Requirements for datamodel &#8226; </tspan><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">analysis for database high cpu </tspan></text></g><g transform="translate(2308, 440)"><defs><filter id="shadow-dccb267f-dfff-4d13-8206-9a3de1ac73ee" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" /></filter><linearGradient id="card-gradient-dccb267f-dfff-4d13-8206-9a3de1ac73ee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" /></linearGradient></defs><rect x="0" y="0" height="360" width="552" rx="12" ry="12" style="fill: url(#card-gradient-dccb267f-dfff-4d13-8206-9a3de1ac73ee); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-dccb267f-dfff-4d13-8206-9a3de1ac73ee);"/><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z" fill="url(#planItem_4)"/><text x='24' y='74' style='font-family: "Segoe UI", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'><tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">Update db function <a xlink:href="https://www.apple.com" target="_blank" style="fill: blue; text-decoration: underline;">WM123</a></tspan></text></g><g transform="translate(2308, 10)"><filter id="glow-Done" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: ; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-Done);">DONE</text></g></g></g></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589509161')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589509161"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589509161')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589509161')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589509161')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589509161')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589509161')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589509161')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interactive_features">5. Interactive Features</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Roadmaps in the DocOps extension include several interactive features:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Visual Styling</strong>: Each stage has distinct colors for better categorization</p>
+</li>
+<li>
+<p><strong>Card Layout</strong>: Tasks are displayed in card-like containers for clear separation</p>
+</li>
+<li>
+<p><strong>Responsive Design</strong>: Roadmaps adjust to different screen sizes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These features enhance the user experience and make it easier to understand project plans and timelines.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">6. Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Planner Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing roadmap visualizations. By using the simple syntax format, you can create customized roadmaps that clearly communicate project plans, development stages, and task organization.</p>
+</div>
+<div class="paragraph">
+<p>The extension supports both light and dark modes, with various display options to match your document&#8217;s style and purpose.</p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

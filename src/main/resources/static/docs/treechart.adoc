@@ -1,0 +1,380 @@
+include::_base.adoc[]
+= DocOps Tree Chart
+:imagesdir: images
+
+== Introduction
+
+The DocOps Tree Chart Extension allows you to create interactive hierarchical tree diagrams in your AsciiDoctor documents. Tree charts are useful for visualizing organizational structures, decision trees, family trees, and any hierarchical relationships.
+
+This guide will help you understand the basic concepts of tree charts, how to include them in your AsciiDoctor documents, and provide examples of different types of tree charts.
+
+== Basic Concepts
+
+=== What are Tree Charts?
+
+Tree charts in the DocOps extension are SVG-based graphical elements that display hierarchical data in a tree-like structure. Each tree chart has:
+
+* A title (the main heading of the chart)
+* A root node (the top-level element)
+* Child nodes (elements that branch from the root or other nodes)
+* Optional display settings for customizing the appearance
+
+The extension supports two main orientations for tree charts:
+
+* Vertical trees - Nodes flow from top to bottom
+* Horizontal trees - Nodes flow from left to right
+
+Each tree chart can be displayed in various styles, including:
+
+* Interactive collapsible nodes
+* Custom color schemes
+* Dark mode
+* Fully expanded or initially collapsed views
+
+=== Tree Chart Components
+
+A tree chart includes:
+
+* A root node representing the top-level element
+* Child nodes representing hierarchical relationships
+* Node labels that describe each element
+* Optional custom colors for nodes
+* Interactive elements for expanding and collapsing branches (in web view)
+
+== AsciiDoctor Syntax for Tree Charts
+
+To include tree charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Chart Title
+width=800
+height=600
+orientation=vertical
+collapsible=true
+expanded=true
+darkMode=false
+hover=true
+colors=#3498db,#2ecc71,#e74c3c,#f39c12,#9b59b6
+---
+Root Node
+    Child Node 1 | #3498db
+        Grandchild 1
+        Grandchild 2
+    Child Node 2 | #2ecc71
+        Grandchild 3
+        Grandchild 4
+    Child Node 3
+----
+....
+
+The macro processes the configuration and data and generates an SVG representation of the tree chart that is embedded in your document.
+
+=== Configuration Properties
+
+* `title` (optional): The main heading of the chart (default: "Tree Chart")
+* `width` (optional): The width of the chart in pixels (default: 800)
+* `height` (optional): The height of the chart in pixels (default: 600)
+* `orientation` (optional): The orientation of the tree, either "vertical" or "horizontal" (default: "vertical")
+* `collapsible` (optional): Whether nodes can be expanded/collapsed (default: true)
+* `expanded` (optional): Whether all nodes are initially expanded (default: true)
+* `darkMode` (optional): Whether to use dark mode (default: false)
+* `hover` (optional): Whether to enable hover effects (default: true)
+* `colors` (optional): A comma-separated list of colors to use for nodes (defaults to a predefined color palette)
+
+=== Data Format
+
+After the configuration section and the separator line (`---`), each line represents a node in the tree. The indentation level determines the parent-child relationships:
+
+[source]
+----
+Root Node [| Color]
+    Child Node 1 [| Color]
+        Grandchild 1 [| Color]
+        Grandchild 2 [| Color]
+    Child Node 2 [| Color]
+        Grandchild 3 [| Color]
+----
+
+* The root node must be at the leftmost position (no indentation)
+* Child nodes must be indented with spaces or tabs
+* Each node can optionally specify a custom color using the pipe (`|`) separator
+* If no color is specified, colors from the configuration or default palette are used
+
+== Examples
+
+=== Basic Tree Chart Example
+
+Here's a simple example of a vertical tree chart:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Organization Chart
+width=800
+height=600
+---
+CEO
+    CTO
+        Engineering Manager
+            Senior Developer
+            Developer
+            Junior Developer
+        QA Manager
+            QA Engineer
+            QA Analyst
+    CFO
+        Finance Manager
+            Accountant
+            Financial Analyst
+    CMO
+        Marketing Manager
+            Marketing Specialist
+            Content Creator
+----
+....
+
+[docops,treechart,controls=true]
+----
+title=Organization Chart
+width=800
+height=600
+---
+CEO
+    CTO
+        Engineering Manager
+            Senior Developer
+            Developer
+            Junior Developer
+        QA Manager
+            QA Engineer
+            QA Analyst
+    CFO
+        Finance Manager
+            Accountant
+            Financial Analyst
+    CMO
+        Marketing Manager
+            Marketing Specialist
+            Content Creator
+----
+
+=== Horizontal Tree Chart Example
+
+You can create horizontal tree charts by setting the `orientation` property to `"horizontal"`:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Decision Tree
+width=800
+height=600
+orientation=horizontal
+---
+Start Project
+    Requirements Analysis
+        Gather Requirements
+        Document Requirements
+    Design Phase
+        Architecture Design
+        UI/UX Design
+    Implementation
+        Frontend Development
+        Backend Development
+        Database Setup
+    Testing
+        Unit Testing
+        Integration Testing
+        User Acceptance Testing
+    Deployment
+        Staging Deployment
+        Production Deployment
+----
+....
+
+[docops,treechart,controls=true]
+----
+title=Decision Tree
+width=800
+height=600
+orientation=horizontal
+---
+Start Project
+    Requirements Analysis
+        Gather Requirements
+        Document Requirements
+    Design Phase
+        Architecture Design
+        UI/UX Design
+    Implementation
+        Frontend Development
+        Backend Development
+        Database Setup
+    Testing
+        Unit Testing
+        Integration Testing
+        User Acceptance Testing
+    Deployment
+        Staging Deployment
+        Production Deployment
+----
+
+=== Custom Colored Tree Chart Example
+
+You can customize the colors of individual nodes:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Technology Stack
+width=800
+height=600
+---
+Application | #3498db
+    Frontend | #2ecc71
+        React
+        Redux
+        TypeScript
+    Backend | #e74c3c
+        Spring Boot
+        Kotlin
+        PostgreSQL
+    DevOps | #9b59b6
+        Docker
+        Kubernetes
+        Jenkins
+----
+....
+
+[docops,treechart,controls=true]
+----
+title=Technology Stack
+width=800
+height=600
+---
+Application | #3498db
+    Frontend | #2ecc71
+        React
+        Redux
+        TypeScript
+    Backend | #e74c3c
+        Spring Boot
+        Kotlin
+        PostgreSQL
+    DevOps | #9b59b6
+        Docker
+        Kubernetes
+        Jenkins
+----
+
+=== Dark Mode Tree Chart Example
+
+You can create dark mode tree charts by setting the `darkMode` property to `true`:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Project Dependencies
+width=800
+height=600
+darkMode=true
+---
+Main Project
+    Core Library
+        Utilities
+        Data Models
+    UI Components
+        Buttons
+        Forms
+        Tables
+    API Client
+        Authentication
+        Endpoints
+        Data Fetching
+----
+....
+
+[docops,treechart,controls=true]
+----
+title=Project Dependencies
+width=800
+height=600
+darkMode=true
+---
+Main Project
+    Core Library
+        Utilities
+        Data Models
+    UI Components
+        Buttons
+        Forms
+        Tables
+    API Client
+        Authentication
+        Endpoints
+        Data Fetching
+----
+
+== Advanced Usage
+
+=== Non-Collapsible Tree for PDF Output
+
+When generating PDFs, you might want to ensure all nodes are visible. Set `collapsible=false` and `expanded=true`:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Family Tree
+width=800
+height=600
+collapsible=false
+expanded=true
+---
+Grandparent
+    Parent 1
+        Child 1
+        Child 2
+    Parent 2
+        Child 3
+        Child 4
+----
+....
+
+=== Custom Color Palette
+
+You can define a custom color palette for your tree chart:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Product Categories
+width=800
+height=600
+colors=#FF5733,#C70039,#900C3F,#581845,#FFC300
+---
+Products
+    Electronics
+        Computers
+        Smartphones
+    Clothing
+        Men's
+        Women's
+    Home Goods
+        Furniture
+        Appliances
+----
+....
+
+== Conclusion
+
+The DocOps Tree Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing hierarchical diagrams. By using the simple key-value configuration format and indentation-based structure, you can create customized tree charts that match your document's style and purpose.
+
+The extension supports both vertical and horizontal orientations, with various display options including custom colors, dark mode, and interactive collapsible nodes for web viewing.

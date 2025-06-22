@@ -1,0 +1,347 @@
+include::_base.adoc[]
+= DocOps Planner
+:imagesdir: images
+
+== Introduction
+
+The DocOps Planner Extension allows you to create visually appealing roadmap visualizations in your AsciiDoctor documents. Roadmaps are useful for showing project timelines, development plans, and organizing tasks into different stages of completion.
+
+This guide will help you understand the basic concepts of roadmaps, how to include them in your AsciiDoctor documents, and provide examples of different types of roadmap visualizations.
+
+== Basic Concepts
+
+=== What are Roadmaps?
+
+Roadmaps in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each roadmap has:
+
+* A title (the main heading of the roadmap)
+* Multiple columns representing different stages (now, next, later, done)
+* Tasks or items within each stage
+* Optional display settings for customizing the appearance
+
+The extension supports various styles of roadmaps, including:
+
+* Custom colors for different stages
+* Dark mode for better visibility in different environments
+* Detailed task descriptions within each stage
+
+=== Roadmap Components
+
+A roadmap includes:
+
+* A title
+* Multiple columns, each representing a stage:
+  ** NOW - Current tasks being worked on
+  ** NEXT - Tasks planned for the immediate future
+  ** LATER - Tasks planned for a later time
+  ** DONE - Completed tasks
+* Tasks within each stage, with descriptions
+
+== AsciiDoctor Syntax for Roadmaps
+
+To include roadmaps in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Your Title", useDark=false,controls=true]
+----
+- now Task1
+Task1 description
+- next Task2
+Task2 description
+- later Task3
+Task3 description
+- done Task4
+Task4 description
+----
+....
+
+The macro processes the content and generates an SVG representation of the roadmap that is embedded in your document.
+
+=== Roadmap Properties
+
+==== Main Properties
+
+* `title` (optional): The main heading of the roadmap (default: "Roadmap")
+* `useDark` (optional): Whether to use dark mode (default: false)
+
+==== Content Format
+
+The content within the macro follows a specific format:
+
+* Each stage starts with a hyphen followed by the stage name (now, next, later, done)
+* The stage name is followed by the task title on the same line
+* The task description follows on subsequent lines until the next stage marker
+
+== Examples
+
+=== Basic Roadmap Example
+
+Here's a simple example of a roadmap with tasks in different stages:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Development Roadmap", useDark=false,controls=true]
+----
+- now Authentication
+Implement user authentication system
+Set up CI/CD pipeline
+Create database schema
+- next REST API
+Develop REST API endpoints
+Build frontend components
+Implement search functionality
+- later Analytics
+Add analytics dashboard
+Optimize performance
+Implement advanced features
+- done Requirements
+Project requirements gathering
+Architecture design
+Technology stack selection
+----
+....
+
+[docops,roadmap,title="Development Roadmap", useDark=false,controls=true]
+----
+- now Authentication
+Implement user authentication system
+Set up CI/CD pipeline
+Create database schema
+- next REST API
+Develop REST API endpoints
+Build frontend components
+Implement search functionality
+- later Analytics
+Add analytics dashboard
+Optimize performance
+Implement advanced features
+- done Requirements
+Project requirements gathering
+Architecture design
+Technology stack selection
+----
+
+=== Dark Mode Roadmap Example
+
+You can create a dark mode roadmap by setting the `useDark` property to `true`:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Product Launch Plan", useDark=true,controls=true]
+----
+- now Market Research
+Conduct competitor analysis
+Identify target audience
+Define unique selling points
+- next Product Development
+Create prototype
+Test with focus groups
+Refine based on feedback
+- later Marketing Campaign
+Develop marketing materials
+Plan social media strategy
+Prepare press releases
+- done Business Plan
+Define business model
+Secure initial funding
+Assemble core team
+----
+....
+
+[docops,roadmap,title="Product Launch Plan", useDark=true,controls=true]
+----
+- now Market Research
+Conduct competitor analysis
+Identify target audience
+Define unique selling points
+- next Product Development
+Create prototype
+Test with focus groups
+Refine based on feedback
+- later Marketing Campaign
+Develop marketing materials
+Plan social media strategy
+Prepare press releases
+- done Business Plan
+Define business model
+Secure initial funding
+Assemble core team
+----
+
+=== Project Management Roadmap Example
+
+Here's an example of a roadmap for project management:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Website Redesign Project", useDark=false,controls=true]
+----
+- now Content Audit
+Review existing content
+Identify gaps and outdated information
+Create content migration plan
+- next Design Phase
+Create wireframes
+Develop visual design concepts
+Build interactive prototypes
+- later Development
+Set up development environment
+Implement frontend components
+Integrate with backend systems
+- done Planning
+Stakeholder interviews
+Requirements gathering
+Project scope definition
+----
+....
+
+[docops,roadmap,title="Website Redesign Project", useDark=false,controls=true]
+----
+- now Content Audit
+Review existing content
+Identify gaps and outdated information
+Create content migration plan
+- next Design Phase
+Create wireframes
+Develop visual design concepts
+Build interactive prototypes
+- later Development
+Set up development environment
+Implement frontend components
+Integrate with backend systems
+- done Planning
+Stakeholder interviews
+Requirements gathering
+Project scope definition
+----
+
+=== Software Release Roadmap Example
+
+Here's an example of a roadmap for software releases:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Software Release Roadmap", useDark=false,controls=true]
+----
+- now Version 2.0
+Implement new user interface
+Add advanced search capabilities
+Improve performance
+- next Version 2.1
+Bug fixes from 2.0 release
+Minor feature enhancements
+Documentation updates
+- later Version 3.0
+Major architecture redesign
+Cloud integration features
+Mobile application support
+- done Version 1.0
+Core functionality
+Basic user management
+Initial deployment
+----
+....
+
+[docops,roadmap,title="Software Release Roadmap", useDark=false,controls=true]
+----
+- now Version 2.0
+Implement new user interface
+Add advanced search capabilities
+Improve performance
+- next Version 2.1
+Bug fixes from 2.0 release
+Minor feature enhancements
+Documentation updates
+- later Version 3.0
+Major architecture redesign
+Cloud integration features
+Mobile application support
+- done Version 1.0
+Core functionality
+Basic user management
+Initial deployment
+----
+
+=== Personal Development Roadmap Example
+
+Here's an example of a roadmap for personal development:
+
+[source,asciidoc]
+....
+[docops,roadmap,title="Learning Path: Full Stack Developer", useDark=true,controls=true]
+----
+- now Backend Development
+Learn Node.js and Express
+Master database design with MongoDB
+Implement authentication and authorization
+- next Frontend Frameworks
+Study React fundamentals
+Build interactive UIs
+State management with Redux
+- later DevOps Skills
+Docker containerization
+CI/CD pipeline setup
+Cloud deployment (AWS/Azure)
+- done Programming Basics
+HTML, CSS, JavaScript
+Git version control
+Basic algorithms and data structures
+----
+....
+
+[docops,roadmap,title="Learning Path: Full Stack Developer", useDark=true,controls=true]
+----
+- now Backend Development
+Learn Node.js and Express
+Master database design with MongoDB
+Implement authentication and authorization
+- next Frontend Frameworks
+Study React fundamentals
+Build interactive UIs
+State management with Redux
+- later DevOps Skills
+Docker containerization
+CI/CD pipeline setup
+Cloud deployment (AWS/Azure)
+- done Programming Basics
+HTML, CSS, JavaScript
+Git version control
+Basic algorithms and data structures
+----
+
+
+[docops, roadmap, title="Kanban",controls=true]
+----
+- Todo
+* Create Documentation
+* Create Blog Post
+- Progressing
+* create a path for the roadmap to have darkmode support
+- Ready for deployment
+* Ready for deploy
+- Test Can't Reproduce
+Cant reproduce
+- Done
+* Requirements for datamodel
+
+* analysis for database high cpu
+- Done
+Title of diagram is more than 100 chars when user duplicates diagram with 100 char
+Update db function [[https://www.apple.com WM123]]
+----
+== Interactive Features
+
+Roadmaps in the DocOps extension include several interactive features:
+
+* **Visual Styling**: Each stage has distinct colors for better categorization
+* **Card Layout**: Tasks are displayed in card-like containers for clear separation
+* **Responsive Design**: Roadmaps adjust to different screen sizes
+
+These features enhance the user experience and make it easier to understand project plans and timelines.
+
+== Conclusion
+
+The DocOps Planner Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing roadmap visualizations. By using the simple syntax format, you can create customized roadmaps that clearly communicate project plans, development stages, and task organization.
+
+The extension supports both light and dark modes, with various display options to match your document's style and purpose.

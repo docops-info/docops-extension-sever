@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>Migration ScoreCard Maker</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/api/analytics/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_migration_scorecard_maker">Migration ScoreCard Maker</a>
+<ul class="sectlevel1">
+<li><a href="#_overview">1. Overview</a></li>
+<li><a href="#_features">2. Features</a></li>
+<li><a href="#_usage">3. Usage</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_example">3.1. Basic Example</a></li>
+<li><a href="#_input_format">3.2. Input Format</a>
+<ul class="sectlevel3">
+<li><a href="#_configuration_parameters">3.2.1. Configuration Parameters</a></li>
+<li><a href="#_sections">3.2.2. Sections</a></li>
+<li><a href="#_status_values">3.2.3. Status Values</a></li>
+<li><a href="#_icons">3.2.4. Icons</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_api">4. API</a></li>
+<li><a href="#_examples">5. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_database_migration_scorecard">5.1. Database Migration ScoreCard</a></li>
+<li><a href="#_application_modernization_scorecard">5.2. Application Modernization ScoreCard</a></li>
+<li><a href="#_devops_transformation_scorecard">5.3. DevOps Transformation ScoreCard</a></li>
+<li><a href="#_website_redesign_scorecard">5.4. Website Redesign ScoreCard</a></li>
+<li><a href="#_security_enhancement_scorecard">5.5. Security Enhancement ScoreCard</a></li>
+<li><a href="#_aiml_implementation_scorecard">5.6. AI/ML Implementation ScoreCard</a></li>
+<li><a href="#_cloud_migration_scorecard">5.7. Cloud Migration ScoreCard</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices_and_creative_uses">6. Best Practices and Creative Uses</a>
+<ul class="sectlevel2">
+<li><a href="#_best_practices_for_creating_effective_scorecards">6.1. Best Practices for Creating Effective Scorecards</a></li>
+<li><a href="#_creative_uses_for_scorecards">6.2. Creative Uses for ScoreCards</a></li>
+<li><a href="#_ios_style_design">6.3. iOS-Style Design</a></li>
+<li><a href="#_design_tips">6.4. Design Tips</a></li>
+</ul>
+</li>
+<li><a href="#_customization">7. Customization</a></li>
+<li><a href="#_integration">8. Integration</a></li>
+<li><a href="#_quick_reference_guide">9. Quick Reference Guide</a>
+<ul class="sectlevel2">
+<li><a href="#_common_patterns">9.1. Common Patterns</a>
+<ul class="sectlevel3">
+<li><a href="#_status_indicators">9.1.1. Status Indicators</a></li>
+<li><a href="#_color_schemes">9.1.2. Color Schemes</a></li>
+<li><a href="#_template_snippets">9.1.3. Template Snippets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_troubleshooting">10. Troubleshooting</a>
+<ul class="sectlevel2">
+<li><a href="#_common_issues">10.1. Common Issues</a></li>
+<li><a href="#_support">10.2. Support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_migration_scorecard_maker" class="sect0">Migration ScoreCard Maker</h1>
+<div class="sect1">
+<h2 id="_overview"><a class="link" href="#_overview">1. Overview</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Migration ScoreCard Maker is a tool for creating visually appealing scorecards that compare before and after states of a migration project. It&#8217;s particularly useful for visualizing database migrations, cloud migrations, or any other transformation projects where you want to highlight improvements and key metrics.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features"><a class="link" href="#_features">2. Features</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Dynamic SVG generation based on table-formatted input</p>
+</li>
+<li>
+<p>iOS-style design with modern aesthetics</p>
+</li>
+<li>
+<p>Customizable themes and colors</p>
+</li>
+<li>
+<p>Sections for before and after states</p>
+</li>
+<li>
+<p>Performance metrics visualization</p>
+</li>
+<li>
+<p>Key optimizations display</p>
+</li>
+<li>
+<p>Migration summary with overall improvement score</p>
+</li>
+<li>
+<p>Fixed dimensions (800x620 pixels) with scaling options</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="link" href="#_usage">3. Usage</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_example"><a class="link" href="#_basic_example">3.1. Basic Example</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Database Migration ScoreCard: Oracle → AWS Aurora PostgreSQL
+subtitle=On-Premise to Cloud Migration with SQL Optimization &amp; Performance Tuning
+headerTitle=Database Architecture Transformation &amp; Query Optimization Results
+---
+[before]
+title=On-Premise Oracle Database
+---
+[before.items]
+Oracle Database 19c (On-Premise) | Physical server, manual scaling, high licensing costs | critical | !
+Cross-Datacenter Communication | App in cloud, DB on-premise (high latency) | critical | !
+---
+
+[after]
+title=AWS Aurora PostgreSQL
+---
+[after.items]
+Aurora PostgreSQL (AWS Managed) | Auto-scaling, managed service, no licensing fees | good | ✓
+Same-Region Communication | App and DB both in AWS (low latency) | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="696" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="696" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Database Migration ScoreCard: Oracle &#8594; AWS Aurora PostgreSQL</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">On-Premise to Cloud Migration with SQL Optimization &amp; Performance Tuning</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="456" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">On-Premise Oracle Database</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Oracle Database 19c (On-Premise) --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Oracle Database 19c</tspan><tspan x="30" dy="18">(On-Premise)</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Physical server, manual</tspan><tspan x="30" dy="16">scaling, high licensing</tspan><tspan x="30" dy="16">costs</tspan></text><!-- Cross-Datacenter Communication --><circle cx="12" cy="126" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="131" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Cross-Datacenter</tspan><tspan x="30" dy="18">Communication</tspan></text><text x="30" y="162" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">App in cloud, DB</tspan><tspan x="30" dy="16">on-premise (high latency)</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="432" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="440" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AWS Aurora PostgreSQL</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Aurora PostgreSQL (AWS Managed) --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Aurora PostgreSQL</tspan><tspan x="30" dy="18">(AWS Managed)</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Auto-scaling, managed</tspan><tspan x="30" dy="16">service, no licensing fees</tspan></text><!-- Same-Region Communication --><circle cx="12" cy="110" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Same-Region</tspan><tspan x="30" dy="18">Communication</tspan></text><text x="30" y="146" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">App and DB both in AWS</tspan><tspan x="30" dy="16">(low latency)</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="416" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 576)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_input_format"><a class="link" href="#_input_format">3.2. Input Format</a></h3>
+<div class="paragraph">
+<p>The ScoreCard Maker uses a simple table format for input, with sections denoted by <code>[section]</code> markers and configuration parameters specified at the beginning.</p>
+</div>
+<div class="sect3">
+<h4 id="_configuration_parameters"><a class="link" href="#_configuration_parameters">3.2.1. Configuration Parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The main title of the scorecard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">subtitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A subtitle or description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headerTitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The title for the header section (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A scaling factor for the SVG (default: 1.0). The base dimensions are 800x620 pixels, which will be multiplied by this factor.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">backgroundColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Background color (default: #f8f9fa)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">titleColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title text color (default: #2c3e50)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">subtitleColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtitle text color (default: #7f8c8d)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headerColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Header background color (default: #8e44ad) (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">beforeSectionColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Before section header color (default: #e74c3c)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">afterSectionColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">After section header color (default: #27ae60)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_sections"><a class="link" href="#_sections">3.2.2. Sections</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Section</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[before]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title for the "before" section</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[before.items]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Items in the "before" section, format: `Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Icon`</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[after]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title for the "after" section</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[after.items]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Items in the "after" section, format: `Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Icon`</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_status_values"><a class="link" href="#_status_values">3.2.3. Status Values</a></h4>
+<div class="paragraph">
+<p>For the <code>Status</code> field in <code>[before.items]</code> and <code>[after.items]</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>critical</code> - iOS-style red gradient indicator</p>
+</li>
+<li>
+<p><code>warning</code> - iOS-style orange gradient indicator</p>
+</li>
+<li>
+<p><code>good</code> - iOS-style green gradient indicator</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the new iOS-style design, these status values are displayed as subtle circular indicators with iOS system color gradients.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_icons"><a class="link" href="#_icons">3.2.4. Icons</a></h4>
+<div class="paragraph">
+<p>Common icons used in the <code>Icon</code> field:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>!</code> - Converted to ⚠️ (warning emoji) in the iOS-style design</p>
+</li>
+<li>
+<p><code>$</code> - Converted to 💰 (money bag emoji) in the iOS-style design</p>
+</li>
+<li>
+<p><code>✓</code> - Converted to ✅ (check mark emoji) in the iOS-style design</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the iOS-style design, these text icons are automatically converted to appropriate emojis for a more modern look.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_api"><a class="link" href="#_api">4. API</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The ScoreCard Maker provides a REST API for generating scorecards:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET /api/scorecard/edit-mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an HTML form for editing the scorecard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET /api/scorecard/view-mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an HTML view for displaying the scorecard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PUT /api/scorecard/render</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Processes the form data and returns the rendered SVG</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples"><a class="link" href="#_examples">5. Examples</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_database_migration_scorecard"><a class="link" href="#_database_migration_scorecard">5.1. Database Migration ScoreCard</a></h3>
+<div class="paragraph">
+<p>The example at the beginning of this document shows a Database Migration ScoreCard. Here&#8217;s another variation focusing on a different database technology:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Database Migration ScoreCard: MongoDB → Amazon DocumentDB
+subtitle=NoSQL Database Migration with Performance Optimization
+headerTitle=Document Database Migration Results
+backgroundColor=#f5f5f5
+---
+[before]
+title=Self-Hosted MongoDB
+---
+[before.items]
+MongoDB 4.2 (Self-Hosted) | Manual sharding, complex maintenance, scaling issues | critical | !
+Inconsistent Backup Strategy | Weekly backups, manual process, recovery gaps | warning | !
+Limited Monitoring | Basic metrics only, no proactive alerts | warning | !
+---
+[before.performance]
+Baseline Performance | 40 | #e74c3c
+---
+[after]
+title=Amazon DocumentDB
+---
+[after.items]
+Amazon DocumentDB | Managed service, automatic scaling, MongoDB-compatible | good | ✓
+Automated Backups | Continuous backups, point-in-time recovery | good | ✓
+Enhanced Monitoring | CloudWatch integration, custom dashboards | good | ✓
+---
+[after.performance]
+Enhanced Performance | 85 | #27ae60
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="788" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="788" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Database Migration ScoreCard: MongoDB &#8594; Amazon DocumentDB</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">NoSQL Database Migration with Performance Optimization</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="548" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Self-Hosted MongoDB</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- MongoDB 4.2 (Self-Hosted) --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">MongoDB 4.2</tspan><tspan x="30" dy="18">(Self-Hosted)</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Manual sharding, complex</tspan><tspan x="30" dy="16">maintenance, scaling</tspan><tspan x="30" dy="16">issues</tspan></text><!-- Inconsistent Backup Strategy --><circle cx="12" cy="126" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="131" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Inconsistent Backup</tspan><tspan x="30" dy="18">Strategy</tspan></text><text x="30" y="162" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Weekly backups, manual</tspan><tspan x="30" dy="16">process, recovery gaps</tspan></text><!-- Limited Monitoring --><circle cx="12" cy="224" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="229" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="224" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Limited Monitoring</tspan></text><text x="30" y="242" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Basic metrics only, no</tspan><tspan x="30" dy="16">proactive alerts</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Baseline Performance</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="512" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Amazon DocumentDB</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Amazon DocumentDB --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Amazon DocumentDB</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Managed service,</tspan><tspan x="30" dy="16">automatic scaling,</tspan><tspan x="30" dy="16">MongoDB-compatible</tspan></text><!-- Automated Backups --><circle cx="12" cy="108" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="113" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="108" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Automated Backups</tspan></text><text x="30" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Continuous backups,</tspan><tspan x="30" dy="16">point-in-time recovery</tspan></text><!-- Enhanced Monitoring --><circle cx="12" cy="188" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="193" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="188" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Enhanced Monitoring</tspan></text><text x="30" y="206" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">CloudWatch integration,</tspan><tspan x="30" dy="16">custom dashboards</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Enhanced Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 668)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_application_modernization_scorecard"><a class="link" href="#_application_modernization_scorecard">5.2. Application Modernization ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example shows how to use the ScoreCard for tracking application modernization efforts:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Application Modernization ScoreCard: Monolith to Microservices
+subtitle=Legacy Java Application Transformation to Cloud-Native Architecture
+headerTitle=Application Architecture Transformation Results
+---
+[before]
+title=Monolithic Java Application
+---
+[before.items]
+Monolithic Architecture | Single codebase, tightly coupled components, difficult to scale | critical | !
+Java EE 6 + Oracle | Legacy technology stack with vendor lock-in | critical | !
+Manual Deployment | Complex, error-prone deployment process, 2-day release cycle | warning | !
+---
+[before.performance]
+Legacy Application | 35 | #e63946
+---
+[after]
+title=Microservices Architecture
+---
+[after.items]
+Microservices | Decoupled services, independent scaling, resilient architecture | good | ✓
+Spring Boot + Kubernetes | Modern cloud-native stack with containerization | good | ✓
+CI/CD Pipeline | Automated testing and deployment, multiple releases per day | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="786" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="786" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Application Modernization ScoreCard: Monolith to Microservices</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">Legacy Java Application Transformation to Cloud-Native Architecture</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="546" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Monolithic Java Application</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Monolithic Architecture --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Monolithic</tspan><tspan x="30" dy="18">Architecture</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Single codebase, tightly</tspan><tspan x="30" dy="16">coupled components,</tspan><tspan x="30" dy="16">difficult to scale</tspan></text><!-- Java EE 6 + Oracle --><circle cx="12" cy="126" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="131" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Java EE 6 + Oracle</tspan></text><text x="30" y="144" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Legacy technology stack</tspan><tspan x="30" dy="16">with vendor lock-in</tspan></text><!-- Manual Deployment --><circle cx="12" cy="206" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="211" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="206" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Manual Deployment</tspan></text><text x="30" y="224" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Complex, error-prone</tspan><tspan x="30" dy="16">deployment process, 2-day</tspan><tspan x="30" dy="16">release cycle</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Legacy Application</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="546" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Microservices Architecture</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Microservices --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Microservices</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Decoupled services,</tspan><tspan x="30" dy="16">independent scaling,</tspan><tspan x="30" dy="16">resilient architecture</tspan></text><!-- Spring Boot + Kubernetes --><circle cx="12" cy="108" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="113" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="108" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Spring Boot +</tspan><tspan x="30" dy="18">Kubernetes</tspan></text><text x="30" y="144" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Modern cloud-native stack</tspan><tspan x="30" dy="16">with containerization</tspan></text><!-- CI/CD Pipeline --><circle cx="12" cy="206" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="211" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="206" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">CI/CD Pipeline</tspan></text><text x="30" y="224" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Automated testing and</tspan><tspan x="30" dy="16">deployment, multiple</tspan><tspan x="30" dy="16">releases per day</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 666)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_devops_transformation_scorecard"><a class="link" href="#_devops_transformation_scorecard">5.3. DevOps Transformation ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example demonstrates tracking DevOps transformation progress:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=DevOps Transformation ScoreCard
+subtitle=From Traditional Development to DevOps Culture and Practices
+headerTitle=Software Delivery Performance Transformation
+---
+[before]
+title=Traditional Development Process
+---
+[before.items]
+Siloed Teams | Separate dev and ops teams with conflicting goals | critical | !
+Manual Processes | Manual testing, deployments, and infrastructure management | critical | !
+Quarterly Releases | Long release cycles with large batches of changes | warning | !
+---
+[before.performance]
+Delivery Performance | 25 | #dc3545
+---
+[after]
+title=DevOps Implementation
+---
+[after.items]
+Cross-Functional Teams | Integrated teams with shared responsibility | good | ✓
+Automation | CI/CD pipelines, infrastructure as code, automated testing | good | ✓
+Continuous Delivery | Small, frequent releases with fast feedback | good | ✓
+
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="770" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="770" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">DevOps Transformation ScoreCard</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">From Traditional Development to DevOps Culture and Practices</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="512" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Traditional Development Process</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Siloed Teams --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Siloed Teams</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Separate dev and ops</tspan><tspan x="30" dy="16">teams with conflicting</tspan><tspan x="30" dy="16">goals</tspan></text><!-- Manual Processes --><circle cx="12" cy="108" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="113" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="108" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Manual Processes</tspan></text><text x="30" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Manual testing,</tspan><tspan x="30" dy="16">deployments, and</tspan><tspan x="30" dy="16">infrastructure management</tspan></text><!-- Quarterly Releases --><circle cx="12" cy="204" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="209" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="204" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Quarterly Releases</tspan></text><text x="30" y="222" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Long release cycles with</tspan><tspan x="30" dy="16">large batches of changes</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Delivery Performance</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="530" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">DevOps Implementation</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Cross-Functional Teams --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Cross-Functional</tspan><tspan x="30" dy="18">Teams</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Integrated teams with</tspan><tspan x="30" dy="16">shared responsibility</tspan></text><!-- Automation --><circle cx="12" cy="110" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Automation</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">CI/CD pipelines,</tspan><tspan x="30" dy="16">infrastructure as code,</tspan><tspan x="30" dy="16">automated testing</tspan></text><!-- Continuous Delivery --><circle cx="12" cy="206" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="211" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="206" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Continuous Delivery</tspan></text><text x="30" y="224" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Small, frequent releases</tspan><tspan x="30" dy="16">with fast feedback</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 650)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_website_redesign_scorecard"><a class="link" href="#_website_redesign_scorecard">5.4. Website Redesign ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example shows how to track website redesign projects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Website Redesign ScoreCard
+subtitle=E-Commerce Platform Modernization and UX Enhancement
+headerTitle=Digital Experience Transformation Results
+scale=1.0
+backgroundColor=#ffffff
+headerColor=#6c5ce7
+beforeSectionColor=#e84393
+afterSectionColor=#00b894
+---
+[before]
+title=Legacy Website
+---
+[before.items]
+Outdated Design | Non-responsive, desktop-only experience | critical | !
+Slow Performance | 6.2s average page load time | critical | !
+Poor Conversion | 1.2% conversion rate, high bounce rate | warning | !
+---
+[before.performance]
+User Experience Score | 32 | #e84393
+---
+[after]
+title=Redesigned Website
+---
+[after.items]
+Modern Design | Responsive, mobile-first approach | good | ✓
+Optimized Performance | 1.8s average page load time | good | ✓
+Enhanced Conversion | 3.8% conversion rate, lower bounce rate | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="754" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="754" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Website Redesign ScoreCard</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">E-Commerce Platform Modernization and UX Enhancement</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="496" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Legacy Website</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Outdated Design --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Outdated Design</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Non-responsive,</tspan><tspan x="30" dy="16">desktop-only experience</tspan></text><!-- Slow Performance --><circle cx="12" cy="92" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="97" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="92" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Slow Performance</tspan></text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">6.2s average page load</tspan><tspan x="30" dy="16">time</tspan></text><!-- Poor Conversion --><circle cx="12" cy="172" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="177" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="172" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Poor Conversion</tspan></text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">1.2% conversion rate,</tspan><tspan x="30" dy="16">high bounce rate</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">User Experience Score</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="514" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Redesigned Website</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Modern Design --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Modern Design</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Responsive, mobile-first</tspan><tspan x="30" dy="16">approach</tspan></text><!-- Optimized Performance --><circle cx="12" cy="92" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="97" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="92" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Optimized</tspan><tspan x="30" dy="18">Performance</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">1.8s average page load</tspan><tspan x="30" dy="16">time</tspan></text><!-- Enhanced Conversion --><circle cx="12" cy="190" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="195" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Enhanced Conversion</tspan></text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">3.8% conversion rate,</tspan><tspan x="30" dy="16">lower bounce rate</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 634)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_security_enhancement_scorecard"><a class="link" href="#_security_enhancement_scorecard">5.5. Security Enhancement ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example demonstrates tracking security improvement initiatives:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Security Enhancement ScoreCard
+subtitle=Enterprise Security Posture Improvement Initiative
+headerTitle=Cybersecurity Resilience Transformation
+---
+[before]
+title=Security Vulnerabilities
+---
+[before.items]
+Outdated Authentication | Password-only auth, no MFA | critical | !
+Unpatched Systems | 68% of systems behind on security patches | critical | !
+Limited Monitoring | No 24/7 monitoring, basic logging | warning | !
+---
+[before.performance]
+Security Posture | 28 | #f72585
+---
+[after]
+title=Enhanced Security
+---
+[after.items]
+Modern Authentication | SSO with MFA and conditional access | good | ✓
+Patch Management | Automated patching, 99.5% compliance | good | ✓
+Advanced Monitoring | 24/7 SOC, SIEM implementation | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="754" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="754" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Security Enhancement ScoreCard</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">Enterprise Security Posture Improvement Initiative</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="514" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Security Vulnerabilities</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Outdated Authentication --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Outdated</tspan><tspan x="30" dy="18">Authentication</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Password-only auth, no</tspan><tspan x="30" dy="16">MFA</tspan></text><!-- Unpatched Systems --><circle cx="12" cy="110" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Unpatched Systems</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">68% of systems behind on</tspan><tspan x="30" dy="16">security patches</tspan></text><!-- Limited Monitoring --><circle cx="12" cy="190" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="195" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Limited Monitoring</tspan></text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">No 24/7 monitoring, basic</tspan><tspan x="30" dy="16">logging</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Security Posture</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="514" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Enhanced Security</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Modern Authentication --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Modern</tspan><tspan x="30" dy="18">Authentication</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">SSO with MFA and</tspan><tspan x="30" dy="16">conditional access</tspan></text><!-- Patch Management --><circle cx="12" cy="110" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Patch Management</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Automated patching, 99.5%</tspan><tspan x="30" dy="16">compliance</tspan></text><!-- Advanced Monitoring --><circle cx="12" cy="190" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="195" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Advanced Monitoring</tspan></text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">24/7 SOC, SIEM</tspan><tspan x="30" dy="16">implementation</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 634)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_aiml_implementation_scorecard"><a class="link" href="#_aiml_implementation_scorecard">5.6. AI/ML Implementation ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example shows how to track AI/ML implementation projects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=AI/ML Implementation ScoreCard
+subtitle=Customer Service Automation with Machine Learning
+headerTitle=Intelligent Automation Transformation Results
+scale=1.0
+backgroundColor=#f0f0f0
+headerColor=#7209b7
+beforeSectionColor=#f94144
+afterSectionColor=#43aa8b
+---
+[before]
+title=Manual Customer Service
+---
+[before.items]
+Manual Ticket Routing | Human agents manually categorizing tickets | critical | !
+No Predictive Capabilities | Reactive approach to customer issues | warning | !
+Limited Self-Service | Basic FAQ, no intelligent assistance | warning | !
+---
+[before.performance]
+Service Efficiency | 35 | #f94144
+---
+[after]
+title=AI-Enhanced Customer Service
+---
+[after.items]
+ML-Based Ticket Routing | Automatic categorization and priority assignment | good | ✓
+Predictive Analytics | Proactive issue detection and resolution | good | ✓
+AI-Powered Chatbot | 24/7 intelligent virtual assistant | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="790" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="790" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">AI/ML Implementation ScoreCard</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">Customer Service Automation with Machine Learning</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="550" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">Manual Customer Service</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Manual Ticket Routing --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Manual Ticket</tspan><tspan x="30" dy="18">Routing</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Human agents manually</tspan><tspan x="30" dy="16">categorizing tickets</tspan></text><!-- No Predictive Capabilities --><circle cx="12" cy="110" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">No Predictive</tspan><tspan x="30" dy="18">Capabilities</tspan></text><text x="30" y="146" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Reactive approach to</tspan><tspan x="30" dy="16">customer issues</tspan></text><!-- Limited Self-Service --><circle cx="12" cy="208" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="213" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Limited Self-Service</tspan></text><text x="30" y="226" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Basic FAQ, no intelligent</tspan><tspan x="30" dy="16">assistance</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Service Efficiency</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="532" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AI-Enhanced Customer Service</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- ML-Based Ticket Routing --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">ML-Based Ticket</tspan><tspan x="30" dy="18">Routing</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Automatic categorization</tspan><tspan x="30" dy="16">and priority assignment</tspan></text><!-- Predictive Analytics --><circle cx="12" cy="110" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Predictive Analytics</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Proactive issue detection</tspan><tspan x="30" dy="16">and resolution</tspan></text><!-- AI-Powered Chatbot --><circle cx="12" cy="190" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="195" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">AI-Powered Chatbot</tspan></text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">24/7 intelligent virtual</tspan><tspan x="30" dy="16">assistant</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 670)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_cloud_migration_scorecard"><a class="link" href="#_cloud_migration_scorecard">5.7. Cloud Migration ScoreCard</a></h3>
+<div class="paragraph">
+<p>This example demonstrates tracking cloud migration projects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,scorecard]
+----
+title=Cloud Migration ScoreCard: On-Premise to AWS
+subtitle=Enterprise Infrastructure Transformation to Cloud-Native Architecture
+headerTitle=Digital Infrastructure Modernization Results
+---
+[before]
+title=BEFORE: On-Premise Data Center
+---
+[before.items]
+Physical Infrastructure | Hardware refresh cycles, capital expenses | critical | $
+Limited Scalability | Manual scaling, capacity planning challenges | warning | !
+High Maintenance | 65% of IT time spent on "keeping the lights on" | critical | !
+---
+[before.performance]
+Infrastructure Agility | 30 | #ef476f
+---
+[after]
+title=AFTER: AWS Cloud Environment
+---
+[after.items]
+Cloud Infrastructure | Pay-as-you-go model, operational expenses | good | $
+Auto-Scaling | Dynamic resource allocation based on demand | good | ✓
+Managed Services | 70% reduction in maintenance overhead | good | ✓
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg width="800" height="754" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- iOS-style background with subtle gradient --><defs><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" /></linearGradient><!-- iOS-style shadows --><filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/></filter><filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/></filter><!-- iOS System Blue gradient --><linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" /></linearGradient><!-- iOS System Green gradient --><linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient><!-- iOS System Red --><linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" /></linearGradient><!-- iOS System Orange --><linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" /></linearGradient></defs><rect width="800" height="754" fill="url(#bgGradient)"/><!-- iOS-style title --><text x="400" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif" font-size="24" font-weight="600" fill="#1D1D1F">Cloud Migration ScoreCard: On-Premise to AWS</text><text x="400" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="17" font-weight="400" fill="#86868B">Enterprise Infrastructure Transformation to Cloud-Native Architecture</text><!-- Before Card --><g><rect x="40" y="100" width="300" height="514" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- Before Header --><rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/><text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">BEFORE: On-Premise Data Center</text><!-- Legacy issues --><g transform="translate(80, 190)"><!-- Physical Infrastructure --><circle cx="12" cy="12" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#redGradient)">💰</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Physical</tspan><tspan x="30" dy="18">Infrastructure</tspan></text><text x="30" y="48" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Hardware refresh cycles,</tspan><tspan x="30" dy="16">capital expenses</tspan></text><!-- Limited Scalability --><circle cx="12" cy="110" r="8" fill="url(#orangeGradient)" opacity="0.15"/><text x="12" y="115" text-anchor="middle" font-size="10" fill="url(#orangeGradient)">⚠️</text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Limited Scalability</tspan></text><text x="30" y="128" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Manual scaling, capacity</tspan><tspan x="30" dy="16">planning challenges</tspan></text><!-- High Maintenance --><circle cx="12" cy="190" r="8" fill="url(#redGradient)" opacity="0.15"/><text x="12" y="195" text-anchor="middle" font-size="10" fill="url(#redGradient)">⚠️</text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">High Maintenance</tspan></text><text x="30" y="208" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">65% of IT time spent on</tspan><tspan x="30" dy="16">&quot;keeping the lights</tspan><tspan x="30" dy="16">on&quot;</tspan></text></g>    <!-- Legacy score indicator --><text x="190" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Infrastructure Agility</text></g><!-- iOS-style upgrade arrow --><g transform="translate(400, 290)"><circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/><path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text></g><!-- After Card --><g><rect x="460" y="100" width="300" height="514" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/><!-- After Header --><rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/><text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AFTER: AWS Cloud Environment</text><!-- Modern improvements --><g transform="translate(500, 190)"><!-- Cloud Infrastructure --><circle cx="12" cy="12" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="17" text-anchor="middle" font-size="10" fill="url(#greenGradient)">💰</text><text x="30" y="12" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Cloud Infrastructure</tspan></text><text x="30" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Pay-as-you-go model,</tspan><tspan x="30" dy="16">operational expenses</tspan></text><!-- Auto-Scaling --><circle cx="12" cy="92" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="97" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="92" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Auto-Scaling</tspan></text><text x="30" y="110" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">Dynamic resource</tspan><tspan x="30" dy="16">allocation based on demand</tspan></text><!-- Managed Services --><circle cx="12" cy="172" r="8" fill="url(#greenGradient)" opacity="0.15"/><text x="12" y="177" text-anchor="middle" font-size="10" fill="url(#greenGradient)">✅</text><text x="30" y="172" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="15" font-weight="500" fill="#1D1D1F"><tspan x="30" dy="0">Managed Services</tspan></text><text x="30" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="400" fill="#86868B"><tspan x="30" dy="0">70% reduction in</tspan><tspan x="30" dy="16">maintenance overhead</tspan></text></g>    <!-- Modern score indicator --><text x="610" y="450" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="12" font-weight="600" fill="#86868B">Performance</text></g><!-- Key improvements summary --><g transform="translate(200, 634)"><rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/><text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text><text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif" font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text></g></svg></div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices_and_creative_uses"><a class="link" href="#_best_practices_and_creative_uses">6. Best Practices and Creative Uses</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_best_practices_for_creating_effective_scorecards"><a class="link" href="#_best_practices_for_creating_effective_scorecards">6.1. Best Practices for Creating Effective Scorecards</a></h3>
+<div class="paragraph">
+<p>When creating your own scorecards, consider these best practices:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Focus on Contrast</strong>: Ensure a clear contrast between "before" and "after" states to highlight improvements.</p>
+</li>
+<li>
+<p><strong>Use Consistent Metrics</strong>: Choose metrics that can be directly compared between the before and after states.</p>
+</li>
+<li>
+<p><strong>Limit Items</strong>: Include 3-5 key items in each section to avoid overwhelming the viewer.</p>
+</li>
+<li>
+<p><strong>Choose Meaningful Colors</strong>: Use colors that intuitively represent status (red for critical, green for good).</p>
+</li>
+<li>
+<p><strong>Quantify Improvements</strong>: Express improvements in percentages or other measurable terms.</p>
+</li>
+<li>
+<p><strong>Highlight Key Optimizations</strong>: Focus on the most impactful changes that drove the improvements.</p>
+</li>
+<li>
+<p><strong>Include Context in Footer</strong>: Add relevant information about timeline, team size, or approach in the footer.</p>
+</li>
+<li>
+<p><strong>Be Specific in Titles</strong>: Use specific, descriptive titles rather than generic ones.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creative_uses_for_scorecards"><a class="link" href="#_creative_uses_for_scorecards">6.2. Creative Uses for ScoreCards</a></h3>
+<div class="paragraph">
+<p>Beyond the examples shown above, ScoreCards can be used for:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Product Launch Comparisons</strong>: Compare metrics between previous and new product versions.</p>
+</li>
+<li>
+<p><strong>Team Performance Tracking</strong>: Visualize team performance improvements over time.</p>
+</li>
+<li>
+<p><strong>User Experience Enhancements</strong>: Document UX improvements with before/after metrics.</p>
+</li>
+<li>
+<p><strong>Infrastructure Upgrades</strong>: Showcase the impact of hardware or network upgrades.</p>
+</li>
+<li>
+<p><strong>Training Program Effectiveness</strong>: Compare skill levels before and after training initiatives.</p>
+</li>
+<li>
+<p><strong>Marketing Campaign Results</strong>: Display the impact of marketing strategy changes.</p>
+</li>
+<li>
+<p><strong>Software Version Comparisons</strong>: Highlight improvements between software releases.</p>
+</li>
+<li>
+<p><strong>Process Optimization</strong>: Document the results of business process reengineering.</p>
+</li>
+<li>
+<p><strong>Compliance Improvements</strong>: Track progress in meeting regulatory requirements.</p>
+</li>
+<li>
+<p><strong>Sustainability Initiatives</strong>: Showcase environmental impact reductions.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ios_style_design"><a class="link" href="#_ios_style_design">6.3. iOS-Style Design</a></h3>
+<div class="paragraph">
+<p>The ScoreCard Maker now uses an iOS-style design with the following elements:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Fixed Dimensions</strong>: Each scorecard has fixed dimensions of 800x620 pixels, which can be scaled using the <code>scale</code> parameter.</p>
+</li>
+<li>
+<p><strong>Subtle Background Gradient</strong>: A light gradient background for a modern, clean look.</p>
+</li>
+<li>
+<p><strong>Card-Based Layout</strong>: Content is organized in card-like containers with rounded corners.</p>
+</li>
+<li>
+<p><strong>iOS-Style Shadows</strong>: Subtle drop shadows add depth and dimension to the cards.</p>
+</li>
+<li>
+<p><strong>System Gradients</strong>: iOS-style color gradients for headers and indicators (blue, green, red, orange).</p>
+</li>
+<li>
+<p><strong>Modern Typography</strong>: Uses the San Francisco font family (or system equivalents) for a native iOS feel.</p>
+</li>
+<li>
+<p><strong>Team Avatars</strong>: Includes a section for team member avatars with initials.</p>
+</li>
+<li>
+<p><strong>Key Improvements Summary</strong>: A dedicated section highlighting the overall improvements.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_design_tips"><a class="link" href="#_design_tips">6.4. Design Tips</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Color Harmony</strong>: Choose complementary colors for a visually appealing scorecard.</p>
+</li>
+<li>
+<p><strong>Typography</strong>: The default typography is designed for readability, but you can customize it if needed.</p>
+</li>
+<li>
+<p><strong>White Space</strong>: The layout includes appropriate white space for readability.</p>
+</li>
+<li>
+<p><strong>Visual Hierarchy</strong>: The most important information (summary and key metrics) is emphasized.</p>
+</li>
+<li>
+<p><strong>Consistency</strong>: Maintain consistent formatting throughout your scorecard.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_customization"><a class="link" href="#_customization">7. Customization</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The ScoreCard Maker supports customization through various parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Colors for different sections</p>
+</li>
+<li>
+<p>Scaling for different display sizes (base dimensions: 800x620 pixels)</p>
+</li>
+<li>
+<p>Custom icons and status indicators</p>
+</li>
+<li>
+<p>iOS-style visual elements (gradients, shadows, rounded corners)</p>
+</li>
+<li>
+<p>Fixed layout with consistent design elements</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration"><a class="link" href="#_integration">8. Integration</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The ScoreCard Maker can be integrated with other documentation tools:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Embed in AsciiDoc documents</p>
+</li>
+<li>
+<p>Include in HTML pages</p>
+</li>
+<li>
+<p>Export as SVG for use in presentations</p>
+</li>
+<li>
+<p>Convert to PDF for reports</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quick_reference_guide"><a class="link" href="#_quick_reference_guide">9. Quick Reference Guide</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_common_patterns"><a class="link" href="#_common_patterns">9.1. Common Patterns</a></h3>
+<div class="paragraph">
+<p>Here are some common patterns you can use as templates for your own scorecards:</p>
+</div>
+<div class="sect3">
+<h4 id="_status_indicators"><a class="link" href="#_status_indicators">9.1.1. Status Indicators</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Icon</th>
+<th class="tableblock halign-left valign-top">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">critical</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">!</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Highlighting problems or critical issues in the "before" state</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">warning</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">!</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicating caution or moderate issues</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">good</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Showing improvements or positive aspects in the "after" state</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">neutral</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">•</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Presenting neutral information without judgment</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_color_schemes"><a class="link" href="#_color_schemes">9.1.2. Color Schemes</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Theme</th>
+<th class="tableblock halign-left valign-top">Colors</th>
+<th class="tableblock halign-left valign-top">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Corporate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#0a2540, #4a56e2, #2a9d8f</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Professional business presentations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">High Contrast</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#000000, #ffffff, #ff0000, #00ff00</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum readability and accessibility</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pastel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#f8edeb, #fcd5ce, #f9dcc4, #fec89a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Softer, more approachable look</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vibrant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#f72585, #7209b7, #3a0ca3, #4361ee</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eye-catching presentations with high impact</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_template_snippets"><a class="link" href="#_template_snippets">9.1.3. Template Snippets</a></h4>
+<div class="paragraph">
+<p><strong>Basic Before/After Item:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">[before.items]
+Item Name | Description of the issue | critical | !
+---
+[after.items]
+Improved Item | Description of the improvement | good | ✓</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="link" href="#_troubleshooting">10. Troubleshooting</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_common_issues"><a class="link" href="#_common_issues">10.1. Common Issues</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>If sections are not appearing correctly, check that you have the correct section markers (<code>[section]</code>)</p>
+</li>
+<li>
+<p>If colors are not displaying correctly, ensure they are valid hex color codes (e.g., <code>#3498db</code>)</p>
+</li>
+<li>
+<p>If the layout seems off, try adjusting the <code>scale</code> parameter</p>
+</li>
+<li>
+<p>If metrics aren&#8217;t showing up, verify that you have both a <code>[metrics]</code> section and a corresponding <code>[metrics.items]</code> section</p>
+</li>
+<li>
+<p>If the scorecard appears too small or too large, remember that the base dimensions are fixed at 800x620 pixels, which are then multiplied by the <code>scale</code> parameter</p>
+</li>
+<li>
+<p>If icons don&#8217;t appear as expected, note that in the iOS-style design, text icons (<code>!</code>, <code>$</code>, <code>✓</code>) are automatically converted to emojis</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_support"><a class="link" href="#_support">10.2. Support</a></h3>
+<div class="paragraph">
+<p>For issues or feature requests, please contact the DocOps team.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

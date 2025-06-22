@@ -1,0 +1,415 @@
+= DocOps Line Charts
+:imagesdir: images
+
+== Introduction
+
+The DocOps Line Chart Extension allows you to create visually appealing line charts in your AsciiDoctor documents. Line charts are useful for visualizing trends over time, comparing multiple data series, and identifying patterns in your data.
+
+This guide will help you understand the basic concepts of line charts, how to include them in your AsciiDoctor documents, and provide examples of different types of line charts.
+
+== Basic Concepts
+
+=== What are Line Charts?
+
+Line charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each line chart has:
+
+* A title (the main heading of the chart)
+* One or more data series (lines)
+* Data points for each series
+* X-axis labels (typically time periods)
+* Y-axis values
+* Optional display settings for customizing the appearance
+
+The extension supports various styles of line charts, including:
+
+* Multiple data series on a single chart
+* Smooth curved lines or straight line segments
+* Interactive tooltips on hover
+* Customizable colors and backgrounds
+* Dark mode support for better visibility in dark-themed documents
+
+=== Line Chart Components
+
+A line chart includes:
+
+* A title
+* One or more data series, each with:
+  ** A series label (shown in the legend)
+  ** A set of data points, each with an x-label and y-value
+* A legend showing all data series
+* Grid lines and axis ticks
+* Display settings for visual appearance
+
+== AsciiDoctor Syntax for Line Charts
+
+To include line charts in your AsciiDoctor document, you use a special macro syntax. The DocOps extension now supports a simpler tabular format for line charts:
+
+[source,asciidoc]
+....
+[docops,line,controls=true]
+----
+title=Chart Title
+width=900
+darkMode=false
+---
+Series 1 | Jan | 40
+Series 1 | Feb | 70
+Series 1 | Mar | 90
+Series 2 | Jan | 22
+Series 2 | Feb | 33
+Series 2 | Mar | 44
+----
+....
+
+The macro processes this tabular data and generates an SVG representation of the line chart that is embedded in your document.
+
+=== Line Chart Configuration
+
+The configuration parameters are specified at the beginning of the content, followed by a separator line (`---`), and then the actual chart data.
+
+==== Configuration Parameters
+
+* `title` (optional): The main heading of the chart (default: "Line Chart")
+* `width` (optional): The width of the chart in pixels (default: 500)
+* `height` (optional): The height of the chart in pixels (default: 500)
+* `legend` (optional): Whether to display a legend (default: true)
+* `hover` (optional): Whether to enable hover effects (default: true)
+* `smooth` (optional): Whether to display smooth curved lines (true) or straight line segments (false) (default: true)
+* `points` (optional): Whether to display data points (default: true)
+* `grid` (optional): Whether to display grid lines (default: true)
+* `xAxisLabel` (optional): Label for the x-axis
+* `yAxisLabel` (optional): Label for the y-axis
+* `darkMode` (optional): Whether to use dark mode styling (default: false)
+* `colors` (optional): A comma-separated list of custom colors for the chart
+
+==== Data Format
+
+The data for the line chart is specified in a simple tabular format:
+
+[source]
+----
+Series Name | X-Label | Y-Value
+----
+
+Where:
+* `Series Name` is the name of the data series (shown in the legend)
+* `X-Label` is the label for the x-axis point
+* `Y-Value` is the numerical value for the data point
+
+== Examples
+
+=== Basic Line Chart Example
+
+Here's a simple example of a line chart with multiple data series using the new tabular format:
+
+[source,asciidoc]
+....
+[docops,line,controls=true]
+----
+title=Monthly Performance Metrics
+width=800
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+----
+....
+
+[docops,line,controls=true]
+----
+title=Monthly Performance Metrics
+width=800
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+----
+
+=== Multi-Series Line Chart Example
+
+Here's an example of a line chart with three data series:
+
+[source,asciidoc]
+....
+[docops,line,controls=true]
+----
+title=Department Performance Metrics
+width=900
+smooth=true
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70
+----
+....
+
+[docops,line,controls=true]
+----
+title=Department Performance Metrics
+width=900
+smooth=true
+---
+Sales | Jan | 40
+Sales | Feb | 70
+Sales | Mar | 90
+Sales | Apr | 70
+Sales | May | 40
+Sales | Jun | 30
+Sales | Jul | 60
+Sales | Aug | 90
+Sales | Sept | 70
+Marketing | Jan | 22
+Marketing | Feb | 33
+Marketing | Mar | 44
+Marketing | Apr | 55
+Marketing | May | 66
+Marketing | Jun | 77
+Marketing | Jul | 88
+Marketing | Aug | 109
+Marketing | Sept | 110
+Development | Jan | 56
+Development | Feb | 65
+Development | Mar | 78
+Development | Apr | 72
+Development | May | 56
+Development | Jun | 94
+Development | Jul | 86
+Development | Aug | 73
+Development | Sept | 70
+----
+
+=== Product Segment Performance Example
+
+This example shows performance data for different product segments over a year:
+
+[source,asciidoc]
+....
+[docops,line, role=left, name=seg,controls=true]
+----
+title=Product Segment Performance
+width=900
+darkMode=false
+---
+Affordable Segment | Jan | 173
+Affordable Segment | Feb | 153
+Affordable Segment | Mar | 195
+Affordable Segment | Apr | 147
+Affordable Segment | May | 120
+Affordable Segment | Jun | 144
+Affordable Segment | Jul | 148
+Affordable Segment | Aug | 109
+Affordable Segment | Sept | 174
+Affordable Segment | Oct | 130
+Affordable Segment | Nov | 172
+Affordable Segment | Dec | 132
+Luxury Segment | Jan | 189
+Luxury Segment | Feb | 189
+Luxury Segment | Mar | 105
+Luxury Segment | Apr | 112
+Luxury Segment | May | 173
+Luxury Segment | Jun | 109
+Luxury Segment | Jul | 151
+Luxury Segment | Aug | 197
+Luxury Segment | Sept | 174
+Luxury Segment | Oct | 145
+Luxury Segment | Nov | 177
+Luxury Segment | Dec | 167
+Super Luxury Segment | Jan | 185
+Super Luxury Segment | Feb | 185
+Super Luxury Segment | Mar | 126
+Super Luxury Segment | Apr | 134
+Super Luxury Segment | May | 196
+Super Luxury Segment | Jun | 153
+Super Luxury Segment | Jul | 112
+Super Luxury Segment | Aug | 133
+Super Luxury Segment | Sept | 200
+Super Luxury Segment | Oct | 145
+Super Luxury Segment | Nov | 167
+Super Luxury Segment | Dec | 110
+----
+....
+
+[docops,line, role=left, name=seg,controls=true]
+----
+title=Product Segment Performance
+width=900
+darkMode=false
+---
+Affordable Segment | Jan | 173
+Affordable Segment | Feb | 153
+Affordable Segment | Mar | 195
+Affordable Segment | Apr | 147
+Affordable Segment | May | 120
+Affordable Segment | Jun | 144
+Affordable Segment | Jul | 148
+Affordable Segment | Aug | 109
+Affordable Segment | Sept | 174
+Affordable Segment | Oct | 130
+Affordable Segment | Nov | 172
+Affordable Segment | Dec | 132
+Luxury Segment | Jan | 189
+Luxury Segment | Feb | 189
+Luxury Segment | Mar | 105
+Luxury Segment | Apr | 112
+Luxury Segment | May | 173
+Luxury Segment | Jun | 109
+Luxury Segment | Jul | 151
+Luxury Segment | Aug | 197
+Luxury Segment | Sept | 174
+Luxury Segment | Oct | 145
+Luxury Segment | Nov | 177
+Luxury Segment | Dec | 167
+Super Luxury Segment | Jan | 185
+Super Luxury Segment | Feb | 185
+Super Luxury Segment | Mar | 126
+Super Luxury Segment | Apr | 134
+Super Luxury Segment | May | 196
+Super Luxury Segment | Jun | 153
+Super Luxury Segment | Jul | 112
+Super Luxury Segment | Aug | 133
+Super Luxury Segment | Sept | 200
+Super Luxury Segment | Oct | 145
+Super Luxury Segment | Nov | 167
+Super Luxury Segment | Dec | 110
+----
+
+=== Dark Mode Line Chart Example
+
+You can enable dark mode for better visibility in dark-themed documents:
+
+[source,asciidoc]
+....
+[docops,line,controls=true]
+----
+title=Series Comparison
+width=800
+darkMode=true
+---
+Series A | 1 | 10
+Series A | 2 | 15
+Series A | 3 | 13
+Series A | 4 | 17
+Series A | 5 | 20
+Series B | 1 | 5
+Series B | 2 | 7
+Series B | 3 | 10
+Series B | 4 | 12
+Series B | 5 | 15
+----
+....
+
+[docops,line,controls=true]
+----
+title=Series Comparison
+width=800
+darkMode=true
+---
+Series A | 1 | 10
+Series A | 2 | 15
+Series A | 3 | 13
+Series A | 4 | 17
+Series A | 5 | 20
+Series B | 1 | 5
+Series B | 2 | 7
+Series B | 3 | 10
+Series B | 4 | 12
+Series B | 5 | 15
+----
+
+=== Custom Colors Example
+
+You can specify custom colors for your line chart:
+
+[source,asciidoc]
+....
+[docops,line,controls=true]
+----
+title=Quarterly Performance
+width=800
+colors=#6a0dad,#0da6a0,#daad0d
+---
+Q1 2023 | Jan | 120
+Q1 2023 | Feb | 150
+Q1 2023 | Mar | 180
+Q2 2023 | Apr | 140
+Q2 2023 | May | 170
+Q2 2023 | Jun | 200
+Q3 2023 | Jul | 160
+Q3 2023 | Aug | 190
+Q3 2023 | Sep | 220
+----
+....
+
+[docops,line,controls=true]
+----
+title=Quarterly Performance
+width=800
+colors=#6a0dad,#0da6a0,#daad0d
+---
+Q1 2023 | Jan | 120
+Q1 2023 | Feb | 150
+Q1 2023 | Mar | 180
+Q2 2023 | Apr | 140
+Q2 2023 | May | 170
+Q2 2023 | Jun | 200
+Q3 2023 | Jul | 160
+Q3 2023 | Aug | 190
+Q3 2023 | Sep | 220
+----
+== Interactive Features
+
+Line charts in the DocOps extension include several interactive features:
+
+* **Tooltips**: Hover over data points to see detailed information
+* **Legend Highlighting**: Hover over legend items to highlight them
+* **Visual Effects**: Data points have hover effects for better visibility
+
+These interactive features enhance the user experience and make it easier to interpret the data in your charts.
+
+== Conclusion
+
+The DocOps Line Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing line charts. The new tabular data format makes it easier to create and maintain line charts compared to the previous JSON format.
+
+The extension supports multiple data series, smooth or straight lines, interactive features, and dark mode, giving you flexibility in how you present your time-series data. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.

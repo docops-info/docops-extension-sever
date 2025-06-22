@@ -1,0 +1,868 @@
+include::_base.adoc[]
+= DocOps ADR
+
+== Introduction
+
+Architecture Decision Records (ADRs) are documents that capture significant design choices made during software development. They provide a structured way to record the context, rationale, and consequences of these decisions, ensuring future understanding and traceability. Essentially, ADRs act as a log of important architectural choices, helping teams understand why a system is designed the way it is.
+
+=== What are Architecture Decision Records?
+
+ADRs are typically short, concise documents (often one or two pages) that describe a specific architectural decision. They detail the decision itself, the context surrounding it (constraints, stakeholder input, etc.), the potential consequences (both positive and negative), and the status of the decision (e.g., proposed, accepted, superseded).
+
+=== Why are ADRs useful?
+
+* *Contextual understanding:* ADRs help current and future team members understand the reasoning behind design choices, even years later.
+* *Improved communication:* They facilitate better communication and collaboration by providing a shared understanding of architectural decisions.
+* *Traceability:* ADRs allow teams to trace back to the reasons for specific design choices, making it easier to adapt and evolve the system.
+* *Reduced re-work:* By documenting decisions and their justifications, ADRs can prevent redundant discussions and re-evaluation of the same issues.
+* *Onboarding new team members:* ADRs provide a quick and efficient way for new team members to get up to speed on the system's architecture.
+
+=== How are ADRs used?
+
+ADRs are often stored alongside the code in a repository (e.g., as Markdown files) and can be integrated with project management tools.
+
+=== Key characteristics of ADRs
+
+* *Immutability:* Once accepted, ADRs are generally considered immutable, meaning they are not changed directly. If a decision needs to be revisited, a new ADR is created to supersede the previous one.
+* *Conciseness:* ADRs are meant to be concise and to the point, focusing on the key aspects of the decision.
+* *Focus on the "why":* The primary goal is to capture the rationale behind the decision, not just the decision itself.
+
+=== The DocOps ADR Extension
+
+The DocOps ADR (Architecture Decision Record) Extension allows you to create visually appealing architecture decision records in your AsciiDoctor documents. It provides a structured format for documenting important architectural decisions, their context, and consequences.
+
+This guide will help you understand the basic concepts of ADRs, how to include them in your AsciiDoctor documents, and provide examples of different types of ADR visualizations.
+
+== Basic Concepts
+
+=== What are DocOps Architecture Decision Records?
+
+Architecture Decision Records (ADRs) in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each ADR has:
+
+* A title (the main heading of the ADR)
+* Status (Proposed, Accepted, Superseded, Deprecated, or Rejected)
+* Date of the decision
+* Context (the factors that influenced the decision)
+* Decision (the actual decision made)
+* Consequences (the results of the decision)
+* Participants (the people involved in making the decision)
+* References (optional links to related resources)
+
+The extension supports various display options, including:
+
+* Light mode (default)
+* Dark mode
+* Different status colors
+
+=== ADR Components
+
+An ADR includes:
+
+* A title
+* Status and date information
+* Context section
+* Decision section
+* Consequences section
+* Participants section with stick figure representations
+* References section with clickable links to related resources (optional)
+
+== AsciiDoctor Syntax for ADRs
+
+To include ADRs in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,adr]
+----
+title: ADR title
+status: Accepted
+date: YYYY-MM-DD
+context: Context point 1
+- Context point 2
+decision: Decision point 1
+- Decision point 2
+consequences: Consequence 1
+Consequence 2
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the ADR that is embedded in your document.
+
+=== ADR Properties
+
+==== Main Properties
+
+* `title` (required): The main heading of the ADR
+* `date` (required): The date when the decision was made
+* `status` (required): The status of the decision (Proposed, Accepted, Superseded, Deprecated, or Rejected)
+* `context` (required): An array of context statements
+* `decision` (required): An array of decision statements
+* `consequences` (required): An array of consequence statements
+* `participants` (optional): An array of participant names
+* `references` (optional): A list of wiki-style links to related resources
+
+==== References Section
+
+The `references` field allows you to include wiki-style links to related resources. These links will be displayed in a dedicated "References" section after the participants section. Wiki-style links use the format +[[url label]]+ where "url" is the target URL and "label" is the display text for the link.
+
+You can format references in two ways:
+
+1. **Single line with multiple links**:
++
+[source]
+----
+references: [[https://example.com/architecture Architecture Overview]], [[https://example.com/standards Coding Standards]]
+----
+
+2. **Multiple lines**:
++
+[source]
+----
+references:
+[[https://example.com/architecture Architecture Overview]]
+[[https://example.com/standards Coding Standards]]
+[[https://example.com/patterns Design Patterns]]
+----
+
+The references will be displayed as clickable links in the ADR visualization.
+
+==== Multiline Participants
+
+The `participants` field supports multiline formatting, allowing you to list participants on separate lines for better readability. This is particularly useful when you have many participants or when participant names include roles or other information.
+
+You can format participants in two ways:
+
+1. **Single line with commas**:
++
+[source]
+----
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)
+----
+
+2. **Multiple lines**:
++
+[source]
+----
+participants:
+Jane Smith (Architect),
+John Doe (Developer),
+Alice Johnson (Product Manager)
+----
++
+Or:
++
+[source]
+----
+participants:
+Jane Smith (Architect)
+John Doe (Developer)
+Alice Johnson (Product Manager)
+----
+
+Both formats will be correctly parsed and displayed in the ADR visualization.
+
+==== Structured Participant Format
+
+The ADR extension now supports a structured format for participants using pipe separators. This allows you to specify additional information for each participant in a structured way.
+
+The format is:
+
+[source]
+----
+Name | title | email | color | emoji
+----
+
+Where:
+
+* `Name` (required): The participant's name
+* `title` (optional): The participant's title or role
+* `email` (optional): The participant's email address
+* `color` (optional): A custom color for the participant's icon (hex code)
+* `emoji` (optional): A custom emoji character to represent the participant (defaults to 👤 if not specified)
+
+Examples:
+
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563
+----
+
+With a custom emoji:
+
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563 | 👩‍💻
+----
+
+Or with multiple participants and different emojis:
+
+[source]
+----
+participants:
+John Doe | Developer | john.doe@example.com | #10B981 | 👨‍💻
+Jane Smith | Architect | jane.smith@example.com | #6366F1 | 🏗️
+Alice Johnson | Product Manager | alice.johnson@example.com | #F59E0B | 📊
+----
+
+[NOTE]
+====
+* If you omit any optional parameters, you can still include the pipe separators:
++
+[source]
+----
+participants: John Doe | Developer | | #10B981 |
+----
+
+* If you don't specify a color, a default color will be used based on the ADR status.
+* If you don't specify an emoji, the default 👤 will be used.
+* You can use any standard emoji character, including composite emojis like 👩‍💻 or 👨‍🔬.
+* The structured format uses emoji icons instead of the traditional person icons.
+* Both the traditional format and the structured format are supported for backward compatibility.
+====
+
+==== Interactive Participants
+
+The participants section includes several interactive features to enhance collaboration:
+
+1. **Hover Effects**: When you hover over a participant, a subtle glow effect is applied to highlight the participant.
+
+2. **Email Detection**: The system automatically detects email addresses in participant information. You can specify emails in two ways:
++
+Using the traditional format:
++
+[source]
+----
+participants: Jane Smith (jane.smith@example.com), John Doe (john.doe@example.com)
+----
++
+Or using the structured format:
++
+[source]
+----
+participants: Jane Smith | Architect | jane.smith@example.com | #4B5563
+----
+
+3. **Microsoft Teams Chat Links**: Participants with email addresses are automatically linked to Microsoft Teams chat. Clicking on a participant with an email will open a new Teams chat with that person.
+
+4. **Group Chat Link**: When two or more participants have email addresses, a "Start Group Chat" link appears in the participants section. Clicking this link will open a Microsoft Teams group chat with all participants who have email addresses.
+
+[TIP]
+====
+To make the most of these interactive features:
+
+* Include email addresses either:
+** In parentheses after participant names: `Name (email@example.com)`
+** Or in the structured format: `Name | Title | email@example.com | color`
+* For organization-specific Teams integration, ensure you're using the correct email domain
+* The structured format provides more control over the participant's appearance and information
+====
+
+==== Status Options
+
+[TIP]
+====
+The `status` property can have one of the following values:
+
+* `Proposed`: Indicates a decision that is being considered (blue)
+* `Accepted`: Indicates a decision that has been approved (green)
+* `Superseded`: Indicates a decision that has been replaced by a newer decision (amber)
+* `Deprecated`: Indicates a decision that is no longer relevant (red)
+* `Rejected`: Indicates a decision that was not approved (dark red)
+====
+
+=== Wiki Style Links
+
+The ADR extension supports wiki style links in all text fields. This allows you to add hyperlinks to external resources or internal references within your ADRs.
+
+==== Wiki Style Link Syntax
+
+To add a wiki style link, use the following syntax:
+
+[source]
+----
+[[URL LABEL]]
+----
+
+Where:
+
+* `URL` is the full URL of the linked resource
+* `LABEL` is the text that will be displayed and linked
+
+For example:
+
+[source]
+----
+[[https://www.example.com Example Website]]
+----
+
+This will render as a clickable link with "Example Website" as the visible text.
+
+==== Examples of Wiki Style Links in ADRs
+
+Wiki style links can be used in any text field of an ADR, including:
+
+* Context points
+* Decision points
+* Consequences
+* Participant information
+* The dedicated references section
+
+Example usage in a decision point:
+
+[source]
+----
+- We will use [[https://kubernetes.io/ Kubernetes]] for container orchestration
+----
+
+Example usage in a context point:
+
+[source]
+----
+- Our current architecture is described in [[https://internal-wiki.example.com/architecture Architecture Wiki]]
+----
+
+[TIP]
+====
+Wiki style links are particularly useful for:
+
+* Linking to technical documentation
+* Referencing design documents
+* Pointing to standards or best practices
+* Connecting to related ADRs
+====
+
+== Examples
+
+=== Basic ADR Example
+
+Here's a simple example of an Architecture Decision Record:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)
+----
+
+=== Dark Mode ADR Example
+
+You can create dark mode ADRs by setting the `useDark` parameter to `true`:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=true,role=center]
+----
+title: Adopt Microservices Architecture
+status: Accepted
+date: 2024-06-01
+context:
+- Our monolithic application is becoming difficult to maintain and scale
+- Development teams need to work independently on different parts of the system
+- We need to improve deployment frequency and reduce time-to-market
+- Different components have different scaling requirements
+decision:
+- We will gradually migrate from monolith to microservices architecture
+- We will use domain-driven design to identify service boundaries
+- We will implement an API gateway for client communication
+- We will use containerization (Docker) and orchestration (Kubernetes)
+consequences:
+- Improved scalability and resilience
+- Faster development cycles and independent deployments
+- Increased operational complexity
+- Need for robust service discovery and monitoring
+participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)
+----
+....
+
+[docops,adr,useDark=true,role=center,controls="true"]
+----
+title: Adopt Microservices Architecture
+status: Accepted
+date: 2024-06-01
+context:
+- Our monolithic application is becoming difficult to maintain and scale
+- Development teams need to work independently on different parts of the system
+- We need to improve deployment frequency and reduce time-to-market
+- Different components have different scaling requirements
+decision:
+- We will gradually migrate from monolith to microservices architecture
+- We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries
+- We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication
+- We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])
+consequences:
+- Improved scalability and resilience
+- Faster development cycles and independent deployments
+- Increased operational complexity
+- Need for robust service discovery and monitoring
+participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)
+----
+
+=== Proposed Status ADR Example
+
+This example shows an ADR with "Proposed" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Implement GraphQL API Layer
+status: Proposed
+date: 2024-06-10
+context:
+- Our REST APIs require multiple round trips for complex data requirements
+- Mobile clients need efficient data loading with minimal bandwidth
+- Frontend teams need more flexibility in data fetching
+- API versioning and documentation are becoming challenging
+decision:
+- We will implement a GraphQL API layer on top of existing services
+- We will use Apollo Server for the GraphQL implementation
+- We will maintain existing REST APIs for backward compatibility
+- We will develop a phased migration plan for clients
+consequences:
+- More efficient data fetching for clients
+- Reduced network overhead for mobile applications
+- Self-documenting API with introspection
+- Learning curve for teams unfamiliar with GraphQL
+- Additional complexity in the API layer
+participants: Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Implement GraphQL API Layer
+status: Proposed
+date: 2024-06-10
+context:
+- Our REST APIs require multiple round trips for complex data requirements
+- Mobile clients need efficient data loading with minimal bandwidth
+- Frontend teams need more flexibility in data fetching
+- API versioning and documentation are becoming challenging
+decision:
+- We will implement a GraphQL API layer on top of existing services
+- We will use Apollo Server for the GraphQL implementation
+- We will maintain existing REST APIs for backward compatibility
+- We will develop a phased migration plan for clients
+consequences:
+- More efficient data fetching for clients
+- Reduced network overhead for mobile applications
+- Self-documenting API with introspection
+- Learning curve for teams unfamiliar with GraphQL
+- Additional complexity in the API layer
+participants: Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)
+----
+
+=== Rejected Status ADR Example
+
+This example shows an ADR with "Rejected" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We're experiencing performance issues with our relational database
+- Some of our data doesn't fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+decision:
+- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team's existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in PostgreSQL optimization and tuning
+participants: Jennifer Lee (Database Administrator), Carlos Rodriguez (System Architect), Thomas Wright (Performance Engineer)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We're experiencing performance issues with our relational database
+- Some of our data doesn't fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+decision:
+- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team's existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in [[https://www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
+participants: 
+Jennifer Lee (Database Administrator), 
+Carlos Rodriguez (System Architect), 
+Thomas Wright (Performance Engineer)
+----
+
+=== Superseded Status ADR Example
+
+This example shows an ADR with "Superseded" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Use JWT for Authentication
+status: Superseded
+date: 2023-11-15
+context:
+- We need a stateless authentication mechanism
+- We want to reduce database lookups for auth verification
+- We need to support authentication across [[https://microservices.io/ multiple services]]
+- We need to include authorization claims in the token
+decision:
+- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
+- We will implement token refresh mechanism
+- We will store tokens in HTTP-only cookies
+- We will include basic user permissions in the token
+consequences:
+- Stateless authentication reducing server load
+- Simplified authentication for microservices
+- Potential security risks if tokens are compromised
+- Limited token size due to being included in every request
+participants: Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Use JWT for Authentication
+status: Superseded
+date: 2023-11-15
+context:
+- We need a stateless authentication mechanism
+- We want to reduce database lookups for auth verification
+- We need to support authentication across [[https://microservices.io/ multiple services]]
+- We need to include authorization claims in the token
+decision:
+- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
+- We will implement token refresh mechanism
+- We will store tokens in HTTP-only cookies
+- We will include basic user permissions in the token
+consequences:
+- Stateless authentication reducing server load
+- Simplified authentication for microservices
+- Potential security risks if tokens are compromised
+- Limited token size due to being included in every request
+participants: Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)
+----
+
+=== Deprecated Status ADR Example
+
+This example shows an ADR with "Deprecated" status:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=true,role=center]
+----
+title: Use Server-Side Rendering for Web Application
+status: Deprecated
+date: 2022-09-10
+context:
+- We need to optimize initial page load performance
+- SEO is important for our content-heavy application
+- We need to support users with slower internet connections
+- We want to reduce client-side JavaScript processing
+decision:
+- We will use Next.js for server-side rendering
+- We will implement incremental static regeneration for content pages
+- We will use client-side hydration for interactive components
+- We will implement code splitting for performance optimization
+consequences:
+- Improved initial page load times
+- Better SEO performance
+- Reduced client-side processing requirements
+- Increased server resource usage
+- More complex deployment architecture
+participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
+----
+....
+
+[docops,adr,useDark=true,role=center]
+----
+title: Use Server-Side Rendering for Web Application
+status: Deprecated
+date: 2022-09-10
+context:
+- We need to optimize initial page load performance
+- SEO is important for our content-heavy application
+- We need to support users with slower internet connections
+- We want to reduce client-side JavaScript processing
+decision:
+- We will use Next.js for server-side rendering
+- We will implement incremental static regeneration for content pages
+- We will use client-side hydration for interactive components
+- We will implement code splitting for performance optimization
+consequences:
+- Improved initial page load times
+- Better SEO performance
+- Reduced client-side processing requirements
+- Increased server resource usage
+- More complex deployment architecture
+participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
+----
+=== Multiline Participants Example
+
+This example demonstrates how to format participants on multiple lines for better readability and showcases the interactive participant features:
+
+[NOTE]
+====
+This example includes email addresses for all participants, which will:
+
+* Automatically create Microsoft Teams chat links for each participant
+* Add a "Start Group Chat" link at the top of the participants section
+* Enable the hover glow effect on participants
+
+When viewing the rendered ADR, you can hover over participants to see the glow effect and click on them to start a Teams chat.
+====
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Implement Data Lake Architecture
+status: Accepted
+date: 2024-06-20
+context:
+- We need a centralized repository for all our data assets
+- Current data silos are preventing cross-functional analytics
+- We need to support both structured and unstructured data
+- Future machine learning initiatives require access to historical data
+decision:
+- We will implement a data lake architecture using cloud storage
+- We will use a layered approach (raw, cleansed, and curated zones)
+- We will implement data cataloging and metadata management
+- We will establish data governance policies for the lake
+consequences:
+- Improved data accessibility across the organization
+- Reduced data duplication and inconsistencies
+- Increased storage costs initially
+- Need for new skills in data engineering and governance
+participants:
+Rebecca Chen ||(rebecca.chen@example.com)|
+Mark Johnson ||(mark.johnson@example.com)|
+Priya Patel || (priya.patel@example.com)|
+Thomas Garcia ||(thomas.garcia@example.com)|
+Sarah Kim ||(sarah.kim@example.com)|
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Implement Data Lake Architecture
+status: Accepted
+date: 2024-06-20
+context:
+- We need a centralized repository for all our data assets
+- Current data silos are preventing cross-functional analytics
+- We need to support both structured and unstructured data
+- Future machine learning initiatives require access to historical data
+decision:
+- We will implement a data lake architecture using cloud storage
+- We will use a layered approach (raw, cleansed, and curated zones)
+- We will implement data cataloging and metadata management
+- We will establish data governance policies for the lake
+consequences:
+- Improved data accessibility across the organization
+- Reduced data duplication and inconsistencies
+- Increased storage costs initially
+- Need for new skills in data engineering and governance
+participants:
+Rebecca Chen ||(rebecca.chen@example.com)|
+Mark Johnson ||(mark.johnson@example.com)|
+Priya Patel || (priya.patel@example.com)|
+Thomas Garcia ||(thomas.garcia@example.com)|
+Sarah Kim ||(sarah.kim@example.com)|
+----
+
+=== Structured Participants Example
+
+This example demonstrates the new structured format for participants with custom emojis, titles, emails, and colors:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt Cloud-Native CI/CD Pipeline
+status: Accepted
+date: 2024-07-01
+context:
+- Our current CI/CD process is manual and error-prone
+- We need to improve deployment frequency and reliability
+- We want to standardize our deployment process across teams
+- We need better visibility into the deployment pipeline
+decision:
+- We will implement a cloud-native CI/CD pipeline
+- We will use GitOps principles for infrastructure and application deployments
+- We will implement automated testing at all stages
+- We will use containerization for consistent environments
+consequences:
+- Faster and more reliable deployments
+- Improved developer productivity
+- Better traceability of changes
+- Initial learning curve for teams
+participants:
+Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
+Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
+Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
+Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt Cloud-Native CI/CD Pipeline
+status: Accepted
+date: 2024-07-01
+context:
+- Our current CI/CD process is manual and error-prone
+- We need to improve deployment frequency and reliability
+- We want to standardize our deployment process across teams
+- We need better visibility into the deployment pipeline
+decision:
+- We will implement a cloud-native CI/CD pipeline
+- We will use GitOps principles for infrastructure and application deployments
+- We will implement automated testing at all stages
+- We will use containerization for consistent environments
+consequences:
+- Faster and more reliable deployments
+- Improved developer productivity
+- Better traceability of changes
+- Initial learning curve for teams
+participants:
+Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
+Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
+Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
+Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
+Sinclair Washington | Ops Lead | sinclair.washington@example.com | #511D43 | 👩‍
+----
+
+=== References Section Example
+
+This example demonstrates how to include references in your ADR:
+
+[source,asciidoc]
+....
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt GraphQL for API Layer
+status: Accepted
+date: 2024-07-15
+context:
+- Our REST APIs have become complex with many endpoints
+- Mobile clients need to fetch data from multiple endpoints
+- Different clients need different data shapes
+- We need to reduce over-fetching and under-fetching of data
+decision:
+- We will adopt GraphQL for our API layer
+- We will maintain existing REST endpoints for backward compatibility
+- We will implement a gradual migration strategy
+- We will use Apollo Server for the GraphQL implementation
+consequences:
+- More efficient data fetching for clients
+- Improved developer experience with self-documenting API
+- Potential learning curve for the team
+- Need for new tooling and monitoring
+participants:
+Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
+Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
+David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
+references:
+[[https://graphql.org/ GraphQL Official Documentation]]
+[[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
+[[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
+[[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
+----
+....
+
+[docops,adr,useDark=false,role=center]
+----
+title: Adopt GraphQL for API Layer
+status: Accepted
+date: 2024-07-15
+context:
+- Our REST APIs have become complex with many endpoints
+- Mobile clients need to fetch data from multiple endpoints
+- Different clients need different data shapes
+- We need to reduce over-fetching and under-fetching of data
+decision:
+- We will adopt GraphQL for our API layer
+- We will maintain existing REST endpoints for backward compatibility
+- We will implement a gradual migration strategy
+- We will use Apollo Server for the GraphQL implementation
+consequences:
+- More efficient data fetching for clients
+- Improved developer experience with self-documenting API
+- Potential learning curve for the team
+- Need for new tooling and monitoring
+participants:
+Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
+Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
+David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
+references:
+[[https://graphql.org/ GraphQL Official Documentation]]
+[[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
+[[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
+[[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
+----
+
+== Conclusion
+
+The DocOps ADR Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing architecture decision records. By using the JSON configuration format, you can create customized ADRs that document important architectural decisions in your projects.
+
+The extension supports various status types and display options, including dark mode, making it versatile for different documentation needs.

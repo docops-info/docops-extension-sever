@@ -181,7 +181,7 @@
         <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
-            <version>1.2025.2</version>
+            <version>1.2025.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -323,14 +323,6 @@
                         <dependency>
                             <groupId>org.jetbrains.kotlin</groupId>
                             <artifactId>kotlin-stdlib</artifactId>
-                        </dependency>
-                        <dependency>
-                            <groupId>io.docops</groupId>
-                            <artifactId>asciidoctorj-docops-panel</artifactId>
-                        </dependency>
-                        <dependency>
-                            <groupId>io.docops</groupId>
-                            <artifactId>docops-button-render</artifactId>
                         </dependency>
                         <dependency>
                             <groupId>org.jetbrains.kotlin</groupId>
@@ -486,71 +478,6 @@
                         <includeOnlyProperty>git.commit.time</includeOnlyProperty>
                     </includeOnlyProperties>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.docops</groupId>
-                        <artifactId>asciidoctorj-docops-panel</artifactId>
-                        <version>${asciidoctorj-docops-panel.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <attributes>
-                        <icons>font</icons>
-                        <iconSet>fas</iconSet>
-                        <panel-server>https://roach.gy/extension/</panel-server>
-                        <panel-webserver>https://roach.gy/extension/</panel-webserver>
-                    </attributes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>asciidoc-to-html</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <backend>html5</backend>
-                            <attributes>
-                                <allow-uri-read/>
-                                <dataUri/>
-                                <toc>left</toc>
-                                <icons>font</icons>
-                                <iconSet>fas</iconSet>
-                                <sectanchors>true</sectanchors>
-                                <idprefix/>
-                                <idseparator>-</idseparator>
-                            </attributes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Resources plugin to copy generated docs to static directory -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-asciidoc-to-static</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/classes/static/docs</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>target/generated-docs</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,0 +1,3357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Quadrant Charts</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/api/analytics/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_quadrant_charts">DocOps Quadrant Charts</a>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_basic_concepts">2. Basic Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_what_are_quadrant_charts">2.1. What are Quadrant Charts?</a></li>
+<li><a href="#_quadrant_chart_components">2.2. Quadrant Chart Components</a></li>
+</ul>
+</li>
+<li><a href="#_asciidoctor_syntax_for_quadrant_charts">3. AsciiDoctor Syntax for Quadrant Charts</a>
+<ul class="sectlevel2">
+<li><a href="#_configuration_parameters">3.1. Configuration Parameters</a></li>
+<li><a href="#_data_format">3.2. Data Format</a></li>
+</ul>
+</li>
+<li><a href="#_examples">4. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_quadrant_chart_example">4.1. Basic Quadrant Chart Example</a></li>
+<li><a href="#_customized_quadrant_labels_example">4.2. Customized Quadrant Labels Example</a></li>
+<li><a href="#_project_risk_assessment_example">4.3. Project Risk Assessment Example</a></li>
+</ul>
+</li>
+<li><a href="#_conclusion">5. Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_quadrant_charts" class="sect0">DocOps Quadrant Charts</h1>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Quadrant Chart Extension allows you to create visually appealing quadrant charts in your AsciiDoctor documents. Quadrant charts are powerful visualization tools for creating strategic priority matrices and impact vs. effort analysis charts. They help teams prioritize work by plotting items on a two-dimensional grid based on their relative importance.</p>
+</div>
+<div class="paragraph">
+<p>This guide will help you understand the basic concepts of quadrant charts, how to include them in your AsciiDoctor documents, and provide examples of different configurations.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_concepts">2. Basic Concepts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_are_quadrant_charts">2.1. What are Quadrant Charts?</h3>
+<div class="paragraph">
+<p>Quadrant charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each quadrant chart has:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A title (the main heading of the chart)</p>
+</li>
+<li>
+<p>A subtitle (optional)</p>
+</li>
+<li>
+<p>X and Y axis labels (typically "Effort" and "Impact")</p>
+</li>
+<li>
+<p>Four quadrants, each with its own label and description</p>
+</li>
+<li>
+<p>A series of data points plotted on the grid</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Quadrant charts are particularly useful for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Strategic priority matrices</p>
+</li>
+<li>
+<p>Impact vs. effort analysis</p>
+</li>
+<li>
+<p>Risk assessment</p>
+</li>
+<li>
+<p>Opportunity evaluation</p>
+</li>
+<li>
+<p>Feature prioritization</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quadrant_chart_components">2.2. Quadrant Chart Components</h3>
+<div class="paragraph">
+<p>A quadrant chart includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A title and optional subtitle</p>
+</li>
+<li>
+<p>X and Y axis labels</p>
+</li>
+<li>
+<p>Four quadrants with labels and descriptions</p>
+</li>
+<li>
+<p>Data points, each with a label, x-coordinate, y-coordinate, and optional category</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asciidoctor_syntax_for_quadrant_charts">3. AsciiDoctor Syntax for Quadrant Charts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To include quadrant charts in your AsciiDoctor document, you use a special macro syntax. Here&#8217;s the basic format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,quadrant,controls=true]
+----
+title: Strategic Priority Matrix
+subtitle: Impact vs. Effort Analysis
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
+q1Label: HIGH IMPACT
+q2Label: STRATEGIC
+q3Label: FILL-INS
+q4Label: THANKLESS
+---
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The macro processes the configuration and data and generates an SVG representation of the quadrant chart that is embedded in your document.</p>
+</div>
+<div class="sect2">
+<h3 id="_configuration_parameters">3.1. Configuration Parameters</h3>
+<div class="paragraph">
+<p>The following configuration parameters are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>title</code> (optional): The main heading of the chart (default: "Strategic Priority Matrix")</p>
+</li>
+<li>
+<p><code>subtitle</code> (optional): The subtitle of the chart (default: "Impact vs. Effort Analysis")</p>
+</li>
+<li>
+<p><code>xAxisLabel</code> (optional): The label for the X-axis (default: "EFFORT REQUIRED")</p>
+</li>
+<li>
+<p><code>yAxisLabel</code> (optional): The label for the Y-axis (default: "IMPACT LEVEL")</p>
+</li>
+<li>
+<p><code>q1Label</code> (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")</p>
+</li>
+<li>
+<p><code>q2Label</code> (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")</p>
+</li>
+<li>
+<p><code>q3Label</code> (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")</p>
+</li>
+<li>
+<p><code>q4Label</code> (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_format">3.2. Data Format</h3>
+<div class="paragraph">
+<p>After the configuration section and the separator line (<code>---</code>), each line represents a data point with the following format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Label | X | Y [| Category]</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Label</code> (required): The name or description of the data point</p>
+</li>
+<li>
+<p><code>X</code> (required): The X-coordinate (effort) value from 0 to 100</p>
+</li>
+<li>
+<p><code>Y</code> (required): The Y-coordinate (impact) value from 0 to 100</p>
+</li>
+<li>
+<p><code>Category</code> (optional): A category for the data point, which can be used for grouping or coloring</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">4. Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_quadrant_chart_example">4.1. Basic Quadrant Chart Example</h3>
+<div class="paragraph">
+<p>Here&#8217;s a simple example of a quadrant chart:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,quadrant,controls=true]
+----
+title: Strategic Priority Matrix
+subtitle: Impact vs. Effort Analysis
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
+---
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589507714" data-theme="light"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Modern iOS-style gradients with updated colors --><linearGradient id="quadrant-tl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF2D55;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#FF5E80;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-tr-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#7A78E2;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-bl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5DDE7C;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-br-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:0.7"/></linearGradient><!-- Enhanced glassmorphism blur filter --><filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1   0 0 0 0.3 0"/></filter><!-- Modern iOS drop shadow for depth --><filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.15)"/></filter><!-- Enhanced glow effect for data points --><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feFlood flood-color="rgba(255,255,255,0.7)" result="floodFill"/><feComposite in="floodFill" in2="coloredBlur" operator="in" result="coloredBlurAlpha"/><feMerge><feMergeNode in="coloredBlurAlpha"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Subtle inner shadow for depth --><filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="1"/><feGaussianBlur stdDeviation="1" result="offset-blur"/><feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/><feFlood flood-color="rgba(0,0,0,0.05)" flood-opacity="1" result="color"/><feComposite operator="in" in="color" in2="inverse" result="shadow"/><feComposite operator="over" in="shadow" in2="SourceGraphic"/></filter></defs><style><![CDATA[ .chart-background { fill: #F2F2F7; rx: 20; ry: 20; filter: url(#ios-shadow); } .quadrant-bg { stroke: rgba(255,255,255,0.5); stroke-width: 1; filter: url(#glass-blur); rx: 16; ry: 16; transition: all 0.3s ease; } .quadrant-bg:hover { filter: url(#glass-blur); stroke: rgba(255,255,255,0.8); stroke-width: 1.5; } .quadrant-top-right { fill: url(#quadrant-tr-gradient); } .quadrant-top-left { fill: url(#quadrant-tl-gradient); } .quadrant-bottom-left { fill: url(#quadrant-bl-gradient); } .quadrant-bottom-right { fill: url(#quadrant-br-gradient); } .axis-line { stroke: rgba(142,142,147,0.5); stroke-width: 1; stroke-linecap: round; stroke-dasharray: 4, 4; } .axis-label { fill: #3A3A3C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.01em; } .chart-title { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); } .data-point { stroke: rgba(255,255,255,0.95); stroke-width: 2; cursor: pointer; filter: url(#ios-shadow); transition: filter 0.3s ease, stroke-width 0.3s ease; } .data-point:hover { filter: url(#glow); stroke-width: 3; } .data-point.quadrant-top-right { fill: #5856D6; } .data-point.quadrant-top-left { fill: #FF2D55; } .data-point.quadrant-bottom-left { fill: #34C759; } .data-point.quadrant-bottom-right { fill: #007AFF; } .point-group .point-label, .point-group .point-category, .point-group .point-label-card { opacity: 1; transition: filter 0.3s ease; pointer-events: none; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: url(#ios-shadow); } .point-label { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; } .point-category { fill: rgba(60,60,67,0.6); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: -0.01em; } .quadrant-label { fill: rgba(28,28,30,0.8); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } .quadrant-card { fill: rgba(255,255,255,0.35); stroke: rgba(255,255,255,0.5); stroke-width: 0.5; rx: 10; ry: 10; filter: url(#glass-blur); } .point-label-card { fill: rgba(255,255,255,0.7); stroke: rgba(255,255,255,0.8); stroke-width: 0.5; rx: 12; ry: 12; filter: url(#ios-shadow); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } @media (prefers-reduced-motion: reduce) { .data-point, .quadrant-bg, .point-label, .point-category, .point-label-card, .point-group * { transition: none !important; animation: none !important; transform: none !important; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: none !important; } .data-point:hover { filter: none !important; stroke-width: 3; } } ]]></style><rect x="30" y="30" width="740" height="540" class="chart-background" filter="url(#ios-shadow)"/><g class="quadrant-backgrounds"><rect x="60" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-left"/><rect x="400.0" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-right"/><rect x="60" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-left"/><rect x="400.0" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-right"/></g><g class="axes"><line x1="400.0" y1="60" x2="400.0" y2="540" class="axis-line"/><line x1="60" y1="300.0" x2="740" y2="300.0" class="axis-line"/><text x="400" y="590" text-anchor="middle" class="axis-label">EFFORT REQUIRED</text><text x="15" y="300" text-anchor="middle" transform="rotate(-90, 15, 300)" class="axis-label">IMPACT LEVEL</text></g><g class="data-points"><g class="point-group"><circle cx="683.33" cy="100.00" r="9" class="data-point quadrant-top-right" data-label="Feature A" data-category="Core"/><rect x="687.33" y="70.00" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="697.33" y="84.00" class="point-label">Feature A</text><text x="697.33" y="98.00" class="point-category">Core</text></g><g class="point-group"><circle cx="219.70" cy="209.09" r="9" class="data-point quadrant-top-left" data-label="Feature B" data-category="Enhancement"/><rect x="223.70" y="179.09" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="233.70" y="193.09" class="point-label">Feature B</text><text x="233.70" y="207.09" class="point-category">Enhancement</text></g><g class="point-group"><circle cx="528.79" cy="427.27" r="9" class="data-point quadrant-bottom-right" data-label="Feature C" data-category="Nice-to-have"/><rect x="532.79" y="397.27" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="542.79" y="411.27" class="point-label">Feature C</text><text x="542.79" y="425.27" class="point-category">Nice-to-have</text></g><g class="point-group"><circle cx="116.67" cy="500.00" r="9" class="data-point quadrant-bottom-left" data-label="Feature D" data-category="Optional"/><rect x="120.67" y="470.00" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="130.67" y="484.00" class="point-label">Feature D</text><text x="130.67" y="498.00" class="point-category">Optional</text></g></g><text x="400" y="50" text-anchor="middle" class="chart-title">Strategic Priority Matrix</text><rect x="414.0" y="77.0" width="181" height="18" class="quadrant-card"/><text x="424.0" y="89" class="quadrant-label">HIGH IMPACT High Effort</text><rect x="74.0" y="77.0" width="160" height="18" class="quadrant-card"/><text x="84" y="89" class="quadrant-label">STRATEGIC Low Effort</text><rect x="74.0" y="317.0" width="153" height="18" class="quadrant-card"/><text x="84" y="329.0" class="quadrant-label">FILL-INS Low Impact</text><rect x="414.0" y="317.0" width="167" height="18" class="quadrant-card"/><text x="424.0" y="329.0" class="quadrant-label">THANKLESS High Effort</text></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589507714')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589507714"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589507714')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589507714')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589507714')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589507714')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589507714')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589507714')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_customized_quadrant_labels_example">4.2. Customized Quadrant Labels Example</h3>
+<div class="paragraph">
+<p>You can customize the labels for each quadrant:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,quadrant,controls=true]
+----
+title: Product Feature Prioritization
+subtitle: Value vs. Complexity
+xAxisLabel: COMPLEXITY
+yAxisLabel: BUSINESS VALUE
+q1Label: QUICK WINS
+q2Label: BIG BETS
+q3Label: MONEY PITS
+q4Label: INCREMENTAL
+---
+Feature A | 25 | 85 | Core
+Feature B | 70 | 80 | Enhancement
+Feature C | 80 | 30 | Nice-to-have
+Feature D | 30 | 20 | Optional
+Feature E | 50 | 50 | Maintenance
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589507877" data-theme="light"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Modern iOS-style gradients with updated colors --><linearGradient id="quadrant-tl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF2D55;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#FF5E80;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-tr-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#7A78E2;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-bl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5DDE7C;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-br-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:0.7"/></linearGradient><!-- Enhanced glassmorphism blur filter --><filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1   0 0 0 0.3 0"/></filter><!-- Modern iOS drop shadow for depth --><filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.15)"/></filter><!-- Enhanced glow effect for data points --><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feFlood flood-color="rgba(255,255,255,0.7)" result="floodFill"/><feComposite in="floodFill" in2="coloredBlur" operator="in" result="coloredBlurAlpha"/><feMerge><feMergeNode in="coloredBlurAlpha"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Subtle inner shadow for depth --><filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="1"/><feGaussianBlur stdDeviation="1" result="offset-blur"/><feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/><feFlood flood-color="rgba(0,0,0,0.05)" flood-opacity="1" result="color"/><feComposite operator="in" in="color" in2="inverse" result="shadow"/><feComposite operator="over" in="shadow" in2="SourceGraphic"/></filter></defs><style><![CDATA[ .chart-background { fill: #F2F2F7; rx: 20; ry: 20; filter: url(#ios-shadow); } .quadrant-bg { stroke: rgba(255,255,255,0.5); stroke-width: 1; filter: url(#glass-blur); rx: 16; ry: 16; transition: all 0.3s ease; } .quadrant-bg:hover { filter: url(#glass-blur); stroke: rgba(255,255,255,0.8); stroke-width: 1.5; } .quadrant-top-right { fill: url(#quadrant-tr-gradient); } .quadrant-top-left { fill: url(#quadrant-tl-gradient); } .quadrant-bottom-left { fill: url(#quadrant-bl-gradient); } .quadrant-bottom-right { fill: url(#quadrant-br-gradient); } .axis-line { stroke: rgba(142,142,147,0.5); stroke-width: 1; stroke-linecap: round; stroke-dasharray: 4, 4; } .axis-label { fill: #3A3A3C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.01em; } .chart-title { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); } .data-point { stroke: rgba(255,255,255,0.95); stroke-width: 2; cursor: pointer; filter: url(#ios-shadow); transition: filter 0.3s ease, stroke-width 0.3s ease; } .data-point:hover { filter: url(#glow); stroke-width: 3; } .data-point.quadrant-top-right { fill: #5856D6; } .data-point.quadrant-top-left { fill: #FF2D55; } .data-point.quadrant-bottom-left { fill: #34C759; } .data-point.quadrant-bottom-right { fill: #007AFF; } .point-group .point-label, .point-group .point-category, .point-group .point-label-card { opacity: 1; transition: filter 0.3s ease; pointer-events: none; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: url(#ios-shadow); } .point-label { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; } .point-category { fill: rgba(60,60,67,0.6); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: -0.01em; } .quadrant-label { fill: rgba(28,28,30,0.8); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } .quadrant-card { fill: rgba(255,255,255,0.35); stroke: rgba(255,255,255,0.5); stroke-width: 0.5; rx: 10; ry: 10; filter: url(#glass-blur); } .point-label-card { fill: rgba(255,255,255,0.7); stroke: rgba(255,255,255,0.8); stroke-width: 0.5; rx: 12; ry: 12; filter: url(#ios-shadow); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } @media (prefers-reduced-motion: reduce) { .data-point, .quadrant-bg, .point-label, .point-category, .point-label-card, .point-group * { transition: none !important; animation: none !important; transform: none !important; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: none !important; } .data-point:hover { filter: none !important; stroke-width: 3; } } ]]></style><rect x="30" y="30" width="740" height="540" class="chart-background" filter="url(#ios-shadow)"/><g class="quadrant-backgrounds"><rect x="60" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-left"/><rect x="400.0" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-right"/><rect x="60" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-left"/><rect x="400.0" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-right"/></g><g class="axes"><line x1="400.0" y1="60" x2="400.0" y2="540" class="axis-line"/><line x1="60" y1="300.0" x2="740" y2="300.0" class="axis-line"/><text x="400" y="590" text-anchor="middle" class="axis-label">COMPLEXITY</text><text x="15" y="300" text-anchor="middle" transform="rotate(-90, 15, 300)" class="axis-label">BUSINESS VALUE</text></g><g class="data-points"><g class="point-group"><circle cx="116.67" cy="100.00" r="9" class="data-point quadrant-top-left" data-label="Feature A" data-category="Core"/><rect x="120.67" y="70.00" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="130.67" y="84.00" class="point-label">Feature A</text><text x="130.67" y="98.00" class="point-category">Core</text></g><g class="point-group"><circle cx="580.30" cy="130.77" r="9" class="data-point quadrant-top-right" data-label="Feature B" data-category="Enhancement"/><rect x="584.30" y="100.77" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="594.30" y="114.77" class="point-label">Feature B</text><text x="594.30" y="128.77" class="point-category">Enhancement</text></g><g class="point-group"><circle cx="683.33" cy="438.46" r="9" class="data-point quadrant-bottom-right" data-label="Feature C" data-category="Nice-to-have"/><rect x="687.33" y="408.46" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="697.33" y="422.46" class="point-label">Feature C</text><text x="697.33" y="436.46" class="point-category">Nice-to-have</text></g><g class="point-group"><circle cx="168.18" cy="500.00" r="9" class="data-point quadrant-bottom-left" data-label="Feature D" data-category="Optional"/><rect x="172.18" y="470.00" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="182.18" y="484.00" class="point-label">Feature D</text><text x="182.18" y="498.00" class="point-category">Optional</text></g><g class="point-group"><circle cx="374.24" cy="315.38" r="9" class="data-point quadrant-bottom-left" data-label="Feature E" data-category="Maintenance"/><rect x="378.24" y="285.38" width="78.5" height="24.0" class="quadrant-card point-label-card"/><text x="388.24" y="299.38" class="point-label">Feature E</text><text x="388.24" y="313.38" class="point-category">Maintenance</text></g></g><text x="400" y="50" text-anchor="middle" class="chart-title">Product Feature Prioritization</text><rect x="414.0" y="77.0" width="90" height="18" class="quadrant-card"/><text x="424.0" y="89" class="quadrant-label">QUICK WINS</text><rect x="74.0" y="77.0" width="76" height="18" class="quadrant-card"/><text x="84" y="89" class="quadrant-label">BIG BETS</text><rect x="74.0" y="317.0" width="90" height="18" class="quadrant-card"/><text x="84" y="329.0" class="quadrant-label">MONEY PITS</text><rect x="414.0" y="317.0" width="97" height="18" class="quadrant-card"/><text x="424.0" y="329.0" class="quadrant-label">INCREMENTAL</text></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589507877')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589507877"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589507877')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589507877')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589507877')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589507877')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589507877')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589507877')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+<div class="sect2">
+<h3 id="_project_risk_assessment_example">4.3. Project Risk Assessment Example</h3>
+<div class="paragraph">
+<p>Quadrant charts can also be used for risk assessment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,quadrant,controls=true]
+----
+title: Project Risk Assessment
+subtitle: Probability vs. Impact
+xAxisLabel: PROBABILITY
+yAxisLabel: IMPACT
+q1Label: HIGH PRIORITY
+q2Label: CRITICAL
+q3Label: LOW PRIORITY
+q4Label: MEDIUM PRIORITY
+---
+Security Breach | 30 | 95 | Security
+Budget Overrun | 70 | 75 | Financial
+Schedule Delay | 80 | 60 | Timeline
+Scope Creep | 85 | 50 | Management
+Resource Shortage | 60 | 70 | Staffing
+Technical Failure | 40 | 85 | Technical
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589507914" data-theme="light"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Modern iOS-style gradients with updated colors --><linearGradient id="quadrant-tl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF2D55;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#FF5E80;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-tr-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#7A78E2;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-bl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5DDE7C;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-br-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:0.7"/></linearGradient><!-- Enhanced glassmorphism blur filter --><filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1   0 0 0 0.3 0"/></filter><!-- Modern iOS drop shadow for depth --><filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.15)"/></filter><!-- Enhanced glow effect for data points --><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feFlood flood-color="rgba(255,255,255,0.7)" result="floodFill"/><feComposite in="floodFill" in2="coloredBlur" operator="in" result="coloredBlurAlpha"/><feMerge><feMergeNode in="coloredBlurAlpha"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Subtle inner shadow for depth --><filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="1"/><feGaussianBlur stdDeviation="1" result="offset-blur"/><feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/><feFlood flood-color="rgba(0,0,0,0.05)" flood-opacity="1" result="color"/><feComposite operator="in" in="color" in2="inverse" result="shadow"/><feComposite operator="over" in="shadow" in2="SourceGraphic"/></filter></defs><style><![CDATA[ .chart-background { fill: #F2F2F7; rx: 20; ry: 20; filter: url(#ios-shadow); } .quadrant-bg { stroke: rgba(255,255,255,0.5); stroke-width: 1; filter: url(#glass-blur); rx: 16; ry: 16; transition: all 0.3s ease; } .quadrant-bg:hover { filter: url(#glass-blur); stroke: rgba(255,255,255,0.8); stroke-width: 1.5; } .quadrant-top-right { fill: url(#quadrant-tr-gradient); } .quadrant-top-left { fill: url(#quadrant-tl-gradient); } .quadrant-bottom-left { fill: url(#quadrant-bl-gradient); } .quadrant-bottom-right { fill: url(#quadrant-br-gradient); } .axis-line { stroke: rgba(142,142,147,0.5); stroke-width: 1; stroke-linecap: round; stroke-dasharray: 4, 4; } .axis-label { fill: #3A3A3C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.01em; } .chart-title { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); } .data-point { stroke: rgba(255,255,255,0.95); stroke-width: 2; cursor: pointer; filter: url(#ios-shadow); transition: filter 0.3s ease, stroke-width 0.3s ease; } .data-point:hover { filter: url(#glow); stroke-width: 3; } .data-point.quadrant-top-right { fill: #5856D6; } .data-point.quadrant-top-left { fill: #FF2D55; } .data-point.quadrant-bottom-left { fill: #34C759; } .data-point.quadrant-bottom-right { fill: #007AFF; } .point-group .point-label, .point-group .point-category, .point-group .point-label-card { opacity: 1; transition: filter 0.3s ease; pointer-events: none; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: url(#ios-shadow); } .point-label { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; } .point-category { fill: rgba(60,60,67,0.6); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: -0.01em; } .quadrant-label { fill: rgba(28,28,30,0.8); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } .quadrant-card { fill: rgba(255,255,255,0.35); stroke: rgba(255,255,255,0.5); stroke-width: 0.5; rx: 10; ry: 10; filter: url(#glass-blur); } .point-label-card { fill: rgba(255,255,255,0.7); stroke: rgba(255,255,255,0.8); stroke-width: 0.5; rx: 12; ry: 12; filter: url(#ios-shadow); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } @media (prefers-reduced-motion: reduce) { .data-point, .quadrant-bg, .point-label, .point-category, .point-label-card, .point-group * { transition: none !important; animation: none !important; transform: none !important; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: none !important; } .data-point:hover { filter: none !important; stroke-width: 3; } } ]]></style><rect x="30" y="30" width="740" height="540" class="chart-background" filter="url(#ios-shadow)"/><g class="quadrant-backgrounds"><rect x="60" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-left"/><rect x="400.0" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-right"/><rect x="60" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-left"/><rect x="400.0" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-right"/></g><g class="axes"><line x1="400.0" y1="60" x2="400.0" y2="540" class="axis-line"/><line x1="60" y1="300.0" x2="740" y2="300.0" class="axis-line"/><text x="400" y="590" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="15" y="300" text-anchor="middle" transform="rotate(-90, 15, 300)" class="axis-label">IMPACT</text></g><g class="data-points"><g class="point-group"><circle cx="116.67" cy="100.00" r="9" class="data-point quadrant-top-left" data-label="Security Breach" data-category="Security"/><rect x="120.67" y="70.00" width="117.5" height="24.0" class="quadrant-card point-label-card"/><text x="130.67" y="84.00" class="point-label">Security Breach</text><text x="130.67" y="98.00" class="point-category">Security</text></g><g class="point-group"><circle cx="528.79" cy="277.78" r="9" class="data-point quadrant-top-right" data-label="Budget Overrun" data-category="Financial"/><rect x="532.79" y="247.78" width="111.0" height="24.0" class="quadrant-card point-label-card"/><text x="542.79" y="261.78" class="point-label">Budget Overrun</text><text x="542.79" y="275.78" class="point-category">Financial</text></g><g class="point-group"><circle cx="631.82" cy="411.11" r="9" class="data-point quadrant-bottom-right" data-label="Schedule Delay" data-category="Timeline"/><rect x="635.82" y="381.11" width="111.0" height="24.0" class="quadrant-card point-label-card"/><text x="645.82" y="395.11" class="point-label">Schedule Delay</text><text x="645.82" y="409.11" class="point-category">Timeline</text></g><g class="point-group"><circle cx="683.33" cy="500.00" r="9" class="data-point quadrant-bottom-right" data-label="Scope Creep" data-category="Management"/><rect x="687.33" y="470.00" width="91.5" height="24.0" class="quadrant-card point-label-card"/><text x="697.33" y="484.00" class="point-label">Scope Creep</text><text x="697.33" y="498.00" class="point-category">Management</text></g><g class="point-group"><circle cx="425.76" cy="322.22" r="9" class="data-point quadrant-bottom-right" data-label="Resource Shortage" data-category="Staffing"/><rect x="429.76" y="292.22" width="130.5" height="24.0" class="quadrant-card point-label-card"/><text x="439.76" y="306.22" class="point-label">Resource Shortage</text><text x="439.76" y="320.22" class="point-category">Staffing</text></g><g class="point-group"><circle cx="219.70" cy="188.89" r="9" class="data-point quadrant-top-left" data-label="Technical Failure" data-category="Technical"/><rect x="223.70" y="158.89" width="130.5" height="24.0" class="quadrant-card point-label-card"/><text x="233.70" y="172.89" class="point-label">Technical Failure</text><text x="233.70" y="186.89" class="point-category">Technical</text></g></g><text x="400" y="50" text-anchor="middle" class="chart-title">Project Risk Assessment</text><rect x="414.0" y="77.0" width="111" height="18" class="quadrant-card"/><text x="424.0" y="89" class="quadrant-label">HIGH PRIORITY</text><rect x="74.0" y="77.0" width="76" height="18" class="quadrant-card"/><text x="84" y="89" class="quadrant-label">CRITICAL</text><rect x="74.0" y="317.0" width="104" height="18" class="quadrant-card"/><text x="84" y="329.0" class="quadrant-label">LOW PRIORITY</text><rect x="414.0" y="317.0" width="125" height="18" class="quadrant-card"/><text x="424.0" y="329.0" class="quadrant-label">MEDIUM PRIORITY</text></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589507914')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589507914"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589507914')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589507914')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589507914')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589507914')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589507914')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589507914')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750589507942" data-theme="light"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Modern iOS-style gradients with updated colors --><linearGradient id="quadrant-tl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF2D55;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#FF5E80;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-tr-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#7A78E2;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-bl-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5DDE7C;stop-opacity:0.7"/></linearGradient><linearGradient id="quadrant-br-gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:0.85"/><stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:0.7"/></linearGradient><!-- Enhanced glassmorphism blur filter --><filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1   0 0 0 0.3 0"/></filter><!-- Modern iOS drop shadow for depth --><filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.15)"/></filter><!-- Enhanced glow effect for data points --><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feFlood flood-color="rgba(255,255,255,0.7)" result="floodFill"/><feComposite in="floodFill" in2="coloredBlur" operator="in" result="coloredBlurAlpha"/><feMerge><feMergeNode in="coloredBlurAlpha"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Subtle inner shadow for depth --><filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="1"/><feGaussianBlur stdDeviation="1" result="offset-blur"/><feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/><feFlood flood-color="rgba(0,0,0,0.05)" flood-opacity="1" result="color"/><feComposite operator="in" in="color" in2="inverse" result="shadow"/><feComposite operator="over" in="shadow" in2="SourceGraphic"/></filter></defs><style><![CDATA[ .chart-background { fill: #F2F2F7; rx: 20; ry: 20; filter: url(#ios-shadow); } .quadrant-bg { stroke: rgba(255,255,255,0.5); stroke-width: 1; filter: url(#glass-blur); rx: 16; ry: 16; transition: all 0.3s ease; } .quadrant-bg:hover { filter: url(#glass-blur); stroke: rgba(255,255,255,0.8); stroke-width: 1.5; } .quadrant-top-right { fill: url(#quadrant-tr-gradient); } .quadrant-top-left { fill: url(#quadrant-tl-gradient); } .quadrant-bottom-left { fill: url(#quadrant-bl-gradient); } .quadrant-bottom-right { fill: url(#quadrant-br-gradient); } .axis-line { stroke: rgba(142,142,147,0.5); stroke-width: 1; stroke-linecap: round; stroke-dasharray: 4, 4; } .axis-label { fill: #3A3A3C; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -0.01em; } .chart-title { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); } .data-point { stroke: rgba(255,255,255,0.95); stroke-width: 2; cursor: pointer; filter: url(#ios-shadow); transition: filter 0.3s ease, stroke-width 0.3s ease; } .data-point:hover { filter: url(#glow); stroke-width: 3; } .data-point.quadrant-top-right { fill: #5856D6; } .data-point.quadrant-top-left { fill: #FF2D55; } .data-point.quadrant-bottom-left { fill: #34C759; } .data-point.quadrant-bottom-right { fill: #007AFF; } .point-group .point-label, .point-group .point-category, .point-group .point-label-card { opacity: 1; transition: filter 0.3s ease; pointer-events: none; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: url(#ios-shadow); } .point-label { fill: #1C1C1E; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; } .point-category { fill: rgba(60,60,67,0.6); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: -0.01em; } .quadrant-label { fill: rgba(28,28,30,0.8); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; } .quadrant-card { fill: rgba(255,255,255,0.35); stroke: rgba(255,255,255,0.5); stroke-width: 0.5; rx: 10; ry: 10; filter: url(#glass-blur); } .point-label-card { fill: rgba(255,255,255,0.7); stroke: rgba(255,255,255,0.8); stroke-width: 0.5; rx: 12; ry: 12; filter: url(#ios-shadow); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } @media (prefers-reduced-motion: reduce) { .data-point, .quadrant-bg, .point-label, .point-category, .point-label-card, .point-group * { transition: none !important; animation: none !important; transform: none !important; } .point-group:hover .point-label, .point-group:hover .point-category, .point-group:hover .point-label-card { filter: none !important; } .data-point:hover { filter: none !important; stroke-width: 3; } } ]]></style><rect x="30" y="30" width="740" height="540" class="chart-background" filter="url(#ios-shadow)"/><g class="quadrant-backgrounds"><rect x="60" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-left"/><rect x="400.0" y="60" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-top-right"/><rect x="60" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-left"/><rect x="400.0" y="300.0" width="340.0" height="240.0" stroke="rgba(255,255,255,0.5)" stroke-width="1" rx="16" ry="16" class="quadrant-bg quadrant-bottom-right"/></g><g class="axes"><line x1="400.0" y1="60" x2="400.0" y2="540" class="axis-line"/><line x1="60" y1="300.0" x2="740" y2="300.0" class="axis-line"/><text x="400" y="590" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="15" y="300" text-anchor="middle" transform="rotate(-90, 15, 300)" class="axis-label">IMPACT</text></g><g class="data-points"><g class="point-group"><circle cx="116.67" cy="100.00" r="9" class="data-point quadrant-top-left" data-label="Security Breach" data-category=""/><rect x="120.67" y="70.00" width="117.5" height="24.0" class="quadrant-card point-label-card"/><text x="130.67" y="84.00" class="point-label">Security Breach</text></g><g class="point-group"><circle cx="528.79" cy="277.78" r="9" class="data-point quadrant-top-right" data-label="Budget Overrun" data-category=""/><rect x="532.79" y="247.78" width="111.0" height="24.0" class="quadrant-card point-label-card"/><text x="542.79" y="261.78" class="point-label">Budget Overrun</text></g><g class="point-group"><circle cx="631.82" cy="411.11" r="9" class="data-point quadrant-bottom-right" data-label="Schedule Delay" data-category=""/><rect x="635.82" y="381.11" width="111.0" height="24.0" class="quadrant-card point-label-card"/><text x="645.82" y="395.11" class="point-label">Schedule Delay</text></g><g class="point-group"><circle cx="683.33" cy="500.00" r="9" class="data-point quadrant-bottom-right" data-label="Scope Creep" data-category=""/><rect x="687.33" y="470.00" width="91.5" height="24.0" class="quadrant-card point-label-card"/><text x="697.33" y="484.00" class="point-label">Scope Creep</text></g><g class="point-group"><circle cx="425.76" cy="322.22" r="9" class="data-point quadrant-bottom-right" data-label="Resource Shortage" data-category=""/><rect x="429.76" y="292.22" width="130.5" height="24.0" class="quadrant-card point-label-card"/><text x="439.76" y="306.22" class="point-label">Resource Shortage</text></g><g class="point-group"><circle cx="219.70" cy="188.89" r="9" class="data-point quadrant-top-left" data-label="Technical Failure" data-category=""/><rect x="223.70" y="158.89" width="130.5" height="24.0" class="quadrant-card point-label-card"/><text x="233.70" y="172.89" class="point-label">Technical Failure</text></g></g><text x="400" y="50" text-anchor="middle" class="chart-title">Title</text><rect x="414.0" y="77.0" width="118" height="18" class="quadrant-card"/><text x="424.0" y="89" class="quadrant-label">HIGH PRIORITY</text><rect x="74.0" y="77.0" width="83" height="18" class="quadrant-card"/><text x="84" y="89" class="quadrant-label">CRITICAL</text><rect x="74.0" y="317.0" width="111" height="18" class="quadrant-card"/><text x="84" y="329.0" class="quadrant-label">LOW PRIORITY</text><rect x="414.0" y="317.0" width="132" height="18" class="quadrant-card"/><text x="424.0" y="329.0" class="quadrant-label">MEDIUM PRIORITY</text></svg><div class="svg-floating-controls">
+    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750589507942')" title="Controls">
+        ⚙️
+    </button>
+    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750589507942"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750589507942')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750589507942')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750589507942')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750589507942')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750589507942')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750589507942')" title="Copy as PNG">📋 PNG</button>    </div>
+</div></div></div><style>
+/* Outer container handles alignment */
+.svg-viewer-container {
+    width: 100%;
+    /* text-align will be set via inline style based on role */
+}
+
+/* Inner container groups SVG and controls together */
+.svg-with-controls {
+    position: relative;
+    display: inline-block; /* This makes it respect text-align and stay together */
+    max-width: 100%;
+}
+
+.svg-with-controls svg {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    display: block;
+}
+
+.svg-floating-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100;
+}
+
+.svg-controls-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.svg-controls-toggle:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.svg-controls-panel {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    animation: slideIn 0.2s ease-out;
+}
+
+.svg-controls-panel.show {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-control-btn {
+    padding: 6px 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-align: center;
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.svg-control-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .svg-controls-toggle,
+[data-theme="dark"] .svg-controls-panel,
+[data-theme="dark"] .svg-control-btn {
+    background: rgba(30, 30, 30, 0.9);
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .svg-controls-toggle:hover,
+[data-theme="dark"] .svg-control-btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+}
+
+/* Fullscreen mode */
+.svg-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.svg-fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.svg-fullscreen .svg-floating-controls {
+    top: 20px;
+    right: 20px;
+}
+
+/* Copy success message */
+.copy-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(34, 197, 94, 0.95);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 101;
+}
+
+.copy-message.show {
+    opacity: 1;
+}
+
+.copy-message.error {
+    background: rgba(239, 68, 68, 0.95);
+}
+</style>
+
+<script>
+window.svgViewer = window.svgViewer || {
+    toggleControls(id) {
+        const panel = document.getElementById(`controls-panel-${id}`);
+        const isVisible = panel.classList.contains('show');
+
+        // Hide all other panels
+        document.querySelectorAll('.svg-controls-panel').forEach(p => {
+            p.classList.remove('show');
+        });
+
+        // Toggle current panel
+        if (!isVisible) {
+            panel.classList.add('show');
+        }
+    },
+
+    zoomIn(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.min(currentZoom * 1.3, 5);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    zoomOut(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+        currentZoom = Math.max(currentZoom / 1.3, 0.2);
+        svg.dataset.zoom = currentZoom;
+        svg.style.transform = `scale(${currentZoom})`;
+    },
+
+    resetZoom(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+        if (!svg) return;
+
+        svg.dataset.zoom = 1;
+        svg.style.transform = 'scale(1)';
+    },
+
+    toggleFullscreen(id) {
+        const container = document.getElementById(id);
+        if (container.classList.contains('svg-fullscreen')) {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        } else {
+            container.classList.add('svg-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    async copyAsSvg(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            await navigator.clipboard.writeText(svgData);
+            this.showMessage(container, 'SVG copied as text! 📋');
+        } catch (error) {
+            console.error('SVG copy failed:', error);
+            this.showMessage(container, 'SVG copy failed 😞', 'error');
+        }
+    },
+
+    async copyAsPng(id) {
+        const container = document.getElementById(id);
+        const svg = container.querySelector('svg');
+
+        if (!svg) {
+            this.showMessage(container, 'No SVG found', 'error');
+            return;
+        }
+
+        try {
+            this.showMessage(container, 'Converting to PNG...', 'info');
+            const pngBlob = await this.convertSvgToPng(svg);
+            const item = new ClipboardItem({ 'image/png': pngBlob });
+            await navigator.clipboard.write([item]);
+            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+        } catch (error) {
+            console.error('PNG copy failed:', error);
+            this.showMessage(container, 'PNG copy failed 😞', 'error');
+        }
+    },
+
+    convertSvgToPng(svgElement) {
+        return new Promise((resolve, reject) => {
+            // Clone the SVG to avoid modifying the original
+            const svgClone = svgElement.cloneNode(true);
+
+            // Get SVG dimensions
+            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+            // Handle viewBox if no explicit width/height
+            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                const viewBox = svgClone.getAttribute('viewBox');
+                if (viewBox) {
+                    const [x, y, w, h] = viewBox.split(' ').map(Number);
+                    svgWidth = w;
+                    svgHeight = h;
+                }
+            }
+
+            // Ensure the cloned SVG has explicit dimensions
+            svgClone.setAttribute('width', svgWidth.toString());
+            svgClone.setAttribute('height', svgHeight.toString());
+
+            // Add XML namespace if missing
+            if (!svgClone.getAttribute('xmlns')) {
+                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            // Handle external stylesheets and fonts
+            this.inlineStyles(svgClone);
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Set canvas size with scaling for better quality
+            const scale = 2; // For higher resolution
+            canvas.width = svgWidth * scale;
+            canvas.height = svgHeight * scale;
+            ctx.scale(scale, scale);
+
+            // Create a blob URL for the SVG
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                // Set white background (optional - remove if you want transparency)
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                // Draw the image
+                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create PNG blob'));
+                    }
+                }, 'image/png', 0.95);
+
+                URL.revokeObjectURL(url);
+            };
+
+            img.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG as image: ' + error));
+            };
+
+            img.src = url;
+        });
+    },
+
+    inlineStyles(svgElement) {
+        // Get all stylesheets from the document
+        const stylesheets = Array.from(document.styleSheets);
+        let cssText = '';
+
+        stylesheets.forEach(sheet => {
+            try {
+                const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                rules.forEach(rule => {
+                    if (rule.type === CSSRule.STYLE_RULE) {
+                        cssText += rule.cssText + ' ';
+                    }
+                });
+            } catch (e) {
+                // Cross-origin stylesheets might throw errors
+                console.warn('Could not access stylesheet:', e);
+            }
+        });
+
+        // Create a style element and add it to the SVG
+        if (cssText) {
+            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.textContent = cssText;
+            svgElement.insertBefore(styleElement, svgElement.firstChild);
+        }
+    },
+
+    // Legacy method for backward compatibility
+    async copyToClipboard(id) {
+        await this.copyAsSvg(id);
+    },
+
+    showMessage(container, message, type = 'success') {
+        const existing = container.querySelector('.copy-message');
+        if (existing) existing.remove();
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+        // Different background colors for different message types
+        if (type === 'info') {
+            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+        }
+
+        messageEl.textContent = message;
+        container.appendChild(messageEl);
+
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 300);
+        }, type === 'info' ? 1500 : 2500);
+    }
+};
+
+// Close controls when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.svg-floating-controls')) {
+        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+            panel.classList.remove('show');
+        });
+    }
+});
+
+// Escape key for fullscreen
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.svg-fullscreen').forEach(container => {
+            container.classList.remove('svg-fullscreen');
+            document.body.style.overflow = '';
+        });
+    }
+});
+</script>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">5. Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Quadrant Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing quadrant charts. By using the simple key-value configuration format and pipe-separated data, you can create customized charts that match your document&#8217;s style and purpose.</p>
+</div>
+<div class="paragraph">
+<p>Quadrant charts are versatile tools that can be used for various purposes, including strategic planning, feature prioritization, risk assessment, and more. The extension makes it easy to create these charts without requiring any external tools or complex setup.</p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

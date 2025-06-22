@@ -1,0 +1,780 @@
+include::_base.adoc[]
+= DocOps Release Strategy
+:imagesdir: images
+
+== Introduction
+
+The DocOps Release Strategy Extension allows you to create visually appealing release roadmaps and timelines in your AsciiDoctor documents. Release strategies are useful for visualizing product release plans, roadmaps, and deployment strategies for successful product releases.
+
+This guide will help you understand the basic concepts of release strategies, how to include them in your AsciiDoctor documents, and provide examples of different types of release strategy visualizations.
+
+== Basic Concepts
+
+=== What are Release Strategies?
+
+Release strategies in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each release strategy has:
+
+* A title (the main heading of the strategy)
+* A series of releases, each with a type (M1, M2, RC1, GA, etc.), date, goal, and content
+* Display settings for customizing the appearance
+
+The extension supports several styles of release strategy visualizations:
+
+* Timeline Summary (TLS) - A condensed timeline showing key releases
+* Roadmap (R) - A detailed roadmap visualization
+
+Each style can be displayed with various customizations, including:
+
+* Custom colors for different elements
+* Dark mode visualizations
+* Different scaling options
+* Custom font colors and milestone colors
+
+=== Release Strategy Components
+
+A release strategy includes:
+
+* A title
+* A series of releases, each with:
+  ** Type (M1, M2, RC1, GA, etc.)
+  ** Date
+  ** Goal
+  ** Content (lines of text describing the release)
+* Display settings for visual appearance
+
+== AsciiDoctor Syntax for Release Strategies
+
+To include release strategies in the AsciiDoctor document, use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "Release Strategy Title",
+  "style": "TLS",
+  "scale": 1.0,
+  "useDark": false,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Milestone 1 Goal",
+      "lines": [
+        "Line 1 content",
+        "Line 2 content",
+        "Line 3 content"
+      ]
+    },
+    // More releases...
+  ],
+  "displayConfig": {
+    "fontColor": "#fcfcfc",
+    "milestoneColor": "#fcfcfc",
+    "colors": ["#5f57ff", "#2563eb", "#7149c6"],
+    "circleColors": ["#fc86be", "#dc93f6", "#aeb1ed"],
+    "carColors": ["#fcfcfc", "#000000", "#ff0000"],
+    "notesVisible": false
+  }
+}
+----
+....
+
+The macro processes the JSON configuration and generates an SVG representation of the release strategy that is embedded in your document.
+
+=== Release Strategy Properties
+
+==== Main Properties
+
+* `title` (required): The main heading of the strategy
+* `style` (optional): The style of the visualization (default: "TL")
+  ** "TL" - Timeline
+  ** "TLS" - Timeline Summary
+  ** "R" - Roadmap
+* `scale` (optional): A scaling factor for the visualization (default: 1.0)
+* `useDark` (optional): Whether to use dark mode (default: false)
+* `releases` (required): An array of release objects
+* `displayConfig` (optional): Settings for customizing the appearance
+
+==== Release Properties
+
+Each release in the `releases` array has the following properties:
+
+* `type` (required): The release type (M1, M2, RC1, GA, etc.)
+* `date` (required): The release date
+* `goal` (required): The goal of the release
+* `lines` (required): An array of strings describing the release activities
+
+==== DisplayConfig Properties
+
+The `displayConfig` object can have the following properties:
+
+* `fontColor` (optional): The color of the text (default: "#fcfcfc")
+* `colors` (optional): An array of colors for various elements (default: ["#5f57ff", "#2563eb", "#7149c6"])
+* `notesVisible` (optional): Whether to show notes (default: false)
+
+== Examples
+
+=== Basic Timeline Example
+
+Here's a simple example of a timeline release strategy:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "Product Release Strategy",
+  "style": "TLS",
+  "scale": 1.0,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
+        "Define release scope and objectives",
+        "Identify key features and enhancements",
+        "Create detailed project timeline",
+        "Allocate resources and responsibilities"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
+        "Code development and unit testing",
+        "Integration of components",
+        "Documentation updates",
+        "Internal code reviews"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
+        "Functional testing",
+        "Performance testing",
+        "Security testing",
+        "User acceptance testing"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
+        "Final approval and sign-off",
+        "Production deployment",
+        "Post-deployment verification",
+        "Monitoring and support"
+      ]
+    }
+  ]
+}
+----
+....
+
+[docops,release,controls=true]
+----
+{
+  "title": "Product Release Strategy",
+  "style": "TLS",
+  "scale": 1.0,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-01-15",
+      "goal": "Initial Planning",
+      "lines": [
+        "Define release scope and objectives",
+        "Identify key features and enhancements",
+        "Create detailed project timeline",
+        "Allocate resources and responsibilities"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-02-15",
+      "goal": "Development Phase",
+      "lines": [
+        "Code development and unit testing",
+        "Integration of components",
+        "Documentation updates",
+        "Internal code reviews"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-03-15",
+      "goal": "Testing Phase",
+      "lines": [
+        "Functional testing",
+        "Performance testing",
+        "Security testing",
+        "User acceptance testing"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-04-15",
+      "goal": "Deployment Phase",
+      "lines": [
+        "Final approval and sign-off",
+        "Production deployment",
+        "Post-deployment verification",
+        "Monitoring and support"
+      ]
+    }
+  ]
+}
+----
+
+=== Dark Mode Timeline Example
+
+You can create dark mode release strategies by setting the `useDark` property to `true`:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "Mobile App Release Strategy",
+  "style": "TLS",
+  "scale": 1.0,
+  "useDark": true,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-06-01",
+      "goal": "Design Phase",
+      "lines": [
+        "User interface design",
+        "User experience planning",
+        "Wireframing and prototyping",
+        "Design review and approval"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-07-15",
+      "goal": "Core Development",
+      "lines": [
+        "Backend API development",
+        "Frontend implementation",
+        "Database design and setup",
+        "Authentication system"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-08-30",
+      "goal": "Feature Complete",
+      "lines": [
+        "All planned features implemented",
+        "Integration testing",
+        "Bug fixing",
+        "Performance optimization"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-09-15",
+      "goal": "Public Release",
+      "lines": [
+        "App store submission",
+        "Marketing campaign launch",
+        "User feedback collection",
+        "Support system setup"
+      ]
+    }
+  ]
+}
+----
+....
+
+[docops,release,controls=true]
+----
+{
+  "title": "Mobile App Release Strategy",
+  "style": "TLS",
+  "scale": 1.0,
+  "useDark": true,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-06-01",
+      "goal": "Design Phase",
+      "lines": [
+        "User interface design",
+        "User experience planning",
+        "Wireframing and prototyping",
+        "Design review and approval"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-07-15",
+      "goal": "Core Development",
+      "lines": [
+        "Backend API development",
+        "Frontend implementation",
+        "Database design and setup",
+        "Authentication system"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-08-30",
+      "goal": "Feature Complete",
+      "lines": [
+        "All planned features implemented",
+        "Integration testing",
+        "Bug fixing",
+        "Performance optimization"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-09-15",
+      "goal": "Public Release",
+      "lines": [
+        "App store submission",
+        "Marketing campaign launch",
+        "User feedback collection",
+        "Support system setup"
+      ]
+    }
+  ]
+}
+----
+
+=== Timeline Summary Example
+
+The Timeline Summary (TLS) style provides a more condensed view of the release strategy:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "Website Redesign Project",
+  "style": "TLS",
+  "scale": 0.8,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-03-01",
+      "goal": "Research & Planning",
+      "lines": [
+        "Competitor analysis",
+        "User research and surveys",
+        "Content inventory",
+        "Technical requirements"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-04-15",
+      "goal": "Design & Prototyping",
+      "lines": [
+        "Information architecture",
+        "Visual design concepts",
+        "Interactive prototypes",
+        "Stakeholder review"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-05-30",
+      "goal": "Development",
+      "lines": [
+        "Frontend development",
+        "CMS integration",
+        "Responsive implementation",
+        "Content migration"
+      ]
+    },
+    {
+      "type": "RC2",
+      "date": "2023-06-15",
+      "goal": "Testing & Refinement",
+      "lines": [
+        "Quality assurance testing",
+        "Performance optimization",
+        "Accessibility compliance",
+        "Browser compatibility"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-07-01",
+      "goal": "Launch",
+      "lines": [
+        "Final approval",
+        "Production deployment",
+        "Redirect setup",
+        "Analytics configuration"
+      ]
+    }
+  ]
+}
+----
+....
+
+[docops,release,controls=true]
+----
+{
+  "title": "Website Redesign Project",
+  "style": "TLS",
+  "scale": 0.8,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-03-01",
+      "goal": "Research & Planning",
+      "lines": [
+        "Competitor analysis",
+        "User research and surveys",
+        "Content inventory",
+        "Technical requirements"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-04-15",
+      "goal": "Design & Prototyping",
+      "lines": [
+        "Information architecture",
+        "Visual design concepts",
+        "Interactive prototypes",
+        "Stakeholder review"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-05-30",
+      "goal": "Development",
+      "lines": [
+        "Frontend development",
+        "CMS integration",
+        "Responsive implementation",
+        "Content migration"
+      ]
+    },
+    {
+      "type": "RC2",
+      "date": "2023-06-15",
+      "goal": "Testing & Refinement",
+      "lines": [
+        "Quality assurance testing",
+        "Performance optimization",
+        "Accessibility compliance",
+        "Browser compatibility"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-07-01",
+      "goal": "Launch",
+      "lines": [
+        "Final approval",
+        "Production deployment",
+        "Redirect setup",
+        "Analytics configuration"
+      ]
+    }
+  ]
+}
+----
+
+
+
+=== Roadmap Example
+
+The Roadmap (R) style provides a detailed roadmap visualization:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "Cloud Platform Roadmap",
+  "style": "R",
+  "scale": 0.7,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-Q1",
+      "goal": "Infrastructure Foundation",
+      "lines": [
+        "Core infrastructure setup",
+        "Containerization platform",
+        "CI/CD pipeline implementation",
+        "Monitoring and logging framework"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-Q2",
+      "goal": "Service Mesh",
+      "lines": [
+        "Service discovery",
+        "Load balancing",
+        "Traffic management",
+        "Security policies"
+      ]
+    },
+    {
+      "type": "M3",
+      "date": "2023-Q3",
+      "goal": "Data Services",
+      "lines": [
+        "Managed database services",
+        "Data warehousing",
+        "ETL pipelines",
+        "Data analytics platform"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-Q4",
+      "goal": "Developer Tools",
+      "lines": [
+        "Self-service portal",
+        "API gateway",
+        "Developer documentation",
+        "SDK and client libraries"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2024-Q1",
+      "goal": "Enterprise Features",
+      "lines": [
+        "Multi-region support",
+        "Compliance certifications",
+        "Enterprise SLAs",
+        "Advanced security features"
+      ]
+    }
+  ]
+}
+----
+....
+
+[docops,release,controls=true]
+----
+{
+  "title": "Cloud Platform Roadmap",
+  "style": "R",
+  "scale": 0.7,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-Q1",
+      "goal": "Infrastructure Foundation",
+      "lines": [
+        "Core infrastructure setup",
+        "Containerization platform",
+        "CI/CD pipeline implementation",
+        "Monitoring and logging framework"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-Q2",
+      "goal": "Service Mesh",
+      "lines": [
+        "Service discovery",
+        "Load balancing",
+        "Traffic management",
+        "Security policies"
+      ]
+    },
+    {
+      "type": "M3",
+      "date": "2023-Q3",
+      "goal": "Data Services",
+      "lines": [
+        "Managed database services",
+        "Data warehousing",
+        "ETL pipelines",
+        "Data analytics platform"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-Q4",
+      "goal": "Developer Tools",
+      "lines": [
+        "Self-service portal",
+        "API gateway",
+        "Developer documentation",
+        "SDK and client libraries"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2024-Q1",
+      "goal": "Enterprise Features",
+      "lines": [
+        "Multi-region support",
+        "Compliance certifications",
+        "Enterprise SLAs",
+        "Advanced security features"
+      ]
+    }
+  ]
+}
+----
+
+=== Dark Mode Roadmap with Custom Colors
+
+You can combine dark mode with custom colors for a unique visualization:
+
+[source,asciidoc]
+....
+[docops,release,controls=true]
+----
+{
+  "title": "AI Product Development Roadmap",
+  "style": "R",
+  "scale": 0.8,
+  "useDark": true,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-Q1",
+      "goal": "Data Collection & Preparation",
+      "lines": [
+        "Data sources identification",
+        "Data collection infrastructure",
+        "Data cleaning and preprocessing",
+        "Feature engineering"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-Q2",
+      "goal": "Model Development",
+      "lines": [
+        "Algorithm selection",
+        "Model training pipeline",
+        "Hyperparameter tuning",
+        "Model evaluation framework"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-Q3",
+      "goal": "Product Integration",
+      "lines": [
+        "API development",
+        "Frontend integration",
+        "Performance optimization",
+        "A/B testing framework"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-Q4",
+      "goal": "Market Launch",
+      "lines": [
+        "Production deployment",
+        "Monitoring and analytics",
+        "Continuous learning system",
+        "Customer feedback loop"
+      ]
+    }
+  ],
+  "displayConfig": {
+    "fontColor": "#e2e8f0",
+    "milestoneColor": "#f8fafc",
+    "colors": ["#8b5cf6", "#6366f1", "#3b82f6"],
+    "circleColors": ["#f472b6", "#a855f7", "#818cf8"],
+    "carColors": ["#f8fafc", "#1e293b", "#ef4444"],
+    "notesVisible": true
+  }
+}
+----
+....
+
+[docops,release,controls=true]
+----
+{
+  "title": "AI Product Development Roadmap",
+  "style": "R",
+  "scale": 0.8,
+  "useDark": true,
+  "releases": [
+    {
+      "type": "M1",
+      "date": "2023-Q1",
+      "goal": "Data Collection & Preparation",
+      "lines": [
+        "Data sources identification",
+        "Data collection infrastructure",
+        "Data cleaning and preprocessing",
+        "Feature engineering"
+      ]
+    },
+    {
+      "type": "M2",
+      "date": "2023-Q2",
+      "goal": "Model Development",
+      "lines": [
+        "Algorithm selection",
+        "Model training pipeline",
+        "Hyperparameter tuning",
+        "Model evaluation framework"
+      ]
+    },
+    {
+      "type": "RC1",
+      "date": "2023-Q3",
+      "goal": "Product Integration",
+      "lines": [
+        "API development",
+        "Frontend integration",
+        "Performance optimization",
+        "A/B testing framework"
+      ]
+    },
+    {
+      "type": "GA",
+      "date": "2023-Q4",
+      "goal": "Market Launch",
+      "lines": [
+        "Production deployment",
+        "Monitoring and analytics",
+        "Continuous learning system",
+        "Customer feedback loop"
+      ]
+    }
+  ],
+  "displayConfig": {
+    "fontColor": "#e2e8f0",
+    "colors": ["#4361ee", "#3a0ca3", "#7209b7"],
+    "notesVisible": true
+  }
+}
+----
+
+== Interactive Features
+
+Release strategies in the DocOps extension include several interactive features:
+
+* **Hover Effects**: Elements have hover effects for better visibility
+* **Tooltips**: Hover over elements to see detailed information
+* **Animations**: Visualizations can be animated when they first appear on the page
+
+These interactive features enhance the user experience and make it easier to interpret the release strategy information in your documents.
+
+== Conclusion
+
+The DocOps Release Strategy Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing release roadmaps and timelines. By using the JSON configuration format, you can create customized visualizations that match your document's style and purpose.
+
+The extension supports various styles of release strategy visualizations, with different display options including custom colors, dark mode, and interactive features.

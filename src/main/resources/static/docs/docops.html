@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Block Processor Documentation</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/api/analytics/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_block_processor_documentation">DocOps Block Processor Documentation</a>
+<ul class="sectlevel1">
+<li><a href="#_overview">1. Overview</a></li>
+<li><a href="#_core_capabilities">2. Core Capabilities</a>
+<ul class="sectlevel2">
+<li><a href="#_dynamic_content_generation">2.1. Dynamic Content Generation</a></li>
+<li><a href="#_interactive_features">2.2. Interactive Features</a></li>
+</ul>
+</li>
+<li><a href="#_basic_usage">3. Basic Usage</a></li>
+<li><a href="#_configuration_parameters">4. Configuration Parameters</a>
+<ul class="sectlevel2">
+<li><a href="#_required_parameters">4.1. Required Parameters</a></li>
+<li><a href="#_optional_parameters">4.2. Optional Parameters</a></li>
+</ul>
+</li>
+<li><a href="#_interactive_controls">5. Interactive Controls</a>
+<ul class="sectlevel2">
+<li><a href="#_zoom_controls">5.1. Zoom Controls</a></li>
+<li><a href="#_copy_options">5.2. Copy Options</a></li>
+<li><a href="#_display_controls">5.3. Display Controls</a></li>
+</ul>
+</li>
+<li><a href="#_text_substitution">6. Text Substitution</a></li>
+<li><a href="#_environment_detection">7. Environment Detection</a>
+<ul class="sectlevel2">
+<li><a href="#_intellij_idea_integration">7.1. IntelliJ IDEA Integration</a></li>
+<li><a href="#_pdf_generation">7.2. PDF Generation</a></li>
+</ul>
+</li>
+<li><a href="#_server_configuration">8. Server Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_document_attributes">8.1. Document Attributes</a></li>
+<li><a href="#_server_health_checking">8.2. Server Health Checking</a></li>
+</ul>
+</li>
+<li><a href="#_alignment_and_styling">9. Alignment and Styling</a>
+<ul class="sectlevel2">
+<li><a href="#_role_based_alignment">9.1. Role-based Alignment</a></li>
+<li><a href="#_responsive_design">9.2. Responsive Design</a></li>
+</ul>
+</li>
+<li><a href="#_error_handling">10. Error Handling</a></li>
+<li><a href="#_performance_features">11. Performance Features</a>
+<ul class="sectlevel2">
+<li><a href="#_optimization">11.1. Optimization</a></li>
+<li><a href="#_resource_management">11.2. Resource Management</a></li>
+</ul>
+</li>
+<li><a href="#_example_usage_scenarios">12. Example Usage Scenarios</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_visualization">12.1. Basic Visualization</a></li>
+<li><a href="#_interactive_dashboard">12.2. Interactive Dashboard</a></li>
+<li><a href="#_pdf_optimized_content">12.3. PDF-Optimized Content</a></li>
+<li><a href="#_advanced_configuration">12.4. Advanced Configuration</a></li>
+</ul>
+</li>
+<li><a href="#_integration_requirements">13. Integration Requirements</a>
+<ul class="sectlevel2">
+<li><a href="#_prerequisites">13.1. Prerequisites</a></li>
+<li><a href="#_installation">13.2. Installation</a></li>
+</ul>
+</li>
+<li><a href="#_api_integration">14. API Integration</a>
+<ul class="sectlevel2">
+<li><a href="#_server_endpoints">14.1. Server Endpoints</a></li>
+<li><a href="#_url_parameters">14.2. URL Parameters</a></li>
+</ul>
+</li>
+<li><a href="#_troubleshooting">15. Troubleshooting</a>
+<ul class="sectlevel2">
+<li><a href="#_common_issues">15.1. Common Issues</a></li>
+<li><a href="#_debug_mode">15.2. Debug Mode</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">16. Best Practices</a>
+<ul class="sectlevel2">
+<li><a href="#_performance">16.1. Performance</a></li>
+<li><a href="#_accessibility">16.2. Accessibility</a></li>
+<li><a href="#_security">16.3. Security</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_block_processor_documentation" class="sect0">DocOps Block Processor Documentation</h1>
+<div class="sect1">
+<h2 id="_overview">1. Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOpsBlockProcessor is a powerful AsciidoctorJ extension that enables dynamic content generation through server-side processing. It creates interactive SVG visualizations and panels in AsciiDoc documents by connecting to a DocOps server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_core_capabilities">2. Core Capabilities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dynamic_content_generation">2.1. Dynamic Content Generation</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Server Integration</strong>: Connects to DocOps server (default: <code><a href="http://localhost:8010/extension" class="bare">http://localhost:8010/extension</a></code>)</p>
+</li>
+<li>
+<p><strong>Content Processing</strong>: Processes block content through external services</p>
+</li>
+<li>
+<p><strong>Multiple Output Formats</strong>: Supports SVG and PDF generation</p>
+</li>
+<li>
+<p><strong>Compression</strong>: Automatically compresses payload data using GZIP</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interactive_features">2.2. Interactive Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Zoom Controls</strong>: In/out zoom with reset functionality</p>
+</li>
+<li>
+<p><strong>Copy Functionality</strong>: Copy as SVG text or convert to PNG</p>
+</li>
+<li>
+<p><strong>Fullscreen Mode</strong>: Expand visualizations to full viewport</p>
+</li>
+<li>
+<p><strong>Theme Support</strong>: Light and dark theme compatibility</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_usage">3. Basic Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The processor uses the <code>docops</code> block name with a required <code>kind</code> parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="buttons"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your content here</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_parameters">4. Configuration Parameters</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_required_parameters">4.1. Required Parameters</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kind</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of visualization to generate (e.g., "buttons", "flowchart", "dashboard")</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_optional_parameters">4.2. Optional Parameters</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0002%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"SVG Viewer"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title for the generated content</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>controls</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show interactive controls overlay</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>copy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allow copying functionality</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>zoom</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable zoom controls</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expand</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable fullscreen mode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>theme</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"light"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Theme for controls (light/dark)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>role</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"center"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alignment (left/center/right)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>useDark</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use dark theme for content</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scale</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"1.0"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scaling factor for output</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interactive_controls">5. Interactive Controls</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When <code>controls=true</code> is enabled, the processor generates an interactive SVG viewer:</p>
+</div>
+<div class="sect2">
+<h3 id="_zoom_controls">5.1. Zoom Controls</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Zoom In</strong> (🔍+): Magnify content up to 5x</p>
+</li>
+<li>
+<p><strong>Zoom Out</strong> (🔍-): Reduce content down to 0.2x</p>
+</li>
+<li>
+<p><strong>Reset Zoom</strong> (⚪): Return to original size</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_copy_options">5.2. Copy Options</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Copy as SVG</strong> (📋 SVG): Copy SVG markup to clipboard</p>
+</li>
+<li>
+<p><strong>Copy as PNG</strong> (📋 PNG): Convert SVG to PNG and copy as image</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_display_controls">5.3. Display Controls</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Toggle Fullscreen</strong> (⛶): Expand to full viewport</p>
+</li>
+<li>
+<p><strong>Floating Controls</strong>: Minimalist gear icon (⚙️) overlay</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_text_substitution">6. Text Substitution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The processor supports dynamic text replacement using the pattern <code>#[variable]</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">:company-name: ACME Corp
+
+[docops,kind="buttons"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Welcome to #[company-name]</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_environment_detection">7. Environment Detection</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_intellij_idea_integration">7.1. IntelliJ IDEA Integration</h3>
+<div class="paragraph">
+<p>When running in IntelliJ IDEA (<code>env=idea</code>):
+- Provides direct image embedding for IDE preview
+- Optimized for development workflow
+- Bypasses web-based rendering</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pdf_generation">7.2. PDF Generation</h3>
+<div class="paragraph">
+<p>When <code>backend=pdf</code>:
+- Automatically detects PDF output
+- Generates appropriate image links
+- Handles scaling and formatting for print</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_server_configuration">8. Server Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_document_attributes">8.1. Document Attributes</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>panel-server</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Override default server URL for API calls</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>panel-webserver</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Override web server URL for image generation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>local-debug</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable debug logging (true/false)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_server_health_checking">8.2. Server Health Checking</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Automatic server availability verification via <code>/api/ping</code></p>
+</li>
+<li>
+<p>Graceful degradation when server unavailable</p>
+</li>
+<li>
+<p>Configurable timeouts (20s connection, 1min request)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_alignment_and_styling">9. Alignment and Styling</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_role_based_alignment">9.1. Role-based Alignment</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="buttons",role="left"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Left-aligned content</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[docops,kind="buttons",role="center"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Centered content</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[docops,kind="buttons",role="right"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Right-aligned content</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_responsive_design">9.2. Responsive Design</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Automatic width adjustment</p>
+</li>
+<li>
+<p>Mobile-friendly controls</p>
+</li>
+<li>
+<p>Scalable vector graphics</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_error_handling">10. Error Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The processor includes comprehensive error handling:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Missing Parameters</strong>: Clear error messages for required parameters</p>
+</li>
+<li>
+<p><strong>Server Unavailable</strong>: Graceful fallback with user notification ("DocOps Server Unavailable! 😵")</p>
+</li>
+<li>
+<p><strong>Network Timeouts</strong>: Configurable timeout handling</p>
+</li>
+<li>
+<p><strong>Compression Errors</strong>: Safe error recovery with logging</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_performance_features">11. Performance Features</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_optimization">11.1. Optimization</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Content Compression</strong>: GZIP compression for payload efficiency</p>
+</li>
+<li>
+<p><strong>HTTP/2 Support</strong>: Modern HTTP client implementation</p>
+</li>
+<li>
+<p><strong>Server-side Caching</strong>: Caching through URL parameters</p>
+</li>
+<li>
+<p><strong>Lazy Loading</strong>: On-demand content generation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resource_management">11.2. Resource Management</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Connection pooling for HTTP requests</p>
+</li>
+<li>
+<p>Automatic resource cleanup</p>
+</li>
+<li>
+<p>Memory-efficient processing</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_usage_scenarios">12. Example Usage Scenarios</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_visualization">12.1. Basic Visualization</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="flowchart"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Start &#8594; Process &#8594; End</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interactive_dashboard">12.2. Interactive Dashboard</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="dashboard",controls=true,theme="dark"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>metric1: 95%
+metric2: 87%
+metric3: 92%</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pdf_optimized_content">12.3. PDF-Optimized Content</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="diagram",scale="1.5"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Component A -&#8594; Component B
+Component B -&#8594; Component C</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_configuration">12.4. Advanced Configuration</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,kind="buttons",controls=true,copy=true,zoom=true,expand=true,theme="dark",role="center",title="My Dashboard"]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>{
+"buttons": [
+{
+"label": "Dashboard",
+"link": "/dashboard",
+"description": "Main dashboard view"
+}
+]
+}</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration_requirements">13. Integration Requirements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_prerequisites">13.1. Prerequisites</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>DocOps Server</strong>: Running DocOps server instance</p>
+</li>
+<li>
+<p><strong>Network Access</strong>: Server accessible from AsciiDoc processing environment</p>
+</li>
+<li>
+<p><strong>AsciidoctorJ</strong>: Compatible with AsciidoctorJ extension framework</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installation">13.2. Installation</h3>
+<div class="paragraph">
+<p>The processor is automatically registered through the <code>PanelsRegistry</code> extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">registry.block(DocOpsBlockProcessor::class.java)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_api_integration">14. API Integration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_server_endpoints">14.1. Server Endpoints</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>GET /api/ping</code>: Health check endpoint</p>
+</li>
+<li>
+<p><code>GET /api/docops/svg</code>: SVG generation endpoint with parameters:</p>
+</li>
+<li>
+<p><code>kind</code>: Visualization type</p>
+</li>
+<li>
+<p><code>payload</code>: Compressed content</p>
+</li>
+<li>
+<p><code>type</code>: Output format (SVG/PDF)</p>
+</li>
+<li>
+<p><code>useDark</code>: Dark theme flag</p>
+</li>
+<li>
+<p><code>title</code>: Content title</p>
+</li>
+<li>
+<p><code>backend</code>: Document backend</p>
+</li>
+<li>
+<p><code>filename</code>: Output filename</p>
+</li>
+<li>
+<p><code>scale</code>: Scaling factor (for PDF output)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_url_parameters">14.2. URL Parameters</h3>
+<div class="paragraph">
+<p>The processor constructs URLs with compressed payloads and configuration parameters, enabling server-side processing and caching.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting">15. Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_common_issues">15.1. Common Issues</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Issue</th>
+<th class="tableblock halign-left valign-top">Cause</th>
+<th class="tableblock halign-left valign-top">Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Parameter Error: Missing 'kind'"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required <code>kind</code> parameter not provided</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add <code>kind</code> parameter: <code>[docops,kind="buttons"]</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"DocOps Server Unavailable! 😵"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Server not running or unreachable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start DocOps server and verify network connectivity</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Empty output</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid content or server error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Check server logs and enable <code>local-debug=true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Controls not showing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>controls=false</code> or JavaScript disabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set <code>controls=true</code> and ensure JavaScript is enabled</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_debug_mode">15.2. Debug Mode</h3>
+<div class="paragraph">
+<p>Enable debug logging by setting the document attribute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">:local-debug: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This enables detailed logging of:
+- Server connectivity checks
+- URL construction
+- Content processing
+- Error details</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">16. Best Practices</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_performance">16.1. Performance</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Use appropriate <code>scale</code> values to balance quality and file size</p>
+</li>
+<li>
+<p>Enable server-side caching for repeated content</p>
+</li>
+<li>
+<p>Consider PDF-specific optimizations for print output</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessibility">16.2. Accessibility</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Provide meaningful <code>title</code> attributes</p>
+</li>
+<li>
+<p>Use sufficient color contrast in custom themes</p>
+</li>
+<li>
+<p>Ensure keyboard navigation works with interactive controls</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_security">16.3. Security</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Validate server URLs in production environments</p>
+</li>
+<li>
+<p>Use HTTPS for server communication when possible</p>
+</li>
+<li>
+<p>Sanitize user input in content blocks</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This comprehensive documentation covers all aspects of the DocOpsBlockProcessor capabilities, from basic usage to advanced configuration and troubleshooting.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

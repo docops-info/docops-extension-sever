@@ -1,0 +1,770 @@
+include::_base.adoc[]
+= Migration ScoreCard Maker
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:imagesdir: images
+
+== Overview
+
+The Migration ScoreCard Maker is a tool for creating visually appealing scorecards that compare before and after states of a migration project. It's particularly useful for visualizing database migrations, cloud migrations, or any other transformation projects where you want to highlight improvements and key metrics.
+
+== Features
+
+* Dynamic SVG generation based on table-formatted input
+* iOS-style design with modern aesthetics
+* Customizable themes and colors
+* Sections for before and after states
+* Performance metrics visualization
+* Key optimizations display
+* Migration summary with overall improvement score
+* Fixed dimensions (800x620 pixels) with scaling options
+
+== Usage
+
+=== Basic Example
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Database Migration ScoreCard: Oracle → AWS Aurora PostgreSQL
+subtitle=On-Premise to Cloud Migration with SQL Optimization & Performance Tuning
+headerTitle=Database Architecture Transformation & Query Optimization Results
+---
+[before]
+title=On-Premise Oracle Database
+---
+[before.items]
+Oracle Database 19c (On-Premise) | Physical server, manual scaling, high licensing costs | critical | !
+Cross-Datacenter Communication | App in cloud, DB on-premise (high latency) | critical | !
+---
+
+[after]
+title=AWS Aurora PostgreSQL
+---
+[after.items]
+Aurora PostgreSQL (AWS Managed) | Auto-scaling, managed service, no licensing fees | good | ✓
+Same-Region Communication | App and DB both in AWS (low latency) | good | ✓
+----
+....
+
+
+[docops,scorecard]
+----
+title=Database Migration ScoreCard: Oracle → AWS Aurora PostgreSQL
+subtitle=On-Premise to Cloud Migration with SQL Optimization & Performance Tuning
+headerTitle=Database Architecture Transformation & Query Optimization Results
+---
+[before]
+title=On-Premise Oracle Database
+---
+[before.items]
+Oracle Database 19c (On-Premise) | Physical server, manual scaling, high licensing costs | critical | !
+Cross-Datacenter Communication | App in cloud, DB on-premise (high latency) | critical | !
+---
+
+[after]
+title=AWS Aurora PostgreSQL
+---
+[after.items]
+Aurora PostgreSQL (AWS Managed) | Auto-scaling, managed service, no licensing fees | good | ✓
+Same-Region Communication | App and DB both in AWS (low latency) | good | ✓
+----
+
+=== Input Format
+
+The ScoreCard Maker uses a simple table format for input, with sections denoted by `[section]` markers and configuration parameters specified at the beginning.
+
+==== Configuration Parameters
+
+[cols="1,3"]
+|===
+|Parameter |Description
+
+|title
+|The main title of the scorecard
+
+|subtitle
+|A subtitle or description
+
+|headerTitle
+|The title for the header section (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)
+
+|scale
+|A scaling factor for the SVG (default: 1.0). The base dimensions are 800x620 pixels, which will be multiplied by this factor.
+
+|backgroundColor
+|Background color (default: #f8f9fa)
+
+|titleColor
+|Title text color (default: #2c3e50)
+
+|subtitleColor
+|Subtitle text color (default: #7f8c8d)
+
+|headerColor
+|Header background color (default: #8e44ad) (Note: In the iOS-style design, this is used for internal reference but not displayed in the UI)
+
+|beforeSectionColor
+|Before section header color (default: #e74c3c)
+
+|afterSectionColor
+|After section header color (default: #27ae60)
+|===
+
+==== Sections
+
+[cols="1,3"]
+|===
+|Section |Description
+
+|[before]
+|Title for the "before" section
+
+|[before.items]
+|Items in the "before" section, format: `Title | Description | Status | Icon`
+
+
+
+|[after]
+|Title for the "after" section
+
+|[after.items]
+|Items in the "after" section, format: `Title | Description | Status | Icon`
+|===
+
+==== Status Values
+
+For the `Status` field in `[before.items]` and `[after.items]`:
+
+* `critical` - iOS-style red gradient indicator
+* `warning` - iOS-style orange gradient indicator
+* `good` - iOS-style green gradient indicator
+
+In the new iOS-style design, these status values are displayed as subtle circular indicators with iOS system color gradients.
+
+==== Icons
+
+Common icons used in the `Icon` field:
+
+* `!` - Converted to ⚠️ (warning emoji) in the iOS-style design
+* `$` - Converted to 💰 (money bag emoji) in the iOS-style design
+* `✓` - Converted to ✅ (check mark emoji) in the iOS-style design
+
+In the iOS-style design, these text icons are automatically converted to appropriate emojis for a more modern look.
+
+== API
+
+The ScoreCard Maker provides a REST API for generating scorecards:
+
+[cols="1,3"]
+|===
+|Endpoint |Description
+
+|GET /api/scorecard/edit-mode
+|Returns an HTML form for editing the scorecard
+
+|GET /api/scorecard/view-mode
+|Returns an HTML view for displaying the scorecard
+
+|PUT /api/scorecard/render
+|Processes the form data and returns the rendered SVG
+|===
+
+== Examples
+
+=== Database Migration ScoreCard
+
+The example at the beginning of this document shows a Database Migration ScoreCard. Here's another variation focusing on a different database technology:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Database Migration ScoreCard: MongoDB → Amazon DocumentDB
+subtitle=NoSQL Database Migration with Performance Optimization
+headerTitle=Document Database Migration Results
+backgroundColor=#f5f5f5
+---
+[before]
+title=Self-Hosted MongoDB
+---
+[before.items]
+MongoDB 4.2 (Self-Hosted) | Manual sharding, complex maintenance, scaling issues | critical | !
+Inconsistent Backup Strategy | Weekly backups, manual process, recovery gaps | warning | !
+Limited Monitoring | Basic metrics only, no proactive alerts | warning | !
+---
+[before.performance]
+Baseline Performance | 40 | #e74c3c
+---
+[after]
+title=Amazon DocumentDB
+---
+[after.items]
+Amazon DocumentDB | Managed service, automatic scaling, MongoDB-compatible | good | ✓
+Automated Backups | Continuous backups, point-in-time recovery | good | ✓
+Enhanced Monitoring | CloudWatch integration, custom dashboards | good | ✓
+---
+[after.performance]
+Enhanced Performance | 85 | #27ae60
+----
+....
+
+[docops,scorecard]
+----
+title=Database Migration ScoreCard: MongoDB → Amazon DocumentDB
+subtitle=NoSQL Database Migration with Performance Optimization
+headerTitle=Document Database Migration Results
+backgroundColor=#f5f5f5
+---
+[before]
+title=Self-Hosted MongoDB
+---
+[before.items]
+MongoDB 4.2 (Self-Hosted) | Manual sharding, complex maintenance, scaling issues | critical | !
+Inconsistent Backup Strategy | Weekly backups, manual process, recovery gaps | warning | !
+Limited Monitoring | Basic metrics only, no proactive alerts | warning | !
+---
+[before.performance]
+Baseline Performance | 40 | #e74c3c
+---
+[after]
+title=Amazon DocumentDB
+---
+[after.items]
+Amazon DocumentDB | Managed service, automatic scaling, MongoDB-compatible | good | ✓
+Automated Backups | Continuous backups, point-in-time recovery | good | ✓
+Enhanced Monitoring | CloudWatch integration, custom dashboards | good | ✓
+---
+[after.performance]
+Enhanced Performance | 85 | #27ae60
+----
+
+=== Application Modernization ScoreCard
+
+This example shows how to use the ScoreCard for tracking application modernization efforts:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Application Modernization ScoreCard: Monolith to Microservices
+subtitle=Legacy Java Application Transformation to Cloud-Native Architecture
+headerTitle=Application Architecture Transformation Results
+---
+[before]
+title=Monolithic Java Application
+---
+[before.items]
+Monolithic Architecture | Single codebase, tightly coupled components, difficult to scale | critical | !
+Java EE 6 + Oracle | Legacy technology stack with vendor lock-in | critical | !
+Manual Deployment | Complex, error-prone deployment process, 2-day release cycle | warning | !
+---
+[before.performance]
+Legacy Application | 35 | #e63946
+---
+[after]
+title=Microservices Architecture
+---
+[after.items]
+Microservices | Decoupled services, independent scaling, resilient architecture | good | ✓
+Spring Boot + Kubernetes | Modern cloud-native stack with containerization | good | ✓
+CI/CD Pipeline | Automated testing and deployment, multiple releases per day | good | ✓
+----
+....
+
+[docops,scorecard]
+----
+title=Application Modernization ScoreCard: Monolith to Microservices
+subtitle=Legacy Java Application Transformation to Cloud-Native Architecture
+headerTitle=Application Architecture Transformation Results
+---
+[before]
+title=Monolithic Java Application
+---
+[before.items]
+Monolithic Architecture | Single codebase, tightly coupled components, difficult to scale | critical | !
+Java EE 6 + Oracle | Legacy technology stack with vendor lock-in | critical | !
+Manual Deployment | Complex, error-prone deployment process, 2-day release cycle | warning | !
+---
+[before.performance]
+Legacy Application | 35 | #e63946
+---
+[after]
+title=Microservices Architecture
+---
+[after.items]
+Microservices | Decoupled services, independent scaling, resilient architecture | good | ✓
+Spring Boot + Kubernetes | Modern cloud-native stack with containerization | good | ✓
+CI/CD Pipeline | Automated testing and deployment, multiple releases per day | good | ✓
+
+----
+=== DevOps Transformation ScoreCard
+
+This example demonstrates tracking DevOps transformation progress:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=DevOps Transformation ScoreCard
+subtitle=From Traditional Development to DevOps Culture and Practices
+headerTitle=Software Delivery Performance Transformation
+---
+[before]
+title=Traditional Development Process
+---
+[before.items]
+Siloed Teams | Separate dev and ops teams with conflicting goals | critical | !
+Manual Processes | Manual testing, deployments, and infrastructure management | critical | !
+Quarterly Releases | Long release cycles with large batches of changes | warning | !
+---
+[before.performance]
+Delivery Performance | 25 | #dc3545
+---
+[after]
+title=DevOps Implementation
+---
+[after.items]
+Cross-Functional Teams | Integrated teams with shared responsibility | good | ✓
+Automation | CI/CD pipelines, infrastructure as code, automated testing | good | ✓
+Continuous Delivery | Small, frequent releases with fast feedback | good | ✓
+
+----
+....
+
+[docops,scorecard]
+----
+title=DevOps Transformation ScoreCard
+subtitle=From Traditional Development to DevOps Culture and Practices
+headerTitle=Software Delivery Performance Transformation
+---
+[before]
+title=Traditional Development Process
+---
+[before.items]
+Siloed Teams | Separate dev and ops teams with conflicting goals | critical | !
+Manual Processes | Manual testing, deployments, and infrastructure management | critical | !
+Quarterly Releases | Long release cycles with large batches of changes | warning | !
+---
+[before.performance]
+Delivery Performance | 25 | #dc3545
+---
+[after]
+title=DevOps Implementation
+---
+[after.items]
+Cross-Functional Teams | Integrated teams with shared responsibility | good | ✓
+Automation | CI/CD pipelines, infrastructure as code, automated testing | good | ✓
+Continuous Delivery | Small, frequent releases with fast feedback | good | ✓
+
+----
+=== Website Redesign ScoreCard
+
+This example shows how to track website redesign projects:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Website Redesign ScoreCard
+subtitle=E-Commerce Platform Modernization and UX Enhancement
+headerTitle=Digital Experience Transformation Results
+scale=1.0
+backgroundColor=#ffffff
+headerColor=#6c5ce7
+beforeSectionColor=#e84393
+afterSectionColor=#00b894
+---
+[before]
+title=Legacy Website
+---
+[before.items]
+Outdated Design | Non-responsive, desktop-only experience | critical | !
+Slow Performance | 6.2s average page load time | critical | !
+Poor Conversion | 1.2% conversion rate, high bounce rate | warning | !
+---
+[before.performance]
+User Experience Score | 32 | #e84393
+---
+[after]
+title=Redesigned Website
+---
+[after.items]
+Modern Design | Responsive, mobile-first approach | good | ✓
+Optimized Performance | 1.8s average page load time | good | ✓
+Enhanced Conversion | 3.8% conversion rate, lower bounce rate | good | ✓
+----
+....
+
+[docops,scorecard]
+----
+title=Website Redesign ScoreCard
+subtitle=E-Commerce Platform Modernization and UX Enhancement
+headerTitle=Digital Experience Transformation Results
+scale=1.0
+backgroundColor=#ffffff
+headerColor=#6c5ce7
+beforeSectionColor=#e84393
+afterSectionColor=#00b894
+---
+[before]
+title=Legacy Website
+---
+[before.items]
+Outdated Design | Non-responsive, desktop-only experience | critical | !
+Slow Performance | 6.2s average page load time | critical | !
+Poor Conversion | 1.2% conversion rate, high bounce rate | warning | !
+---
+[before.performance]
+User Experience Score | 32 | #e84393
+---
+[after]
+title=Redesigned Website
+---
+[after.items]
+Modern Design | Responsive, mobile-first approach | good | ✓
+Optimized Performance | 1.8s average page load time | good | ✓
+Enhanced Conversion | 3.8% conversion rate, lower bounce rate | good | ✓
+----
+
+=== Security Enhancement ScoreCard
+
+This example demonstrates tracking security improvement initiatives:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Security Enhancement ScoreCard
+subtitle=Enterprise Security Posture Improvement Initiative
+headerTitle=Cybersecurity Resilience Transformation
+---
+[before]
+title=Security Vulnerabilities
+---
+[before.items]
+Outdated Authentication | Password-only auth, no MFA | critical | !
+Unpatched Systems | 68% of systems behind on security patches | critical | !
+Limited Monitoring | No 24/7 monitoring, basic logging | warning | !
+---
+[before.performance]
+Security Posture | 28 | #f72585
+---
+[after]
+title=Enhanced Security
+---
+[after.items]
+Modern Authentication | SSO with MFA and conditional access | good | ✓
+Patch Management | Automated patching, 99.5% compliance | good | ✓
+Advanced Monitoring | 24/7 SOC, SIEM implementation | good | ✓
+----
+....
+
+[docops,scorecard]
+----
+title=Security Enhancement ScoreCard
+subtitle=Enterprise Security Posture Improvement Initiative
+headerTitle=Cybersecurity Resilience Transformation
+---
+[before]
+title=Security Vulnerabilities
+---
+[before.items]
+Outdated Authentication | Password-only auth, no MFA | critical | !
+Unpatched Systems | 68% of systems behind on security patches | critical | !
+Limited Monitoring | No 24/7 monitoring, basic logging | warning | !
+---
+[before.performance]
+Security Posture | 28 | #f72585
+---
+[after]
+title=Enhanced Security
+---
+[after.items]
+Modern Authentication | SSO with MFA and conditional access | good | ✓
+Patch Management | Automated patching, 99.5% compliance | good | ✓
+Advanced Monitoring | 24/7 SOC, SIEM implementation | good | ✓
+
+----
+=== AI/ML Implementation ScoreCard
+
+This example shows how to track AI/ML implementation projects:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=AI/ML Implementation ScoreCard
+subtitle=Customer Service Automation with Machine Learning
+headerTitle=Intelligent Automation Transformation Results
+scale=1.0
+backgroundColor=#f0f0f0
+headerColor=#7209b7
+beforeSectionColor=#f94144
+afterSectionColor=#43aa8b
+---
+[before]
+title=Manual Customer Service
+---
+[before.items]
+Manual Ticket Routing | Human agents manually categorizing tickets | critical | !
+No Predictive Capabilities | Reactive approach to customer issues | warning | !
+Limited Self-Service | Basic FAQ, no intelligent assistance | warning | !
+---
+[before.performance]
+Service Efficiency | 35 | #f94144
+---
+[after]
+title=AI-Enhanced Customer Service
+---
+[after.items]
+ML-Based Ticket Routing | Automatic categorization and priority assignment | good | ✓
+Predictive Analytics | Proactive issue detection and resolution | good | ✓
+AI-Powered Chatbot | 24/7 intelligent virtual assistant | good | ✓
+----
+....
+
+[docops,scorecard]
+----
+title=AI/ML Implementation ScoreCard
+subtitle=Customer Service Automation with Machine Learning
+headerTitle=Intelligent Automation Transformation Results
+scale=1.0
+backgroundColor=#f0f0f0
+headerColor=#7209b7
+beforeSectionColor=#f94144
+afterSectionColor=#43aa8b
+---
+[before]
+title=Manual Customer Service
+---
+[before.items]
+Manual Ticket Routing | Human agents manually categorizing tickets | critical | !
+No Predictive Capabilities | Reactive approach to customer issues | warning | !
+Limited Self-Service | Basic FAQ, no intelligent assistance | warning | !
+---
+[before.performance]
+Service Efficiency | 35 | #f94144
+---
+[after]
+title=AI-Enhanced Customer Service
+---
+[after.items]
+ML-Based Ticket Routing | Automatic categorization and priority assignment | good | ✓
+Predictive Analytics | Proactive issue detection and resolution | good | ✓
+AI-Powered Chatbot | 24/7 intelligent virtual assistant | good | ✓
+----
+=== Cloud Migration ScoreCard
+
+This example demonstrates tracking cloud migration projects:
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+title=Cloud Migration ScoreCard: On-Premise to AWS
+subtitle=Enterprise Infrastructure Transformation to Cloud-Native Architecture
+headerTitle=Digital Infrastructure Modernization Results
+---
+[before]
+title=BEFORE: On-Premise Data Center
+---
+[before.items]
+Physical Infrastructure | Hardware refresh cycles, capital expenses | critical | $
+Limited Scalability | Manual scaling, capacity planning challenges | warning | !
+High Maintenance | 65% of IT time spent on "keeping the lights on" | critical | !
+---
+[before.performance]
+Infrastructure Agility | 30 | #ef476f
+---
+[after]
+title=AFTER: AWS Cloud Environment
+---
+[after.items]
+Cloud Infrastructure | Pay-as-you-go model, operational expenses | good | $
+Auto-Scaling | Dynamic resource allocation based on demand | good | ✓
+Managed Services | 70% reduction in maintenance overhead | good | ✓
+----
+....
+
+[docops,scorecard]
+----
+title=Cloud Migration ScoreCard: On-Premise to AWS
+subtitle=Enterprise Infrastructure Transformation to Cloud-Native Architecture
+headerTitle=Digital Infrastructure Modernization Results
+---
+[before]
+title=BEFORE: On-Premise Data Center
+---
+[before.items]
+Physical Infrastructure | Hardware refresh cycles, capital expenses | critical | $
+Limited Scalability | Manual scaling, capacity planning challenges | warning | !
+High Maintenance | 65% of IT time spent on "keeping the lights on" | critical | !
+---
+[before.performance]
+Infrastructure Agility | 30 | #ef476f
+---
+[after]
+title=AFTER: AWS Cloud Environment
+---
+[after.items]
+Cloud Infrastructure | Pay-as-you-go model, operational expenses | good | $
+Auto-Scaling | Dynamic resource allocation based on demand | good | ✓
+Managed Services | 70% reduction in maintenance overhead | good | ✓
+----
+== Best Practices and Creative Uses
+
+=== Best Practices for Creating Effective Scorecards
+
+When creating your own scorecards, consider these best practices:
+
+1. **Focus on Contrast**: Ensure a clear contrast between "before" and "after" states to highlight improvements.
+2. **Use Consistent Metrics**: Choose metrics that can be directly compared between the before and after states.
+3. **Limit Items**: Include 3-5 key items in each section to avoid overwhelming the viewer.
+4. **Choose Meaningful Colors**: Use colors that intuitively represent status (red for critical, green for good).
+5. **Quantify Improvements**: Express improvements in percentages or other measurable terms.
+6. **Highlight Key Optimizations**: Focus on the most impactful changes that drove the improvements.
+7. **Include Context in Footer**: Add relevant information about timeline, team size, or approach in the footer.
+8. **Be Specific in Titles**: Use specific, descriptive titles rather than generic ones.
+
+=== Creative Uses for ScoreCards
+
+Beyond the examples shown above, ScoreCards can be used for:
+
+1. **Product Launch Comparisons**: Compare metrics between previous and new product versions.
+2. **Team Performance Tracking**: Visualize team performance improvements over time.
+3. **User Experience Enhancements**: Document UX improvements with before/after metrics.
+4. **Infrastructure Upgrades**: Showcase the impact of hardware or network upgrades.
+5. **Training Program Effectiveness**: Compare skill levels before and after training initiatives.
+6. **Marketing Campaign Results**: Display the impact of marketing strategy changes.
+7. **Software Version Comparisons**: Highlight improvements between software releases.
+8. **Process Optimization**: Document the results of business process reengineering.
+9. **Compliance Improvements**: Track progress in meeting regulatory requirements.
+10. **Sustainability Initiatives**: Showcase environmental impact reductions.
+
+=== iOS-Style Design
+
+The ScoreCard Maker now uses an iOS-style design with the following elements:
+
+1. **Fixed Dimensions**: Each scorecard has fixed dimensions of 800x620 pixels, which can be scaled using the `scale` parameter.
+2. **Subtle Background Gradient**: A light gradient background for a modern, clean look.
+3. **Card-Based Layout**: Content is organized in card-like containers with rounded corners.
+4. **iOS-Style Shadows**: Subtle drop shadows add depth and dimension to the cards.
+5. **System Gradients**: iOS-style color gradients for headers and indicators (blue, green, red, orange).
+6. **Modern Typography**: Uses the San Francisco font family (or system equivalents) for a native iOS feel.
+7. **Team Avatars**: Includes a section for team member avatars with initials.
+8. **Key Improvements Summary**: A dedicated section highlighting the overall improvements.
+
+=== Design Tips
+
+1. **Color Harmony**: Choose complementary colors for a visually appealing scorecard.
+2. **Typography**: The default typography is designed for readability, but you can customize it if needed.
+3. **White Space**: The layout includes appropriate white space for readability.
+4. **Visual Hierarchy**: The most important information (summary and key metrics) is emphasized.
+5. **Consistency**: Maintain consistent formatting throughout your scorecard.
+
+== Customization
+
+The ScoreCard Maker supports customization through various parameters:
+
+* Colors for different sections
+* Scaling for different display sizes (base dimensions: 800x620 pixels)
+* Custom icons and status indicators
+* iOS-style visual elements (gradients, shadows, rounded corners)
+* Fixed layout with consistent design elements
+
+== Integration
+
+The ScoreCard Maker can be integrated with other documentation tools:
+
+* Embed in AsciiDoc documents
+* Include in HTML pages
+* Export as SVG for use in presentations
+* Convert to PDF for reports
+
+== Quick Reference Guide
+
+=== Common Patterns
+
+Here are some common patterns you can use as templates for your own scorecards:
+
+==== Status Indicators
+
+[cols="1,1,2"]
+|===
+|Status |Icon |Use Case
+
+|critical
+|!
+|Highlighting problems or critical issues in the "before" state
+
+|warning
+|!
+|Indicating caution or moderate issues
+
+|good
+|✓
+|Showing improvements or positive aspects in the "after" state
+
+|neutral
+|•
+|Presenting neutral information without judgment
+|===
+
+
+==== Color Schemes
+
+[cols="1,1,2"]
+|===
+|Theme |Colors |Use Case
+
+|Corporate
+|#0a2540, #4a56e2, #2a9d8f
+|Professional business presentations
+
+|High Contrast
+|#000000, #ffffff, #ff0000, #00ff00
+|Maximum readability and accessibility
+
+|Pastel
+|#f8edeb, #fcd5ce, #f9dcc4, #fec89a
+|Softer, more approachable look
+
+|Vibrant
+|#f72585, #7209b7, #3a0ca3, #4361ee
+|Eye-catching presentations with high impact
+|===
+
+==== Template Snippets
+
+**Basic Before/After Item:**
+[source,text]
+----
+[before.items]
+Item Name | Description of the issue | critical | !
+---
+[after.items]
+Improved Item | Description of the improvement | good | ✓
+----
+
+
+
+== Troubleshooting
+
+=== Common Issues
+
+* If sections are not appearing correctly, check that you have the correct section markers (`[section]`)
+* If colors are not displaying correctly, ensure they are valid hex color codes (e.g., `#3498db`)
+* If the layout seems off, try adjusting the `scale` parameter
+* If metrics aren't showing up, verify that you have both a `[metrics]` section and a corresponding `[metrics.items]` section
+* If the scorecard appears too small or too large, remember that the base dimensions are fixed at 800x620 pixels, which are then multiplied by the `scale` parameter
+* If icons don't appear as expected, note that in the iOS-style design, text icons (`!`, `$`, `✓`) are automatically converted to emojis
+
+=== Support
+
+For issues or feature requests, please contact the DocOps team.
