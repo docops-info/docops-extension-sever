@@ -148,15 +148,17 @@ class FeatureCardMaker {
 
     private fun createColumnLayout(cards: List<FeatureCard>, theme: CardTheme): String {
         val cardWidth = 280
-        val cardHeight = 400
         val gap = 20
         val totalWidth = cardWidth
-        val totalHeight = cards.size * cardHeight + (cards.size - 1) * gap
+
+        // Calculate dynamic heights for each card
+        val cardHeights = cards.map { calculateCardHeight(it) }
+        val totalHeight = cardHeights.sum() + (cards.size - 1) * gap
 
         val svgBuilder = StringBuilder()
         svgBuilder.append("""
         <?xml version="1.0" encoding="UTF-8"?>
-        <svg height="$totalHeight" width="$totalWidth" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg">
         <defs>
             ${generateGradients(cards, theme)}
         </defs>
@@ -165,16 +167,17 @@ class FeatureCardMaker {
         </style>
     """.trimIndent())
 
+        var currentY = 0
         cards.forEachIndexed { index, card ->
-            val y = index * (cardHeight + gap)
-            svgBuilder.append(generateCardSvg(card, 0, y, cardWidth, cardHeight, index, theme))
+            val cardHeight = cardHeights[index]
+            svgBuilder.append(generateCardSvg(card, 0, currentY, cardWidth, cardHeight, index, theme))
+            currentY += cardHeight + gap
         }
 
         svgBuilder.append(generateJavaScript())
         svgBuilder.append("</svg>")
         return svgBuilder.toString()
     }
-
     private fun createRowLayout(cards: List<FeatureCard>, theme: CardTheme): String {
         val cardWidth = 280
         val cardHeight = 400
@@ -209,40 +212,65 @@ class FeatureCardMaker {
         <script type="text/javascript">
         <![CDATA[
             document.addEventListener('DOMContentLoaded', function() {
+                /* Add click handlers to all feature cards */
                 const cards = document.querySelectorAll('.feature-card');
+                
                 cards.forEach(function(card) {
                     let isExpanded = false;
                     
                     card.addEventListener('click', function() {
                         const details = card.querySelector('.card-details');
+                        const description = card.querySelector('.card-description');
                         const emoji = card.querySelector('text[dominant-baseline="middle"]');
                         
                         if (!isExpanded) {
-                            details.style.opacity = '1';
-                            details.style.transform = 'translateY(0)';
+                            /* Hide description and show details */
+                            if (description) {
+                                description.style.opacity = '0';
+                                description.style.transition = 'opacity 0.2s ease';
+                            }
                             
+                            /* Show details after description fades out */
+                            setTimeout(function() {
+                                details.style.opacity = '1';
+                                details.style.transform = 'translateY(0)';
+                            }, 200);
+                            
+                            /* Animate emoji */
                             if (emoji) {
                                 emoji.style.transform = 'translateY(-10px)';
                                 emoji.style.transition = 'transform 0.3s ease';
                             }
                             
+                            /* Add expanded class for styling */
                             card.classList.add('expanded');
                             
                             isExpanded = true;
                         } else {
+                            /* Show description and hide details */
                             details.style.opacity = '0';
                             details.style.transform = 'translateY(20px)';
                             
+                            /* Show description after details fade out */
+                            setTimeout(function() {
+                                if (description) {
+                                    description.style.opacity = '1';
+                                }
+                            }, 200);
+                            
+                            /* Reset emoji position */
                             if (emoji) {
                                 emoji.style.transform = 'translateY(0)';
                             }
                             
+                            /* Remove expanded class */
                             card.classList.remove('expanded');
                             
                             isExpanded = false;
                         }
                     });
                     
+                    /* Add hover effects programmatically if needed */
                     card.addEventListener('mouseenter', function() {
                         if (!card.classList.contains('expanded')) {
                             card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))';
@@ -260,6 +288,74 @@ class FeatureCardMaker {
         </script>
     """.trimIndent()
     }
+
+    // Helper function to create wrapped text in SVG
+    private fun createWrappedTextSvg(
+        text: String,
+        x: Int,
+        y: Int,
+        maxWidth: Int,
+        fontSize: Int,
+        textColor: String,
+        textAnchor: String = "start",
+        lineHeight: Int = fontSize + 4
+    ): String {
+        // Approximate characters that fit in maxWidth (rough estimate)
+        val avgCharWidth = fontSize * 0.6
+        val charsPerLine = (maxWidth / avgCharWidth).toInt()
+
+        // Split text into words
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        for (word in words) {
+            if (currentLine.length + word.length + 1 <= charsPerLine) {
+                // Word fits on current line
+                if (currentLine.isNotEmpty()) {
+                    currentLine.append(" ")
+                }
+                currentLine.append(word)
+            } else {
+                // Word doesn't fit, start a new line
+                if (currentLine.isNotEmpty()) {
+                    lines.add(currentLine.toString())
+                    currentLine = StringBuilder()
+                }
+
+                // If the word is too long for a single line, split it
+                if (word.length > charsPerLine) {
+                    var remainingWord = word
+                    while (remainingWord.length > charsPerLine) {
+                        val splitPoint = charsPerLine.coerceAtMost(remainingWord.length)
+                        lines.add(remainingWord.substring(0, splitPoint))
+                        remainingWord = remainingWord.substring(splitPoint)
+                    }
+                    currentLine.append(remainingWord)
+                } else {
+                    currentLine.append(word)
+                }
+            }
+        }
+
+        // Add the last line if not empty
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine.toString())
+        }
+
+        // Create SVG text with tspan elements for each line
+        val svgBuilder = StringBuilder()
+        svgBuilder.append("""<text x="$x" y="$y" text-anchor="$textAnchor" font-size="$fontSize" fill="$textColor">""")
+
+        lines.forEachIndexed { index, line ->
+            val dy = if (index == 0) "0" else "$lineHeight"
+            svgBuilder.append("""<tspan x="$x" dy="$dy">${escapeXml(line)}</tspan>""")
+        }
+
+        svgBuilder.append("</text>")
+        return svgBuilder.toString()
+    }
+
     private fun generateCardSvg(card: FeatureCard, x: Int, y: Int, width: Int, height: Int, index: Int, theme: CardTheme): String {
         val colors = getColorScheme(card.colorScheme, theme)
 
@@ -279,8 +375,10 @@ class FeatureCardMaker {
             <!-- Title -->
             <text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="${colors.title}">${escapeXml(card.title)}</text>
             
-            <!-- Description -->
-            <text x="140" y="160" text-anchor="middle" font-size="16" fill="${colors.text}">${escapeXml(card.description)}</text>
+            <!-- Description (will be hidden when expanded) -->
+            <g class="card-description">
+                ${generateDescriptionText(card.description, colors.text)}
+            </g>
             
             <!-- Details (initially hidden) -->
             <g class="card-details" style="opacity: 0; transform: translateY(20px);">
@@ -290,12 +388,122 @@ class FeatureCardMaker {
     """.trimIndent()
     }
 
+    private fun generateDescriptionText(description: String, textColor: String): String {
+        val maxCharsPerLine = 32 // Slightly longer for description
+        val wrappedLines = if (description.length > maxCharsPerLine) {
+            wrapText(description, maxCharsPerLine)
+        } else {
+            listOf(description)
+        }
+
+        return wrappedLines.mapIndexed { index, line ->
+            val y = 160 + index * 18 // Start at Y=160 with 18px line spacing
+            """<text x="140" y="$y" text-anchor="middle" font-size="16" fill="$textColor" font-family="system-ui, -apple-system, sans-serif">${escapeXml(line.trim())}</text>"""
+        }.joinToString("\n")
+    }
 
     private fun generateDetailsText(details: List<String>, textColor: String): String {
-        return details.mapIndexed { index, detail ->
-            val y = 200 + index * 20
-            """<text x="40" y="$y" font-size="14" fill="$textColor">${escapeXml(detail)}</text>"""
-        }.joinToString("\n")
+        if (details.isEmpty()) return ""
+
+        var currentY = 190 // Start a bit lower to account for wrapped descriptions
+        val items = mutableListOf<String>()
+
+        details.forEach { detail ->
+            val bulletY = currentY - 2 // Slightly offset bullet vertically
+
+            // Create bullet point
+            val bullet = """<circle cx="25" cy="$bulletY" r="3" fill="$textColor" opacity="0.7"/>"""
+
+            // Handle long text by wrapping at reasonable length
+            val maxCharsPerLine = 28
+            val wrappedText = if (detail.length > maxCharsPerLine) {
+                wrapText(detail, maxCharsPerLine)
+            } else {
+                listOf(detail)
+            }
+
+            // Generate text lines
+            val textLines = wrappedText.mapIndexed { lineIndex, line ->
+                val lineY = currentY + lineIndex * 16 // Line spacing within wrapped text
+                val xOffset = 35 // Consistent indentation for all lines
+                """<text x="$xOffset" y="$lineY" font-size="13" fill="$textColor" font-family="system-ui, -apple-system, sans-serif">${escapeXml(line.trim())}</text>"""
+            }.joinToString("\n")
+
+            items.add(bullet + "\n" + textLines)
+
+            // Move Y position for next bullet item
+            // Base spacing + extra spacing for wrapped lines
+            currentY += 25 + (wrappedText.size - 1) * 16 + 10 // Added 10px extra spacing between bullets
+        }
+
+        return items.joinToString("\n")
+    }
+
+
+    private fun wrapText(text: String, maxChars: Int): List<String> {
+        if (text.length <= maxChars) return listOf(text)
+
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        for (word in words) {
+            // If adding this word would exceed the limit
+            if (currentLine.length + word.length + 1 > maxChars) {
+                // If current line is not empty, add it to lines
+                if (currentLine.isNotEmpty()) {
+                    lines.add(currentLine.toString())
+                    currentLine = StringBuilder()
+                }
+
+                // If the word itself is longer than maxChars, split it
+                if (word.length > maxChars) {
+                    var remainingWord = word
+                    while (remainingWord.length > maxChars) {
+                        lines.add(remainingWord.substring(0, maxChars))
+                        remainingWord = remainingWord.substring(maxChars)
+                    }
+                    if (remainingWord.isNotEmpty()) {
+                        currentLine.append(remainingWord)
+                    }
+                } else {
+                    currentLine.append(word)
+                }
+            } else {
+                // Add word to current line
+                if (currentLine.isNotEmpty()) {
+                    currentLine.append(" ")
+                }
+                currentLine.append(word)
+            }
+        }
+
+        // Add the last line if it's not empty
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine.toString())
+        }
+
+        return lines
+    }
+
+    private fun calculateCardHeight(card: FeatureCard): Int {
+        val baseHeight = 400
+        if (card.details.isEmpty()) return baseHeight
+
+        // Calculate additional height needed for details
+        val maxCharsPerLine = 28
+        val totalLines = card.details.sumOf { detail ->
+            if (detail.length > maxCharsPerLine) {
+                wrapText(detail, maxCharsPerLine).size
+            } else {
+                1
+            }
+        }
+
+        // Each detail item needs 25px base + 16px per additional line
+        val detailsHeight = card.details.size * 25 + (totalLines - card.details.size) * 16
+
+        return baseHeight + minOf(detailsHeight, 150) // Cap the additional height
     }
 
     private fun generateGradients(cards: List<FeatureCard>, theme: CardTheme): String {
@@ -331,6 +539,9 @@ class FeatureCardMaker {
         }
         .card-details {
             transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .card-description {
+            transition: opacity 0.2s ease;
         }
         .card-background {
             transition: opacity 0.2s ease;

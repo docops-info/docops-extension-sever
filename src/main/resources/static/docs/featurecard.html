@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>Docops Feature Cards</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_feature_cards">Docops Feature Cards</a>
+<ul class="sectlevel1">
+<li><a href="#_overview">1. Overview</a></li>
+<li><a href="#_features">2. Features</a></li>
+<li><a href="#_usage">3. Usage</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_example">3.1. Basic Example</a></li>
+<li><a href="#_input_format">3.2. Input Format</a>
+<ul class="sectlevel3">
+<li><a href="#_configuration_directives">3.2.1. Configuration Directives</a></li>
+<li><a href="#_card_data_format">3.2.2. Card Data Format</a></li>
+<li><a href="#_details">3.2.3. Details</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_examples">4. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_grid_layout_default">4.1. Grid Layout (Default)</a></li>
+<li><a href="#_row_layout">4.2. Row Layout</a></li>
+<li><a href="#_column_layout">4.3. Column Layout</a></li>
+<li><a href="#_dark_theme">4.4. Dark Theme</a></li>
+</ul>
+</li>
+<li><a href="#_creative_use_cases">5. Creative Use Cases</a>
+<ul class="sectlevel2">
+<li><a href="#_product_features_showcase">5.1. Product Features Showcase</a></li>
+<li><a href="#_service_tiers_comparison">5.2. Service Tiers Comparison</a></li>
+<li><a href="#_technology_stack_overview">5.3. Technology Stack Overview</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">6. Best Practices</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_effective_feature_cards">6.1. Creating Effective Feature Cards</a></li>
+<li><a href="#_design_tips">6.2. Design Tips</a></li>
+</ul>
+</li>
+<li><a href="#_api">7. API</a></li>
+<li><a href="#_troubleshooting">8. Troubleshooting</a>
+<ul class="sectlevel2">
+<li><a href="#_common_issues">8.1. Common Issues</a></li>
+<li><a href="#_support">8.2. Support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_feature_cards" class="sect0">Docops Feature Cards</h1>
+<div class="sect1">
+<h2 id="_overview"><a class="link" href="#_overview">1. Overview</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Feature Card Maker is a tool for creating visually appealing, interactive feature cards that showcase product features, capabilities, or services. These cards are designed with modern aesthetics and interactive elements, making them perfect for product documentation, marketing materials, or feature comparison pages.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features"><a class="link" href="#_features">2. Features</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Dynamic SVG generation based on table-formatted input</p>
+</li>
+<li>
+<p>Modern card design with smooth animations and interactions</p>
+</li>
+<li>
+<p>Three layout options: Grid, Row, and Column</p>
+</li>
+<li>
+<p>Theme support (Light, Dark, Auto)</p>
+</li>
+<li>
+<p>Seven color schemes: Blue, Green, Orange, Purple, Red, Teal, and Gray</p>
+</li>
+<li>
+<p>Interactive cards with expandable details</p>
+</li>
+<li>
+<p>Emoji support for visual appeal</p>
+</li>
+<li>
+<p>Responsive design with hover effects</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="link" href="#_usage">3. Usage</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_example"><a class="link" href="#_basic_example">3.1. Basic Example</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Feature 1 | This is a description of feature 1 | 🚀 | BLUE
+&gt;&gt; This is a detail about feature 1
+&gt;&gt; Another detail about feature 1
+Feature 2 | This is a description of feature 2 | 🔍 | GREEN
+&gt;&gt; This is a detail about feature 2
+Feature 3 | This is a description of feature 3 | 🛠️ | ORANGE
+&gt;&gt; This is a detail about feature 3
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="400" width="880" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E3F2FD"/><stop offset="100%" style="stop-color:#BBDEFB"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#81C784"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E8F5E8"/><stop offset="100%" style="stop-color:#C8E6C9"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#66BB6A"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFF3E0"/><stop offset="100%" style="stop-color:#FFCC80"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#FFB74D"/><stop offset="100%" style="stop-color:#FF9800"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🚀</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#1976D2">Feature 1</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a description of feature</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">1</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a detail about</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">feature 1</text><circle cx="25" cy="239" r="3" fill="#424242" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Another detail about feature</text><text x="35" y="257" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">1</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔍</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#388E3C">Feature 2</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a description of feature</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">2</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a detail about</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">feature 2</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🛠️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#E65100">Feature 3</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a description of feature</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">3</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">This is a detail about</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">feature 3</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_input_format"><a class="link" href="#_input_format">3.2. Input Format</a></h3>
+<div class="paragraph">
+<p>The Feature Card Maker uses a simple table format for input, with configuration directives denoted by <code>@</code> markers at the beginning.</p>
+</div>
+<div class="sect3">
+<h4 id="_configuration_directives"><a class="link" href="#_configuration_directives">3.2.1. Configuration Directives</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Directive</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@theme: light</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the theme to light mode (default)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@theme: dark</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the theme to dark mode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@theme: auto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the theme to automatically adapt to the user&#8217;s system preferences</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@layout: grid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arranges cards in a grid layout (default)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@layout: row</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arranges cards in a horizontal row</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@layout: column</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arranges cards in a vertical column</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_card_data_format"><a class="link" href="#_card_data_format">3.2.2. Card Data Format</a></h4>
+<div class="paragraph">
+<p>After the configuration directives, the card data is provided in a table format:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The title of the feature card</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A brief description of the feature</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Emoji</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An emoji that represents the feature (e.g., 🚀, 📊, 🔍)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColorScheme</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The color scheme for the card (BLUE, GREEN, ORANGE, PURPLE, RED, TEAL, GRAY)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_details"><a class="link" href="#_details">3.2.3. Details</a></h4>
+<div class="paragraph">
+<p>Additional details can be added to each card by including lines that start with <code>&gt;&gt;</code> immediately after the card&#8217;s main data row. These details will be displayed when the user clicks on the card.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Feature 1 | This is a description of feature 1 | 🚀 | BLUE
+&gt;&gt; This is a detail about feature 1
+&gt;&gt; Another detail about feature 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples"><a class="link" href="#_examples">4. Examples</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_grid_layout_default"><a class="link" href="#_grid_layout_default">4.1. Grid Layout (Default)</a></h3>
+<div class="paragraph">
+<p>The grid layout arranges cards in a grid pattern, with a maximum of 3 cards per row.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Cloud Storage | Secure, scalable storage for all your data | ☁️ | BLUE
+&gt;&gt; End-to-end encryption for all files
+&gt;&gt; Automatic backup and version history
+&gt;&gt; Access from any device, anywhere
+Real-time Collaboration | Work together with your team in real-time | 👥 | GREEN
+&gt;&gt; Simultaneous editing with live cursors
+&gt;&gt; Comments and suggestions
+&gt;&gt; Activity history and notifications
+Advanced Analytics | Gain insights from your data with powerful analytics | 📊 | PURPLE
+&gt;&gt; Custom dashboards and reports
+&gt;&gt; AI-powered trend analysis
+&gt;&gt; Export and share insights
+Mobile Access | Access your work on the go with our mobile apps | 📱 | ORANGE
+&gt;&gt; Native iOS and Android apps
+&gt;&gt; Offline mode with sync
+&gt;&gt; Push notifications for updates
+Automation | Save time with powerful automation tools | ⚙️ | TEAL
+&gt;&gt; Custom workflow creation
+&gt;&gt; Scheduled tasks and triggers
+&gt;&gt; Integration with third-party services
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="820" width="880" viewBox="0 0 880 820" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E3F2FD"/><stop offset="100%" style="stop-color:#BBDEFB"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#81C784"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E8F5E8"/><stop offset="100%" style="stop-color:#C8E6C9"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#66BB6A"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#F3E5F5"/><stop offset="100%" style="stop-color:#CE93D8"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#BA68C8"/><stop offset="100%" style="stop-color:#9C27B0"/></radialGradient><linearGradient id="cardGradient3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFF3E0"/><stop offset="100%" style="stop-color:#FFCC80"/></linearGradient><radialGradient id="emojiCircle3" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#FFB74D"/><stop offset="100%" style="stop-color:#FF9800"/></radialGradient><linearGradient id="cardGradient4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E0F2F1"/><stop offset="100%" style="stop-color:#B2DFDB"/></linearGradient><radialGradient id="emojiCircle4" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#4DB6AC"/><stop offset="100%" style="stop-color:#009688"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">☁️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#1976D2">Cloud Storage</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Secure, scalable storage for all</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">your data</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">End-to-end encryption for</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">all files</text><circle cx="25" cy="239" r="3" fill="#424242" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Automatic backup and version</text><text x="35" y="257" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">history</text><circle cx="25" cy="290" r="3" fill="#424242" opacity="0.7"/><text x="35" y="292" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Access from any device,</text><text x="35" y="308" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">anywhere</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">👥</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#388E3C">Real-time Collaboration</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Work together with your team in</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">real-time</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Simultaneous editing with</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">live cursors</text><circle cx="25" cy="239" r="3" fill="#424242" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Comments and suggestions</text><circle cx="25" cy="274" r="3" fill="#424242" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Activity history and</text><text x="35" y="292" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">notifications</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">📊</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#7B1FA2">Advanced Analytics</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Gain insights from your data</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">with powerful analytics</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Custom dashboards and</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">reports</text><circle cx="25" cy="239" r="3" fill="#424242" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">AI-powered trend analysis</text><circle cx="25" cy="274" r="3" fill="#424242" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Export and share insights</text></g></g>        <g transform="translate(0, 420)" class="feature-card" data-card="3"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient3)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle3)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">📱</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#E65100">Mobile Access</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Access your work on the go with</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">our mobile apps</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Native iOS and Android apps</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Offline mode with sync</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Push notifications for</text><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">updates</text></g></g>        <g transform="translate(300, 420)" class="feature-card" data-card="4"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient4)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle4)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">⚙️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#00695C">Automation</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Save time with powerful</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">automation tools</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Custom workflow creation</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Scheduled tasks and triggers</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Integration with third-party</text><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">services</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_row_layout"><a class="link" href="#_row_layout">4.2. Row Layout</a></h3>
+<div class="paragraph">
+<p>The row layout arranges cards in a single horizontal row.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Security | Enterprise-grade security for your data | 🔒 | RED
+&gt;&gt; SOC 2 Type II compliance
+&gt;&gt; GDPR and HIPAA compliant
+&gt;&gt; Regular security audits
+Performance | Lightning-fast performance for all operations | ⚡ | ORANGE
+&gt;&gt; Optimized algorithms
+&gt;&gt; Global CDN distribution
+&gt;&gt; Caching mechanisms
+Reliability | 99.99% uptime guarantee | 🛡️ | BLUE
+&gt;&gt; Redundant infrastructure
+&gt;&gt; Automatic failover
+&gt;&gt; 24/7 monitoring
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="400" width="880" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFEBEE"/><stop offset="100%" style="stop-color:#FFCDD2"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#EF5350"/><stop offset="100%" style="stop-color:#F44336"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFF3E0"/><stop offset="100%" style="stop-color:#FFCC80"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#FFB74D"/><stop offset="100%" style="stop-color:#FF9800"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E3F2FD"/><stop offset="100%" style="stop-color:#BBDEFB"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#81C784"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔒</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#D32F2F">Security</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Enterprise-grade security for</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">your data</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">SOC 2 Type II compliance</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">GDPR and HIPAA compliant</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Regular security audits</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">⚡</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#E65100">Performance</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Lightning-fast performance for</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">all operations</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Optimized algorithms</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Global CDN distribution</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Caching mechanisms</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🛡️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#1976D2">Reliability</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">99.99% uptime guarantee</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Redundant infrastructure</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Automatic failover</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">24/7 monitoring</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_column_layout"><a class="link" href="#_column_layout">4.3. Column Layout</a></h3>
+<div class="paragraph">
+<p>The column layout arranges cards in a single vertical column.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: dark
+@layout: column
+
+Title | Description | Emoji | ColorScheme
+AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
+&gt;&gt; Natural language processing
+&gt;&gt; Contextual understanding
+&gt;&gt; Continuous learning
+Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
+&gt;&gt; API access
+&gt;&gt; Webhook support
+&gt;&gt; Pre-built connectors
+Premium Support | Get help when you need it | 🎯 | TEAL
+&gt;&gt; 24/7 live chat
+&gt;&gt; Dedicated support team
+&gt;&gt; Priority response times
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg viewBox="0 0 280 1465" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#4A148C"/><stop offset="100%" style="stop-color:#6A1B9A"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#8E24AA"/><stop offset="100%" style="stop-color:#7B1FA2"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#1B5E20"/><stop offset="100%" style="stop-color:#2E7D32"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#4CAF50"/><stop offset="100%" style="stop-color:#388E3C"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#004D40"/><stop offset="100%" style="stop-color:#00695C"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#00796B"/><stop offset="100%" style="stop-color:#00695C"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.1) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3)); } .feature-card.expanded { filter: brightness(1.15) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4)); }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="475" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🤖</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#BA68C8">AI Assistant</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Intelligent assistant powered by</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">machine learning</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Natural language processing</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Contextual understanding</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Continuous learning</text></g></g>        <g transform="translate(0, 495)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="475" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔌</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#81C784">Custom Integrations</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Connect with your favorite tools</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">and services</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">API access</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Webhook support</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Pre-built connectors</text></g></g>        <g transform="translate(0, 990)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="475" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🎯</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#4DB6AC">Premium Support</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Get help when you need it</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">24/7 live chat</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Dedicated support team</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Priority response times</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_dark_theme"><a class="link" href="#_dark_theme">4.4. Dark Theme</a></h3>
+<div class="paragraph">
+<p>The dark theme provides a sleek, modern look that&#8217;s perfect for dark mode interfaces.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Data Visualization | Create beautiful, interactive charts and graphs | 📈 | BLUE
+&gt;&gt; Line, bar, and pie charts
+&gt;&gt; Interactive tooltips and zooming
+&gt;&gt; Custom color schemes
+Team Management | Organize and manage your team effectively | 👨‍💼 | GREEN
+&gt;&gt; Role-based permissions
+&gt;&gt; Team performance analytics
+&gt;&gt; Resource allocation tools
+Content Creation | Create and publish content with ease | 📝 | ORANGE
+&gt;&gt; Rich text editor
+&gt;&gt; Media library
+&gt;&gt; Publishing workflow
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="400" width="880" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#2C3E50"/><stop offset="100%" style="stop-color:#34495E"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#388E3C"/><stop offset="100%" style="stop-color:#2E7D32"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#1B5E20"/><stop offset="100%" style="stop-color:#2E7D32"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#4CAF50"/><stop offset="100%" style="stop-color:#388E3C"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#8D4E03"/><stop offset="100%" style="stop-color:#A0522D"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#F57C00"/><stop offset="100%" style="stop-color:#E65100"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.1) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3)); } .feature-card.expanded { filter: brightness(1.15) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4)); }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">📈</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#64B5F6">Data Visualization</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Create beautiful, interactive</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">charts and graphs</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Line, bar, and pie charts</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Interactive tooltips and</text><text x="35" y="241" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">zooming</text><circle cx="25" cy="274" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Custom color schemes</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">👨‍💼</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#81C784">Team Management</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Organize and manage your team</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">effectively</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Role-based permissions</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Team performance analytics</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Resource allocation tools</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">📝</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#FFB74D">Content Creation</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Create and publish content with</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">ease</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Rich text editor</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Media library</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Publishing workflow</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creative_use_cases"><a class="link" href="#_creative_use_cases">5. Creative Use Cases</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_product_features_showcase"><a class="link" href="#_product_features_showcase">5.1. Product Features Showcase</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Smart Notifications | Get notified about what matters most to you | 🔔 | BLUE
+&gt;&gt; Customizable notification preferences
+&gt;&gt; Priority-based filtering
+&gt;&gt; Scheduled quiet hours
+Cross-Platform Sync | Your data is always in sync across all devices | 🔄 | GREEN
+&gt;&gt; Real-time synchronization
+&gt;&gt; Conflict resolution
+&gt;&gt; Offline support with automatic sync
+Advanced Search | Find anything in seconds with our powerful search | 🔍 | PURPLE
+&gt;&gt; Full-text search
+&gt;&gt; Filters and advanced operators
+&gt;&gt; Recent and saved searches
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="400" width="880" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E3F2FD"/><stop offset="100%" style="stop-color:#BBDEFB"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#81C784"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E8F5E8"/><stop offset="100%" style="stop-color:#C8E6C9"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#66BB6A"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#F3E5F5"/><stop offset="100%" style="stop-color:#CE93D8"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#BA68C8"/><stop offset="100%" style="stop-color:#9C27B0"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔔</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#1976D2">Smart Notifications</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Get notified about what matters</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">most to you</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Customizable notification</text><text x="35" y="206" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">preferences</text><circle cx="25" cy="239" r="3" fill="#424242" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Priority-based filtering</text><circle cx="25" cy="274" r="3" fill="#424242" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Scheduled quiet hours</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔄</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#388E3C">Cross-Platform Sync</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Your data is always in sync</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">across all devices</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Real-time synchronization</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Conflict resolution</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Offline support with</text><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">automatic sync</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔍</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#7B1FA2">Advanced Search</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Find anything in seconds with</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">our powerful search</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Full-text search</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Filters and advanced</text><text x="35" y="241" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">operators</text><circle cx="25" cy="274" r="3" fill="#424242" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Recent and saved searches</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_service_tiers_comparison"><a class="link" href="#_service_tiers_comparison">5.2. Service Tiers Comparison</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Basic Plan | Essential features for individuals | 🥉 | GRAY
+&gt;&gt; 10GB storage
+&gt;&gt; Basic support
+&gt;&gt; Core features
+Pro Plan | Advanced features for professionals | 🥈 | BLUE
+&gt;&gt; 100GB storage
+&gt;&gt; Priority support
+&gt;&gt; Advanced features
+&gt;&gt; Team collaboration
+Enterprise Plan | Complete solution for organizations | 🥇 | PURPLE
+&gt;&gt; Unlimited storage
+&gt;&gt; 24/7 dedicated support
+&gt;&gt; All features
+&gt;&gt; Custom integrations
+&gt;&gt; SLA guarantee
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="400" width="880" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FAFAFA"/><stop offset="100%" style="stop-color:#E0E0E0"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#90A4AE"/><stop offset="100%" style="stop-color:#607D8B"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E3F2FD"/><stop offset="100%" style="stop-color:#BBDEFB"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#81C784"/><stop offset="100%" style="stop-color:#4CAF50"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#F3E5F5"/><stop offset="100%" style="stop-color:#CE93D8"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#BA68C8"/><stop offset="100%" style="stop-color:#9C27B0"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🥉</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#455A64">Basic Plan</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Essential features for</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">individuals</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">10GB storage</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Basic support</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Core features</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🥈</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#1976D2">Pro Plan</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Advanced features for</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">professionals</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">100GB storage</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Priority support</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Advanced features</text><circle cx="25" cy="293" r="3" fill="#424242" opacity="0.7"/><text x="35" y="295" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Team collaboration</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#E1E1E1" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🥇</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#7B1FA2">Enterprise Plan</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Complete solution for</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#424242" font-family="system-ui, -apple-system, sans-serif">organizations</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#424242" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Unlimited storage</text><circle cx="25" cy="223" r="3" fill="#424242" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">24/7 dedicated support</text><circle cx="25" cy="258" r="3" fill="#424242" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">All features</text><circle cx="25" cy="293" r="3" fill="#424242" opacity="0.7"/><text x="35" y="295" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">Custom integrations</text><circle cx="25" cy="328" r="3" fill="#424242" opacity="0.7"/><text x="35" y="330" font-size="13" fill="#424242" font-family="system-ui, -apple-system, sans-serif">SLA guarantee</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+<div class="sect2">
+<h3 id="_technology_stack_overview"><a class="link" href="#_technology_stack_overview">5.3. Technology Stack Overview</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Frontend | Modern, responsive user interface | 🖥️ | BLUE
+&gt;&gt; React.js for component-based UI
+&gt;&gt; TypeScript for type safety
+&gt;&gt; Tailwind CSS for styling
+Backend | Scalable, reliable server architecture | ⚙️ | GREEN
+&gt;&gt; Node.js runtime
+&gt;&gt; Express.js framework
+&gt;&gt; GraphQL API
+Database | High-performance data storage | 🗄️ | ORANGE
+&gt;&gt; PostgreSQL for relational data
+&gt;&gt; Redis for caching
+&gt;&gt; MongoDB for document storage
+Infrastructure | Cloud-native deployment | ☁️ | PURPLE
+&gt;&gt; Docker containers
+&gt;&gt; Kubernetes orchestration
+&gt;&gt; AWS cloud services
+DevOps | Continuous integration and delivery | 🔄 | RED
+&gt;&gt; GitHub Actions for CI/CD
+&gt;&gt; Automated testing
+&gt;&gt; Infrastructure as code
+----</code></pre>
+</div>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg height="820" width="880" viewBox="0 0 880 820" xmlns="http://www.w3.org/2000/svg"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-23</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="cardGradient0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#2C3E50"/><stop offset="100%" style="stop-color:#34495E"/></linearGradient><radialGradient id="emojiCircle0" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#388E3C"/><stop offset="100%" style="stop-color:#2E7D32"/></radialGradient><linearGradient id="cardGradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#1B5E20"/><stop offset="100%" style="stop-color:#2E7D32"/></linearGradient><radialGradient id="emojiCircle1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#4CAF50"/><stop offset="100%" style="stop-color:#388E3C"/></radialGradient><linearGradient id="cardGradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#8D4E03"/><stop offset="100%" style="stop-color:#A0522D"/></linearGradient><radialGradient id="emojiCircle2" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#F57C00"/><stop offset="100%" style="stop-color:#E65100"/></radialGradient><linearGradient id="cardGradient3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#4A148C"/><stop offset="100%" style="stop-color:#6A1B9A"/></linearGradient><radialGradient id="emojiCircle3" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#8E24AA"/><stop offset="100%" style="stop-color:#7B1FA2"/></radialGradient><linearGradient id="cardGradient4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#B71C1C"/><stop offset="100%" style="stop-color:#C62828"/></linearGradient><radialGradient id="emojiCircle4" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:#E53935"/><stop offset="100%" style="stop-color:#D32F2F"/></radialGradient></defs><style>.feature-card { cursor: pointer; transition: filter 0.2s ease, opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15)); } .feature-card.expanded { filter: brightness(1.08) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.2)); } .feature-card:hover .card-background { opacity: 0.95; } .card-details { transition: opacity 0.3s ease, transform 0.3s ease; } .card-description { transition: opacity 0.2s ease; } .card-background { transition: opacity 0.2s ease; } .feature-card:hover:not(.expanded) { filter: brightness(1.1) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3)); } .feature-card.expanded { filter: brightness(1.15) drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4)); }</style>        <g transform="translate(0, 0)" class="feature-card" data-card="0"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient0)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle0)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🖥️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#64B5F6">Frontend</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Modern, responsive user</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">interface</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">React.js for component-based</text><text x="35" y="206" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">UI</text><circle cx="25" cy="239" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">TypeScript for type safety</text><circle cx="25" cy="274" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Tailwind CSS for styling</text></g></g>        <g transform="translate(300, 0)" class="feature-card" data-card="1"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient1)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle1)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">⚙️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#81C784">Backend</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Scalable, reliable server</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">architecture</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Node.js runtime</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Express.js framework</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">GraphQL API</text></g></g>        <g transform="translate(600, 0)" class="feature-card" data-card="2"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient2)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle2)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🗄️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#FFB74D">Database</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">High-performance data storage</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">PostgreSQL for relational</text><text x="35" y="206" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">data</text><circle cx="25" cy="239" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="241" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Redis for caching</text><circle cx="25" cy="274" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="276" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">MongoDB for document storage</text></g></g>        <g transform="translate(0, 420)" class="feature-card" data-card="3"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient3)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle3)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">☁️</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#BA68C8">Infrastructure</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Cloud-native deployment</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Docker containers</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Kubernetes orchestration</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">AWS cloud services</text></g></g>        <g transform="translate(300, 420)" class="feature-card" data-card="4"><!-- Card background --><rect class="card-background" x="0" y="0" width="280" height="400" rx="20" ry="20" fill="url(#cardGradient4)" stroke="#444" stroke-width="1"/><!-- Emoji circle background --><path d="M 60 0 L 220 0 Q 220 60 140 60 Q 60 60 60 0 Z" fill="url(#emojiCircle4)"/><!-- Emoji --><text x="140" y="40" text-anchor="middle" font-size="32" dominant-baseline="middle">🔄</text><!-- Title --><text x="140" y="120" text-anchor="middle" font-size="24" font-weight="bold" fill="#EF5350">DevOps</text><!-- Description (will be hidden when expanded) --><g class="card-description"><text x="140" y="160" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Continuous integration and</text><text x="140" y="178" text-anchor="middle" font-size="16" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">delivery</text></g><!-- Details (initially hidden) --><g class="card-details" style="opacity: 0; transform: translateY(20px);"><circle cx="25" cy="188" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="190" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">GitHub Actions for CI/CD</text><circle cx="25" cy="223" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="225" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Automated testing</text><circle cx="25" cy="258" r="3" fill="#BDBDBD" opacity="0.7"/><text x="35" y="260" font-size="13" fill="#BDBDBD" font-family="system-ui, -apple-system, sans-serif">Infrastructure as code</text></g></g><script type="text/javascript"><![CDATA[ document.addEventListener('DOMContentLoaded', function() { /* Add click handlers to all feature cards */ const cards = document.querySelectorAll('.feature-card'); cards.forEach(function(card) { let isExpanded = false; card.addEventListener('click', function() { const details = card.querySelector('.card-details'); const description = card.querySelector('.card-description'); const emoji = card.querySelector('text[dominant-baseline="middle"]'); if (!isExpanded) { /* Hide description and show details */ if (description) { description.style.opacity = '0'; description.style.transition = 'opacity 0.2s ease'; } /* Show details after description fades out */ setTimeout(function() { details.style.opacity = '1'; details.style.transform = 'translateY(0)'; }, 200); /* Animate emoji */ if (emoji) { emoji.style.transform = 'translateY(-10px)'; emoji.style.transition = 'transform 0.3s ease'; } /* Add expanded class for styling */ card.classList.add('expanded'); isExpanded = true; } else { /* Show description and hide details */ details.style.opacity = '0'; details.style.transform = 'translateY(20px)'; /* Show description after details fade out */ setTimeout(function() { if (description) { description.style.opacity = '1'; } }, 200); /* Reset emoji position */ if (emoji) { emoji.style.transform = 'translateY(0)'; } /* Remove expanded class */ card.classList.remove('expanded'); isExpanded = false; } }); /* Add hover effects programmatically if needed */ card.addEventListener('mouseenter', function() { if (!card.classList.contains('expanded')) { card.style.filter = 'brightness(1.05) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.15))'; } }); card.addEventListener('mouseleave', function() { if (!card.classList.contains('expanded')) { card.style.filter = ''; } }); }); }); ]]></script></svg></div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices"><a class="link" href="#_best_practices">6. Best Practices</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_creating_effective_feature_cards"><a class="link" href="#_creating_effective_feature_cards">6.1. Creating Effective Feature Cards</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Keep Descriptions Concise</strong>: Aim for 1-2 sentences that clearly communicate the value proposition.</p>
+</li>
+<li>
+<p><strong>Choose Relevant Emojis</strong>: Select emojis that visually represent the feature or concept.</p>
+</li>
+<li>
+<p><strong>Use Consistent Color Schemes</strong>: Maintain visual harmony by using complementary colors or a consistent color theme.</p>
+</li>
+<li>
+<p><strong>Provide Meaningful Details</strong>: Include 2-4 detail points that expand on the feature&#8217;s capabilities or benefits.</p>
+</li>
+<li>
+<p><strong>Group Related Features</strong>: Organize cards logically to tell a cohesive story about your product or service.</p>
+</li>
+<li>
+<p><strong>Consider the Layout</strong>: Choose the layout that best suits your content and the context in which it will be displayed.</p>
+</li>
+<li>
+<p><strong>Match Theme to Context</strong>: Use the light theme for light backgrounds and the dark theme for dark backgrounds.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_design_tips"><a class="link" href="#_design_tips">6.2. Design Tips</a></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Visual Hierarchy</strong>: Place the most important features first in grid layouts, or at the top in column layouts.</p>
+</li>
+<li>
+<p><strong>Color Psychology</strong>: Use colors strategically (e.g., blue for trust, green for growth, red for important features).</p>
+</li>
+<li>
+<p><strong>White Space</strong>: The cards are designed with appropriate spacing, so don&#8217;t overcrowd with too much text.</p>
+</li>
+<li>
+<p><strong>Interaction Cues</strong>: Inform users that cards are interactive by adding a note or instruction above the cards.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_api"><a class="link" href="#_api">7. API</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Feature Card Maker provides a REST API for generating feature cards:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GET /api/featurecard</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an HTML form for creating feature cards</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POST /api/featurecard/render</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Processes the input data and returns the rendered SVG</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="link" href="#_troubleshooting">8. Troubleshooting</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_common_issues"><a class="link" href="#_common_issues">8.1. Common Issues</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>If cards are not appearing, check that your table format is correct with proper column separators (<code>|</code>).</p>
+</li>
+<li>
+<p>If emojis don&#8217;t display correctly, ensure you&#8217;re using valid Unicode emoji characters.</p>
+</li>
+<li>
+<p>If the layout doesn&#8217;t look right, verify that you&#8217;ve specified a valid layout option (<code>grid</code>, <code>row</code>, or <code>column</code>).</p>
+</li>
+<li>
+<p>If colors appear incorrect, confirm that you&#8217;re using one of the supported color schemes.</p>
+</li>
+<li>
+<p>If details aren&#8217;t showing when clicking a card, make sure you&#8217;ve added detail lines starting with <code>&gt;&gt;</code> immediately after the card&#8217;s main data row.</p>
+</li>
+<li>
+<p>Long text in descriptions and details will automatically wrap to fit within the card boundaries, so you don&#8217;t need to worry about text overflow.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_support"><a class="link" href="#_support">8.2. Support</a></h3>
+<div class="paragraph">
+<p>For issues or feature requests, please contact the DocOps team.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>
