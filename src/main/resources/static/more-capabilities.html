@@ -14,6 +14,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/xml.min.js"></script>
+    <style>
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .demo-container {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            background: #f9fafb;
+        }
+        .demo-output {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
 </head>
 <body class="bg-gray-50 text-gray-900">
 <!-- Header -->
@@ -58,6 +89,7 @@
             <a href="#color-gradient-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🎨 Color Gradients</a>
             <a href="#tree-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🌳 Tree Chart</a>
             <a href="#quadrant-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Quadrant Chart</a>
+            <a href="#feature-card-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🃏 Feature Cards</a>
         </div>
     </div>
 </section>
@@ -404,7 +436,78 @@ Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
             </div>
         </div>
 
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+            <h2 class="text-2xl font-bold mb-2">Interactive Feature Cards</h2>
+            <p class="text-purple-100">Create engaging, clickable cards with expandable details perfect for showcasing features, services, or team members.</p>
+        </div>
+
+        <div class="p-6">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Example Usage:</h3>
+                    <div class="code-block">
+                        @theme: dark
+                        @layout: column
+
+                        Title | Description | Emoji | ColorScheme
+                        AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
+                        >> Natural language processing
+                        >> Contextual understanding
+                        >> Continuous learning
+                        Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
+                        >> API access
+                        >> Webhook support
+                        >> Pre-built connectors
+                        Premium Support | Get help when you need it | 🎯 | TEAL
+                        >> 24/7 live chat
+                        >> Dedicated support team
+                        >> Priority response times
+                    </div>
+
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">Features:</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• <strong>Interactive:</strong> Click cards to expand/collapse details</li>
+                            <li>• <strong>Responsive:</strong> Adapts to different screen sizes</li>
+                            <li>• <strong>Customizable:</strong> Multiple color schemes and layouts</li>
+                            <li>• <strong>Accessible:</strong> Keyboard navigation and ARIA support</li>
+                            <li>• <strong>Smooth animations:</strong> CSS transitions and transforms</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Live Demo:</h3>
+                    <div class="demo-container">
+                        <div class="demo-output" id="featurecard-demo">
+                            <!-- Feature card demo will be loaded here -->
+                            <div class="text-center">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                                <p class="text-gray-600">Loading interactive demo...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button onclick="loadFeatureCardDemo('light')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+                            Light Theme
+                        </button>
+                        <button onclick="loadFeatureCardDemo('dark')" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                            Dark Theme
+                        </button>
+                        <button onclick="loadFeatureCardDemo('grid')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                            Grid Layout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    </div>
+
+
 </section>
 
 <!-- Footer -->
@@ -505,5 +608,119 @@ Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
         }
     });
 </script>
+<script>
+    // Feature Card Demo Functions
+    async function loadFeatureCardDemo(variant = 'light') {
+        const demoContainer = document.getElementById('featurecard-demo');
+
+        // Show loading state
+        demoContainer.innerHTML = `
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading ${variant} theme demo...</p>
+                </div>
+            `;
+
+        try {
+            // Prepare the demo data based on variant
+            let demoData;
+            switch(variant) {
+                case 'dark':
+                    demoData = `@theme: dark
+@layout: column
+
+Title | Description | Emoji | ColorScheme
+AI Assistant | Smart AI-powered assistant | 🤖 | PURPLE
+>> Natural language processing
+>> Contextual understanding
+Development Tools | Powerful development environment | 🛠️ | BLUE
+>> Code completion
+>> Real-time debugging
+>> Git integration`;
+                    break;
+                case 'grid':
+                    demoData = `@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Docs | Documentation system | 📚 | GREEN
+>> Easy authoring
+>> Version control
+Analytics | Usage insights | 📊 | ORANGE
+>> Real-time metrics
+>> Custom dashboards
+Security | Enterprise security | 🔒 | RED
+>> SSO integration
+>> Audit logging`;
+                    break;
+                default:
+                    demoData = `@theme: light
+@layout: column
+
+Title | Description | Emoji | ColorScheme
+Feature Cards | Interactive card components | 🎴 | PURPLE
+>> Click to expand details
+>> Smooth animations
+>> Responsive design
+Easy Integration | Simple setup process | ⚡ | GREEN
+>> Copy and paste
+>> No configuration needed
+>> Works everywhere`;
+            }
+
+            // Make API call to generate feature card
+            const response = await fetch('/api/featurecard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+                body: demoData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const svgContent = await response.text();
+
+            // Display the generated SVG
+            demoContainer.innerHTML = `
+                    <div class="w-full max-w-md mx-auto">
+                        ${svgContent}
+                    </div>
+                `;
+
+        } catch (error) {
+            console.error('Error loading feature card demo:', error);
+            demoContainer.innerHTML = `
+                    <div class="text-center text-red-600">
+                        <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                        <p class="mb-2">Failed to load demo</p>
+                        <p class="text-sm text-gray-500">Please check the API endpoint</p>
+                    </div>
+                `;
+        }
+    }
+
+    // Load initial demo when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFeatureCardDemo('light');
+    });
+
+    // Add some interactive behavior for better UX
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.feature-card')) {
+            // Add a subtle feedback effect
+            const card = e.target.closest('.feature-card');
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                card.style.transform = '';
+            }, 150);
+        }
+    });
+</script>
+
 </body>
 </html>
