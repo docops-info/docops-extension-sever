@@ -14,6 +14,7 @@ import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
+import io.docops.docopsextensionssupport.scorecard.FeatureCardHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
@@ -73,7 +74,8 @@ class DocOpsRouter (
         "metricscard" to MetricsCardHandler(),
         "wordcloud" to WordCloudHandler(),
         "quadrant" to QuadrantHandler(),
-        "swim" to SwimLaneHandler()
+        "swim" to SwimLaneHandler(),
+        "feature" to FeatureCardHandler()
         // Add more handlers as needed
     )
 
