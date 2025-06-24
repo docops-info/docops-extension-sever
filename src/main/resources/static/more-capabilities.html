@@ -436,73 +436,75 @@ Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
-            <h2 class="text-2xl font-bold mb-2">Interactive Feature Cards</h2>
-            <p class="text-purple-100">Create engaging, clickable cards with expandable details perfect for showcasing features, services, or team members.</p>
-        </div>
+        <div class="capability-card">
+            <div class="capability-header">
+                <h2 class="text-3xl font-bold mb-3">🎴 Interactive Feature Cards</h2>
+                <p class="text-lg opacity-90">Create engaging, clickable cards with expandable details perfect for showcasing features, services, or team members.</p>
+            </div>
 
-        <div class="p-6">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Example Usage:</h3>
-                    <div class="code-block">
-                        @theme: dark
-                        @layout: column
+            <div class="capability-content">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Example Usage:</h3>
+                        <div class="code-block">
+                            @theme: dark
+                            @layout: column
 
-                        Title | Description | Emoji | ColorScheme
-                        AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
-                        >> Natural language processing
-                        >> Contextual understanding
-                        >> Continuous learning
-                        Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
-                        >> API access
-                        >> Webhook support
-                        >> Pre-built connectors
-                        Premium Support | Get help when you need it | 🎯 | TEAL
-                        >> 24/7 live chat
-                        >> Dedicated support team
-                        >> Priority response times
-                    </div>
+                            Title | Description | Emoji | ColorScheme
+                            AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
+                            >> Natural language processing
+                            >> Contextual understanding
+                            >> Continuous learning
+                            Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
+                            >> API access
+                            >> Webhook support
+                            >> Pre-built connectors
+                            Premium Support | Get help when you need it | 🎯 | TEAL
+                            >> 24/7 live chat
+                            >> Dedicated support team
+                            >> Priority response times
+                        </div>
 
-                    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
-                        <h4 class="font-semibold text-blue-800 mb-2">Features:</h4>
-                        <ul class="text-sm text-blue-700 space-y-1">
-                            <li>• <strong>Interactive:</strong> Click cards to expand/collapse details</li>
-                            <li>• <strong>Responsive:</strong> Adapts to different screen sizes</li>
-                            <li>• <strong>Customizable:</strong> Multiple color schemes and layouts</li>
-                            <li>• <strong>Accessible:</strong> Keyboard navigation and ARIA support</li>
-                            <li>• <strong>Smooth animations:</strong> CSS transitions and transforms</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Live Demo:</h3>
-                    <div class="demo-container">
-                        <div class="demo-output" id="featurecard-demo">
-                            <!-- Feature card demo will be loaded here -->
-                            <div class="text-center">
-                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-                                <p class="text-gray-600">Loading interactive demo...</p>
-                            </div>
+                        <div class="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-800 mb-3">Key Features:</h4>
+                            <ul class="text-sm text-blue-700 space-y-2">
+                                <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> <strong>Interactive:</strong> Click cards to expand/collapse details</li>
+                                <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> <strong>Responsive:</strong> Adapts to different screen sizes</li>
+                                <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> <strong>Customizable:</strong> Multiple color schemes and layouts</li>
+                                <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> <strong>Accessible:</strong> Keyboard navigation and ARIA support</li>
+                                <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> <strong>Smooth animations:</strong> CSS transitions and transforms</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        <button onclick="loadFeatureCardDemo('light')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors text-sm">
-                            Light Theme
-                        </button>
-                        <button onclick="loadFeatureCardDemo('dark')" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                            Dark Theme
-                        </button>
-                        <button onclick="loadFeatureCardDemo('grid')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                            Grid Layout
-                        </button>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Live Interactive Demo:</h3>
+                        <div class="demo-container">
+                            <div class="demo-output" id="featurecard-demo">
+                                <div class="text-center">
+                                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                                    <p class="text-gray-600">Loading interactive demo...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <button onclick="loadFeatureCardDemo('light')" class="px-4 py-2 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:border-blue-500 hover:text-blue-600 transition-all text-sm font-medium shadow-sm">
+                                Light Theme
+                            </button>
+                            <button onclick="loadFeatureCardDemo('dark')" class="px-4 py-2 bg-white border-2 border-gray-700 text-gray-700 rounded-lg hover:bg-gray-700 hover:text-white transition-all text-sm font-medium shadow-sm">
+                                Dark Theme
+                            </button>
+                            <button onclick="loadFeatureCardDemo('grid')" class="px-4 py-2 bg-white border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-600 hover:text-white transition-all text-sm font-medium shadow-sm">
+                                Grid Layout
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     </div>
@@ -609,11 +611,9 @@ Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
     });
 </script>
 <script>
-    // Feature Card Demo Functions
     async function loadFeatureCardDemo(variant = 'light') {
         const demoContainer = document.getElementById('featurecard-demo');
 
-        // Show loading state
         demoContainer.innerHTML = `
                 <div class="text-center">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
@@ -622,7 +622,6 @@ Feature D | 85 | 25 | 9 | #ef4444 | Low impact, high effort
             `;
 
         try {
-            // Prepare the demo data based on variant
             let demoData;
             switch(variant) {
                 case 'dark':
@@ -635,8 +634,7 @@ AI Assistant | Smart AI-powered assistant | 🤖 | PURPLE
 >> Contextual understanding
 Development Tools | Powerful development environment | 🛠️ | BLUE
 >> Code completion
->> Real-time debugging
->> Git integration`;
+>> Real-time debugging`;
                     break;
                 case 'grid':
                     demoData = `@theme: light
@@ -648,10 +646,7 @@ Docs | Documentation system | 📚 | GREEN
 >> Version control
 Analytics | Usage insights | 📊 | ORANGE
 >> Real-time metrics
->> Custom dashboards
-Security | Enterprise security | 🔒 | RED
->> SSO integration
->> Audit logging`;
+>> Custom dashboards`;
                     break;
                 default:
                     demoData = `@theme: light
@@ -661,15 +656,12 @@ Title | Description | Emoji | ColorScheme
 Feature Cards | Interactive card components | 🎴 | PURPLE
 >> Click to expand details
 >> Smooth animations
->> Responsive design
 Easy Integration | Simple setup process | ⚡ | GREEN
 >> Copy and paste
->> No configuration needed
->> Works everywhere`;
+>> No configuration needed`;
             }
 
-            // Make API call to generate feature card
-            const response = await fetch('/api/featurecard', {
+            const response = await fetch('api/featurecard', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'text/plain',
@@ -682,13 +674,7 @@ Easy Integration | Simple setup process | ⚡ | GREEN
             }
 
             const svgContent = await response.text();
-
-            // Display the generated SVG
-            demoContainer.innerHTML = `
-                    <div class="w-full max-w-md mx-auto">
-                        ${svgContent}
-                    </div>
-                `;
+            demoContainer.innerHTML = `<div class="w-full max-w-md mx-auto">${svgContent}</div>`;
 
         } catch (error) {
             console.error('Error loading feature card demo:', error);
@@ -697,30 +683,18 @@ Easy Integration | Simple setup process | ⚡ | GREEN
                         <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
-                        <p class="mb-2">Failed to load demo</p>
+                        <p class="mb-2 font-medium">Failed to load demo</p>
                         <p class="text-sm text-gray-500">Please check the API endpoint</p>
                     </div>
                 `;
         }
     }
 
-    // Load initial demo when page loads
     document.addEventListener('DOMContentLoaded', function() {
         loadFeatureCardDemo('light');
     });
-
-    // Add some interactive behavior for better UX
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.feature-card')) {
-            // Add a subtle feedback effect
-            const card = e.target.closest('.feature-card');
-            card.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                card.style.transform = '';
-            }, 150);
-        }
-    });
 </script>
+
 
 </body>
 </html>
