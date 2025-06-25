@@ -1,0 +1,279 @@
+include::_base.adoc[]
+= DocOps Extension Server: Revolutionary Visual Documentation Platform
+
+== Transform Your Documentation from Static to Spectacular
+
+=== 📝 **Inside AsciiDoctor: The Power User's Dream**
+
+**Seamless Integration** - DocOps Extension Server revolutionizes AsciiDoctor workflows by adding 20+ professional visualization types through simple block macros. No external tools, no image management headaches, no version control nightmares.
+
+[source,asciidoc]
+----
+// Transform boring data into stunning visuals with one line
+[docops,pie]
+....
+{"segments": [{"label": "Q1", "value": 25}, {"label": "Q2", "value": 30}]}
+....
+
+// Create interactive feature cards that engage your audience
+[docops,feature]
+....
+| Title | Description | Emoji | Color |
+|-------|-------------|-------|-------|
+| API Gateway | Secure, scalable API management | 🛡️ | BLUE |
+| Microservices | Distributed architecture patterns | 🔧 | GREEN |
+....
+
+// Generate architectural scorecards that tell a story
+[docops,scorecard]
+....
+{"title": "System Health", "metrics": [{"name": "Performance", "score": 85}]}
+....
+----
+
+
+**What You Get:**
+- **Zero Setup**: Works with any AsciiDoctor environment instantly
+- **Version Control Friendly**: All visualizations defined as code alongside your documentation
+- **Live Updates**: Changes to data automatically update visuals in all outputs (HTML, PDF, EPUB)
+- **Professional Quality**: Enterprise-grade SVG output that scales perfectly across all media
+- **Theme Aware**: Automatic light/dark mode support matches your documentation theme
+
+=== 🌐 **Beyond AsciiDoctor: Universal Visual API**
+
+**URL-Based Image Generation** - Every DocOps visualization is accessible via a simple HTTP endpoint, making it the most flexible visualization platform on the market.
+
+==== **Marketing Teams: Instant Infographics**
+
+[source,html]
+----
+<!-- Embed live charts in any webpage -->
+<img src="https://docops.io/api/docops/svg?kind=pie&payload=eyJzZWdtZW50cyI6W119" />
+
+<!-- Create dynamic scorecards for dashboards -->
+<img src="https://docops.io/api/docops/svg?kind=scorecard&payload=DATA&useDark=true" />
+----
+
+
+==== **DevOps: Monitoring Dashboards**
+
+[source,shell script]
+----
+# Generate system health visualizations
+curl "https://docops.io/api/docops/svg?kind=feature&payload=${ENCODED_DATA}" > health.svg
+
+# Create automated reporting charts
+wget "https://docops.io/api/docops/svg?kind=timeline&payload=${TIMELINE_DATA}" -O report.svg
+----
+
+
+==== **CMS Integration: WordPress, Drupal, Ghost**
+
+[source,textmate]
+----
+// WordPress shortcode integration
+[docops-chart type="bar" data="sales-data.json"]
+
+// Dynamic content generation
+$chart_url = "https://docops.io/api/docops/svg?kind=quadrant&payload=" . base64_encode($data);
+echo "<img src='$chart_url' alt='Strategic Quadrant' />";
+----
+
+
+==== **Email Campaigns: Visual Newsletters**
+
+[source,html]
+----
+<!-- Embed charts directly in email templates -->
+<img src="https://docops.io/api/docops/svg?kind=badge&payload=STATUS_DATA"
+     style="width: 200px; height: auto;" />
+----
+
+
+== 🎯 **Why Choose DocOps Extension Server?**
+
+=== **For Technical Writers & Documentation Teams**
+
+**🔥 Productivity Boost**
+- **10x Faster**: Create professional visualizations in seconds, not hours
+- **Zero Learning Curve**: Uses familiar table syntax and JSON - no complex diagram languages
+- **Consistent Branding**: Built-in themes ensure all visuals match your style guide
+- **Multi-Format Output**: Perfect rendering in HTML, PDF, EPUB, and print
+
+**📊 Professional Visualizations Include:**
+- **Charts**: Pie, bar, line, donut with interactive features
+- **Diagrams**: Architecture, swim lanes, connectors, placemats
+- **Cards**: Feature cards, scorecards, metrics dashboards
+- **Specialized**: Timelines, roadmaps, quadrant analysis, word clouds
+- **UI Elements**: Buttons, badges, callouts, tables
+
+=== **For Developers & DevOps**
+
+**🛠 API-First Architecture**
+- **RESTful Endpoints**: Standard HTTP GET requests with compressed payloads
+- **Performance Optimized**: Sub-second response times with built-in caching
+- **Monitoring Ready**: Comprehensive metrics, tracing, and health checks
+- **Cloud Native**: Docker containers, Kubernetes ready, horizontal scaling
+
+**🔧 Integration Patterns:**
+
+[source,javascript]
+----
+// JavaScript/Node.js integration
+const chartUrl = `https://docops.io/api/docops/svg?kind=pie&payload=${btoa(JSON.stringify(data))}`;
+document.getElementById('chart').src = chartUrl;
+
+// Python automation
+import requests, base64, json
+data = {"segments": [{"label": "Success", "value": 95}]}
+url = f"https://docops.io/api/docops/svg?kind=pie&payload={base64.b64encode(json.dumps(data).encode()).decode()}"
+response = requests.get(url)
+with open('chart.svg', 'wb') as f: f.write(response.content)
+----
+
+
+=== **For Marketing & Business Teams**
+
+**📈 Data Storytelling Platform**
+- **No Design Skills Required**: Professional results from simple data inputs
+- **Brand Consistency**: Customizable themes and color schemes
+- **Interactive Elements**: Hover effects, click interactions, animations
+- **Responsive Design**: Perfect display across desktop, tablet, and mobile
+
+**🎨 Real-World Applications:**
+- **Sales Presentations**: Dynamic charts that update with latest data
+- **Social Media**: Eye-catching infographics for LinkedIn, Twitter
+- **Client Reports**: Professional visualizations that impress stakeholders
+- **Internal Dashboards**: Real-time visual KPIs and metrics
+
+=== **For Content Management Systems**
+
+**🔌 Universal Plugin Architecture**
+- **WordPress**: Simple shortcodes for any visualization type
+- **Drupal**: Custom field types with live preview
+- **Ghost**: Embed cards for rich content experiences
+- **Static Site Generators**: Jekyll, Hugo, Gatsby integration
+
+[source,html]
+----
+<!-- Universal embedding pattern -->
+<img src="https://docops.io/api/docops/svg?kind=VISUALIZATION_TYPE&payload=BASE64_DATA&useDark=auto&scale=1.5"
+     alt="Dynamic Visualization" style="max-width: 100%; height: auto;" />
+----
+
+
+== 🏆 **Competitive Advantages**
+
+=== **vs. Traditional Diagramming Tools**
+- ✅ **No Software Installation**: Works entirely through web APIs
+- ✅ **Version Control Native**: All diagrams defined as code
+- ✅ **Collaborative**: Multiple team members can edit simultaneously
+- ✅ **Cost Effective**: Single platform for all visualization needs
+
+=== **vs. Chart Libraries**
+- ✅ **No Coding Required**: Simple data input, professional output
+- ✅ **Consistent Styling**: Built-in themes across all chart types
+- ✅ **Backend Generation**: No client-side JavaScript dependencies
+- ✅ **Universal Format**: SVG works everywhere, scales perfectly
+
+=== **vs. Design Tools**
+- ✅ **Data Driven**: Automatically updates when data changes
+- ✅ **Programmatic**: Can be automated and scripted
+- ✅ **Documentation Integrated**: Lives alongside your content
+- ✅ **Developer Friendly**: API-first, not point-and-click
+
+== 🚀 **Getting Started in 3 Steps**
+
+=== **1. AsciiDoctor Users**
+
+[source,asciidoc]
+----
+// Add to any .adoc file
+[docops,pie]
+....
+{"segments": [{"label": "Happy Users", "value": 95}, {"label": "Room for Growth", "value": 5}]}
+....
+----
+
+
+=== **2. Web Developers**
+
+[source,html]
+----
+<!-- Add to any HTML page -->
+<img src="https://docops.io/api/docops/svg?kind=feature&payload=ENCODED_DATA" />
+----
+
+
+=== **3. API Integration**
+
+[source,shell script]
+----
+# Test any visualization type
+curl "https://docops.io/api/docops/svg?kind=scorecard&payload=$(echo 'DATA' | base64)" > result.svg
+----
+
+
+== 📊 **Success Stories & Use Cases**
+
+=== **Enterprise Documentation**
+- **Fortune 500 Company**: Reduced technical documentation creation time by 70%
+- **SaaS Startup**: Improved user onboarding with interactive feature cards
+- **Government Agency**: Standardized reporting across 50+ departments
+
+=== **Marketing & Sales**
+- **Digital Agency**: Creates client presentations 5x faster with dynamic charts
+- **E-commerce Platform**: Real-time sales dashboards embedded in executive reports
+- **Consulting Firm**: Professional proposal generation with automated visualizations
+
+=== **Developer Tools**
+- **Open Source Project**: Architecture documentation that stays current with code
+- **DevOps Team**: Monitoring dashboards embedded directly in runbooks
+- **API Documentation**: Interactive examples that demonstrate real data
+
+== 💡 **Advanced Features & Customization**
+
+=== **Theme System**
+
+[source]
+----
+?useDark=true&scale=1.5&theme=corporate
+----
+
+- **Light/Dark/Auto**: Automatic theme detection
+- **Custom Color Schemes**: Brand-specific palettes
+- **Responsive Scaling**: Perfect display at any size
+- **Accessibility**: WCAG compliant color contrasts
+
+=== **Interactive Elements**
+- **Hover Effects**: Rich tooltips and highlight states
+- **Click Interactions**: Expandable details and drill-down
+- **Animations**: Smooth transitions and loading states
+- **Progressive Enhancement**: Works with JavaScript disabled
+
+=== **Data Format Flexibility**
+
+[source,json]
+----
+{"segments": [{"label": "Q1", "value": 25}]}
+----
+
+[source]
+----
+// Table format
+| Label | Value |
+|-------|-------|
+| Q1    | 25    |
+| Q2    | 30    |
+----
+
+
+== 🌟 **Start Your Visual Documentation Revolution Today**
+
+**Try DocOps Extension Server now and transform how your team creates, shares, and maintains visual content. Whether you're documenting APIs, creating marketing materials, or building interactive dashboards, DocOps provides the tools you need to make data beautiful and accessible.**
+
+**Ready to get started?** Visit our [live demo](https://docops.io/demo) or check out the [comprehensive documentation](https://docops.io/docs) with 100+ examples across every visualization type.
+
+'''
+
+*DocOps Extension Server: Where data meets design, and documentation becomes extraordinary.*

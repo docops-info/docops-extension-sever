@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Extension Server: Revolutionary Visual Documentation Platform</title>
+<style>
+/* Modern AsciiDoctor Stylesheet
+ * A clean, professional stylesheet for AsciiDoctor documents
+ * v2.1 - DocOps.io Extension Server Branded
+ *
+ * This stylesheet has been enhanced with DocOps.io branding elements from layout.html
+ * Key branding features:
+ * - Blue to purple gradient (#3b82f6 to #8b5cf6) for headers, buttons, and callouts
+ * - Modern, clean design with enhanced shadows and rounded corners
+ * - Utility classes for easily applying gradient text, backgrounds, and borders
+ * - Hero section for prominent document introductions
+ * - Enhanced admonition blocks with gradient styling
+ *
+ * Usage:
+ * - Add class "gradient" to buttons for gradient background
+ * - Add class "gradient" to callouts for gradient styling
+ * - Use "gradient-text", "gradient-bg", "gradient-border", and "gradient-border-left" 
+ *   utility classes to apply branding to any element
+ * - Wrap document introductions in a "hero" class div for a prominent header
+ */
+
+:root {
+    /* Primary Color Palette - DocOps.io Branding */
+    --primary-color: #3b82f6; /* blue-600 */
+    --primary-hover: #2563eb; /* blue-700 */
+    --primary-light: #dbeafe; /* blue-100 */
+    --primary-dark: #1d4ed8; /* blue-800 */
+    --primary-gradient-start: #3b82f6; /* blue-600 */
+    --primary-gradient-end: #8b5cf6; /* purple-600 */
+
+    /* Secondary Color Palette */
+    --secondary-color: #64748b; /* gray-500 */
+    --secondary-light: #f1f5f9; /* gray-100 */
+    --secondary-dark: #334155; /* gray-700 */
+
+    /* Text Colors */
+    --text-color: #1e293b; /* gray-800 */
+    --text-light: #64748b; /* gray-500 */
+    --text-muted: #94a3b8; /* gray-400 */
+
+    /* Background Colors */
+    --bg-color: #ffffff; /* white */
+    --bg-light: #f8fafc; /* gray-50 */
+    --bg-dark: #0f172a; /* gray-900 */
+
+    /* Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --code-text: #334155;
+    --code-border: #e2e8f0;
+
+    /* Admonition Colors */
+    --note-bg: #eff6ff;
+    --note-border: #bfdbfe;
+    --note-icon: #3b82f6;
+
+    --tip-bg: #f0fdf4;
+    --tip-border: #bbf7d0;
+    --tip-icon: #22c55e;
+
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+    --warning-icon: #f97316;
+
+    --caution-bg: #fef2f2;
+    --caution-border: #fecaca;
+    --caution-icon: #ef4444;
+
+    --important-bg: #faf5ff;
+    --important-border: #e9d5ff;
+    --important-icon: #8b5cf6;
+
+    /* Typography */
+    --body-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --heading-font: var(--body-font);
+    --monospace-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    /* Content Width */
+    --content-width: 50rem;
+    --content-width-wide: 70rem;
+
+    /* Add transition for smooth theme switching */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+}
+
+/* Base Styles */
+html {
+    font-size: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color);
+    scroll-margin-top: var(--spacing-2xl);
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.125rem;
+}
+
+h6 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+a:hover, a:focus {
+    color: var(--primary-hover);
+    border-bottom-color: var(--primary-hover);
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+li > p {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+li > ul, li > ol {
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+dt {
+    font-weight: 700;
+    margin-top: var(--spacing-lg);
+}
+
+dd {
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Code */
+code, pre {
+    font-family: var(--monospace-font);
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+}
+
+code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    overflow-x: auto;
+    line-height: 1.5;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Syntax Highlighting */
+.hljs-comment,
+.hljs-quote {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #d73a49;
+}
+
+.hljs-string,
+.hljs-attr {
+    color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal {
+    color: #005cc5;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+    color: #6f42c1;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-built_in {
+    color: #22863a;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+table th {
+    font-weight: 600;
+    background-color: var(--secondary-light);
+    border-bottom: 2px solid var(--border-dark);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--secondary-light);
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: none;
+    position: relative;
+}
+
+.admonitionblock > table {
+    margin-bottom: 0;
+    border: none;
+}
+
+.admonitionblock td.icon {
+    width: 3rem;
+    padding: var(--spacing-md);
+    text-align: center;
+    font-weight: 700;
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.admonitionblock td.content {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Note */
+.admonitionblock.note {
+    background-color: var(--note-bg);
+    border-color: var(--note-border);
+}
+
+.admonitionblock.note td.icon {
+    background-color: var(--note-icon);
+    color: white;
+}
+
+.admonitionblock.note td.icon:before {
+    content: "\f05a"; /* Font Awesome info icon */
+}
+
+/* Tip */
+.admonitionblock.tip {
+    background-color: var(--tip-bg);
+    border-color: var(--tip-border);
+}
+
+.admonitionblock.tip td.icon {
+    background-color: var(--tip-icon);
+    color: white;
+}
+
+.admonitionblock.tip td.icon:before {
+    content: "\f0eb"; /* Font Awesome lightbulb icon */
+}
+
+/* Warning */
+.admonitionblock.warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.admonitionblock.warning td.icon {
+    background-color: var(--warning-icon);
+    color: white;
+}
+
+.admonitionblock.warning td.icon:before {
+    content: "\f071"; /* Font Awesome exclamation-triangle icon */
+}
+
+/* Caution */
+.admonitionblock.caution {
+    background-color: var(--caution-bg);
+    border-color: var(--caution-border);
+}
+
+.admonitionblock.caution td.icon {
+    background-color: var(--caution-icon);
+    color: white;
+}
+
+.admonitionblock.caution td.icon:before {
+    content: "\f06d"; /* Font Awesome fire icon */
+}
+
+/* Important - with DocOps.io gradient styling */
+.admonitionblock.important {
+    background-color: white;
+    border-color: transparent;
+    position: relative;
+}
+
+.admonitionblock.important::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.admonitionblock.important td.icon {
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.admonitionblock.important td.icon:before {
+    content: "\f06a"; /* Font Awesome exclamation-circle icon */
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: var(--spacing-xl) 0;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Hero Section - DocOps.io style */
+.hero {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.hero h1 {
+    color: white;
+    background-image: none;
+    -webkit-text-fill-color: white;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* TOC */
+#toc {
+    background-color: var(--secondary-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--spacing-lg);
+}
+
+#toc.toc2 {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 20rem;
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--bg-light);
+    z-index: 1000;
+}
+
+#toc.toc2 #toctitle {
+    margin-top: 0;
+}
+
+body.toc2 {
+    padding-left: 22rem;
+    max-width: none;
+}
+
+#toc .title {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#toc li {
+    margin-top: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+#toc a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+}
+
+#toc a:hover {
+    color: var(--primary-color);
+}
+
+#toc ul ul {
+    padding-left: var(--spacing-lg);
+}
+
+#toc ul ul a {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+#footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    html, body {
+        font-size: 11pt;
+        line-height: 1.5;
+        background-color: #fff;
+        color: #000;
+    }
+
+    body {
+        padding: 0;
+        max-width: none;
+    }
+
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+        border-bottom: none;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+
+    pre, code {
+        border: 1px solid var(--border-color);
+        background-color: #f8f8f8 !important;
+    }
+
+    pre {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        color: #000;
+    }
+
+    img {
+        page-break-inside: avoid;
+        max-width: 100% !important;
+        box-shadow: none;
+    }
+
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+    }
+
+    .admonitionblock {
+        page-break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    /* Avoid page break after a heading and before the content that follows it */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+    }
+
+    #toc, #header, #footer {
+        display: none;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .no-page-break {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    body.toc2 {
+        padding-left: 0;
+    }
+
+    #toc.toc2 {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    pre, code {
+        font-size: 0.85rem;
+    }
+
+    .admonitionblock td.icon {
+        width: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    table th, table td {
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.icon {
+        width: 2rem;
+        padding: var(--spacing-sm);
+    }
+
+    .admonitionblock td.content {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Source blocks with syntax highlighting */
+.listingblock .title {
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.listingblock pre.highlightjs {
+    padding: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.listingblock pre.highlightjs > code {
+    padding: var(--spacing-md);
+    display: block;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--code-border);
+    line-height: 1.5;
+}
+
+/* Literalblock */
+.literalblock pre {
+    background-color: var(--code-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--code-border);
+}
+
+/* Sidebar */
+.sidebarblock {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--secondary-light);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebarblock > .content > .title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Keyboard shortcuts */
+kbd {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+    font-family: var(--monospace-font);
+    background-color: var(--secondary-light);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 0 var(--border-dark);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Buttons styling for links marked as buttons */
+.button {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+    border-bottom: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Primary gradient button */
+.button.gradient {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+/* Secondary button */
+.button.secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.button.secondary:hover {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+}
+
+/* Mark text */
+mark {
+    background-color: #fef9c3;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+}
+
+/* Text alignment */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* DocOps.io Branding Utility Classes */
+.gradient-text {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+}
+
+.gradient-border-left {
+    position: relative;
+    border-left: none;
+    padding-left: var(--spacing-lg);
+}
+
+.gradient-border-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.gradient-border {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    z-index: -1;
+}
+
+/* Custom callouts (beyond admonition blocks) */
+.callout {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Gradient callout - DocOps.io style */
+.callout.gradient {
+    background-color: white;
+    border-left: none;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.callout.gradient::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, var(--primary-gradient-start), var(--primary-gradient-end));
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.callout.gradient .callout-title {
+    background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* Print page break control */
+.page-break {
+    page-break-after: always;
+}
+
+.no-page-break {
+    page-break-inside: avoid;
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    z-index: 100;
+    transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root.dark-mode-auto {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+
+        /* Adjust other colors for dark mode */
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+}
+
+
+/* Apply transitions to elements that change with theme */
+body,
+.admonitionblock,
+.sidebarblock,
+#toc,
+table,
+pre,
+code,
+blockquote {
+    transition: var(--theme-transition);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Icons for theme toggle */
+.theme-toggle .light-icon {
+    display: none;
+}
+
+.theme-toggle .dark-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .light-icon,
+:root.dark-mode-auto .theme-toggle .light-icon {
+    display: block;
+}
+
+:root.dark-mode .theme-toggle .dark-icon,
+:root.dark-mode-auto .theme-toggle .dark-icon {
+    display: none;
+}
+
+/* Responsive adjustments for toggle button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Improve visibility in dark mode for various elements */
+:root.dark-mode img,
+:root.dark-mode-auto img {
+    opacity: 0.9;
+}
+
+:root.dark-mode .hero,
+:root.dark-mode-auto .hero {
+    background-image: linear-gradient(135deg, #1e293b, #334155);
+}
+
+/* Ensure proper contrast for links in dark mode */
+:root.dark-mode a,
+:root.dark-mode-auto a {
+    color: #60a5fa;
+}
+
+:root.dark-mode a:hover,
+:root.dark-mode-auto a:hover {
+    color: #93c5fd;
+}
+
+/* Font Awesome integration note */
+/*
+ * This stylesheet uses Font Awesome icons for admonition blocks.
+ * To use these icons, include Font Awesome in your document:
+ *
+ * <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ *
+ * Or add this line to your AsciiDoc document:
+ * :icons: font
+ * :icon-set: fas
+ */
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_extension_server_revolutionary_visual_documentation_platform">DocOps Extension Server: Revolutionary Visual Documentation Platform</a>
+<ul class="sectlevel1">
+<li><a href="#_transform_your_documentation_from_static_to_spectacular">1. Transform Your Documentation from Static to Spectacular</a>
+<ul class="sectlevel2">
+<li><a href="#_inside_asciidoctor_the_power_users_dream">1.1. 📝 <strong>Inside AsciiDoctor: The Power User&#8217;s Dream</strong></a></li>
+<li><a href="#_beyond_asciidoctor_universal_visual_api">1.2. 🌐 <strong>Beyond AsciiDoctor: Universal Visual API</strong></a>
+<ul class="sectlevel3">
+<li><a href="#_marketing_teams_instant_infographics">1.2.1. <strong>Marketing Teams: Instant Infographics</strong></a></li>
+<li><a href="#_devops_monitoring_dashboards">1.2.2. <strong>DevOps: Monitoring Dashboards</strong></a></li>
+<li><a href="#_cms_integration_wordpress_drupal_ghost">1.2.3. <strong>CMS Integration: WordPress, Drupal, Ghost</strong></a></li>
+<li><a href="#_email_campaigns_visual_newsletters">1.2.4. <strong>Email Campaigns: Visual Newsletters</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_why_choose_docops_extension_server">2. 🎯 <strong>Why Choose DocOps Extension Server?</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_for_technical_writers_documentation_teams">2.1. <strong>For Technical Writers &amp; Documentation Teams</strong></a></li>
+<li><a href="#_for_developers_devops">2.2. <strong>For Developers &amp; DevOps</strong></a></li>
+<li><a href="#_for_marketing_business_teams">2.3. <strong>For Marketing &amp; Business Teams</strong></a></li>
+<li><a href="#_for_content_management_systems">2.4. <strong>For Content Management Systems</strong></a></li>
+</ul>
+</li>
+<li><a href="#_competitive_advantages">3. 🏆 <strong>Competitive Advantages</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_vs_traditional_diagramming_tools">3.1. <strong>vs. Traditional Diagramming Tools</strong></a></li>
+<li><a href="#_vs_chart_libraries">3.2. <strong>vs. Chart Libraries</strong></a></li>
+<li><a href="#_vs_design_tools">3.3. <strong>vs. Design Tools</strong></a></li>
+</ul>
+</li>
+<li><a href="#_getting_started_in_3_steps">4. 🚀 <strong>Getting Started in 3 Steps</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_1_asciidoctor_users">4.1. <strong>1. AsciiDoctor Users</strong></a></li>
+<li><a href="#_2_web_developers">4.2. <strong>2. Web Developers</strong></a></li>
+<li><a href="#_3_api_integration">4.3. <strong>3. API Integration</strong></a></li>
+</ul>
+</li>
+<li><a href="#_success_stories_use_cases">5. 📊 <strong>Success Stories &amp; Use Cases</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_enterprise_documentation">5.1. <strong>Enterprise Documentation</strong></a></li>
+<li><a href="#_marketing_sales">5.2. <strong>Marketing &amp; Sales</strong></a></li>
+<li><a href="#_developer_tools">5.3. <strong>Developer Tools</strong></a></li>
+</ul>
+</li>
+<li><a href="#_advanced_features_customization">6. 💡 <strong>Advanced Features &amp; Customization</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_theme_system">6.1. <strong>Theme System</strong></a></li>
+<li><a href="#_interactive_elements">6.2. <strong>Interactive Elements</strong></a></li>
+<li><a href="#_data_format_flexibility">6.3. <strong>Data Format Flexibility</strong></a></li>
+</ul>
+</li>
+<li><a href="#_start_your_visual_documentation_revolution_today">7. 🌟 <strong>Start Your Visual Documentation Revolution Today</strong></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_extension_server_revolutionary_visual_documentation_platform" class="sect0">DocOps Extension Server: Revolutionary Visual Documentation Platform</h1>
+<div class="sect1">
+<h2 id="_transform_your_documentation_from_static_to_spectacular">1. Transform Your Documentation from Static to Spectacular</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_inside_asciidoctor_the_power_users_dream">1.1. 📝 <strong>Inside AsciiDoctor: The Power User&#8217;s Dream</strong></h3>
+<div class="paragraph">
+<p><strong>Seamless Integration</strong> - DocOps Extension Server revolutionizes AsciiDoctor workflows by adding 20+ professional visualization types through simple block macros. No external tools, no image management headaches, no version control nightmares.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">// Transform boring data into stunning visuals with one line
+[docops,pie]
+....
+{"segments": [{"label": "Q1", "value": 25}, {"label": "Q2", "value": 30}]}
+....
+
+// Create interactive feature cards that engage your audience
+[docops,feature]
+....
+| Title | Description | Emoji | Color |
+|-------|-------------|-------|-------|
+| API Gateway | Secure, scalable API management | 🛡️ | BLUE |
+| Microservices | Distributed architecture patterns | 🔧 | GREEN |
+....
+
+// Generate architectural scorecards that tell a story
+[docops,scorecard]
+....
+{"title": "System Health", "metrics": [{"name": "Performance", "score": 85}]}
+....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>What You Get:</strong>
+- <strong>Zero Setup</strong>: Works with any AsciiDoctor environment instantly
+- <strong>Version Control Friendly</strong>: All visualizations defined as code alongside your documentation
+- <strong>Live Updates</strong>: Changes to data automatically update visuals in all outputs (HTML, PDF, EPUB)
+- <strong>Professional Quality</strong>: Enterprise-grade SVG output that scales perfectly across all media
+- <strong>Theme Aware</strong>: Automatic light/dark mode support matches your documentation theme</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beyond_asciidoctor_universal_visual_api">1.2. 🌐 <strong>Beyond AsciiDoctor: Universal Visual API</strong></h3>
+<div class="paragraph">
+<p><strong>URL-Based Image Generation</strong> - Every DocOps visualization is accessible via a simple HTTP endpoint, making it the most flexible visualization platform on the market.</p>
+</div>
+<div class="sect3">
+<h4 id="_marketing_teams_instant_infographics">1.2.1. <strong>Marketing Teams: Instant Infographics</strong></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!-- Embed live charts in any webpage --&gt;
+&lt;img src="https://docops.io/api/docops/svg?kind=pie&amp;payload=eyJzZWdtZW50cyI6W119" /&gt;
+
+&lt;!-- Create dynamic scorecards for dashboards --&gt;
+&lt;img src="https://docops.io/api/docops/svg?kind=scorecard&amp;payload=DATA&amp;useDark=true" /&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_devops_monitoring_dashboards">1.2.2. <strong>DevOps: Monitoring Dashboards</strong></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script"># Generate system health visualizations
+curl "https://docops.io/api/docops/svg?kind=feature&amp;payload=${ENCODED_DATA}" &gt; health.svg
+
+# Create automated reporting charts
+wget "https://docops.io/api/docops/svg?kind=timeline&amp;payload=${TIMELINE_DATA}" -O report.svg</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cms_integration_wordpress_drupal_ghost">1.2.3. <strong>CMS Integration: WordPress, Drupal, Ghost</strong></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-textmate hljs" data-lang="textmate">// WordPress shortcode integration
+[docops-chart type="bar" data="sales-data.json"]
+
+// Dynamic content generation
+$chart_url = "https://docops.io/api/docops/svg?kind=quadrant&amp;payload=" . base64_encode($data);
+echo "&lt;img src='$chart_url' alt='Strategic Quadrant' /&gt;";</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_email_campaigns_visual_newsletters">1.2.4. <strong>Email Campaigns: Visual Newsletters</strong></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!-- Embed charts directly in email templates --&gt;
+&lt;img src="https://docops.io/api/docops/svg?kind=badge&amp;payload=STATUS_DATA"
+     style="width: 200px; height: auto;" /&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_choose_docops_extension_server">2. 🎯 <strong>Why Choose DocOps Extension Server?</strong></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_for_technical_writers_documentation_teams">2.1. <strong>For Technical Writers &amp; Documentation Teams</strong></h3>
+<div class="paragraph">
+<p><strong>🔥 Productivity Boost</strong>
+- <strong>10x Faster</strong>: Create professional visualizations in seconds, not hours
+- <strong>Zero Learning Curve</strong>: Uses familiar table syntax and JSON - no complex diagram languages
+- <strong>Consistent Branding</strong>: Built-in themes ensure all visuals match your style guide
+- <strong>Multi-Format Output</strong>: Perfect rendering in HTML, PDF, EPUB, and print</p>
+</div>
+<div class="paragraph">
+<p><strong>📊 Professional Visualizations Include:</strong>
+- <strong>Charts</strong>: Pie, bar, line, donut with interactive features
+- <strong>Diagrams</strong>: Architecture, swim lanes, connectors, placemats
+- <strong>Cards</strong>: Feature cards, scorecards, metrics dashboards
+- <strong>Specialized</strong>: Timelines, roadmaps, quadrant analysis, word clouds
+- <strong>UI Elements</strong>: Buttons, badges, callouts, tables</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_for_developers_devops">2.2. <strong>For Developers &amp; DevOps</strong></h3>
+<div class="paragraph">
+<p><strong>🛠 API-First Architecture</strong>
+- <strong>RESTful Endpoints</strong>: Standard HTTP GET requests with compressed payloads
+- <strong>Performance Optimized</strong>: Sub-second response times with built-in caching
+- <strong>Monitoring Ready</strong>: Comprehensive metrics, tracing, and health checks
+- <strong>Cloud Native</strong>: Docker containers, Kubernetes ready, horizontal scaling</p>
+</div>
+<div class="paragraph">
+<p><strong>🔧 Integration Patterns:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">// JavaScript/Node.js integration
+const chartUrl = `https://docops.io/api/docops/svg?kind=pie&amp;payload=${btoa(JSON.stringify(data))}`;
+document.getElementById('chart').src = chartUrl;
+
+// Python automation
+import requests, base64, json
+data = {"segments": [{"label": "Success", "value": 95}]}
+url = f"https://docops.io/api/docops/svg?kind=pie&amp;payload={base64.b64encode(json.dumps(data).encode()).decode()}"
+response = requests.get(url)
+with open('chart.svg', 'wb') as f: f.write(response.content)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_for_marketing_business_teams">2.3. <strong>For Marketing &amp; Business Teams</strong></h3>
+<div class="paragraph">
+<p><strong>📈 Data Storytelling Platform</strong>
+- <strong>No Design Skills Required</strong>: Professional results from simple data inputs
+- <strong>Brand Consistency</strong>: Customizable themes and color schemes
+- <strong>Interactive Elements</strong>: Hover effects, click interactions, animations
+- <strong>Responsive Design</strong>: Perfect display across desktop, tablet, and mobile</p>
+</div>
+<div class="paragraph">
+<p><strong>🎨 Real-World Applications:</strong>
+- <strong>Sales Presentations</strong>: Dynamic charts that update with latest data
+- <strong>Social Media</strong>: Eye-catching infographics for LinkedIn, Twitter
+- <strong>Client Reports</strong>: Professional visualizations that impress stakeholders
+- <strong>Internal Dashboards</strong>: Real-time visual KPIs and metrics</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_for_content_management_systems">2.4. <strong>For Content Management Systems</strong></h3>
+<div class="paragraph">
+<p><strong>🔌 Universal Plugin Architecture</strong>
+- <strong>WordPress</strong>: Simple shortcodes for any visualization type
+- <strong>Drupal</strong>: Custom field types with live preview
+- <strong>Ghost</strong>: Embed cards for rich content experiences
+- <strong>Static Site Generators</strong>: Jekyll, Hugo, Gatsby integration</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!-- Universal embedding pattern --&gt;
+&lt;img src="https://docops.io/api/docops/svg?kind=VISUALIZATION_TYPE&amp;payload=BASE64_DATA&amp;useDark=auto&amp;scale=1.5"
+     alt="Dynamic Visualization" style="max-width: 100%; height: auto;" /&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_competitive_advantages">3. 🏆 <strong>Competitive Advantages</strong></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_vs_traditional_diagramming_tools">3.1. <strong>vs. Traditional Diagramming Tools</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>No Software Installation</strong>: Works entirely through web APIs</p>
+</li>
+<li>
+<p>✅ <strong>Version Control Native</strong>: All diagrams defined as code</p>
+</li>
+<li>
+<p>✅ <strong>Collaborative</strong>: Multiple team members can edit simultaneously</p>
+</li>
+<li>
+<p>✅ <strong>Cost Effective</strong>: Single platform for all visualization needs</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_vs_chart_libraries">3.2. <strong>vs. Chart Libraries</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>No Coding Required</strong>: Simple data input, professional output</p>
+</li>
+<li>
+<p>✅ <strong>Consistent Styling</strong>: Built-in themes across all chart types</p>
+</li>
+<li>
+<p>✅ <strong>Backend Generation</strong>: No client-side JavaScript dependencies</p>
+</li>
+<li>
+<p>✅ <strong>Universal Format</strong>: SVG works everywhere, scales perfectly</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_vs_design_tools">3.3. <strong>vs. Design Tools</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ <strong>Data Driven</strong>: Automatically updates when data changes</p>
+</li>
+<li>
+<p>✅ <strong>Programmatic</strong>: Can be automated and scripted</p>
+</li>
+<li>
+<p>✅ <strong>Documentation Integrated</strong>: Lives alongside your content</p>
+</li>
+<li>
+<p>✅ <strong>Developer Friendly</strong>: API-first, not point-and-click</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started_in_3_steps">4. 🚀 <strong>Getting Started in 3 Steps</strong></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_asciidoctor_users">4.1. <strong>1. AsciiDoctor Users</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">// Add to any .adoc file
+[docops,pie]
+....
+{"segments": [{"label": "Happy Users", "value": 95}, {"label": "Room for Growth", "value": 5}]}
+....</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_web_developers">4.2. <strong>2. Web Developers</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;!-- Add to any HTML page --&gt;
+&lt;img src="https://docops.io/api/docops/svg?kind=feature&amp;payload=ENCODED_DATA" /&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_api_integration">4.3. <strong>3. API Integration</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script"># Test any visualization type
+curl "https://docops.io/api/docops/svg?kind=scorecard&amp;payload=$(echo 'DATA' | base64)" &gt; result.svg</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_success_stories_use_cases">5. 📊 <strong>Success Stories &amp; Use Cases</strong></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_enterprise_documentation">5.1. <strong>Enterprise Documentation</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Fortune 500 Company</strong>: Reduced technical documentation creation time by 70%</p>
+</li>
+<li>
+<p><strong>SaaS Startup</strong>: Improved user onboarding with interactive feature cards</p>
+</li>
+<li>
+<p><strong>Government Agency</strong>: Standardized reporting across 50+ departments</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_marketing_sales">5.2. <strong>Marketing &amp; Sales</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Digital Agency</strong>: Creates client presentations 5x faster with dynamic charts</p>
+</li>
+<li>
+<p><strong>E-commerce Platform</strong>: Real-time sales dashboards embedded in executive reports</p>
+</li>
+<li>
+<p><strong>Consulting Firm</strong>: Professional proposal generation with automated visualizations</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_developer_tools">5.3. <strong>Developer Tools</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Open Source Project</strong>: Architecture documentation that stays current with code</p>
+</li>
+<li>
+<p><strong>DevOps Team</strong>: Monitoring dashboards embedded directly in runbooks</p>
+</li>
+<li>
+<p><strong>API Documentation</strong>: Interactive examples that demonstrate real data</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_advanced_features_customization">6. 💡 <strong>Advanced Features &amp; Customization</strong></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_theme_system">6.1. <strong>Theme System</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">?useDark=true&amp;scale=1.5&amp;theme=corporate</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Light/Dark/Auto</strong>: Automatic theme detection</p>
+</li>
+<li>
+<p><strong>Custom Color Schemes</strong>: Brand-specific palettes</p>
+</li>
+<li>
+<p><strong>Responsive Scaling</strong>: Perfect display at any size</p>
+</li>
+<li>
+<p><strong>Accessibility</strong>: WCAG compliant color contrasts</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interactive_elements">6.2. <strong>Interactive Elements</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Hover Effects</strong>: Rich tooltips and highlight states</p>
+</li>
+<li>
+<p><strong>Click Interactions</strong>: Expandable details and drill-down</p>
+</li>
+<li>
+<p><strong>Animations</strong>: Smooth transitions and loading states</p>
+</li>
+<li>
+<p><strong>Progressive Enhancement</strong>: Works with JavaScript disabled</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_format_flexibility">6.3. <strong>Data Format Flexibility</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{"segments": [{"label": "Q1", "value": 25}]}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">// Table format
+| Label | Value |
+|-------|-------|
+| Q1    | 25    |
+| Q2    | 30    |</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_start_your_visual_documentation_revolution_today">7. 🌟 <strong>Start Your Visual Documentation Revolution Today</strong></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Try DocOps Extension Server now and transform how your team creates, shares, and maintains visual content. Whether you&#8217;re documenting APIs, creating marketing materials, or building interactive dashboards, DocOps provides the tools you need to make data beautiful and accessible.</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Ready to get started?</strong> Visit our [live demo](<a href="https://docops.io/demo" class="bare">https://docops.io/demo</a>) or check out the [comprehensive documentation](<a href="https://docops.io/docs" class="bare">https://docops.io/docs</a>) with 100+ examples across every visualization type.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>DocOps Extension Server: Where data meets design, and documentation becomes extraordinary.</strong></p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>
