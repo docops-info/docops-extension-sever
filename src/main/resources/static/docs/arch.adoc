@@ -1,0 +1,16 @@
+include::_base.adoc[]
+= DocOps Extension Server Architecture
+
+== Design
+
+image::arch.svg[]
+
+== Architecture Layers
+
+1. *External Systems*: AsciiDoctor with block processor
+2. *Web Layer*: REST API, DocOpsRouter, Controllers
+3. *Handler Layer*: Pluggable strategy pattern handlers
+4. *Visualization Makers*: Core SVG generation engines
+5. *Support Services*: Utilities and helpers
+6. *Spring Boot Infrastructure*: DI, events, metrics
+7. *Static Resources*: Web assets
