@@ -54,7 +54,7 @@ class PieMaker {
         if(pies.pieDisplay.useDark) {
             backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="#374151"/>"""
         } else {
-            backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="#ffffff" filter="url(#dropShadow)"/>"""
+            backgroundColor = """<rect width="100%" height="100%" rx="10" ry="10" fill="rgba(255,255,255,0.1)" filter="url(#dropShadow)"/>"""
         }
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="${height+10}" viewBox="0 0 $width ${height+10}" >
@@ -65,7 +65,7 @@ class PieMaker {
     private fun tail() = """</svg></svg>"""
 
     private fun makePieSvg(pie: Pie, display: PieDisplay, index: Int) : String {
-        val fill = if(display.useDark) "#2d3748" else "#f8f9fa"
+        val fill = if(display.useDark) "#2d3748" else "rgba(255,255,255,0.1)"
         val gradientId = "pieGradient_$index"
         // Use a dark color for text on light background and vice versa
         val textColor = if(display.useDark) "#FCFCFC" else "#333333"

@@ -8,6 +8,11 @@ The DocOps Pie Chart Extension allows you to create visually appealing pie chart
 
 This guide will help you understand the basic concepts of pie charts, how to include them in your AsciiDoctor documents, and provide examples of different types of pie charts.
 
+The extension supports two different pie chart implementations:
+
+* `pieslice` - Traditional pie charts with customizable slices
+* `pie` - Modern, animated pie charts with percentage indicators
+
 == Basic Concepts
 
 === What are Pie Charts?
@@ -361,8 +366,256 @@ Pie charts in the DocOps extension include several interactive features:
 
 These interactive features enhance the user experience and make it easier to interpret the data in your charts.
 
+== Modern Pie Charts with the `pie` Macro
+
+The `pie` macro provides a modern, animated approach to pie charts. Each pie chart displays a percentage value with a circular progress indicator and a label. Multiple pie charts can be displayed in a row, making it ideal for comparing different metrics.
+
+=== AsciiDoctor Syntax for Modern Pie Charts
+
+To include modern pie charts in your AsciiDoctor document, use the following syntax:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=true
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+....
+
+You can also position your chart using the `role` attribute:
+
+[source,asciidoc]
+....
+[docops,pie, role=left]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=true
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+....
+
+=== Configuration Parameters
+
+The following configuration parameters are available for the `pie` macro:
+
+* `baseColor` (optional): The base color for the pie charts (default: "#3ABEF9")
+* `outlineColor` (optional): The outline color for the pie charts (default: "#050C9C")
+* `scale` (optional): The scale factor for the chart (default: 1.0)
+* `useDark` (optional): Whether to use dark mode styling (default: false)
+
+=== Data Format
+
+The data for the pie charts can be specified in two formats:
+
+==== Tabular Format
+
+[source]
+----
+Label | Percent
+Product A | 30
+Product B | 25
+----
+
+Where:
+* `Label` is the category name
+* `Percent` is the numerical value for the slice (percentage)
+
+==== JSON Format
+
+You can also use JSON format for more complex configurations:
+
+[source,json]
+----
+{
+  "pies": [
+    {"percent": 19, "label": "Sales Training"},
+    {"percent": 25, "label": "Conventions"},
+    {"percent": 18.0, "label": "Publications"},
+    {"percent": 12.0, "label": "Print Advertising"},
+    {"percent": 17.0, "label": "Catalogues"},
+    {"percent": 10.0, "label": "Online Advertising"}
+  ], 
+  "pieDisplay": {
+    "baseColor": "#111111", 
+    "outlineColor": "#00FF9C", 
+    "useDark": false, 
+    "scale": 1.5
+  }
+}
+----
+
+=== Examples
+
+==== Basic Pie Chart Example
+
+Here's a simple example of modern pie charts with minimal configuration:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=true
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+....
+
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=true
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+
+==== Pie Chart with Left Alignment
+
+You can position your chart using the `role` attribute:
+
+[source,asciidoc]
+....
+[docops,pie, role=left]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=false
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+....
+
+[docops,pie, role=left]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+useDark=false
+---
+Label | Percent
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+
+==== Pie Chart with JSON Format
+
+For more complex configurations, you can use JSON format:
+
+[source,asciidoc]
+....
+[docops,pie, role=left]
+----
+{
+  "pies": [
+    {"percent": 19, "label": "Sales Training"},
+    {"percent": 25, "label": "Conventions"},
+    {"percent": 18.0, "label": "Publications"},
+    {"percent": 12.0, "label": "Print Advertising"},
+    {"percent": 17.0, "label": "Catalogues"},
+    {"percent": 10.0, "label": "Online Advertising"}
+  ], 
+  "pieDisplay": {
+    "baseColor": "#111111", 
+    "outlineColor": "#00FF9C", 
+    "useDark": false, 
+    "scale": 1.5
+  }
+}
+----
+....
+
+[docops,pie, role=left]
+----
+{
+  "pies": [
+    {"percent": 19, "label": "Sales Training"},
+    {"percent": 25, "label": "Conventions"},
+    {"percent": 18.0, "label": "Publications"},
+    {"percent": 12.0, "label": "Print Advertising"},
+    {"percent": 17.0, "label": "Catalogues"},
+    {"percent": 10.0, "label": "Online Advertising"}
+  ], 
+  "pieDisplay": {
+    "baseColor": "#111111", 
+    "outlineColor": "#00FF9C", 
+    "useDark": false, 
+    "scale": 1.5
+  }
+}
+----
+
+==== Pie Chart with Dark Mode
+
+You can enable dark mode for better visibility in dark-themed documents:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1.2
+useDark=true
+---
+Label | Percent
+Research | 22
+Development | 35
+Marketing | 18
+Sales | 25
+----
+....
+
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1.2
+useDark=true
+---
+Label | Percent
+Research | 22
+Development | 35
+Marketing | 18
+Sales | 25
+----
+
 == Conclusion
 
 The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the simple pipe-separated format and configuration parameters, you can create customized charts that match your document's style and purpose.
 
-The extension supports both regular pie charts and donut charts, with various display options including custom colors, interactive features, and dark mode. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.
+The extension supports both traditional pie charts (`pieslice`) and modern animated pie charts (`pie`), with various display options including custom colors, interactive features, and dark mode. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.
