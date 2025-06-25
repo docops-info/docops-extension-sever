@@ -15,3 +15,146 @@ image::arch.svg[]
 6. *Spring Boot Infrastructure*: DI, events, metrics
 7. *Static Resources*: Web assets
 
+== Badge Sequence
+
+[plantuml,badge,svg]
+----
+@startuml
+' iOS Modern Theme
+skinparam backgroundColor #F2F2F7
+skinparam DefaultFontName SF Pro Display
+skinparam DefaultFontSize 11
+
+' iOS Color Palette
+skinparam participant {
+    BackgroundColor white
+    BorderColor #D1D1D6
+    FontColor #1C1C1E
+    FontStyle bold
+    Padding 10
+}
+
+skinparam sequence {
+    ArrowColor #007AFF
+    ArrowFontColor #1C1C1E
+    ArrowFontSize 10
+    ArrowThickness 2
+    LifeLineBorderColor #D1D1D6
+    LifeLineBackgroundColor #F2F2F7
+}
+
+skinparam actor {
+    BackgroundColor #007AFF
+    BorderColor #0051D0
+    FontColor white
+    FontStyle bold
+}
+
+skinparam note {
+    BackgroundColor #FFCC02
+    BorderColor #FFB000
+    FontColor #1C1C1E
+    FontSize 9
+}
+
+skinparam sequenceGroup {
+    BackgroundColor #FFFFFF
+    BorderColor #C7C7CC
+    FontColor #1C1C1E
+    FontStyle bold
+}
+skinparam roundcorner 8
+skinparam shadowing true
+skinparam participant {
+    BackgroundColor #FFFFFF
+    BorderColor #E5E5EA
+    BorderThickness 1
+}
+
+title DocOps Badge Generation Flow - iOS Style
+
+actor Client as C
+participant "DocOpsRouter" as Router #E3F2FD
+participant "BadgeHandler" as Handler #FFF3E0
+participant "DocOpsBadgeGenerator" as Generator #E8F5E8
+participant "ApplicationEventPublisher" as Publisher #F3E5F5
+participant "Logger" as Log #FFEBEE
+
+C -> Router: GET /api/docops/svg?kind=badge&payload=...
+activate Router
+
+note right of Router
+    Parameters:
+    • kind: "badge"
+    • payload: encoded badge data
+    • scale: "1.0" (default)
+    • useDark: false (default)
+    • backend: "html" (default)
+end note
+
+Router -> Router: Create DocOpsContext
+Router -> Router: Get handler for "badge" kind
+Router -> Router: Start measureTimedValue
+
+group Payload Processing
+    Router -> Router: URL decode payload
+    alt URL decode fails
+        Router -> Log: warn("Failed to URL decode payload")
+    end
+    Router -> Router: uncompressString(decodedPayload)
+    Router -> Router: decodePayloadIfNeeded(data)
+end
+
+Router -> Handler: handleSVG(finalPayload, context)
+activate Handler
+
+Handler -> Handler: Parse badge configuration
+Handler -> Handler: processPipeDelimitedData()
+
+Handler -> Generator: createBadgeFromString(data, isPdf)
+activate Generator
+
+Generator -> Generator: Parse badge data
+Generator -> Generator: Apply styling and colors
+Generator -> Generator: Generate SVG markup
+
+Generator --> Handler: SVG string
+deactivate Generator
+
+Handler --> Router: Generated SVG
+deactivate Handler
+
+Router -> Router: joinXmlLines(addSvgMetadata(svg))
+Router -> Router: End timing measurement
+
+Router -> Log: info("badge executed in ${duration}ms")
+
+group Event Tracking & Publishing
+    Router -> Router: Increment eventCounts["badge"]
+    Router -> Publisher: publishEvent(DocOpsExtensionEvent)
+    activate Publisher
+
+    note right of Publisher
+        Event contains:
+        • kind: "badge"
+        • duration: execution time
+        • success: true
+        • count: execution count
+    end note
+
+    Publisher --> Router: Event published
+    deactivate Publisher
+end
+
+Router -> Router: Set response headers
+note right of Router
+    Headers:
+    • Cache-Control: no-cache
+    • Content-Type: image/svg+xml
+end note
+
+Router --> C: ResponseEntity<ByteArray>(svg, headers, 200)
+deactivate Router
+
+@enduml
+----
