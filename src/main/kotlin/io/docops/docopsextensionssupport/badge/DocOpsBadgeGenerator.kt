@@ -415,7 +415,7 @@ class DocOpsBadgeGenerator {
         if (icon.isNotEmpty()) {
             // Use enhanced logo handling with effects
             val logoSize = 100
-            val logo = getBadgeLogo(icon, logoSize, true)
+            val logo = getBadgeLogo(icon, logoSize, true, backgroundColor = labelColor)
 
             // Adjust positioning and spacing
             startX += 127
@@ -537,51 +537,49 @@ class DocOpsBadgeGenerator {
         return total
     }
 
+
     /**
      * Enhanced logo handling for badges
      * @param input The logo input string
      * @param size The desired size of the logo (default: 100)
      * @param addEffects Whether to add visual effects to the logo
+     * @param backgroundColor The background color for contrast calculation
      * @return The processed logo as a data URL or URL string
      */
-    private fun getBadgeLogo(input: String?, size: Int = 100, addEffects: Boolean = true): String {
-        // Default transparent 1x1 pixel as fallback
-        var logo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII="
+    private fun getBadgeLogo(
+        input: String?,
+        size: Int = 100,
+        addEffects: Boolean = true,
+        backgroundColor: String? = null
+    ): String {
+        if (input == null || input.isEmpty()) {
+            return ""
+        }
 
-        input?.let {
-            if (input.startsWith("<") && input.endsWith(">")) {
-                // Handle SimpleIcons format (e.g. <github>)
-                val iconName = input.replace("<", "").replace(">", "")
-                val simpleIcon = SimpleIcons.get(iconName)
+        var logo = input
+        if (logo.startsWith("<") && logo.endsWith(">")) {
+            val iconName = logo.substring(1, logo.length - 1)
+            val simpleIcon = SimpleIcons.get(iconName)
 
-                if (simpleIcon != null) {
-                    val ico = simpleIcon.svg
-                    try {
-                        val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                            .parse(ByteArrayInputStream(ico?.toByteArray()))
-                        var src = ""
-                        xml?.let {
-                            // Apply enhanced SVG manipulation with original color
-                            src = manipulateSVG(xml, simpleIcon.hex, addEffects)
-                        }
-                        logo = "data:image/svg+xml;base64," + Base64.getEncoder()
-                            .encodeToString(src.toByteArray())
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+            if (simpleIcon != null) {
+                val ico = simpleIcon.svg
+                if (ico.isNotBlank()) {
+                    val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                        .parse(ByteArrayInputStream(ico.toByteArray()))
+
+                    // Pass background color for better contrast
+                    val src = manipulateSVG(xml, simpleIcon.hex, addEffects, backgroundColor)
+
+                    return "data:image/svg+xml;base64," + Base64.getEncoder()
+                        .encodeToString(src.toByteArray())
                 }
-            } else if (input.startsWith("http")) {
-                // External URL - use as is
-                logo = input
-            } else {
-                // Assume it's a data URL or direct path
-                logo = input
             }
+        } else if (logo.startsWith("http")) {
+            return getLogoFromUrl(logo)
         }
 
         return logo
     }
-
     /**
      * Enhanced SVG manipulation for better icon appearance
      * @param doc The XML document containing the SVG
@@ -589,74 +587,130 @@ class DocOpsBadgeGenerator {
      * @param addEffects Whether to add visual effects to the icon
      * @return The processed SVG as a string
      */
-    private fun manipulateSVG(doc: org.w3c.dom.Document, hexColor: String, addEffects: Boolean = true): String {
-        val svg = doc.documentElement
+    /**
+     * Enhanced SVG manipulation for better icon appearance
+     * @param doc The XML document containing the SVG
+     * @param hexColor The hex color to use for the icon
+     * @param addEffects Whether to add visual effects to the icon
+     * @param backgroundColor The background color to determine contrast (optional)
+     * @return The processed SVG as a string
+     */
+    private fun manipulateSVG(
+        doc: org.w3c.dom.Document,
+        hexColor: String,
+        addEffects: Boolean = true,
+        backgroundColor: String? = null
+    ): String {
+        val paths = doc.getElementsByTagName("path")
+        val circles = doc.getElementsByTagName("circle")
+        val rects = doc.getElementsByTagName("rect")
+        val polygons = doc.getElementsByTagName("polygon")
+        val ellipses = doc.getElementsByTagName("ellipse")
 
-        // Ensure viewBox is set for proper scaling
-        if (!svg.hasAttribute("viewBox") && svg.hasAttribute("width") && svg.hasAttribute("height")) {
-            val width = svg.getAttribute("width").replace("px", "").toFloatOrNull() ?: 24f
-            val height = svg.getAttribute("height").replace("px", "").toFloatOrNull() ?: 24f
-            svg.setAttribute("viewBox", "0 0 $width $height")
-        }
+        // Determine the best color for the icon based on background
+        val iconColor = determineIconColor(hexColor, backgroundColor)
 
-        // Set fill color for all paths
-        val paths = svg.getElementsByTagName("path")
+        // Apply color to all SVG elements
         for (i in 0 until paths.length) {
-            val path = paths.item(i)
-            path.attributes.getNamedItem("fill")?.nodeValue = "#$hexColor"
+            val path = paths.item(i) as org.w3c.dom.Element
+            path.setAttribute("fill", "#$iconColor")
+
+            if (addEffects) {
+                // Add subtle stroke for better definition on any background
+                path.setAttribute("stroke", getContrastStroke(iconColor))
+                path.setAttribute("stroke-width", "0.5")
+            }
         }
 
-        // Add effects if requested
-        if (addEffects) {
-            // Add filter element for subtle shadow/glow using DOM API
-            val defs = doc.createElement("defs")
+        for (i in 0 until circles.length) {
+            val circle = circles.item(i) as org.w3c.dom.Element
+            circle.setAttribute("fill", "#$iconColor")
 
-            val filter = doc.createElement("filter")
-            filter.setAttribute("id", "iconEffect")
-            filter.setAttribute("x", "-10%")
-            filter.setAttribute("y", "-10%")
-            filter.setAttribute("width", "120%")
-            filter.setAttribute("height", "120%")
-
-            val blur = doc.createElement("feGaussianBlur")
-            blur.setAttribute("stdDeviation", "0.5")
-            blur.setAttribute("result", "blur")
-
-            val colorMatrix = doc.createElement("feColorMatrix")
-            colorMatrix.setAttribute("in", "blur")
-            colorMatrix.setAttribute("type", "matrix")
-            colorMatrix.setAttribute("values", "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7")
-            colorMatrix.setAttribute("result", "glow")
-
-            val blend = doc.createElement("feBlend")
-            blend.setAttribute("in", "SourceGraphic")
-            blend.setAttribute("in2", "glow")
-            blend.setAttribute("mode", "normal")
-
-            filter.appendChild(blur)
-            filter.appendChild(colorMatrix)
-            filter.appendChild(blend)
-            defs.appendChild(filter)
-
-            svg.appendChild(defs)
-
-            // Apply filter to the SVG
-            svg.setAttribute("filter", "url(#iconEffect)")
+            if (addEffects) {
+                circle.setAttribute("stroke", getContrastStroke(iconColor))
+                circle.setAttribute("stroke-width", "0.5")
+            }
         }
 
-        // Ensure proper dimensions
-        svg.setAttribute("width", "100%")
-        svg.setAttribute("height", "100%")
+        for (i in 0 until rects.length) {
+            val rect = rects.item(i) as org.w3c.dom.Element
+            rect.setAttribute("fill", "#$iconColor")
 
-        // Convert back to string
+            if (addEffects) {
+                rect.setAttribute("stroke", getContrastStroke(iconColor))
+                rect.setAttribute("stroke-width", "0.5")
+            }
+        }
+
+        for (i in 0 until polygons.length) {
+            val polygon = polygons.item(i) as org.w3c.dom.Element
+            polygon.setAttribute("fill", "#$iconColor")
+
+            if (addEffects) {
+                polygon.setAttribute("stroke", getContrastStroke(iconColor))
+                polygon.setAttribute("stroke-width", "0.5")
+            }
+        }
+
+        for (i in 0 until ellipses.length) {
+            val ellipse = ellipses.item(i) as org.w3c.dom.Element
+            ellipse.setAttribute("fill", "#$iconColor")
+
+            if (addEffects) {
+                ellipse.setAttribute("stroke", getContrastStroke(iconColor))
+                ellipse.setAttribute("stroke-width", "0.5")
+            }
+        }
+
         val transformer = javax.xml.transform.TransformerFactory.newInstance().newTransformer()
-        val source = javax.xml.transform.dom.DOMSource(doc)
         val result = javax.xml.transform.stream.StreamResult(java.io.StringWriter())
+        val source = javax.xml.transform.dom.DOMSource(doc)
         transformer.transform(source, result)
 
-        return (result.writer as java.io.StringWriter).toString()
+        return result.writer.toString()
     }
 
+    /**
+     * Determines the best icon color based on the original color and background
+     */
+    private fun determineIconColor(originalHex: String, backgroundColor: String?): String {
+        if (backgroundColor == null) {
+            return originalHex
+        }
+
+        val backgroundIsDark = isColorDark(backgroundColor)
+        val originalIsDark = isColorDark(originalHex)
+
+        return when {
+            // If background is dark and original icon is also dark, make icon light
+            backgroundIsDark && originalIsDark -> "ffffff"
+            // If background is light and original icon is light, make icon dark
+            !backgroundIsDark && !originalIsDark -> "000000"
+            // Otherwise, use original color as it should have good contrast
+            else -> originalHex
+        }
+    }
+
+    /**
+     * Determines if a color is considered dark
+     */
+    private fun isColorDark(hexColor: String): Boolean {
+        val color = hexColor.removePrefix("#")
+        val r = color.substring(0, 2).toInt(16)
+        val g = color.substring(2, 4).toInt(16)
+        val b = color.substring(4, 6).toInt(16)
+
+        // Calculate luminance using the standard formula
+        val luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        return luminance < 0.5
+    }
+
+    /**
+     * Gets a contrasting stroke color for better icon definition
+     */
+    private fun getContrastStroke(iconColor: String): String {
+        return if (isColorDark(iconColor)) "#ffffff40" else "#00000040"
+    }
     private fun getLogoFromUrl(url: String): String {
         val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(20))
