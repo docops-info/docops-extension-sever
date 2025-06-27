@@ -557,6 +557,8 @@ class DocOpsBadgeGenerator {
         }
 
         var logo = input
+
+        // Handle SimpleIcons format: <iconname>
         if (logo.startsWith("<") && logo.endsWith(">")) {
             val iconName = logo.substring(1, logo.length - 1)
             val simpleIcon = SimpleIcons.get(iconName)
@@ -564,22 +566,41 @@ class DocOpsBadgeGenerator {
             if (simpleIcon != null) {
                 val ico = simpleIcon.svg
                 if (ico.isNotBlank()) {
-                    val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                        .parse(ByteArrayInputStream(ico.toByteArray()))
+                    try {
+                        val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                            .parse(ByteArrayInputStream(ico.toByteArray()))
 
-                    // Pass background color for better contrast
-                    val src = manipulateSVG(xml, simpleIcon.hex, addEffects, backgroundColor)
+                        // Pass background color for better contrast
+                        val src = manipulateSVG(xml, simpleIcon.hex, addEffects, backgroundColor)
 
-                    return "data:image/svg+xml;base64," + Base64.getEncoder()
-                        .encodeToString(src.toByteArray())
+                        return "data:image/svg+xml;base64," + Base64.getEncoder()
+                            .encodeToString(src.toByteArray())
+                    } catch (e: Exception) {
+                        // Log the error and return empty string instead of falling through
+                        println("Error processing SimpleIcon '$iconName': ${e.message}")
+                        return ""
+                    }
                 }
+            } else {
+                // SimpleIcon not found - return empty string instead of the input
+                println("SimpleIcon '$iconName' not found")
+                return ""
             }
-        } else if (logo.startsWith("http")) {
+        }
+        // Handle URL format
+        else if (logo.startsWith("http://") || logo.startsWith("https://")) {
             return getLogoFromUrl(logo)
         }
+        // Handle data URLs or other formats
+        else if (logo.startsWith("data:")) {
+            return logo
+        }
 
-        return logo
+        // If none of the above formats match, return empty string
+        // This prevents href URLs from being used as logos
+        return ""
     }
+
     /**
      * Enhanced SVG manipulation for better icon appearance
      * @param doc The XML document containing the SVG
