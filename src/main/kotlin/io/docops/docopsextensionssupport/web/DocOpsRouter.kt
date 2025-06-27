@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
 @Controller
@@ -123,8 +124,12 @@ class DocOpsRouter (
         // Publish the event with the count
         applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds, true, count))
         headers.cacheControl = CacheControl.noCache().headerValue
-        headers.contentType = MediaType.parseMediaType("image/svg+xml")
-        return ResponseEntity(timing.value.toByteArray(), headers, HttpStatus.OK)
+        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+
+
+        return ResponseEntity(timing.value.toByteArray(
+            StandardCharsets.UTF_8
+        ), headers, HttpStatus.OK)
     }
 
     private fun isUrlEncoded(payload: String): Boolean {
