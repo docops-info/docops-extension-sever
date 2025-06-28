@@ -33,6 +33,8 @@ The extension supports various styling options, including:
 
 A shield includes:
 
+
+
 * A label (left side)
 * A message (right side)
 * Optional URL for making the shield clickable
@@ -353,6 +355,436 @@ Pro|Subscription||#1565C0|#2196F3|<award>|#fcfcfc
 Enterprise|Solution||#283593|#3F51B5|<building>|#fcfcfc
 ----
 
+== Shield Styles
+
+The DocOps Shield Extension supports multiple shield styles to match your documentation needs.
+
+=== iOS-Style Shields
+
+The DocOps Shield Extension supports modern iOS-style shields with enhanced visual features. These shields have a sleek, contemporary design inspired by iOS UI elements, featuring gradient backgrounds, glassmorphism effects, and interactive hover animations.
+
+==== iOS Shield Features
+
+* Modern gradient backgrounds with subtle shading
+* Glassmorphism effects with highlight overlays
+* Rounded corners and soft shadows
+* Support for iOS-style icons
+* Interactive hover effects
+* Flexible arrangement options (horizontal, vertical, grid)
+* Automatic status color detection
+
+=== Material-Style Shields
+
+The DocOps Shield Extension also supports Material Design-style shields with a clean, modern appearance. These shields follow Google's Material Design guidelines, featuring flat colors, subtle shadows, and a more structured layout.
+
+==== Material Shield Features
+
+* Flat color backgrounds with minimal gradients
+* Subtle drop shadows for depth
+* Squared corners with small radius
+* Clean typography with Roboto font
+* Support for Material Design icons
+* Consistent spacing and alignment
+* Flexible arrangement options (horizontal, vertical, grid)
+
+=== Shield Configuration
+
+You can customize the appearance and behavior of your shields by including configuration options in your shield data. The configuration is specified as a JSON object at the beginning of your shield data.
+
+==== Configuration Properties
+
+* `style`: The style of the shields (default: "ios", can also be "material")
+* `theme`: The theme to apply (default: "ios", can also be "material")
+* `spacing`: The spacing between shields in pixels (default: 15)
+* `arrangement`: The arrangement of shields - "HORIZONTAL", "VERTICAL", or "GRID" (default: "GRID")
+* `backgroundStyle`: The style of the container background (default: "ios-container" or "material-container" based on theme)
+* `animationEnabled`: Whether to enable animations (default: true)
+
+==== Configuration Example
+
+Here's an example of how to include configuration in your shield data:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "ios", "arrangement": "HORIZONTAL", "spacing": 20}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+....
+
+For Material Design style:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material", "arrangement": "HORIZONTAL", "spacing": 20}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+....
+
+[docops,shield]
+----
+{"style": "material", "theme": "material", "arrangement": "HORIZONTAL", "spacing": 20}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+
+[docops,shield]
+----
+{"style": "ios", "arrangement": "HORIZONTAL", "spacing": 20}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+
+You can also specify the arrangement directly in the macro:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"spacing": 25, "backgroundStyle": "ios-container"}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+....
+
+[docops,shield]
+----
+{"spacing": 25, "backgroundStyle": "ios-container"}
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+
+=== Basic iOS Shield Example
+
+Here's a simple example of an iOS-style shield:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Status|Stable
+----
+....
+
+[docops,shield]
+----
+Status|Stable
+----
+
+=== iOS Shield with Icon Example
+
+You can add an icon to your iOS shield:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Build|Passing||#34C759|#30A14E|check
+----
+....
+
+[docops,shield]
+----
+Build|Passing||#34C759|#30A14E|check
+----
+
+=== iOS Shield with Status Colors
+
+The iOS shields automatically detect common status messages and apply appropriate colors and icons:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Tests|Passing
+Coverage|Failed
+Deploy|Running
+Review|Pending
+----
+....
+
+[docops,shield]
+----
+Tests|Passing
+Coverage|Failed
+Deploy|Running
+Review|Pending
+----
+
+=== iOS Shield with Custom Colors and Icons
+
+Customize your iOS shields with specific colors and icons:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+GitHub|Star Now|https://github.com/docops||#24292E|github
+Swift|Latest|https://swift.org||#F05138|code
+App Store|Download|https://apps.apple.com||#0D96F6|download
+----
+....
+
+[docops,shield]
+----
+GitHub|Star Now|https://github.com/docops||#24292E|github
+Swift|Latest|https://swift.org||#F05138|code
+App Store|Download|https://apps.apple.com||#0D96F6|download
+----
+
+=== Vertical iOS Shield Arrangement
+
+You can arrange iOS shields vertically:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+iOS|14.0+||#007AFF
+Swift|5.5||#F05138
+Xcode|13.0||#1575F9
+----
+....
+
+[docops,shield]
+----
+iOS|14.0+||#007AFF
+Swift|5.5||#F05138
+Xcode|13.0||#1575F9
+----
+
+=== Grid iOS Shield Arrangement
+
+You can also arrange iOS shields in a grid:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Design|Figma||#F24E1E|#FF7262|star
+Code|Swift||#F05138|#FF7262|code
+Test|XCTest||#34C759|#30A14E|check
+Deploy|TestFlight||#0D96F6|#0056CC|rocket
+Analytics|Firebase||#FFCA28|#FFA000|chart
+Feedback|AppStore||#A2AAAD|#7D848C|heart
+----
+....
+
+[docops,shield]
+----
+Design|Figma||#F24E1E|#FF7262|star
+Code|Swift||#F05138|#FF7262|code
+Test|XCTest||#34C759|#30A14E|check
+Deploy|TestFlight||#0D96F6|#0056CC|rocket
+Analytics|Firebase||#FFCA28|#FFA000|chart
+Feedback|AppStore||#A2AAAD|#7D848C|heart
+----
+
+=== iOS Shield for Project Status Dashboard
+
+Create a project status dashboard with iOS shields:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Project|DocOps iOS||#007AFF|#0056CC|building
+Version|2.5.0||#5856D6|#4A3EB1|code
+Last Update|2023-10-15||#FF2D55|#FF0033|clock
+Status|Active||#34C759|#30A14E|check
+Issues|12 Open||#FF9500|#FF6B00|warning
+PRs|5 Pending||#5AC8FA|#0091FF|github
+----
+....
+
+[docops,shield]
+----
+Project|DocOps iOS||#007AFF|#0056CC|building
+Version|2.5.0||#5856D6|#4A3EB1|code
+Last Update|2023-10-15||#FF2D55|#FF0033|clock
+Status|Active||#34C759|#30A14E|check
+Issues|12 Open||#FF9500|#FF6B00|warning
+PRs|5 Pending||#5AC8FA|#0091FF|github
+----
+
+=== iOS Shield for Feature Highlights
+
+Showcase your app's key features with iOS shields:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Dark Mode|Supported||#1D1D1D|#8E8E93|moon
+Widgets|Interactive||#FF2D55|#FF0033|star
+Cloud Sync|Real-time||#007AFF|#0056CC|cloud
+Offline Mode|Available||#34C759|#30A14E|check
+Voice Control|Enhanced||#5856D6|#4A3EB1|microphone
+----
+....
+
+[docops,shield]
+----
+Dark Mode|Supported||#1D1D1D|#8E8E93|moon
+Widgets|Interactive||#FF2D55|#FF0033|star
+Cloud Sync|Real-time||#007AFF|#0056CC|cloud
+Offline Mode|Available||#34C759|#30A14E|check
+Voice Control|Enhanced||#5856D6|#4A3EB1|microphone
+----
+
+=== iOS Shield for Team Members
+
+Highlight your team members with iOS shields:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+Sarah|Design Lead||#FF2D55|#FF0033|heart
+Michael|iOS Developer||#007AFF|#0056CC|code
+Jennifer|UX Researcher||#5856D6|#4A3EB1|book
+David|Backend Engineer||#34C759|#30A14E|api
+Alex|QA Engineer||#FF9500|#FF6B00|check
+----
+....
+
+[docops,shield]
+----
+Sarah|Design Lead||#FF2D55|#FF0033|heart
+Michael|iOS Developer||#007AFF|#0056CC|code
+Jennifer|UX Researcher||#5856D6|#4A3EB1|book
+David|Backend Engineer||#34C759|#30A14E|api
+Alex|QA Engineer||#FF9500|#FF6B00|check
+----
+
+=== Material Shield Examples
+
+Here are examples of shields using the Material Design style.
+
+=== Basic Material Shield Example
+
+Here's a simple example of a Material-style shield:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material"}
+Status|Stable
+----
+....
+
+[docops,shield]
+----
+{"style": "material", "theme": "material"}
+Status|Stable
+----
+
+=== Material Shield with Icon Example
+
+You can add an icon to your Material shield:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material"}
+Build|Passing||#4CAF50|#388E3C|check
+----
+....
+
+[docops,shield]
+----
+{"style": "material", "theme": "material"}
+Build|Passing||#4CAF50|#388E3C|check
+----
+
+=== Horizontal Material Shield Arrangement
+
+You can arrange Material shields horizontally:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material", "spacing": 20, "arrangement": "horizontal"}
+Design|Figma||#F24E1E|#FF7262|star
+Code|React||#61DAFB|#282C34|code
+Deploy|Firebase||#FFCA28|#FFA000|rocket
+----
+....
+
+[docops,shield]
+----
+{"style": "material", "theme": "material", "spacing": 20, "arrangement": "horizontal"}
+Design|Figma||#F24E1E|#FF7262|star
+Code|React||#61DAFB|#282C34|code
+Deploy|Firebase||#FFCA28|#FFA000|rocket
+----
+
+=== Vertical Material Shield Arrangement
+
+You can arrange Material shields vertically:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material", "spacing": 15, "arrangement": "vertical"}
+Android|12.0+||#3DDC84|#32B270
+Kotlin|1.7||#7F52FF|#5F3DC4
+Jetpack|Compose||#4285F4|#3367D6
+----
+....
+
+[docops,shield,arrangement=vertical]
+----
+{"style": "material", "theme": "material", "spacing": 15, "arrangement": "vertical"}
+Android|12.0+||#3DDC84|#32B270
+Kotlin|1.7||#7F52FF|#5F3DC4
+Jetpack|Compose||#4285F4|#3367D6
+----
+
+=== Grid Material Shield Arrangement
+
+You can also arrange Material shields in a grid:
+
+[source,asciidoc]
+....
+[docops,shield]
+----
+{"style": "material", "theme": "material", "spacing": 15}
+Design|Material||#F24E1E|#FF7262|star
+Code|Kotlin||#7F52FF|#5F3DC4|code
+Test|JUnit||#4CAF50|#388E3C|check
+Deploy|Google Play||#4285F4|#3367D6|rocket
+Analytics|Firebase||#FFCA28|#FFA000|chart
+Feedback|Play Store||#A2AAAD|#7D848C|heart
+----
+....
+
+[docops,shield,arrangement=grid]
+----
+{"style": "material", "theme": "material", "spacing": 15, "arrangement": "grid"}
+Design|Material||#F24E1E|#FF7262|star
+Code|Kotlin||#7F52FF|#5F3DC4|code
+Test|JUnit||#4CAF50|#388E3C|check
+Deploy|Google Play||#4285F4|#3367D6|rocket
+Analytics|Firebase||#FFCA28|#FFA000|chart
+Feedback|Play Store||#A2AAAD|#7D848C|heart
+----
+
 == Conclusion
 
 The DocOps Shield Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing badges and shields. By using either the pipe-delimited or JSON configuration format, you can create customized shields that match your document's style and purpose.
@@ -361,4 +793,9 @@ The pipe-delimited format offers a simple, concise syntax for basic shield confi
 
 The extension supports various customization options, including custom colors, logos, links, and dark mode, allowing you to create shields that effectively communicate status information and metadata in your documentation.
 
-With the examples provided in this guide, you can create badges for various use cases, including CI/CD status, version information, security and compliance, technology stack, documentation status, and social media links.
+With the examples provided in this guide, you can create badges and shields for various use cases, including CI/CD status, version information, security and compliance, technology stack, documentation status, and social media links.
+
+The extension now supports both iOS and Material Design style shields:
+
+* iOS-style shields provide a modern and visually appealing option with features like gradient backgrounds, glassmorphism effects, and interactive hover animations.
+* Material Design-style shields offer a clean, structured appearance following Google's Material Design guidelines with flat colors, subtle shadows, and consistent spacing.

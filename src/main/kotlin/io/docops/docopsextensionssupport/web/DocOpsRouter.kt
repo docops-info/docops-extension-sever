@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.web
 
 import io.docops.docopsextensionssupport.adr.AdrHandler
 import io.docops.docopsextensionssupport.badge.BadgeHandler
+import io.docops.docopsextensionssupport.badge.ShieldHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
@@ -76,7 +77,8 @@ class DocOpsRouter (
         "wordcloud" to WordCloudHandler(),
         "quadrant" to QuadrantHandler(),
         "swim" to SwimLaneHandler(),
-        "feature" to FeatureCardHandler()
+        "feature" to FeatureCardHandler(),
+        "shield" to ShieldHandler()
         // Add more handlers as needed
     )
 
