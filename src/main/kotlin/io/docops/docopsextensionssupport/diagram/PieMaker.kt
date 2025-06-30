@@ -1,9 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
-import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import java.io.File
 
 class PieMaker {
