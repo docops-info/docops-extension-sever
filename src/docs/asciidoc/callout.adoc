@@ -112,6 +112,7 @@ Alternatively, you can use JSON format for more control:
 
 * `type` (required): The type of callout visualization (systematic, metrics, ). Default is "systematic".
 * `title` (required): The title of the callout.
+* `useGlass` (optional): Boolean value to enable or disable the glass look and feel. Default is true.
 
 == Examples
 
@@ -484,6 +485,71 @@ You can use JSON format to create metrics callouts with custom formatting:
     "SEO Score": "92/100",
     "Accessibility Score": "97/100"
   }
+}
+----
+
+=== Styling Options
+
+You can customize the visual appearance of callouts using the `useGlass` attribute. By default, callouts use a glass-like styling with transparency and highlights. You can disable this to use a more traditional flat design:
+
+[source,asciidoc]
+....
+[docops,callout,controls=true]
+----
+{
+  "type": "systematic",
+  "title": "Project Phases",
+  "useGlass": false,
+  "steps": [
+    {
+      "phase": "Planning",
+      "action": "Define project scope and requirements",
+      "result": "Approved project plan",
+      "improvement": "More stakeholder involvement"
+    },
+    {
+      "phase": "Execution",
+      "action": "Implement project deliverables",
+      "result": "Completed work products",
+      "improvement": "Better resource allocation"
+    },
+    {
+      "phase": "Monitoring",
+      "action": "Track progress and manage issues",
+      "result": "Status reports and issue logs",
+      "improvement": "More frequent check-ins"
+    }
+  ]
+}
+----
+....
+
+[docops,callout,controls=true]
+----
+{
+  "type": "systematic",
+  "title": "Project Phases",
+  "useGlass": false,
+  "steps": [
+    {
+      "phase": "Planning",
+      "action": "Define project scope and requirements",
+      "result": "Approved project plan",
+      "improvement": "More stakeholder involvement"
+    },
+    {
+      "phase": "Execution",
+      "action": "Implement project deliverables",
+      "result": "Completed work products",
+      "improvement": "Better resource allocation"
+    },
+    {
+      "phase": "Monitoring",
+      "action": "Track progress and manage issues",
+      "result": "Status reports and issue logs",
+      "improvement": "More frequent check-ins"
+    }
+  ]
 }
 ----
 

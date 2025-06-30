@@ -20,7 +20,8 @@ data class CalloutStep(
 data class CalloutData(
     val title: String = "Callout",
     val steps: List<CalloutStep> = emptyList(),
-    val metrics: Map<String, String> = emptyMap()
+    val metrics: Map<String, String> = emptyMap(),
+    val useGlass: Boolean = true
 )
 
 // For backward compatibility
