@@ -91,6 +91,7 @@ class DocOpsRouter (
                @RequestParam("type", required = false, defaultValue = "SVG") type: String,
                @RequestParam("title", required = false, defaultValue = "") title: String,
                @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
+               @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
                @RequestParam("backend", required = false, defaultValue = "html") backend: String
     ) : ResponseEntity<ByteArray> {
         val context = DocOpsContext(
@@ -98,6 +99,7 @@ class DocOpsRouter (
             type = type,
             title = title,
             useDark = useDark,
+            useGlass = useGlass,
             backend = backend
         )
 

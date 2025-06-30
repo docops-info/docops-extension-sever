@@ -270,7 +270,7 @@ class TimelineController {
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(false, useGlass = true)
+            val tm = TimelineMaker(false)
             val svg = tm.makeTimelineSvg(data, "title", "0.6", false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

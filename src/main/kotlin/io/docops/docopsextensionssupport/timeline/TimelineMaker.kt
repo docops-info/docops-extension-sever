@@ -27,7 +27,7 @@ import java.util.*
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString(), val useGlass: Boolean = true) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString(), val useGlass: Boolean = false) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     private var cardBackgroundColor = ""

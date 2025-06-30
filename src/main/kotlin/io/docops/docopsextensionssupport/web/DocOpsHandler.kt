@@ -23,5 +23,5 @@ data class DocOpsContext(
     val title: String = "",
     val useDark: Boolean = false,
     val backend: String = "html",
-    val useGlass: Boolean = true
+    val useGlass: Boolean = false
 )
