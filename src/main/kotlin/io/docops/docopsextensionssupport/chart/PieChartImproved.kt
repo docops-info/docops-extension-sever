@@ -2,7 +2,10 @@ package io.docops.docopsextensionssupport.chart
 
 import java.util.*
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
+import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.gradientFromColor
 
 class PieChartImproved {
     // Modern color palette for pie chart
@@ -157,34 +160,124 @@ class PieChartImproved {
             svgBuilder.append("<rect width='$width' height='$height' fill='$backgroundColor' />")
         }
 
-        // Add CSS styles for hover effects if enabled
+        // Add glass effect definitions
+        svgBuilder.append("""
+            <defs>
+                <!-- Glass effect gradients -->
+                <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Highlight gradient -->
+                <linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Radial gradient for realistic light reflections -->
+                <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </radialGradient>
+
+                <!-- Enhanced drop shadow filter for glass elements -->
+                <filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/>
+                </filter>
+
+                <!-- Frosted glass blur filter -->
+                <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+                </filter>
+
+                <!-- Glass border gradient -->
+                <linearGradient id="glassBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+        """.trimIndent())
+
+        // Add CSS styles for hover effects and glass styling if enabled
         if (enableHoverEffects) {
             svgBuilder.append("""
                 <style>
                     .pie-segment {
                         transition: transform 0.2s, filter 0.2s;
                         transform-origin: ${centerX}px ${centerY}px;
+                        filter: url(#glassDropShadow);
                     }
                     .pie-segment:hover {
                         transform: scale(1.05);
-                        filter: brightness(1.1);
+                        filter: url(#glassDropShadow) brightness(1.1);
                         cursor: pointer;
+                    }
+                    .pie-segment-overlay {
+                        pointer-events: none;
+                        opacity: 0.7;
+                    }
+                    .pie-segment-highlight {
+                        pointer-events: none;
+                        opacity: 0.5;
+                        transition: opacity 0.2s ease;
+                    }
+                    .pie-segment:hover + .pie-segment-highlight {
+                        opacity: 0.8;
+                    }
+                    .legend-item {
+                        transition: all 0.2s ease;
                     }
                     .legend-item:hover {
                         cursor: pointer;
+                        transform: translateY(-2px);
                     }
                     .legend-item:hover rect {
                         stroke-width: 2;
+                        filter: brightness(1.1);
                     }
                     .legend-item:hover text {
                         font-weight: bold;
+                    }
+                    .legend-box {
+                        filter: url(#glassDropShadow);
+                        transition: all 0.2s ease;
+                    }
+                    .donut-hole {
+                        filter: url(#glassBlur);
                     }
                 </style>
             """.trimIndent())
         }
 
-        // Add title
-        svgBuilder.append("<text x='${width/2}' y='30' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' fill='$textColor'>$title</text>")
+        // Add title with glass effect
+        // Create a glass-style background for the title
+        val titleWidth = min(title.length * 14 + 40, (width * 0.8).toInt())
+        val titleHeight = 40
+        val titleBgX = width/2 - titleWidth/2
+        val titleBgY = 10
+
+        // Title background with glass effect
+        svgBuilder.append("<rect x='$titleBgX' y='$titleBgY' width='$titleWidth' height='$titleHeight' ")
+        svgBuilder.append("rx='10' ry='10' fill='${if(darkMode) "#2a3a4a" else "rgba(245,245,247,0.85)"}' ")
+        svgBuilder.append("filter='url(#glassDropShadow)' />")
+
+        // Glass overlay for title background
+        svgBuilder.append("<rect x='$titleBgX' y='$titleBgY' width='$titleWidth' height='$titleHeight' ")
+        svgBuilder.append("rx='10' ry='10' fill='url(#glassOverlay)' class='glass-overlay' />")
+
+        // Top highlight for title
+        svgBuilder.append("<rect x='${titleBgX + 5}' y='${titleBgY + 5}' width='${titleWidth - 10}' height='15' ")
+        svgBuilder.append("rx='5' ry='5' fill='url(#glassHighlight)' class='glass-highlight' opacity='0.4' />")
+
+        // Title text with enhanced styling
+        svgBuilder.append("<text x='${width/2}' y='35' font-family='Arial' font-size='20' text-anchor='middle' ")
+        svgBuilder.append("font-weight='bold' fill='$textColor' style='letter-spacing: -0.02em;'>$title</text>")
 
         // Draw pie segments
         var startAngle = 0.0
@@ -211,8 +304,10 @@ class PieChartImproved {
             val colorIndex = index % colors.size
             val color = segment.color ?: colors[colorIndex]
 
-            // Create path for the segment with class for hover effects if enabled
+            // Create path for the segment with glass effect
             svgBuilder.append("<g>")
+
+            // Base segment with glass effect
             if (enableHoverEffects) {
                 svgBuilder.append("<path id='segment-$index' class='pie-segment' d='M$centerX,$centerY L$x1,$y1 A$pieRadius,$pieRadius 0 $largeArcFlag,1 $x2,$y2 Z' ")
             } else {
@@ -222,6 +317,21 @@ class PieChartImproved {
             // Add title element for tooltip
             svgBuilder.append("<title>${segment.label}: ${segment.value} (${String.format("%.1f", percentage * 100)}%)</title>")
             svgBuilder.append("</path>")
+
+            // Glass overlay for the segment
+            svgBuilder.append("<path class='pie-segment-overlay' d='M$centerX,$centerY L$x1,$y1 A$pieRadius,$pieRadius 0 $largeArcFlag,1 $x2,$y2 Z' ")
+            svgBuilder.append("fill='url(#glassOverlay)' stroke='url(#glassBorder)' stroke-width='1' />")
+
+            // Calculate midpoint for highlight
+            val midAngleRadians = Math.toRadians(startAngle + angle / 2)
+            val highlightRadius = pieRadius * 0.85
+            val highlightX = centerX + highlightRadius * sin(midAngleRadians)
+            val highlightY = centerY - highlightRadius * cos(midAngleRadians)
+
+            // Add radial highlight for glass effect
+            svgBuilder.append("<circle class='pie-segment-highlight' cx='$highlightX' cy='$highlightY' r='${pieRadius * 0.15}' ")
+            svgBuilder.append("fill='url(#glassRadial)' />")
+
             svgBuilder.append("</g>")
 
             // Store segment info for labels
@@ -244,13 +354,23 @@ class PieChartImproved {
 
         // Add donut hole if donut chart is enabled
         if (isDonut) {
-            // Create a circle in the center to make the "hole"
-            // The hole size is typically 50-60% of the pie radius
+            // Create a circle in the center to make the "hole" with glass effect
             val holeRadius = pieRadius * 0.55
-            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='$donutHoleColor' />")
 
-            // Optional: Add a subtle border to the hole
-            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='none' stroke='$donutBorderColor' stroke-width='1' />")
+            // Base donut hole
+            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='$donutHoleColor' class='donut-hole' />")
+
+            // Glass overlay for donut hole
+            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='url(#glassOverlay)' class='donut-hole' />")
+
+            // Border with glass effect
+            svgBuilder.append("<circle cx='$centerX' cy='$centerY' r='$holeRadius' fill='none' stroke='url(#glassBorder)' stroke-width='1' />")
+
+            // Top highlight for shine
+            svgBuilder.append("<ellipse cx='${centerX - holeRadius * 0.2}' cy='${centerY - holeRadius * 0.2}' rx='${holeRadius * 0.7}' ry='${holeRadius * 0.3}' fill='url(#glassHighlight)' opacity='0.6' />")
+
+            // Small radial highlight for realistic light effect
+            svgBuilder.append("<circle cx='${centerX - holeRadius * 0.3}' cy='${centerY - holeRadius * 0.3}' r='${holeRadius * 0.15}' fill='url(#glassRadial)' opacity='0.7' />")
         }
 
         // Add legend if enabled
@@ -259,6 +379,25 @@ class PieChartImproved {
             // Position legend on the right side with adequate spacing
             val legendX = centerX + pieRadius + 30 // 30px margin between pie and legend
             val legendY = height * 0.5 - (segments.size * 25) / 2 // Center legend vertically
+
+            // Create a glass-style background for the legend
+            val legendWidth = 180
+            val legendHeight = segments.size * 25 + 20
+            val legendBgX = legendX - 25
+            val legendBgY = legendY - 20
+
+            // Legend background with glass effect
+            svgBuilder.append("<rect x='$legendBgX' y='$legendBgY' width='$legendWidth' height='$legendHeight' ")
+            svgBuilder.append("rx='10' ry='10' fill='${if(darkMode) "#2a3a4a" else "rgba(245,245,247,0.85)"}' ")
+            svgBuilder.append("class='legend-box' />")
+
+            // Glass overlay for legend background
+            svgBuilder.append("<rect x='$legendBgX' y='$legendBgY' width='$legendWidth' height='$legendHeight' ")
+            svgBuilder.append("rx='10' ry='10' fill='url(#glassOverlay)' class='glass-overlay' />")
+
+            // Top highlight for legend
+            svgBuilder.append("<rect x='${legendBgX + 5}' y='${legendBgY + 5}' width='${legendWidth - 10}' height='20' ")
+            svgBuilder.append("rx='5' ry='5' fill='url(#glassHighlight)' class='glass-highlight' opacity='0.4' />")
 
             svgBuilder.append("<g class='legend'>")
 
@@ -273,15 +412,24 @@ class PieChartImproved {
                     svgBuilder.append("<g>")
                 }
 
-                // Legend color box with tooltip
+                // Legend color box with glass effect and tooltip
                 svgBuilder.append("<rect x='${legendX - 15}' y='${yPos - 10}' width='15' height='15' ")
-                svgBuilder.append("fill='${segmentWithAngles.color}' stroke='$legendBorderColor'>")
+                svgBuilder.append("rx='3' ry='3' fill='${segmentWithAngles.color}' stroke='url(#glassBorder)' filter='url(#glassDropShadow)'>")
                 svgBuilder.append("<title>${segment.label}: ${segment.value} (${String.format("%.1f", segmentWithAngles.percentage * 100)}%)</title>")
                 svgBuilder.append("</rect>")
 
-                // Legend text
+                // Glass overlay for color box
+                svgBuilder.append("<rect x='${legendX - 15}' y='${yPos - 10}' width='15' height='15' ")
+                svgBuilder.append("rx='3' ry='3' fill='url(#glassOverlay)' class='glass-overlay' />")
+
+                // Small highlight for color box
+                svgBuilder.append("<rect x='${legendX - 13}' y='${yPos - 8}' width='11' height='5' ")
+                svgBuilder.append("rx='2' ry='2' fill='url(#glassHighlight)' class='glass-highlight' opacity='0.5' />")
+
+                // Legend text with enhanced styling
                 val percentText = "%.1f%%".format(segmentWithAngles.percentage * 100)
-                svgBuilder.append("<text x='$legendX' y='$yPos' font-family='Arial' font-size='12' text-anchor='start' fill='$textColor'>")
+                svgBuilder.append("<text x='$legendX' y='$yPos' font-family='Arial' font-size='12' text-anchor='start' fill='$textColor' ")
+                svgBuilder.append("style='font-weight: 500; letter-spacing: -0.01em;'>")
                 svgBuilder.append("${segment.label} ($percentText)</text>")
 
                 svgBuilder.append("</g>")
