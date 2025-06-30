@@ -23,11 +23,12 @@ class ConnectorMakerImproved(private val config: ConnectorConfig = ConnectorConf
         val markerScale: Float = 2f,
         val lineOpacity: Float = 0.8f,
         val radius: Float = 8f,
-        val smoothFactor: Float = 0.5f
+        val smoothFactor: Float = 0.5f,
+        val useGlassEffect: Boolean = true
     )
 
     /**
-     * Creates an SVG path for a connector between two points
+     * Creates an SVG path for a connector between two points with glass effect
      */
     fun makeConnector(startX: Float, startY: Float, endX: Float, endY: Float, id: String = ""): String {
         val dx = endX - startX
@@ -44,46 +45,83 @@ class ConnectorMakerImproved(private val config: ConnectorConfig = ConnectorConf
 
         // Create unique marker ID if not provided
         val markerId = if (id.isBlank()) "arrow-${System.currentTimeMillis()}" else "arrow-$id"
+        val glassId = if (id.isBlank()) "glass-${System.currentTimeMillis()}" else "glass-$id"
 
         return buildString {
-            // Define arrow marker
-            if (config.showArrow) {
-                append("""
-                    <defs>
-                        <marker 
-                            id="$markerId" 
-                            viewBox="0 0 10 10" 
-                            refX="5" 
-                            refY="5"
-                            markerWidth="${config.arrowSize * config.markerScale}" 
-                            markerHeight="${config.arrowSize * config.markerScale}"
-                            orient="auto-start-reverse">
-                            <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
-                        </marker>
-                    </defs>
-                """.trimIndent())
-            }
-
-            // Draw the path
+            // Define arrow marker and glass effect gradients
             append("""
-                <path 
-                    d="M $startX,$startY C $controlPoint1X,$controlPoint1Y $controlPoint2X,$controlPoint2Y $endX,$endY"
-                    fill="none" 
-                    stroke="${config.strokeColor}" 
-                    stroke-width="${config.strokeWidth}" 
-                    stroke-opacity="${config.lineOpacity}"
-                    ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
-                    stroke-linecap="round"
-                />
+                <defs>
+                    <marker 
+                        id="$markerId" 
+                        viewBox="0 0 10 10" 
+                        refX="5" 
+                        refY="5"
+                        markerWidth="${config.arrowSize * config.markerScale}" 
+                        markerHeight="${config.arrowSize * config.markerScale}"
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
+                    </marker>
+
+                    <!-- Glass effect gradients for connector -->
+                    <linearGradient id="connector-glass-${glassId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glow filter for glass effect -->
+                    <filter id="connector-glow-${glassId}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+            """.trimIndent())
+
+            // Create a group for the glass connector
+            append("""
+                <g class="glass-connector">
+                    <!-- Base path with drop shadow -->
+                    <path 
+                        d="M $startX,$startY C $controlPoint1X,$controlPoint1Y $controlPoint2X,$controlPoint2Y $endX,$endY"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth + 2}" 
+                        stroke-opacity="0.3"
+                        filter="url(#connector-glow-${glassId})"
+                        stroke-linecap="round"
+                    />
+
+                    <!-- Main path with glass effect -->
+                    <path 
+                        d="M $startX,$startY C $controlPoint1X,$controlPoint1Y $controlPoint2X,$controlPoint2Y $endX,$endY"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth}" 
+                        stroke-opacity="${config.lineOpacity}"
+                        ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
+                        stroke-linecap="round"
+                    />
+
+                    <!-- Glass highlight overlay -->
+                    <path 
+                        d="M $startX,$startY C $controlPoint1X,$controlPoint1Y $controlPoint2X,$controlPoint2Y $endX,$endY"
+                        fill="none" 
+                        stroke="url(#connector-glass-${glassId})" 
+                        stroke-width="${config.strokeWidth * 0.7}" 
+                        stroke-opacity="0.5"
+                        stroke-linecap="round"
+                    />
+                </g>
             """.trimIndent())
         }
     }
 
     /**
-     * Creates an SVG orthogonal connector with rounded corners
+     * Creates an SVG orthogonal connector with rounded corners and glass effect
      */
     fun makeOrthogonalConnector(startX: Float, startY: Float, endX: Float, endY: Float, id: String = ""): String {
         val markerId = if (id.isBlank()) "arrow-${System.currentTimeMillis()}" else "arrow-$id"
+        val glassId = if (id.isBlank()) "glass-${System.currentTimeMillis()}" else "glass-$id"
         val midX = (startX + endX) / 2
         val midY = (startY + endY) / 2
 
@@ -113,82 +151,155 @@ class ConnectorMakerImproved(private val config: ConnectorConfig = ConnectorConf
         }
 
         return buildString {
-            // Define arrow marker
-            if (config.showArrow) {
-                append("""
-                    <defs>
-                        <marker 
-                            id="$markerId" 
-                            viewBox="0 0 10 10" 
-                            refX="5" 
-                            refY="5"
-                            markerWidth="${config.arrowSize * config.markerScale}" 
-                            markerHeight="${config.arrowSize * config.markerScale}"
-                            orient="auto-start-reverse">
-                            <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
-                        </marker>
-                    </defs>
-                """.trimIndent())
-            }
-
-            // Draw the path
+            // Define arrow marker and glass effect gradients
             append("""
-                <path 
-                    d="$path"
-                    fill="none" 
-                    stroke="${config.strokeColor}" 
-                    stroke-width="${config.strokeWidth}" 
-                    stroke-opacity="${config.lineOpacity}"
-                    ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
+                <defs>
+                    <marker 
+                        id="$markerId" 
+                        viewBox="0 0 10 10" 
+                        refX="5" 
+                        refY="5"
+                        markerWidth="${config.arrowSize * config.markerScale}" 
+                        markerHeight="${config.arrowSize * config.markerScale}"
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
+                    </marker>
+
+                    <!-- Glass effect gradients for connector -->
+                    <linearGradient id="connector-glass-${glassId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glow filter for glass effect -->
+                    <filter id="connector-glow-${glassId}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+            """.trimIndent())
+
+            // Create a group for the glass connector
+            append("""
+                <g class="glass-connector">
+                    <!-- Base path with drop shadow -->
+                    <path 
+                        d="$path"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth + 2}" 
+                        stroke-opacity="0.3"
+                        filter="url(#connector-glow-${glassId})"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- Main path with glass effect -->
+                    <path 
+                        d="$path"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth}" 
+                        stroke-opacity="${config.lineOpacity}"
+                        ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- Glass highlight overlay -->
+                    <path 
+                        d="$path"
+                        fill="none" 
+                        stroke="url(#connector-glass-${glassId})" 
+                        stroke-width="${config.strokeWidth * 0.7}" 
+                        stroke-opacity="0.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </g>
             """.trimIndent())
         }
     }
 
     /**
-     * Creates a self-connecting loop connector
+     * Creates a self-connecting loop connector with glass effect
      */
     fun makeSelfConnector(x: Float, y: Float, size: Float = 40f, id: String = ""): String {
         val markerId = if (id.isBlank()) "arrow-${System.currentTimeMillis()}" else "arrow-$id"
+        val glassId = if (id.isBlank()) "glass-${System.currentTimeMillis()}" else "glass-$id"
 
         return buildString {
-            // Define arrow marker
-            if (config.showArrow) {
-                append("""
-                    <defs>
-                        <marker 
-                            id="$markerId" 
-                            viewBox="0 0 10 10" 
-                            refX="5" 
-                            refY="5"
-                            markerWidth="${config.arrowSize * config.markerScale}" 
-                            markerHeight="${config.arrowSize * config.markerScale}"
-                            orient="auto-start-reverse">
-                            <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
-                        </marker>
-                    </defs>
-                """.trimIndent())
-            }
-
-            // Draw the loop path
+            // Define arrow marker and glass effect gradients
             append("""
-                <path 
-                    d="M $x,$y C ${x+size},${y-size} ${x+size},${y+size} $x,$y"
-                    fill="none" 
-                    stroke="${config.strokeColor}" 
-                    stroke-width="${config.strokeWidth}" 
-                    stroke-opacity="${config.lineOpacity}"
-                    ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
-                    stroke-linecap="round"
-                />
+                <defs>
+                    <marker 
+                        id="$markerId" 
+                        viewBox="0 0 10 10" 
+                        refX="5" 
+                        refY="5"
+                        markerWidth="${config.arrowSize * config.markerScale}" 
+                        markerHeight="${config.arrowSize * config.markerScale}"
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
+                    </marker>
+
+                    <!-- Glass effect gradients for connector -->
+                    <linearGradient id="connector-glass-${glassId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glow filter for glass effect -->
+                    <filter id="connector-glow-${glassId}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+            """.trimIndent())
+
+            // Create a group for the glass connector
+            append("""
+                <g class="glass-connector">
+                    <!-- Base path with drop shadow -->
+                    <path 
+                        d="M $x,$y C ${x+size},${y-size} ${x+size},${y+size} $x,$y"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth + 2}" 
+                        stroke-opacity="0.3"
+                        filter="url(#connector-glow-${glassId})"
+                        stroke-linecap="round"
+                    />
+
+                    <!-- Main path with glass effect -->
+                    <path 
+                        d="M $x,$y C ${x+size},${y-size} ${x+size},${y+size} $x,$y"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth}" 
+                        stroke-opacity="${config.lineOpacity}"
+                        ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
+                        stroke-linecap="round"
+                    />
+
+                    <!-- Glass highlight overlay -->
+                    <path 
+                        d="M $x,$y C ${x+size},${y-size} ${x+size},${y+size} $x,$y"
+                        fill="none" 
+                        stroke="url(#connector-glass-${glassId})" 
+                        stroke-width="${config.strokeWidth * 0.7}" 
+                        stroke-opacity="0.5"
+                        stroke-linecap="round"
+                    />
+                </g>
             """.trimIndent())
         }
     }
 
     /**
-     * Creates a multipoint connector that can navigate around obstacles
+     * Creates a multipoint connector that can navigate around obstacles with glass effect
      */
     fun makeMultipointConnector(points: List<Pair<Float, Float>>, id: String = ""): String {
         if (points.size < 2) {
@@ -197,6 +308,7 @@ class ConnectorMakerImproved(private val config: ConnectorConfig = ConnectorConf
         }
 
         val markerId = if (id.isBlank()) "arrow-${System.currentTimeMillis()}" else "arrow-$id"
+        val glassId = if (id.isBlank()) "glass-${System.currentTimeMillis()}" else "glass-$id"
 
         // Build the path data
         val pathData = buildString {
@@ -228,43 +340,80 @@ class ConnectorMakerImproved(private val config: ConnectorConfig = ConnectorConf
         }
 
         return buildString {
-            // Define arrow marker
-            if (config.showArrow) {
-                append("""
-                    <defs>
-                        <marker 
-                            id="$markerId" 
-                            viewBox="0 0 10 10" 
-                            refX="5" 
-                            refY="5"
-                            markerWidth="${config.arrowSize * config.markerScale}" 
-                            markerHeight="${config.arrowSize * config.markerScale}"
-                            orient="auto-start-reverse">
-                            <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
-                        </marker>
-                    </defs>
-                """.trimIndent())
-            }
-
-            // Draw the path
+            // Define arrow marker and glass effect gradients
             append("""
-                <path 
-                    d="$pathData"
-                    fill="none" 
-                    stroke="${config.strokeColor}" 
-                    stroke-width="${config.strokeWidth}" 
-                    stroke-opacity="${config.lineOpacity}"
-                    ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
+                <defs>
+                    <marker 
+                        id="$markerId" 
+                        viewBox="0 0 10 10" 
+                        refX="5" 
+                        refY="5"
+                        markerWidth="${config.arrowSize * config.markerScale}" 
+                        markerHeight="${config.arrowSize * config.markerScale}"
+                        orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="${config.strokeColor}"/>
+                    </marker>
+
+                    <!-- Glass effect gradients for connector -->
+                    <linearGradient id="connector-glass-${glassId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glow filter for glass effect -->
+                    <filter id="connector-glow-${glassId}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+            """.trimIndent())
+
+            // Create a group for the glass connector
+            append("""
+                <g class="glass-connector">
+                    <!-- Base path with drop shadow -->
+                    <path 
+                        d="$pathData"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth + 2}" 
+                        stroke-opacity="0.3"
+                        filter="url(#connector-glow-${glassId})"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- Main path with glass effect -->
+                    <path 
+                        d="$pathData"
+                        fill="none" 
+                        stroke="${config.strokeColor}" 
+                        stroke-width="${config.strokeWidth}" 
+                        stroke-opacity="${config.lineOpacity}"
+                        ${if (config.showArrow) """marker-end="url(#$markerId)"""" else ""}
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- Glass highlight overlay -->
+                    <path 
+                        d="$pathData"
+                        fill="none" 
+                        stroke="url(#connector-glass-${glassId})" 
+                        stroke-width="${config.strokeWidth * 0.7}" 
+                        stroke-opacity="0.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </g>
             """.trimIndent())
         }
     }
 
     companion object {
         /**
-         * Creates a quick connector with default settings
+         * Creates a quick connector with default settings and glass effect
          */
         fun quickConnector(startX: Float, startY: Float, endX: Float, endY: Float, color: String = "#4b5563"): String {
             return ConnectorMakerImproved(ConnectorConfig(strokeColor = color))
@@ -277,7 +426,8 @@ fun createFlowDiagram(): String {
         ConnectorMakerImproved.ConnectorConfig(
             strokeWidth = 2.5f,
             strokeColor = "#4b5563",
-            showArrow = true
+            showArrow = true,
+            lineOpacity = 0.9f
         )
     )
 
@@ -320,23 +470,23 @@ fun createFlowDiagram(): String {
             <!-- Flow diagram nodes -->
             <rect x="50" y="20" width="100" height="60" rx="10" fill="#93c5fd" stroke="#2563eb" stroke-width="2" />
             <text x="100" y="55" font-family="Arial" font-size="14" text-anchor="middle">Start</text>
-            
+
             <rect x="50" y="120" width="100" height="60" rx="10" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2" />
             <text x="100" y="155" font-family="Arial" font-size="14" text-anchor="middle">Process</text>
-            
+
             <polygon points="100,220 130,250 100,280 70,250" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2" />
             <text x="100" y="255" font-family="Arial" font-size="14" text-anchor="middle">?</text>
-            
+
             <rect x="180" y="220" width="80" height="60" rx="10" fill="#c7d2fe" stroke="#4f46e5" stroke-width="2" />
             <text x="220" y="255" font-family="Arial" font-size="14" text-anchor="middle">Option 1</text>
-            
+
             <rect x="60" y="320" width="80" height="60" rx="10" fill="#c7d2fe" stroke="#4f46e5" stroke-width="2" />
             <text x="100" y="355" font-family="Arial" font-size="14" text-anchor="middle">Option 2</text>
-            
+
             <!-- Labels for decision paths -->
             <text x="150" y="235" font-family="Arial" font-size="12" text-anchor="middle">Yes</text>
             <text x="85" y="300" font-family="Arial" font-size="12" text-anchor="middle">No</text>
-            
+
             <!-- The connectors -->
             $startToProcess
             $processToDecision

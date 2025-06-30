@@ -97,19 +97,62 @@ class BarGroupMaker {
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
             val color = "url(#svgGradientColor_$index)"
-            // Create rectangular bar with rounded corners like in bar.svg
+            val barX = counter
+            val barY = 500 - per
+            val barWidth = 40.0
+            val barHeight = per
+
+            // Create glass effect bar with layered structure
             sb.append("""
-                <rect class="bar" 
-                      x="$counter" 
-                      y="${500 - per}" 
-                      width="40" 
-                      height="${per}" 
-                      rx="6" 
-                      ry="6" 
-                      fill="$color">
-                    <animate attributeName="height" from="0" to="${per}" dur="1s" fill="freeze"/>
-                    <animate attributeName="y" from="500" to="${500 - per}" dur="1s" fill="freeze"/>
-                </rect>
+                <g class="glass-bar">
+                    <!-- Base rectangle with gradient -->
+                    <rect x="$barX" 
+                          y="$barY" 
+                          width="$barWidth" 
+                          height="$barHeight" 
+                          rx="6" 
+                          ry="6" 
+                          fill="$color"
+                          filter="url(#glassDropShadow)"
+                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+
+                    <!-- Glass overlay with transparency -->
+                    <rect x="$barX" 
+                          y="$barY" 
+                          width="$barWidth" 
+                          height="$barHeight" 
+                          rx="6" 
+                          ry="6"
+                          fill="url(#glassOverlay)"
+                          filter="url(#glassBlur)">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+
+                    <!-- Radial highlight for realistic light effect -->
+                    <ellipse cx="${barX + barWidth/4}" 
+                             cy="${barY + barHeight/5}" 
+                             rx="${barWidth/3}" 
+                             ry="${Math.min(barHeight/6, 15.0)}"
+                             fill="url(#glassRadial)"
+                             opacity="0.7">
+                        <animate attributeName="cy" from="510" to="${barY + barHeight/5}" dur="1s" fill="freeze"/>
+                    </ellipse>
+
+                    <!-- Top highlight for shine -->
+                    <rect x="${barX + 3}" 
+                          y="${barY + 3}" 
+                          width="${barWidth - 6}" 
+                          height="${Math.min(barHeight/4, 20.0)}" 
+                          rx="4" 
+                          ry="4"
+                          fill="url(#glassHighlight)">
+                        <animate attributeName="y" from="497" to="${barY + 3}" dur="1s" fill="freeze"/>
+                    </rect>
+                </g>
             """.trimIndent())
 
             if(series.value > 0) {
@@ -306,6 +349,29 @@ class BarGroupMaker {
                 <stop class="stop3" offset="100%" stop-color="#EEEDEB"/>
             </linearGradient>
             $gradients
+
+            <!-- Glass effect gradients -->
+            <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                <stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
+                <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+            </linearGradient>
+
+            <!-- Highlight gradient -->
+            <linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                <stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+            </linearGradient>
+
+            <!-- Radial gradient for realistic light reflections -->
+            <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
+                <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+            </radialGradient>
+
             <pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                 <path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/>
             </pattern>
@@ -333,6 +399,41 @@ class BarGroupMaker {
                 <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
                              result="litPaint"/>
             </filter>
+
+            <!-- Enhanced drop shadow filter for glass bars -->
+            <filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/>
+            </filter>
+
+            <!-- Frosted glass blur filter -->
+            <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+            </filter>
+
+            <!-- Inner shadow for depth -->
+            <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feOffset dx="0" dy="2"/>
+                <feGaussianBlur stdDeviation="2" result="offset-blur"/>
+                <feFlood flood-color="rgba(0,0,0,0.2)"/>
+                <feComposite in2="offset-blur" operator="in"/>
+                <feComposite in2="SourceGraphic" operator="over"/>
+            </filter>
+
+            <!-- Glow filter for hover effect -->
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+                <feColorMatrix in="blur" type="matrix" values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 18 -7
+                " result="glow"/>
+                <feMerge>
+                    <feMergeNode in="glow"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+
             <filter id="dropShadow" filterUnits="userSpaceOnUse" width="150%" height="150%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
                 <feOffset dx="2" dy="2"/>
@@ -345,8 +446,13 @@ class BarGroupMaker {
                 </feMerge>
             </filter>
             <style>
-                #id_${barGroup.id} .bar:hover {
-                    filter: grayscale(100%) sepia(100%);
+                #id_${barGroup.id} .glass-bar {
+                    transition: all 0.3s ease;
+                }
+                #id_${barGroup.id} .glass-bar:hover {
+                    filter: url(#glow);
+                    transform: scale(1.02);
+                    cursor: pointer;
                 }
             </style>
         </defs>"""

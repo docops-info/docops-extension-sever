@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import kotlin.math.min
 
 class VBarMaker {
     private var fontColor = ""
@@ -69,12 +70,40 @@ class VBarMaker {
                 </defs>
             """.trimIndent())
 
-            // Add the bar with animation
+            // Add the bar with glass effect
             sb.append("""
-                <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" fill="url(#$gradientId)">
-                    <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                    <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
-                </rect>
+                <g class="glass-bar">
+                    <!-- Base rectangle with gradient -->
+                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
+                          fill="url(#$gradientId)"
+                          filter="url(#glassDropShadow)"
+                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+
+                    <!-- Glass overlay with transparency -->
+                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6"
+                          fill="url(#glassOverlay)"
+                          filter="url(#glassBlur)">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+
+                    <!-- Radial highlight for realistic light effect -->
+                    <ellipse cx="${barX + barWidth/4}" cy="${barY + barHeight/5}" rx="${barWidth/3}" ry="${barHeight/6}"
+                             fill="url(#glassRadial)"
+                             opacity="0.7">
+                        <animate attributeName="cy" from="${yAxisEnd + 10}" to="${barY + barHeight/5}" dur="1s" fill="freeze"/>
+                    </ellipse>
+
+                    <!-- Top highlight for shine -->
+                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${kotlin.math.min(barHeight/4, 20.0)}" rx="4" ry="4"
+                          fill="url(#glassHighlight)">
+                        <animate attributeName="y" from="${yAxisEnd - 3}" to="${barY + 3}" dur="1s" fill="freeze"/>
+                    </rect>
+                </g>
+
                 <!-- Create wrapped label text -->
                 <text x="${barX + barWidth/2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
                     ${createWrappedLabel(series.label, barWidth)}
@@ -260,17 +289,45 @@ class VBarMaker {
     private fun addDefs(bar: Bar): String {
         return """
             <defs>
-                <!-- Drop shadow filter for bars -->
-                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-                    <feOffset in="blur" dx="3" dy="3" result="offsetBlur"/>
-                    <feComponentTransfer in="offsetBlur" result="shadow">
-                        <feFuncA type="linear" slope="0.3"/>
-                    </feComponentTransfer>
-                    <feMerge>
-                        <feMergeNode in="shadow"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
+                <!-- Glass effect gradients -->
+                <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Highlight gradient -->
+                <linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Radial gradient for realistic light reflections -->
+                <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </radialGradient>
+
+                <!-- Enhanced drop shadow filter for glass bars -->
+                <filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/>
+                </filter>
+
+                <!-- Frosted glass blur filter -->
+                <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+                </filter>
+
+                <!-- Inner shadow for depth -->
+                <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feOffset dx="0" dy="2"/>
+                    <feGaussianBlur stdDeviation="2" result="offset-blur"/>
+                    <feFlood flood-color="rgba(0,0,0,0.2)"/>
+                    <feComposite in2="offset-blur" operator="in"/>
+                    <feComposite in2="SourceGraphic" operator="over"/>
                 </filter>
 
                 <!-- Glow filter for hover effect -->
@@ -289,12 +346,12 @@ class VBarMaker {
                 </filter>
 
                 <style>
-                   #id_${bar.display.id} rect {
+                   #id_${bar.display.id} .glass-bar {
                         transition: all 0.3s ease;
                     }
-                    #id_${bar.display.id} rect:hover {
+                    #id_${bar.display.id} .glass-bar:hover {
                         filter: url(#glow);
-                        transform: scale(1.05);
+                        transform: scale(1.02);
                         cursor: pointer;
                     }
                 </style>
