@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.callout
 
 import kotlinx.serialization.json.Json
+import java.lang.Boolean.parseBoolean
 import java.util.UUID
 
 /**
@@ -80,16 +81,19 @@ open class CalloutMaker {
     private fun parseTableData(data: String, type: String): CalloutData {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Callout"
+        var useGlass = true // Default value
 
         return when (type) {
             "metrics" -> {
                 val metrics = mutableMapOf<String, String>()
                 var inDataSection = false
-
                 for (line in lines) {
                     when {
                         line.startsWith("title:") -> title = line.substring(6).trim()
                         line.startsWith("title=") -> title = line.substring(6).trim()
+                        line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
+                        line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
+
                         line == "---" -> inDataSection = true
                         inDataSection && line.contains("|") && !isHeaderRow(line) -> {
                             val parts = line.split("|").map { it.trim() }
@@ -100,7 +104,7 @@ open class CalloutMaker {
                     }
                 }
 
-                CalloutData(title = title, metrics = metrics)
+                CalloutData(title = title, metrics = metrics, useGlass = useGlass)
             }
             "systematic" -> {
                 val steps = mutableListOf<CalloutStep>()
@@ -110,6 +114,9 @@ open class CalloutMaker {
                     when {
                         line.startsWith("title:") -> title = line.substring(6).trim()
                         line.startsWith("title=") -> title = line.substring(6).trim()
+                        line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
+                        line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
+
                         line == "---" -> inDataSection = true
                         inDataSection && line.contains("|") && !isHeaderRow(line) -> {
                             val parts = line.split("|").map { it.trim() }
@@ -124,7 +131,7 @@ open class CalloutMaker {
                     }
                 }
 
-                CalloutData(title = title, steps = steps)
+                CalloutData(title = title, steps = steps, useGlass = useGlass)
             }
             else -> createDefaultCalloutData()
         }
