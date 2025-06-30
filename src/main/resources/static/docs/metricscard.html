@@ -1132,6 +1132,420 @@ blockquote {
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+</style>
+
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
 <script>
     class UserTracker {
         constructor() {
@@ -1222,6 +1636,244 @@ blockquote {
         tracker.trackPageView(userInfo);
     });
 </script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -1261,6 +1913,7 @@ blockquote {
 <li><a href="#_project_status_metrics">4.4. Project Status Metrics</a></li>
 <li><a href="#_health_and_fitness_metrics">4.5. Health and Fitness Metrics</a></li>
 <li><a href="#_environmental_impact_metrics">4.6. Environmental Impact Metrics</a></li>
+<li><a href="#_styling_options">4.7. Styling Options</a></li>
 </ul>
 </li>
 <li><a href="#_advanced_usage">5. Advanced Usage</a>
@@ -1494,6 +2147,9 @@ if (document.readyState === 'loading') {
 <li>
 <p><code>theme</code> (optional) - The visual theme to use (currently only "ios" is supported)</p>
 </li>
+<li>
+<p><code>useGlass</code> (optional) - Boolean value to enable or disable the glass look and feel (defaults to true)</p>
+</li>
 </ul>
 </div>
 </div>
@@ -1531,7 +2187,8 @@ if (document.readyState === 'loading') {
       "sublabel": "Systematic Approach"
     }
   ],
-  "theme": "ios"
+  "theme": "ios",
+  "useGlass": true
 }
 ----</code></pre>
 </div>
@@ -1590,6 +2247,9 @@ Retention | 92%
 <li>
 <p><code>useDark</code> (optional): Whether to use a dark theme. Default is false.</p>
 </li>
+<li>
+<p><code>useGlass</code> (optional): Boolean value to enable or disable the glass look and feel. Default is true.</p>
+</li>
 </ul>
 </div>
 </div>
@@ -1631,428 +2291,25 @@ Retention | 92%
 ----</code></pre>
 </div>
 </div>
-<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750647315507" data-theme="light"><svg id="ID_87ae2378-baa9-46ca-8e22-8c0cd29cc07f" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="800" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(110, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">97%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Query Cost Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">(12,000 &#8594; 405)</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(310, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">32%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">CPU Utilization Drop</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">(88% &#8594; 60%)</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(510, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Optimization Phases</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Systematic Approach</text></g>    </g></svg><div class="svg-floating-controls">
-    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750647315507')" title="Controls">
-        ⚙️
-    </button>
-    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750647315507"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750647315507')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750647315507')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750647315507')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750647315507')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750647315507')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750647315507')" title="Copy as PNG">📋 PNG</button>    </div>
-</div></div></div><style>
-/* Outer container handles alignment */
-.svg-viewer-container {
-    width: 100%;
-    /* text-align will be set via inline style based on role */
-}
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-fb5a74a53d6be76d" data-theme="light">
+<svg id="ID_4f10ebf1-61f4-4249-86bb-b73a2f182a94" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="800" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(110, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">97%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Query Cost Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">(12,000 &#8594; 405)</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(310, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">32%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">CPU Utilization Drop</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">(88% &#8594; 60%)</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(510, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Optimization Phases</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Systematic Approach</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-fb5a74a53d6be76d')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-fb5a74a53d6be76d">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-fb5a74a53d6be76d')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-fb5a74a53d6be76d')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-fb5a74a53d6be76d')" title="Reset Zoom">⚪</button>
 
-/* Inner container groups SVG and controls together */
-.svg-with-controls {
-    position: relative;
-    display: inline-block; /* This makes it respect text-align and stay together */
-    max-width: 100%;
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-fb5a74a53d6be76d')" title="Toggle Fullscreen">⛶</button>
 
-.svg-with-controls svg {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-    display: block;
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-fb5a74a53d6be76d')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-fb5a74a53d6be76d')" title="Copy as PNG">📋 PNG</button>
 
-.svg-floating-controls {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 100;
-}
-
-.svg-controls-toggle {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-}
-
-.svg-controls-toggle:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.svg-controls-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    animation: slideIn 0.2s ease-out;
-}
-
-.svg-controls-panel.show {
-    display: flex;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.svg-control-btn {
-    padding: 6px 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    text-align: center;
-    color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.svg-control-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark theme support */
-[data-theme="dark"] .svg-controls-toggle,
-[data-theme="dark"] .svg-controls-panel,
-[data-theme="dark"] .svg-control-btn {
-    background: rgba(30, 30, 30, 0.9);
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .svg-controls-toggle:hover,
-[data-theme="dark"] .svg-control-btn:hover {
-    background: rgba(50, 50, 50, 0.95);
-}
-
-/* Fullscreen mode */
-.svg-fullscreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.95) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.svg-fullscreen svg {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-}
-
-.svg-fullscreen .svg-floating-controls {
-    top: 20px;
-    right: 20px;
-}
-
-/* Copy success message */
-.copy-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 197, 94, 0.95);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 101;
-}
-
-.copy-message.show {
-    opacity: 1;
-}
-
-.copy-message.error {
-    background: rgba(239, 68, 68, 0.95);
-}
-</style>
-
-<script>
-window.svgViewer = window.svgViewer || {
-    toggleControls(id) {
-        const panel = document.getElementById(`controls-panel-${id}`);
-        const isVisible = panel.classList.contains('show');
-
-        // Hide all other panels
-        document.querySelectorAll('.svg-controls-panel').forEach(p => {
-            p.classList.remove('show');
-        });
-
-        // Toggle current panel
-        if (!isVisible) {
-            panel.classList.add('show');
-        }
-    },
-
-    zoomIn(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.min(currentZoom * 1.3, 5);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    zoomOut(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.max(currentZoom / 1.3, 0.2);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    resetZoom(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        svg.dataset.zoom = 1;
-        svg.style.transform = 'scale(1)';
-    },
-
-    toggleFullscreen(id) {
-        const container = document.getElementById(id);
-        if (container.classList.contains('svg-fullscreen')) {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        } else {
-            container.classList.add('svg-fullscreen');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    async copyAsSvg(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            await navigator.clipboard.writeText(svgData);
-            this.showMessage(container, 'SVG copied as text! 📋');
-        } catch (error) {
-            console.error('SVG copy failed:', error);
-            this.showMessage(container, 'SVG copy failed 😞', 'error');
-        }
-    },
-
-    async copyAsPng(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            this.showMessage(container, 'Converting to PNG...', 'info');
-            const pngBlob = await this.convertSvgToPng(svg);
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
-        } catch (error) {
-            console.error('PNG copy failed:', error);
-            this.showMessage(container, 'PNG copy failed 😞', 'error');
-        }
-    },
-
-    convertSvgToPng(svgElement) {
-        return new Promise((resolve, reject) => {
-            // Clone the SVG to avoid modifying the original
-            const svgClone = svgElement.cloneNode(true);
-
-            // Get SVG dimensions
-            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
-            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
-
-            // Handle viewBox if no explicit width/height
-            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
-                const viewBox = svgClone.getAttribute('viewBox');
-                if (viewBox) {
-                    const [x, y, w, h] = viewBox.split(' ').map(Number);
-                    svgWidth = w;
-                    svgHeight = h;
-                }
-            }
-
-            // Ensure the cloned SVG has explicit dimensions
-            svgClone.setAttribute('width', svgWidth.toString());
-            svgClone.setAttribute('height', svgHeight.toString());
-
-            // Add XML namespace if missing
-            if (!svgClone.getAttribute('xmlns')) {
-                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            }
-
-            // Handle external stylesheets and fonts
-            this.inlineStyles(svgClone);
-
-            const svgData = new XMLSerializer().serializeToString(svgClone);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-
-            // Set canvas size with scaling for better quality
-            const scale = 2; // For higher resolution
-            canvas.width = svgWidth * scale;
-            canvas.height = svgHeight * scale;
-            ctx.scale(scale, scale);
-
-            // Create a blob URL for the SVG
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            img.onload = function() {
-                // Set white background (optional - remove if you want transparency)
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, svgWidth, svgHeight);
-
-                // Draw the image
-                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve(blob);
-                    } else {
-                        reject(new Error('Failed to create PNG blob'));
-                    }
-                }, 'image/png', 0.95);
-
-                URL.revokeObjectURL(url);
-            };
-
-            img.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG as image: ' + error));
-            };
-
-            img.src = url;
-        });
-    },
-
-    inlineStyles(svgElement) {
-        // Get all stylesheets from the document
-        const stylesheets = Array.from(document.styleSheets);
-        let cssText = '';
-
-        stylesheets.forEach(sheet => {
-            try {
-                const rules = Array.from(sheet.cssRules || sheet.rules || []);
-                rules.forEach(rule => {
-                    if (rule.type === CSSRule.STYLE_RULE) {
-                        cssText += rule.cssText + ' ';
-                    }
-                });
-            } catch (e) {
-                // Cross-origin stylesheets might throw errors
-                console.warn('Could not access stylesheet:', e);
-            }
-        });
-
-        // Create a style element and add it to the SVG
-        if (cssText) {
-            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleElement.textContent = cssText;
-            svgElement.insertBefore(styleElement, svgElement.firstChild);
-        }
-    },
-
-    // Legacy method for backward compatibility
-    async copyToClipboard(id) {
-        await this.copyAsSvg(id);
-    },
-
-    showMessage(container, message, type = 'success') {
-        const existing = container.querySelector('.copy-message');
-        if (existing) existing.remove();
-
-        const messageEl = document.createElement('div');
-        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
-
-        // Different background colors for different message types
-        if (type === 'info') {
-            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
-        }
-
-        messageEl.textContent = message;
-        container.appendChild(messageEl);
-
-        setTimeout(() => messageEl.classList.add('show'), 10);
-        setTimeout(() => {
-            messageEl.classList.remove('show');
-            setTimeout(() => messageEl.remove(), 300);
-        }, type === 'info' ? 1500 : 2500);
-    }
-};
-
-// Close controls when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.svg-floating-controls')) {
-        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
-            panel.classList.remove('show');
-        });
-    }
-});
-
-// Escape key for fullscreen
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.svg-fullscreen').forEach(container => {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_business_metrics_example">4.2. Business Metrics Example</h3>
@@ -2073,7 +2330,7 @@ NPS Score | 72 | Industry Leading
 ----</code></pre>
 </div>
 </div>
-<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_d22508f9-5e3c-42fa-9bf3-6204b5647cc5" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="800" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(10, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">$4.2M</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Revenue</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">18% YoY Growth</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(210, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">156</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">New Customers</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">42 Enterprise</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(410, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Customer Retention</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">2% Improvement</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(610, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">72</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">NPS Score</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Industry Leading</text></g>    </g></svg></div></div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_95db4e2f-acac-42ab-a335-0099c7254527" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="800" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(10, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">$4.2M</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Revenue</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">18% YoY Growth</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(210, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">156</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">New Customers</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">42 Enterprise</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(410, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Customer Retention</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">2% Improvement</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(610, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">72</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">NPS Score</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Industry Leading</text></g>    </g></svg></div></div>
 </div>
 <div class="sect2">
 <h3 id="_website_performance_metrics">4.3. Website Performance Metrics</h3>
@@ -2095,428 +2352,25 @@ Conversion Rate | 3.8% | +0.7% vs Last Month
 ----</code></pre>
 </div>
 </div>
-<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750647315646" data-theme="light"><svg id="ID_d758bf88-f532-4278-8697-a574d983ebbe" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">1.2s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Page Load Time</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">40% Faster</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">0.8s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">First Contentful Paint</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">90th Percentile</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">2.1s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Time to Interactive</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Mobile Devices</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">24%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Bounce Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">-5% vs Last Month</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">3.8%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Conversion Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">+0.7% vs Last Month</text></g>    </g></svg><div class="svg-floating-controls">
-    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750647315646')" title="Controls">
-        ⚙️
-    </button>
-    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750647315646"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750647315646')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750647315646')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750647315646')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750647315646')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750647315646')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750647315646')" title="Copy as PNG">📋 PNG</button>    </div>
-</div></div></div><style>
-/* Outer container handles alignment */
-.svg-viewer-container {
-    width: 100%;
-    /* text-align will be set via inline style based on role */
-}
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-bb42fdcbb3acda92" data-theme="light">
+<svg id="ID_2a84d856-6c15-4f9b-b74a-96f8f26b3d35" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">1.2s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Page Load Time</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">40% Faster</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">0.8s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">First Contentful Paint</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">90th Percentile</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">2.1s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Time to Interactive</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Mobile Devices</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">24%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Bounce Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">-5% vs Last Month</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">3.8%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Conversion Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">+0.7% vs Last Month</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-bb42fdcbb3acda92')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-bb42fdcbb3acda92">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-bb42fdcbb3acda92')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-bb42fdcbb3acda92')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-bb42fdcbb3acda92')" title="Reset Zoom">⚪</button>
 
-/* Inner container groups SVG and controls together */
-.svg-with-controls {
-    position: relative;
-    display: inline-block; /* This makes it respect text-align and stay together */
-    max-width: 100%;
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-bb42fdcbb3acda92')" title="Toggle Fullscreen">⛶</button>
 
-.svg-with-controls svg {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-    display: block;
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-bb42fdcbb3acda92')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-bb42fdcbb3acda92')" title="Copy as PNG">📋 PNG</button>
 
-.svg-floating-controls {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 100;
-}
-
-.svg-controls-toggle {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-}
-
-.svg-controls-toggle:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.svg-controls-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    animation: slideIn 0.2s ease-out;
-}
-
-.svg-controls-panel.show {
-    display: flex;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.svg-control-btn {
-    padding: 6px 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    text-align: center;
-    color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.svg-control-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark theme support */
-[data-theme="dark"] .svg-controls-toggle,
-[data-theme="dark"] .svg-controls-panel,
-[data-theme="dark"] .svg-control-btn {
-    background: rgba(30, 30, 30, 0.9);
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .svg-controls-toggle:hover,
-[data-theme="dark"] .svg-control-btn:hover {
-    background: rgba(50, 50, 50, 0.95);
-}
-
-/* Fullscreen mode */
-.svg-fullscreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.95) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.svg-fullscreen svg {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-}
-
-.svg-fullscreen .svg-floating-controls {
-    top: 20px;
-    right: 20px;
-}
-
-/* Copy success message */
-.copy-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 197, 94, 0.95);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 101;
-}
-
-.copy-message.show {
-    opacity: 1;
-}
-
-.copy-message.error {
-    background: rgba(239, 68, 68, 0.95);
-}
-</style>
-
-<script>
-window.svgViewer = window.svgViewer || {
-    toggleControls(id) {
-        const panel = document.getElementById(`controls-panel-${id}`);
-        const isVisible = panel.classList.contains('show');
-
-        // Hide all other panels
-        document.querySelectorAll('.svg-controls-panel').forEach(p => {
-            p.classList.remove('show');
-        });
-
-        // Toggle current panel
-        if (!isVisible) {
-            panel.classList.add('show');
-        }
-    },
-
-    zoomIn(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.min(currentZoom * 1.3, 5);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    zoomOut(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.max(currentZoom / 1.3, 0.2);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    resetZoom(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        svg.dataset.zoom = 1;
-        svg.style.transform = 'scale(1)';
-    },
-
-    toggleFullscreen(id) {
-        const container = document.getElementById(id);
-        if (container.classList.contains('svg-fullscreen')) {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        } else {
-            container.classList.add('svg-fullscreen');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    async copyAsSvg(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            await navigator.clipboard.writeText(svgData);
-            this.showMessage(container, 'SVG copied as text! 📋');
-        } catch (error) {
-            console.error('SVG copy failed:', error);
-            this.showMessage(container, 'SVG copy failed 😞', 'error');
-        }
-    },
-
-    async copyAsPng(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            this.showMessage(container, 'Converting to PNG...', 'info');
-            const pngBlob = await this.convertSvgToPng(svg);
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
-        } catch (error) {
-            console.error('PNG copy failed:', error);
-            this.showMessage(container, 'PNG copy failed 😞', 'error');
-        }
-    },
-
-    convertSvgToPng(svgElement) {
-        return new Promise((resolve, reject) => {
-            // Clone the SVG to avoid modifying the original
-            const svgClone = svgElement.cloneNode(true);
-
-            // Get SVG dimensions
-            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
-            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
-
-            // Handle viewBox if no explicit width/height
-            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
-                const viewBox = svgClone.getAttribute('viewBox');
-                if (viewBox) {
-                    const [x, y, w, h] = viewBox.split(' ').map(Number);
-                    svgWidth = w;
-                    svgHeight = h;
-                }
-            }
-
-            // Ensure the cloned SVG has explicit dimensions
-            svgClone.setAttribute('width', svgWidth.toString());
-            svgClone.setAttribute('height', svgHeight.toString());
-
-            // Add XML namespace if missing
-            if (!svgClone.getAttribute('xmlns')) {
-                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            }
-
-            // Handle external stylesheets and fonts
-            this.inlineStyles(svgClone);
-
-            const svgData = new XMLSerializer().serializeToString(svgClone);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-
-            // Set canvas size with scaling for better quality
-            const scale = 2; // For higher resolution
-            canvas.width = svgWidth * scale;
-            canvas.height = svgHeight * scale;
-            ctx.scale(scale, scale);
-
-            // Create a blob URL for the SVG
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            img.onload = function() {
-                // Set white background (optional - remove if you want transparency)
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, svgWidth, svgHeight);
-
-                // Draw the image
-                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve(blob);
-                    } else {
-                        reject(new Error('Failed to create PNG blob'));
-                    }
-                }, 'image/png', 0.95);
-
-                URL.revokeObjectURL(url);
-            };
-
-            img.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG as image: ' + error));
-            };
-
-            img.src = url;
-        });
-    },
-
-    inlineStyles(svgElement) {
-        // Get all stylesheets from the document
-        const stylesheets = Array.from(document.styleSheets);
-        let cssText = '';
-
-        stylesheets.forEach(sheet => {
-            try {
-                const rules = Array.from(sheet.cssRules || sheet.rules || []);
-                rules.forEach(rule => {
-                    if (rule.type === CSSRule.STYLE_RULE) {
-                        cssText += rule.cssText + ' ';
-                    }
-                });
-            } catch (e) {
-                // Cross-origin stylesheets might throw errors
-                console.warn('Could not access stylesheet:', e);
-            }
-        });
-
-        // Create a style element and add it to the SVG
-        if (cssText) {
-            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleElement.textContent = cssText;
-            svgElement.insertBefore(styleElement, svgElement.firstChild);
-        }
-    },
-
-    // Legacy method for backward compatibility
-    async copyToClipboard(id) {
-        await this.copyAsSvg(id);
-    },
-
-    showMessage(container, message, type = 'success') {
-        const existing = container.querySelector('.copy-message');
-        if (existing) existing.remove();
-
-        const messageEl = document.createElement('div');
-        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
-
-        // Different background colors for different message types
-        if (type === 'info') {
-            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
-        }
-
-        messageEl.textContent = message;
-        container.appendChild(messageEl);
-
-        setTimeout(() => messageEl.classList.add('show'), 10);
-        setTimeout(() => {
-            messageEl.classList.remove('show');
-            setTimeout(() => messageEl.remove(), 300);
-        }, type === 'info' ? 1500 : 2500);
-    }
-};
-
-// Close controls when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.svg-floating-controls')) {
-        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
-            panel.classList.remove('show');
-        });
-    }
-});
-
-// Escape key for fullscreen
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.svg-fullscreen').forEach(container => {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_project_status_metrics">4.4. Project Status Metrics</h3>
@@ -2538,428 +2392,25 @@ Code Coverage | 92% | +5% This Month
 ----</code></pre>
 </div>
 </div>
-<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750647315678" data-theme="light"><svg id="ID_69892565-7f4b-4aae-a577-06327a6f5e8d" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">78%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Completion</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">On Schedule</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Budget Utilized</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Under Budget</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">12</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Open Issues</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">3 Critical</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">42</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Team Velocity</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Story Points/Sprint</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">92%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Code Coverage</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">+5% This Month</text></g>    </g></svg><div class="svg-floating-controls">
-    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750647315678')" title="Controls">
-        ⚙️
-    </button>
-    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750647315678"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750647315678')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750647315678')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750647315678')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750647315678')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750647315678')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750647315678')" title="Copy as PNG">📋 PNG</button>    </div>
-</div></div></div><style>
-/* Outer container handles alignment */
-.svg-viewer-container {
-    width: 100%;
-    /* text-align will be set via inline style based on role */
-}
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-2b5e28c6aa718d80" data-theme="light">
+<svg id="ID_ed98fbb9-7060-4330-84ae-8ca0412b040d" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">78%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Completion</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">On Schedule</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Budget Utilized</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Under Budget</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">12</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Open Issues</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">3 Critical</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">42</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Team Velocity</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Story Points/Sprint</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">92%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Code Coverage</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">+5% This Month</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-2b5e28c6aa718d80')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-2b5e28c6aa718d80">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-2b5e28c6aa718d80')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-2b5e28c6aa718d80')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-2b5e28c6aa718d80')" title="Reset Zoom">⚪</button>
 
-/* Inner container groups SVG and controls together */
-.svg-with-controls {
-    position: relative;
-    display: inline-block; /* This makes it respect text-align and stay together */
-    max-width: 100%;
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-2b5e28c6aa718d80')" title="Toggle Fullscreen">⛶</button>
 
-.svg-with-controls svg {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-    display: block;
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-2b5e28c6aa718d80')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-2b5e28c6aa718d80')" title="Copy as PNG">📋 PNG</button>
 
-.svg-floating-controls {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 100;
-}
-
-.svg-controls-toggle {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-}
-
-.svg-controls-toggle:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.svg-controls-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    animation: slideIn 0.2s ease-out;
-}
-
-.svg-controls-panel.show {
-    display: flex;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.svg-control-btn {
-    padding: 6px 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    text-align: center;
-    color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.svg-control-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark theme support */
-[data-theme="dark"] .svg-controls-toggle,
-[data-theme="dark"] .svg-controls-panel,
-[data-theme="dark"] .svg-control-btn {
-    background: rgba(30, 30, 30, 0.9);
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .svg-controls-toggle:hover,
-[data-theme="dark"] .svg-control-btn:hover {
-    background: rgba(50, 50, 50, 0.95);
-}
-
-/* Fullscreen mode */
-.svg-fullscreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.95) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.svg-fullscreen svg {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-}
-
-.svg-fullscreen .svg-floating-controls {
-    top: 20px;
-    right: 20px;
-}
-
-/* Copy success message */
-.copy-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 197, 94, 0.95);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 101;
-}
-
-.copy-message.show {
-    opacity: 1;
-}
-
-.copy-message.error {
-    background: rgba(239, 68, 68, 0.95);
-}
-</style>
-
-<script>
-window.svgViewer = window.svgViewer || {
-    toggleControls(id) {
-        const panel = document.getElementById(`controls-panel-${id}`);
-        const isVisible = panel.classList.contains('show');
-
-        // Hide all other panels
-        document.querySelectorAll('.svg-controls-panel').forEach(p => {
-            p.classList.remove('show');
-        });
-
-        // Toggle current panel
-        if (!isVisible) {
-            panel.classList.add('show');
-        }
-    },
-
-    zoomIn(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.min(currentZoom * 1.3, 5);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    zoomOut(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.max(currentZoom / 1.3, 0.2);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    resetZoom(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        svg.dataset.zoom = 1;
-        svg.style.transform = 'scale(1)';
-    },
-
-    toggleFullscreen(id) {
-        const container = document.getElementById(id);
-        if (container.classList.contains('svg-fullscreen')) {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        } else {
-            container.classList.add('svg-fullscreen');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    async copyAsSvg(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            await navigator.clipboard.writeText(svgData);
-            this.showMessage(container, 'SVG copied as text! 📋');
-        } catch (error) {
-            console.error('SVG copy failed:', error);
-            this.showMessage(container, 'SVG copy failed 😞', 'error');
-        }
-    },
-
-    async copyAsPng(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            this.showMessage(container, 'Converting to PNG...', 'info');
-            const pngBlob = await this.convertSvgToPng(svg);
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
-        } catch (error) {
-            console.error('PNG copy failed:', error);
-            this.showMessage(container, 'PNG copy failed 😞', 'error');
-        }
-    },
-
-    convertSvgToPng(svgElement) {
-        return new Promise((resolve, reject) => {
-            // Clone the SVG to avoid modifying the original
-            const svgClone = svgElement.cloneNode(true);
-
-            // Get SVG dimensions
-            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
-            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
-
-            // Handle viewBox if no explicit width/height
-            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
-                const viewBox = svgClone.getAttribute('viewBox');
-                if (viewBox) {
-                    const [x, y, w, h] = viewBox.split(' ').map(Number);
-                    svgWidth = w;
-                    svgHeight = h;
-                }
-            }
-
-            // Ensure the cloned SVG has explicit dimensions
-            svgClone.setAttribute('width', svgWidth.toString());
-            svgClone.setAttribute('height', svgHeight.toString());
-
-            // Add XML namespace if missing
-            if (!svgClone.getAttribute('xmlns')) {
-                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            }
-
-            // Handle external stylesheets and fonts
-            this.inlineStyles(svgClone);
-
-            const svgData = new XMLSerializer().serializeToString(svgClone);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-
-            // Set canvas size with scaling for better quality
-            const scale = 2; // For higher resolution
-            canvas.width = svgWidth * scale;
-            canvas.height = svgHeight * scale;
-            ctx.scale(scale, scale);
-
-            // Create a blob URL for the SVG
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            img.onload = function() {
-                // Set white background (optional - remove if you want transparency)
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, svgWidth, svgHeight);
-
-                // Draw the image
-                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve(blob);
-                    } else {
-                        reject(new Error('Failed to create PNG blob'));
-                    }
-                }, 'image/png', 0.95);
-
-                URL.revokeObjectURL(url);
-            };
-
-            img.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG as image: ' + error));
-            };
-
-            img.src = url;
-        });
-    },
-
-    inlineStyles(svgElement) {
-        // Get all stylesheets from the document
-        const stylesheets = Array.from(document.styleSheets);
-        let cssText = '';
-
-        stylesheets.forEach(sheet => {
-            try {
-                const rules = Array.from(sheet.cssRules || sheet.rules || []);
-                rules.forEach(rule => {
-                    if (rule.type === CSSRule.STYLE_RULE) {
-                        cssText += rule.cssText + ' ';
-                    }
-                });
-            } catch (e) {
-                // Cross-origin stylesheets might throw errors
-                console.warn('Could not access stylesheet:', e);
-            }
-        });
-
-        // Create a style element and add it to the SVG
-        if (cssText) {
-            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleElement.textContent = cssText;
-            svgElement.insertBefore(styleElement, svgElement.firstChild);
-        }
-    },
-
-    // Legacy method for backward compatibility
-    async copyToClipboard(id) {
-        await this.copyAsSvg(id);
-    },
-
-    showMessage(container, message, type = 'success') {
-        const existing = container.querySelector('.copy-message');
-        if (existing) existing.remove();
-
-        const messageEl = document.createElement('div');
-        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
-
-        // Different background colors for different message types
-        if (type === 'info') {
-            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
-        }
-
-        messageEl.textContent = message;
-        container.appendChild(messageEl);
-
-        setTimeout(() => messageEl.classList.add('show'), 10);
-        setTimeout(() => {
-            messageEl.classList.remove('show');
-            setTimeout(() => messageEl.remove(), 300);
-        }, type === 'info' ? 1500 : 2500);
-    }
-};
-
-// Close controls when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.svg-floating-controls')) {
-        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
-            panel.classList.remove('show');
-        });
-    }
-});
-
-// Escape key for fullscreen
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.svg-fullscreen').forEach(container => {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_health_and_fitness_metrics">4.5. Health and Fitness Metrics</h3>
@@ -2981,428 +2432,25 @@ VO2 Max | 42.3 | +5.3 ml/kg/min
 ----</code></pre>
 </div>
 </div>
-<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750647315714" data-theme="light"><svg id="ID_c7163103-2886-435a-bb5c-6d3b72c37795" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">12 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Weight Loss</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">8-Week Program</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">4.2%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Body Fat Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">From 22% to 17.8%</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">2.8 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Muscle Mass Increase</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Primarily Upper Body</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">62 bpm</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Resting Heart Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">-8 bpm Improvement</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">42.3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">VO2 Max</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">+5.3 ml/kg/min</text></g>    </g></svg><div class="svg-floating-controls">
-    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750647315714')" title="Controls">
-        ⚙️
-    </button>
-    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750647315714"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750647315714')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750647315714')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750647315714')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750647315714')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750647315714')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750647315714')" title="Copy as PNG">📋 PNG</button>    </div>
-</div></div></div><style>
-/* Outer container handles alignment */
-.svg-viewer-container {
-    width: 100%;
-    /* text-align will be set via inline style based on role */
-}
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-621c3fa17eab7758" data-theme="light">
+<svg id="ID_398f38a4-0b8b-4585-9239-d6690276ca45" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">12 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Weight Loss</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">8-Week Program</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">4.2%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Body Fat Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">From 22% to 17.8%</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">2.8 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Muscle Mass Increase</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Primarily Upper Body</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">62 bpm</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Resting Heart Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">-8 bpm Improvement</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">42.3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">VO2 Max</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">+5.3 ml/kg/min</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-621c3fa17eab7758')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-621c3fa17eab7758">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-621c3fa17eab7758')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-621c3fa17eab7758')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-621c3fa17eab7758')" title="Reset Zoom">⚪</button>
 
-/* Inner container groups SVG and controls together */
-.svg-with-controls {
-    position: relative;
-    display: inline-block; /* This makes it respect text-align and stay together */
-    max-width: 100%;
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-621c3fa17eab7758')" title="Toggle Fullscreen">⛶</button>
 
-.svg-with-controls svg {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-    display: block;
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-621c3fa17eab7758')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-621c3fa17eab7758')" title="Copy as PNG">📋 PNG</button>
 
-.svg-floating-controls {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 100;
-}
-
-.svg-controls-toggle {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-}
-
-.svg-controls-toggle:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.svg-controls-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    animation: slideIn 0.2s ease-out;
-}
-
-.svg-controls-panel.show {
-    display: flex;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.svg-control-btn {
-    padding: 6px 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    text-align: center;
-    color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.svg-control-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark theme support */
-[data-theme="dark"] .svg-controls-toggle,
-[data-theme="dark"] .svg-controls-panel,
-[data-theme="dark"] .svg-control-btn {
-    background: rgba(30, 30, 30, 0.9);
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .svg-controls-toggle:hover,
-[data-theme="dark"] .svg-control-btn:hover {
-    background: rgba(50, 50, 50, 0.95);
-}
-
-/* Fullscreen mode */
-.svg-fullscreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.95) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.svg-fullscreen svg {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-}
-
-.svg-fullscreen .svg-floating-controls {
-    top: 20px;
-    right: 20px;
-}
-
-/* Copy success message */
-.copy-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 197, 94, 0.95);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 101;
-}
-
-.copy-message.show {
-    opacity: 1;
-}
-
-.copy-message.error {
-    background: rgba(239, 68, 68, 0.95);
-}
-</style>
-
-<script>
-window.svgViewer = window.svgViewer || {
-    toggleControls(id) {
-        const panel = document.getElementById(`controls-panel-${id}`);
-        const isVisible = panel.classList.contains('show');
-
-        // Hide all other panels
-        document.querySelectorAll('.svg-controls-panel').forEach(p => {
-            p.classList.remove('show');
-        });
-
-        // Toggle current panel
-        if (!isVisible) {
-            panel.classList.add('show');
-        }
-    },
-
-    zoomIn(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.min(currentZoom * 1.3, 5);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    zoomOut(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.max(currentZoom / 1.3, 0.2);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    resetZoom(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        svg.dataset.zoom = 1;
-        svg.style.transform = 'scale(1)';
-    },
-
-    toggleFullscreen(id) {
-        const container = document.getElementById(id);
-        if (container.classList.contains('svg-fullscreen')) {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        } else {
-            container.classList.add('svg-fullscreen');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    async copyAsSvg(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            await navigator.clipboard.writeText(svgData);
-            this.showMessage(container, 'SVG copied as text! 📋');
-        } catch (error) {
-            console.error('SVG copy failed:', error);
-            this.showMessage(container, 'SVG copy failed 😞', 'error');
-        }
-    },
-
-    async copyAsPng(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            this.showMessage(container, 'Converting to PNG...', 'info');
-            const pngBlob = await this.convertSvgToPng(svg);
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
-        } catch (error) {
-            console.error('PNG copy failed:', error);
-            this.showMessage(container, 'PNG copy failed 😞', 'error');
-        }
-    },
-
-    convertSvgToPng(svgElement) {
-        return new Promise((resolve, reject) => {
-            // Clone the SVG to avoid modifying the original
-            const svgClone = svgElement.cloneNode(true);
-
-            // Get SVG dimensions
-            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
-            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
-
-            // Handle viewBox if no explicit width/height
-            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
-                const viewBox = svgClone.getAttribute('viewBox');
-                if (viewBox) {
-                    const [x, y, w, h] = viewBox.split(' ').map(Number);
-                    svgWidth = w;
-                    svgHeight = h;
-                }
-            }
-
-            // Ensure the cloned SVG has explicit dimensions
-            svgClone.setAttribute('width', svgWidth.toString());
-            svgClone.setAttribute('height', svgHeight.toString());
-
-            // Add XML namespace if missing
-            if (!svgClone.getAttribute('xmlns')) {
-                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            }
-
-            // Handle external stylesheets and fonts
-            this.inlineStyles(svgClone);
-
-            const svgData = new XMLSerializer().serializeToString(svgClone);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-
-            // Set canvas size with scaling for better quality
-            const scale = 2; // For higher resolution
-            canvas.width = svgWidth * scale;
-            canvas.height = svgHeight * scale;
-            ctx.scale(scale, scale);
-
-            // Create a blob URL for the SVG
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            img.onload = function() {
-                // Set white background (optional - remove if you want transparency)
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, svgWidth, svgHeight);
-
-                // Draw the image
-                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve(blob);
-                    } else {
-                        reject(new Error('Failed to create PNG blob'));
-                    }
-                }, 'image/png', 0.95);
-
-                URL.revokeObjectURL(url);
-            };
-
-            img.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG as image: ' + error));
-            };
-
-            img.src = url;
-        });
-    },
-
-    inlineStyles(svgElement) {
-        // Get all stylesheets from the document
-        const stylesheets = Array.from(document.styleSheets);
-        let cssText = '';
-
-        stylesheets.forEach(sheet => {
-            try {
-                const rules = Array.from(sheet.cssRules || sheet.rules || []);
-                rules.forEach(rule => {
-                    if (rule.type === CSSRule.STYLE_RULE) {
-                        cssText += rule.cssText + ' ';
-                    }
-                });
-            } catch (e) {
-                // Cross-origin stylesheets might throw errors
-                console.warn('Could not access stylesheet:', e);
-            }
-        });
-
-        // Create a style element and add it to the SVG
-        if (cssText) {
-            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleElement.textContent = cssText;
-            svgElement.insertBefore(styleElement, svgElement.firstChild);
-        }
-    },
-
-    // Legacy method for backward compatibility
-    async copyToClipboard(id) {
-        await this.copyAsSvg(id);
-    },
-
-    showMessage(container, message, type = 'success') {
-        const existing = container.querySelector('.copy-message');
-        if (existing) existing.remove();
-
-        const messageEl = document.createElement('div');
-        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
-
-        // Different background colors for different message types
-        if (type === 'info') {
-            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
-        }
-
-        messageEl.textContent = message;
-        container.appendChild(messageEl);
-
-        setTimeout(() => messageEl.classList.add('show'), 10);
-        setTimeout(() => {
-            messageEl.classList.remove('show');
-            setTimeout(() => messageEl.remove(), 300);
-        }, type === 'info' ? 1500 : 2500);
-    }
-};
-
-// Close controls when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.svg-floating-controls')) {
-        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
-            panel.classList.remove('show');
-        });
-    }
-});
-
-// Escape key for fullscreen
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.svg-fullscreen').forEach(container => {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_environmental_impact_metrics">4.6. Environmental Impact Metrics</h3>
@@ -3424,428 +2472,78 @@ Paper Reduction | 65% | Digital Transformation
 ----</code></pre>
 </div>
 </div>
-<div class="svg-viewer-container" style="display: block; text-align: center;"><div class="svg-with-controls" id="svgviewer-1750647315743" data-theme="light"><svg id="ID_9b840ef3-aba9-43da-9a21-1c57ff613996" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-22</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">28%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Carbon Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">vs. 2020 Baseline</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">72%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Renewable Energy</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Of Total Consumption</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">350K</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Water Conservation</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Gallons Saved</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Waste Diverted</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">From Landfill</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Paper Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Digital Transformation</text></g>    </g></svg><div class="svg-floating-controls">
-    <button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1750647315743')" title="Controls">
-        ⚙️
-    </button>
-    <div class="svg-controls-panel" id="controls-panel-svgviewer-1750647315743"><button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1750647315743')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1750647315743')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1750647315743')" title="Reset Zoom">⚪</button><button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1750647315743')" title="Toggle Fullscreen">⛶</button><button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1750647315743')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1750647315743')" title="Copy as PNG">📋 PNG</button>    </div>
-</div></div></div><style>
-/* Outer container handles alignment */
-.svg-viewer-container {
-    width: 100%;
-    /* text-align will be set via inline style based on role */
-}
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-c5511035b0a619ec" data-theme="light">
+<svg id="ID_ec51a023-218d-497e-a164-001ac3fc5762" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="980" height="400" fill="#1d4ed8" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(0, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">28%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Carbon Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">vs. 2020 Baseline</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(200, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">72%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Renewable Energy</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Of Total Consumption</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(400, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">350K</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Water Conservation</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Gallons Saved</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(600, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Waste Diverted</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">From Landfill</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(800, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Card highlight --><rect x="5" y="5" width="170" height="30" rx="10" fill="url(#highlight)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Paper Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Digital Transformation</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-c5511035b0a619ec')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-c5511035b0a619ec">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-c5511035b0a619ec')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-c5511035b0a619ec')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-c5511035b0a619ec')" title="Reset Zoom">⚪</button>
 
-/* Inner container groups SVG and controls together */
-.svg-with-controls {
-    position: relative;
-    display: inline-block; /* This makes it respect text-align and stay together */
-    max-width: 100%;
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-c5511035b0a619ec')" title="Toggle Fullscreen">⛶</button>
 
-.svg-with-controls svg {
-    max-width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-    display: block;
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-c5511035b0a619ec')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-c5511035b0a619ec')" title="Copy as PNG">📋 PNG</button>
 
-.svg-floating-controls {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 100;
-}
-
-.svg-controls-toggle {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-}
-
-.svg-controls-toggle:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.svg-controls-panel {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    min-width: 120px;
-    animation: slideIn 0.2s ease-out;
-}
-
-.svg-controls-panel.show {
-    display: flex;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_styling_options">4.7. Styling Options</h3>
+<div class="paragraph">
+<p>You can customize the visual appearance of metrics cards using the <code>useGlass</code> attribute. By default, metrics cards use a glass-like styling with transparency and highlights on a blue background. You can disable this to use a more traditional flat design:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,metricscard,controls=true]
+----
+{
+  "title": "Traditional Style Metrics",
+  "useGlass": false,
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  ]
 }
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-f103128c7cd28145" data-theme="light">
+<svg id="ID_60595e56-6097-4dd8-92f2-d994e6cab517" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-06-30</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="800" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(110, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">97%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Query Cost Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">(12,000 &#8594; 405)</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(310, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">32%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">CPU Utilization Drop</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">(88% &#8594; 60%)</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(510, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Optimization Phases</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Systematic Approach</text></g>    </g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-f103128c7cd28145')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-f103128c7cd28145">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-f103128c7cd28145')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-f103128c7cd28145')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-f103128c7cd28145')" title="Reset Zoom">⚪</button>
 
-.svg-control-btn {
-    padding: 6px 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    text-align: center;
-    color: #333;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-f103128c7cd28145')" title="Toggle Fullscreen">⛶</button>
 
-.svg-control-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-f103128c7cd28145')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-f103128c7cd28145')" title="Copy as PNG">📋 PNG</button>
 
-/* Dark theme support */
-[data-theme="dark"] .svg-controls-toggle,
-[data-theme="dark"] .svg-controls-panel,
-[data-theme="dark"] .svg-control-btn {
-    background: rgba(30, 30, 30, 0.9);
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .svg-controls-toggle:hover,
-[data-theme="dark"] .svg-control-btn:hover {
-    background: rgba(50, 50, 50, 0.95);
-}
-
-/* Fullscreen mode */
-.svg-fullscreen {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.95) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.svg-fullscreen svg {
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-}
-
-.svg-fullscreen .svg-floating-controls {
-    top: 20px;
-    right: 20px;
-}
-
-/* Copy success message */
-.copy-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 197, 94, 0.95);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 101;
-}
-
-.copy-message.show {
-    opacity: 1;
-}
-
-.copy-message.error {
-    background: rgba(239, 68, 68, 0.95);
-}
-</style>
-
-<script>
-window.svgViewer = window.svgViewer || {
-    toggleControls(id) {
-        const panel = document.getElementById(`controls-panel-${id}`);
-        const isVisible = panel.classList.contains('show');
-
-        // Hide all other panels
-        document.querySelectorAll('.svg-controls-panel').forEach(p => {
-            p.classList.remove('show');
-        });
-
-        // Toggle current panel
-        if (!isVisible) {
-            panel.classList.add('show');
-        }
-    },
-
-    zoomIn(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.min(currentZoom * 1.3, 5);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    zoomOut(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        let currentZoom = parseFloat(svg.dataset.zoom) || 1;
-        currentZoom = Math.max(currentZoom / 1.3, 0.2);
-        svg.dataset.zoom = currentZoom;
-        svg.style.transform = `scale(${currentZoom})`;
-    },
-
-    resetZoom(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        svg.dataset.zoom = 1;
-        svg.style.transform = 'scale(1)';
-    },
-
-    toggleFullscreen(id) {
-        const container = document.getElementById(id);
-        if (container.classList.contains('svg-fullscreen')) {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        } else {
-            container.classList.add('svg-fullscreen');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    async copyAsSvg(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            await navigator.clipboard.writeText(svgData);
-            this.showMessage(container, 'SVG copied as text! 📋');
-        } catch (error) {
-            console.error('SVG copy failed:', error);
-            this.showMessage(container, 'SVG copy failed 😞', 'error');
-        }
-    },
-
-    async copyAsPng(id) {
-        const container = document.getElementById(id);
-        const svg = container.querySelector('svg');
-
-        if (!svg) {
-            this.showMessage(container, 'No SVG found', 'error');
-            return;
-        }
-
-        try {
-            this.showMessage(container, 'Converting to PNG...', 'info');
-            const pngBlob = await this.convertSvgToPng(svg);
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            this.showMessage(container, 'PNG copied to clipboard! 🖼️');
-        } catch (error) {
-            console.error('PNG copy failed:', error);
-            this.showMessage(container, 'PNG copy failed 😞', 'error');
-        }
-    },
-
-    convertSvgToPng(svgElement) {
-        return new Promise((resolve, reject) => {
-            // Clone the SVG to avoid modifying the original
-            const svgClone = svgElement.cloneNode(true);
-
-            // Get SVG dimensions
-            let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
-            let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
-
-            // Handle viewBox if no explicit width/height
-            if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
-                const viewBox = svgClone.getAttribute('viewBox');
-                if (viewBox) {
-                    const [x, y, w, h] = viewBox.split(' ').map(Number);
-                    svgWidth = w;
-                    svgHeight = h;
-                }
-            }
-
-            // Ensure the cloned SVG has explicit dimensions
-            svgClone.setAttribute('width', svgWidth.toString());
-            svgClone.setAttribute('height', svgHeight.toString());
-
-            // Add XML namespace if missing
-            if (!svgClone.getAttribute('xmlns')) {
-                svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            }
-
-            // Handle external stylesheets and fonts
-            this.inlineStyles(svgClone);
-
-            const svgData = new XMLSerializer().serializeToString(svgClone);
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-
-            // Set canvas size with scaling for better quality
-            const scale = 2; // For higher resolution
-            canvas.width = svgWidth * scale;
-            canvas.height = svgHeight * scale;
-            ctx.scale(scale, scale);
-
-            // Create a blob URL for the SVG
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            img.onload = function() {
-                // Set white background (optional - remove if you want transparency)
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, svgWidth, svgHeight);
-
-                // Draw the image
-                ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve(blob);
-                    } else {
-                        reject(new Error('Failed to create PNG blob'));
-                    }
-                }, 'image/png', 0.95);
-
-                URL.revokeObjectURL(url);
-            };
-
-            img.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG as image: ' + error));
-            };
-
-            img.src = url;
-        });
-    },
-
-    inlineStyles(svgElement) {
-        // Get all stylesheets from the document
-        const stylesheets = Array.from(document.styleSheets);
-        let cssText = '';
-
-        stylesheets.forEach(sheet => {
-            try {
-                const rules = Array.from(sheet.cssRules || sheet.rules || []);
-                rules.forEach(rule => {
-                    if (rule.type === CSSRule.STYLE_RULE) {
-                        cssText += rule.cssText + ' ';
-                    }
-                });
-            } catch (e) {
-                // Cross-origin stylesheets might throw errors
-                console.warn('Could not access stylesheet:', e);
-            }
-        });
-
-        // Create a style element and add it to the SVG
-        if (cssText) {
-            const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleElement.textContent = cssText;
-            svgElement.insertBefore(styleElement, svgElement.firstChild);
-        }
-    },
-
-    // Legacy method for backward compatibility
-    async copyToClipboard(id) {
-        await this.copyAsSvg(id);
-    },
-
-    showMessage(container, message, type = 'success') {
-        const existing = container.querySelector('.copy-message');
-        if (existing) existing.remove();
-
-        const messageEl = document.createElement('div');
-        messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
-
-        // Different background colors for different message types
-        if (type === 'info') {
-            messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
-        }
-
-        messageEl.textContent = message;
-        container.appendChild(messageEl);
-
-        setTimeout(() => messageEl.classList.add('show'), 10);
-        setTimeout(() => {
-            messageEl.classList.remove('show');
-            setTimeout(() => messageEl.remove(), 300);
-        }, type === 'info' ? 1500 : 2500);
-    }
-};
-
-// Close controls when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.svg-floating-controls')) {
-        document.querySelectorAll('.svg-controls-panel').forEach(panel => {
-            panel.classList.remove('show');
-        });
-    }
-});
-
-// Escape key for fullscreen
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.svg-fullscreen').forEach(container => {
-            container.classList.remove('svg-fullscreen');
-            document.body.style.overflow = '';
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3884,6 +2582,9 @@ document.addEventListener('keydown', function(e) {
 </li>
 <li>
 <p><code>useDark</code> (optional): Whether to use a dark theme</p>
+</li>
+<li>
+<p><code>useGlass</code> (optional): Boolean value to enable or disable the glass look and feel</p>
 </li>
 <li>
 <p><code>type</code> (optional): The output format (default is "SVG")</p>

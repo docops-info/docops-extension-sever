@@ -119,6 +119,46 @@ class MetricsCardMaker {
             append("""
             <svg id="ID_$id" width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
                 <defs>
+            """.trimIndent())
+
+            // Add glass-specific definitions if useGlass is true
+            if (metricsCardData.useGlass) {
+                append("""
+                    <!-- Glass gradients -->
+                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    </radialGradient>
+                    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glass filters -->
+                    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+                    </filter>
+                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
+                    </filter>
+                    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feOffset dx="0" dy="2"/>
+                        <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+                        <feFlood flood-color="rgba(0,0,0,0.3)"/>
+                        <feComposite in2="offset-blur" operator="in"/>
+                        <feComposite in2="SourceGraphic" operator="over"/>
+                    </filter>
+                """.trimIndent())
+            }
+
+            // Always include original iOS shadow and gradient
+            append("""
                     <filter id="iosShadow">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
                     </filter>
@@ -129,7 +169,7 @@ class MetricsCardMaker {
                 </defs>
 
                 <!-- Background -->
-                <rect width="$finalWidth" height="$height" fill="#F2F2F7" rx="0" ry="0"/>
+                <rect width="$finalWidth" height="$height" fill="${if (metricsCardData.useGlass) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
 
                 <!-- Metrics Container -->
                 <g class="metrics">
@@ -144,7 +184,33 @@ class MetricsCardMaker {
                 val x = startX + index * (cardWidth + cardMargin)
                 val y = (height - 200) / 2 // Center vertically
 
-                append("""
+                // Conditionally apply glass or original styling to cards
+                if (metricsCardData.useGlass) {
+                    append("""
+                    <!-- Metric Card ${index + 1} -->
+                    <g class="metric-card" transform="translate($x, $y)">
+                        <!-- Card Background -->
+                        <rect width="$cardWidth" height="200" rx="16" ry="16" 
+                              fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" 
+                              filter="url(#shadow)"/>
+                        <!-- Card highlight -->
+                        <rect x="5" y="5" width="${cardWidth - 10}" height="30" rx="10" 
+                              fill="url(#highlight)"/>
+
+                        <!-- Metric Value -->
+                        <text x="${cardWidth/2}" y="80" 
+                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
+                              font-size="36" font-weight="700" text-anchor="middle" 
+                              fill="white">${metric.value.escapeXml()}</text>
+
+                        <!-- Metric Label -->
+                        <text x="${cardWidth/2}" y="120" 
+                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
+                              font-size="16" font-weight="600" text-anchor="middle" 
+                              fill="rgba(255,255,255,0.9)">${metric.label.escapeXml()}</text>
+                    """.trimIndent())
+                } else {
+                    append("""
                     <!-- Metric Card ${index + 1} -->
                     <g class="metric-card" transform="translate($x, $y)">
                         <!-- Card Background -->
@@ -163,18 +229,30 @@ class MetricsCardMaker {
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="16" font-weight="600" text-anchor="middle" 
                               fill="#1C1C1E">${metric.label.escapeXml()}</text>
-                """.trimIndent())
+                    """.trimIndent())
+                }
 
                 // Add sublabel if present
                 if (metric.sublabel != null) {
-                    append("""
+                    if (metricsCardData.useGlass) {
+                        append("""
+
+                        <!-- Metric Sublabel -->
+                        <text x="${cardWidth/2}" y="145" 
+                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
+                              font-size="14" font-weight="400" text-anchor="middle" 
+                              fill="rgba(255,255,255,0.7)">${metric.sublabel.escapeXml()}</text>
+                        """.trimIndent())
+                    } else {
+                        append("""
 
                         <!-- Metric Sublabel -->
                         <text x="${cardWidth/2}" y="145" 
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="14" font-weight="400" text-anchor="middle" 
                               fill="#8E8E93">${metric.sublabel.escapeXml()}</text>
-                    """.trimIndent())
+                        """.trimIndent())
+                    }
                 }
 
                 append("""

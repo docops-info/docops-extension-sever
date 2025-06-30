@@ -39,6 +39,7 @@ The overall metrics card collection has:
 * `title` (optional) - The title for the entire metrics card collection (defaults to "Metrics")
 * `metrics` - An array of individual metric cards
 * `theme` (optional) - The visual theme to use (currently only "ios" is supported)
+* `useGlass` (optional) - Boolean value to enable or disable the glass look and feel (defaults to true)
 
 == AsciiDoctor Syntax for Metrics Cards
 
@@ -69,7 +70,8 @@ To include metrics cards in your AsciiDoctor document, you use a special macro s
       "sublabel": "Systematic Approach"
     }
   ],
-  "theme": "ios"
+  "theme": "ios",
+  "useGlass": true
 }
 ----
 ....
@@ -114,6 +116,7 @@ Retention | 92%
 * `height` (optional): The height of the SVG in pixels. Default is 400.
 * `scale` (optional): A scaling factor for the entire visualization. Default is 1.0.
 * `useDark` (optional): Whether to use a dark theme. Default is false.
+* `useGlass` (optional): Boolean value to enable or disable the glass look and feel. Default is true.
 
 == Examples
 
@@ -325,6 +328,63 @@ Waste Diverted | 94% | From Landfill
 Paper Reduction | 65% | Digital Transformation
 ----
 
+=== Styling Options
+
+You can customize the visual appearance of metrics cards using the `useGlass` attribute. By default, metrics cards use a glass-like styling with transparency and highlights on a blue background. You can disable this to use a more traditional flat design:
+
+[source,asciidoc]
+....
+[docops,metricscard,controls=true]
+----
+{
+  "title": "Traditional Style Metrics",
+  "useGlass": false,
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
+    }
+  ]
+}
+----
+....
+
+[docops,metricscard,controls=true]
+----
+{
+  "title": "Traditional Style Metrics",
+  "useGlass": false,
+  "metrics": [
+    {
+      "value": "97%",
+      "label": "Query Cost Reduction",
+      "sublabel": "(12,000 → 405)"
+    },
+    {
+      "value": "32%",
+      "label": "CPU Utilization Drop",
+      "sublabel": "(88% → 60%)"
+    },
+    {
+      "value": "3",
+      "label": "Optimization Phases",
+      "sublabel": "Systematic Approach"
+    }
+  ]
+}
+----
+
 == Advanced Usage
 
 === Using the API Directly
@@ -344,6 +404,7 @@ The API accepts the following parameters:
 * `height` (optional): The height of the SVG in pixels
 * `scale` (optional): A scaling factor for the entire visualization
 * `useDark` (optional): Whether to use a dark theme
+* `useGlass` (optional): Boolean value to enable or disable the glass look and feel
 * `type` (optional): The output format (default is "SVG")
 
 === Embedding in Other Applications
