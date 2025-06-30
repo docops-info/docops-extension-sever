@@ -140,7 +140,7 @@ class TimelineController {
 
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3")
+            val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3", useGlass = true)
             val svg = tm.makeTimelineSvg(contents, title, scale, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -212,12 +212,13 @@ class TimelineController {
         @RequestParam("type", required = false, defaultValue = "SVG") type: String,
         @RequestParam("numChars", required = false, defaultValue = "35") numChars: String,
         @RequestParam(name = "useDark", defaultValue = "false") useDark: Boolean,
-        @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String
+        @RequestParam(name = "outlineColor", defaultValue = "#37cdbe") outlineColor: String,
+        @RequestParam(name = "useGlass", defaultValue = "true") useGlass: Boolean
 
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor)
+            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, useGlass = useGlass)
             val isPdf = "PDF" == type
             val svg = tm.makeTimelineSvg(data, title, scale, isPdf)
             val headers = HttpHeaders()
@@ -269,7 +270,7 @@ class TimelineController {
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(false )
+            val tm = TimelineMaker(false, useGlass = true)
             val svg = tm.makeTimelineSvg(data, "title", "0.6", false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

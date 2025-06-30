@@ -22,5 +22,6 @@ data class DocOpsContext(
     val type: String = "SVG",
     val title: String = "",
     val useDark: Boolean = false,
-    val backend: String = "html"
+    val backend: String = "html",
+    val useGlass: Boolean = true
 )

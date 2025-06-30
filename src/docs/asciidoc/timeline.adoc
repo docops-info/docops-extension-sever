@@ -71,6 +71,7 @@ The macro processes the timeline entries and generates an SVG representation tha
 * `role` (optional): The role attribute for the timeline (e.g., "center" to center the timeline)
 * `useDark` (optional): Whether to use dark mode (default: false)
 * `outlineColor` (optional): The color for the timeline outline (default: "#37cdbe")
+* `useGlass` (optional): Whether to use glass styling with transparency and highlights (default: true)
 
 
 ==== Entry Properties
@@ -508,8 +509,72 @@ text: AI-Powered Documentation Assistant
 • Smart search capabilities
 ----
 
+=== Styling Options
+
+You can customize the visual appearance of timelines using the `useGlass` attribute. By default, timelines use a glass-like styling with transparency and highlights on a blue background. You can disable this to use a more traditional flat design:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Traditional Style Timeline",scale="1",role="center",useGlass="false"]
+----
+-
+date: January 2024
+text: First milestone in the project
+-
+date: February 2024
+text: Second milestone with important achievements
+-
+date: March 2024
+text: Final delivery of the project
+----
+....
+
+[docops,timeline,title="Traditional Style Timeline",scale="1",role="center",useGlass="false",controls=true]
+----
+-
+date: January 2024
+text: First milestone in the project
+-
+date: February 2024
+text: Second milestone with important achievements
+-
+date: March 2024
+text: Final delivery of the project
+----
+
+You can also combine the glass styling with dark mode for a sleek, modern look:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Modern Glass Timeline",scale="1",role="center",useDark="true",useGlass="true"]
+----
+-
+date: January 2024
+text: First milestone in the project
+-
+date: February 2024
+text: Second milestone with important achievements
+-
+date: March 2024
+text: Final delivery of the project
+----
+....
+
+[docops,timeline,title="Modern Glass Timeline",scale="1",role="center",useDark="true",useGlass="true",controls=true]
+----
+-
+date: January 2024
+text: First milestone in the project
+-
+date: February 2024
+text: Second milestone with important achievements
+-
+date: March 2024
+text: Final delivery of the project
+----
+
 == Conclusion
 
 The DocOps Timeline Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing timelines. By using the simple text-based syntax, you can create customized timelines that display chronological events in a clear and engaging format.
 
-The extension supports various display options and allows for rich text content including links, making it versatile for different documentation needs.
+The extension supports various display options and allows for rich text content including links, making it versatile for different documentation needs. With the addition of glass styling options, you can create modern, visually striking timelines that match your document's aesthetic.

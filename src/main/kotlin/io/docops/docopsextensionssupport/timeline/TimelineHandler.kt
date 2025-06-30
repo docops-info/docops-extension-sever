@@ -10,10 +10,11 @@ class TimelineHandler : DocOpsHandler {
         title: String,
         useDark: Boolean,
         scale: String,
-        backend: String
+        backend: String,
+        useGlass: Boolean = true
     ): String {
         val isPdf = backend == "pdf"
-        val tm = TimelineMaker(useDark = useDark)
+        val tm = TimelineMaker(useDark = useDark, useGlass = useGlass)
         val svg = tm.makeTimelineSvg(payload, title, scale, isPdf = isPdf)
         return svg
     }
@@ -28,7 +29,8 @@ class TimelineHandler : DocOpsHandler {
             context.title,
             context.useDark,
             context.scale,
-            context.backend
+            context.backend,
+            context.useGlass
         )
     }
 

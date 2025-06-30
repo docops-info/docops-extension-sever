@@ -2,8 +2,7 @@ package io.docops.docopsextensionssupport.metricscard
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlinx.serialization.json.Json
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
-import java.util.UUID
+import java.util.*
 
 /**
  * Class responsible for creating metrics card SVGs
@@ -67,6 +66,7 @@ class MetricsCardMaker {
     private fun parseTableData(data: String): MetricsCardData {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Metrics"
+        var useGlass = true // Default value
         val metrics = mutableListOf<MetricCard>()
         var inDataSection = false
 
@@ -74,6 +74,8 @@ class MetricsCardMaker {
             when {
                 line.startsWith("title:") -> title = line.substring(6).trim()
                 line.startsWith("title=") -> title = line.substring(6).trim()
+                line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
+                line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
                 line == "---" -> inDataSection = true
                 inDataSection && line.contains("|") && !isHeaderRow(line) -> {
                     val parts = line.split("|").map { it.trim() }
@@ -87,7 +89,7 @@ class MetricsCardMaker {
             }
         }
 
-        return MetricsCardData(title = title, metrics = metrics)
+        return MetricsCardData(title = title, metrics = metrics, useGlass = useGlass)
     }
 
     /**
@@ -98,6 +100,14 @@ class MetricsCardMaker {
         return lowerLine.contains("metric") || 
                lowerLine.contains("label") || 
                lowerLine.contains("value")
+    }
+
+    /**
+     * Helper function to parse boolean values from string
+     */
+    private fun parseBoolean(value: String): Boolean {
+        val lowerValue = value.lowercase().trim()
+        return lowerValue == "true" || lowerValue == "yes" || lowerValue == "on" || lowerValue == "1"
     }
 
     /**

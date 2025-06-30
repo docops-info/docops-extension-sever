@@ -27,7 +27,7 @@ import java.util.*
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString()) {
+class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString(), val useGlass: Boolean = true) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     private var cardBackgroundColor = ""
@@ -213,19 +213,19 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
                   y2="$dotY" 
                   stroke="$separatorColor" 
                   stroke-width="2"/>
-            
+
             <!-- Timeline dot -->
             <circle cx="$dotX" cy="$dotY" r="8" 
                     fill="url(#timeline_grad_$gradIndex)" 
                     stroke="$cardBackgroundColor" 
                     stroke-width="3"/>
-            
+
             <!-- Card background -->
             <rect x="$xPosition" y="$yPosition" 
                   width="$cardWidth" height="$cardHeight" 
                   rx="$cardRadius" ry="$cardRadius" 
                   class="timeline-card"/>
-            
+
             <!-- Date header -->
             <rect x="$xPosition" y="$yPosition" 
                   width="$cardWidth" height="$headerHeight" 
@@ -234,14 +234,14 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
             <rect x="$xPosition" y="${yPosition + 25}" 
                   width="$cardWidth" height="15" 
                   fill="url(#timeline_grad_$gradIndex)"/>
-            
+
             <!-- Date text -->
             <text x="${xPosition + cardPadding}" y="${yPosition + 28}" 
                   class="timeline-text timeline-date" 
                   fill="white">
                 ${entry.date.escapeXml()}
             </text>
-            
+
             <!-- Content text with links -->
             <text x="${xPosition + cardPadding}" y="${yPosition + headerHeight + 25}" 
                   class="timeline-text timeline-content">
@@ -386,11 +386,49 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
         """
         }
 
+        // Glass-specific definitions
+        val glassDefinitions = if (useGlass) {
+            """
+        <!-- Glass gradients -->
+        <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+        </linearGradient>
+        <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+            <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+        </radialGradient>
+        <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Glass filters -->
+        <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+        </filter>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
+        </filter>
+        <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feOffset dx="0" dy="2"/>
+            <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+            <feFlood flood-color="rgba(0,0,0,0.3)"/>
+            <feComposite in2="offset" operator="in"/>
+            <feComposite in2="SourceGraphic" operator="over"/>
+        </filter>
+        """
+        } else {
+            ""
+        }
+
         // Add background gradient definition
         val backgroundGradient = """
     <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:$fillColor;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:${if (useDark) "#0a0a0a" else "#fafafa"};stop-opacity:1" />
+        <stop offset="0%" style="stop-color:${if (useGlass) "#1d4ed8" else fillColor};stop-opacity:1" />
+        <stop offset="100%" style="stop-color:${if (useGlass) "#1d4ed8" else if (useDark) "#0a0a0a" else "#fafafa"};stop-opacity:1" />
     </linearGradient>
     """
 
@@ -418,10 +456,10 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
     <defs>
         <style>
             .timeline-card {
-                fill: $cardBackgroundColor;
-                stroke: $separatorColor;
-                stroke-width: 0.5;
-                filter: url(#cardShadow);
+                fill: ${if (useGlass) "url(#glassGradient)" else cardBackgroundColor};
+                stroke: ${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor};
+                stroke-width: ${if (useGlass) "1" else "0.5"};
+                filter: url(#${if (useGlass) "shadow" else "cardShadow"});
                 transition: transform 0.2s ease;
             }
             .timeline-card:hover {
@@ -429,14 +467,14 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
             }
             .timeline-text {
                 font-family: $DEFAULT_FONT_FAMILY;
-                fill: $textColor;
+                fill: ${if (useGlass) "white" else textColor};
                 text-rendering: optimizeLegibility;
             }
             .timeline-title {
                 font-size: 32px;
                 font-weight: 800;
                 letter-spacing: -1px;
-                fill: $textColor;
+                fill: ${if (useGlass) "white" else textColor};
             }
             .timeline-date {
                 font-size: 13px;
@@ -448,20 +486,21 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
                 font-size: 15px;
                 font-weight: 400;
                 line-height: 1.5;
-                fill: $textColor;
+                fill: ${if (useGlass) "rgba(255,255,255,0.9)" else textColor};
             }
             .timeline-spine {
-                stroke: $separatorColor;
+                stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else separatorColor};
                 stroke-width: 2;
                 stroke-linecap: round;
+                ${if (useGlass) "filter: url(#blur);" else ""}
             }
             .timeline-dot {
-                stroke: $cardBackgroundColor;
+                stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else cardBackgroundColor};
                 stroke-width: 3;
-                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+                filter: ${if (useGlass) "url(#shadow)" else "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"};
             }
             .timeline-connector {
-                stroke: $separatorColor;
+                stroke: ${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor};
                 stroke-width: 1.5;
                 stroke-dasharray: 3,3;
                 opacity: 0.6;
@@ -469,6 +508,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
             $linkStyle
         </style>
         $shadowFilter
+        $glassDefinitions
         $backgroundGradient
         $gradientDefs
     </defs>
@@ -494,29 +534,37 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
     <g class="timeline-entry">
         <!-- Dashed connector line -->
         <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" y1="$dotY"  x2="$spineX"  y2="$dotY" class="timeline-connector"/>
-        
+
         <!-- Enhanced timeline dot -->
-        <circle cx="$spineX" cy="$dotY" r="8" fill="url(#timeline_grad_$gradIndex)" class="timeline-dot"/>
-        
+        <circle cx="$spineX" cy="$dotY" r="8" fill="${if (useGlass) "url(#glassRadial)" else "url(#timeline_grad_$gradIndex)"}" class="timeline-dot"/>
+        ${if (useGlass) """
+        <!-- Circle highlight -->
+        <ellipse cx="${spineX-3}" cy="${dotY-3}" rx="3" ry="2" fill="rgba(255,255,255,0.5)"/>
+        """ else ""}
+
         <!-- Elegant card with enhanced shadow -->
-        <rect x="$xPosition" y="$yPosition" width="$cardWidth" height="$cardHeight" rx="$cardRadius" ry="$cardRadius"  class="timeline-card"/>
-        
+        <rect x="$xPosition" y="$yPosition" width="$cardWidth" height="$cardHeight" rx="$cardRadius" ry="$cardRadius" class="timeline-card"/>
+
         <!-- Gradient header with subtle design -->
         <rect x="$xPosition" y="$yPosition" 
               width="$cardWidth" height="$headerHeight" 
               rx="$cardRadius" ry="$cardRadius" 
-              fill="url(#timeline_grad_$gradIndex)"/>
+              fill="${if (useGlass) "url(#glassGradient)" else "url(#timeline_grad_$gradIndex)"}"/>
         <rect x="$xPosition" y="${yPosition + cardRadius}" 
               width="$cardWidth" height="${headerHeight - cardRadius}" 
-              fill="url(#timeline_grad_$gradIndex)"/>
-        
+              fill="${if (useGlass) "url(#glassGradient)" else "url(#timeline_grad_$gradIndex)"}"/>
+        ${if (useGlass) """
+        <!-- Card highlight -->
+        <rect x="${xPosition + 5}" y="${yPosition + 5}" width="${cardWidth - 10}" height="15" rx="7" fill="url(#highlight)"/>
+        """ else ""}
+
         <!-- Refined date text -->
         <text x="${xPosition + cardPadding}" y="${yPosition + 28}" 
               class="timeline-text timeline-date" 
               fill="white">
               ${entry.date.escapeXml()}
         </text>
-        
+
         <!-- Content with enhanced typography -->
         <text x="${xPosition + cardPadding}" y="${yPosition + headerHeight + 25}" 
               class="timeline-text timeline-content">
@@ -554,13 +602,13 @@ Challenges the distinction between high and low culture and emphasizes fragmenta
     """.trimIndent()
 
     // Test normal output
-    val maker = TimelineMaker(false, "#a1d975")
+    val maker = TimelineMaker(false, "#a1d975", useGlass = true)
     val svg = maker.makeTimelineSvg(entry, "Literary Periods", "0.6", false)
     val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
 
     // Test PDF output
-    val makerPdf = TimelineMaker(false, "#a1d975")
+    val makerPdf = TimelineMaker(false, "#a1d975", useGlass = true)
     val svgPdf = makerPdf.makeTimelineSvg(entry, "Literary Periods", "1", true)
     val fPdf = File("gen/timeline_pdf.svg")
     fPdf.writeBytes(svgPdf.toByteArray())
