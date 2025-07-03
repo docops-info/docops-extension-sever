@@ -86,7 +86,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
          } else {
              str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
          }
-         str.append(title(releaseStrategy.title, width, titleFill))
+         str.append(glassTitle(releaseStrategy.title, width, titleFill))
          str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, releaseStrategy.id, releaseStrategy))
@@ -108,6 +108,49 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             aria-label='Docops: Release Strategy' id="ID$id">
             <desc>https://docops.io/extension</desc>
             <title>${title.escapeXml()}</title>
+
+            <!-- Glass effect filters -->
+            <defs>
+                <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="5" stdDeviation="10" flood-opacity="0.75" flood-color="#000000" />
+                </filter>
+
+                <filter id="glass-blur" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+                </filter>
+
+                <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
+                </filter>
+
+                <!-- Glass effect gradients -->
+                <linearGradient id="glass-overlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Gradient for glass base -->
+                <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Inner shadow for depth -->
+                <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feOffset dx="0" dy="2"/>
+                    <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+                    <feFlood flood-color="rgba(0,0,0,0.3)"/>
+                    <feComposite in2="offset-blur" operator="in"/>
+                    <feComposite in2="SourceGraphic" operator="over"/>
+                </filter>
+
+                <!-- Title gradient -->
+                <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
+                </linearGradient>
+            </defs>
         """.trimIndent()
     }
 
@@ -166,13 +209,52 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         //language=svg
         return """
          <g transform="translate(${positionX+10},60)" class="$clz">
-             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" fill='$dateColor'>${release.date}</text>
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" fill="$cardFill" stroke="$dateColor" stroke-width="2"/>
-            <text x="410" y="110" class="milestoneTL" font-size="36px" fill="$textFill">${release.type}</text>
+             <!-- Date text with glass effect -->
+             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" 
+                   fill='$dateColor' filter="url(#title-shadow)">${release.date}</text>
+
+             <!-- Glass card background -->
+             <defs>
+                <filter id="card-glass-${release.type}-${currentIndex}" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+                    <feOffset in="blur" dx="0" dy="4" result="offsetBlur" />
+                    <feComponentTransfer in="offsetBlur" result="shadow">
+                        <feFuncA type="linear" slope="0.3" />
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode in="shadow" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+             </defs>
+
+             <!-- Main card with glass effect -->
+             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" 
+                   fill="url(#glassGradient)" 
+                   stroke="$dateColor" 
+                   stroke-width="2"
+                   filter="url(#glass-shadow)"/>
+
+             <!-- Glass highlight overlay -->
+             <path d="m 5,5 h 390 v 40 h -390 z" 
+                   fill="url(#glass-overlay)" 
+                   opacity="0.7"/>
+
+             <!-- Type label with glass effect -->
+             <text x="410" y="110" class="milestoneTL" 
+                   font-size="36px" 
+                   fill="$textFill"
+                   filter="url(#title-shadow)">${release.type}</text>
+
             $completed
+
+            <!-- Content with glass effect -->
             <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
-                <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" font-size="12px"
-                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-weight="bold" fill="$textFill">
+                <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" 
+                      font-size="12px"
+                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" 
+                      font-weight="bold" 
+                      fill="$textFill">
                    $spans
                 </text>
             </g>
@@ -234,8 +316,40 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             //language=svg
             return """
          <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" $visibility>
-            <rect width='400' height='$height' stroke="$borderColor" fill="$cardFill" rx="4" ry="4"/>
-            <text $anchor x="$x" y="2" class="milestoneTL lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold" fill="$textFill">
+            <!-- Glass card background -->
+            <defs>
+                <filter id="hidden-card-glass-${release.type}-${currentIndex}" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+                    <feOffset in="blur" dx="0" dy="3" result="offsetBlur" />
+                    <feComponentTransfer in="offsetBlur" result="shadow">
+                        <feFuncA type="linear" slope="0.2" />
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode in="shadow" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Main card with glass effect -->
+            <rect width='400' height='$height' 
+                  stroke="$borderColor" 
+                  fill="url(#glassGradient)" 
+                  rx="8" ry="8"
+                  filter="url(#glass-shadow)"/>
+
+            <!-- Glass highlight overlay -->
+            <rect x="5" y="5" width="390" height="15" 
+                  rx="5" ry="5"
+                  fill="url(#glass-overlay)" 
+                  opacity="0.7"/>
+
+            <!-- Text content -->
+            <text $anchor x="$x" y="2" class="milestoneTL lines" 
+                  font-size="12px" 
+                  font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' 
+                  font-weight="bold" 
+                  fill="$textFill">
                 $lineText
             </text>
             $bulletStar
@@ -249,6 +363,33 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
             text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="20" font-weight="normal">$it</tspan>""")
         }
         return text.toString()
+    }
+
+    /**
+     * Create a glass-styled title
+     */
+    private fun glassTitle(title: String, width: Float, titleFill: String): String {
+        return """
+            <!-- Glass title background -->
+            <rect x="${width/2 - 300}" y="5" width="600" height="50" rx="15" ry="15"
+                  fill="url(#glassGradient)" 
+                  stroke="rgba(255,255,255,0.3)" 
+                  stroke-width="1" 
+                  filter="url(#glass-shadow)" />
+
+            <!-- Title highlight -->
+            <rect x="${width/2 - 295}" y="10" width="590" height="15" rx="10" ry="10"
+                  fill="url(#glass-overlay)" opacity="0.7" />
+
+            <!-- Title text with glass effect -->
+            <text x="${width/2}" y="38" text-anchor="middle" 
+                  style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
+                         font-size: 24px; 
+                         font-weight: bold; 
+                         letter-spacing: 1px; 
+                         fill: url(#title-gradient); 
+                         filter: url(#title-shadow);">${title.escapeXml()}</text>
+        """.trimIndent()
     }
 
 

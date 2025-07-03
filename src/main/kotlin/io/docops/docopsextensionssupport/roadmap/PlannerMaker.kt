@@ -36,15 +36,31 @@ class PlannerMaker {
         sb.append("""<g>""")
         sb.append("""
             <defs>
-                <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
-                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
-                </filter>
                 <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
                     <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
                 </linearGradient>
             </defs>
-            <text x="${width/2}" y="50" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 44px; font-weight: bold; letter-spacing: 1px; fill: url(#title-gradient); filter: url(#title-shadow);">${title.escapeXml()}</text>
+
+            <!-- Glass title background -->
+            <rect x="${width/2 - 400}" y="10" width="800" height="70" rx="15" ry="15"
+                  fill="url(#glassGradient)" 
+                  stroke="rgba(255,255,255,0.3)" 
+                  stroke-width="1" 
+                  filter="url(#glass-shadow)" />
+
+            <!-- Title highlight -->
+            <rect x="${width/2 - 395}" y="15" width="790" height="25" rx="10" ry="10"
+                  fill="url(#glass-overlay)" opacity="0.7" />
+
+            <!-- Title text with glass effect -->
+            <text x="${width/2}" y="60" text-anchor="middle" 
+                  style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
+                         font-size: 44px; 
+                         font-weight: bold; 
+                         letter-spacing: 1px; 
+                         fill: url(#title-gradient); 
+                         filter: url(#title-shadow);">${title.escapeXml()}</text>
         """)
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
@@ -94,21 +110,37 @@ private fun itemGradient(planItems: PlanItems): String {
             }
 
             sb.append("""<g transform="translate($startX, $y)">""")
-            // Add drop shadow filter
+            // Add glass effect
             sb.append("""
                 <defs>
-                    <filter id="shadow-${planItem.id}" x="-10%" y="-10%" width="120%" height="120%">
-                        <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15" />
+                    <filter id="glass-effect-${planItem.id}" x="-10%" y="-10%" width="120%" height="120%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+                        <feOffset in="blur" dx="0" dy="4" result="offsetBlur" />
+                        <feComponentTransfer in="offsetBlur" result="shadow">
+                            <feFuncA type="linear" slope="0.3" />
+                        </feComponentTransfer>
+                        <feMerge>
+                            <feMergeNode in="shadow" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
                     </filter>
-                    <linearGradient id="card-gradient-${planItem.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#f8f8f8;stop-opacity:1" />
-                    </linearGradient>
                 </defs>
+
+                <!-- Glass card background -->
                 <rect x="0" y="0" height="360" width="552" rx="12" ry="12"
-                      style="fill: url(#card-gradient-${planItem.id}); stroke: #e0e0e0; stroke-width: 1; filter: url(#shadow-${planItem.id});"/>
+                      style="fill: url(#glassGradient); stroke: rgba(255,255,255,0.3); stroke-width: 1; filter: url(#glass-shadow);"/>
+
+                <!-- Color header with glass effect -->
                 <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z"
-                      fill="$color"/>
+                      fill="$color" filter="url(#glass-blur)" />
+
+                <!-- Glass highlight overlay -->
+                <rect x="5" y="5" width="542" height="40" rx="8" ry="8"
+                      fill="url(#glass-overlay)" opacity="0.7" />
+
+                <!-- Bottom glass highlight -->
+                <rect x="10" y="300" width="532" height="50" rx="8" ry="8"
+                      fill="rgba(255,255,255,0.1)" />
             """.trimIndent())
 
             planItem.title?.let {
@@ -138,11 +170,29 @@ private fun itemGradient(planItems: PlanItems): String {
 
         sb.append("""
             <g transform="translate($startX, 10)">
+                <!-- Glass column header -->
+                <rect x="0" y="0" width="552" height="40" rx="8" ry="8"
+                      fill="url(#glassGradient)" 
+                      stroke="rgba(255,255,255,0.3)" 
+                      stroke-width="1" 
+                      filter="url(#glass-shadow)" />
+
+                <!-- Column header highlight -->
+                <rect x="5" y="5" width="542" height="15" rx="5" ry="5"
+                      fill="url(#glass-overlay)" opacity="0.7" />
+
+                <!-- Column header text with glass effect -->
                 <filter id="glow-$key" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur stdDeviation="2" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
-                <text x="281" y="26" text-anchor="middle" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $parentColor; font-size: 1rem; font-weight: bold; letter-spacing: 1px; filter: url(#glow-$key);">${key.escapeXml().uppercase()}</text>
+                <text x="281" y="26" text-anchor="middle" 
+                      style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
+                             fill: $parentColor; 
+                             font-size: 1rem; 
+                             font-weight: bold; 
+                             letter-spacing: 1px; 
+                             filter: url(#title-shadow);">${key.escapeXml().uppercase()}</text>
             </g>
             """.trimIndent())
         return sb.toString()
@@ -169,6 +219,41 @@ private fun itemGradient(planItems: PlanItems): String {
      <defs>
      $grads
      $itemGrad
+
+     <!-- Glass effect filters -->
+     <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
+         <feDropShadow dx="0" dy="5" stdDeviation="10" flood-opacity="0.75" flood-color="#000000" />
+     </filter>
+
+     <filter id="glass-blur" x="-10%" y="-10%" width="120%" height="120%">
+         <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+     </filter>
+
+     <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
+         <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
+     </filter>
+
+     <!-- Glass effect gradients -->
+     <linearGradient id="glass-overlay" x1="0%" y1="0%" x2="0%" y2="100%">
+         <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
+         <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+     </linearGradient>
+
+     <!-- Gradient for glass base -->
+     <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+         <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+         <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+         <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+     </linearGradient>
+
+     <!-- Inner shadow for depth -->
+     <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+         <feOffset dx="0" dy="2"/>
+         <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+         <feFlood flood-color="rgba(0,0,0,0.3)"/>
+         <feComposite in2="offset-blur" operator="in"/>
+         <feComposite in2="SourceGraphic" operator="over"/>
+     </filter>
      </defs>
      """.trimIndent()
     }
@@ -177,26 +262,22 @@ private fun itemGradient(planItems: PlanItems): String {
 
 fun main() {
     val str = """
-- now Docker
-Use common docker image to streamline the process.
-- next
-dockerize API service
-build spring boot 3 version [[https://www.google.com google]] of application
-analyze black duck results
-- later Image
-image embed rectangle
-- now
-image embed slim
-- next Another map #005400
-color background roadmap
-- done Car
-remove car from release [[https://roach.gy roach]] strategy
-- done
-pass in theme (light,dark)
-- later url
-refactor displayConfigUrl to displayTheme
-- blocked dependency
-waiting on team to finish feature
+- now Backend Development
+Learn Node.js and Express
+Master database design with MongoDB
+Implement authentication and authorization
+- next Frontend Frameworks
+Study React fundamentals
+Build interactive UIs
+State management with Redux
+- later DevOps Skills
+Docker containerization
+CI/CD pipeline setup
+Cloud deployment (AWS/Azure)
+- done Programming Basics
+HTML, CSS, JavaScript
+Git version control
+Basic algorithms and data structures
     """.trimIndent()
     val p = PlannerMaker()
     val svg =p.makePlannerImage(str, "title", "0.5")

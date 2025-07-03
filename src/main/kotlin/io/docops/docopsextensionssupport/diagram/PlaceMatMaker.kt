@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.ShapeResponse
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.*
 
@@ -445,17 +446,34 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 }
 
 fun main() {
-    val pmm = PlaceMatMaker(PlaceMatRequest(mutableListOf(PlaceMat("SUI", legend = "Vendor"), PlaceMat("Contact View", legend = "Both"),
-        PlaceMat("Contact Management", legend = "Company"),
-        PlaceMat("CDE Wrapper", legend = "Vendor"),
-        PlaceMat("Live Publish", legend = "Vendor"),
-        PlaceMat("Policy Quote Search", legend = "Both"),
-        PlaceMat("NXT3", legend = "Vendor")
-    ),config= PlaceMatConfig(legend = mutableListOf(
-        ColorLegendConfig("#c9d7e4","Company"),
-        ColorLegendConfig("#F34F1C","Vendor"),
-        ColorLegendConfig("#01A6F0", "Both"))
-    ), title = "Impacted Applications - Internal", fill = true, useDark = false), "SVG")
+    val pmRequest = Json.decodeFromString<PlaceMatRequest>("""
+{
+  "title": "Enterprise Architecture Domains",
+  "placeMats": [
+    {"name": "Business Strategy", "legend": "Business"},
+    {"name": "Business Processes", "legend": "Business"},
+    {"name": "Organization Structure", "legend": "Business"},
+    {"name": "Application Portfolio", "legend": "Application"},
+    {"name": "Application Integration", "legend": "Application"},
+    {"name": "User Experience", "legend": "Application"},
+    {"name": "Data Models", "legend": "Data"},
+    {"name": "Data Governance", "legend": "Data"},
+    {"name": "Data Quality", "legend": "Data"},
+    {"name": "Infrastructure", "legend": "Technology"},
+    {"name": "Security", "legend": "Technology"},
+    {"name": "Cloud Strategy", "legend": "Technology"}
+  ],
+  "config": {
+    "legend": [
+      {"legend": "Business", "color": "#ff9e00"},
+      {"legend": "Application", "color": "#ff5500"},
+      {"legend": "Data", "color": "#e10600"},
+      {"legend": "Technology", "color": "#8900f2"}
+    ]
+  }
+}        
+    """.trimIndent())
+    val pmm = PlaceMatMaker(placeMatRequest = pmRequest, isPdf = false)
     val svg = pmm.makePlacerMat()
     val f = File("gen/place.svg")
     f.writeText(svg.shapeSvg)
