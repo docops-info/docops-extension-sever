@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Sitemap</title>
+    <style>
+        
+/* iOS Theme CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif;
+    background: #F2F2F7;
+    color: #1C1C1E;
+    overflow: hidden;
+}
+
+.sitemap-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.sitemap-header {
+    background: linear-gradient(135deg, #007AFF 0%, #0051D0 100%);
+    color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.sitemap-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.sitemap-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.stat-icon {
+    font-size: 16px;
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.sitemap-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.control-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #F2F2F7;
+}
+
+#sitemapCanvas {
+    display: block;
+    cursor: grab;
+    width: 100%;
+    height: 100%;
+}
+
+#sitemapCanvas:active {
+    cursor: grabbing;
+}
+
+.canvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.tooltip.visible {
+    opacity: 1;
+}
+
+.sitemap-footer {
+    background: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #6D6D80;
+    border-top: 1px solid #E5E5EA;
+}
+
+.sitemap-footer strong {
+    color: #007AFF;
+}
+
+/* Loading state */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    font-size: 16px;
+    color: #6D6D80;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .sitemap-header {
+        padding: 15px;
+    }
+    
+    .sitemap-title {
+        font-size: 24px;
+    }
+    
+    .sitemap-stats {
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .control-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+    
+    .sitemap-footer {
+        padding: 12px 15px;
+        font-size: 12px;
+    }
+}
+        
+    </style>
+</head>
+<body>
+    <div class="sitemap-container">
+        <!-- Header -->
+        <div class="sitemap-header">
+            <h1 class="sitemap-title">📁 Interactive Sitemap</h1>
+            <div class="sitemap-stats">
+                <span class="stat-item">
+                    <span class="stat-icon">📂</span>
+                    <span class="stat-label">Directories:</span>
+                    <span class="stat-value">3</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-icon">📄</span>
+                    <span class="stat-label">HTML Files:</span>
+                    <span class="stat-value">27</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-icon">📊</span>
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value">30</span>
+                </span>
+            </div>
+            <div class="sitemap-controls">
+                <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.expandAll()">
+                    <span class="btn-icon">📂</span>
+                    Expand All
+                </button>
+                <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.collapseAll()">
+                    <span class="btn-icon">📁</span>
+                    Collapse All
+                </button>
+                <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.resetView()">
+                    <span class="btn-icon">🔄</span>
+                    Reset View
+                </button>
+            </div>
+        </div>
+        
+        <!-- Canvas Container -->
+        <div class="canvas-container">
+            <canvas id="sitemapCanvas" width="1200" height="800"></canvas>
+            <div class="canvas-overlay">
+                <div id="tooltip" class="tooltip"></div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="sitemap-footer">
+            <p>💡 <strong>Tip:</strong> Click directories to expand/collapse • Click files to open • Use mouse wheel to zoom • Drag to pan</p>
+        </div>
+    </div>
+
+    <script>
+        
+// Interactive Sitemap Viewer with iOS Design
+class SitemapViewer {
+    constructor(canvasId, data) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.data = data;
+        
+        // Validate canvas
+        if (!this.canvas || !this.ctx) {
+            console.error('Canvas not found or context not available');
+            return;
+        }
+        
+        // Canvas properties
+        this.scale = 1;
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.isDragging = false;
+        this.lastMouseX = 0;
+        this.lastMouseY = 0;
+        
+        // Node properties
+        this.nodeWidth = 140;
+        this.nodeHeight = 50;
+        this.horizontalSpacing = 160;
+        this.verticalSpacing = 80;
+        this.marginX = 60;
+        this.marginY = 60;
+        
+        // iOS Colors
+        this.colors = {
+            blue: '#007AFF',
+            blueHover: '#0051D0',
+            green: '#34C759',
+            greenHover: '#2AA946',
+            purple: '#AF52DE',
+            purpleHover: '#9B44C8',
+            background: '#F2F2F7',
+            white: '#FFFFFF',
+            gray: '#6D6D80',
+            darkGray: '#1C1C1E'
+        };
+        
+        // Animation properties
+        this.animationFrame = null;
+        this.hoveredNode = null;
+        this.tooltip = document.getElementById('tooltip');
+        
+        this.setupCanvas();
+        this.setupEventListeners();
+        this.calculateLayout();
+        this.render();
+    }
+    
+    setupCanvas() {
+        const container = this.canvas.parentElement;
+        const dpr = window.devicePixelRatio || 1;
+        
+        const updateCanvasSize = () => {
+            const rect = container.getBoundingClientRect();
+            this.canvas.width = rect.width * dpr;
+            this.canvas.height = rect.height * dpr;
+            this.canvas.style.width = rect.width + 'px';
+            this.canvas.style.height = rect.height + 'px';
+            this.ctx.scale(dpr, dpr);
+            this.render();
+        };
+        
+        updateCanvasSize();
+        window.addEventListener('resize', updateCanvasSize);
+    }
+    
+    setupEventListeners() {
+        // Mouse events
+        this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+        this.canvas.addEventListener('wheel', (e) => this.handleWheel(e));
+        this.canvas.addEventListener('click', (e) => this.handleClick(e));
+        
+        // Touch events for mobile
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+        
+        // Prevent context menu
+        this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
+    
+    calculateLayout() {
+        this.assignLevels(this.data, 0);
+        this.data.x = this.marginX;
+        this.data.y = this.marginY + 100; // Space for header
+        this.layoutChildren(this.data, this.marginX + this.horizontalSpacing, this.data.y);
+    }
+    
+    assignLevels(node, level) {
+        node.level = level;
+        if (node.children) {
+            node.children.forEach(child => this.assignLevels(child, level + 1));
+        }
+    }
+    
+    layoutChildren(parent, startX, startY) {
+        if (!parent.children || parent.children.length === 0 || !parent.isExpanded) return;
+        
+        const visibleChildren = parent.children.filter(child => parent.isExpanded);
+        const totalHeight = visibleChildren.length * this.verticalSpacing;
+        let currentY = startY - (totalHeight / 2) + (this.verticalSpacing / 2);
+        
+        visibleChildren.forEach(child => {
+            child.x = startX;
+            child.y = currentY;
+            currentY += this.verticalSpacing;
+            this.layoutChildren(child, startX + this.horizontalSpacing, child.y);
+        });
+    }
+    
+    render() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        this.ctx.save();
+        this.ctx.translate(this.offsetX, this.offsetY);
+        this.ctx.scale(this.scale, this.scale);
+        
+        // Draw connections first
+        this.drawConnections(this.data);
+        
+        // Draw nodes
+        this.drawNodes(this.data);
+        
+        this.ctx.restore();
+    }
+    
+    drawConnections(node) {
+        if (!node.children || !node.isExpanded || node.children.length === 0) return;
+        
+        // Validate node position
+        if (!this.isValidPosition(node.x, node.y)) {
+            console.warn('Invalid node position for connections:', node.name, node.x, node.y);
+            return;
+        }
+        
+        node.children.forEach(child => {
+            // Validate child position
+            if (!this.isValidPosition(child.x, child.y)) {
+                console.warn('Invalid child position for connections:', child.name, child.x, child.y);
+                return;
+            }
+            
+            const startX = node.x + this.nodeWidth;
+            const startY = node.y + this.nodeHeight / 2;
+            const endX = child.x;
+            const endY = child.y + this.nodeHeight / 2;
+            const midX = startX + (endX - startX) / 2;
+            
+            // Validate all coordinates before drawing
+            if (this.isValidPosition(startX, startY) && this.isValidPosition(endX, endY) && this.isValidPosition(midX, startY)) {
+                this.ctx.strokeStyle = this.colors.blue;
+                this.ctx.lineWidth = 3;
+                this.ctx.globalAlpha = 0.8;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(startX, startY);
+                this.ctx.lineTo(midX, startY);
+                this.ctx.lineTo(midX, endY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+            }
+            
+            this.drawConnections(child);
+        });
+        
+        this.ctx.globalAlpha = 1;
+    }
+    
+    isValidPosition(x, y) {
+        return typeof x === 'number' && typeof y === 'number' && 
+               isFinite(x) && isFinite(y) && 
+               !isNaN(x) && !isNaN(y);
+    }
+    
+    drawNodes(node) {
+        this.drawNode(node);
+        
+        if (node.children && node.isExpanded) {
+            node.children.forEach(child => this.drawNodes(child));
+        }
+    }
+    
+    drawNode(node) {
+        // Validate node position
+        if (!this.isValidPosition(node.x, node.y)) {
+            console.warn('Invalid node position:', node.name, node.x, node.y);
+            return;
+        }
+        
+        const isHovered = this.hoveredNode === node;
+        const scale = isHovered ? 1.05 : 1;
+        
+        // Determine colors and size based on node type
+        let fillColor, strokeColor, textColor;
+        let width = this.nodeWidth;
+        let height = this.nodeHeight;
+        
+        if (node.level === 0) {
+            fillColor = isHovered ? this.colors.blueHover : this.colors.blue;
+            width += 20;
+            height += 10;
+        } else if (node.isDirectory) {
+            fillColor = isHovered ? this.colors.greenHover : this.colors.green;
+        } else {
+            fillColor = isHovered ? this.colors.purpleHover : this.colors.purple;
+            width -= 10;
+            height -= 5;
+        }
+        
+        strokeColor = this.colors.white;
+        textColor = this.colors.white;
+        
+        // Adjust position for different node sizes
+        let adjustedX = node.x;
+        let adjustedY = node.y;
+        
+        if (node.level === 0) {
+            adjustedX -= 10;
+            adjustedY -= 5;
+        } else if (!node.isDirectory) {
+            adjustedX += 5;
+            adjustedY += 2;
+        }
+        
+        this.ctx.save();
+        
+        if (scale !== 1) {
+            const centerX = adjustedX + width / 2;
+            const centerY = adjustedY + height / 2;
+            this.ctx.translate(centerX, centerY);
+            this.ctx.scale(scale, scale);
+            this.ctx.translate(-centerX, -centerY);
+        }
+        
+        // Draw shadow
+        this.ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        this.ctx.shadowBlur = 8;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 2;
+        
+        // Draw main rectangle
+        this.ctx.fillStyle = fillColor;
+        this.ctx.strokeStyle = strokeColor;
+        this.ctx.lineWidth = 2;
+        
+        this.roundRect(adjustedX, adjustedY, width, height, 12);
+        this.ctx.fill();
+        this.ctx.stroke();
+        
+        // Reset shadow
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
+        
+        // Draw text
+        this.ctx.fillStyle = textColor;
+        this.ctx.font = `600 ${node.level === 0 ? '14px' : '12px'} -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif`;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        const displayName = this.truncateText(node.name, 18);
+        this.ctx.fillText(displayName, adjustedX + width / 2, adjustedY + height / 2);
+        
+        // Draw expand/collapse indicator for directories with children
+        if (node.isDirectory && node.children && node.children.length > 0) {
+            const indicatorX = adjustedX + width - 15;
+            const indicatorY = adjustedY + 10;
+            
+            this.ctx.fillStyle = this.colors.white;
+            this.ctx.font = '12px Arial';
+            this.ctx.fillText(node.isExpanded ? '−' : '+', indicatorX, indicatorY);
+        }
+        
+        this.ctx.restore();
+        
+        // Store node bounds for hit testing
+        node.bounds = {
+            x: adjustedX,
+            y: adjustedY,
+            width: width * scale,
+            height: height * scale
+        };
+    }
+    
+    roundRect(x, y, width, height, radius) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.lineTo(x + width - radius, y);
+        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.ctx.lineTo(x + width, y + height - radius);
+        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.ctx.lineTo(x + radius, y + height);
+        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.ctx.lineTo(x, y + radius);
+        this.ctx.quadraticCurveTo(x, y, x + radius, y);
+        this.ctx.closePath();
+    }
+    
+    truncateText(text, maxLength) {
+        return text.length <= maxLength ? text : text.substring(0, maxLength - 3) + '...';
+    }
+    
+    getMousePos(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left - this.offsetX) / this.scale,
+            y: (e.clientY - rect.top - this.offsetY) / this.scale
+        };
+    }
+    
+    getNodeAtPosition(x, y) {
+        const allNodes = this.getAllNodes(this.data);
+        return allNodes.find(node => {
+            const bounds = node.bounds;
+            return bounds && x >= bounds.x && x <= bounds.x + bounds.width &&
+                   y >= bounds.y && y <= bounds.y + bounds.height;
+        });
+    }
+    
+    getAllNodes(node, nodes = []) {
+        nodes.push(node);
+        if (node.children && node.isExpanded) {
+            node.children.forEach(child => this.getAllNodes(child, nodes));
+        }
+        return nodes;
+    }
+    
+    // Event handlers
+    handleMouseDown(e) {
+        const pos = this.getMousePos(e);
+        this.isDragging = true;
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+    }
+    
+    handleMouseMove(e) {
+        const pos = this.getMousePos(e);
+        const hoveredNode = this.getNodeAtPosition(pos.x, pos.y);
+        
+        if (this.isDragging) {
+            const deltaX = e.clientX - this.lastMouseX;
+            const deltaY = e.clientY - this.lastMouseY;
+            
+            this.offsetX += deltaX;
+            this.offsetY += deltaY;
+            
+            this.lastMouseX = e.clientX;
+            this.lastMouseY = e.clientY;
+            
+            this.render();
+        } else {
+            // Handle hover
+            if (hoveredNode !== this.hoveredNode) {
+                this.hoveredNode = hoveredNode;
+                this.render();
+                
+                // Update tooltip
+                if (hoveredNode) {
+                    this.showTooltip(e, hoveredNode);
+                } else {
+                    this.hideTooltip();
+                }
+            }
+            
+            // Update cursor
+            this.canvas.style.cursor = hoveredNode ? 'pointer' : 'grab';
+        }
+    }
+    
+    handleMouseUp(e) {
+        this.isDragging = false;
+    }
+    
+    handleClick(e) {
+        if (this.isDragging) return;
+        
+        const pos = this.getMousePos(e);
+        const clickedNode = this.getNodeAtPosition(pos.x, pos.y);
+        
+        if (clickedNode) {
+            if (clickedNode.isDirectory && clickedNode.children && clickedNode.children.length > 0) {
+                // Toggle expand/collapse
+                clickedNode.isExpanded = !clickedNode.isExpanded;
+                this.calculateLayout();
+                this.render();
+            } else if (!clickedNode.isDirectory && clickedNode.url) {
+                // Open file
+                window.open(clickedNode.url, '_blank');
+            }
+        }
+    }
+    
+    handleWheel(e) {
+        e.preventDefault();
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        const wheel = e.deltaY < 0 ? 1 : -1;
+        const zoom = Math.exp(wheel * 0.1);
+        const newScale = Math.max(0.1, Math.min(3, this.scale * zoom));
+        
+        if (newScale !== this.scale) {
+            const scaleFactor = newScale / this.scale;
+            this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactor;
+            this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactor;
+            this.scale = newScale;
+            this.render();
+        }
+    }
+    
+    // Touch event handlers
+    handleTouchStart(e) {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            this.handleMouseDown({
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+        }
+    }
+    
+    handleTouchMove(e) {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            this.handleMouseMove({
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+        }
+    }
+    
+    handleTouchEnd(e) {
+        e.preventDefault();
+        this.handleMouseUp(e);
+    }
+    
+    showTooltip(e, node) {
+        if (this.tooltip) {
+            this.tooltip.textContent = `${node.relativePath}${node.url ? ' - Click to open' : ''}`;
+            this.tooltip.style.left = e.clientX + 'px';
+            this.tooltip.style.top = (e.clientY - 40) + 'px';
+            this.tooltip.classList.add('visible');
+        }
+    }
+    
+    hideTooltip() {
+        if (this.tooltip) {
+            this.tooltip.classList.remove('visible');
+        }
+    }
+    
+    // Public methods
+    expandAll() {
+        this.setExpanded(this.data, true);
+        this.calculateLayout();
+        this.render();
+    }
+    
+    collapseAll() {
+        this.setExpanded(this.data, false);
+        this.data.isExpanded = true; // Keep root expanded
+        this.calculateLayout();
+        this.render();
+    }
+    
+    setExpanded(node, expanded) {
+        if (node.isDirectory && node.children) {
+            node.isExpanded = expanded;
+            node.children.forEach(child => this.setExpanded(child, expanded));
+        }
+    }
+    
+    resetView() {
+        this.scale = 1;
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.render();
+    }
+}
+
+// Initialize the sitemap viewer when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const sitemapData = {
+            "name": "docs",
+            "relativePath": "",
+            "url": "",
+            "isDirectory": true,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": [{
+            "name": "images",
+            "relativePath": "images",
+            "url": "",
+            "isDirectory": true,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "styles",
+            "relativePath": "styles",
+            "url": "",
+            "isDirectory": true,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "_base.html",
+            "relativePath": "_base.html",
+            "url": "_base.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "adr.html",
+            "relativePath": "adr.html",
+            "url": "adr.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "arch.html",
+            "relativePath": "arch.html",
+            "url": "arch.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "barchart.html",
+            "relativePath": "barchart.html",
+            "url": "barchart.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "buttons.html",
+            "relativePath": "buttons.html",
+            "url": "buttons.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "callout.html",
+            "relativePath": "callout.html",
+            "url": "callout.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "charts.html",
+            "relativePath": "charts.html",
+            "url": "charts.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "connectors.html",
+            "relativePath": "connectors.html",
+            "url": "connectors.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "docops.html",
+            "relativePath": "docops.html",
+            "url": "docops.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "examples.html",
+            "relativePath": "examples.html",
+            "url": "examples.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "featurecard.html",
+            "relativePath": "featurecard.html",
+            "url": "featurecard.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "glass.html",
+            "relativePath": "glass.html",
+            "url": "glass.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "linechart.html",
+            "relativePath": "linechart.html",
+            "url": "linechart.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "metricscard.html",
+            "relativePath": "metricscard.html",
+            "url": "metricscard.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "piechart.html",
+            "relativePath": "piechart.html",
+            "url": "piechart.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "placemat.html",
+            "relativePath": "placemat.html",
+            "url": "placemat.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "planner.html",
+            "relativePath": "planner.html",
+            "url": "planner.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "quadrant.html",
+            "relativePath": "quadrant.html",
+            "url": "quadrant.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "releasestrategy.html",
+            "relativePath": "releasestrategy.html",
+            "url": "releasestrategy.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "scorecard.html",
+            "relativePath": "scorecard.html",
+            "url": "scorecard.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "shield.html",
+            "relativePath": "shield.html",
+            "url": "shield.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "story.html",
+            "relativePath": "story.html",
+            "url": "story.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "swimlane.html",
+            "relativePath": "swimlane.html",
+            "url": "swimlane.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "timeline.html",
+            "relativePath": "timeline.html",
+            "url": "timeline.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "treechart.html",
+            "relativePath": "treechart.html",
+            "url": "treechart.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "tutorial.html",
+            "relativePath": "tutorial.html",
+            "url": "tutorial.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        },{
+            "name": "wordcloud.html",
+            "relativePath": "wordcloud.html",
+            "url": "wordcloud.html",
+            "isDirectory": false,
+            "isExpanded": true,
+            "level": 0,
+            "x": 0.0,
+            "y": 0.0,
+            "children": []
+        }]
+        };
+        console.log('Initializing sitemap with data:', sitemapData);
+        
+        if (sitemapData) {
+            window.sitemapViewer = new SitemapViewer('sitemapCanvas', sitemapData);
+        } else {
+            console.error('No sitemap data available');
+        }
+    } catch (error) {
+        console.error('Error initializing sitemap viewer:', error);
+    }
+});
+        
+    </script>
+</body>
+</html>
