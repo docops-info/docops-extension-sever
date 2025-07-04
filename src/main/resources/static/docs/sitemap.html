@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Sitemap</title>
+    <title>Radial Sitemap Constellation</title>
     <style>
         
-/* iOS Theme CSS */
+/* Radial Sitemap CSS - Space Theme */
 * {
     margin: 0;
     padding: 0;
@@ -15,52 +15,94 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif;
-    background: #F2F2F7;
-    color: #1C1C1E;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
+    color: #ffffff;
     overflow: hidden;
+    min-height: 100vh;
 }
 
 .sitemap-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background: linear-gradient(45deg, #0f1419 0%, #16213e 50%, #1a1a2e 100%);
 }
 
 .sitemap-header {
-    background: linear-gradient(135deg, #007AFF 0%, #0051D0 100%);
+    background: linear-gradient(135deg, #4a90e2 0%, #7b68ee 50%, #ff6b9d 100%);
     color: white;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.sitemap-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.1) 1px, transparent 1px);
+    animation: starfield 20s linear infinite;
+}
+
+@keyframes starfield {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100px); }
 }
 
 .sitemap-title {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 700;
     margin-bottom: 15px;
     text-align: center;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    position: relative;
+    z-index: 1;
 }
 
 .sitemap-stats {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 25px;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255,255,255,0.2);
-    padding: 8px 16px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    padding: 10px 18px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
 .stat-icon {
-    font-size: 16px;
+    font-size: 18px;
+    animation: pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.1); opacity: 1; }
 }
 
 .stat-label {
@@ -69,8 +111,9 @@ body {
 }
 
 .stat-value {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
+    text-shadow: 0 0 10px currentColor;
 }
 
 .sitemap-controls {
@@ -78,14 +121,16 @@ body {
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .control-btn {
-    background: rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
     color: white;
     border: 1px solid rgba(255,255,255,0.3);
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 12px 22px;
+    border-radius: 30px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -93,28 +138,36 @@ body {
     align-items: center;
     gap: 8px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.control-btn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-2px);
+    backdrop-filter: blur(15px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
+.control-btn:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    text-shadow: 0 0 10px currentColor;
+}
+
 .control-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
 }
 
 .btn-icon {
-    font-size: 14px;
+    font-size: 16px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
 }
 
 .canvas-container {
     flex: 1;
     position: relative;
     overflow: hidden;
-    background: #F2F2F7;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f1419 100%);
 }
 
 #sitemapCanvas {
@@ -139,19 +192,21 @@ body {
 
 .tooltip {
     position: absolute;
-    background: rgba(0,0,0,0.8);
+    background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(30,30,60,0.9) 100%);
     color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
     opacity: 0;
     transform: translateY(-100%);
-    transition: opacity 0.2s ease;
+    transition: opacity 0.3s ease;
     pointer-events: none;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
 .tooltip.visible {
@@ -159,26 +214,18 @@ body {
 }
 
 .sitemap-footer {
-    background: white;
-    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    padding: 18px 25px;
     text-align: center;
     font-size: 14px;
-    color: #6D6D80;
-    border-top: 1px solid #E5E5EA;
+    color: #b0b0b0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
 }
 
 .sitemap-footer strong {
-    color: #007AFF;
-}
-
-/* Loading state */
-.loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-    font-size: 16px;
-    color: #6D6D80;
+    color: #4a90e2;
+    text-shadow: 0 0 10px rgba(74,144,226,0.5);
 }
 
 /* Responsive design */
@@ -188,7 +235,7 @@ body {
     }
     
     .sitemap-title {
-        font-size: 24px;
+        font-size: 26px;
     }
     
     .sitemap-stats {
@@ -196,17 +243,17 @@ body {
     }
     
     .stat-item {
-        padding: 6px 12px;
+        padding: 8px 14px;
         font-size: 12px;
     }
     
     .control-btn {
-        padding: 8px 16px;
+        padding: 10px 18px;
         font-size: 12px;
     }
     
     .sitemap-footer {
-        padding: 12px 15px;
+        padding: 15px 20px;
         font-size: 12px;
     }
 }
@@ -217,36 +264,45 @@ body {
     <div class="sitemap-container">
         <!-- Header -->
         <div class="sitemap-header">
-            <h1 class="sitemap-title">📁 Interactive Sitemap</h1>
+            <h1 class="sitemap-title">🌌 Radial Sitemap Constellation</h1>
             <div class="sitemap-stats">
                 <span class="stat-item">
-                    <span class="stat-icon">📂</span>
-                    <span class="stat-label">Directories:</span>
-                    <span class="stat-value">3</span>
+                    <span class="stat-icon">🌟</span>
+                    <span class="stat-label">Root Hub:</span>
+                    <span class="stat-value">1</span>
                 </span>
                 <span class="stat-item">
-                    <span class="stat-icon">📄</span>
-                    <span class="stat-label">HTML Files:</span>
+                    <span class="stat-icon">🌍</span>
+                    <span class="stat-label">Orbital Directories:</span>
+                    <span class="stat-value">2</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-label">File Stars:</span>
                     <span class="stat-value">27</span>
                 </span>
                 <span class="stat-item">
-                    <span class="stat-icon">📊</span>
-                    <span class="stat-label">Total:</span>
+                    <span class="stat-icon">🌌</span>
+                    <span class="stat-label">Total Objects:</span>
                     <span class="stat-value">30</span>
                 </span>
             </div>
             <div class="sitemap-controls">
                 <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.expandAll()">
-                    <span class="btn-icon">📂</span>
-                    Expand All
+                    <span class="btn-icon">🌟</span>
+                    Expand Galaxy
                 </button>
                 <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.collapseAll()">
-                    <span class="btn-icon">📁</span>
-                    Collapse All
+                    <span class="btn-icon">🌑</span>
+                    Collapse Orbits
                 </button>
                 <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.resetView()">
-                    <span class="btn-icon">🔄</span>
-                    Reset View
+                    <span class="btn-icon">🎯</span>
+                    Center View
+                </button>
+                <button class="control-btn" onclick="window.sitemapViewer && window.sitemapViewer.toggleRotation()">
+                    <span class="btn-icon">🌪️</span>
+                    <span id="rotationLabel">Start Orbit</span>
                 </button>
             </div>
         </div>
@@ -261,14 +317,14 @@ body {
         
         <!-- Footer -->
         <div class="sitemap-footer">
-            <p>💡 <strong>Tip:</strong> Click directories to expand/collapse • Click files to open • Use mouse wheel to zoom • Drag to pan</p>
+            <p>🌌 <strong>Navigate the Constellation:</strong> Click central hub to expand • Click directories to show/hide orbits • Click files to open • Drag to explore • Scroll to zoom • Enable orbit rotation for animation</p>
         </div>
     </div>
 
     <script>
         
-// Interactive Sitemap Viewer with iOS Design
-class SitemapViewer {
+// Radial Sitemap Viewer - Space Constellation Theme
+class RadialSitemapViewer {
     constructor(canvasId, data) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
@@ -288,37 +344,45 @@ class SitemapViewer {
         this.lastMouseX = 0;
         this.lastMouseY = 0;
         
-        // Node properties
-        this.nodeWidth = 140;
-        this.nodeHeight = 50;
-        this.horizontalSpacing = 160;
-        this.verticalSpacing = 80;
-        this.marginX = 60;
-        this.marginY = 60;
-        
-        // iOS Colors
-        this.colors = {
-            blue: '#007AFF',
-            blueHover: '#0051D0',
-            green: '#34C759',
-            greenHover: '#2AA946',
-            purple: '#AF52DE',
-            purpleHover: '#9B44C8',
-            background: '#F2F2F7',
-            white: '#FFFFFF',
-            gray: '#6D6D80',
-            darkGray: '#1C1C1E'
-        };
+        // Radial layout properties
+        this.centerX = 0;
+        this.centerY = 0;
+        this.baseRadius = 120;
+        this.radiusIncrement = 100;
+        this.minNodeSize = 30;
+        this.maxNodeSize = 80;
+        this.rootNodeSize = 90;
         
         // Animation properties
+        this.isRotating = false;
+        this.rotationSpeed = 0.002;
+        this.globalRotation = 0;
         this.animationFrame = null;
         this.hoveredNode = null;
         this.tooltip = document.getElementById('tooltip');
         
+        // Particle system for connections
+        this.particles = [];
+        this.maxParticles = 50;
+        
+        // Colors - space theme
+        this.colors = {
+            background: '#0f1419',
+            centerHub: '#ffd700',
+            centerHubGlow: '#ffed4e',
+            directory: '#4a90e2',
+            directoryGlow: '#6bb6ff',
+            file: '#ff6b9d',
+            fileGlow: '#ff8fb3',
+            connection: '#7b68ee',
+            connectionGlow: '#9d7bff',
+            particle: '#ffffff'
+        };
+        
         this.setupCanvas();
         this.setupEventListeners();
-        this.calculateLayout();
-        this.render();
+        this.calculateRadialLayout();
+        this.startAnimationLoop();
     }
     
     setupCanvas() {
@@ -332,7 +396,12 @@ class SitemapViewer {
             this.canvas.style.width = rect.width + 'px';
             this.canvas.style.height = rect.height + 'px';
             this.ctx.scale(dpr, dpr);
-            this.render();
+            
+            // Update center coordinates
+            this.centerX = rect.width / 2;
+            this.centerY = rect.height / 2;
+            
+            this.calculateRadialLayout();
         };
         
         updateCanvasSize();
@@ -356,11 +425,17 @@ class SitemapViewer {
         this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     }
     
-    calculateLayout() {
+    calculateRadialLayout() {
         this.assignLevels(this.data, 0);
-        this.data.x = this.marginX;
-        this.data.y = this.marginY + 100; // Space for header
-        this.layoutChildren(this.data, this.marginX + this.horizontalSpacing, this.data.y);
+        
+        // Position root at center
+        this.data.x = this.centerX;
+        this.data.y = this.centerY;
+        this.data.radius = 0;
+        this.data.angle = 0;
+        
+        // Layout children in concentric circles
+        this.layoutRadialChildren(this.data, 1);
     }
     
     assignLevels(node, level) {
@@ -370,31 +445,94 @@ class SitemapViewer {
         }
     }
     
-    layoutChildren(parent, startX, startY) {
+    layoutRadialChildren(parent, level) {
         if (!parent.children || parent.children.length === 0 || !parent.isExpanded) return;
         
         const visibleChildren = parent.children.filter(child => parent.isExpanded);
-        const totalHeight = visibleChildren.length * this.verticalSpacing;
-        let currentY = startY - (totalHeight / 2) + (this.verticalSpacing / 2);
+        if (visibleChildren.length === 0) return;
         
-        visibleChildren.forEach(child => {
-            child.x = startX;
-            child.y = currentY;
-            currentY += this.verticalSpacing;
-            this.layoutChildren(child, startX + this.horizontalSpacing, child.y);
+        const radius = this.baseRadius + (level - 1) * this.radiusIncrement;
+        const angleStep = (2 * Math.PI) / visibleChildren.length;
+        const startAngle = parent.angle || 0;
+        
+        visibleChildren.forEach((child, index) => {
+            const angle = startAngle + (index * angleStep);
+            
+            child.radius = radius;
+            child.angle = angle;
+            child.x = parent.x + radius * Math.cos(angle);
+            child.y = parent.y + radius * Math.sin(angle);
+            
+            // Recursively layout grandchildren
+            this.layoutRadialChildren(child, level + 1);
         });
+    }
+    
+    updatePositionsForRotation() {
+        if (!this.isRotating) return;
+        
+        this.globalRotation += this.rotationSpeed;
+        this.updateNodePositions(this.data, this.globalRotation);
+    }
+    
+    updateNodePositions(node, rotationOffset) {
+        if (node.level > 0 && node.radius > 0) {
+            const effectiveAngle = node.angle + rotationOffset;
+            const parent = this.findParent(this.data, node);
+            if (parent) {
+                node.x = parent.x + node.radius * Math.cos(effectiveAngle);
+                node.y = parent.y + node.radius * Math.sin(effectiveAngle);
+            }
+        }
+        
+        if (node.children && node.isExpanded) {
+            node.children.forEach(child => this.updateNodePositions(child, rotationOffset));
+        }
+    }
+    
+    findParent(root, targetNode) {
+        if (root.children) {
+            for (let child of root.children) {
+                if (child === targetNode) {
+                    return root;
+                }
+                const found = this.findParent(child, targetNode);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+    
+    startAnimationLoop() {
+        const animate = () => {
+            this.updatePositionsForRotation();
+            this.updateParticles();
+            this.render();
+            this.animationFrame = requestAnimationFrame(animate);
+        };
+        animate();
     }
     
     render() {
         const rect = this.canvas.getBoundingClientRect();
-        this.ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        // Clear with space background
+        this.ctx.fillStyle = this.colors.background;
+        this.ctx.fillRect(0, 0, rect.width, rect.height);
+        
+        // Add starfield effect
+        this.drawStarfield();
         
         this.ctx.save();
         this.ctx.translate(this.offsetX, this.offsetY);
         this.ctx.scale(this.scale, this.scale);
         
-        // Draw connections first
+        // Draw orbital rings
+        this.drawOrbitalRings();
+        
+        // Draw connections with particles
         this.drawConnections(this.data);
+        this.drawParticles();
         
         // Draw nodes
         this.drawNodes(this.data);
@@ -402,46 +540,123 @@ class SitemapViewer {
         this.ctx.restore();
     }
     
+    drawStarfield() {
+        this.ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        for (let i = 0; i < 100; i++) {
+            const x = Math.random() * this.canvas.width / window.devicePixelRatio;
+            const y = Math.random() * this.canvas.height / window.devicePixelRatio;
+            const size = Math.random() * 1.5;
+            
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, size, 0, 2 * Math.PI);
+            this.ctx.fill();
+        }
+    }
+    
+    drawOrbitalRings() {
+        const maxLevel = this.getMaxLevel(this.data);
+        
+        for (let level = 1; level <= maxLevel; level++) {
+            const radius = (this.baseRadius + (level - 1) * this.radiusIncrement) * this.scale;
+            
+            this.ctx.strokeStyle = 'rgba(123, 104, 238, 0.2)';
+            this.ctx.lineWidth = 1;
+            this.ctx.setLineDash([5, 10]);
+            
+            this.ctx.beginPath();
+            this.ctx.arc(this.centerX, this.centerY, radius, 0, 2 * Math.PI);
+            this.ctx.stroke();
+        }
+        
+        this.ctx.setLineDash([]);
+    }
+    
+    getMaxLevel(node) {
+        let maxLevel = node.level;
+        if (node.children && node.isExpanded) {
+            node.children.forEach(child => {
+                maxLevel = Math.max(maxLevel, this.getMaxLevel(child));
+            });
+        }
+        return maxLevel;
+    }
+    
     drawConnections(node) {
         if (!node.children || !node.isExpanded || node.children.length === 0) return;
         
-        // Validate node position
-        if (!this.isValidPosition(node.x, node.y)) {
-            console.warn('Invalid node position for connections:', node.name, node.x, node.y);
-            return;
-        }
+        if (!this.isValidPosition(node.x, node.y)) return;
         
         node.children.forEach(child => {
-            // Validate child position
-            if (!this.isValidPosition(child.x, child.y)) {
-                console.warn('Invalid child position for connections:', child.name, child.x, child.y);
-                return;
-            }
+            if (!this.isValidPosition(child.x, child.y)) return;
             
-            const startX = node.x + this.nodeWidth;
-            const startY = node.y + this.nodeHeight / 2;
-            const endX = child.x;
-            const endY = child.y + this.nodeHeight / 2;
-            const midX = startX + (endX - startX) / 2;
+            // Create gradient line
+            const gradient = this.ctx.createLinearGradient(node.x, node.y, child.x, child.y);
+            gradient.addColorStop(0, this.colors.connection);
+            gradient.addColorStop(1, this.colors.connectionGlow);
             
-            // Validate all coordinates before drawing
-            if (this.isValidPosition(startX, startY) && this.isValidPosition(endX, endY) && this.isValidPosition(midX, startY)) {
-                this.ctx.strokeStyle = this.colors.blue;
-                this.ctx.lineWidth = 3;
-                this.ctx.globalAlpha = 0.8;
-                
-                this.ctx.beginPath();
-                this.ctx.moveTo(startX, startY);
-                this.ctx.lineTo(midX, startY);
-                this.ctx.lineTo(midX, endY);
-                this.ctx.lineTo(endX, endY);
-                this.ctx.stroke();
+            this.ctx.strokeStyle = gradient;
+            this.ctx.lineWidth = 3;
+            this.ctx.globalAlpha = 0.6;
+            
+            // Draw curved connection
+            const midX = (node.x + child.x) / 2;
+            const midY = (node.y + child.y) / 2;
+            const distance = Math.sqrt((child.x - node.x) ** 2 + (child.y - node.y) ** 2);
+            const curveOffset = distance * 0.2;
+            
+            const perpX = -(child.y - node.y) / distance * curveOffset;
+            const perpY = (child.x - node.x) / distance * curveOffset;
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(node.x, node.y);
+            this.ctx.quadraticCurveTo(midX + perpX, midY + perpY, child.x, child.y);
+            this.ctx.stroke();
+            
+            // Add particles along the connection
+            if (Math.random() < 0.1 && this.particles.length < this.maxParticles) {
+                this.particles.push({
+                    x: node.x,
+                    y: node.y,
+                    targetX: child.x,
+                    targetY: child.y,
+                    progress: 0,
+                    speed: 0.02 + Math.random() * 0.03,
+                    size: 2 + Math.random() * 3,
+                    life: 1.0
+                });
             }
             
             this.drawConnections(child);
         });
         
         this.ctx.globalAlpha = 1;
+    }
+    
+    updateParticles() {
+        this.particles = this.particles.filter(particle => {
+            particle.progress += particle.speed;
+            particle.life -= 0.01;
+            
+            if (particle.progress >= 1 || particle.life <= 0) {
+                return false;
+            }
+            
+            // Update particle position along the curve
+            const t = particle.progress;
+            particle.x = particle.x * (1 - t) + particle.targetX * t;
+            particle.y = particle.y * (1 - t) + particle.targetY * t;
+            
+            return true;
+        });
+    }
+    
+    drawParticles() {
+        this.particles.forEach(particle => {
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${particle.life})`;
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, 2 * Math.PI);
+            this.ctx.fill();
+        });
     }
     
     isValidPosition(x, y) {
@@ -459,120 +674,93 @@ class SitemapViewer {
     }
     
     drawNode(node) {
-        // Validate node position
-        if (!this.isValidPosition(node.x, node.y)) {
-            console.warn('Invalid node position:', node.name, node.x, node.y);
-            return;
-        }
+        if (!this.isValidPosition(node.x, node.y)) return;
         
         const isHovered = this.hoveredNode === node;
-        const scale = isHovered ? 1.05 : 1;
+        const scale = isHovered ? 1.2 : 1;
         
-        // Determine colors and size based on node type
-        let fillColor, strokeColor, textColor;
-        let width = this.nodeWidth;
-        let height = this.nodeHeight;
+        // Determine node size and colors
+        let nodeSize, fillColor, glowColor;
         
         if (node.level === 0) {
-            fillColor = isHovered ? this.colors.blueHover : this.colors.blue;
-            width += 20;
-            height += 10;
+            nodeSize = this.rootNodeSize;
+            fillColor = this.colors.centerHub;
+            glowColor = this.colors.centerHubGlow;
         } else if (node.isDirectory) {
-            fillColor = isHovered ? this.colors.greenHover : this.colors.green;
+            nodeSize = this.maxNodeSize - (node.level * 5);
+            fillColor = this.colors.directory;
+            glowColor = this.colors.directoryGlow;
         } else {
-            fillColor = isHovered ? this.colors.purpleHover : this.colors.purple;
-            width -= 10;
-            height -= 5;
+            nodeSize = this.minNodeSize;
+            fillColor = this.colors.file;
+            glowColor = this.colors.fileGlow;
         }
         
-        strokeColor = this.colors.white;
-        textColor = this.colors.white;
-        
-        // Adjust position for different node sizes
-        let adjustedX = node.x;
-        let adjustedY = node.y;
-        
-        if (node.level === 0) {
-            adjustedX -= 10;
-            adjustedY -= 5;
-        } else if (!node.isDirectory) {
-            adjustedX += 5;
-            adjustedY += 2;
-        }
+        nodeSize = Math.max(nodeSize, this.minNodeSize) * scale;
         
         this.ctx.save();
         
-        if (scale !== 1) {
-            const centerX = adjustedX + width / 2;
-            const centerY = adjustedY + height / 2;
-            this.ctx.translate(centerX, centerY);
-            this.ctx.scale(scale, scale);
-            this.ctx.translate(-centerX, -centerY);
+        // Create radial gradient for glow effect
+        const gradient = this.ctx.createRadialGradient(
+            node.x, node.y, 0,
+            node.x, node.y, nodeSize
+        );
+        gradient.addColorStop(0, fillColor);
+        gradient.addColorStop(0.7, fillColor);
+        gradient.addColorStop(1, 'rgba(255,255,255,0.1)');
+        
+        // Draw glow for root node
+        if (node.level === 0 || isHovered) {
+            this.ctx.shadowColor = glowColor;
+            this.ctx.shadowBlur = 30;
+            this.ctx.shadowOffsetX = 0;
+            this.ctx.shadowOffsetY = 0;
         }
         
-        // Draw shadow
-        this.ctx.shadowColor = 'rgba(0,0,0,0.15)';
-        this.ctx.shadowBlur = 8;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 2;
-        
-        // Draw main rectangle
-        this.ctx.fillStyle = fillColor;
-        this.ctx.strokeStyle = strokeColor;
-        this.ctx.lineWidth = 2;
-        
-        this.roundRect(adjustedX, adjustedY, width, height, 12);
+        // Draw main node
+        this.ctx.fillStyle = gradient;
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, nodeSize / 2, 0, 2 * Math.PI);
         this.ctx.fill();
+        
+        // Draw border
+        this.ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        this.ctx.lineWidth = 2;
         this.ctx.stroke();
         
         // Reset shadow
         this.ctx.shadowColor = 'transparent';
         this.ctx.shadowBlur = 0;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 0;
         
         // Draw text
-        this.ctx.fillStyle = textColor;
-        this.ctx.font = `600 ${node.level === 0 ? '14px' : '12px'} -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif`;
+        this.ctx.fillStyle = node.level === 0 ? '#000000' : '#ffffff';
+        this.ctx.font = `${node.level === 0 ? 'bold' : 'normal'} ${Math.max(10, nodeSize / 4)}px -apple-system, BlinkMacSystemFont, SF Pro Display, Arial, sans-serif`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         
-        const displayName = this.truncateText(node.name, 18);
-        this.ctx.fillText(displayName, adjustedX + width / 2, adjustedY + height / 2);
+        const displayName = this.truncateText(node.name, node.level === 0 ? 12 : 8);
+        this.ctx.fillText(displayName, node.x, node.y);
         
         // Draw expand/collapse indicator for directories with children
         if (node.isDirectory && node.children && node.children.length > 0) {
-            const indicatorX = adjustedX + width - 15;
-            const indicatorY = adjustedY + 10;
-            
-            this.ctx.fillStyle = this.colors.white;
-            this.ctx.font = '12px Arial';
-            this.ctx.fillText(node.isExpanded ? '−' : '+', indicatorX, indicatorY);
+            this.ctx.fillStyle = node.level === 0 ? '#000000' : '#ffffff';
+            this.ctx.font = '16px Arial';
+            this.ctx.fillText(
+                node.isExpanded ? '−' : '+', 
+                node.x, 
+                node.y + nodeSize / 2 - 8
+            );
         }
         
         this.ctx.restore();
         
         // Store node bounds for hit testing
         node.bounds = {
-            x: adjustedX,
-            y: adjustedY,
-            width: width * scale,
-            height: height * scale
+            x: node.x - nodeSize / 2,
+            y: node.y - nodeSize / 2,
+            width: nodeSize,
+            height: nodeSize
         };
-    }
-    
-    roundRect(x, y, width, height, radius) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(x + radius, y);
-        this.ctx.lineTo(x + width - radius, y);
-        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        this.ctx.lineTo(x + width, y + height - radius);
-        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        this.ctx.lineTo(x + radius, y + height);
-        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        this.ctx.lineTo(x, y + radius);
-        this.ctx.quadraticCurveTo(x, y, x + radius, y);
-        this.ctx.closePath();
     }
     
     truncateText(text, maxLength) {
@@ -606,7 +794,6 @@ class SitemapViewer {
     
     // Event handlers
     handleMouseDown(e) {
-        const pos = this.getMousePos(e);
         this.isDragging = true;
         this.lastMouseX = e.clientX;
         this.lastMouseY = e.clientY;
@@ -625,13 +812,10 @@ class SitemapViewer {
             
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
-            
-            this.render();
         } else {
             // Handle hover
             if (hoveredNode !== this.hoveredNode) {
                 this.hoveredNode = hoveredNode;
-                this.render();
                 
                 // Update tooltip
                 if (hoveredNode) {
@@ -660,8 +844,7 @@ class SitemapViewer {
             if (clickedNode.isDirectory && clickedNode.children && clickedNode.children.length > 0) {
                 // Toggle expand/collapse
                 clickedNode.isExpanded = !clickedNode.isExpanded;
-                this.calculateLayout();
-                this.render();
+                this.calculateRadialLayout();
             } else if (!clickedNode.isDirectory && clickedNode.url) {
                 // Open file
                 window.open(clickedNode.url, '_blank');
@@ -678,14 +861,13 @@ class SitemapViewer {
         
         const wheel = e.deltaY < 0 ? 1 : -1;
         const zoom = Math.exp(wheel * 0.1);
-        const newScale = Math.max(0.1, Math.min(3, this.scale * zoom));
+        const newScale = Math.max(0.2, Math.min(3, this.scale * zoom));
         
         if (newScale !== this.scale) {
             const scaleFactor = newScale / this.scale;
             this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactor;
             this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactor;
             this.scale = newScale;
-            this.render();
         }
     }
     
@@ -719,9 +901,18 @@ class SitemapViewer {
     
     showTooltip(e, node) {
         if (this.tooltip) {
-            this.tooltip.textContent = `${node.relativePath}${node.url ? ' - Click to open' : ''}`;
+            let tooltipText = node.relativePath;
+            if (node.level === 0) {
+                tooltipText += ' (Central Hub)';
+            } else if (node.isDirectory) {
+                tooltipText += ' (Directory Orbit)';
+            } else {
+                tooltipText += ' (File Star - Click to open)';
+            }
+            
+            this.tooltip.textContent = tooltipText;
             this.tooltip.style.left = e.clientX + 'px';
-            this.tooltip.style.top = (e.clientY - 40) + 'px';
+            this.tooltip.style.top = (e.clientY - 50) + 'px';
             this.tooltip.classList.add('visible');
         }
     }
@@ -735,15 +926,13 @@ class SitemapViewer {
     // Public methods
     expandAll() {
         this.setExpanded(this.data, true);
-        this.calculateLayout();
-        this.render();
+        this.calculateRadialLayout();
     }
     
     collapseAll() {
         this.setExpanded(this.data, false);
         this.data.isExpanded = true; // Keep root expanded
-        this.calculateLayout();
-        this.render();
+        this.calculateRadialLayout();
     }
     
     setExpanded(node, expanded) {
@@ -757,11 +946,20 @@ class SitemapViewer {
         this.scale = 1;
         this.offsetX = 0;
         this.offsetY = 0;
-        this.render();
+        this.globalRotation = 0;
+        this.calculateRadialLayout();
+    }
+    
+    toggleRotation() {
+        this.isRotating = !this.isRotating;
+        const label = document.getElementById('rotationLabel');
+        if (label) {
+            label.textContent = this.isRotating ? 'Stop Orbit' : 'Start Orbit';
+        }
     }
 }
 
-// Initialize the sitemap viewer when DOM is ready
+// Initialize the radial sitemap viewer when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     try {
         const sitemapData = {
@@ -773,6 +971,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": [{
             "name": "images",
             "relativePath": "images",
@@ -782,6 +982,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "styles",
@@ -792,6 +994,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "_base.html",
@@ -802,6 +1006,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "adr.html",
@@ -812,6 +1018,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "arch.html",
@@ -822,6 +1030,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "barchart.html",
@@ -832,6 +1042,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "buttons.html",
@@ -842,6 +1054,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "callout.html",
@@ -852,6 +1066,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "charts.html",
@@ -862,6 +1078,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "connectors.html",
@@ -872,6 +1090,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "docops.html",
@@ -882,6 +1102,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "examples.html",
@@ -892,6 +1114,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "featurecard.html",
@@ -902,6 +1126,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "glass.html",
@@ -912,6 +1138,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "linechart.html",
@@ -922,6 +1150,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "metricscard.html",
@@ -932,6 +1162,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "piechart.html",
@@ -942,6 +1174,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "placemat.html",
@@ -952,6 +1186,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "planner.html",
@@ -962,6 +1198,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "quadrant.html",
@@ -972,6 +1210,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "releasestrategy.html",
@@ -982,6 +1222,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "scorecard.html",
@@ -992,6 +1234,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "shield.html",
@@ -1002,6 +1246,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "story.html",
@@ -1012,6 +1258,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "swimlane.html",
@@ -1022,6 +1270,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "timeline.html",
@@ -1032,6 +1282,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "treechart.html",
@@ -1042,6 +1294,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "tutorial.html",
@@ -1052,6 +1306,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         },{
             "name": "wordcloud.html",
@@ -1062,18 +1318,20 @@ document.addEventListener('DOMContentLoaded', function() {
             "level": 0,
             "x": 0.0,
             "y": 0.0,
+            "angle": 0.0,
+            "radius": 0.0,
             "children": []
         }]
         };
-        console.log('Initializing sitemap with data:', sitemapData);
+        console.log('Initializing radial sitemap with data:', sitemapData);
         
         if (sitemapData) {
-            window.sitemapViewer = new SitemapViewer('sitemapCanvas', sitemapData);
+            window.sitemapViewer = new RadialSitemapViewer('sitemapCanvas', sitemapData);
         } else {
             console.error('No sitemap data available');
         }
     } catch (error) {
-        console.error('Error initializing sitemap viewer:', error);
+        console.error('Error initializing radial sitemap viewer:', error);
     }
 });
         
