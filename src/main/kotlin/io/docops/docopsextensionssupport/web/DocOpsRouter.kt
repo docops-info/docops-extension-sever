@@ -92,6 +92,7 @@ class DocOpsRouter (
                @RequestParam("title", required = false, defaultValue = "") title: String,
                @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
                @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
+               @RequestParam("docname", defaultValue = "unknown") docname: String,
                @RequestParam("backend", required = false, defaultValue = "html") backend: String
     ) : ResponseEntity<ByteArray> {
         val context = DocOpsContext(
@@ -100,7 +101,8 @@ class DocOpsRouter (
             title = title,
             useDark = useDark,
             useGlass = useGlass,
-            backend = backend
+            backend = backend,
+            docname = docname
         )
 
         val headers = HttpHeaders()

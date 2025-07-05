@@ -111,7 +111,7 @@ class EmbeddedImage(val ref: String, val type: String = "image/png")
  * ```
  */
 @Serializable
-class Button(
+data class Button(
     var id: String = UUID.randomUUID().toString(),
     val label: String,
     val link: String,
@@ -127,7 +127,9 @@ class Button(
     var buttonGradientStyle: String? = null,
     var buttonStyle: ButtonStyle? = null,
     var enabled: Boolean = true,
-    var embeddedImage: EmbeddedImage? = null
+    var embeddedImage: EmbeddedImage? = null,
+    var active: Boolean = false,  // Add this property for active/current state
+    var activeName: String = ""
 )
 
 /**
@@ -331,7 +333,10 @@ class ButtonDisplay(
         fontSize = 12
     ),
     val hexLinesEnabled: Boolean = false,
-    val raise: Boolean = true
+    val raise: Boolean = true,
+    val activeColor: String = "#ff6b6b", // Default active color
+    val useActiveColor: Boolean = true    // Enable/disable active color override
+
 )
 
 /**
@@ -389,6 +394,7 @@ class Buttons(
     var theme: ButtonDisplay? = null,
     var themeUrl: String? = null,
     var useDark: Boolean = false,
+    var docname: String = "",
     val id: String = UUID.randomUUID().toString()
 ) {
 
@@ -407,18 +413,27 @@ class Buttons(
                 typeMap.putAll(it.colorTypeMap)
             }
         }
-        buttons.forEach {
-            val color = determineButtonColor(it)
-            it.color = determineButtonColor(it)
-            it.buttonStyle = determineStyle(it)
-            if (color.isNotEmpty()) {
-                it.gradient = buildGradientHslDef(color, it.id)
+        buttons.forEach { button ->
+            // Set active state FIRST, before color determination
+            if(docname.isNotBlank() && docname == button.activeName) {
+                button.active = true
             }
-            it.buttonGradientStyle = """.btn_${it.id}_cls { fill: url(#btn_${it.id}); }"""
+
+            val color = determineButtonColor(button)
+            button.color = color
+            button.buttonStyle = determineStyle(button)
+
+            // Generate gradient based on the final color (which could be active color)
+            if (color.isNotEmpty()) {
+                button.gradient = buildGradientHslDef(color, button.id)
+            }
+            button.buttonGradientStyle = """.btn_${button.id}_cls { fill: url(#btn_${button.id}); }"""
         }
 
         sort()
     }
+
+
 
     private fun parseStyleForFontSize(style: String?, defaultSize: Int = 24): Int {
         var sz = defaultSize
@@ -438,6 +453,11 @@ class Buttons(
     }
     private fun determineButtonColor(button: Button): String {
         var color: String = ""
+
+        // Check if button is active and should use active color
+        if (button.active && theme?.useActiveColor == true) {
+            return theme?.activeColor ?: "#ff6b6b"
+        }
 
         if (null == button.color && null != button.type) {
             val col = typeMap[button.type]
@@ -606,6 +626,39 @@ class Buttons(
             }
         }
     }
+    /**
+     * Creates a copy of this Buttons instance with a new docname
+     */
+    fun withDocname(newDocname: String): Buttons {
+        return Buttons(
+            buttons = this.buttons.map { it.copy() }.toMutableList(),
+            buttonType = this.buttonType,
+            theme = this.theme,
+            themeUrl = this.themeUrl,
+            useDark = this.useDark,
+            docname = newDocname,
+            id = this.id
+        )
+    }
+
+    companion object {
+        /**
+         * Factory method to create Buttons from JSON with docname
+         */
+        fun fromJsonWithDocname(jsonString: String, docname: String): Buttons {
+            val tempButtons = Json.decodeFromString<Buttons>(jsonString)
+            return Buttons(
+                buttons = tempButtons.buttons,
+                buttonType = tempButtons.buttonType,
+                theme = tempButtons.theme,
+                themeUrl = tempButtons.themeUrl,
+                useDark = tempButtons.useDark,
+                docname = docname,
+                id = tempButtons.id
+            )
+        }
+    }
+
 }
 
 

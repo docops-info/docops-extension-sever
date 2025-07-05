@@ -8,15 +8,15 @@ import org.springframework.http.ResponseEntity
 
 /**
  * Handles the processing and generation of SVG representations for buttons.
- * 
+ *
  * This class is responsible for decoding button data from URL-encoded payloads,
  * creating button objects, and generating SVG responses. It serves as a focused
  * utility for SVG generation, while [ButtonController] provides a more comprehensive
  * REST API with additional features like theme handling.
- * 
+ *
  * The handler measures and logs the execution time of operations for performance monitoring.
  */
-class ButtonHandler : DocOpsHandler{
+class ButtonHandler : DocOpsHandler {
 
     val log = KotlinLogging.logger {}
 
@@ -32,9 +32,9 @@ class ButtonHandler : DocOpsHandler{
      * @param backend The backend rendering type to use
      * @return A [ResponseEntity] containing the SVG representation as a byte array with appropriate HTTP headers
      */
-    fun handleSVG(payload: String, useDark: Boolean, type: String , backend: String): String {
-            val content = Json.decodeFromString<Buttons>(payload)
-         return   createResponse(content, useDark, backend)
+    fun handleSVG(payload: String, useDark: Boolean, type: String, backend: String, docname: String): String {
+        val content = Buttons.fromJsonWithDocname(payload, docname)
+        return createResponse(content, useDark, backend, docname)
     }
 
     /**
@@ -48,7 +48,7 @@ class ButtonHandler : DocOpsHandler{
      * @param type The type of output format (e.g., "SVG")
      * @return A [ResponseEntity] containing the SVG representation as a byte array with appropriate HTTP headers
      */
-    private fun createResponse(buttons: Buttons, useDark: Boolean, type: String): String {
+    private fun createResponse(buttons: Buttons, useDark: Boolean, type: String, docname: String): String {
         buttons.useDark = useDark
         val buttonShape = buttons.createSVGShape()
         val imgSrc = buttonShape.drawShape(type)
@@ -59,6 +59,6 @@ class ButtonHandler : DocOpsHandler{
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVG(payload, context.useDark, context.type, context.backend)
+        return handleSVG(payload, context.useDark, context.type, context.backend, docname = context.docname)
     }
 }

@@ -57,10 +57,17 @@ class Hex(buttons: Buttons) : Regular(buttons) {
 
     fun head(): String {
         val w = width()
-         val h = height()
+        val h = height()
         return """
-            <svg xmlns="http://www.w3.org/2000/svg" width="$w" height="$h" viewBox="0 0 $w $h" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
-        """.trimIndent()
+        <svg xmlns="http://www.w3.org/2000/svg" width="$w" height="$h" viewBox="0 0 $w $h" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
+        <defs>
+            <style>
+                .active-button {
+                    filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
+                }
+            </style>
+        </defs>
+    """.trimIndent()
     }
 
 
@@ -87,21 +94,36 @@ class Hex(buttons: Buttons) : Regular(buttons) {
             val fontColor = determineTextColor(button.color!!)
             spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight:500;">${s.escapeXml()}</tspan>""")
         }
+
         var win = "_top"
         buttons.theme?.let {
             if (it.newWin) {
                 win = "_blank"
             }
         }
+
+        // Determine the actual color to use (active color takes precedence)
+        val actualColor = if (button.active && theme.useActiveColor) {
+            theme.activeColor
+        } else {
+            button.color!!
+        }
+
         var filter = ""
-        var fill = "${button.color}"
+        var fill = actualColor
         if(!isPdf) {
             filter = "url(#Bevel2)"
             fill = "url(#btn_${button.id})"
         }
+
+        // Keep stroke properties consistent
+        val strokeWidth = "3"
+        val strokeColor = theme.strokeColor
+        val additionalClass = if (button.active) "active-button" else ""
+
         val btnLook = """fill="$fill""""
         val title = descriptionOrLabel(button)
-        val textColor = determineTextColor(button.color!!)
+        val textColor = determineTextColor(actualColor)
         var img = ""
         button.embeddedImage?.let {
             img = getIcon(it.ref)
@@ -110,7 +132,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
         var endAnchor = "</a>"
         if(!button.enabled) {
-           href = ""
+            href = ""
             endAnchor = ""
         }
         var typeText = ""
@@ -118,27 +140,34 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var l1 = ""
         var l2 = ""
         if(theme.hexLinesEnabled) {
-            val lineColor = determineTextColor(button.color!!)
+            val lineColor = determineTextColor(actualColor)
             l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
             l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
         }
-        return """
-        <g transform="translate($x,$y)" cursor="pointer">
-        <title>$title</title>
-        $href
-        <polygon stroke="${theme.strokeColor}" stroke-width="3" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994" rx="5" ry="5" filter="drop-shadow(3px 3px 3px rgba(0,0,0,0.2))"/>
-        <g transform="translate(125,50) scale(1.0)">
-         $img 
-        </g>
-        <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
-        $endAnchor
-        $l1
-        $l2
-        <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 0.9em;">$typeText</text>
-        </g>
-        """.trimIndent()
-    }
 
+        // Optional pulsing animation for active buttons (affects opacity)
+        val activeAnimation = if (button.active) {
+            """<animate attributeName="opacity" values="1;0.8;1" dur="2s" repeatCount="indefinite"/>"""
+        } else ""
+
+        return """
+    <g transform="translate($x,$y)" cursor="pointer" class="$additionalClass">
+    <title>$title</title>
+    $href
+    <polygon stroke="$strokeColor" stroke-width="$strokeWidth" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994" rx="5" ry="5" filter="drop-shadow(3px 3px 3px rgba(0,0,0,0.2))">
+        $activeAnimation
+    </polygon>
+    <g transform="translate(125,50) scale(1.0)">
+     $img 
+    </g>
+    <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
+    $endAnchor
+    $l1
+    $l2
+    <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 0.9em;">$typeText</text>
+    </g>
+    """.trimIndent()
+    }
 
     private fun descriptionOrLabel(button: Button): String {
         return when {
@@ -152,7 +181,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     }
 
     private fun getIcon(icon: String) : String {
-        var logo = icon
+        val logo = icon
         val simpleIcon = SimpleIcons.get(icon.replace("<", "").replace(">", ""))
         var filter = ""
         if (!isPdf) {

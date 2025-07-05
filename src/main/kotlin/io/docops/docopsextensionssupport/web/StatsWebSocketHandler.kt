@@ -29,10 +29,10 @@ class StatsWebSocketHandler @Autowired constructor(
      */
     @EventListener
     fun docopsEvent(event: DocOpsExtensionEvent) {
-        println("=== EVENT RECEIVED ===")
-        println("Event: ${event.eventName}")
-        println("Duration: ${event.duration}ms")
-        println("Status: ${event.status}")
+        //println("=== EVENT RECEIVED ===")
+        //println("Event: ${event.eventName}")
+        //println("Duration: ${event.duration}ms")
+        //println("Status: ${event.status}")
 
         val eventHtml = formatEventToHtml(event)
         val eventData = mapOf(
@@ -49,16 +49,16 @@ class StatsWebSocketHandler @Autowired constructor(
             html = eventHtml
         )
 
-        println("Sending event to WebSocket topic: /topic/stats")
+        //println("Sending event to WebSocket topic: /topic/stats")
         messagingTemplate.convertAndSend("/topic/stats", message)
-        println("=== EVENT PROCESSED ===")
+        //println("=== EVENT PROCESSED ===")
     }
 
     /**
      * Send a direct message to all connected WebSocket clients
      */
     fun sendDirectMessage(message: String) {
-        println("=== SENDING DIRECT WEBSOCKET MESSAGE ===")
+        //println("=== SENDING DIRECT WEBSOCKET MESSAGE ===")
 
         val statsMessage = StatsMessage(
             type = "direct",
@@ -66,7 +66,7 @@ class StatsWebSocketHandler @Autowired constructor(
         )
 
         messagingTemplate.convertAndSend("/topic/stats", statsMessage)
-        println("Direct message sent to WebSocket topic: /topic/stats")
+        //println("Direct message sent to WebSocket topic: /topic/stats")
     }
 
     /**
