@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.ButtonDisplay
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.button.parseStyleForFontSize
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
@@ -82,14 +83,21 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     }
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val spans = StringBuilder()
-        val fontSize = button.buttonStyle?.fontSize ?: 24
+        val fontSize = button.buttonStyle?.labelStyle?.let { style ->
+            parseStyleForFontSize(style, button.buttonStyle?.fontSize ?: 24)
+        } ?: button.buttonStyle?.fontSize ?: 24
+
+        println("Button: ${button.label}, fontSize from buttonStyle: ${button.buttonStyle?.fontSize}, using: $fontSize")
+
         val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245F, fontSize = fontSize)
-        val startTextY = 187 - (textSpans.size * 12)
+        println("$textSpans $fontSize")
+        // Calculate startTextY based on font size and number of text spans
+        val startTextY = 187 - (textSpans.size * fontSize / 2)
 
         textSpans.forEachIndexed { index, s ->
             var dy = 0
             if(index > 0) {
-                dy=fontSize
+                dy = fontSize
             }
             val fontColor = determineTextColor(button.color!!)
             spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight:500;">${s.escapeXml()}</tspan>""")
@@ -128,7 +136,8 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         button.embeddedImage?.let {
             img = getIcon(it.ref)
         }
-        val endY = textSpans.size * fontSize + 5 + startTextY - fontSize + 10
+        // Simplified endY calculation: startTextY + (number of spans * fontSize)
+        val endY = startTextY + (textSpans.size * fontSize)
         var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
         var endAnchor = "</a>"
         if(!button.enabled) {
@@ -141,7 +150,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var l2 = ""
         if(theme.hexLinesEnabled) {
             val lineColor = determineTextColor(actualColor)
-            l1="""<line x1="40" y1="${startTextY - (5 + fontSize)}" x2="265" y2="${startTextY - (5+fontSize)}" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
+            // Position top line above text based on font size
+            l1="""<line x1="40" y1="${startTextY - fontSize}" x2="265" y2="${startTextY - fontSize}" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
+            // Position bottom line below text
             l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
         }
 

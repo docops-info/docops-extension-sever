@@ -435,22 +435,7 @@ class Buttons(
 
 
 
-    private fun parseStyleForFontSize(style: String?, defaultSize: Int = 24): Int {
-        var sz = defaultSize
-        style?.let {
-            val styles = it.split(";")
-            styles.forEach {
-                if(it.trim().startsWith("font-size")) {
-                    val size = it.substringAfter("font-size:")
-                    if(size.contains("px")) {
-                        val num = size.substringBefore("px").trim().toInt()
-                        sz =num
-                    }
-                }
-            }
-        }
-        return sz
-    }
+
     private fun determineButtonColor(button: Button): String {
         var color: String = ""
 
@@ -686,6 +671,22 @@ fun buildGradientDef(color: String, id: String): String {
     return m.linearGradient
 }
 
+fun parseStyleForFontSize(style: String?, defaultSize: Int = 24): Int {
+    var sz = defaultSize
+    style?.let {
+        val styles = it.split(";")
+        styles.forEach {
+            if(it.trim().startsWith("font-size")) {
+                val size = it.substringAfter("font-size:")
+                if(size.contains("px")) {
+                    val num = size.substringBefore("px").trim().toInt()
+                    sz =num
+                }
+            }
+        }
+    }
+    return sz
+}
 /**
  * Creates an SVG linear gradient definition from a color using HSL color space.
  *
