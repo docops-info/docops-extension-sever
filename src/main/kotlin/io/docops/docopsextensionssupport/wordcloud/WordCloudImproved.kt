@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.wordcloud
 
+import io.docops.docopsextensionssupport.util.ParsingUtils
 import java.util.UUID
 
 class WordCloudImproved {
@@ -21,10 +22,10 @@ class WordCloudImproved {
     fun makeWordCloudSvg(payload: String): String {
         // Parse configuration and data from content
         val (config, cloudData) = parseConfigAndData(payload)
-        
+
         // Create WordCloud object from parsed data
         val wordCloud = createWordCloudFromData(config, cloudData)
-        
+
         // Use WordCloudMaker to generate SVG
         val wordCloudMaker = WordCloudMaker()
         return wordCloudMaker.makeWordCloud(wordCloud)
@@ -32,45 +33,13 @@ class WordCloudImproved {
 
     /**
      * Parses the content to extract configuration parameters and word cloud data.
-     * Configuration parameters are specified at the beginning of the content in the format "key=value",
-     * followed by a separator line "---", and then the actual word data.
+     * Uses the shared ParsingUtils for consistent parsing across the application.
      *
      * @param content The full content of the block
      * @return A Pair containing the configuration map and the word data string
      */
     private fun parseConfigAndData(content: String): Pair<Map<String, String>, String> {
-        val lines = content.lines()
-        val config = mutableMapOf<String, String>()
-        var separatorIndex = -1
-
-        // Find the separator line and parse configuration
-        for (i in lines.indices) {
-            val line = lines[i].trim()
-            if (line == "---") {
-                separatorIndex = i
-                break
-            }
-
-            // Parse key=value pairs
-            val keyValuePair = line.split("=", limit = 2)
-            if (keyValuePair.size == 2) {
-                val key = keyValuePair[0].trim()
-                val value = keyValuePair[1].trim()
-                if (key.isNotEmpty()) {
-                    config[key] = value
-                }
-            }
-        }
-
-        // Extract word data
-        val wordData = if (separatorIndex >= 0) {
-            lines.subList(separatorIndex + 1, lines.size).joinToString("\n")
-        } else {
-            // If no separator is found, assume the entire content is word data
-            content
-        }
-
-        return Pair(config, wordData)
+        return ParsingUtils.parseConfigAndData(content)
     }
 
     /**
@@ -100,7 +69,7 @@ class WordCloudImproved {
                     val text = parts[0]
                     val weight = parts[1].toDoubleOrNull() ?: 1.0
                     val color = if (parts.size > 2 && parts[2].isNotBlank()) parts[2] else null
-                    
+
                     // Create itemDisplay if color is provided
                     val itemDisplay = if (color != null) {
                         WordCloudDisplay(
@@ -115,7 +84,7 @@ class WordCloudImproved {
                             scale = scale
                         )
                     } else null
-                    
+
                     words.add(Word(text, weight, itemDisplay))
                 }
             }

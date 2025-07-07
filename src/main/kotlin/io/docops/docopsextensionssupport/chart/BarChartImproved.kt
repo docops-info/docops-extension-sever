@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.util.ParsingUtils
 import java.util.UUID
 
 class BarChartImproved {
@@ -21,10 +22,10 @@ class BarChartImproved {
     fun makeBarSvg(payload: String): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
-        
+
         // Create Bar object from parsed data
         val bar = createBarFromData(config, chartData)
-        
+
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
         return barMaker.makeVerticalBar(bar)
@@ -33,10 +34,10 @@ class BarChartImproved {
     fun makeGroupBarSvg(payload: String): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
-        
+
         // Create BarGroup object from parsed data
         val barGroup = createBarGroupFromData(config, chartData)
-        
+
         // Use existing BarGroupMaker to generate SVG
         val barGroupMaker = BarGroupMaker()
         return if (barGroup.display.vBar) {
@@ -50,45 +51,13 @@ class BarChartImproved {
 
     /**
      * Parses the content to extract configuration parameters and chart data.
-     * Configuration parameters are specified at the beginning of the content in the format "key=value",
-     * followed by a separator line "---", and then the actual chart data.
+     * Uses the shared ParsingUtils for consistent parsing across the application.
      *
      * @param content The full content of the block
      * @return A Pair containing the configuration map and the chart data string
      */
     private fun parseConfigAndData(content: String): Pair<Map<String, String>, String> {
-        val lines = content.lines()
-        val config = mutableMapOf<String, String>()
-        var separatorIndex = -1
-
-        // Find the separator line and parse configuration
-        for (i in lines.indices) {
-            val line = lines[i].trim()
-            if (line == "---") {
-                separatorIndex = i
-                break
-            }
-
-            // Parse key=value pairs
-            val keyValuePair = line.split("=", limit = 2)
-            if (keyValuePair.size == 2) {
-                val key = keyValuePair[0].trim()
-                val value = keyValuePair[1].trim()
-                if (key.isNotEmpty()) {
-                    config[key] = value
-                }
-            }
-        }
-
-        // Extract chart data
-        val chartData = if (separatorIndex >= 0) {
-            lines.subList(separatorIndex + 1, lines.size).joinToString("\n")
-        } else {
-            // If no separator is found, assume the entire content is chart data
-            content
-        }
-
-        return Pair(config, chartData)
+        return ParsingUtils.parseConfigAndData(content)
     }
 
     /**
@@ -118,7 +87,7 @@ class BarChartImproved {
                     val label = parts[0]
                     val value = parts[1].toDoubleOrNull() ?: 0.0
                     val color = if (parts.size > 2 && parts[2].isNotBlank()) parts[2] else null
-                    
+
                     // Create itemDisplay if color is provided
                     val itemDisplay = if (color != null) {
                         BarDisplay(
@@ -131,7 +100,7 @@ class BarChartImproved {
                             scale = scale
                         )
                     } else null
-                    
+
                     series.add(Series(label, value, itemDisplay))
                 }
             }
@@ -169,7 +138,7 @@ class BarChartImproved {
 
         // Parse group data
         val groupMap = mutableMapOf<String, MutableList<Series>>()
-        
+
         chartData.lines().forEach { line ->
             if (line.isNotBlank()) {
                 val parts = line.split("|").map { it.trim() }
@@ -178,7 +147,7 @@ class BarChartImproved {
                     val label = parts[1]
                     val value = parts[2].toDoubleOrNull() ?: 0.0
                     val color = if (parts.size > 3 && parts[3].isNotBlank()) parts[3] else null
-                    
+
                     // Create itemDisplay if color is provided
                     val itemDisplay = if (color != null) {
                         BarDisplay(
@@ -188,16 +157,16 @@ class BarChartImproved {
                             useDark = useDark
                         )
                     } else null
-                    
+
                     if (!groupMap.containsKey(groupName)) {
                         groupMap[groupName] = mutableListOf()
                     }
-                    
+
                     groupMap[groupName]?.add(Series(label, value, itemDisplay))
                 }
             }
         }
-        
+
         // Convert groupMap to groups list
         val groups = groupMap.map { (name, series) -> 
             Group(name, series)

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.util.ParsingUtils
 import java.util.UUID
 
 class LineChartImproved {
@@ -61,45 +62,13 @@ class LineChartImproved {
 
     /**
      * Parses the content to extract configuration parameters and chart data.
-     * Configuration parameters are specified at the beginning of the content in the format "key=value",
-     * followed by a separator line "---", and then the actual chart data.
+     * Uses the shared ParsingUtils for consistent parsing across the application.
      *
      * @param content The full content of the block
      * @return A Pair containing the configuration map and the chart data string
      */
     private fun parseConfigAndData(content: String): Pair<Map<String, String>, String> {
-        val lines = content.lines()
-        val config = mutableMapOf<String, String>()
-        var separatorIndex = -1
-
-        // Find the separator line and parse configuration
-        for (i in lines.indices) {
-            val line = lines[i].trim()
-            if (line == "---") {
-                separatorIndex = i
-                break
-            }
-
-            // Parse key=value pairs
-            val keyValuePair = line.split("=", limit = 2)
-            if (keyValuePair.size == 2) {
-                val key = keyValuePair[0].trim()
-                val value = keyValuePair[1].trim()
-                if (key.isNotEmpty()) {
-                    config[key] = value
-                }
-            }
-        }
-
-        // Extract chart data
-        val chartData = if (separatorIndex >= 0) {
-            lines.subList(separatorIndex + 1, lines.size).joinToString("\n")
-        } else {
-            // If no separator is found, assume the entire content is chart data
-            content
-        }
-
-        return Pair(config, chartData)
+        return ParsingUtils.parseConfigAndData(content)
     }
 
     private fun parseLineChartData(content: String): List<LineDataSeries> {

@@ -75,6 +75,15 @@ Root Node
 
 The macro processes the configuration and data and generates an SVG representation of the tree chart that is embedded in your document.
 
+=== Parsing Format
+
+Tree charts use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:
+
+1. **Configuration Section**: Contains key-value pairs in the format `key=value` before the `---` separator
+2. **Data Section**: Contains the hierarchical tree data after the separator, with indentation indicating parent-child relationships
+
+For more information about the parsing framework, see the xref:parsing.adoc[Parsing Utilities] documentation.
+
 === Configuration Properties
 
 * `title` (optional): The main heading of the chart (default: "Tree Chart")
