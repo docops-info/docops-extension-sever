@@ -138,13 +138,13 @@ class TreeMaker {
 
         return if (orientation == "vertical") {
             // For vertical layout: width depends on max nodes at any level, height on depth
-            val requiredWidth = max(800, maxWidth * 140 + 100) // Increased to 140px per node + padding for wrapped text
-            val requiredHeight = max(600, depth * 140 + 200) // Increased to 140px per level + padding for wrapped text
+            val requiredWidth = max(800, maxWidth * 170 + 100) // Increased to 170px per node for larger circles
+            val requiredHeight = max(600, depth * 170 + 200) // Increased to 170px per level for larger circles
             Pair(requiredWidth, requiredHeight)
         } else {
             // For horizontal layout: height depends on max nodes at any level, width on depth
-            val requiredWidth = max(800, depth * 140 + 200)
-            val requiredHeight = max(600, maxWidth * 140 + 100)
+            val requiredWidth = max(800, depth * 170 + 200) // Increased for larger circles
+            val requiredHeight = max(600, maxWidth * 170 + 100) // Increased for larger circles
             Pair(requiredWidth, requiredHeight)
         }
     }
@@ -338,7 +338,7 @@ class TreeMaker {
         val margin = mapOf("top" to 60, "right" to 40, "bottom" to 30, "left" to 40)
         val innerWidth = width - margin["left"]!! - margin["right"]!!
         val innerHeight = height - margin["top"]!! - margin["bottom"]!!
-        val nodeRadius = 20 // Increased radius for wrapped text
+        val nodeRadius = 30 // Increased radius for better visibility
 
         val svgBuilder = StringBuilder()
         svgBuilder.append("<g transform='translate(${margin["left"]}, ${margin["top"]})'>")
@@ -361,7 +361,7 @@ class TreeMaker {
             val totalNodesInLevel = currentLevelNodes.size
 
             val (x, y) = if (orientation == "vertical") {
-                val y = level * 120.0 // Increased spacing for wrapped text
+                val y = level * 150.0 // Increased spacing for larger circles
                 val x = if (totalNodesInLevel == 1) {
                     innerWidth / 2.0
                 } else {
@@ -370,7 +370,7 @@ class TreeMaker {
                 }
                 Pair(x, y)
             } else {
-                val x = level * 140.0 // Increased spacing for wrapped text
+                val x = level * 170.0 // Increased spacing for larger circles
                 val y = if (totalNodesInLevel == 1) {
                     innerHeight / 2.0
                 } else {
@@ -509,7 +509,7 @@ class TreeMaker {
                 const margin = {top: 60, right: 40, bottom: 30, left: 40};
                 const innerWidth = $width - margin.left - margin.right;
                 const innerHeight = $height - margin.top - margin.bottom;
-                const nodeRadius = 20; 
+                const nodeRadius = 30; 
                 const orientation = "$orientation";
                 const initiallyExpanded = $initiallyExpanded;
                 const collapsible = $collapsible;
@@ -570,7 +570,7 @@ class TreeMaker {
                             const totalNodesInLevel = currentLevelNodes.length;
 
                             if (orientation === "vertical") {
-                                node.y = level * 120; 
+                                node.y = level * 150; 
                                 if (totalNodesInLevel === 1) {
                                     node.x = innerWidth / 2;
                                 } else {
@@ -578,7 +578,7 @@ class TreeMaker {
                                     node.x = spacing * (indexInLevel + 1);
                                 }
                             } else {
-                                node.x = level * 140; 
+                                node.x = level * 170; 
                                 if (totalNodesInLevel === 1) {
                                     node.y = innerHeight / 2;
                                 } else {
