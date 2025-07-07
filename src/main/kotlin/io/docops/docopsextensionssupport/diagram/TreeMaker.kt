@@ -35,6 +35,8 @@ class TreeMaker {
         // For PDF, always show fully expanded tree
         val initiallyExpanded = if (isPdf) true else (config["expanded"]?.toBoolean() ?: true)
         val orientation = config.getOrDefault("orientation", "vertical")
+        // Glass effect for nodes
+        val useGlass = config["useGlass"]?.toBoolean() ?: false
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
         val customColors = configColors
@@ -58,7 +60,10 @@ class TreeMaker {
             collapsible,
             initiallyExpanded,
             orientation,
-            isPdf, adjustedWidth, adjustedHeight
+            isPdf, 
+            adjustedWidth, 
+            adjustedHeight,
+            useGlass
         )
         return svg
     }
@@ -244,7 +249,10 @@ class TreeMaker {
         collapsible: Boolean = true,
         initiallyExpanded: Boolean = true,
         orientation: String = "vertical",
-        isPdf: Boolean = false, adjustedWidth: Int, adjustedHeight: Int
+        isPdf: Boolean = false, 
+        adjustedWidth: Int, 
+        adjustedHeight: Int,
+        useGlass: Boolean = false
     ): String {
         // Define colors based on dark mode
         val backgroundColor = if (darkMode) "#1e293b" else "transparent"
@@ -257,6 +265,38 @@ class TreeMaker {
         val id = UUID.randomUUID().toString()
         // Start SVG
         svgBuilder.append("<svg id='treeChart_$id' width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 $adjustedWidth $adjustedHeight'>")
+
+        // Add glass effect definitions if enabled
+        if (useGlass) {
+            svgBuilder.append("""
+                <defs>
+                    <!-- Gradient for glass base -->
+                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Radial gradient for glass circle -->
+                    <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    </radialGradient>
+
+                    <!-- Highlight gradient -->
+                    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Drop shadow -->
+                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.3)"/>
+                    </filter>
+                </defs>
+            """.trimIndent())
+        }
 
         // Add background if in dark mode
         if (darkMode) {
@@ -307,10 +347,10 @@ class TreeMaker {
 
         // For PDF, generate static SVG without JavaScript
         if (isPdf) {
-            svgBuilder.append(generateStaticTreeSvg(root, colors, width, height, textColor, orientation))
+            svgBuilder.append(generateStaticTreeSvg(root, colors, width, height, textColor, orientation, useGlass))
         } else {
             // Add JavaScript for tree layout and interactivity
-            svgBuilder.append(generateInteractiveTreeSvg(root, colors, width, height, textColor, orientation, collapsible, initiallyExpanded, id))
+            svgBuilder.append(generateInteractiveTreeSvg(root, colors, width, height, textColor, orientation, collapsible, initiallyExpanded, id, useGlass))
         }
 
         svgBuilder.append("</svg>")
@@ -323,7 +363,8 @@ class TreeMaker {
         width: Int,
         height: Int,
         textColor: String,
-        orientation: String
+        orientation: String,
+        useGlass: Boolean = false
     ): String {
         val margin = mapOf("top" to 60, "right" to 40, "bottom" to 30, "left" to 40)
         val innerWidth = width - margin["left"]!! - margin["right"]!!
@@ -404,7 +445,18 @@ class TreeMaker {
             val wrappedText = wrapText(node.label)
 
             svgBuilder.append("<g class='node' transform='translate($x, $y)'>")
-            svgBuilder.append("<circle class='node-circle' r='$nodeRadius' fill='$color' />")
+
+            if (useGlass) {
+                // Glass effect for nodes
+                svgBuilder.append("<circle class='node-circle' r='$nodeRadius' fill='url(#glassRadial)' ")
+                svgBuilder.append("stroke='rgba(255,255,255,0.3)' stroke-width='1' filter='url(#shadow)' style='fill-opacity:0.9; fill: $color;' />")
+
+                // Add highlight to create glass effect
+                svgBuilder.append("<ellipse cx='-${nodeRadius/3}' cy='-${nodeRadius/3}' rx='${nodeRadius/2}' ry='${nodeRadius/3}' ")
+                svgBuilder.append("fill='rgba(255,255,255,0.5)' />")
+            } else {
+                svgBuilder.append("<circle class='node-circle' r='$nodeRadius' fill='$color' />")
+            }
 
             // Render wrapped text lines
             val lineHeight = 12
@@ -438,17 +490,19 @@ class TreeMaker {
         orientation: String,
         collapsible: Boolean,
         initiallyExpanded: Boolean,
-        id: String
+        id: String,
+        useGlass: Boolean = false
     ): String {
         return """
             <script type="text/javascript">
             <![CDATA[
             (function() {
+                const useGlass = ${useGlass.toString()};
                 function wrapText(text, maxCharsPerLine = 12) {
                     if (text.length <= maxCharsPerLine) {
                         return [text];
                     }
-                    
+
                     const words = text.split(' ');
                     const lines = [];
                     let currentLine = '';
@@ -525,20 +579,20 @@ class TreeMaker {
                         const nodes = [];
                         const links = [];
                         const levelNodes = {};
-                        
+
                         function buildLevelMap(node, level) {
                             if (!levelNodes[level]) {
                                 levelNodes[level] = [];
                             }
                             levelNodes[level].push(node);
-                            
+
                             if (node.children) {
                                 node.children.forEach(child => {
                                     buildLevelMap(child, level + 1);
                                 });
                             }
                         }
-                        
+
                         buildLevelMap(root, 0);
 
                         function calculateNodePositions(node, level, indexInLevel = 0) {
@@ -634,13 +688,33 @@ class TreeMaker {
                             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                             circle.setAttribute("class", "node-circle");
                             circle.setAttribute("r", nodeRadius);
-                            circle.setAttribute("fill", d.color);
-                            nodeGroup.appendChild(circle);
+
+                            if (useGlass) {
+                                /* Glass effect for nodes */
+                                circle.setAttribute("fill", "url(#glassRadial)");
+                                circle.setAttribute("stroke", "rgba(255,255,255,0.3)");
+                                circle.setAttribute("stroke-width", "1");
+                                circle.setAttribute("filter", "url(#shadow)");
+                                circle.setAttribute("style", "fill-opacity:0.9; fill: " + d.color);
+                                nodeGroup.appendChild(circle);
+
+                                /* Add highlight to create glass effect */
+                                const highlight = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                                highlight.setAttribute("cx", String(-nodeRadius/3));
+                                highlight.setAttribute("cy", String(-nodeRadius/3));
+                                highlight.setAttribute("rx", String(nodeRadius/2));
+                                highlight.setAttribute("ry", String(nodeRadius/3));
+                                highlight.setAttribute("fill", "rgba(255,255,255,0.5)");
+                                nodeGroup.appendChild(highlight);
+                            } else {
+                                circle.setAttribute("fill", d.color);
+                                nodeGroup.appendChild(circle);
+                            }
 
                             const wrappedLines = wrapText(d.name);
                             const lineHeight = 12;
                             const startY = wrappedLines.length === 1 ? 0 : -(wrappedLines.length - 1) * lineHeight / 2;
-                            
+
                             wrappedLines.forEach((line, index) => {
                                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                                 text.setAttribute("class", "node-label");

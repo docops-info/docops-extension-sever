@@ -31,6 +31,7 @@ Each tree chart can be displayed in various styles, including:
 * Interactive collapsible nodes
 * Custom color schemes
 * Dark mode
+* Modern glass effect
 * Fully expanded or initially collapsed views
 
 === Tree Chart Components
@@ -84,6 +85,7 @@ The macro processes the configuration and data and generates an SVG representati
 * `expanded` (optional): Whether all nodes are initially expanded (default: true)
 * `darkMode` (optional): Whether to use dark mode (default: false)
 * `hover` (optional): Whether to enable hover effects (default: true)
+* `useGlass` (optional): Whether to apply a glass effect to nodes (default: false)
 * `colors` (optional): A comma-separated list of colors to use for nodes (defaults to a predefined color palette)
 
 === Data Format
@@ -323,6 +325,65 @@ Main Project
         Data Fetching
 ----
 
+=== Glass Effect Tree Chart Example
+
+You can create tree charts with a modern glass effect by setting the `useGlass` property to `true`:
+
+[source,asciidoc]
+....
+[docops,treechart,controls=true]
+----
+title=Feature Roadmap
+width=800
+height=600
+useGlass=true
+---
+Product Vision
+    Q1 Goals | #3498db
+        Feature A
+        Feature B
+        Bug Fixes
+    Q2 Goals | #2ecc71
+        Feature C
+        Feature D
+        Performance Improvements
+    Q3 Goals | #e74c3c
+        Feature E
+        Feature F
+        Security Enhancements
+    Q4 Goals | #9b59b6
+        Feature G
+        Feature H
+        Final Release
+----
+....
+
+[docops,treechart,controls=true]
+----
+title=Feature Roadmap
+width=800
+height=600
+useGlass=true
+---
+Product Vision
+    Q1 Goals | #3498db
+        Feature A
+        Feature B
+        Bug Fixes
+    Q2 Goals | #2ecc71
+        Feature C
+        Feature D
+        Performance Improvements
+    Q3 Goals | #e74c3c
+        Feature E
+        Feature F
+        Security Enhancements
+    Q4 Goals | #9b59b6
+        Feature G
+        Feature H
+        Final Release
+----
+
 == Advanced Usage
 
 === Non-Collapsible Tree for PDF Output
@@ -379,7 +440,7 @@ Products
 
 The DocOps Tree Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing hierarchical diagrams. By using the simple key-value configuration format and indentation-based structure, you can create customized tree charts that match your document's style and purpose.
 
-The extension supports both vertical and horizontal orientations, with various display options including custom colors, dark mode, and interactive collapsible nodes for web viewing.
+The extension supports both vertical and horizontal orientations, with various display options including custom colors, dark mode, glass effect, and interactive collapsible nodes for web viewing.
 
 
 include::shared/buttons.adoc[]
