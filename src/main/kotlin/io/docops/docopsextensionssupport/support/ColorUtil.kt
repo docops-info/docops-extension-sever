@@ -142,7 +142,7 @@ class SVGColor(
     }
 
     // Enhanced gradient with more stops and opacity control
-    val linearGradient = """
+   /* val linearGradient = """
         <linearGradient id="$id" $gradientCoordinates>
             <stop offset="0%" style="stop-color:${colorMap["color1"]}" stop-opacity="$opacityStart"/>
             <stop offset="25%" style="stop-color:${blendColors(colorMap["color1"]!!, colorMap["color2"]!!, 0.75)}" stop-opacity="${opacityStart + (opacityMiddle - opacityStart) * 0.5}"/>
@@ -150,11 +150,33 @@ class SVGColor(
             <stop offset="75%" style="stop-color:${blendColors(colorMap["color2"]!!, colorMap["color3"]!!, 0.75)}" stop-opacity="${opacityMiddle + (opacityEnd - opacityMiddle) * 0.5}"/>
             <stop offset="100%" style="stop-color:${colorMap["color3"]}" stop-opacity="$opacityEnd"/>
         </linearGradient>
-    """.trimIndent()
+    """.trimIndent()*/
 
+    /*val linearGradient = """
+    <linearGradient id="$id" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:$color"/>
+        <stop offset="100%" style="stop-color:${darkenColor(color, 0.3)}"/>
+    </linearGradient>
+""".trimIndent()*/
+
+    val linearGradient = createSimpleGradient(color, id)
     fun lighter() = colorMap["color1"]
     fun darker() = colorMap["color3"]
     fun original() = color
+
+    fun createSimpleGradient(baseColor: String, id: String): String {
+        val darkerColor = darkenColor(baseColor, 0.3)
+        return """
+        <linearGradient id="$id" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="$baseColor"/>
+            <stop offset="100%" stop-color="$darkerColor"/>
+        </linearGradient>
+    """.trimIndent()
+    }
+
+
+
+
 
     // Helper function to blend two colors
     private fun blendColors(color1: String, color2: String, ratio: Double): String {
@@ -167,4 +189,32 @@ class SVGColor(
 
         return rgbToHex(r, g, b)
     }
+    private fun darkenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, false)
+    }
+
+    private fun brightenColor(hexColor: String, factor: Double): String {
+        return adjustColor(hexColor, factor, true)
+    }
+
+    private fun adjustColor(hexColor: String, factor: Double, brighten: Boolean): String {
+        val color = Color.decode(hexColor)
+        val r = if (brighten) {
+            (color.red + (255 - color.red) * factor).toInt().coerceIn(0, 255)
+        } else {
+            (color.red * (1 - factor)).toInt().coerceIn(0, 255)
+        }
+        val g = if (brighten) {
+            (color.green + (255 - color.green) * factor).toInt().coerceIn(0, 255)
+        } else {
+            (color.green * (1 - factor)).toInt().coerceIn(0, 255)
+        }
+        val b = if (brighten) {
+            (color.blue + (255 - color.blue) * factor).toInt().coerceIn(0, 255)
+        } else {
+            (color.blue * (1 - factor)).toInt().coerceIn(0, 255)
+        }
+        return String.format("#%02x%02x%02x", r, g, b)
+    }
+
 }
