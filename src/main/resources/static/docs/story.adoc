@@ -124,7 +124,10 @@ echo "<img src='$chart_url' alt='Strategic Quadrant' />";
 // JavaScript/Node.js integration
 const chartUrl = `https://docops.io/api/docops/svg?kind=pie&payload=${btoa(JSON.stringify(data))}`;
 document.getElementById('chart').src = chartUrl;
+----
 
+[source,python]
+----
 // Python automation
 import requests, base64, json
 data = {"segments": [{"label": "Success", "value": 95}]}
