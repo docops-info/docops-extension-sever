@@ -15,12 +15,6 @@ class RoadmapMaker {
     fun generateRoadmapSVG(config: RoadmapConfig, features: List<RoadmapFeature>): String {
         val width = config.width
         val height = config.height
-
-        println("DEBUG: Generating roadmap with ${features.size} features")
-        features.forEach { feature ->
-            println("DEBUG: Feature: ${feature.title} (${feature.quarter}, ${feature.status})")
-        }
-
         val svg = StringBuilder()
 
         // SVG header
@@ -60,7 +54,6 @@ class RoadmapMaker {
 
         // Feature cards - this is the important part
         val featureCardsSection = generateFeatureCards(config, features)
-        println("DEBUG: Feature cards section length: ${featureCardsSection.length}")
         svg.append(featureCardsSection)
 
         // Legend
@@ -225,17 +218,66 @@ class RoadmapMaker {
     """.trimIndent())
 
         // Category header
-        if (category != null) {
+        val categoryColor = category?.color ?: "#6b7280"
+        val categoryName = category?.name ?: feature.category
+
+        card.append("""
+        <rect x="0" y="0" width="$cardWidth" height="8" rx="12" fill="$categoryColor"/>
+    """.trimIndent())
+
+        // Priority corner badge (top-left)
+        if (feature.priority != Priority.MEDIUM) {
+            val priorityColor = when (feature.priority) {
+                Priority.LOW -> "#10b981"
+                Priority.MEDIUM -> "#f59e0b"
+                Priority.HIGH -> "#f97316"
+                Priority.CRITICAL -> "#ef4444"
+            }
+            val prioritySymbol = when (feature.priority) {
+                Priority.LOW -> "L"
+                Priority.MEDIUM -> "M"
+                Priority.HIGH -> "H"
+                Priority.CRITICAL -> "!"
+            }
+
             card.append("""
-            <rect x="0" y="0" width="$cardWidth" height="8" rx="12" fill="url(#${feature.category}Gradient)"/>
-            <circle cx="20" cy="25" r="8" fill="url(#${feature.category}Gradient)"/>
-            <text x="35" y="30" class="feature-category">${category.name.escapeXml()}</text>
+            <polygon points="0,8 0,24 16,8" fill="$priorityColor"/>
+            <text x="6" y="18" class="priority-badge">$prioritySymbol</text>
         """.trimIndent())
         }
 
-        // Feature title with text wrapping
-        val titleLines = wrapText(feature.title, cardWidth - 30, 14) // Leave margin for padding
-        card.append("""<text x="15" y="50" class="feature-title">""")
+        // Assignee initials (top-right)
+        if (feature.assignee.isNotEmpty()) {
+            val initials = feature.assignee.split(" ")
+                .take(2)
+                .map { it.first().uppercaseChar() }
+                .joinToString("")
+
+            card.append("""
+            <circle cx="${cardWidth - 20}" cy="20" r="12" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1"/>
+            <text x="${cardWidth - 20}" y="25" class="assignee-initials">$initials</text>
+        """.trimIndent())
+        }
+
+        // Category indicator circle
+        card.append("""
+        <circle cx="20" cy="25" r="8" fill="$categoryColor"/>
+        <text x="35" y="30" class="feature-category">${categoryName.escapeXml()}</text>
+    """.trimIndent())
+
+        // Dependency indicators (small icons on right side)
+        if (feature.dependencies.isNotEmpty()) {
+            val depCount = feature.dependencies.size
+            card.append("""
+            <circle cx="${cardWidth - 40}" cy="35" r="6" fill="#f59e0b"/>
+            <text x="${cardWidth - 40}" y="39" class="dependency-count">$depCount</text>
+        """.trimIndent())
+        }
+
+        // Feature title with text wrapping (adjusted for top content)
+        val titleStartY = 50
+        val titleLines = wrapText(feature.title, cardWidth - 30, 14)
+        card.append("""<text x="15" y="$titleStartY" class="feature-title">""")
         titleLines.forEachIndexed { index, line ->
             if (index == 0) {
                 card.append("""<tspan x="15" dy="0">${line.escapeXml()}</tspan>""")
@@ -245,9 +287,9 @@ class RoadmapMaker {
         }
         card.append("""</text>""")
 
-        // Feature description with text wrapping (limit to available space)
-        val descriptionStartY = 50 + (titleLines.size * 16) + 8
-        val availableDescriptionHeight = cardHeight - descriptionStartY - 30 // Leave space for release date
+        // Feature description with text wrapping (adjusted for content)
+        val descriptionStartY = titleStartY + (titleLines.size * 16) + 8
+        val availableDescriptionHeight = cardHeight - descriptionStartY - 40 // Leave space for effort badge and release date
         val maxDescriptionLines = (availableDescriptionHeight / 14).toInt().coerceAtLeast(1)
 
         val allDescriptionText = feature.description.joinToString(" ")
@@ -263,7 +305,26 @@ class RoadmapMaker {
             card.append("""</text>""")
         }
 
-        // Release date
+        // Effort indicator (bottom-left T-shirt size badge)
+        val effortColor = when (feature.effort) {
+            Effort.SMALL -> "#10b981"
+            Effort.MEDIUM -> "#f59e0b"
+            Effort.LARGE -> "#f97316"
+            Effort.EXTRA_LARGE -> "#ef4444"
+        }
+        val effortSize = when (feature.effort) {
+            Effort.SMALL -> "S"
+            Effort.MEDIUM -> "M"
+            Effort.LARGE -> "L"
+            Effort.EXTRA_LARGE -> "XL"
+        }
+
+        card.append("""
+        <rect x="10" y="${cardHeight - 25}" width="20" height="15" rx="3" fill="$effortColor"/>
+        <text x="20" y="${cardHeight - 15}" class="effort-badge">$effortSize</text>
+    """.trimIndent())
+
+        // Release date (bottom-right)
         val releaseDateText = when (feature.status) {
             FeatureStatus.COMPLETED -> "Released: ${formatReleaseDate(feature.releaseDate)}"
             FeatureStatus.CURRENT -> "In Progress"
@@ -274,15 +335,63 @@ class RoadmapMaker {
         }
 
         card.append("""
-        <text x="15" y="${cardHeight - 8}" class="release-date $statusClass">$releaseDateText</text>
+        <text x="40" y="${cardHeight - 8}" class="release-date $statusClass">$releaseDateText</text>
     """.trimIndent())
 
-        // Status indicator
-        card.append(generateStatusIndicator(feature.status, category?.color ?: "#6b7280"))
+        // Status indicator (adjusted position)
+        card.append(generateStatusIndicator(feature.status, categoryColor))
+
+        // Hover tooltip with detailed information
+        card.append(generateTooltip(feature, categoryName))
 
         card.append("</g>")
 
         return card.toString()
+    }
+
+    private fun generateTooltip(feature: RoadmapFeature, categoryName: String): String {
+        val dependencyText = if (feature.dependencies.isNotEmpty()) {
+            "Dependencies: ${feature.dependencies.joinToString(", ")}"
+        } else {
+            "No dependencies"
+        }
+
+        return """
+        <g class="tooltip" opacity="0">
+            <rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/>
+            <text x="0" y="-25" class="tooltip-text">
+                <tspan x="0" dy="0">Priority: ${feature.priority.name}</tspan>
+                <tspan x="0" dy="12">Effort: ${feature.effort.name}</tspan>
+                <tspan x="0" dy="12">Category: $categoryName</tspan>
+                <tspan x="0" dy="12">$dependencyText</tspan>
+            </text>
+        </g>
+    """.trimIndent()
+    }
+
+    private fun generateStatusIndicator(status: FeatureStatus, categoryColor: String): String {
+        return when (status) {
+            FeatureStatus.COMPLETED -> """
+            <circle cx="135" cy="25" r="6" fill="#10b981"/>
+            <path d="M 132 23 L 134 25 L 138 21" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
+        """.trimIndent()
+            FeatureStatus.CURRENT -> """
+            <circle cx="135" cy="25" r="8" fill="#3b82f6" filter="url(#glow)"/>
+            <circle cx="135" cy="25" r="4" fill="#ffffff"/>
+        """.trimIndent()
+            FeatureStatus.PLANNED -> """
+            <circle cx="135" cy="25" r="6" fill="#d1d5db"/>
+            <circle cx="135" cy="25" r="3" fill="#9ca3af"/>
+        """.trimIndent()
+            FeatureStatus.FUTURE -> """
+            <circle cx="135" cy="25" r="6" fill="#f3f4f6"/>
+            <circle cx="135" cy="25" r="3" fill="#d1d5db"/>
+        """.trimIndent()
+            else -> """
+            <circle cx="135" cy="25" r="6" fill="#ef4444"/>
+            <path d="M 132 22 L 138 28 M 138 22 L 132 28" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+        """.trimIndent()
+        }
     }
 
     private fun wrapText(text: String, maxWidth: Int, fontSize: Int): List<String> {
@@ -323,41 +432,7 @@ class RoadmapMaker {
 
         return lines
     }
-    private fun generateStatusIndicator(status: FeatureStatus, color: String): String {
-        return when (status) {
-            FeatureStatus.COMPLETED -> """
-                <circle cx="135" cy="25" r="6" fill="#10b981"/>
-                <path d="M 132 23 L 134 25 L 138 21" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
-            """.trimIndent()
-            
-            FeatureStatus.CURRENT -> """
-                <circle cx="135" cy="25" r="8" fill="#3b82f6" filter="url(#glow)"/>
-                <circle cx="135" cy="25" r="4" fill="#ffffff"/>
-            """.trimIndent()
-            
-            FeatureStatus.PLANNED -> """
-                <circle cx="135" cy="25" r="6" fill="#d1d5db"/>
-                <circle cx="135" cy="25" r="3" fill="#9ca3af"/>
-            """.trimIndent()
-            
-            FeatureStatus.FUTURE -> """
-                <circle cx="135" cy="25" r="6" fill="#f3f4f6"/>
-                <circle cx="135" cy="25" r="3" fill="#d1d5db"/>
-            """.trimIndent()
-            
-            FeatureStatus.CANCELLED -> """
-                <circle cx="135" cy="25" r="6" fill="#ef4444"/>
-                <path d="M 132 22 L 138 28 M 138 22 L 132 28" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-            """.trimIndent()
-            
-            FeatureStatus.ON_HOLD -> """
-                <circle cx="135" cy="25" r="6" fill="#f59e0b"/>
-                <rect x="132" y="22" width="2" height="6" fill="#ffffff"/>
-                <rect x="136" y="22" width="2" height="6" fill="#ffffff"/>
-            """.trimIndent()
-        }
-    }
-    
+
     private fun generateLegend(config: RoadmapConfig): String {
         val legendY = config.height - 150
         val legend = StringBuilder()
@@ -439,12 +514,44 @@ class RoadmapMaker {
                 
                 .feature-category {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    font-size: ${10 * scale}px;
+                    font-size: ${9 * scale}px;
                     font-weight: 600;
                     fill: #6b7280;
                     text-anchor: start;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
+                }
+                
+                .priority-badge {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: ${8 * scale}px;
+                    font-weight: 700;
+                    fill: #ffffff;
+                    text-anchor: middle;
+                }
+                
+                .assignee-initials {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: ${9 * scale}px;
+                    font-weight: 600;
+                    fill: #4b5563;
+                    text-anchor: middle;
+                }
+                
+                .dependency-count {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: ${8 * scale}px;
+                    font-weight: 700;
+                    fill: #ffffff;
+                    text-anchor: middle;
+                }
+                
+                .effort-badge {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: ${9 * scale}px;
+                    font-weight: 700;
+                    fill: #ffffff;
+                    text-anchor: middle;
                 }
                 
                 .feature-title {
@@ -465,7 +572,7 @@ class RoadmapMaker {
                 
                 .release-date {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    font-size: ${10 * scale}px;
+                    font-size: ${9 * scale}px;
                     font-weight: 500;
                     fill: #9ca3af;
                     text-anchor: start;
@@ -482,6 +589,19 @@ class RoadmapMaker {
                 
                 .release-date.future {
                     fill: #d1d5db;
+                }
+                
+                .tooltip {
+                    pointer-events: none;
+                    transition: opacity 0.2s ease;
+                }
+                
+                .tooltip-text {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: ${10 * scale}px;
+                    font-weight: 500;
+                    fill: #ffffff;
+                    text-anchor: start;
                 }
                 
                 .legend-title {
@@ -513,6 +633,10 @@ class RoadmapMaker {
                     transform: translateY(-3px);
                 }
                 
+                .feature-card:hover .tooltip {
+                    opacity: 1;
+                }
+                
                 .feature-card.current circle:nth-child(7) {
                     animation: pulse 2s infinite;
                 }
@@ -540,7 +664,9 @@ class RoadmapMaker {
             dateString
         }
     }
-    
+
+
+
     private fun darkenColor(hexColor: String, factor: Double): String {
         val color = hexColor.removePrefix("#")
         val r = (color.substring(0, 2).toInt(16) * (1 - factor)).toInt().coerceIn(0, 255)

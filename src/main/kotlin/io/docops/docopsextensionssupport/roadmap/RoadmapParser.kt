@@ -2,6 +2,7 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.json.Json
 import java.util.*
 
@@ -9,7 +10,7 @@ import java.util.*
  * RoadmapParser handles parsing of roadmap data from various input formats
  */
 class RoadmapParser {
-    
+    private val logger = KotlinLogging.logger {}
     private val json = Json {
         ignoreUnknownKeys = true
         isLenient = true
@@ -42,9 +43,6 @@ class RoadmapParser {
     private fun parseTableFormat(content: String): Pair<RoadmapConfig, List<RoadmapFeature>> {
         val (configSection, dataSection) = ParsingUtils.parseConfigAndData(content)
 
-        println("DEBUG: Config section: $configSection")
-        println("DEBUG: Data section preview: ${dataSection.take(200)}")
-
         val config = parseConfig(configSection)
         val features = parseFeatures(dataSection, config)
 
@@ -75,41 +73,46 @@ class RoadmapParser {
         )
     }
     
-    private fun parseCategories(configSection: Map<String, String>): Map<String, CategoryConfig> {
-        val categories = defaultCategories().toMutableMap()
-        
-        // Allow overriding default categories
-        configSection.forEach { (key, value) ->
-            if (key.startsWith("category.")) {
-                val categoryKey = key.removePrefix("category.")
-                val parts = value.split(",")
-                if (parts.size >= 2) {
-                    categories[categoryKey] = CategoryConfig(
-                        name = parts[0].trim(),
-                        color = parts[1].trim(),
-                        visible = parts.getOrNull(2)?.toBoolean() ?: true
-                    )
+        private fun parseCategories(configSection: Map<String, String>): Map<String, CategoryConfig> {
+            val categories = defaultCategories().toMutableMap()
+
+            // Allow overriding default categories
+            configSection.forEach { (key, value) ->
+                if (key.startsWith("category.")) {
+                    val categoryKey = key.removePrefix("category.")
+
+                    // Support both comma and pipe separators
+                    val parts = if (value.contains("|")) {
+                        value.split("|")
+                    } else {
+                        value.split(",")
+                    }
+
+                    if (parts.size >= 2) {
+                        categories[categoryKey] = CategoryConfig(
+                            name = parts[0].trim(),
+                            color = parts[1].trim(),
+                            visible = parts.getOrNull(2)?.toBoolean() ?: true
+                        )
+                    }
                 }
             }
-        }
-        
-        return categories
-    }
 
-    private fun parseFeatures(dataSection: String, config: RoadmapConfig): List<RoadmapFeature> {
+            return categories
+        }
+
+
+        private fun parseFeatures(dataSection: String, config: RoadmapConfig): List<RoadmapFeature> {
         val tableData = ParsingUtils.parseTableData(dataSection)
         val features = mutableListOf<RoadmapFeature>()
 
         if (tableData.isEmpty()) {
-            println("DEBUG: No table data found")
             return features
         }
 
-        println("DEBUG: Table data has ${tableData.size} rows")
 
         // Skip header row and process feature rows
         tableData.drop(1).forEachIndexed { index, row ->
-            println("DEBUG: Processing row $index: ${row.joinToString(" | ")}")
 
             // Skip empty rows and table end markers
             if (row.isNotEmpty() && row.size > 1) {
@@ -140,16 +143,14 @@ class RoadmapParser {
                             dependencies = parseDependencies(cleanedRow.getOrNull(9) ?: "")
                         )
 
-                        println("DEBUG: Created feature: ${feature.title} in ${feature.quarter} with status ${feature.status}")
                         features.add(feature)
                     } catch (e: Exception) {
-                        println("DEBUG: Error creating feature from row $index: ${e.message}")
+                        logger.error(e) {"Error creating feature from row $index: ${e.message}"}
                     }
                 }
             }
         }
 
-        println("DEBUG: Total features parsed: ${features.size}")
         return features
     }
 
