@@ -176,29 +176,74 @@ class RoadmapMaker {
 
         // Dynamic positioning based on number of quarters
         val startX = 100.0
-        val columnWidth = 200.0 // Reduced for more columns
-        val cardWidth = 160
-        val cardHeight = 120
-        val verticalSpacing = 140
+        val columnWidth = 200.0 // Width allocated per quarter
+        val cardWidth = 160.0
+        val cardHeight = 120.0
+        val baseVerticalSpacing = 140.0
+        val quarterStartY = 180.0
 
         // Group features by quarter
         val featuresByQuarter = features.groupBy { it.quarter }
 
         config.quarters.forEachIndexed { quarterIndex, quarter ->
             val quarterFeatures = featuresByQuarter[quarter] ?: emptyList()
-            val x = startX + (quarterIndex * columnWidth)
+            val quarterCenterX = startX + (quarterIndex * columnWidth)
 
-            quarterFeatures.forEachIndexed { featureIndex, feature ->
-                val y = 180 + (featureIndex * verticalSpacing)
-                val cardX = x - (cardWidth / 2) + (cardWidth / 2) // Center card on quarter position
+            // Calculate available space for this quarter
+            val availableHeight = config.height - quarterStartY - 100 // Leave space for legend
+            val maxFeaturesInColumn = 4 // Maximum features per column
 
-                // Fix the parameter order: config, feature, x, y
-                cards.append(generateFeatureCard(config, feature, cardX, y.toDouble()))
+            // If we have more than maxFeaturesInColumn features, arrange them in multiple columns
+            if (quarterFeatures.size > maxFeaturesInColumn) {
+                val columnsNeeded = kotlin.math.ceil(quarterFeatures.size.toDouble() / maxFeaturesInColumn).toInt()
+                val subColumnWidth = 80.0 // Width of each sub-column within the quarter
+                val totalSubColumnsWidth = columnsNeeded * subColumnWidth
+                val subColumnStartX = quarterCenterX - (totalSubColumnsWidth / 2) + (subColumnWidth / 2)
+
+                quarterFeatures.forEachIndexed { featureIndex, feature ->
+                    val columnIndex = featureIndex / maxFeaturesInColumn
+                    val rowIndex = featureIndex % maxFeaturesInColumn
+
+                    // Calculate vertical spacing for this column
+                    val featuresInThisColumn = if (columnIndex == columnsNeeded - 1) {
+                        // Last column might have fewer features
+                        quarterFeatures.size - (columnIndex * maxFeaturesInColumn)
+                    } else {
+                        maxFeaturesInColumn
+                    }
+
+                    val adjustedVerticalSpacing = if (featuresInThisColumn > 1) {
+                        (availableHeight / featuresInThisColumn).coerceAtLeast(cardHeight + 20).coerceAtMost(baseVerticalSpacing)
+                    } else {
+                        baseVerticalSpacing
+                    }
+
+                    // Position within the sub-column
+                    val cardX = subColumnStartX + (columnIndex * subColumnWidth) - (cardWidth / 2)
+                    val cardY = quarterStartY + (rowIndex * adjustedVerticalSpacing)
+
+                    cards.append(generateFeatureCard(config, feature, cardX, cardY))
+                }
+            } else {
+                // Original logic for 4 or fewer features - single column centered in quarter
+                val adjustedVerticalSpacing = if (quarterFeatures.size > 1) {
+                    (availableHeight / quarterFeatures.size).coerceAtLeast(cardHeight + 20).coerceAtMost(baseVerticalSpacing)
+                } else {
+                    baseVerticalSpacing
+                }
+
+                quarterFeatures.forEachIndexed { featureIndex, feature ->
+                    val cardX = quarterCenterX - (cardWidth / 2) // Center card in quarter
+                    val cardY = quarterStartY + (featureIndex * adjustedVerticalSpacing)
+
+                    cards.append(generateFeatureCard(config, feature, cardX, cardY))
+                }
             }
         }
 
         return cards.toString()
     }
+
 
     private fun generateFeatureCard(config: RoadmapConfig, feature: RoadmapFeature, x: Double, y: Double): String {
         val cardWidth = config.displayConfig.cardWidth

@@ -529,6 +529,114 @@ AI Features | ai | Q4 | future | 2024-12-31 | Machine learning integration | Sar
 * **Consider dependencies**: Show relationships between features when relevant
 * **Choose appropriate dimensions**: Adjust width and height based on the number of features and quarters
 
+
+=== Multiple Features in Same Quarter
+
+The DocOps Roadmap Visualizer intelligently handles quarters with many features by automatically arranging them in multiple columns when there are more than 4 features in a single quarter. This ensures optimal use of space and maintains readability.
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=High-Density Quarter Example
+subtitle=Demonstrating multiple features in Q2 2024
+width=1400
+height=1000
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+Authentication | security | Q1 2024 | completed | 2024-01-15 | OAuth 2.0 and multi-factor authentication
+Database Setup | core | Q1 2024 | completed | 2024-02-28 | Core database schema and migrations
+API Gateway | core | Q2 2024 | current | 2024-04-15 | Centralized API management and routing
+User Management | core | Q2 2024 | current | 2024-04-30 | User roles and permissions system
+Payment Processing | integration | Q2 2024 | current | 2024-05-15 | Stripe and PayPal integration
+Email Notifications | core | Q2 2024 | current | 2024-05-30 | Automated email system
+Mobile SDK | integration | Q2 2024 | planned | 2024-06-15 | iOS and Android SDK development
+Admin Dashboard | ui | Q2 2024 | planned | 2024-06-30 | Administrative control panel
+Search Engine | performance | Q2 2024 | planned | 2024-06-30 | Elasticsearch integration
+Data Export | integration | Q2 2024 | planned | 2024-06-30 | CSV and JSON export functionality
+Real-time Analytics | analytics | Q3 2024 | planned | 2024-08-15 | Live data processing and visualization
+AI Recommendations | ai | Q3 2024 | planned | 2024-09-30 | Machine learning recommendations
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | SAML and Active Directory integration
+Global CDN | infrastructure | Q4 2024 | future | 2024-12-31 | Content delivery network deployment
+----
+....
+
+[docops,roadmap]
+----
+title=High-Density Quarter Example
+subtitle=Demonstrating multiple features in Q2 2024
+width=1400
+height=1000
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+Authentication | security | Q1 2024 | completed | 2024-01-15 | OAuth 2.0 and multi-factor authentication
+Database Setup | core | Q1 2024 | completed | 2024-02-28 | Core database schema and migrations
+API Gateway | core | Q2 2024 | current | 2024-04-15 | Centralized API management and routing
+User Management | core | Q2 2024 | current | 2024-04-30 | User roles and permissions system
+Payment Processing | integration | Q2 2024 | current | 2024-05-15 | Stripe and PayPal integration
+Email Notifications | core | Q2 2024 | current | 2024-05-30 | Automated email system
+Mobile SDK | integration | Q2 2024 | planned | 2024-06-15 | iOS and Android SDK development
+Admin Dashboard | ui | Q2 2024 | planned | 2024-06-30 | Administrative control panel
+Search Engine | performance | Q2 2024 | planned | 2024-06-30 | Elasticsearch integration
+Data Export | integration | Q2 2024 | planned | 2024-06-30 | CSV and JSON export functionality
+Real-time Analytics | analytics | Q3 2024 | planned | 2024-08-15 | Live data processing and visualization
+AI Recommendations | ai | Q3 2024 | planned | 2024-09-30 | Machine learning recommendations
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | SAML and Active Directory integration
+Global CDN | infrastructure | Q4 2024 | future | 2024-12-31 | Content delivery network deployment
+----
+
+**Key Features of Multi-Feature Layout:**
+
+* **Automatic Column Layout**: When more than 4 features are assigned to a quarter, they're automatically arranged in multiple columns to optimize space usage
+* **Responsive Spacing**: Vertical spacing adjusts dynamically to ensure all features fit within the available height
+* **Consistent Alignment**: Features remain properly aligned within their quarter boundaries
+* **Visual Hierarchy**: Status indicators and category colors help distinguish between different features
+* **Scalable Design**: Works effectively with any number of features per quarter
+
+**Best Practices for High-Density Quarters:**
+
+1. **Use Descriptive Titles**: Keep feature titles concise but meaningful
+2. **Leverage Categories**: Use consistent category colors to group related features
+3. **Status Indicators**: Clearly differentiate between completed, current, planned, and future features
+4. **Priority Levels**: Use priority indicators to highlight critical features
+5. **Adjust Dimensions**: Increase width and height for quarters with many features
+
+This layout automatically handles the visual complexity of busy quarters while maintaining the clean, professional appearance that makes roadmaps effective communication tools.
+
+=== Optimizing for Large Roadmaps
+
+When creating roadmaps with many features, consider these configuration options:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Enterprise Roadmap
+subtitle=Comprehensive feature timeline
+width=1600        # Increased width for more features
+height=1200       # Increased height for better spacing
+cardWidth=140     # Slightly smaller cards for more density
+cardHeight=100    # Compact card height
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024,Q1 2025,Q2 2025
+showLegend=true   # Legend helps with many categories
+data=|
+---
+# Your feature data here
+----
+....
+
+**Performance Considerations:**
+
+* **Optimal Width**: 1400-1600px provides good balance between readability and space efficiency
+* **Height Scaling**: Allow 150-200px per 4 features in the busiest quarter
+* **Card Sizing**: Slightly smaller cards (140x100px) work well for dense layouts
+* **Legend Placement**: Always include legend for roadmaps with multiple categories
+
+
 == Conclusion
 
 The DocOps Roadmap Visualizer provides a powerful way to create professional, interactive roadmaps in your AsciiDoctor documents. By using the simple table-based syntax, you can create customized roadmaps that clearly communicate your product strategy, development timeline, and feature priorities.
