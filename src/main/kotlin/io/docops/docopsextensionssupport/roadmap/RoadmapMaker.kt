@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
  * showing timeline, quarters, and feature cards with status indicators
  */
 class RoadmapMaker {
-    
+
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     private val displayDateFormat = SimpleDateFormat("MMM dd")
 
@@ -17,10 +17,53 @@ class RoadmapMaker {
         val height = config.height
         val svg = StringBuilder()
 
+        // Group features by quarter
+        val featuresByQuarter = features.groupBy { it.quarter }
+
+        // Calculate column counts for each quarter
+        val quarterColumnCounts = config.quarters.map { quarter ->
+            val quarterFeatures = featuresByQuarter[quarter] ?: emptyList()
+            val maxFeaturesInColumn = 4 // Maximum features per column
+            if (quarterFeatures.size > maxFeaturesInColumn) {
+                kotlin.math.ceil(quarterFeatures.size.toDouble() / maxFeaturesInColumn).toInt()
+            } else {
+                1 // Default to 1 column if 4 or fewer features
+            }
+        }
+
+        // Calculate quarter widths based on column counts
+        val baseColumnWidth = 200.0
+        val minQuarterWidth = baseColumnWidth // Minimum width for a quarter
+        val quarterSpacing = 50.0 // Space between quarters
+        val quarterWidths = quarterColumnCounts.map { columnCount ->
+            maxOf(minQuarterWidth, columnCount * baseColumnWidth)
+        }
+
+        // Calculate quarter positions
+        val startX = 100.0
+        val quarterPositions = mutableListOf<Double>()
+        var currentX = startX
+        quarterWidths.forEach { width ->
+            quarterPositions.add(currentX)
+            currentX += width + quarterSpacing
+        }
+
+        // Calculate actual required width based on content
+        val cardWidth = 160.0
+        val rightMargin = 50.0
+        val actualRequiredWidth = if (quarterPositions.isNotEmpty()) {
+            quarterPositions.last() + quarterWidths.last() + rightMargin
+        } else {
+            width.toDouble()
+        }
+
+        // Use the maximum of configured width and calculated width to ensure content fits
+        val finalWidth = maxOf(width.toDouble(), actualRequiredWidth).toInt()
+
         // SVG header
         svg.append("""
         <?xml version="1.0" encoding="UTF-8"?>
-        <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height">
+        <svg xmlns="http://www.w3.org/2000/svg" width="$finalWidth" height="$height" viewBox="0 0 $finalWidth $height">
     """.trimIndent())
 
         // Add metadata
@@ -43,22 +86,22 @@ class RoadmapMaker {
 
         // Background
         svg.append("""
-        <rect width="$width" height="$height" fill="url(#bgGradient)"/>
+        <rect width="$finalWidth" height="$height" fill="url(#bgGradient)"/>
     """.trimIndent())
 
         // Header
         svg.append(generateHeader(config))
 
         // Timeline and quarters
-        svg.append(generateTimeline(config))
+        svg.append(generateTimeline(config, quarterWidths, quarterPositions))
 
         // Feature cards - this is the important part
-        val featureCardsSection = generateFeatureCards(config, features)
+        val featureCardsSection = generateFeatureCards(config, features, quarterWidths, quarterPositions)
         svg.append(featureCardsSection)
 
         // Legend
         if (config.showLegend) {
-            svg.append(generateLegend(config))
+            svg.append(generateLegend(config, finalWidth))
         }
 
         // Embedded styles
@@ -71,9 +114,9 @@ class RoadmapMaker {
 
     private fun generateDefinitions(config: RoadmapConfig): String {
         val defs = StringBuilder()
-        
+
         defs.append("<defs>")
-        
+
         // Category gradients
         config.categories.forEach { (key, category) ->
             if (category.visible) {
@@ -85,7 +128,7 @@ class RoadmapMaker {
                 """.trimIndent())
             }
         }
-        
+
         // Background gradient
         defs.append("""
             <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -93,7 +136,7 @@ class RoadmapMaker {
                 <stop offset="100%" style="stop-color:${lightenColor(config.displayConfig.backgroundColor, 0.1)};stop-opacity:1" />
             </linearGradient>
         """.trimIndent())
-        
+
         // Timeline gradient
         defs.append("""
             <linearGradient id="timelineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -102,7 +145,7 @@ class RoadmapMaker {
                 <stop offset="100%" style="stop-color:#e5e7eb;stop-opacity:1" />
             </linearGradient>
         """.trimIndent())
-        
+
         // Filters
         defs.append("""
             <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -116,7 +159,7 @@ class RoadmapMaker {
                     <feMergeNode in="SourceGraphic"/> 
                 </feMerge>
             </filter>
-            
+
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
                 <feMerge>
@@ -125,36 +168,36 @@ class RoadmapMaker {
                 </feMerge>
             </filter>
         """.trimIndent())
-        
+
         defs.append("</defs>")
-        
+
         return defs.toString()
     }
-    
+
     private fun generateHeader(config: RoadmapConfig): String {
         val titleY = 50 * config.displayConfig.scale
         val subtitleY = 75 * config.displayConfig.scale
-        
+
         return """
             <text x="50" y="$titleY" class="roadmap-title">${config.title.escapeXml()}</text>
             <text x="50" y="$subtitleY" class="roadmap-subtitle">${config.subtitle.escapeXml()}</text>
         """.trimIndent()
     }
 
-    private fun generateTimeline(config: RoadmapConfig): String {
+    private fun generateTimeline(config: RoadmapConfig, quarterWidths: List<Double>, quarterPositions: List<Double>): String {
         val timeline = StringBuilder()
 
-        // Calculate positions dynamically based on number of quarters
+        // Calculate positions dynamically based on quarter widths
         val startX = 100.0
-        val columnWidth = 200.0 // Reduced width for more columns
-        val timelineWidth = (config.quarters.size - 1) * columnWidth
-        val endX = startX + timelineWidth
+        // Calculate the end position of the timeline (last quarter position + last quarter width)
+        val endX = quarterPositions.last() + quarterWidths.last()
 
         // Generate quarter labels positioned above feature card columns
         timeline.append("""<g class="quarters">""")
         config.quarters.forEachIndexed { index, quarter ->
-            val x = startX + (index * columnWidth)
-            timeline.append("""<text x="$x" y="${120 * config.displayConfig.scale}" class="quarter-label">$quarter</text>""")
+            // Position quarter labels at the center of each quarter
+            val quarterCenter = quarterPositions[index] + (quarterWidths[index] / 2)
+            timeline.append("""<text x="$quarterCenter" y="${120 * config.displayConfig.scale}" class="quarter-label">$quarter</text>""")
         }
         timeline.append("</g>")
 
@@ -164,19 +207,16 @@ class RoadmapMaker {
 
         // Generate quarter markers on timeline
         config.quarters.forEachIndexed { index, _ ->
-            val x = startX + (index * columnWidth)
-            timeline.append("""<circle cx="$x" cy="$timelineY" r="6" fill="#3b82f6"/>""")
+            val quarterCenter = quarterPositions[index] + (quarterWidths[index] / 2)
+            timeline.append("""<circle cx="$quarterCenter" cy="$timelineY" r="6" fill="#3b82f6"/>""")
         }
 
         return timeline.toString()
     }
 
-    private fun generateFeatureCards(config: RoadmapConfig, features: List<RoadmapFeature>): String {
+    private fun generateFeatureCards(config: RoadmapConfig, features: List<RoadmapFeature>, quarterWidths: List<Double>, quarterPositions: List<Double>): String {
         val cards = StringBuilder()
 
-        // Dynamic positioning based on number of quarters
-        val startX = 100.0
-        val columnWidth = 200.0 // Width allocated per quarter
         val cardWidth = 160.0
         val cardHeight = 120.0
         val baseVerticalSpacing = 140.0
@@ -187,7 +227,9 @@ class RoadmapMaker {
 
         config.quarters.forEachIndexed { quarterIndex, quarter ->
             val quarterFeatures = featuresByQuarter[quarter] ?: emptyList()
-            val quarterCenterX = startX + (quarterIndex * columnWidth)
+            val quarterLeftX = quarterPositions[quarterIndex]
+            val quarterWidth = quarterWidths[quarterIndex]
+            val quarterCenterX = quarterLeftX + (quarterWidth / 2)
 
             // Calculate available space for this quarter
             val availableHeight = config.height - quarterStartY - 100 // Leave space for legend
@@ -196,7 +238,9 @@ class RoadmapMaker {
             // If we have more than maxFeaturesInColumn features, arrange them in multiple columns
             if (quarterFeatures.size > maxFeaturesInColumn) {
                 val columnsNeeded = kotlin.math.ceil(quarterFeatures.size.toDouble() / maxFeaturesInColumn).toInt()
-                val subColumnWidth = 80.0 // Width of each sub-column within the quarter
+
+                // Calculate sub-column width based on quarter width
+                val subColumnWidth = quarterWidth / columnsNeeded
                 val totalSubColumnsWidth = columnsNeeded * subColumnWidth
                 val subColumnStartX = quarterCenterX - (totalSubColumnsWidth / 2) + (subColumnWidth / 2)
 
@@ -307,8 +351,20 @@ class RoadmapMaker {
         // Category indicator circle
         card.append("""
         <circle cx="20" cy="25" r="8" fill="$categoryColor"/>
-        <text x="35" y="30" class="feature-category">${categoryName.escapeXml()}</text>
     """.trimIndent())
+
+        // Category name with text wrapping to prevent overflow
+        val availableCategoryWidth = cardWidth - 35 - 10 // Leave 10px margin on the right
+        val categoryLines = wrapText(categoryName, availableCategoryWidth.toInt(), 12)
+        card.append("""<text x="35" y="30" class="feature-category">""")
+        categoryLines.forEachIndexed { index, line ->
+            if (index == 0) {
+                card.append("""<tspan x="35" dy="0">${line.escapeXml()}</tspan>""")
+            } else {
+                card.append("""<tspan x="35" dy="12">${line.escapeXml()}</tspan>""")
+            }
+        }
+        card.append("""</text>""")
 
         // Dependency indicators (small icons on right side)
         if (feature.dependencies.isNotEmpty()) {
@@ -320,7 +376,9 @@ class RoadmapMaker {
         }
 
         // Feature title with text wrapping (adjusted for top content)
-        val titleStartY = 50
+        // Calculate titleStartY based on category text height to prevent overlap
+        val categoryTextHeight = categoryLines.size * 12 // 12px per line
+        val titleStartY = maxOf(50, 30 + categoryTextHeight + 8) // Ensure minimum 8px gap after category
         val titleLines = wrapText(feature.title, cardWidth - 30, 14)
         card.append("""<text x="15" y="$titleStartY" class="feature-title">""")
         titleLines.forEachIndexed { index, line ->
@@ -334,8 +392,14 @@ class RoadmapMaker {
 
         // Feature description with text wrapping (adjusted for content)
         val descriptionStartY = titleStartY + (titleLines.size * 16) + 8
-        val availableDescriptionHeight = cardHeight - descriptionStartY - 40 // Leave space for effort badge and release date
-        val maxDescriptionLines = (availableDescriptionHeight / 14).toInt().coerceAtLeast(1)
+        // Reserve more space for effort badge and release date to prevent overlap
+        val bottomReservedSpace = 35 // Space for effort badge (25px height) + release date + margins
+        val availableDescriptionHeight = cardHeight - descriptionStartY - bottomReservedSpace
+        val maxDescriptionLines = if (availableDescriptionHeight > 14) {
+            (availableDescriptionHeight / 14).toInt()
+        } else {
+            0 // Don't show description if no space available
+        }
 
         val allDescriptionText = feature.description.joinToString(" ")
         val descriptionLines = wrapText(allDescriptionText, cardWidth - 30, 11)
@@ -478,16 +542,16 @@ class RoadmapMaker {
         return lines
     }
 
-    private fun generateLegend(config: RoadmapConfig): String {
+    private fun generateLegend(config: RoadmapConfig, svgWidth: Int): String {
         val legendY = config.height - 150
         val legend = StringBuilder()
-        
+
         legend.append("""
             <g class="legend" transform="translate(50, $legendY)">
-                <rect x="0" y="0" width="${config.width - 100}" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/>
+                <rect x="0" y="0" width="${svgWidth - 100}" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/>
                 <text x="20" y="25" class="legend-title">Feature Categories & Status</text>
         """.trimIndent())
-        
+
         // Categories
         legend.append("""<g class="categories" transform="translate(20, 40)">""")
         var categoryX = 0
@@ -499,30 +563,30 @@ class RoadmapMaker {
             categoryX += (category.name.length * 8) + 40
         }
         legend.append("</g>")
-        
+
         // Status indicators
         legend.append("""
             <g class="status" transform="translate(20, 70)">
                 <circle cx="0" cy="0" r="6" fill="#10b981"/>
                 <path d="M -3 -1 L -1 1 L 3 -3" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
                 <text x="15" y="5" class="legend-text">Completed</text>
-                
+
                 <circle cx="120" cy="0" r="8" fill="#3b82f6"/>
                 <circle cx="120" cy="0" r="4" fill="#ffffff"/>
                 <text x="135" y="5" class="legend-text">In Progress</text>
-                
+
                 <circle cx="240" cy="0" r="6" fill="#d1d5db"/>
                 <circle cx="240" cy="0" r="3" fill="#9ca3af"/>
                 <text x="255" y="5" class="legend-text">Planned</text>
-                
+
                 <circle cx="340" cy="0" r="6" fill="#f3f4f6"/>
                 <circle cx="340" cy="0" r="3" fill="#d1d5db"/>
                 <text x="355" y="5" class="legend-text">Future</text>
             </g>
         """.trimIndent())
-        
+
         legend.append("</g>")
-        
+
         return legend.toString()
     }
 
@@ -540,7 +604,7 @@ class RoadmapMaker {
                     fill: $fontColor;
                     text-anchor: start;
                 }
-                
+
                 .roadmap-subtitle {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${16 * scale}px;
@@ -548,7 +612,7 @@ class RoadmapMaker {
                     fill: #6b7280;
                     text-anchor: start;
                 }
-                
+
                 .quarter-label {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${16 * scale}px;
@@ -556,7 +620,7 @@ class RoadmapMaker {
                     fill: #374151;
                     text-anchor: middle;
                 }
-                
+
                 .feature-category {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${9 * scale}px;
@@ -566,7 +630,7 @@ class RoadmapMaker {
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }
-                
+
                 .priority-badge {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${8 * scale}px;
@@ -574,7 +638,7 @@ class RoadmapMaker {
                     fill: #ffffff;
                     text-anchor: middle;
                 }
-                
+
                 .assignee-initials {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${9 * scale}px;
@@ -582,7 +646,7 @@ class RoadmapMaker {
                     fill: #4b5563;
                     text-anchor: middle;
                 }
-                
+
                 .dependency-count {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${8 * scale}px;
@@ -590,7 +654,7 @@ class RoadmapMaker {
                     fill: #ffffff;
                     text-anchor: middle;
                 }
-                
+
                 .effort-badge {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${9 * scale}px;
@@ -598,7 +662,7 @@ class RoadmapMaker {
                     fill: #ffffff;
                     text-anchor: middle;
                 }
-                
+
                 .feature-title {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${14 * scale}px;
@@ -606,7 +670,7 @@ class RoadmapMaker {
                     fill: $fontColor;
                     text-anchor: start;
                 }
-                
+
                 .feature-description {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${11 * scale}px;
@@ -614,7 +678,7 @@ class RoadmapMaker {
                     fill: #6b7280;
                     text-anchor: start;
                 }
-                
+
                 .release-date {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${9 * scale}px;
@@ -622,25 +686,25 @@ class RoadmapMaker {
                     fill: #9ca3af;
                     text-anchor: start;
                 }
-                
+
                 .release-date.current {
                     fill: #3b82f6;
                     font-weight: 600;
                 }
-                
+
                 .release-date.planned {
                     fill: #f59e0b;
                 }
-                
+
                 .release-date.future {
                     fill: #d1d5db;
                 }
-                
+
                 .tooltip {
                     pointer-events: none;
                     transition: opacity 0.2s ease;
                 }
-                
+
                 .tooltip-text {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${10 * scale}px;
@@ -648,7 +712,7 @@ class RoadmapMaker {
                     fill: #ffffff;
                     text-anchor: start;
                 }
-                
+
                 .legend-title {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${16 * scale}px;
@@ -656,7 +720,7 @@ class RoadmapMaker {
                     fill: $fontColor;
                     text-anchor: start;
                 }
-                
+
                 .legend-text {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     font-size: ${12 * scale}px;
@@ -664,28 +728,28 @@ class RoadmapMaker {
                     fill: #6b7280;
                     text-anchor: start;
                 }
-                
+
                 .feature-card {
                     cursor: pointer;
                 }
-                
+
                 .feature-card rect:first-child {
                     transition: all 0.3s ease;
                 }
-                
+
                 .feature-card:hover rect:first-child {
                     filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
                     transform: translateY(-3px);
                 }
-                
+
                 .feature-card:hover .tooltip {
                     opacity: 1;
                 }
-                
+
                 .feature-card.current circle:nth-child(7) {
                     animation: pulse 2s infinite;
                 }
-                
+
                 @keyframes pulse {
                     0%, 100% { 
                         opacity: 1; 
@@ -700,7 +764,7 @@ class RoadmapMaker {
         </style>
     """.trimIndent()
     }
-    
+
     private fun formatReleaseDate(dateString: String): String {
         return try {
             val date = dateFormat.parse(dateString)
@@ -719,7 +783,7 @@ class RoadmapMaker {
         val b = (color.substring(4, 6).toInt(16) * (1 - factor)).toInt().coerceIn(0, 255)
         return "#%02x%02x%02x".format(r, g, b)
     }
-    
+
     private fun lightenColor(hexColor: String, factor: Double): String {
         val color = hexColor.removePrefix("#")
         val r = (color.substring(0, 2).toInt(16) + (255 - color.substring(0, 2).toInt(16)) * factor).toInt().coerceIn(0, 255)
