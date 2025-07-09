@@ -13,6 +13,7 @@ import io.docops.docopsextensionssupport.chart.PieSliceHandler
 import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
+import io.docops.docopsextensionssupport.roadmap.PlannerHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.FeatureCardHandler
@@ -63,6 +64,7 @@ class DocOpsRouter (
         "badge" to badgeHandler,
         "buttons" to ButtonHandler(),
         "adr" to AdrHandler(),
+        "planner" to PlannerHandler(),
         "roadmap" to RoadmapHandler(),
         "pie" to PieHandler(),
         "pieslice" to PieSliceHandler(),

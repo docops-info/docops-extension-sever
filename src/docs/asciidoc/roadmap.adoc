@@ -1,0 +1,536 @@
+include::_base.adoc[]
+= DocOps Roadmap Visualizer
+:imagesdir: images
+
+include::shared/buttons.adoc[]
+
+== Introduction
+
+The DocOps Roadmap Visualizer allows you to create professional, interactive product roadmaps in your AsciiDoctor documents. Roadmaps are essential for communicating product strategy, development timelines, and feature priorities to stakeholders, team members, and customers.
+
+This guide will help you understand how to create and customize roadmaps using the DocOps extension, with examples of different configurations and use cases.
+
+== Basic Concepts
+
+=== What is a Roadmap?
+
+A roadmap in the DocOps extension is a visual representation of your product or project timeline, organized by quarters or time periods. Each roadmap includes:
+
+* A title and optional subtitle
+* Time periods (quarters) displayed horizontally
+* Features organized by category and status
+* Visual indicators for feature status, priority, and effort
+* Optional legend for categories and status indicators
+
+Roadmaps help teams and stakeholders:
+
+* Visualize the product development timeline
+* Understand feature priorities and dependencies
+* Track progress against planned milestones
+* Communicate strategy and vision
+
+=== Roadmap Components
+
+A roadmap includes the following components:
+
+* *Header*: Contains the title and subtitle
+* *Timeline*: Shows quarters or time periods horizontally
+* *Feature Cards*: Individual cards for each feature, containing:
+  ** Title
+  ** Category (with color coding)
+  ** Status indicator
+  ** Release date
+  ** Description
+  ** Optional priority and effort indicators
+* *Legend*: Shows category colors and status indicators
+
+== AsciiDoctor Syntax for Roadmaps
+
+To include a roadmap in your AsciiDoctor document, use the following syntax:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Your Roadmap Title
+subtitle=Optional Subtitle
+width=1200
+height=800
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+Feature 1 | core | Q1 2024 | completed | 2024-01-15 | Description of Feature 1
+Feature 2 | security | Q2 2024 | current | 2024-05-01 | Description of Feature 2
+Feature 3 | performance | Q3 2024 | planned | 2024-08-15 | Description of Feature 3
+Feature 4 | integration | Q4 2024 | future | 2024-11-30 | Description of Feature 4
+----
+....
+
+=== Configuration Options
+
+The roadmap can be customized with the following configuration options:
+
+==== Basic Configuration
+
+* `title`: The main title of the roadmap (default: "Product Roadmap")
+* `subtitle`: An optional subtitle (default: "")
+* `width`: Width of the SVG in pixels (default: 1200)
+* `height`: Height of the SVG in pixels (default: 800)
+* `theme`: Color theme, either "light" or "dark" (default: "light")
+* `quarters`: Comma-separated list of quarters or time periods (default: "Q1,Q2,Q3,Q4")
+* `showLegend`: Whether to display the legend (default: true)
+* `animationEnabled`: Whether to enable animations (default: true)
+
+==== Display Configuration
+
+You can customize the display with these additional options:
+
+* `fontColor`: Text color (default: "#1f2937" for light theme)
+* `backgroundColor`: Background color (default: "#f8fafc" for light theme)
+* `scale`: Scale factor for the entire roadmap (default: 1.0)
+* `cardSpacing`: Vertical spacing between cards in pixels (default: 20)
+* `quarterSpacing`: Horizontal spacing between quarters in pixels (default: 300)
+* `cardWidth`: Width of feature cards in pixels (default: 160)
+* `cardHeight`: Height of feature cards in pixels (default: 120)
+
+=== Feature Data Format
+
+The feature data is provided in a table format with the following columns:
+
+* `Title`: The name of the feature
+* `Category`: The category the feature belongs to (e.g., core, security, performance)
+* `Quarter`: The quarter or time period when the feature is planned
+* `Status`: The current status of the feature (completed, current, planned, future, cancelled, on_hold)
+* `Release Date`: The planned or actual release date (YYYY-MM-DD format)
+* `Description`: A description of the feature
+* `Priority` (optional): The priority level (low, medium, high, critical)
+* `Effort` (optional): The effort required (small, medium, large, extra_large)
+* `Assignee` (optional): The person assigned to the feature
+* `Dependencies` (optional): Comma-separated list of feature IDs this feature depends on
+
+== Examples
+
+=== Basic Roadmap Example
+
+Here's a simple example of a product roadmap with features across four quarters:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Product Roadmap 2024
+subtitle=Key features and milestones
+width=1200
+height=800
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 2024 | completed | 2024-01-15 | Implement OAuth 2.0 and multi-factor authentication
+Performance Optimization | performance | Q1 2024 | completed | 2024-02-28 | Improve database query performance and caching
+API Gateway | core | Q2 2024 | current | 2024-05-15 | Centralized API management and routing
+Mobile SDK | integration | Q2 2024 | current | 2024-06-30 | Native SDKs for iOS and Android integration
+Real-time Analytics | analytics | Q3 2024 | planned | 2024-08-15 | Real-time data processing and visualization
+AI Recommendations | ai | Q3 2024 | planned | 2024-09-30 | Machine learning-based content recommendations
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | Enterprise single sign-on integration
+Global CDN | infrastructure | Q4 2024 | future | 2024-12-31 | Global content delivery network deployment
+----
+....
+
+[docops,roadmap]
+----
+title=Product Roadmap 2024
+subtitle=Key features and milestones
+width=1200
+height=800
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 2024 | completed | 2024-01-15 | Implement OAuth 2.0 and multi-factor authentication
+Performance Optimization | performance | Q1 2024 | completed | 2024-02-28 | Improve database query performance and caching
+API Gateway | core | Q2 2024 | current | 2024-05-15 | Centralized API management and routing
+Mobile SDK | integration | Q2 2024 | current | 2024-06-30 | Native SDKs for iOS and Android integration
+Real-time Analytics | analytics | Q3 2024 | planned | 2024-08-15 | Real-time data processing and visualization
+AI Recommendations | ai | Q3 2024 | planned | 2024-09-30 | Machine learning-based content recommendations
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | Enterprise single sign-on integration
+Global CDN | infrastructure | Q4 2024 | future | 2024-12-31 | Global content delivery network deployment
+----
+
+=== Extended Timeline Example
+
+This example shows a roadmap with an extended timeline spanning multiple years:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Long-term Product Strategy
+subtitle=2024-2025 Development Roadmap
+width=1400
+height=800
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024,Q1 2025,Q2 2025,Q3 2025,Q4 2025
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 2024 | completed | 2024-01-15 | OAuth 2.0 integration with major providers
+Performance Optimization | performance | Q1 2024 | completed | 2024-02-28 | Database indexing and query optimization
+GraphQL API | core | Q2 2024 | current | 2024-05-15 | GraphQL schema design and implementation
+Mobile SDK | integration | Q2 2024 | current | 2024-06-30 | iOS and Android framework development
+Real-time Features | performance | Q3 2024 | planned | 2024-08-15 | WebSocket implementation for real-time updates
+AI Analytics | ai | Q3 2024 | planned | 2024-09-30 | Machine learning model training pipeline
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | SAML integration for enterprise customers
+Global Deployment | infrastructure | Q4 2024 | future | 2024-12-31 | Multi-region infrastructure setup
+Advanced Analytics | ai | Q1 2025 | future | 2025-02-15 | Predictive modeling and trend analysis
+Cloud Migration | infrastructure | Q2 2025 | future | 2025-05-30 | Full cloud transition and legacy system retirement
+Blockchain Integration | security | Q3 2025 | future | 2025-08-15 | Distributed ledger for secure transactions
+AI Assistant | ai | Q4 2025 | future | 2025-11-30 | Natural language processing assistant
+----
+....
+
+[docops,roadmap]
+----
+title=Long-term Product Strategy
+subtitle=2024-2025 Development Roadmap
+width=1400
+height=800
+quarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024,Q1 2025,Q2 2025,Q3 2025,Q4 2025
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 2024 | completed | 2024-01-15 | OAuth 2.0 integration with major providers
+Performance Optimization | performance | Q1 2024 | completed | 2024-02-28 | Database indexing and query optimization
+GraphQL API | core | Q2 2024 | current | 2024-05-15 | GraphQL schema design and implementation
+Mobile SDK | integration | Q2 2024 | current | 2024-06-30 | iOS and Android framework development
+Real-time Features | performance | Q3 2024 | planned | 2024-08-15 | WebSocket implementation for real-time updates
+AI Analytics | ai | Q3 2024 | planned | 2024-09-30 | Machine learning model training pipeline
+Enterprise SSO | security | Q4 2024 | future | 2024-11-15 | SAML integration for enterprise customers
+Global Deployment | infrastructure | Q4 2024 | future | 2024-12-31 | Multi-region infrastructure setup
+Advanced Analytics | ai | Q1 2025 | future | 2025-02-15 | Predictive modeling and trend analysis
+Cloud Migration | infrastructure | Q2 2025 | future | 2025-05-30 | Full cloud transition and legacy system retirement
+Blockchain Integration | security | Q3 2025 | future | 2025-08-15 | Distributed ledger for secure transactions
+AI Assistant | ai | Q4 2025 | future | 2025-11-30 | Natural language processing assistant
+----
+
+=== Dark Theme Example
+
+You can create a dark-themed roadmap by setting the `theme` property to "dark":
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Mobile App Development Roadmap
+subtitle=Feature timeline for our mobile application
+theme=dark
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Profiles | core | Q1 | completed | 2024-01-10 | User registration and profile management
+Payment Integration | integration | Q1 | completed | 2024-02-20 | Stripe and PayPal payment processing
+Social Sharing | ui | Q2 | current | 2024-04-15 | Social media integration and content sharing
+Push Notifications | core | Q2 | current | 2024-05-25 | Real-time push notification system
+Offline Mode | performance | Q3 | planned | 2024-07-10 | Offline data synchronization
+Analytics Dashboard | analytics | Q3 | planned | 2024-08-30 | User behavior analytics and reporting
+Voice Commands | ai | Q4 | future | 2024-10-15 | Voice recognition and command processing
+AR Features | ui | Q4 | future | 2024-11-30 | Augmented reality experience integration
+----
+....
+
+[docops,roadmap]
+----
+title=Mobile App Development Roadmap
+subtitle=Feature timeline for our mobile application
+theme=dark
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Profiles | core | Q1 | completed | 2024-01-10 | User registration and profile management
+Payment Integration | integration | Q1 | completed | 2024-02-20 | Stripe and PayPal payment processing
+Social Sharing | ui | Q2 | current | 2024-04-15 | Social media integration and content sharing
+Push Notifications | core | Q2 | current | 2024-05-25 | Real-time push notification system
+Offline Mode | performance | Q3 | planned | 2024-07-10 | Offline data synchronization
+Analytics Dashboard | analytics | Q3 | planned | 2024-08-30 | User behavior analytics and reporting
+Voice Commands | ai | Q4 | future | 2024-10-15 | Voice recognition and command processing
+AR Features | ui | Q4 | future | 2024-11-30 | Augmented reality experience integration
+----
+
+=== Status Variations Example
+
+This example demonstrates different feature statuses including completed, current, planned, future, cancelled, and on-hold:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Project Status Overview
+subtitle=Current status of all planned features
+width=1200
+height=900
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 | completed | 2024-01-15 | Single sign-on implementation
+API Documentation | core | Q1 | completed | 2024-02-10 | OpenAPI specification and documentation
+Mobile Responsive UI | ui | Q2 | current | 2024-04-20 | Responsive design for all screen sizes
+Payment Gateway | integration | Q2 | on_hold | 2024-05-30 | Integration with payment processors (on hold due to compliance review)
+Reporting Module | analytics | Q2 | cancelled | 2024-06-15 | Advanced reporting capabilities (cancelled due to resource constraints)
+Search Optimization | performance | Q3 | planned | 2024-08-10 | Elasticsearch implementation for faster search
+Notification System | core | Q3 | planned | 2024-09-05 | Email and in-app notification system
+Admin Dashboard | ui | Q4 | future | 2024-10-20 | Administrative control panel
+Data Export | integration | Q4 | future | 2024-11-15 | CSV and PDF export functionality
+----
+....
+
+[docops,roadmap]
+----
+title=Project Status Overview
+subtitle=Current status of all planned features
+width=1200
+height=900
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+User Authentication | security | Q1 | completed | 2024-01-15 | Single sign-on implementation
+API Documentation | core | Q1 | completed | 2024-02-10 | OpenAPI specification and documentation
+Mobile Responsive UI | ui | Q2 | current | 2024-04-20 | Responsive design for all screen sizes
+Payment Gateway | integration | Q2 | on_hold | 2024-05-30 | Integration with payment processors (on hold due to compliance review)
+Reporting Module | analytics | Q2 | cancelled | 2024-06-15 | Advanced reporting capabilities (cancelled due to resource constraints)
+Search Optimization | performance | Q3 | planned | 2024-08-10 | Elasticsearch implementation for faster search
+Notification System | core | Q3 | planned | 2024-09-05 | Email and in-app notification system
+Admin Dashboard | ui | Q4 | future | 2024-10-20 | Administrative control panel
+Data Export | integration | Q4 | future | 2024-11-15 | CSV and PDF export functionality
+----
+
+=== Priority and Effort Example
+
+This example includes priority and effort levels for each feature:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Development Priorities
+subtitle=Features with priority and effort estimates
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Priority | Effort
+Security Audit | security | Q1 | completed | 2024-01-30 | Comprehensive security review | critical | large
+Performance Tuning | performance | Q1 | completed | 2024-02-28 | Database and API optimization | high | medium
+User Management | core | Q2 | current | 2024-04-15 | Enhanced user role management | high | medium
+Mobile App | ui | Q2 | current | 2024-06-30 | Native mobile application | medium | extra_large
+Analytics Dashboard | analytics | Q3 | planned | 2024-08-15 | Data visualization dashboard | medium | large
+API Extensions | core | Q3 | planned | 2024-09-30 | New API endpoints for partners | high | medium
+Localization | ui | Q4 | future | 2024-10-31 | Multi-language support | low | small
+Backup System | infrastructure | Q4 | future | 2024-12-15 | Automated backup and recovery | high | medium
+----
+....
+
+[docops,roadmap]
+----
+title=Development Priorities
+subtitle=Features with priority and effort estimates
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Priority | Effort
+Security Audit | security | Q1 | completed | 2024-01-30 | Comprehensive security review | critical | large
+Performance Tuning | performance | Q1 | completed | 2024-02-28 | Database and API optimization | high | medium
+User Management | core | Q2 | current | 2024-04-15 | Enhanced user role management | high | medium
+Mobile App | ui | Q2 | current | 2024-06-30 | Native mobile application | medium | extra_large
+Analytics Dashboard | analytics | Q3 | planned | 2024-08-15 | Data visualization dashboard | medium | large
+API Extensions | core | Q3 | planned | 2024-09-30 | New API endpoints for partners | high | medium
+Localization | ui | Q4 | future | 2024-10-31 | Multi-language support | low | small
+Backup System | infrastructure | Q4 | future | 2024-12-15 | Automated backup and recovery | high | medium
+----
+
+=== Custom Categories Example
+
+You can define custom categories with specific colors:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Custom Categories Roadmap
+subtitle=Using custom category definitions
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+category.frontend=Frontend|#e11d48
+category.backend=Backend|#0891b2
+category.devops=DevOps|#4f46e5
+category.research=Research|#a16207
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+UI Redesign | frontend | Q1 | completed | 2024-02-15 | Complete user interface redesign
+API Refactoring | backend | Q1 | completed | 2024-03-10 | Restructuring of backend APIs
+CI/CD Pipeline | devops | Q2 | current | 2024-05-20 | Continuous integration and deployment setup
+Component Library | frontend | Q2 | current | 2024-06-15 | Reusable UI component library
+Database Migration | backend | Q3 | planned | 2024-08-10 | Migration to new database architecture
+Container Orchestration | devops | Q3 | planned | 2024-09-25 | Kubernetes implementation
+AI Prototyping | research | Q4 | future | 2024-11-05 | Exploration of AI capabilities
+Blockchain Feasibility | research | Q4 | future | 2024-12-20 | Research on blockchain integration
+----
+....
+
+[docops,roadmap]
+----
+title=Custom Categories Roadmap
+subtitle=Using custom category definitions
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+category.frontend=Frontend|#e11d48
+category.backend=Backend|#0891b2
+category.devops=DevOps|#4f46e5
+category.research=Research|#a16207
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description
+UI Redesign | frontend | Q1 | completed | 2024-02-15 | Complete user interface redesign
+API Refactoring | backend | Q1 | completed | 2024-03-10 | Restructuring of backend APIs
+CI/CD Pipeline | devops | Q2 | current | 2024-05-20 | Continuous integration and deployment setup
+Component Library | frontend | Q2 | current | 2024-06-15 | Reusable UI component library
+Database Migration | backend | Q3 | planned | 2024-08-10 | Migration to new database architecture
+Container Orchestration | devops | Q3 | planned | 2024-09-25 | Kubernetes implementation
+AI Prototyping | research | Q4 | future | 2024-11-05 | Exploration of AI capabilities
+Blockchain Feasibility | research | Q4 | future | 2024-12-20 | Research on blockchain integration
+----
+
+== Advanced Features
+
+=== Feature Dependencies
+
+You can specify dependencies between features using the Dependencies column:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Feature Dependencies Example
+subtitle=Showing relationships between features
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Dependencies
+Authentication | security | Q1 | completed | 2024-01-15 | User authentication system | 
+Database Schema | core | Q1 | completed | 2024-02-28 | Core database architecture |
+API Layer | core | Q2 | current | 2024-04-30 | RESTful API implementation | Authentication,Database Schema
+Admin Portal | ui | Q2 | current | 2024-06-15 | Administrative interface | API Layer
+Mobile App | ui | Q3 | planned | 2024-08-30 | Native mobile application | API Layer
+Analytics | analytics | Q3 | planned | 2024-09-30 | User behavior analytics | API Layer,Admin Portal
+Third-party Integration | integration | Q4 | future | 2024-11-15 | External service integration | API Layer
+AI Recommendations | ai | Q4 | future | 2024-12-31 | Personalized recommendations | Analytics
+----
+....
+
+[docops,roadmap]
+----
+title=Feature Dependencies Example
+subtitle=Showing relationships between features
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Dependencies
+Authentication | security | Q1 | completed | 2024-01-15 | User authentication system | 
+Database Schema | core | Q1 | completed | 2024-02-28 | Core database architecture |
+API Layer | core | Q2 | current | 2024-04-30 | RESTful API implementation | Authentication,Database Schema
+Admin Portal | ui | Q2 | current | 2024-06-15 | Administrative interface | API Layer
+Mobile App | ui | Q3 | planned | 2024-08-30 | Native mobile application | API Layer
+Analytics | analytics | Q3 | planned | 2024-09-30 | User behavior analytics | API Layer,Admin Portal
+Third-party Integration | integration | Q4 | future | 2024-11-15 | External service integration | API Layer
+AI Recommendations | ai | Q4 | future | 2024-12-31 | Personalized recommendations | Analytics
+----
+
+=== Assignees
+
+You can assign features to team members:
+
+[source,asciidoc]
+....
+[docops,roadmap]
+----
+title=Team Assignments
+subtitle=Features with assigned team members
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Assignee
+Authentication | security | Q1 | completed | 2024-01-30 | User authentication system | Sarah
+Database Optimization | performance | Q1 | completed | 2024-02-28 | Query performance improvements | Michael
+API Development | core | Q2 | current | 2024-04-15 | RESTful API implementation | David
+UI Components | ui | Q2 | current | 2024-06-30 | Reusable UI component library | Jessica
+Mobile App | ui | Q3 | planned | 2024-08-15 | Native mobile application | Jessica
+Data Analytics | analytics | Q3 | planned | 2024-09-30 | User behavior analytics | Michael
+Cloud Migration | infrastructure | Q4 | future | 2024-11-15 | Migration to cloud infrastructure | David
+AI Features | ai | Q4 | future | 2024-12-31 | Machine learning integration | Sarah
+----
+....
+
+[docops,roadmap]
+----
+title=Team Assignments
+subtitle=Features with assigned team members
+width=1200
+height=800
+quarters=Q1,Q2,Q3,Q4
+data=|
+---
+Title | Category | Quarter | Status | Release Date | Description | Assignee
+Authentication | security | Q1 | completed | 2024-01-30 | User authentication system | Sarah
+Database Optimization | performance | Q1 | completed | 2024-02-28 | Query performance improvements | Michael
+API Development | core | Q2 | current | 2024-04-15 | RESTful API implementation | David
+UI Components | ui | Q2 | current | 2024-06-30 | Reusable UI component library | Jessica
+Mobile App | ui | Q3 | planned | 2024-08-15 | Native mobile application | Jessica
+Data Analytics | analytics | Q3 | planned | 2024-09-30 | User behavior analytics | Michael
+Cloud Migration | infrastructure | Q4 | future | 2024-11-15 | Migration to cloud infrastructure | David
+AI Features | ai | Q4 | future | 2024-12-31 | Machine learning integration | Sarah
+----
+
+== Best Practices
+
+=== Organizing Your Roadmap
+
+* **Group related features**: Place related features in the same category for better organization
+* **Balance quarters**: Try to distribute features evenly across quarters to avoid overloading
+* **Highlight priorities**: Use the priority field to emphasize important features
+* **Be realistic with timelines**: Set achievable deadlines for features
+* **Update regularly**: Keep your roadmap up-to-date as priorities and timelines change
+
+=== Visual Design Tips
+
+* **Use clear titles**: Make your roadmap title descriptive and specific
+* **Keep descriptions concise**: Feature descriptions should be brief but informative
+* **Use status effectively**: Accurately represent the current status of each feature
+* **Consider dependencies**: Show relationships between features when relevant
+* **Choose appropriate dimensions**: Adjust width and height based on the number of features and quarters
+
+== Conclusion
+
+The DocOps Roadmap Visualizer provides a powerful way to create professional, interactive roadmaps in your AsciiDoctor documents. By using the simple table-based syntax, you can create customized roadmaps that clearly communicate your product strategy, development timeline, and feature priorities.
+
+The extension supports various configuration options, allowing you to tailor the roadmap to your specific needs, whether you're planning a small project or a multi-year product strategy.
+
+include::shared/buttons.adoc[]
