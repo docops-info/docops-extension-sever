@@ -32,62 +32,76 @@ import java.util.*
  */
 class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
-     /**
-      * Generates a SVG string representation of a document using the given release strategy.
-      *
-      * @param releaseStrategy The release strategy to use for generating the document.
-      * @param isPdf Specifies whether the document format is PDF.
-      * @return The SVG string representation of the generated document.
-      */
-     override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
+    /**
+     * Generates a SVG string representation of a document using the given release strategy.
+     *
+     * @param releaseStrategy The release strategy to use for generating the document.
+     * @param isPdf Specifies whether the document format is PDF.
+     * @return The SVG string representation of the generated document.
+     */
+    override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
         val width = determineWidth(releaseStrategy = releaseStrategy)
 
         val str = StringBuilder(head(
-                width,
-                releaseStrategy.id,
-                title = releaseStrategy.title,
-                releaseStrategy.scale,
-                releaseStrategy
-            ))
+            width,
+            releaseStrategy.id,
+            title = releaseStrategy.title,
+            releaseStrategy.scale,
+            releaseStrategy
+        ))
         str.append(defs(isPdf, releaseStrategy.id,  releaseStrategy.scale, releaseStrategy))
 
-        // Add custom CSS for enhanced aesthetics
+        // Add custom CSS for clean design without glass effects
         if (!isPdf) {
             str.append("""
                 <style>
                     #ID${releaseStrategy.id} .raise { 
                         pointer-events: bounding-box; 
                         opacity: 1; 
-                        filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3)); 
-                        transition: transform 0.3s ease, filter 0.3s ease;
+                        transition: transform 0.2s ease;
                     }
                     #ID${releaseStrategy.id} .raise:hover { 
-                        filter: drop-shadow(5px 5px 6px rgba(0, 0, 0, 0.4));
+                        transform: translateY(-2px);
                     }
                     #ID${releaseStrategy.id} .milestoneTL { 
                         font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; 
                         font-weight: bold; 
-                        transition: color 0.3s ease;
+                        transition: none;
                     }
                     #ID${releaseStrategy.id} .lines { 
                         font-size: 12px; 
                         line-height: 1.4;
+                        transition: none;
+                    }
+                    #ID${releaseStrategy.id} text {
+                        text-rendering: optimizeLegibility;
+                        shape-rendering: geometricPrecision;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                    }
+                    #ID${releaseStrategy.id} .raise text {
+                        transition: none;
+                        transform: translateZ(0);
+                        will-change: auto;
                     }
                 </style>
             """.trimIndent())
         }
 
-         var titleFill = "#000000"
-         var backgroundColor = "#f8f9fa"
-         if(releaseStrategy.useDark) {
-             titleFill = "#fcfcfc"
-             backgroundColor = "#21252B"
-             str.append("""<rect width="100%" height="100%" fill="url(#dmode1)"/>""")
-         } else {
-             str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
-         }
-         str.append(glassTitle(releaseStrategy.title, width, titleFill))
-         str.append("""<g transform='translate(0,20),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
+        var titleFill = "#000000"
+        var backgroundColor = "#f8f9fa"
+        if(releaseStrategy.useDark) {
+            titleFill = "#fcfcfc"
+            backgroundColor = "#21252B"
+            str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
+        } else {
+            str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
+        }
+
+        // Use regular title instead of glassTitle
+        str.append(title(releaseStrategy.title, width, titleFill))
+        str.append("""<g transform='translate(0,60),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
+
         releaseStrategy.releases.forEachIndexed { index, release ->
             str.append(buildReleaseItem(release,index, isPdf, releaseStrategy.id, releaseStrategy))
             str.append(buildReleaseItemHidden(release,index, isPdf, releaseStrategy.id, releaseStrategy))
@@ -99,60 +113,36 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
 
     private fun head(width: Float, id: String, title: String, scale: Float, releaseStrategy: ReleaseStrategy) : String{
+        // Calculate height based on releases and their content
+        val baseHeight = 275
+        val maxLinesHeight = releaseStrategy.maxLinesForHeight()
+        val titlePadding = 38
 
-        val height = (275  + releaseStrategy.maxLinesForHeight() + 38)* scale
+        // Calculate additional height needed for detail lines
+        val maxDetailLines = releaseStrategy.releases.maxOfOrNull { release ->
+            release.lines.size
+        } ?: 0
+
+        // Add extra space for detail lines (each line is approximately 15px with spacing)
+        val detailLinesHeight = maxDetailLines * 15
+
+        // Add padding for detail panels
+        val detailPanelPadding = 40
+
+        val totalHeight = (baseHeight + maxLinesHeight + titlePadding + detailLinesHeight + detailPanelPadding) * scale
+
         //language=svg
         return """
-            <svg width="${width / DISPLAY_RATIO_16_9}" height="${height / DISPLAY_RATIO_16_9}" viewBox='0 0 $width $height' xmlns='http://www.w3.org/2000/svg' 
-            xmlns:xlink="http://www.w3.org/1999/xlink" role='img' preserveAspectRatio='xMidYMid meet'
-            aria-label='Docops: Release Strategy' id="ID$id">
-            <desc>https://docops.io/extension</desc>
-            <title>${title.escapeXml()}</title>
-
-            <!-- Glass effect filters -->
-            <defs>
-                <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="5" stdDeviation="10" flood-opacity="0.75" flood-color="#000000" />
-                </filter>
-
-                <filter id="glass-blur" x="-10%" y="-10%" width="120%" height="120%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-                </filter>
-
-                <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
-                    <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
-                </filter>
-
-                <!-- Glass effect gradients -->
-                <linearGradient id="glass-overlay" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-                </linearGradient>
-
-                <!-- Gradient for glass base -->
-                <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                </linearGradient>
-
-                <!-- Inner shadow for depth -->
-                <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feOffset dx="0" dy="2"/>
-                    <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-                    <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                    <feComposite in2="offset-blur" operator="in"/>
-                    <feComposite in2="SourceGraphic" operator="over"/>
-                </filter>
-
-                <!-- Title gradient -->
-                <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-        """.trimIndent()
+        <svg width="${width / DISPLAY_RATIO_16_9}" height="${totalHeight / DISPLAY_RATIO_16_9}" viewBox='0 0 $width $totalHeight' xmlns='http://www.w3.org/2000/svg' 
+        xmlns:xlink="http://www.w3.org/1999/xlink" role='img' preserveAspectRatio='xMidYMid meet'
+        aria-label='Docops: Release Strategy' id="ID$id">
+        <desc>https://docops.io/extension</desc>
+        <title>${title.escapeXml()}</title>
+        <g transform='translate(0,20),scale($scale)' id='GID$id'>
+    """.trimIndent()
     }
+
+
 
     fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
         var startX = 0
@@ -190,9 +180,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         }
 
         var fill = "url(#${shadeColor(release)}_rect_$id)"
-        var clz = "raise"
+
         if(isPdf) {
-            clz = ""
             fill = release.fillColor(releaseStrategy)
         }
 
@@ -208,7 +197,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
         //language=svg
         return """
-         <g transform="translate(${positionX+10},60)" class="$clz">
+         <g transform="translate(${positionX+10},60)">
              <!-- Date text with glass effect -->
              <text text-anchor="middle" x="250" y="-12" class="milestoneTL" 
                    fill='$dateColor' filter="url(#title-shadow)">${release.date}</text>
