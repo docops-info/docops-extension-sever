@@ -17,12 +17,9 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.roadmap.linesToUrlIfExist
-import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.util.*
+
 
 /**
  * This class represents a Release Timeline Summary Maker.
@@ -32,6 +29,20 @@ import java.util.*
  */
 class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
+    companion object {
+        private const val CARD_WIDTH = 400f
+        private const val CARD_HEIGHT = 200f
+        private const val TRIANGLE_WIDTH = 100f
+        private const val CARD_SPACING = 20f
+        private const val TITLE_HEIGHT = 60f
+        private const val MARGIN = 20f
+        private const val TEXT_MARGIN = 20f
+        private const val GOAL_MAX_CHARS = 58  // Increased for longer goal text
+        private const val DETAIL_MAX_CHARS = 80  // Increased for wider bullet wrapping
+        private const val GOAL_HEIGHT = 45f  // Space reserved for goal text
+        private const val MAX_BULLET_LINES = 8  // Maximum bullet lines before showing "..."
+    }
+
     /**
      * Generates a SVG string representation of a document using the given release strategy.
      *
@@ -39,349 +50,368 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
      * @param isPdf Specifies whether the document format is PDF.
      * @return The SVG string representation of the generated document.
      */
-    override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean) : String{
-        val width = determineWidth(releaseStrategy = releaseStrategy)
+    override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean): String {
+        val dimensions = calculateDimensions(releaseStrategy)
+        val id = releaseStrategy.id
 
-        val str = StringBuilder(head(
-            width,
-            releaseStrategy.id,
-            title = releaseStrategy.title,
-            releaseStrategy.scale,
-            releaseStrategy
-        ))
-        str.append(defs(isPdf, releaseStrategy.id,  releaseStrategy.scale, releaseStrategy))
+        val str = StringBuilder()
+        str.append(createSvgHeader(dimensions, id, releaseStrategy.title))
+        str.append(createDefinitions(isPdf, id, releaseStrategy))
+        str.append(createBackground(dimensions, releaseStrategy))
+        str.append(createTitle(releaseStrategy.title, dimensions, releaseStrategy))
+        str.append(createMainContent(releaseStrategy, isPdf, id, dimensions))
+        str.append(createSvgFooter())
 
-        // Add custom CSS for clean design without glass effects
-        if (!isPdf) {
-            str.append("""
-                <style>
-                    #ID${releaseStrategy.id} .raise { 
-                        pointer-events: bounding-box; 
-                        opacity: 1; 
-                        transition: transform 0.2s ease;
-                    }
-                    #ID${releaseStrategy.id} .raise:hover { 
-                        transform: translateY(-2px);
-                    }
-                    #ID${releaseStrategy.id} .milestoneTL { 
-                        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; 
-                        font-weight: bold; 
-                        transition: none;
-                    }
-                    #ID${releaseStrategy.id} .lines { 
-                        font-size: 12px; 
-                        line-height: 1.4;
-                        transition: none;
-                    }
-                    #ID${releaseStrategy.id} text {
-                        text-rendering: optimizeLegibility;
-                        shape-rendering: geometricPrecision;
-                        -webkit-font-smoothing: antialiased;
-                        -moz-osx-font-smoothing: grayscale;
-                    }
-                    #ID${releaseStrategy.id} .raise text {
-                        transition: none;
-                        transform: translateZ(0);
-                        will-change: auto;
-                    }
-                </style>
-            """.trimIndent())
-        }
-
-        var titleFill = "#000000"
-        var backgroundColor = "#f8f9fa"
-        if(releaseStrategy.useDark) {
-            titleFill = "#fcfcfc"
-            backgroundColor = "#21252B"
-            str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
-        } else {
-            str.append("""<rect width="100%" height="100%" fill="$backgroundColor"/>""")
-        }
-
-        // Use regular title instead of glassTitle
-        str.append(title(releaseStrategy.title, width, titleFill))
-        str.append("""<g transform='translate(0,60),scale(${releaseStrategy.scale})' id='GID${releaseStrategy.id}'>""")
-
-        releaseStrategy.releases.forEachIndexed { index, release ->
-            str.append(buildReleaseItem(release,index, isPdf, releaseStrategy.id, releaseStrategy))
-            str.append(buildReleaseItemHidden(release,index, isPdf, releaseStrategy.id, releaseStrategy))
-        }
-
-        str.append("</g>")
-        str.append(tail())
         return str.toString()
     }
 
-    private fun head(width: Float, id: String, title: String, scale: Float, releaseStrategy: ReleaseStrategy) : String{
-        // Calculate height based on releases and their content
-        val baseHeight = 275
-        val maxLinesHeight = releaseStrategy.maxLinesForHeight()
-        val titlePadding = 38
+    private fun calculateDimensions(releaseStrategy: ReleaseStrategy): Dimensions {
+        // Calculate width: each card + triangle + spacing, minus last spacing, plus margins
+        val singleCardWidth = CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING
+        val contentWidth = (releaseStrategy.releases.size * singleCardWidth) - CARD_SPACING + (2 * MARGIN)
+        val contentHeight = TITLE_HEIGHT + CARD_HEIGHT + (2 * MARGIN)
 
-        // Calculate additional height needed for detail lines
-        val maxDetailLines = releaseStrategy.releases.maxOfOrNull { release ->
-            release.lines.size
-        } ?: 0
+        return Dimensions(
+            contentWidth = contentWidth,
+            contentHeight = contentHeight,
+            scaledWidth = contentWidth * releaseStrategy.scale,
+            scaledHeight = contentHeight * releaseStrategy.scale,
+            scale = releaseStrategy.scale
+        )
+    }
 
-        // Add extra space for detail lines (each line is approximately 15px with spacing)
-        val detailLinesHeight = maxDetailLines * 15
-
-        // Add padding for detail panels
-        val detailPanelPadding = 40
-
-        val totalHeight = (baseHeight + maxLinesHeight + titlePadding + detailLinesHeight + detailPanelPadding) * scale
-
-        //language=svg
+    private fun createSvgHeader(dimensions: Dimensions, id: String, title: String): String {
         return """
-        <svg width="${width / DISPLAY_RATIO_16_9}" height="${totalHeight / DISPLAY_RATIO_16_9}" viewBox='0 0 $width $totalHeight' xmlns='http://www.w3.org/2000/svg' 
-        xmlns:xlink="http://www.w3.org/1999/xlink" role='img' preserveAspectRatio='xMidYMid meet'
-        aria-label='Docops: Release Strategy' id="ID$id">
-        <desc>https://docops.io/extension</desc>
-        <title>${title.escapeXml()}</title>
-        <g transform='translate(0,20),scale($scale)' id='GID$id'>
-    """.trimIndent()
+            <svg width="${dimensions.scaledWidth}" height="${dimensions.scaledHeight}" 
+                 viewBox="0 0 ${dimensions.contentWidth} ${dimensions.contentHeight}" 
+                 xmlns="http://www.w3.org/2000/svg" 
+                 xmlns:xlink="http://www.w3.org/1999/xlink" 
+                 role="img" 
+                 aria-label="DocOps: Release Strategy" 
+                 id="ID$id">
+                <desc>https://docops.io/extension</desc>
+                <title>${title.escapeXml()}</title>
+        """.trimIndent()
+    }
+
+    private fun createDefinitions(isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
+        val str = StringBuilder()
+        str.append("<defs>")
+
+        // Add gradients for each release type
+        releaseStrategy.displayConfig.colors.forEachIndexed { index, color ->
+            val gradientId = when (index) {
+                0 -> "gradientM_$id"
+                1 -> "gradientR_$id"
+                2 -> "gradientG_$id"
+                else -> "gradient${index}_$id"
+            }
+            str.append(createGradient(gradientId, color))
+        }
+
+        // Add shadow filter
+        str.append(createShadowFilter())
+
+        // Add completed check icon if needed
+        if (releaseStrategy.releases.any { it.completed }) {
+            str.append(createCompletedCheckIcon())
+        }
+
+        str.append("</defs>")
+
+        // Add CSS styles
+        if (!isPdf) {
+            str.append(createStyles(id, releaseStrategy))
+        }
+
+        return str.toString()
+    }
+
+    private fun createGradient(id: String, color: String): String {
+        return """
+            <linearGradient id="$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:$color;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:$color;stop-opacity:0.8" />
+            </linearGradient>
+        """.trimIndent()
     }
 
 
 
-    fun buildReleaseItem(release: Release, currentIndex: Int, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
-        var startX = 0
-        if (currentIndex > 0) {
-            startX = currentIndex * 425 -(20*currentIndex)
-        }
-        val lineText = StringBuilder()
-        var lineStart = 25
-        release.lines.forEachIndexed { index, s ->
-            lineText.append(
-                """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="12px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
-            """.trimIndent()
-            )
-            if (index <= 7) {
-                lineStart += 10
-            } else {
-                lineStart -= 10
-            }
-        }
-        val goals = release.goal.escapeXml()
-        val itemArray = itemTextWidth(goals, 290F, 20)
-        val lines = linesToUrlIfExist(itemArray, mutableMapOf())
-
-        val spans = linesToSpanText(lines,20, 150)
-        val textY = 100 - (lines.size * 12)
-        var positionX = startX
-        if(currentIndex>0) {
-            positionX += currentIndex * 5
-        }
-        var completed = ""
-        if(release.completed) {
-            completed = "<use xlink:href=\"#completedCheck\" x=\"405\" y=\"65\" width=\"24\" height=\"24\"/>"
-        }
-
-        var fill = "url(#${shadeColor(release)}_rect_$id)"
-
-        if(isPdf) {
-            fill = release.fillColor(releaseStrategy)
-        }
-
-        // Set colors based on dark mode
-        var cardFill = "#fcfcfc"
-        var textFill = "#111111"
-        var dateColor = fishTailColor(release, releaseStrategy)
-
-        if(releaseStrategy.useDark) {
-            cardFill = "#2c3033"
-            textFill = "#e6e6e6"
-        }
-
-        //language=svg
+    private fun createCompletedCheckIcon(): String {
         return """
-         <g transform="translate(${positionX+10},60)">
-             <!-- Date text with glass effect -->
-             <text text-anchor="middle" x="250" y="-12" class="milestoneTL" 
-                   fill='$dateColor' filter="url(#title-shadow)">${release.date}</text>
-
-             <!-- Glass card background -->
-             <defs>
-                <filter id="card-glass-${release.type}-${currentIndex}" x="-10%" y="-10%" width="120%" height="120%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
-                    <feOffset in="blur" dx="0" dy="4" result="offsetBlur" />
-                    <feComponentTransfer in="offsetBlur" result="shadow">
-                        <feFuncA type="linear" slope="0.3" />
-                    </feComponentTransfer>
-                    <feMerge>
-                        <feMergeNode in="shadow" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-             </defs>
-
-             <!-- Main card with glass effect -->
-             <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z m 400,0 v 200 l 100,-100 z" 
-                   fill="url(#glassGradient)" 
-                   stroke="$dateColor" 
-                   stroke-width="2"
-                   filter="url(#glass-shadow)"/>
-
-             <!-- Glass highlight overlay -->
-             <path d="m 5,5 h 390 v 40 h -390 z" 
-                   fill="url(#glass-overlay)" 
-                   opacity="0.7"/>
-
-             <!-- Type label with glass effect -->
-             <text x="410" y="110" class="milestoneTL" 
-                   font-size="36px" 
-                   fill="$textFill"
-                   filter="url(#title-shadow)">${release.type}</text>
-
-            $completed
-
-            <!-- Content with glass effect -->
-            <g transform="translate(100,0)" cursor="pointer" onclick="strategyShowItem('ID${id}_${currentIndex}')">
-                <text text-anchor="middle" x="150" y="$textY" class="milestoneTL lines" 
-                      font-size="12px"
-                      font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" 
-                      font-weight="bold" 
-                      fill="$textFill">
-                   $spans
-                </text>
+            <g id="completedCheck">
+                <circle cx="12" cy="12" r="12" fill="#10b981"/>
+                <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
             </g>
-        </g>
-        """.trimIndent()
-    }
-    fun buildReleaseItemHidden(release: Release, currentIndex: Int, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
-            var startX = 0
-            if (currentIndex > 0) {
-                startX = currentIndex * 425 -(20*currentIndex)
-            }
-            val lineText = StringBuilder()
-            val bulletStar = StringBuilder()
-            var lineStart = 2
-        var y = -3
-        val newLines = releaseStrategy.releaseLinesToDisplay(release.lines)
-        newLines.forEachIndexed { index, s ->
-            if(s is BulletLine) {
-                bulletStar.append("""
-                <use xlink:href="#bullStar${release.type.marker(release.type)}$id" x="1" y="$y" width="24" height="24"/>
-            """.trimIndent())
-                lineStart = 12
-            } else {
-                lineStart = 14
-            }
-
-                lineText.append(
-                    """
-                <tspan x="$lineStart" dy="12" class="entry" font-size="12px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">${s.text.escapeXml()}</tspan>
-            """.trimIndent()
-                )
-                y += 12
-            }
-            var x = 200
-            var visibility = "visibility='hidden'"
-            var anchor = "text-anchor='middle'"
-            if (isPdf || releaseStrategy.displayConfig.notesVisible) {
-                x = 10
-                anchor = ""
-                visibility = "visibility='visible'"
-            }
-        val height = (newLines.size+1) * 12
-        var positionX = startX
-        if(currentIndex>0) {
-            positionX += currentIndex * 5
-        }
-
-        // Set colors based on dark mode
-        var cardFill = "#fcfcfc"
-        var textFill = "#111111"
-        var borderColor = fishTailColor(release, releaseStrategy)
-
-        if(releaseStrategy.useDark) {
-            cardFill = "#2c3033"
-            textFill = "#e6e6e6"
-        }
-
-            //language=svg
-            return """
-         <g transform="translate(${positionX+10},275)" class="${shadeColor(release)}" id="ID${id}_${currentIndex}" $visibility>
-            <!-- Glass card background -->
-            <defs>
-                <filter id="hidden-card-glass-${release.type}-${currentIndex}" x="-10%" y="-10%" width="120%" height="120%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-                    <feOffset in="blur" dx="0" dy="3" result="offsetBlur" />
-                    <feComponentTransfer in="offsetBlur" result="shadow">
-                        <feFuncA type="linear" slope="0.2" />
-                    </feComponentTransfer>
-                    <feMerge>
-                        <feMergeNode in="shadow" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-
-            <!-- Main card with glass effect -->
-            <rect width='400' height='$height' 
-                  stroke="$borderColor" 
-                  fill="url(#glassGradient)" 
-                  rx="8" ry="8"
-                  filter="url(#glass-shadow)"/>
-
-            <!-- Glass highlight overlay -->
-            <rect x="5" y="5" width="390" height="15" 
-                  rx="5" ry="5"
-                  fill="url(#glass-overlay)" 
-                  opacity="0.7"/>
-
-            <!-- Text content -->
-            <text $anchor x="$x" y="2" class="milestoneTL lines" 
-                  font-size="12px" 
-                  font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' 
-                  font-weight="bold" 
-                  fill="$textFill">
-                $lineText
-            </text>
-            $bulletStar
-        </g>
         """.trimIndent()
     }
 
-    private fun linesToSpanText(lines: MutableList<String>, dy: Int, x: Int): String {
-        val text = StringBuilder()
-        lines.forEach {
-            text.append("""<tspan x="$x" dy="$dy" text-anchor="middle" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="20" font-weight="normal">$it</tspan>""")
-        }
-        return text.toString()
-    }
-
-    /**
-     * Create a glass-styled title
-     */
-    private fun glassTitle(title: String, width: Float, titleFill: String): String {
+    private fun createShadowFilter(): String {
         return """
-            <!-- Glass title background -->
-            <rect x="${width/2 - 300}" y="5" width="600" height="50" rx="15" ry="15"
-                  fill="url(#glassGradient)" 
-                  stroke="rgba(255,255,255,0.3)" 
-                  stroke-width="1" 
-                  filter="url(#glass-shadow)" />
+            <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+            </filter>
+            <filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge> 
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        """.trimIndent()
+    }
 
-            <!-- Title highlight -->
-            <rect x="${width/2 - 295}" y="10" width="590" height="15" rx="10" ry="10"
-                  fill="url(#glass-overlay)" opacity="0.7" />
+    private fun createStyles(id: String, releaseStrategy: ReleaseStrategy): String {
+        return """
+            <style>
+                #ID$id .release-card {
+                    transition: filter 0.3s ease;
+                    cursor: pointer;
+                }
+                #ID$id .release-card:hover {
+                    filter: url(#glowEffect);
+                }
+                #ID$id .milestone-text {
+                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-weight: bold;
+                    text-rendering: optimizeLegibility;
+                    pointer-events: none;
+                }
+                #ID$id .detail-text {
+                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-size: 10px;
+                    line-height: 1.4;
+                    pointer-events: none;
+                }
+                #ID$id .date-text {
+                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-size: 11px;
+                    font-weight: normal;
+                    pointer-events: none;
+                }
+                #ID$id .goal-text {
+                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-size: 12px;
+                    font-weight: bold;
+                    line-height: 1.3;
+                    pointer-events: none;
+                }
+                /* Prevent text selection and ensure stable positioning */
+                #ID$id text {
+                    user-select: none;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                }
+                /* Maintain stable positioning */
+                #ID$id g {
+                    transform-box: fill-box;
+                }
+            </style>
+        """.trimIndent()
+    }
+    private fun createBackground(dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
+        val backgroundColor = if (releaseStrategy.useDark) "#21252B" else "#f8f9fa"
+        return """<rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="$backgroundColor"/>"""
+    }
 
-            <!-- Title text with glass effect -->
-            <text x="${width/2}" y="38" text-anchor="middle" 
-                  style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
-                         font-size: 24px; 
-                         font-weight: bold; 
-                         letter-spacing: 1px; 
-                         fill: url(#title-gradient); 
-                         filter: url(#title-shadow);">${title.escapeXml()}</text>
+
+
+    private fun createTitle(title: String, dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
+        val titleFill = if (releaseStrategy.useDark) "#fcfcfc" else "#000000"
+        return """
+            <text x="${dimensions.contentWidth / 2}" y="30" 
+                  fill="$titleFill" 
+                  text-anchor="middle" 
+                  font-size="18px" 
+                  font-family="Arial, Helvetica, sans-serif" 
+                  class="milestone-text">
+                ${title.escapeXml()}
+            </text>
+        """.trimIndent()
+    }
+
+    private fun createMainContent(releaseStrategy: ReleaseStrategy, isPdf: Boolean, id: String, dimensions: Dimensions): String {
+        val str = StringBuilder()
+
+        releaseStrategy.releases.forEachIndexed { index, release ->
+            val x = MARGIN + (index * (CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING))
+            val y = TITLE_HEIGHT
+            str.append(createReleaseCard(release, x, y, isPdf, id, releaseStrategy))
+        }
+
+        return str.toString()
+    }
+
+    private fun createReleaseCard(release: Release, x: Float, y: Float, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
+        val gradientId = getGradientId(release, id)
+        val fontColor = releaseStrategy.displayConfig.fontColor
+        val dateColor = if (releaseStrategy.useDark) "#fcfcfc" else "#111111"
+
+        // Calculate goal text area - extend closer to completed icon
+        val goalMaxWidth = if (release.completed) CARD_WIDTH - 60f else CARD_WIDTH - 40f
+
+        return """
+            <g transform="translate($x,$y)" class="release-card">
+                <!-- Card background -->
+                <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
+                      fill="url(#$gradientId)" 
+                      stroke="rgba(0,0,0,0.1)" 
+                      stroke-width="1" 
+                      filter="url(#dropShadow)"/>
+                
+                <!-- Arrow triangle -->
+                <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
+                      fill="url(#$gradientId)" 
+                      stroke="rgba(0,0,0,0.1)" 
+                      stroke-width="1"/>
+                
+                <!-- Date text -->
+                <text x="${CARD_WIDTH/2}" y="-10" 
+                      fill="$dateColor" 
+                      text-anchor="middle" 
+                      class="date-text">
+                    ${release.date}
+                </text>
+                
+                <!-- Release type -->
+                <text x="${CARD_WIDTH + TRIANGLE_WIDTH/2}" y="${CARD_HEIGHT/2 + 8}" 
+                      fill="white" 
+                      text-anchor="middle" 
+                      font-size="24px" 
+                      class="milestone-text">
+                    ${release.type}
+                </text>
+                
+                <!-- Completed check -->
+                ${if (release.completed) """<use href="#completedCheck" x="${CARD_WIDTH - 30}" y="10"/>""" else ""}
+                
+                <!-- Goal text (wrapped, extends closer to completed icon) -->
+                ${createWrappedGoalText(release.goal, TEXT_MARGIN, 25.0f, goalMaxWidth, fontColor)}
+                
+                <!-- Detail lines (wrapped, positioned below goal) -->
+                ${createDetailLines(release.lines, TEXT_MARGIN + GOAL_HEIGHT, CARD_WIDTH - (2 * TEXT_MARGIN), fontColor)}
+            </g>
         """.trimIndent()
     }
 
 
+    private fun createWrappedGoalText(text: String, x: Float, y: Float, maxWidth: Float, fontColor: String): String {
+        val wrappedLines = wrapText(text, GOAL_MAX_CHARS)
+        val str = StringBuilder()
+
+        str.append("""<text x="$x" y="$y" class="goal-text" fill="$fontColor">""")
+
+        wrappedLines.forEachIndexed { index, line ->
+            val dyValue = if (index == 0) "0" else "16"
+            str.append("""<tspan x="$x" dy="$dyValue">${line.escapeXml()}</tspan>""")
+        }
+
+        str.append("</text>")
+
+        return str.toString()
+    }
+
+
+    private fun createDetailLines(lines: List<String>, startY: Float, maxWidth: Float, fontColor: String): String {
+        val str = StringBuilder()
+        var lineCount = 0
+
+        // Start with text element
+        str.append("""<text x="${TEXT_MARGIN}" y="$startY" class="detail-text" fill="$fontColor">""")
+
+        for (line in lines) {
+            if (lineCount >= MAX_BULLET_LINES) {
+                str.append("""<tspan x="${TEXT_MARGIN}" dy="12">...</tspan>""")
+                break
+            }
+
+            // Wrap the line text but handle bullets properly
+            val wrappedLines = wrapText(line, DETAIL_MAX_CHARS)
+
+            wrappedLines.forEachIndexed { index, wrappedLine ->
+                if (lineCount >= MAX_BULLET_LINES) return@forEachIndexed
+
+                // Only add chevron on the first line of each original line
+                val bulletText = if (index == 0) "» $wrappedLine" else "  $wrappedLine"
+                val dyValue = if (lineCount == 0) "0" else "12"
+
+                str.append("""<tspan x="${TEXT_MARGIN}" dy="$dyValue">${bulletText.escapeXml()}</tspan>""")
+                lineCount++
+            }
+        }
+
+        // Close the text element
+        str.append("</text>")
+
+        return str.toString()
+    }
+
+
+    private fun wrapText(text: String, maxCharsPerLine: Int): List<String> {
+        if (text.length <= maxCharsPerLine) {
+            return listOf(text)
+        }
+
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        for (word in words) {
+            // If adding this word would exceed the limit
+            if (currentLine.length + word.length + (if (currentLine.isNotEmpty()) 1 else 0) > maxCharsPerLine) {
+                // If current line has content, save it and start new line
+                if (currentLine.isNotEmpty()) {
+                    lines.add(currentLine.toString())
+                    currentLine = StringBuilder(word)
+                } else {
+                    // Single word is too long, break it
+                    if (word.length > maxCharsPerLine) {
+                        lines.add(word.substring(0, maxCharsPerLine))
+                        currentLine = StringBuilder(word.substring(maxCharsPerLine))
+                    } else {
+                        currentLine.append(word)
+                    }
+                }
+            } else {
+                // Add word to current line
+                if (currentLine.isNotEmpty()) {
+                    currentLine.append(" ")
+                }
+                currentLine.append(word)
+            }
+        }
+
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine.toString())
+        }
+
+        return lines
+    }
+
+    private fun getGradientId(release: Release, id: String): String {
+        return when {
+            release.type.toString().startsWith("M") -> "gradientM_$id"
+            release.type.toString().startsWith("R") -> "gradientR_$id"
+            release.type.toString().startsWith("G") -> "gradientG_$id"
+            else -> "gradientM_$id"
+        }
+    }
+
+    private fun createSvgFooter(): String {
+        return "</svg>"
+    }
+
+
+     // Data class to hold dimension calculations
+    private data class Dimensions(
+        val contentWidth: Float,
+        val contentHeight: Float,
+        val scaledWidth: Float,
+        val scaledHeight: Float,
+        val scale: Float
+    )
 }
 
 fun main() {
