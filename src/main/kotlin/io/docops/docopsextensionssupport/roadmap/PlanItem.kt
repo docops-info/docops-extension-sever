@@ -29,28 +29,35 @@ class PlanItem(val id: String = UUID.randomUUID().toString(), val type: String, 
         return ""
     }
     private fun shadowContentWithUrl()  {
-
         content?.let {
-            it.lines().forEachIndexed { index, input ->
-                var s = input
+            val processedLines = mutableListOf<String>()
+            val shadowLines = mutableListOf<String>()
+
+            it.lines().forEach { input ->
+                var processedLine = input
+                var shadowLine = input
+
                 if(input.contains("[[") && input.contains("]]")) {
                     val regex = "(?<=\\[\\[)(.*?)(?=]])".toRegex()
                     hasUrls = true
-                    val matches = regex.findAll(s)
-                    matches.forEach {
-                            item ->
+                    val matches = regex.findAll(input)
+                    matches.forEach { item ->
                         val urlItem = item.value.split(" ")
                         val url = urlItem[0]
                         val display = urlItem[1]
-                        s = input.replace("[[${item.value}]]", display)
-                        content = input.replace("[[${item.value}]]", """[[$display]]""")
+                        shadowLine = shadowLine.replace("[[${item.value}]]", display)
+                        processedLine = processedLine.replace("[[${item.value}]]", """[[$display]]""")
                         urlMap["[[$display]]"] = url
                     }
                 }
-                shadowContent = s.escapeXml()
-            }
-        }
 
+                processedLines.add(processedLine)
+                shadowLines.add(shadowLine)
+            }
+
+            content = processedLines.joinToString("\n")
+            shadowContent = shadowLines.joinToString("\n").escapeXml()
+        }
     }
 }
 

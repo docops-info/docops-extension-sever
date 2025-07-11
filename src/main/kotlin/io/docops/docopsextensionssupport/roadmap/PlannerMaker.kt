@@ -7,18 +7,16 @@ import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
-// DocOps branding colors based on the legend.html branding look
+// Modern branding colors for dynamic columns
 val DOCOPS_BRANDING_COLORS = listOf(
-    // Business Capability (Red gradient)
-    "#eb0e0e",
-    // Engineering (Blue gradient)
-    "#004680",
-    // Both (Pink gradient)
-    "#ff6dd0",
-    // Additional colors from the original STUNNINGPIE
-    "#e6d800", // Yellow
-    "#50e991", // Green
-    "#9b19f5"  // Purple
+    "#FF6B6B", // Modern Red
+    "#4ECDC4", // Modern Blue/Teal
+    "#A8E6CF", // Modern Green
+    "#FFD93D", // Modern Yellow
+    "#9B59B6", // Modern Purple
+    "#E67E22", // Modern Orange
+    "#3498DB", // Modern Blue
+    "#2ECC71"  // Modern Green variant
 )
 
 class PlannerMaker {
@@ -35,32 +33,12 @@ class PlannerMaker {
         sb.append(makeHead(planItems, title, grads, itemGrad, width, height, scale))
         sb.append("""<g>""")
         sb.append("""
-            <defs>
-                <linearGradient id="title-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#3498db;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-
-            <!-- Glass title background -->
-            <rect x="${width/2 - 400}" y="10" width="800" height="70" rx="15" ry="15"
-                  fill="url(#glassGradient)" 
-                  stroke="rgba(255,255,255,0.3)" 
-                  stroke-width="1" 
-                  filter="url(#glass-shadow)" />
-
-            <!-- Title highlight -->
-            <rect x="${width/2 - 395}" y="15" width="790" height="25" rx="10" ry="10"
-                  fill="url(#glass-overlay)" opacity="0.7" />
-
-            <!-- Title text with glass effect -->
-            <text x="${width/2}" y="60" text-anchor="middle" 
-                  style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
-                         font-size: 44px; 
-                         font-weight: bold; 
-                         letter-spacing: 1px; 
-                         fill: url(#title-gradient); 
-                         filter: url(#title-shadow);">${title.escapeXml()}</text>
+            <!-- Modern Title -->
+            <text x="${width/2}" y="40" text-anchor="middle" 
+                  style="font-family: 'Inter', 'Segoe UI', sans-serif; 
+                         font-size: 32px; 
+                         font-weight: 700; 
+                         fill: #2D3748;">${title.escapeXml()}</text>
         """)
         sb.append("<g transform=\"translate(0, 60)\">")
         var column = 0
@@ -69,7 +47,7 @@ class PlannerMaker {
             if(value[0].color != null) {
                 color = value[0].color!!
             }
-            val startX = 20 + (column * 572)
+            val startX = 50 + (column * 300) // Updated spacing for larger design
             sb.append(makeColumn( key, value, 60, startX, colorIn = "url(#planItem_$column)", color))
             column++
         }
@@ -89,198 +67,300 @@ private fun itemGradient(planItems: PlanItems): String {
     return sb.toString()
 }
 
+    // Update the makeColumn method to use renderTextWithBullets
     private fun makeColumn(
         key: String,
-        planItems: List<PlanItem>,
+        value: List<PlanItem>,
         startY: Int,
         startX: Int,
         colorIn: String,
-        columnColor: String
+        color: String
     ): String {
         val sb = StringBuilder()
-        var color = colorIn
-        var y = startY
-        var parentColor = ""
-        planItems.forEachIndexed { _, planItem ->
-            if(planItem.color != null) {
-                color = "url(#${planItem.id})"
-                if(planItem.isParent) {
-                    parentColor = color
-                }
-            }
 
-            sb.append("""<g transform="translate($startX, $y)">""")
-            // Add glass effect
+        // Column header
+        sb.append("""
+        <rect x="${startX}" y="${startY}" width="280" height="50" 
+              fill="${color}" rx="8" ry="8" class="card"/>
+        <text x="${startX + 140}" y="${startY + 30}" text-anchor="middle" class="column-header">
+            ${key.escapeXml()}
+        </text>
+    """)
+
+        var currentY = startY + 70
+
+        value.forEach { item ->
+            val cardHeight = calculateCardHeight(item)
+
+            // Card background
             sb.append("""
-                <defs>
-                    <filter id="glass-effect-${planItem.id}" x="-10%" y="-10%" width="120%" height="120%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
-                        <feOffset in="blur" dx="0" dy="4" result="offsetBlur" />
-                        <feComponentTransfer in="offsetBlur" result="shadow">
-                            <feFuncA type="linear" slope="0.3" />
-                        </feComponentTransfer>
-                        <feMerge>
-                            <feMergeNode in="shadow" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                </defs>
+            <rect x="${startX + 10}" y="${currentY}" width="260" height="${cardHeight}" 
+                  fill="white" rx="8" ry="8" class="card" 
+                  stroke="#E2E8F0" stroke-width="1"/>
+        """)
 
-                <!-- Glass card background -->
-                <rect x="0" y="0" height="360" width="552" rx="12" ry="12"
-                      style="fill: url(#glassGradient); stroke: rgba(255,255,255,0.3); stroke-width: 1; filter: url(#glass-shadow);"/>
-
-                <!-- Color header with glass effect -->
-                <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 540.0 0 A 12.0 12.0 0 0 1 552.0 12.0 L 552.0 54.0 A 0.0 0.0 0 0 1 552.0 54.0 L 0.0 54.0 A 0.0 0.0 0 0 1 0 54.0 Z"
-                      fill="$color" filter="url(#glass-blur)" />
-
-                <!-- Glass highlight overlay -->
-                <rect x="5" y="5" width="542" height="40" rx="8" ry="8"
-                      fill="url(#glass-overlay)" opacity="0.7" />
-
-                <!-- Bottom glass highlight -->
-                <rect x="10" y="300" width="532" height="50" rx="8" ry="8"
-                      fill="rgba(255,255,255,0.1)" />
-            """.trimIndent())
-
-            planItem.title?.let {
-                val textColor = determineTextColor(columnColor)
-                sb.append("""<text x="24" y="36" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: $textColor; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;">${planItem.title}</text>""")
+            // Item title
+            val titleY = currentY + 25
+            if (item.title != null) {
+                sb.append("""
+                <text x="${startX + 25}" y="${titleY}" class="content-text" 
+                      style="font-weight: 600; font-size: 16px;">
+                    ${item.title.escapeXml()}
+                </text>
+            """)
             }
-            planItem.content?.let {
-                //todo fix url
-                val contentList = itemTextWidth(planItem.content!!, 532F, 24, "Helvetica")
-                val list = linesToUrlIfExist(contentList, planItem.urlMap)
-                sb.append("<text x='24' y='74' style='font-family: \"Segoe UI\", Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; line-height: 1.5;'>")
-                list.forEachIndexed { index, string ->
-                    // Check if the line starts with a bullet point
-                    if (string.startsWith("•")) {
-                        // Render bullet point with proper indentation
-                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem; font-weight: 600;">• </tspan>""")
-                        sb.append("""<tspan style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">${string.substring(1)}</tspan>""")
-                    } else {
-                        sb.append("""<tspan x="24" dy="28" style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; fill: #444444; font-size: 1rem;">${string}</tspan>""")
-                    }
-                }
-                sb.append("</text>")
+
+            // Item content with bullets
+            val contentY = if (item.title != null) titleY + 25 else titleY
+            if (item.content?.isNotEmpty() ?: false) {
+                sb.append(renderTextWithBullets(item.content!!, startX + 25f, contentY.toFloat(), item.urlMap))
             }
-            sb.append("</g>")
-            y += 360 + 20
+
+            currentY += cardHeight + 15
         }
 
-        sb.append("""
-            <g transform="translate($startX, 10)">
-                <!-- Glass column header -->
-                <rect x="0" y="0" width="552" height="40" rx="8" ry="8"
-                      fill="url(#glassGradient)" 
-                      stroke="rgba(255,255,255,0.3)" 
-                      stroke-width="1" 
-                      filter="url(#glass-shadow)" />
-
-                <!-- Column header highlight -->
-                <rect x="5" y="5" width="542" height="15" rx="5" ry="5"
-                      fill="url(#glass-overlay)" opacity="0.7" />
-
-                <!-- Column header text with glass effect -->
-                <filter id="glow-$key" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-                <text x="281" y="26" text-anchor="middle" 
-                      style="font-family: 'Segoe UI', Arial, Helvetica, sans-serif; 
-                             fill: $parentColor; 
-                             font-size: 1rem; 
-                             font-weight: bold; 
-                             letter-spacing: 1px; 
-                             filter: url(#title-shadow);">${key.escapeXml().uppercase()}</text>
-            </g>
-            """.trimIndent())
         return sb.toString()
     }
+
+    private fun calculateCardHeight(item: PlanItem): Int {
+        val baseHeight = 40
+        val titleHeight = if (item.title != null) 30 else 0
+
+        // Calculate wrapped text lines for proper height
+        var totalWrappedLines = 0
+        item.content?.split("\n")?.forEach { line ->
+            val wrappedLines = when {
+                line.startsWith("[BULLET_DOT]") -> {
+                    itemTextWidth(line.substring(12), 240F, 14, "Inter")
+                }
+                line.startsWith("[BULLET_CHEVRON]") -> {
+                    itemTextWidth(line.substring(16), 240F, 14, "Inter")
+                }
+                line.startsWith("[BULLET_PLUS]") -> {
+                    itemTextWidth(line.substring(13), 240F, 14, "Inter")
+                }
+                line.startsWith("[BULLET_DASH]") -> {
+                    itemTextWidth(line.substring(13), 240F, 14, "Inter")
+                }
+                else -> {
+                    itemTextWidth(line, 240F, 14, "Inter")
+                }
+            }
+            totalWrappedLines += wrappedLines.size
+        }
+
+        val contentHeight = totalWrappedLines * 20
+        return baseHeight + titleHeight + contentHeight
+    }
+
     private fun determineWidth(planItems: PlanItems) : Int {
-        return (552 * planItems.toColumns().size) + (planItems.toColumns().size * 20) + 20
+        // Match reference planner.svg size - ensure minimum width of 1200
+        val calculatedWidth = (280 * planItems.toColumns().size) + (planItems.toColumns().size * 20) + 80
+        return maxOf(calculatedWidth, 1200)
     }
     private fun determineHeight(planItems: PlanItems) : Int {
-        return planItems.maxRows() * 360 + (planItems.maxRows() * 20) + 120
+        // Match reference planner.svg size - ensure minimum height of 600
+        val calculatedHeight = planItems.maxRows() * 240 + 160
+        return maxOf(calculatedHeight, 600)
     }
-    private fun makeHead(
-        planItems: PlanItems,
-        title: String,
-        grads: String,
-        itemGrad: String,
-        width: Int,
-        height: Int,
-        scale: String
-    ): String {
+
+    fun createBulletSymbols(): String {
         return """
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="${(width * 0.50 * scale.toFloat()) / DISPLAY_RATIO_16_9}" height="${(height * 0.50 * scale.toFloat())/DISPLAY_RATIO_16_9}"
-     viewBox="0 0 $width $height" preserveAspectRatio="xMidYMin meet">
-     <defs>
-     $grads
-     $itemGrad
-
-     <!-- Glass effect filters -->
-     <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
-         <feDropShadow dx="0" dy="5" stdDeviation="10" flood-opacity="0.75" flood-color="#000000" />
-     </filter>
-
-     <filter id="glass-blur" x="-10%" y="-10%" width="120%" height="120%">
-         <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-     </filter>
-
-     <filter id="title-shadow" x="-10%" y="-10%" width="120%" height="120%">
-         <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.2" flood-color="#000000" />
-     </filter>
-
-     <!-- Glass effect gradients -->
-     <linearGradient id="glass-overlay" x1="0%" y1="0%" x2="0%" y2="100%">
-         <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
-         <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-     </linearGradient>
-
-     <!-- Gradient for glass base -->
-     <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-         <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-         <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-         <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-     </linearGradient>
-
-     <!-- Inner shadow for depth -->
-     <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-         <feOffset dx="0" dy="2"/>
-         <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-         <feFlood flood-color="rgba(0,0,0,0.3)"/>
-         <feComposite in2="offset-blur" operator="in"/>
-         <feComposite in2="SourceGraphic" operator="over"/>
-     </filter>
-     </defs>
-     """.trimIndent()
+        <defs>
+            <symbol id="bullet-dot" viewBox="0 0 10 10">
+                <circle cx="5" cy="5" r="2" fill="currentColor"/>
+            </symbol>
+            <symbol id="bullet-chevron" viewBox="0 0 10 10">
+                <path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </symbol>
+            <symbol id="bullet-plus" viewBox="0 0 10 10">
+                <path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/>
+            </symbol>
+            <symbol id="bullet-dash" viewBox="0 0 10 10">
+                <path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/>
+            </symbol>
+        </defs>
+    """.trimIndent()
     }
+
+    fun renderTextWithBullets(text: String, x: Float, y: Float, urlMap: MutableMap<String, String>, lineHeight: Float = 20f): String {
+        val lines = text.split("\n")
+        val result = StringBuilder()
+        var currentY = y
+
+        lines.forEach { line ->
+            when {
+                line.startsWith("[BULLET_DOT]") -> {
+                    val content = line.substring(12)
+                    val wrappedLines = itemTextWidth(content, 240F, 14, "Inter")
+                    val processedLines = linesToUrlIfExist(wrappedLines, urlMap)
+                    processedLines.forEachIndexed { index, wrappedLine ->
+                        if (index == 0) {
+                            result.append("""<use href="#bullet-dot" x="${x}" y="${currentY - 3}" width="8" height="8"/>""")
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        } else {
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        }
+                        currentY += lineHeight
+                    }
+                    currentY -= lineHeight // Adjust since we'll add it again at the end
+                }
+                line.startsWith("[BULLET_CHEVRON]") -> {
+                    val content = line.substring(16)
+                    val wrappedLines = itemTextWidth(content, 240F, 14, "Inter")
+                    val processedLines = linesToUrlIfExist(wrappedLines, urlMap)
+                    processedLines.forEachIndexed { index, wrappedLine ->
+                        if (index == 0) {
+                            result.append("""<use href="#bullet-chevron" x="${x}" y="${currentY - 3}" width="8" height="8"/>""")
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        } else {
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        }
+                        currentY += lineHeight
+                    }
+                    currentY -= lineHeight // Adjust since we'll add it again at the end
+                }
+                line.startsWith("[BULLET_PLUS]") -> {
+                    val content = line.substring(13)
+                    val wrappedLines = itemTextWidth(content, 240F, 14, "Inter")
+                    val processedLines = linesToUrlIfExist(wrappedLines, urlMap)
+                    processedLines.forEachIndexed { index, wrappedLine ->
+                        if (index == 0) {
+                            result.append("""<use href="#bullet-plus" x="${x}" y="${currentY - 3}" width="8" height="8"/>""")
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        } else {
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        }
+                        currentY += lineHeight
+                    }
+                    currentY -= lineHeight // Adjust since we'll add it again at the end
+                }
+                line.startsWith("[BULLET_DASH]") -> {
+                    val content = line.substring(13)
+                    val wrappedLines = itemTextWidth(content, 240F, 14, "Inter")
+                    val processedLines = linesToUrlIfExist(wrappedLines, urlMap)
+                    processedLines.forEachIndexed { index, wrappedLine ->
+                        if (index == 0) {
+                            result.append("""<use href="#bullet-dash" x="${x}" y="${currentY - 3}" width="8" height="8"/>""")
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        } else {
+                            if (wrappedLine.contains("<a xlink:href=")) {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                            } else {
+                                result.append("""<text x="${x + 12}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                            }
+                        }
+                        currentY += lineHeight
+                    }
+                    currentY -= lineHeight // Adjust since we'll add it again at the end
+                }
+                else -> {
+                    val wrappedLines = itemTextWidth(line, 240F, 14, "Inter")
+                    val processedLines = linesToUrlIfExist(wrappedLines, urlMap)
+                    processedLines.forEach { wrappedLine ->
+                        if (wrappedLine.contains("<a xlink:href=")) {
+                            result.append("""<text x="${x}" y="${currentY}" class="content-text">$wrappedLine</text>""")
+                        } else {
+                            result.append("""<text x="${x}" y="${currentY}" class="content-text">${wrappedLine.escapeXml()}</text>""")
+                        }
+                        currentY += lineHeight
+                    }
+                    currentY -= lineHeight // Adjust since we'll add it again at the end
+                }
+            }
+            currentY += lineHeight
+        }
+
+        return result.toString()
+    }
+
+
+
+    // Update the makeHead method to include bullet symbols
+    private fun makeHead(planItems: PlanItems, title: String, grads: String, itemGrad: String, width: Int, height: Int, scale: String): String {
+        return """
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns:xlink="http://www.w3.org/1999/xlink">
+        ${createBulletSymbols()}
+        <defs>
+            ${grads}
+            ${itemGrad}
+            <style>
+                .content-text {
+                    font-family: 'Inter', 'Segoe UI', sans-serif;
+                    font-size: 14px;
+                    fill: #4A5568;
+                }
+                .column-header {
+                    font-family: 'Inter', 'Segoe UI', sans-serif;
+                    font-size: 18px;
+                    font-weight: 600;
+                    fill: white;
+                }
+                .card {
+                    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+                }
+            </style>
+        </defs>
+    """.trimIndent()
+    }
+
     private fun makeEnd() = "</svg>"
 }
 
 fun main() {
     val str = """
-- now Backend Development
+- now Current Tasks
 Learn Node.js and Express
-Master database design with MongoDB
-Implement authentication and authorization
-- next Frontend Frameworks
+* Regular bullet point
+>> Chevron bullet point
+[[https://nodejs.org Node.js Documentation]]
+- next Upcoming Work
 Study React fundamentals
-Build interactive UIs
-State management with Redux
-- later DevOps Skills
+>> Build interactive UIs
+* State management with Redux
+[[https://reactjs.org React Documentation]]
+- later Future Plans
 Docker containerization
-CI/CD pipeline setup
-Cloud deployment (AWS/Azure)
-- done Programming Basics
+>> CI/CD pipeline setup
+* Cloud deployment (AWS/Azure)
+[[https://docker.com Docker Hub]]
+- done Completed Items
 HTML, CSS, JavaScript
-Git version control
-Basic algorithms and data structures
+>> Git version control
+* Basic algorithms and data structures
+[[https://github.com GitHub]]
     """.trimIndent()
     val p = PlannerMaker()
-    val svg =p.makePlannerImage(str, "title", "0.5")
+    val svg =p.makePlannerImage(str, "Enhanced Development Roadmap", "1.0")
     val f = File("gen/plannernew.svg")
     f.writeBytes(svg.toByteArray())
+    println("Generated enhanced planner with larger size, chevron bullets, and wiki links")
 }
