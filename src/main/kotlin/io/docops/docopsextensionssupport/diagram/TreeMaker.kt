@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import java.util.UUID
 import kotlin.math.max
@@ -233,7 +234,7 @@ class TreeMaker {
 
         val id = UUID.randomUUID().toString()
         // Start SVG
-        svgBuilder.append("<svg id='treeChart_$id' width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 $adjustedWidth $adjustedHeight'>")
+        svgBuilder.append("<svg id='treeChart_$id' width='$adjustedWidth' height='$adjustedHeight' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' viewBox='0 0 $adjustedWidth $adjustedHeight'>")
 
         // Add glass effect definitions if enabled
         if (useGlass) {
@@ -427,14 +428,16 @@ class TreeMaker {
                 svgBuilder.append("<circle class='node-circle' r='$nodeRadius' fill='$color' />")
             }
 
-            // Render wrapped text lines
+            // Render wrapped text lines with dynamic color based on node background
             val lineHeight = 12
             val startY = if (wrappedText.size == 1) 0 else -(wrappedText.size - 1) * lineHeight / 2
+            val nodeTextColor = determineTextColor(color)
+            val strokeColor = if (nodeTextColor == "#000000") "#FCFCFC" else "#000000"
 
             wrappedText.forEachIndexed { index, line ->
                 val yOffset = startY + (index * lineHeight)
                 svgBuilder.append("""
-                    <text class='node-label' fill='$textColor' y='$yOffset'>${line.replace("'", "&apos;").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")}</text>
+                    <text class='node-label' fill='$nodeTextColor' stroke='$strokeColor' stroke-width='1' y='$yOffset'>${line.replace("'", "&apos;").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")}</text>
                 """.trimIndent())
             }
 
@@ -502,6 +505,29 @@ class TreeMaker {
                     }
 
                     return lines;
+                }
+
+                function hexToRgb(hex) {
+                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                    return result ? {
+                        r: parseInt(result[1], 16),
+                        g: parseInt(result[2], 16),
+                        b: parseInt(result[3], 16)
+                    } : null;
+                }
+
+                function calculateLuminance(r, g, b) {
+                    const rNorm = r / 255.0;
+                    const gNorm = g / 255.0;
+                    const bNorm = b / 255.0;
+                    return 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
+                }
+
+                function determineTextColor(hexColor) {
+                    const rgb = hexToRgb(hexColor);
+                    if (!rgb) return "#000000";
+                    const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
+                    return luminance < 0.5 ? "#000000" : "#FCFCFC";
                 }
 
                 const treeData = ${serializeTreeToJson(root, colors)};
@@ -687,7 +713,11 @@ class TreeMaker {
                             wrappedLines.forEach((line, index) => {
                                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                                 text.setAttribute("class", "node-label");
-                                text.setAttribute("fill", "$textColor");
+                                const nodeTextColor = determineTextColor(d.color);
+                                const strokeColor = nodeTextColor === "#000000" ? "#FCFCFC" : "#000000";
+                                text.setAttribute("fill", nodeTextColor);
+                                text.setAttribute("stroke", strokeColor);
+                                text.setAttribute("stroke-width", "1");
                                 text.setAttribute("y", startY + (index * lineHeight));
                                 text.textContent = line;
                                 nodeGroup.appendChild(text);
