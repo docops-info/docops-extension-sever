@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>Product Development Roadmap with Semantic Versioning &amp; Release Strategy</title>
+<style>
+:root{--primary-color:#3b82f6;--primary-hover:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--primary-gradient-start:#3b82f6;--primary-gradient-end:#8b5cf6;--secondary-color:#64748b;--secondary-light:#f1f5f9;--secondary-dark:#334155;--text-color:#1e293b;--text-light:#64748b;--text-muted:#94a3b8;--bg-color:#ffffff;--bg-light:#f8fafc;--bg-dark:#0f172a;--border-color:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;--code-bg:#f1f5f9;--code-text:#334155;--code-border:#e2e8f0;--note-bg:#eff6ff;--note-border:#bfdbfe;--note-icon:#3b82f6;--tip-bg:#f0fdf4;--tip-border:#bbf7d0;--tip-icon:#22c55e;--warning-bg:#fff7ed;--warning-border:#fed7aa;--warning-icon:#f97316;--caution-bg:#fef2f2;--caution-border:#fecaca;--caution-icon:#ef4444;--important-bg:#faf5ff;--important-border:#e9d5ff;--important-icon:#8b5cf6;--body-font:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;--heading-font:var(--body-font);--monospace-font:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--shadow-sm:0 1px 2px 0 rgba(0, 0, 0, 0.05);--shadow-md:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--radius-sm:0.25rem;--radius-md:0.375rem;--radius-lg:0.5rem;--content-width:50rem;--content-width-wide:70rem;--theme-transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease}html{font-size:100%;text-size-adjust:100%;box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:var(--body-font);font-size:1rem;line-height:1.7;background-color:var(--bg-color);max-width:var(--content-width);margin:0 auto;padding:var(--spacing-lg) var(--spacing-xl)}h1{font-size:2.5rem;border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm);margin-top:var(--spacing-xl);background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}body,h1,h2,h3,h4,h5{color:var(--text-color)}dl,h1,h2,h3,h4,h5,h6,p{margin-bottom:var(--spacing-lg)}h1,h2,h3,h4,h5,h6{font-family:var(--heading-font);font-weight:700;line-height:1.3;scroll-margin-top:var(--spacing-2xl)}h2,h3,h4,h5,h6{margin-top:var(--spacing-2xl)}h6{font-size:1rem;color:var(--secondary-color)}h2{font-size:2rem}h3{font-size:1.5rem}h4{font-size:1.25rem}h5{font-size:1.125rem}dl,p{margin-top:0}a{color:var(--primary-color);text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:focus,a:hover{color:var(--primary-hover);border-bottom-color:var(--primary-hover)}ol,ul{margin-top:0;margin-bottom:var(--spacing-lg);padding-left:var(--spacing-xl)}li,li>ol,li>p,li>ul{margin-bottom:var(--spacing-sm)}li>ol,li>p,li>ul{margin-top:var(--spacing-sm)}dt{font-weight:700;margin-top:var(--spacing-lg)}dd{margin-left:var(--spacing-xl);margin-bottom:var(--spacing-md)}code,pre{font-family:var(--monospace-font);font-size:.9rem;border-radius:var(--radius-md)}code{background-color:var(--code-bg);color:var(--code-text);padding:var(--spacing-xs) var(--spacing-sm)}pre,table td,table th{padding:var(--spacing-md)}pre,table{margin-bottom:var(--spacing-lg)}pre{margin-top:0;background-color:var(--code-bg);border:1px solid var(--code-border);overflow-x:auto;line-height:1.5}pre code{background-color:transparent;padding:0;border-radius:0}.hljs-comment,.hljs-quote{color:#6a737d;font-style:italic}.hljs-keyword,.hljs-selector-tag{color:#d73a49}.hljs-attr,.hljs-string{color:#032f62}.hljs-literal,.hljs-number{color:#005cc5}.hljs-section,.hljs-selector-id,.hljs-title{color:#6f42c1}.hljs-built_in,.hljs-name,.hljs-tag{color:#22863a}table{width:100%;border-collapse:collapse;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden}table td,table th{text-align:left}table th{font-weight:600;background-color:var(--secondary-light);border-bottom:2px solid var(--border-dark)}table td{border-bottom:1px solid var(--border-color)}table tr:last-child td{border-bottom:none}tbody tr:hover{background-color:var(--secondary-light)}.admonitionblock{margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);border:0;position:relative}.admonitionblock>table{margin-bottom:0;border:0}.admonitionblock td.icon{width:3rem;padding:var(--spacing-md);text-align:center;font-weight:700}.admonitionblock td.icon:before{font-family:"Font Awesome 5 Free";font-weight:900;font-size:1.5rem;display:block;margin-bottom:var(--spacing-xs)}.admonitionblock td.content,blockquote{padding:var(--spacing-md) var(--spacing-lg)}.admonitionblock.note{background-color:var(--note-bg);border-color:var(--note-border)}.admonitionblock.note td.icon{background-color:var(--note-icon);color:#fff}.admonitionblock.note td.icon:before{content:""}.admonitionblock.tip{background-color:var(--tip-bg);border-color:var(--tip-border)}.admonitionblock.tip td.icon{background-color:var(--tip-icon);color:#fff}.admonitionblock.tip td.icon:before{content:""}.admonitionblock.warning{background-color:var(--warning-bg);border-color:var(--warning-border)}.admonitionblock.warning td.icon{background-color:var(--warning-icon);color:#fff}.admonitionblock.warning td.icon:before{content:""}.admonitionblock.caution{background-color:var(--caution-bg);border-color:var(--caution-border)}.admonitionblock.caution td.icon{background-color:var(--caution-icon);color:#fff}.admonitionblock.caution td.icon:before{content:""}.admonitionblock.important{background-color:#fff;border-color:transparent;position:relative}.admonitionblock.important td.icon,.admonitionblock.important::before,.gradient-border-left::before{background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.admonitionblock.important::before,.gradient-border-left::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%}.admonitionblock.important td.icon{color:#fff}.admonitionblock.important td.icon:before{content:""}blockquote{margin:0 0 var(--spacing-lg)0;color:var(--secondary-color);background-color:var(--secondary-light);border-left:4px solid var(--primary-color);border-radius:0 var(--radius-md) var(--radius-md)0}blockquote p:last-child{margin-bottom:0}hr{border:0;height:1px;background-color:var(--border-color);margin:var(--spacing-xl)0}#toc,img{border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}img{max-width:100%;height:auto;margin:var(--spacing-md)0}.hero{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;padding:var(--spacing-2xl) var(--spacing-xl);margin-bottom:var(--spacing-2xl);border-radius:var(--radius-lg);text-align:center}#toc a,.hero h1{border-bottom:none}.hero h1{color:#fff;background-image:none;-webkit-text-fill-color:#fff}.hero p{font-size:1.25rem;max-width:42rem;margin-left:auto;margin-right:auto}#toc{background-color:var(--secondary-light);padding:var(--spacing-lg);margin-bottom:var(--spacing-xl);border:1px solid var(--border-color);position:sticky;top:var(--spacing-lg)}#toc.toc2{position:fixed;left:0;top:0;width:20rem;height:100%;overflow-y:auto;border-radius:0;border-right:1px solid var(--border-color);padding:var(--spacing-xl) var(--spacing-lg);background-color:var(--bg-light);z-index:1000}#toc.toc2 #toctitle,.hero h1{margin-top:0}body.toc2{padding-left:22rem;max-width:none}#toc .title,.sidebarblock>.content>.title{margin-top:0;font-size:1.25rem;color:var(--text-color);margin-bottom:var(--spacing-md)}#toc .title{font-weight:700}#toc ul{list-style-type:none;padding-left:0;margin-bottom:0}#toc li{margin-top:var(--spacing-sm);line-height:1.4}#toc a{display:block;padding:var(--spacing-xs)0;color:var(--text-color)}#toc a:hover{color:var(--primary-color)}#toc ul ul{padding-left:var(--spacing-lg)}#toc ul ul a{font-size:.9rem}#footer{margin-top:var(--spacing-2xl);padding-top:var(--spacing-lg);color:var(--text-muted);font-size:.875rem;border-top:1px solid var(--border-color)}@media print{@page{margin:1.5cm}body,html{font-size:11pt;line-height:1.5;background-color:#fff;color:#000}body{padding:0;max-width:none}a{color:var(--text-color);text-decoration:underline;border-bottom:none}a[href^=http]:after{content:" ("attr(href)")";font-size:.9em;font-weight:400}code,pre{border:1px solid var(--border-color);background-color:#f8f8f8!important}.admonitionblock,h1,h2,h3,h4,h5,h6,img,pre,table{page-break-inside:avoid}h1,h2,h3,h4,h5,h6{page-break-after:avoid;color:#000}img{max-width:100%!important}.admonitionblock,table{border:1px solid #ddd}.admonitionblock,img{box-shadow:none}h1+*,h2+*,h3+*,h4+*,h5+*,h6+*{page-break-before:avoid}#footer,#header,#toc{display:none}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}}@media (max-width:1200px){body.toc2{padding-left:0}#toc.toc2{position:static;width:auto;height:auto;border-right:none;border-radius:var(--radius-md)}}@media (max-width:768px){body{padding:var(--spacing-md);font-size:.95rem}h1{font-size:2rem}h2{font-size:1.6rem}h3{font-size:1.3rem}h4{font-size:1.1rem}code,pre{font-size:.85rem}.admonitionblock td.icon{width:2.5rem}}@media (max-width:480px){body{padding:var(--spacing-sm);font-size:.9rem}h1{font-size:1.8rem}h2{font-size:1.4rem}h3{font-size:1.2rem}.admonitionblock td.icon{width:2rem}.admonitionblock td.content,.admonitionblock td.icon,table td,table th{padding:var(--spacing-sm)}}.listingblock .title{font-style:italic;color:var(--secondary-color);margin-bottom:var(--spacing-sm)}.listingblock pre.highlightjs{padding:0;border-radius:var(--radius-md);overflow:hidden}.listingblock pre.highlightjs>code,.literalblock pre{background-color:var(--code-bg);border:1px solid var(--code-border)}.listingblock pre.highlightjs>code{padding:var(--spacing-md);display:block;overflow-x:auto;line-height:1.5}.literalblock pre{border-radius:var(--radius-md)}.sidebarblock{border:1px solid var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);box-shadow:var(--shadow-sm)}.sidebarblock>.content>.title{border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm)}kbd,mark{border-radius:var(--radius-sm)}.button.secondary:hover,.sidebarblock,kbd{background-color:var(--secondary-light)}.button,kbd{display:inline-block}kbd{padding:var(--spacing-xs) var(--spacing-sm);font-size:.85rem;font-family:var(--monospace-font);border:1px solid var(--border-dark);box-shadow:0 2px 0 var(--border-dark);margin:0 var(--spacing-xs)}.button{padding:var(--spacing-sm) var(--spacing-lg);background-color:var(--primary-color);color:#fff;border-radius:var(--radius-md);font-weight:500;text-align:center;transition:all .2s ease;border-bottom:none;box-shadow:var(--shadow-sm)}.button:hover{background-color:var(--primary-hover);text-decoration:none;color:#fff;box-shadow:var(--shadow-md)}.button.gradient{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.button.secondary{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.button.secondary:hover{color:var(--text-color)}mark{background-color:#fef9c3;padding:var(--spacing-xs)}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.gradient-bg,.gradient-text{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-text{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}.gradient-bg{color:#fff}.gradient-border-left{position:relative;border-left:none;padding-left:var(--spacing-lg)}.gradient-border{border:2px solid transparent;background-clip:padding-box;position:relative}.callout.gradient .callout-title,.gradient-border::before{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-border::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;margin:-2px;border-radius:inherit;z-index:-1}.callout{padding:var(--spacing-md);margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);background-color:var(--primary-light);border-left:4px solid var(--primary-color);box-shadow:var(--shadow-sm)}.callout.gradient{background-color:#fff;border-left:none;border-radius:var(--radius-lg);padding:var(--spacing-lg);box-shadow:var(--shadow-md);position:relative;overflow:hidden}.callout.gradient::before{content:"";position:absolute;top:0;left:0;width:6px;height:100%;background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.callout-title{font-weight:700;margin-top:0;margin-bottom:var(--spacing-sm);color:var(--primary-dark)}.callout.gradient .callout-title{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;display:inline-block}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}:focus{outline:2px solid var(--primary-color);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}.skip-to-content{position:absolute;top:-40px;left:0;background:var(--primary-color);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:100;transition:top .2s ease}.skip-to-content:focus{top:0}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-color:#0f172a;--bg-light:#1e293b;--text-color:#f8fafc;--text-light:#cbd5e1;--text-muted:#94a3b8;--border-color:#334155;--border-light:#1e293b;--border-dark:#475569;--code-bg:#1e293b;--code-text:#e2e8f0;--code-border:#334155;--primary-light:#1e40af;--secondary-light:#1e293b}}#toc,.admonitionblock,.sidebarblock,blockquote,body,code,pre,table{transition:var(--theme-transition)}.theme-toggle{position:fixed;top:65px;right:20px;z-index:1000;background:var(--primary-color);color:#fff;border:0;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease;display:flex;align-items:center;justify-content:center;font-size:1.2rem}.theme-toggle:hover{background:var(--primary-hover);transform:scale(1.1)}.theme-toggle:focus{outline:2px solid var(--primary-color);outline-offset:2px}.theme-toggle .light-icon{display:none}.theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:none}@media (max-width:768px){.theme-toggle{top:15px;right:15px;width:45px;height:45px;font-size:1.1rem}}:root.dark-mode img,:root.dark-mode-auto img{opacity:.9}:root.dark-mode .hero,:root.dark-mode-auto .hero{background-image:linear-gradient(135deg,#1e293b,#334155)}:root.dark-mode a,:root.dark-mode-auto a{color:#60a5fa}:root.dark-mode a:hover,:root.dark-mode-auto a:hover{color:#93c5fd}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+</style>
+
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_product_development_roadmap_with_semantic_versioning_release_strategy">Product Development Roadmap with Semantic Versioning &amp; Release Strategy</a>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_semantic_versioning_strategy">2. Semantic Versioning Strategy</a></li>
+<li><a href="#_product_development_roadmap">3. Product Development Roadmap</a></li>
+<li><a href="#_release_strategy_timeline">4. Release Strategy Timeline</a></li>
+<li><a href="#_version_lifecycle_management">5. Version Lifecycle Management</a></li>
+<li><a href="#_key_versioning_principles">6. Key Versioning Principles</a>
+<ul class="sectlevel2">
+<li><a href="#_semantic_versioning_rules">6.1. Semantic Versioning Rules</a></li>
+<li><a href="#_pre_release_versioning">6.2. Pre-release Versioning</a></li>
+<li><a href="#_version_support_policy">6.3. Version Support Policy</a></li>
+<li><a href="#_migration_strategy">6.4. Migration Strategy</a></li>
+</ul>
+</li>
+<li><a href="#_release_candidate_process">7. Release Candidate Process</a>
+<ul class="sectlevel2">
+<li><a href="#_rc1_feature_complete">7.1. RC1 - Feature Complete</a></li>
+<li><a href="#_rc2_production_ready">7.2. RC2 - Production Ready</a></li>
+<li><a href="#_ga_general_availability">7.3. GA - General Availability</a></li>
+</ul>
+</li>
+<li><a href="#_milestone_planning">8. Milestone Planning</a>
+<ul class="sectlevel2">
+<li><a href="#_development_milestones">8.1. Development Milestones</a></li>
+<li><a href="#_quality_gates">8.2. Quality Gates</a></li>
+<li><a href="#_feedback_loops">8.3. Feedback Loops</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_product_development_roadmap_with_semantic_versioning_release_strategy" class="sect0">Product Development Roadmap with Semantic Versioning &amp; Release Strategy</h1>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This roadmap demonstrates a comprehensive approach to product development using semantic versioning (SemVer) with structured release candidates, milestones, and strategic release planning. The roadmap spans 18 months and shows the evolution from MVP to a mature enterprise platform.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_semantic_versioning_strategy">2. Semantic Versioning Strategy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Our versioning follows semantic versioning principles:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MAJOR.MINOR.PATCH</strong> (e.g., 1.0.0, 2.1.3)</p>
+</li>
+<li>
+<p><strong>Release Candidates</strong>: Version with -RC suffix (e.g., 1.0.0-RC1)</p>
+</li>
+<li>
+<p><strong>Milestones</strong>: Version with -M suffix (e.g., 1.0.0-M1)</p>
+</li>
+<li>
+<p><strong>Alpha/Beta</strong>: Pre-release versions (e.g., 1.0.0-alpha.1, 1.0.0-beta.1)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_product_development_roadmap">3. Product Development Roadmap</h2>
+<div class="sectionbody">
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-683106dc53c215ca" data-theme="light">
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="2800" height="1200" viewBox="0 0 2800 1200"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-12</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><metadata><rdf:rdf xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-08</dc:date></cc:work></rdf:rdf></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="coreGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" /><stop offset="100%" style="stop-color:#2f68c4;stop-opacity:1" /></linearGradient><linearGradient id="securityGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E74C3C;stop-opacity:1" /><stop offset="100%" style="stop-color:#b83c30;stop-opacity:1" /></linearGradient><linearGradient id="performanceGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#10b981;stop-opacity:1" /><stop offset="100%" style="stop-color:#0c9467;stop-opacity:1" /></linearGradient><linearGradient id="integrationGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" /><stop offset="100%" style="stop-color:#c47e08;stop-opacity:1" /></linearGradient><linearGradient id="aiGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#27AE60;stop-opacity:1" /><stop offset="100%" style="stop-color:#1f8b4c;stop-opacity:1" /></linearGradient><linearGradient id="uiGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" /><stop offset="100%" style="stop-color:#0491a9;stop-opacity:1" /></linearGradient><linearGradient id="infrastructureGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#84cc16;stop-opacity:1" /><stop offset="100%" style="stop-color:#69a311;stop-opacity:1" /></linearGradient><linearGradient id="analyticsGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" /><stop offset="100%" style="stop-color:#8644c5;stop-opacity:1" /></linearGradient><linearGradient id="mvpGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#16A085;stop-opacity:1" /><stop offset="100%" style="stop-color:#11806a;stop-opacity:1" /></linearGradient><linearGradient id="enhancementGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#2980B9;stop-opacity:1" /><stop offset="100%" style="stop-color:#206694;stop-opacity:1" /></linearGradient><linearGradient id="stabilityGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#E67E22;stop-opacity:1" /><stop offset="100%" style="stop-color:#b8641b;stop-opacity:1" /></linearGradient><linearGradient id="enterpriseGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#8E44AD;stop-opacity:1" /><stop offset="100%" style="stop-color:#71368a;stop-opacity:1" /></linearGradient><linearGradient id="deprecationGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#95A5A6;stop-opacity:1" /><stop offset="100%" style="stop-color:#778484;stop-opacity:1" /></linearGradient><linearGradient id="milestoneGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#F39C12;stop-opacity:1" /><stop offset="100%" style="stop-color:#c27c0e;stop-opacity:1" /></linearGradient><linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" /><stop offset="100%" style="stop-color:#f8fafc;stop-opacity:1" /></linearGradient><linearGradient id="timelineGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#e5e7eb;stop-opacity:1" /><stop offset="40%" style="stop-color:#3b82f6;stop-opacity:1" /><stop offset="100%" style="stop-color:#e5e7eb;stop-opacity:1" /></linearGradient><filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="6" result="offset" /><feComponentTransfer><feFuncA type="linear" slope="0.2"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="2800" height="1200" fill="url(#bgGradient)"/><text x="50" y="50.0" class="roadmap-title">Product Development Roadmap - Semantic Versioning &amp; Release Strategy</text><text x="50" y="75.0" class="roadmap-subtitle">From MVP to Enterprise Platform (Q1 2025 - Q2 2026)</text><g class="quarters"><text x="300.0" y="120.0" class="quarter-label">Q1 2025</text><text x="750.0" y="120.0" class="quarter-label">Q2 2025</text><text x="1200.0" y="120.0" class="quarter-label">Q3 2025</text><text x="1650.0" y="120.0" class="quarter-label">Q4 2025</text><text x="2100.0" y="120.0" class="quarter-label">Q1 2026</text><text x="2550.0" y="120.0" class="quarter-label">Q2 2026</text></g><line x1="100.0" y1="140.0" x2="2750.0" y2="140.0" stroke="url(#timelineGradient)" stroke-width="4"/><circle cx="300.0" cy="140.0" r="6" fill="#3b82f6"/><circle cx="750.0" cy="140.0" r="6" fill="#3b82f6"/><circle cx="1200.0" cy="140.0" r="6" fill="#3b82f6"/><circle cx="1650.0" cy="140.0" r="6" fill="#3b82f6"/><circle cx="2100.0" cy="140.0" r="6" fill="#3b82f6"/><circle cx="2550.0" cy="140.0" r="6" fill="#3b82f6"/><g class="feature-card completed" transform="translate(120.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#16A085"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#16A085"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">MVP Foundation</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Core API</tspan><tspan x="15" dy="16">v1.0.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date completed">Released: Jan 15</text><circle cx="135" cy="25" r="6" fill="#10b981"/><path d="M 132 23 L 134 25 L 138 21" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: MVP Foundation</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card completed" transform="translate(120.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#16A085"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#16A085"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">MVP Foundation</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Authentication</tspan><tspan x="15" dy="16">v1.0.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date completed">Released: Jan 30</text><circle cx="135" cy="25" r="6" fill="#10b981"/><path d="M 132 23 L 134 25 L 138 21" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: MVP Foundation</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card completed" transform="translate(120.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#16A085"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#16A085"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">MVP Foundation</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Data Models</tspan><tspan x="15" dy="16">v1.0.0-M3</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date completed">Released: Feb 15</text><circle cx="135" cy="25" r="6" fill="#10b981"/><path d="M 132 23 L 134 25 L 138 21" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: MVP Foundation</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card current" transform="translate(120.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">MVP Release</tspan><tspan x="15" dy="16">v1.0.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date current">In Progress</text><circle cx="135" cy="25" r="8" fill="#3b82f6" filter="url(#glow)"/><circle cx="135" cy="25" r="4" fill="#ffffff"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card current" transform="translate(320.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">MVP Release</tspan><tspan x="15" dy="16">v1.0.0-RC2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date current">In Progress</text><circle cx="135" cy="25" r="8" fill="#3b82f6" filter="url(#glow)"/><circle cx="135" cy="25" r="4" fill="#ffffff"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(320.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">MVP Release</tspan><tspan x="15" dy="16">v1.0.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Mar 31</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(570.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Payment System</tspan><tspan x="15" dy="16">v1.1.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Apr 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(570.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Notification</tspan><tspan x="15" dy="16">System</tspan><tspan x="15" dy="16">v1.1.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Apr 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(570.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Enhanced</tspan><tspan x="15" dy="16">Features</tspan><tspan x="15" dy="16">v1.1.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: May 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(570.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Enhanced</tspan><tspan x="15" dy="16">Features v1.1.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: May 31</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(770.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E67E22"/><circle cx="20" cy="25" r="8" fill="#E67E22"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Stability &amp;</tspan><tspan x="35" dy="12">Performance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Performance</tspan><tspan x="15" dy="16">Optimization</tspan><tspan x="15" dy="16">v1.1.1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Jun 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Stability & Performance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(770.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E67E22"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#E67E22"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Stability &amp;</tspan><tspan x="35" dy="12">Performance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Bug Fixes</tspan><tspan x="15" dy="16">v1.1.2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date planned">Target: Jun 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Stability & Performance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1020.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Advanced Search</tspan><tspan x="15" dy="16">v1.2.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Jul 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1020.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Real-time</tspan><tspan x="15" dy="16">Features</tspan><tspan x="15" dy="16">v1.2.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Jul 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1020.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Analytics</tspan><tspan x="15" dy="16">Dashboard</tspan><tspan x="15" dy="16">v1.2.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Aug 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1020.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Minor Release</tspan><tspan x="15" dy="16">v1.2.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Aug 31</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1220.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E74C3C"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#E74C3C"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Security &amp;</tspan><tspan x="35" dy="12">Compliance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Security</tspan><tspan x="15" dy="16">Patches v1.2.1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date planned">Target: Sep 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Security & Compliance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1220.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E67E22"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#E67E22"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Stability &amp;</tspan><tspan x="35" dy="12">Performance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Performance</tspan><tspan x="15" dy="16">Patches v1.2.2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date planned">Target: Sep 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Stability & Performance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1470.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Major</tspan><tspan x="15" dy="16">Architecture</tspan><tspan x="15" dy="16">v2.0.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Oct 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1470.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#8E44AD"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#8E44AD"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Enterprise</tspan><tspan x="35" dy="12">Features</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">API Gateway</tspan><tspan x="15" dy="16">v2.0.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Oct 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Enterprise Features</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1470.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#8E44AD"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#8E44AD"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Enterprise</tspan><tspan x="35" dy="12">Features</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Multi-tenant</tspan><tspan x="15" dy="16">Support</tspan><tspan x="15" dy="16">v2.0.0-M3</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Nov 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Enterprise Features</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1470.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Major Release</tspan><tspan x="15" dy="16">v2.0.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date planned">Target: Nov 30</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1670.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#95A5A6"/><circle cx="20" cy="25" r="8" fill="#95A5A6"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Deprecation &amp;</tspan><tspan x="35" dy="12">EOL</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">v1.0.x</tspan><tspan x="15" dy="16">Deprecation</tspan><tspan x="15" dy="16">Notice</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date planned">Target: Dec 01</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Deprecation & EOL</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1670.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Major Release</tspan><tspan x="15" dy="16">v2.0.0-RC2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Dec 15</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card planned" transform="translate(1670.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Major Release</tspan><tspan x="15" dy="16">v2.0.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date planned">Target: Dec 31</text><circle cx="135" cy="25" r="6" fill="#d1d5db"/><circle cx="135" cy="25" r="3" fill="#9ca3af"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(1920.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#8E44AD"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#8E44AD"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Enterprise</tspan><tspan x="35" dy="12">Features</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Enterprise SSO</tspan><tspan x="15" dy="16">v2.1.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date future">Target: Jan 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Enterprise Features</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(1920.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#27AE60"/><circle cx="20" cy="25" r="8" fill="#27AE60"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">AI/ML</tspan><tspan x="35" dy="12">Integration</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Advanced</tspan><tspan x="15" dy="16">Analytics</tspan><tspan x="15" dy="16">v2.1.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date future">Target: Jan 30</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: AI/ML Integration</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(1920.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#27AE60"/><circle cx="20" cy="25" r="8" fill="#27AE60"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">AI/ML</tspan><tspan x="35" dy="12">Integration</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">ML Integration</tspan><tspan x="15" dy="16">v2.1.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date future">Target: Feb 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: AI/ML Integration</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(1920.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#8E44AD"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#8E44AD"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Enterprise</tspan><tspan x="35" dy="12">Features</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Enterprise</tspan><tspan x="15" dy="16">Features v2.1.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date future">Target: Feb 28</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Enterprise Features</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2120.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E74C3C"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#E74C3C"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Security &amp;</tspan><tspan x="35" dy="12">Compliance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Security Audit</tspan><tspan x="15" dy="16">v2.1.1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date future">Target: Mar 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Security & Compliance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2120.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#95A5A6"/><circle cx="20" cy="25" r="8" fill="#95A5A6"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Deprecation &amp;</tspan><tspan x="35" dy="12">EOL</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">v1.1.x End of</tspan><tspan x="15" dy="16">Life</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date future">Target: Mar 31</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Deprecation & EOL</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2370.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#27AE60"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#27AE60"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">AI/ML</tspan><tspan x="35" dy="12">Integration</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">AI Platform</tspan><tspan x="15" dy="16">v2.2.0-M1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date future">Target: Apr 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: AI/ML Integration</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2370.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E74C3C"/><polygon points="0,8 0,24 16,8" fill="#f97316"/><text x="6" y="18" class="priority-badge">H</text><circle cx="20" cy="25" r="8" fill="#E74C3C"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Security &amp;</tspan><tspan x="35" dy="12">Compliance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Quantum</tspan><tspan x="15" dy="16">Security</tspan><tspan x="15" dy="16">v2.2.0-M2</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date future">Target: Apr 30</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: HIGH</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Security & Compliance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2370.0, 460.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#2980B9"/><circle cx="20" cy="25" r="8" fill="#2980B9"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Feature</tspan><tspan x="35" dy="12">Enhancement</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Edge Computing</tspan><tspan x="15" dy="16">v2.2.0-RC1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f97316"/><text x="20" y="105" class="effort-badge">L</text><text x="40" y="112" class="release-date future">Target: May 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: LARGE</tspan><tspan x="0" dy="12">Category: Feature Enhancement</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2370.0, 600.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#F39C12"/><polygon points="0,8 0,24 16,8" fill="#ef4444"/><text x="6" y="18" class="priority-badge">!</text><circle cx="20" cy="25" r="8" fill="#F39C12"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Major Milestone</tspan></text><text x="15" y="50" class="feature-title"><tspan x="15" dy="0">Next-Gen</tspan><tspan x="15" dy="16">Platform v2.2.0</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date future">Target: May 31</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: CRITICAL</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Major Milestone</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2570.0, 180.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#E67E22"/><circle cx="20" cy="25" r="8" fill="#E67E22"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Stability &amp;</tspan><tspan x="35" dy="12">Performance</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">Legacy</tspan><tspan x="15" dy="16">Migration</tspan><tspan x="15" dy="16">v2.2.1</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#f59e0b"/><text x="20" y="105" class="effort-badge">M</text><text x="40" y="112" class="release-date future">Target: Jun 15</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: MEDIUM</tspan><tspan x="0" dy="12">Category: Stability & Performance</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="feature-card future" transform="translate(2570.0, 320.0)"><rect x="0" y="0" width="160" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><rect x="0" y="0" width="160" height="8" rx="12" fill="#95A5A6"/><circle cx="20" cy="25" r="8" fill="#95A5A6"/><text x="35" y="30" class="feature-category"><tspan x="35" dy="0">Deprecation &amp;</tspan><tspan x="35" dy="12">EOL</tspan></text><text x="15" y="62" class="feature-title"><tspan x="15" dy="0">v1.2.x End of</tspan><tspan x="15" dy="16">Life</tspan></text><rect x="10" y="95" width="20" height="15" rx="3" fill="#10b981"/><text x="20" y="105" class="effort-badge">S</text><text x="40" y="112" class="release-date future">Target: Jun 30</text><circle cx="135" cy="25" r="6" fill="#f3f4f6"/><circle cx="135" cy="25" r="3" fill="#d1d5db"/><g class="tooltip" opacity="0"><rect x="-10" y="-40" width="200" height="80" rx="8" fill="#1f2937" stroke="#374151" stroke-width="1"/><text x="0" y="-25" class="tooltip-text"><tspan x="0" dy="0">Priority: MEDIUM</tspan><tspan x="0" dy="12">Effort: SMALL</tspan><tspan x="0" dy="12">Category: Deprecation & EOL</tspan><tspan x="0" dy="12">No dependencies</tspan></text></g></g><g class="legend" transform="translate(50, 1050)"><rect x="0" y="0" width="2700" height="120" rx="12" fill="#ffffff" filter="url(#cardShadow)"/><text x="20" y="25" class="legend-title">Feature Categories & Status</text><g class="categories" transform="translate(20, 40)"><circle cx="0" cy="0" r="6" fill="#3b82f6"/><text x="15" y="5" class="legend-text">Core API</text><circle cx="104" cy="0" r="6" fill="#E74C3C"/><text x="119" y="5" class="legend-text">Security &amp; Compliance</text><circle cx="312" cy="0" r="6" fill="#10b981"/><text x="327" y="5" class="legend-text">Performance</text><circle cx="440" cy="0" r="6" fill="#f59e0b"/><text x="455" y="5" class="legend-text">Integration</text><circle cx="568" cy="0" r="6" fill="#27AE60"/><text x="583" y="5" class="legend-text">AI/ML Integration</text><circle cx="744" cy="0" r="6" fill="#06b6d4"/><text x="759" y="5" class="legend-text">UI/UX</text><circle cx="824" cy="0" r="6" fill="#84cc16"/><text x="839" y="5" class="legend-text">Infrastructure</text><circle cx="976" cy="0" r="6" fill="#a855f7"/><text x="991" y="5" class="legend-text">Analytics</text><circle cx="1088" cy="0" r="6" fill="#16A085"/><text x="1103" y="5" class="legend-text">MVP Foundation</text><circle cx="1240" cy="0" r="6" fill="#2980B9"/><text x="1255" y="5" class="legend-text">Feature Enhancement</text><circle cx="1432" cy="0" r="6" fill="#E67E22"/><text x="1447" y="5" class="legend-text">Stability &amp; Performance</text><circle cx="1656" cy="0" r="6" fill="#8E44AD"/><text x="1671" y="5" class="legend-text">Enterprise Features</text><circle cx="1848" cy="0" r="6" fill="#95A5A6"/><text x="1863" y="5" class="legend-text">Deprecation &amp; EOL</text><circle cx="2024" cy="0" r="6" fill="#F39C12"/><text x="2039" y="5" class="legend-text">Major Milestone</text></g><g class="status" transform="translate(20, 70)"><circle cx="0" cy="0" r="6" fill="#10b981"/><path d="M -3 -1 L -1 1 L 3 -3" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/><text x="15" y="5" class="legend-text">Completed</text><circle cx="120" cy="0" r="8" fill="#3b82f6"/><circle cx="120" cy="0" r="4" fill="#ffffff"/><text x="135" y="5" class="legend-text">In Progress</text><circle cx="240" cy="0" r="6" fill="#d1d5db"/><circle cx="240" cy="0" r="3" fill="#9ca3af"/><text x="255" y="5" class="legend-text">Planned</text><circle cx="340" cy="0" r="6" fill="#f3f4f6"/><circle cx="340" cy="0" r="3" fill="#d1d5db"/><text x="355" y="5" class="legend-text">Future</text></g></g><style><![CDATA[ .roadmap-title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 32.0px; font-weight: 700; fill: #1f2937; text-anchor: start; } .roadmap-subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16.0px; font-weight: 400; fill: #6b7280; text-anchor: start; } .quarter-label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16.0px; font-weight: 600; fill: #374151; text-anchor: middle; } .feature-category { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.0px; font-weight: 600; fill: #6b7280; text-anchor: start; text-transform: uppercase; letter-spacing: 0.5px; } .priority-badge { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8.0px; font-weight: 700; fill: #ffffff; text-anchor: middle; } .assignee-initials { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.0px; font-weight: 600; fill: #4b5563; text-anchor: middle; } .dependency-count { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8.0px; font-weight: 700; fill: #ffffff; text-anchor: middle; } .effort-badge { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.0px; font-weight: 700; fill: #ffffff; text-anchor: middle; } .feature-title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14.0px; font-weight: 600; fill: #1f2937; text-anchor: start; } .feature-description { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11.0px; font-weight: 400; fill: #6b7280; text-anchor: start; } .release-date { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 9.0px; font-weight: 500; fill: #9ca3af; text-anchor: start; } .release-date.current { fill: #3b82f6; font-weight: 600; } .release-date.planned { fill: #f59e0b; } .release-date.future { fill: #d1d5db; } .tooltip { pointer-events: none; transition: opacity 0.2s ease; } .tooltip-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10.0px; font-weight: 500; fill: #ffffff; text-anchor: start; } .legend-title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16.0px; font-weight: 600; fill: #1f2937; text-anchor: start; } .legend-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12.0px; font-weight: 400; fill: #6b7280; text-anchor: start; } .feature-card { cursor: pointer; } .feature-card rect:first-child { transition: all 0.3s ease; } .feature-card:hover rect:first-child { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2)); transform: translateY(-3px); } .feature-card:hover .tooltip { opacity: 1; } .feature-card.current circle:nth-child(7) { animation: pulse 2s infinite; } @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.1); } } ]]></style></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-683106dc53c215ca')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-683106dc53c215ca">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-683106dc53c215ca')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-683106dc53c215ca')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-683106dc53c215ca')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-683106dc53c215ca')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-683106dc53c215ca')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-683106dc53c215ca')" title="Copy as PNG">📋 PNG</button>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_release_strategy_timeline">4. Release Strategy Timeline</h2>
+<div class="sectionbody">
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-d991bb71701e33ce" data-theme="light">
+<svg width="3660.0" height="300.0" viewBox="0 0 3660.0 300.0" xmlns="http://www.w3.org/2000/svg"xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-12</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>https://docops.io/extension</desc><title>Semantic Versioning Release Strategy</title><defs><linearGradient id="gradientM_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#007AFF;stop-opacity:0.8" /></linearGradient><linearGradient id="gradientR_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#34C759;stop-opacity:0.8" /></linearGradient><linearGradient id="gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#AF52DE;stop-opacity:1" /><stop offset="100%" style="stop-color:#AF52DE;stop-opacity:0.8" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>#ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .release-card { transition: filter 0.3s ease; cursor: pointer; } #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .release-card:hover { filter: url(#glowEffect); } #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .milestone-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; text-rendering: optimizeLegibility; pointer-events: none; } #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .detail-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; line-height: 1.4; pointer-events: none; } #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .date-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 11px; font-weight: normal; pointer-events: none; } #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 .goal-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12px; font-weight: bold; line-height: 1.3; pointer-events: none; } /* Prevent text selection and ensure stable positioning */ #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 text { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; } /* Maintain stable positioning */ #ID3fe1ddeb-9ea7-4701-b988-28cb72f56ae5 g { transform-box: fill-box; }</style><rect width="3660.0" height="300.0" fill="#f8f9fa"/><text x="1830.0" y="30" fill="#000000" text-anchor="middle" font-size="18px" font-family="Arial, Helvetica, sans-serif" class="milestone-text">Semantic Versioning Release Strategy</text><g transform="translate(20.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q1 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">M1</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">MVP Foundation Milestones</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v1.0.0-M1: Core API foundation</tspan><tspan x="20.0" dy="12">&#187; v1.0.0-M2: Authentication system</tspan><tspan x="20.0" dy="12">&#187; v1.0.0-M3: Data models and validation</tspan><tspan x="20.0" dy="12">&#187; Iterative development with feedback loops</tspan></text></g><g transform="translate(540.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientR_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientR_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q1 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">RC1</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">MVP Release Candidates</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v1.0.0-RC1: Feature complete candidate</tspan><tspan x="20.0" dy="12">&#187; v1.0.0-RC2: Bug fixes and stability</tspan><tspan x="20.0" dy="12">&#187; Production readiness validation</tspan><tspan x="20.0" dy="12">&#187; Performance and security testing</tspan></text></g><g transform="translate(1060.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q1 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">General Availability</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v1.0.0: Production release</tspan><tspan x="20.0" dy="12">&#187; Full documentation and support</tspan><tspan x="20.0" dy="12">&#187; Customer onboarding ready</tspan><tspan x="20.0" dy="12">&#187; 24/7 support activation</tspan></text></g><g transform="translate(1580.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q2 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">Feature Enhancement Series</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v1.1.0: Payment and notification features</tspan><tspan x="20.0" dy="12">&#187; v1.1.1: Performance optimizations</tspan><tspan x="20.0" dy="12">&#187; v1.1.2: Critical bug fixes</tspan><tspan x="20.0" dy="12">&#187; Backward compatibility maintained</tspan></text></g><g transform="translate(2100.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q3 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">Advanced Features Series</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v1.2.0: Analytics and real-time features</tspan><tspan x="20.0" dy="12">&#187; v1.2.1: Security vulnerability patches</tspan><tspan x="20.0" dy="12">&#187; v1.2.2: Performance improvements</tspan><tspan x="20.0" dy="12">&#187; Extended feature set for enterprise readiness</tspan></text></g><g transform="translate(2620.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Q4 2025</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">Major Architecture Release</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v2.0.0-M1: Architecture redesign</tspan><tspan x="20.0" dy="12">&#187; v2.0.0-M2: API gateway integration</tspan><tspan x="20.0" dy="12">&#187; v2.0.0-M3: Multi-tenant support</tspan><tspan x="20.0" dy="12">&#187; v2.0.0-RC1/RC2: Release candidates</tspan><tspan x="20.0" dy="12">&#187; v2.0.0: Breaking changes and new architecture</tspan></text></g><g transform="translate(3140.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_3fe1ddeb-9ea7-4701-b988-28cb72f56ae5)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">2026</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#fcfcfc"><tspan x="20.0" dy="0">Enterprise &amp; AI Platform</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#fcfcfc"><tspan x="20.0" dy="0">&#187; v2.1.0: Enterprise SSO and advanced analytics</tspan><tspan x="20.0" dy="12">&#187; v2.2.0: AI platform and quantum security</tspan><tspan x="20.0" dy="12">&#187; Continuous innovation and market leadership</tspan><tspan x="20.0" dy="12">&#187; Legacy version deprecation management</tspan></text></g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-d991bb71701e33ce')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-d991bb71701e33ce">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-d991bb71701e33ce')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-d991bb71701e33ce')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-d991bb71701e33ce')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-d991bb71701e33ce')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-d991bb71701e33ce')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-d991bb71701e33ce')" title="Copy as PNG">📋 PNG</button>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_lifecycle_management">5. Version Lifecycle Management</h2>
+<div class="sectionbody">
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-2ec0f81032abf74b" data-theme="light">
+<svg width="1680.0" height="240.0" viewBox="0 0 2100.0 300.0" xmlns="http://www.w3.org/2000/svg"xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="IDbaf44276-875b-4477-b751-e5ed66170b15"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-12</dc:date></cc:Work></rdf:RDF></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>https://docops.io/extension</desc><title>Version Lifecycle &amp; Deprecation Strategy</title><defs><linearGradient id="gradientM_baf44276-875b-4477-b751-e5ed66170b15" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10b981;stop-opacity:1" /><stop offset="100%" style="stop-color:#10b981;stop-opacity:0.8" /></linearGradient><linearGradient id="gradientR_baf44276-875b-4477-b751-e5ed66170b15" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" /><stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.8" /></linearGradient><linearGradient id="gradientG_baf44276-875b-4477-b751-e5ed66170b15" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" /><stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.8" /></linearGradient><linearGradient id="gradient3_baf44276-875b-4477-b751-e5ed66170b15" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6b7280;stop-opacity:1" /><stop offset="100%" style="stop-color:#6b7280;stop-opacity:0.8" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>#IDbaf44276-875b-4477-b751-e5ed66170b15 .release-card { transition: filter 0.3s ease; cursor: pointer; } #IDbaf44276-875b-4477-b751-e5ed66170b15 .release-card:hover { filter: url(#glowEffect); } #IDbaf44276-875b-4477-b751-e5ed66170b15 .milestone-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; text-rendering: optimizeLegibility; pointer-events: none; } #IDbaf44276-875b-4477-b751-e5ed66170b15 .detail-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; line-height: 1.4; pointer-events: none; } #IDbaf44276-875b-4477-b751-e5ed66170b15 .date-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 11px; font-weight: normal; pointer-events: none; } #IDbaf44276-875b-4477-b751-e5ed66170b15 .goal-text { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12px; font-weight: bold; line-height: 1.3; pointer-events: none; } /* Prevent text selection and ensure stable positioning */ #IDbaf44276-875b-4477-b751-e5ed66170b15 text { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; } /* Maintain stable positioning */ #IDbaf44276-875b-4477-b751-e5ed66170b15 g { transform-box: fill-box; }</style><rect width="2100.0" height="300.0" fill="#f8f9fa"/><text x="1050.0" y="30" fill="#000000" text-anchor="middle" font-size="18px" font-family="Arial, Helvetica, sans-serif" class="milestone-text">Version Lifecycle &amp; Deprecation Strategy</text><g transform="translate(20.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">Current</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#e2e8f0"><tspan x="20.0" dy="0">Active Development</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#e2e8f0"><tspan x="20.0" dy="0">&#187; v2.2.x: Latest features and improvements</tspan><tspan x="20.0" dy="12">&#187; v2.1.x: Maintenance and security updates</tspan><tspan x="20.0" dy="12">&#187; Full support and new feature development</tspan><tspan x="20.0" dy="12">&#187; Regular minor and patch releases</tspan></text></g><g transform="translate(540.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">6 months</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#e2e8f0"><tspan x="20.0" dy="0">Maintenance Mode</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#e2e8f0"><tspan x="20.0" dy="0">&#187; v2.0.x: Security patches only</tspan><tspan x="20.0" dy="12">&#187; v1.2.x: Critical bug fixes</tspan><tspan x="20.0" dy="12">&#187; Limited support for existing customers</tspan><tspan x="20.0" dy="12">&#187; Migration assistance available</tspan></text></g><g transform="translate(1060.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">12 months</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#e2e8f0"><tspan x="20.0" dy="0">Deprecation Phase</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#e2e8f0"><tspan x="20.0" dy="0">&#187; v1.1.x: Deprecated but supported</tspan><tspan x="20.0" dy="12">&#187; v1.0.x: End-of-life announced</tspan><tspan x="20.0" dy="12">&#187; Migration tools and documentation</tspan><tspan x="20.0" dy="12">&#187; Customer communication and support</tspan></text></g><g transform="translate(1580.0,60.0)" class="release-card"><!-- Card background --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1" filter="url(#dropShadow)"/><!-- Arrow triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_baf44276-875b-4477-b751-e5ed66170b15)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/><!-- Date text --><text x="200.0" y="-10" fill="#111111" text-anchor="middle" class="date-text">18 months</text><!-- Release type --><text x="450.0" y="108.0" fill="white" text-anchor="middle" font-size="24px" class="milestone-text">GA</text><!-- Completed check --><!-- Goal text (wrapped, extends closer to completed icon) --><text x="20.0" y="25.0" class="goal-text" fill="#e2e8f0"><tspan x="20.0" dy="0">End of Life</tspan></text><!-- Detail lines (wrapped, positioned below goal) --><text x="20.0" y="65.0" class="detail-text" fill="#e2e8f0"><tspan x="20.0" dy="0">&#187; v1.0.x: No longer supported</tspan><tspan x="20.0" dy="12">&#187; Security vulnerabilities not patched</tspan><tspan x="20.0" dy="12">&#187; Final migration deadline</tspan><tspan x="20.0" dy="12">&#187; Legacy system removal</tspan></text></g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-2ec0f81032abf74b')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-2ec0f81032abf74b">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-2ec0f81032abf74b')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-2ec0f81032abf74b')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-2ec0f81032abf74b')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-2ec0f81032abf74b')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-2ec0f81032abf74b')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-2ec0f81032abf74b')" title="Copy as PNG">📋 PNG</button>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_versioning_principles">6. Key Versioning Principles</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_semantic_versioning_rules">6.1. Semantic Versioning Rules</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>MAJOR version</strong> (X.y.z): Incompatible API changes</p>
+</li>
+<li>
+<p><strong>MINOR version</strong> (x.Y.z): Backward-compatible functionality additions</p>
+</li>
+<li>
+<p><strong>PATCH version</strong> (x.y.Z): Backward-compatible bug fixes</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pre_release_versioning">6.2. Pre-release Versioning</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Milestones (-M1, -M2, -M3)</strong>: Development milestones with specific feature sets</p>
+</li>
+<li>
+<p><strong>Release Candidates (-RC1, -RC2)</strong>: Feature-complete versions ready for testing</p>
+</li>
+<li>
+<p><strong>Alpha/Beta</strong>: Early testing versions for internal/external feedback</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_support_policy">6.3. Version Support Policy</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Active</strong>: Latest major.minor version receives all updates</p>
+</li>
+<li>
+<p><strong>Maintenance</strong>: Previous major.minor versions receive security updates for 12 months</p>
+</li>
+<li>
+<p><strong>Deprecated</strong>: Older versions receive critical security patches for 6 months</p>
+</li>
+<li>
+<p><strong>End-of-Life</strong>: No support, users must migrate to supported versions</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_migration_strategy">6.4. Migration Strategy</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Major Version Upgrades</strong>: 6-month migration window with tools and support</p>
+</li>
+<li>
+<p><strong>Breaking Changes</strong>: Comprehensive documentation and automated migration tools</p>
+</li>
+<li>
+<p><strong>Deprecation Notices</strong>: 12-month advance notice for major breaking changes</p>
+</li>
+<li>
+<p><strong>Support Overlap</strong>: Minimum 6-month support overlap between major versions</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_release_candidate_process">7. Release Candidate Process</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_rc1_feature_complete">7.1. RC1 - Feature Complete</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>All planned features implemented</p>
+</li>
+<li>
+<p>Internal testing completed</p>
+</li>
+<li>
+<p>API documentation finalized</p>
+</li>
+<li>
+<p>Performance benchmarks met</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rc2_production_ready">7.2. RC2 - Production Ready</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Community feedback incorporated</p>
+</li>
+<li>
+<p>Security audit completed</p>
+</li>
+<li>
+<p>Load testing validated</p>
+</li>
+<li>
+<p>Deployment procedures tested</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ga_general_availability">7.3. GA - General Availability</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Final quality assurance passed</p>
+</li>
+<li>
+<p>Support documentation ready</p>
+</li>
+<li>
+<p>Customer success team trained</p>
+</li>
+<li>
+<p>Monitoring and alerting configured</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_milestone_planning">8. Milestone Planning</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_development_milestones">8.1. Development Milestones</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>M1</strong>: Core functionality foundation</p>
+</li>
+<li>
+<p><strong>M2</strong>: Integration and connectivity features</p>
+</li>
+<li>
+<p><strong>M3</strong>: Advanced features and optimization</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quality_gates">8.2. Quality Gates</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Code coverage &gt; 85%</p>
+</li>
+<li>
+<p>Performance benchmarks met</p>
+</li>
+<li>
+<p>Security scan passed</p>
+</li>
+<li>
+<p>Documentation complete</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_feedback_loops">8.3. Feedback Loops</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Weekly milestone reviews</p>
+</li>
+<li>
+<p>Community feedback integration</p>
+</li>
+<li>
+<p>Customer advisory board input</p>
+</li>
+<li>
+<p>Internal dogfooding results</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This roadmap provides a comprehensive approach to product development with semantic versioning, ensuring predictable releases, clear migration paths, and sustainable long-term maintenance of multiple product versions.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #657786;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .reading-time {
+        background: rgba(32, 35, 42, 0.95);
+        border-color: #444;
+        color: #8899a6;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .reading-time {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .reading-time {
+        display: none;
+    }
+}
+</style>
+<div class="reading-time">
+    <p>📖 4 min read • 1338 words</p>
+</div>
+</body>
+</html>
