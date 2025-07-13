@@ -158,43 +158,71 @@ class LineChartImproved {
         val id = UUID.randomUUID().toString()
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
-        // Add background if in dark mode
-        if (darkMode) {
-            svgBuilder.append("<rect width='$width' height='$height' fill='$backgroundColor' />")
-        }
 
-        // Add CSS styles for hover effects if enabled
-        if (enableHoverEffects) {
-            svgBuilder.append("""
-                <style>
-                    .line-path {
-                        transition: stroke-width 0.2s;
-                    }
-                    .line-path:hover {
-                        stroke-width: 4;
-                    }
-                    .data-point {
-                        transition: r 0.2s;
-                    }
-                    .data-point:hover {
-                        r: 8;
-                        cursor: pointer;
-                    }
-                    .legend-item:hover {
-                        cursor: pointer;
-                    }
-                    .legend-item:hover rect {
-                        stroke-width: 2;
-                    }
-                    .legend-item:hover text {
-                        font-weight: bold;
-                    }
-                </style>
-            """.trimIndent())
-        }
 
-        // Add title
-        svgBuilder.append("<text x='${width/2}' y='25' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' fill='$textColor'>$title</text>")
+        // Add responsive CSS that adapts to system color scheme
+        svgBuilder.append("""
+        <style>
+            <![CDATA[
+            /* Default light mode colors */
+            .chart-text { fill: #000000; }
+            .chart-grid { stroke: #e0e0e0; }
+            .chart-axis { stroke: #000000; }
+            .chart-background { fill: transparent; }
+            .chart-point-stroke { stroke: white; }
+            
+            /* Dark mode colors - automatically applied when system prefers dark */
+            @media (prefers-color-scheme: dark) {
+                .chart-text { fill: #f8fafc; }
+                .chart-grid { stroke: #334155; }
+                .chart-axis { stroke: #cbd5e1; }
+                .chart-background { fill: #1e293b; }
+                .chart-point-stroke { stroke: #1e293b; }
+            }
+            
+            /* Explicit dark mode override for when darkMode config is true */
+            ${if (darkMode) """
+                .chart-text { fill: #f8fafc !important; }
+                .chart-grid { stroke: #334155 !important; }
+                .chart-axis { stroke: #cbd5e1 !important; }
+                .chart-background { fill: #1e293b !important; }
+                .chart-point-stroke { stroke: #1e293b !important; }
+            """ else ""}
+            
+            /* Hover effects */
+            ${if (enableHoverEffects) """
+                .line-path {
+                    transition: stroke-width 0.2s;
+                }
+                .line-path:hover {
+                    stroke-width: 4;
+                }
+                .data-point {
+                    transition: r 0.2s;
+                }
+                .data-point:hover {
+                    r: 8;
+                    cursor: pointer;
+                }
+                .legend-item:hover {
+                    cursor: pointer;
+                }
+                .legend-item:hover rect {
+                    stroke-width: 2;
+                }
+                .legend-item:hover text {
+                    font-weight: bold;
+                }
+            """ else ""}
+            ]]>
+        </style>
+    """.trimIndent())
+
+// Add background using CSS class
+        svgBuilder.append("<rect width='$width' height='$height' class='chart-background' />")
+
+        // Add title using CSS class
+        svgBuilder.append("<text x='${width/2}' y='25' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' class='chart-text'>$title</text>")
 
         // Define chart area
         val chartX = margin

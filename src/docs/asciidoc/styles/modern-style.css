@@ -1009,6 +1009,23 @@ mark {
         --primary-light: #1e40af;
         --secondary-light: #1e293b;
     }
+    /* Add this after the existing dark mode auto section */
+    :root.dark-mode {
+        --bg-color: #0f172a;
+        --bg-light: #1e293b;
+        --text-color: #f8fafc;
+        --text-light: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-light: #1e293b;
+        --border-dark: #475569;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --code-border: #334155;
+        --primary-light: #1e40af;
+        --secondary-light: #1e293b;
+    }
+
 }
 
 
@@ -1105,4 +1122,21 @@ blockquote {
 :root.dark-mode a:hover,
 :root.dark-mode-auto a:hover {
     color: #93c5fd;
+}
+
+:root.dark-mode code,
+:root.dark-mode-auto code {
+    color: var(--code-text);
+    background-color: var(--code-bg);
+}
+
+:root.dark-mode pre,
+:root.dark-mode-auto pre {
+    background-color: var(--code-bg);
+    border-color: var(--code-border);
+}
+
+:root.dark-mode pre code,
+:root.dark-mode-auto pre code {
+    color: var(--code-text);
 }
