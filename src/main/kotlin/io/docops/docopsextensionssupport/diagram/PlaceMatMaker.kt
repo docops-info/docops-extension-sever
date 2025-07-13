@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 
 import io.docops.docopsextensionssupport.svgsupport.textWidth
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.ShapeResponse
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -444,6 +445,24 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         return sb.toString()
     }
 }
+
+/**
+ * Convert PlaceMatRequest to basic CsvResponse
+ */
+fun PlaceMatRequest.toCsv(): CsvResponse {
+    val headers = listOf("Name", "Legend", "Style")
+
+    val rows = this.placeMats.map { placeMat ->
+        listOf(
+            placeMat.name,
+            placeMat.legend,
+            placeMat.style
+        )
+    }
+
+    return CsvResponse(headers, rows)
+}
+
 
 fun main() {
     val pmRequest = Json.decodeFromString<PlaceMatRequest>("""

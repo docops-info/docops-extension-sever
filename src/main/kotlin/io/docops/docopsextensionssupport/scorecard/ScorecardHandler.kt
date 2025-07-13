@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -74,5 +76,11 @@ class ScorecardHandler : DocOpsHandler{
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.backend)
+    }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val parser = ScoreCardParser()
+        val migrationScorecard = parser.parse(request.content)
+        return migrationScorecard.toCsv()
     }
 }

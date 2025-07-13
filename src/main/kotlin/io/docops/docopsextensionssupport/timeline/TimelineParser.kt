@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.timeline
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import java.util.*
 
 /**
@@ -94,6 +95,21 @@ class TimelineParser {
         return sb.toString()
     }
 }
+
+fun MutableList<Entry>.toCsv(): CsvResponse {
+    val headers = listOf("Index", "Date", "Text")
+
+    val rows = this.map { entry ->
+        listOf(
+            entry.index.toString(),
+            entry.date,
+            entry.text
+        )
+    }
+
+    return CsvResponse(headers, rows)
+}
+
 
 fun main() {
     val entry = TimelineParser().parse(

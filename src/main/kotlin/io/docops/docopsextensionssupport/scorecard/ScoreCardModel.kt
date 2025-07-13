@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -178,4 +179,24 @@ fun calculateItemsHeight(items: List<InfrastructureItem>): Int {
     height += 30
 
     return height
+}
+
+/**
+ * Convert MigrationScoreCard to basic overview CSV
+ */
+fun MigrationScoreCard.toCsv(): CsvResponse {
+    val headers = listOf("Field", "Value")
+
+    val rows = mutableListOf<List<String>>()
+
+    rows.add(listOf("ID", this.id))
+    rows.add(listOf("Title", this.title))
+    rows.add(listOf("Subtitle", this.subtitle))
+    rows.add(listOf("Header Title", this.headerTitle))
+    rows.add(listOf("Scale", this.scale.toString()))
+    rows.add(listOf("Before Section Title", this.beforeSection.title))
+    rows.add(listOf("After Section Title", this.afterSection.title))
+    rows.add(listOf("Team Members Count", this.teamMembers.size.toString()))
+
+    return CsvResponse(headers, rows)
 }

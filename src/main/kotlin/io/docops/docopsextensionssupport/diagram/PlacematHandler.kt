@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
@@ -23,5 +25,10 @@ class PlacematHandler : DocOpsHandler{
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.type, context.backend)
+    }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val pms = Json.decodeFromString<PlaceMatRequest>(request.content)
+        return pms.toCsv()
     }
 }

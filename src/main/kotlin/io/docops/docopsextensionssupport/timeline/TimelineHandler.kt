@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.timeline
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 
@@ -34,4 +36,8 @@ class TimelineHandler : DocOpsHandler {
         )
     }
 
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val entries = TimelineParser().parse(request.content)
+        return entries.toCsv()
+    }
 }

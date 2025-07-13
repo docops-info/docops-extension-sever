@@ -16,6 +16,7 @@
 
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,4 +29,26 @@ fun FormBadge.labelOrNull() : String? {
     return this.label.ifEmpty {
         null
     }
+}
+
+/**
+ * Convert MutableList<Badge> to basic CSV
+ */
+fun MutableList<Badge>.toCsv(): CsvResponse {
+    val headers = listOf("Label", "Message", "URL", "Label Color", "Message Color", "Logo", "Font Color", "Is PDF")
+
+    val rows = this.map { badge ->
+        listOf(
+            badge.label,
+            badge.message,
+            badge.url ?: "",
+            badge.labelColor ?: "",
+            badge.messageColor ?: "",
+            badge.logo ?: "",
+            badge.fontColor,
+            badge.isPdf.toString()
+        )
+    }
+
+    return CsvResponse(headers, rows)
 }

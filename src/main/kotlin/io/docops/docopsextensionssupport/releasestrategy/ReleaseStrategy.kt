@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseEnum.*
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -193,6 +194,28 @@ fun ReleaseStrategy.maxLinesForHeight(): Int {
         }
     }
     return (maxSize + 3) * 12
+}
+
+/**
+ * Convert ReleaseStrategy to basic overview CSV
+ */
+fun ReleaseStrategy.toCsv(): CsvResponse {
+    val headers = listOf("Release Type", "Date", "Goal", "Completed", "Selected", "Lines", "Lines Count")
+
+    val rows = this.releases.map { release ->
+        listOf(
+            release.type.name,
+            release.date,
+            release.goal,
+            release.completed.toString(),
+            release.selected.toString(),
+            release.lines.joinToString("; "),
+            release.lines.size.toString()
+        )
+    }
+
+    return CsvResponse(headers, rows)
+
 }
 
 fun ReleaseStrategy.asciidocTable(): String {

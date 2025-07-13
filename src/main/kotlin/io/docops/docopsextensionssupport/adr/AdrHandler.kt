@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 
@@ -19,5 +21,8 @@ class AdrHandler : DocOpsHandler{
         return handleSVG(payload, context.scale, context.useDark, context.backend)
     }
 
-
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val adr = AdrParser().parseContent(request.content)
+        return adr.toCsv()
+    }
 }

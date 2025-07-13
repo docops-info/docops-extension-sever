@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.badge
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.sercasti.tracing.Traceable
@@ -25,8 +27,28 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         data: String,
         isPdf: Boolean
     ): String {
+        val badges = createBadgesFromInput(data, isPdf)
+
+        var rows = 1
+        if (badges.size > 3) {
+            rows = badges.size / 3 + 1
+        }
+        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges = badges)
+        val svg = StringBuilder()
+        //language=svg
+        svg.append(
+            """
+                <svg width='${svgSrc.second}' height='${rows * 20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
+            """.trimIndent()
+        )
+        svg.append(svgSrc.first)
+        svg.append("</svg>")
+        return svg.toString()
+    }
+
+    fun createBadgesFromInput( data: String,
+                               isPdf: Boolean): MutableList<Badge> {
         val badges = mutableListOf<Badge>()
-        // Try to parse as JSON first
         try {
             // Check if the data looks like JSON (starts with [ for array or { for object)
             if (data.trim().startsWith("[") || data.trim().startsWith("{")) {
@@ -72,24 +94,8 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         catch (e: Exception) {
             processPipeDelimitedData(data, badges, isPdf)
         }
-
-        var rows = 1
-        if (badges.size > 3) {
-            rows = badges.size / 3 + 1
-        }
-        val svgSrc = docOpsBadgeGenerator.createBadgeFromList(badges = badges)
-        val svg = StringBuilder()
-        //language=svg
-        svg.append(
-            """
-                <svg width='${svgSrc.second}' height='${rows * 20}' xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='Made With: Kotlin'>
-            """.trimIndent()
-        )
-        svg.append(svgSrc.first)
-        svg.append("</svg>")
-        return svg.toString()
+        return badges
     }
-
     /**
      * Process pipe-delimited data format
      */
@@ -139,5 +145,10 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.backend)
+    }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val badges = createBadgesFromInput(request.content, false)
+        return badges.toCsv()
     }
 }

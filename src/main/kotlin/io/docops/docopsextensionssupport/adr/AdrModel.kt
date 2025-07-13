@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import java.io.File
 import kotlin.collections.filter
 import kotlin.collections.find
@@ -77,6 +78,36 @@ data class Adr(
     val references: List<WikiLink> = emptyList(),
     val links: List<WikiLink> = emptyList()
 )
+
+
+fun Adr.toCsv(): CsvResponse {
+    val headers = listOf("Section",  "Content")
+    val rows = mutableListOf<List<String>>()
+    rows.add(listOf("Title", this.title))
+    rows.add(listOf("Status", this.status.name))
+    rows.add(listOf("Date", this.date))
+
+    // Add context items
+    rows.add(listOf("Context", this.context.joinToString("\n")))
+
+
+    // Add decision items
+    rows.add(listOf("Decision", this.decision.joinToString("\n")))
+
+
+    // Add consequences items
+    rows.add(listOf("Consequences", this.consequences.joinToString("\n")))
+
+
+    rows.add(listOf("Participants", this.participants.joinToString(",") { it.name }))
+    rows.add(listOf("References", this.references.joinToString(",") { it.url }))
+    rows.add(listOf("Links", this.links.joinToString(",") { it.url }))
+
+
+
+    return CsvResponse(headers, rows)
+
+}
 
 /**
  * Parser for Architecture Decision Record (ADR) files.
