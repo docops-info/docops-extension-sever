@@ -8,6 +8,7 @@ import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.BarGroupHandler
 import io.docops.docopsextensionssupport.chart.BarHandler
+import io.docops.docopsextensionssupport.chart.CombinationChartHandler
 import io.docops.docopsextensionssupport.chart.LineHandler
 import io.docops.docopsextensionssupport.chart.PieSliceHandler
 import io.docops.docopsextensionssupport.diagram.*
@@ -42,7 +43,8 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/docops")
 class DocOpsRouter (
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val badgeHandler: BadgeHandler) {
+    private val badgeHandler: BadgeHandler,
+    private val combinationChartHandler: CombinationChartHandler) {
 
 
     private val logger = KotlinLogging.logger {}
@@ -71,6 +73,7 @@ class DocOpsRouter (
         "bar" to BarHandler(),
         "bargroup" to BarGroupHandler(),
         "line" to LineHandler(),
+        "combination" to combinationChartHandler,
         "comp" to ComparisonChartHandler(),
         "table" to TableHandler(),
         "treechart" to TreeChartHandler(),
