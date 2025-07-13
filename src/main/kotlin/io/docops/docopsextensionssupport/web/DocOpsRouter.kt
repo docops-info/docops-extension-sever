@@ -29,17 +29,22 @@ import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.*
-import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
-@Controller
+@RestController
 @RequestMapping("/api/docops")
 class DocOpsRouter (
     private val applicationEventPublisher: ApplicationEventPublisher,
@@ -124,7 +129,8 @@ class DocOpsRouter (
 
             val data = uncompressString(decodedPayload)
             val finalPayload = decodePayloadIfNeeded(data)
-            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context)))
+            val csvResponse = handler.toCsv(CsvRequest(finalPayload, kind))
+            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), csvResponse))
         }
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
 
@@ -167,4 +173,43 @@ class DocOpsRouter (
         }
     }
 
+
+
+}
+
+@Serializable
+data class CsvRequest(
+    val content: String,
+    val kind: String
+)
+
+@Serializable
+data class CsvResponse(
+    val headers: List<String>,
+    val rows: List<List<String>>
+)
+
+
+fun CsvResponse.toCsvJsonMetaData(): String {
+    val json = Json { encodeDefaults = true }
+    val str = """
+        <metadata type="text/csv">
+            <![CDATA[
+            ${json.encodeToString(this)}
+            ]]>
+          </metadata>
+    """.trimIndent()
+    return str
+}
+
+
+/**
+ * Escape XML special characters
+ */
+private fun escapeXml(text: String): String {
+    return text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&apos;")
 }

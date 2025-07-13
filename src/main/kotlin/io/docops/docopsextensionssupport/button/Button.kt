@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.button.shape.*
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.awt.Color
@@ -791,4 +792,26 @@ private fun tint(color: Color, factor: Double): String {
  */
 fun randomColor() {
     val color = (Math.random() * 16777215).toInt() or (0xFF shl 24)
+}
+
+
+/**
+ * Convert Buttons to basic CsvResponse
+ */
+fun Buttons.toCsv(): CsvResponse {
+    val headers = listOf("Label", "Link", "Description", "Type", "Color", "Enabled", "Active")
+
+    val rows = this.buttons.map { button ->
+        listOf(
+            button.label ?: "",
+            button.link ?: "",
+            button.description ?: "",
+            button.type ?: "",
+            button.color ?: "",
+            button.enabled.toString(),
+            button.active.toString()
+        )
+    }
+
+    return CsvResponse(headers, rows)
 }

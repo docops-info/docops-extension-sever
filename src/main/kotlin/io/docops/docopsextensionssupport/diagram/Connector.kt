@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,3 +27,20 @@ class Connector (val text: String, val baseColor: String? = "#E14D2A", val descr
 
 @Serializable
 data class Connectors(val connectors: MutableList<Connector>)
+
+/**
+ * Convert a list of Connectors to CsvResponse
+ */
+fun List<Connector>.toCsv(): CsvResponse {
+    val headers = listOf("Text", "Description", "Base Color")
+
+    val rows = this.map { connector ->
+        listOf(
+            connector.text,
+            connector.description,
+            connector.baseColor ?: "#E14D2A"
+        )
+    }
+
+    return CsvResponse(headers, rows)
+}

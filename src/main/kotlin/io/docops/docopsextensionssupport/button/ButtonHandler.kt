@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.button
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -60,5 +62,11 @@ class ButtonHandler : DocOpsHandler {
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.useDark, context.type, context.backend, docname = context.docname)
+    }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val tempButtons = Json.decodeFromString<Buttons>(request.content)
+
+        return tempButtons.toCsv()
     }
 }

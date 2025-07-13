@@ -12,6 +12,11 @@ interface DocOpsHandler {
      */
     fun handleSVG(payload: String, context: DocOpsContext): String
 
+     open fun toCsv(request: CsvRequest): CsvResponse {
+
+        throw IllegalArgumentException("CSV not supported for this handler.")
+    }
+
 }
 
 /**

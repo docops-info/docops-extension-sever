@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.max
@@ -18,4 +19,24 @@ data class Pies(val pies: MutableList<Pie>, val pieDisplay: PieDisplay = PieDisp
         } ?: 1
     }
 
+}
+
+
+    fun Pies.piesToCsv(): CsvResponse {
+    // Define the headers for the CSV
+    val headers = listOf("Label", "Percent", "Base Color", "Outline Color", "Scale", "Dark Mode")
+
+    // Convert each pie to a row
+    val rows = pies.map { pie ->
+        listOf(
+            pie.label,
+            pie.percent.toString(),
+            pieDisplay.baseColor,
+            pieDisplay.outlineColor,
+            pieDisplay.scale.toString(),
+            pieDisplay.useDark.toString()
+        )
+    }
+
+    return CsvResponse(headers, rows)
 }

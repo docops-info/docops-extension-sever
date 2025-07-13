@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import kotlinx.serialization.json.Json
@@ -21,6 +23,12 @@ class PieHandler : DocOpsHandler {
     ): String {
         return handleSVG(payload)
     }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val pies = parseInput(request.content)
+        return pies.piesToCsv()
+    }
+
 
     /**
      * Parse input data supporting both JSON and tabular formats

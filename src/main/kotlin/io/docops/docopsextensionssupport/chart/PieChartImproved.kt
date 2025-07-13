@@ -1,12 +1,11 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
-import io.docops.docopsextensionssupport.support.SVGColor
-import io.docops.docopsextensionssupport.support.gradientFromColor
-import io.docops.docopsextensionssupport.util.ParsingUtils
 
 class PieChartImproved {
     // Modern color palette for pie chart
@@ -470,6 +469,28 @@ class PieChartImproved {
                     "A $radius $radius 0 $largeArcFlag 1 $x2 $y2 " +
                     "Z"
         }
+    }
+
+    /**
+     * Convert input payload to CSV format
+     */
+    fun payloadToCsv(payload: String): CsvResponse {
+        return payloadToSimpleCsv(payload)
+    }
+
+    /**
+     * Convert input payload to simple CSV format (just label and value)
+     */
+    fun payloadToSimpleCsv(payload: String): CsvResponse {
+        val (_, chartData) = parseConfigAndData(payload)
+        val pieData = parsePieChartData(chartData)
+
+        val headers = listOf("Label", "Value")
+        val rows = pieData.map { segment ->
+            listOf(segment.label, segment.value.toString())
+        }
+
+        return CsvResponse(headers, rows)
     }
 
 

@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
@@ -104,6 +106,15 @@ class ConnectorHandler: DocOpsHandler {
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.type, context.scale, context.useDark)
+    }
+
+    override fun toCsv(request: CsvRequest): CsvResponse {
+        val connectors = if (isTableFormat(request.content)) {
+            parseTableData(request.content)
+        } else {
+            decodeFromJson(request.content)
+        }
+        return connectors.connectors.toCsv()
     }
 
 }
