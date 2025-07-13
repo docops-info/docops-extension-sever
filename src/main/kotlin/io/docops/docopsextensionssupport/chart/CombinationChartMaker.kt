@@ -328,12 +328,28 @@ class CombinationChartMaker {
 
         // Get unique X values and their positions
         val xValues = chart.series.flatMap { it.data }.map { it.x }.distinct().sorted()
-        val xPositions = xValues.mapIndexed { index, xValue -> 
-            xValue to (80 + index * (640.0 / (xValues.size - 1)))
-        }.toMap()
 
-        // Calculate bar width
+        // Calculate bar width first to determine proper spacing
         val barWidth = if (xValues.size > 1) (640.0 / xValues.size) * 0.6 else 60.0
+
+        // Add padding after y-axis line to prevent overlap
+        // Y-axis is at x=80, so start bars with padding of half bar width + 10 pixels
+        val yAxisPadding = barWidth / 2 + 10
+        val startX = 80 + yAxisPadding
+
+        // Calculate available width, accounting for right y-axis when dual axis is enabled
+        val rightBoundary = if (chart.display.dualYAxis) {
+            // When dual y-axis is enabled, bars should not extend beyond the right y-axis line at x=720
+            // Add padding to prevent bars from overlapping with right y-axis elements
+            720.0 - (barWidth / 2 + 10)  // Leave space for half bar width + padding before right y-axis
+        } else {
+            720.0  // Normal right boundary when no dual y-axis
+        }
+        val availableWidth = rightBoundary - startX
+
+        val xPositions = xValues.mapIndexed { index, xValue -> 
+            xValue to (startX + index * (availableWidth / (xValues.size - 1)))
+        }.toMap()
 
         // Draw bars first (so lines appear on top)
         val barSeries = chart.series.filter { it.type == ChartType.BAR }
