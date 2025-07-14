@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -110,7 +111,7 @@ class TreeChartController {
             }
 
             val treeMaker = TreeMaker()
-            val svg = treeMaker.makeTree(contents, false)
+            val svg = treeMaker.makeTree(contents, false, DefaultCsvResponse)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -137,7 +138,7 @@ class TreeChartController {
         @RequestParam(name = "backend", defaultValue = "html") backend: String
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
-            val handler = TreeChartHandler()
+            val handler = TreeChartHandler(DefaultCsvResponse)
             handler.handleSVG(payload, "pdf".equals(backend, ignoreCase = true))
         }
         log.info{"getTreeChart executed in ${timing.duration.inWholeMilliseconds}ms "}
@@ -146,7 +147,7 @@ class TreeChartController {
     @PostMapping("")
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
-            val handler = TreeChartHandler()
+            val handler = TreeChartHandler(DefaultCsvResponse)
             handler.handleSVG(payload, false)
         }
         log.info{"editFormSubmission executed in ${timing.duration.inWholeMilliseconds}ms "}

@@ -1,15 +1,14 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
-import java.net.URLDecoder
 
-class LineHandler : DocOpsHandler{
+class LineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     fun handleSVG(payload: String) : String {
         val lineChartImproved= LineChartImproved()
-        val svg = lineChartImproved.makeLineSvg(payload)
+        val svg = lineChartImproved.makeLineSvg(payload, csvResponse)
         return svg
     }
 

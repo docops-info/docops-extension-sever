@@ -262,9 +262,8 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
     }
 
 
-    fun makeTimelineSvg(source: String, title: String, scale: String, isPdf: Boolean): String {
+    fun makeTimelineSvg(entries: MutableList<Entry>, title: String, scale: String, isPdf: Boolean): String {
         this.pdf = isPdf
-        val entries = TimelineParser().parse(source)
         val sb = StringBuilder()
         val id = UUID.randomUUID().toString()
 
@@ -603,13 +602,14 @@ Challenges the distinction between high and low culture and emphasizes fragmenta
 
     // Test normal output
     val maker = TimelineMaker(false, "#a1d975", useGlass = true)
-    val svg = maker.makeTimelineSvg(entry, "Literary Periods", "0.6", false)
+    val entries = TimelineParser().parse(entry)
+    val svg = maker.makeTimelineSvg(entries, "Literary Periods", "0.6", false)
     val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
 
     // Test PDF output
     val makerPdf = TimelineMaker(false, "#a1d975", useGlass = true)
-    val svgPdf = makerPdf.makeTimelineSvg(entry, "Literary Periods", "1", true)
+    val svgPdf = makerPdf.makeTimelineSvg(entries, "Literary Periods", "1", true)
     val fPdf = File("gen/timeline_pdf.svg")
     fPdf.writeBytes(svgPdf.toByteArray())
 

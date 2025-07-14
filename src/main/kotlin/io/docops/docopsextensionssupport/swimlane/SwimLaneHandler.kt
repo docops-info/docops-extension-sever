@@ -1,13 +1,16 @@
 package io.docops.docopsextensionssupport.swimlane
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 
 /**
  * Handler for swimlane diagrams
  */
-class SwimLaneHandler : DocOpsHandler {
+class SwimLaneHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     private val json = Json { ignoreUnknownKeys = true }
     private val maker = SwimLaneMaker()
@@ -30,6 +33,7 @@ class SwimLaneHandler : DocOpsHandler {
             parseTableData(payload)
         }
 
+        csvResponse.update(swimLaneData.toCsv())
         return maker.generateSvg(swimLaneData)
     }
 

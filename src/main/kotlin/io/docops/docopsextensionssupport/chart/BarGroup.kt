@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.abs
@@ -25,9 +26,9 @@ class BarGroupDisplay(
     val xLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val yLabelStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:12px; text-anchor:middle",
     val lineColor: String = "#FFBB5C",
-    val vBar : Boolean = false,
+    val vBar: Boolean = false,
     val condensed: Boolean = false,
-    val useDark : Boolean = false,
+    val useDark: Boolean = false,
     val scale: Double = 1.0
 )
 
@@ -54,15 +55,15 @@ fun BarGroup.calcWidth(): Int {
 }
 
 
-
 fun BarGroup.calcHeight(): Int {
     val count = this.groups.sumOf { it.series.size }
-    val sum = count * 40 + 2 + (5 * (count-1))
+    val sum = count * 40 + 2 + (5 * (count - 1))
     if (sum <= 800) {
         return 800
     }
     return sum
 }
+
 fun BarGroup.maxData(): Double {
     return this.groups.maxOf { it.series.maxOf { it.value } }
 }
@@ -89,6 +90,7 @@ fun BarGroup.uniqueLabels(): List<String> {
     }
     return uniqueLabels.distinct().toList()
 }
+
 fun BarGroup.scaleUp(item: Double): Double {
     val m = groups.maxOf { it.series.maxOf { it.value } }
     return (450 * item) / m
@@ -98,6 +100,7 @@ fun BarGroup.maxValue(): Double {
     val m = groups.maxOf { it.series.maxOf { it.value } }
     return m / 3
 }
+
 fun BarGroup.valueFmt(value: Double): String {
     var numberString = ""
 
@@ -107,10 +110,12 @@ fun BarGroup.valueFmt(value: Double): String {
 
 
         }
+
         abs(value / 1000) > 1 -> {
             String.format("%.1f", (value / 1000)) + "k"
 
         }
+
         else -> {
             value.toInt().toString()
         }
@@ -120,10 +125,11 @@ fun BarGroup.valueFmt(value: Double): String {
 
 fun BarGroup.ticks(): NiceScale {
     val min = this.groups.minOf { it.series.minOf { it.value } }
-    val max = this.groups.maxOf { it.series.maxOf{it.value} }
+    val max = this.groups.maxOf { it.series.maxOf { it.value } }
     val nice = NiceScale(min, max)
     return nice
 }
+
 fun BarGroup.legendLabel(): MutableList<String> {
     val uniqueLabels = mutableListOf<String>()
     this.groups.forEach {
@@ -133,4 +139,38 @@ fun BarGroup.legendLabel(): MutableList<String> {
         }
     }
     return uniqueLabels
+}
+
+fun BarGroup.toCsv(): CsvResponse {
+    val headers = mutableListOf<String>()
+    val rows = mutableListOf<List<String>>()
+
+    // Create headers based on the data structure
+    headers.add("Group")
+    headers.add("Label")
+    headers.add("Value")
+    if (groups.any { group -> group.series.any { it.itemDisplay != null } }) {
+        headers.add("Color")
+    }
+
+    // Add data rows
+    for (group in groups) {
+        for (series in group.series) {
+            val row = mutableListOf<String>()
+            row.add(group.label)
+            series.label?.let { row.add(it) }
+            row.add(series.value.toString())
+
+            // Add color if available
+            if (headers.contains("Color")) {
+                row.add(series.itemDisplay?.baseColor ?: display.baseColor)
+            }
+
+            rows.add(row)
+        }
+    }
+
+    return CsvResponse(headers, rows)
+
+
 }

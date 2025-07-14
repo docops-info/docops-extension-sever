@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.CacheControl
@@ -22,7 +23,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/scorecard")
 class ScorecardController {
     private val log = KotlinLogging.logger {}
-    private val scoreCardHandler = ScorecardHandler()
+    private val scoreCardHandler = ScorecardHandler(DefaultCsvResponse)
 
     @GetMapping("/edit-mode")
     @ResponseBody

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.abs
@@ -79,3 +80,11 @@ fun Bar.valueFmt(value: Double): String {
     return numberString
 }
 
+fun Bar.toCsv(): CsvResponse {
+    val headers = listOf<String>("Category", "Value")
+    val rows = mutableListOf<List<String>>()
+    series.forEach {
+        rows.add(listOf(it.label ?: "", it.value.toString()))
+    }
+    return CsvResponse(headers, rows)
+}

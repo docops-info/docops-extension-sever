@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.callout
 
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 import java.lang.Boolean.parseBoolean
 import java.util.UUID
@@ -7,23 +9,26 @@ import java.util.UUID
 /**
  * Generic class for creating callout SVGs
  */
-open class CalloutMaker {
+open class CalloutMaker(val csvResponse: CsvResponse) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     // Table format parsing methods
     fun createSystematicApproachFromTable(data: String, width: Int, height: Int): String {
         val calloutData = parseTableData(data, "systematic")
+        csvResponse.update(calloutData.toCsv())
         return generateSystematicSvg(calloutData, width, height)
     }
 
     fun createMetricsFromTable(data: String, width: Int, height: Int): String {
         val calloutData = parseTableData(data, "metrics")
+        csvResponse.update(calloutData.toCsv())
         return generateMetricsSvg(calloutData, width, height)
     }
 
     fun createTimelineFromTable(data: String, width: Int, height: Int): String {
         val calloutData = parseTableData(data, "timeline")
+        csvResponse.update(calloutData.toCsv())
         return generateTimelineSvg(calloutData, width, height)
     }
 
@@ -34,6 +39,7 @@ open class CalloutMaker {
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
+        csvResponse.update(calloutData.toCsv())
         return generateSystematicSvg(calloutData, width, height)
     }
 
@@ -43,6 +49,7 @@ open class CalloutMaker {
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
+        csvResponse.update(calloutData.toCsv())
         return generateMetricsSvg(calloutData, width, height)
     }
 
@@ -52,6 +59,7 @@ open class CalloutMaker {
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
+        csvResponse.update(calloutData.toCsv())
         return generateTimelineSvg(calloutData, width, height)
     }
 

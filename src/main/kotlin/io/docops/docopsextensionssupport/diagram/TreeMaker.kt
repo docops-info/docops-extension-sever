@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 import kotlin.math.max
 
@@ -21,7 +23,7 @@ class TreeMaker {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeTree(payload: String, isPdf: Boolean = false): String {
+    fun makeTree(payload: String, isPdf: Boolean = false, csvResponse: CsvResponse): String {
 
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
@@ -44,7 +46,7 @@ class TreeMaker {
         val customColors = configColors
 
         val treeData = parseTreeChartData(chartData)
-
+        csvResponse.update(treeData.toCsv())
         // Calculate required dimensions based on tree structure
         val calculatedDimensions = calculateRequiredDimensions(treeData, orientation)
         val adjustedWidth = max(width.toInt(), calculatedDimensions.first)
@@ -771,4 +773,36 @@ class TreeMaker {
         val color: String? = null,
         val children: MutableList<TreeNode> = mutableListOf()
     )
+    /**
+     * Converts a TreeNode to CSV format
+     * @return CsvResponse with headers and rows representing the tree structure
+     */
+    private fun TreeNode.toCsv(): CsvResponse {
+        val headers = listOf("Level", "Label", "Color", "Path", "Parent", "Has Children")
+        val csvRows = mutableListOf<List<String>>()
+
+        // Flatten the tree structure into rows
+        fun flattenTree(node: TreeNode, level: Int = 0, path: String = "", parent: String = "") {
+            val currentPath = if (path.isEmpty()) node.label else "$path > ${node.label}"
+
+            csvRows.add(listOf(
+                level.toString(),
+                node.label,
+                node.color ?: "",
+                currentPath,
+                parent,
+                node.children.isNotEmpty().toString()
+            ))
+
+            // Recursively process children
+            node.children.forEach { child ->
+                flattenTree(child, level + 1, currentPath, node.label)
+            }
+        }
+
+        flattenTree(this)
+
+        return CsvResponse(headers, csvRows)
+    }
+
 }

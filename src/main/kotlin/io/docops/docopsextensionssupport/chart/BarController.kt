@@ -1,27 +1,16 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.adr.AdrParser
-import io.docops.docopsextensionssupport.adr.AdrSvgGenerator
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.util.UrlUtil
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import org.apache.commons.logging.LogFactory
-import org.springframework.http.CacheControl
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
@@ -105,7 +94,7 @@ class BarController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val barChartImproved = BarChartImproved()
-            val svg = barChartImproved.makeBarSvg(contents)
+            val svg = barChartImproved.makeBarSvg(contents, DefaultCsvResponse)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -168,7 +157,7 @@ class BarController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val barChartImproved = BarChartImproved()
-            val svg = barChartImproved.makeGroupBarSvg(contents)
+            val svg = barChartImproved.makeGroupBarSvg(contents, DefaultCsvResponse)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -224,7 +213,7 @@ class BarController {
     @PostMapping("", produces = ["image/svg+xml"])
     fun barFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val barChartImproved = BarChartImproved()
-        val svg = barChartImproved.makeBarSvg(payload)
+        val svg = barChartImproved.makeBarSvg(payload, DefaultCsvResponse)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)

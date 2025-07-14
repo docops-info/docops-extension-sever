@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.wordcloud
 
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.CacheControl
@@ -20,7 +21,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/wordcloud")
 class WordCloudController {
     private val log = KotlinLogging.logger {  }
-    private val wordCloudHandler = WordCloudHandler()
+    private val wordCloudHandler = WordCloudHandler(DefaultCsvResponse)
 
     @GetMapping("/edit-mode")
     @ResponseBody
@@ -100,7 +101,7 @@ class WordCloudController {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
             val wordCloudImproved = WordCloudImproved()
-            val svg = wordCloudImproved.makeWordCloudSvg(content)
+            val svg = wordCloudImproved.makeWordCloudSvg(content, DefaultCsvResponse)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -122,7 +123,7 @@ class WordCloudController {
     @PostMapping("")
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val wordCloudImproved = WordCloudImproved()
-        val svg = wordCloudImproved.makeWordCloudSvg(payload)
+        val svg = wordCloudImproved.makeWordCloudSvg(payload, DefaultCsvResponse)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("text/html")

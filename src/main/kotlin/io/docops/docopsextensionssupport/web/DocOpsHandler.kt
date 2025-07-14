@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.web
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.ResponseEntity
 
 interface DocOpsHandler {
@@ -14,7 +15,7 @@ interface DocOpsHandler {
 
      open fun toCsv(request: CsvRequest): CsvResponse {
 
-        throw IllegalArgumentException("CSV not supported for this handler.")
+        return DefaultCsvResponse
     }
 
 }
@@ -31,3 +32,17 @@ data class DocOpsContext(
     val useGlass: Boolean = false,
     val docname: String = ""
 )
+
+abstract class BaseDocOpsHandler(
+    protected val csvResponse: CsvResponse
+) : DocOpsHandler {
+
+    protected val logger = KotlinLogging.logger {}
+    // Common functionality can go here
+    protected fun logHandlerExecution(kind: String, duration: Long) {
+        logger.info { "handling $kind took $duration ms" }
+    }
+
+    // Force subclasses to implement the main method
+    abstract override fun handleSVG(payload: String, context: DocOpsContext): String
+}

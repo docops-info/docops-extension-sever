@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -58,4 +59,21 @@ fun ComparisonChart.lines(): MutableMap<String, ColLine> {
         begin += 20 + (maxLines * 14)
     }
     return resp
+}
+
+/**
+ * Converts a ComparisonChart to CSV format
+ * @return CsvResponse with headers and rows representing the comparison chart data
+ */
+fun ComparisonChart.toCsv(): CsvResponse {
+    val headers = colHeader.toMutableList()
+    val csvRows = mutableListOf<List<String>>()
+
+    // Convert each row to CSV format
+    rows.forEach { row ->
+        val csvRow = listOf(row.title, row.original, row.next)
+        csvRows.add(csvRow)
+    }
+
+    return CsvResponse(headers, csvRows)
 }

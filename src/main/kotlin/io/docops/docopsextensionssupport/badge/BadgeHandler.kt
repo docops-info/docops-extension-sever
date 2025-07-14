@@ -1,25 +1,17 @@
 package io.docops.docopsextensionssupport.badge
 
-import io.docops.docopsextensionssupport.svgsupport.uncompressString
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
-import io.github.sercasti.tracing.Traceable
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
-import java.net.URLDecoder
 
-@Component
-class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocOpsBadgeGenerator) : DocOpsHandler{
 
-    @Traceable
+class BadgeHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
+
+    private val docOpsBadgeGenerator: DocOpsBadgeGenerator = DocOpsBadgeGenerator()
     fun handleSVG(payload: String, backend: String) : String  {
-
-
         val isPdf = backend == "pdf"
-
         return createBadgeFromString(payload, isPdf)
     }
 
@@ -43,6 +35,7 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         )
         svg.append(svgSrc.first)
         svg.append("</svg>")
+         csvResponse.update(badges.toCsv())
         return svg.toString()
     }
 
@@ -147,8 +140,4 @@ class BadgeHandler @Autowired constructor(private val docOpsBadgeGenerator: DocO
         return handleSVG(payload, context.backend)
     }
 
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val badges = createBadgesFromInput(request.content, false)
-        return badges.toCsv()
-    }
 }

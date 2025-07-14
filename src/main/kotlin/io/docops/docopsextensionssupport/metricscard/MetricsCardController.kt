@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.metricscard
 
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,7 +21,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/metricscard")
 class MetricsCardController {
     private val log = KotlinLogging.logger {  }
-    private val metricsCardHandler = MetricsCardHandler()
+    private val metricsCardHandler = MetricsCardHandler(DefaultCsvResponse)
 
     @GetMapping("/edit-mode")
     @ResponseBody
@@ -88,7 +89,7 @@ class MetricsCardController {
     fun renderMetricsCard(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
-            val maker = MetricsCardMaker()
+            val maker = MetricsCardMaker(DefaultCsvResponse)
             val svg = maker.createCards(content, 650, 300)
 
 
@@ -112,7 +113,7 @@ class MetricsCardController {
     @PostMapping("")
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
-            val maker = MetricsCardMaker()
+            val maker = MetricsCardMaker(DefaultCsvResponse)
             val svg = maker.createCards(payload, 650, 300)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue

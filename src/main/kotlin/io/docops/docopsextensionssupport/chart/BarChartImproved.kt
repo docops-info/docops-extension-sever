@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 
 class BarChartImproved {
@@ -19,7 +21,7 @@ class BarChartImproved {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeBarSvg(payload: String): String {
+    fun makeBarSvg(payload: String, csvResponse: CsvResponse): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
@@ -28,16 +30,18 @@ class BarChartImproved {
 
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
+        csvResponse.update(bar.toCsv())
         return barMaker.makeVerticalBar(bar)
     }
 
-    fun makeGroupBarSvg(payload: String): String {
+    fun makeGroupBarSvg(payload: String, csvResponse: CsvResponse): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
         // Create BarGroup object from parsed data
         val barGroup = createBarGroupFromData(config, chartData)
 
+        csvResponse.update(barGroup.toCsv())
         // Use existing BarGroupMaker to generate SVG
         val barGroupMaker = BarGroupMaker()
         return if (barGroup.display.vBar) {

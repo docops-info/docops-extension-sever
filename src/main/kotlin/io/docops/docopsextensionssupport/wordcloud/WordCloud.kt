@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.wordcloud
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.log10
@@ -66,4 +67,52 @@ fun WordCloud.centerX(): Int {
 
 fun WordCloud.centerY(): Int {
     return calcHeight() / 2
+}
+
+/**
+ * Converts a WordCloud to CSV format
+ * @return CsvResponse with headers and rows representing the word cloud data
+ */
+fun WordCloud.toCsv(): CsvResponse {
+    val headers = listOf("Title", "Word Number", "Text", "Weight", "ID", "Base Color", "Use Dark", "Width", "Height", "Min Font Size", "Max Font Size", "Shape", "Scale")
+    val csvRows = mutableListOf<List<String>>()
+
+    if (words.isNotEmpty()) {
+        words.forEachIndexed { index, word ->
+            csvRows.add(listOf(
+                if (index == 0) title else "", // Only show title in first row
+                (index + 1).toString(),
+                word.text,
+                word.weight.toString(),
+                word.id,
+                word.itemDisplay?.baseColor ?: display.baseColor,
+                if (index == 0) display.useDark.toString() else "", // Only show display settings in first row
+                if (index == 0) display.width.toString() else "",
+                if (index == 0) display.height.toString() else "",
+                if (index == 0) display.minFontSize.toString() else "",
+                if (index == 0) display.maxFontSize.toString() else "",
+                if (index == 0) display.shape else "",
+                if (index == 0) display.scale.toString() else ""
+            ))
+        }
+    } else {
+        // If no words, just add title row with display configuration
+        csvRows.add(listOf(
+            title,
+            "0",
+            "",
+            "",
+            "",
+            display.baseColor,
+            display.useDark.toString(),
+            display.width.toString(),
+            display.height.toString(),
+            display.minFontSize.toString(),
+            display.maxFontSize.toString(),
+            display.shape,
+            display.scale.toString()
+        ))
+    }
+
+    return CsvResponse(headers, csvRows)
 }

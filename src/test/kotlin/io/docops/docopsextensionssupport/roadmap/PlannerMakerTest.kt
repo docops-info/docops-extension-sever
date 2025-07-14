@@ -37,7 +37,9 @@ class PlannerMakerTest {
 
         // Create PlannerMaker instance and generate SVG
         val plannerMaker = PlannerMaker()
-        val svg = plannerMaker.makePlannerImage(plannerContent, "Glass Design Planner", "0.5")
+        val parser = PlannerParser()
+        val planItems = parser.parse(plannerContent)
+        val svg = plannerMaker.makePlannerImage(planItems, "Glass Design Planner", "0.5")
 
         // Save the SVG to a file
         val file = File("gen/plannernew.svg")

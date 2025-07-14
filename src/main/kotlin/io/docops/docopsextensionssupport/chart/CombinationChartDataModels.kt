@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -54,3 +55,43 @@ data class CombinationChartDisplay(
     val dualYAxis: Boolean = false,
     val useGlass: Boolean = false
 )
+
+/**
+ * Converts a CombinationChart to CSV format
+ * @return CsvResponse with headers and rows representing the combination chart data
+ */
+fun CombinationChart.toCsv(): CsvResponse {
+    val headers = mutableListOf<String>()
+    val rows = mutableListOf<List<String>>()
+
+    // Create headers based on the chart structure
+    headers.add("Series")
+    headers.add("Type")
+    headers.add("X")
+    headers.add("Y")
+
+    // Check if any series has color information
+    if (series.any { it.color != null }) {
+        headers.add("Color")
+    }
+
+    // Add data rows
+    for (chartSeries in series) {
+        for (point in chartSeries.data) {
+            val row = mutableListOf<String>()
+            row.add(chartSeries.name)
+            row.add(chartSeries.type.name) // e.g., "line", "bar", "area"
+            row.add(point.x.toString())
+            row.add(point.y.toString())
+
+            // Add color if the header exists
+            if (headers.contains("Color")) {
+                row.add(chartSeries.color ?: "")
+            }
+
+            rows.add(row)
+        }
+    }
+
+    return CsvResponse(headers, rows)
+}

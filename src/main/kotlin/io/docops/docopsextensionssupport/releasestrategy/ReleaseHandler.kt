@@ -1,13 +1,13 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
+import io.docops.docopsextensionssupport.web.update
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.json.Json
 
-class ReleaseHandler : DocOpsHandler {
+class ReleaseHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     val log = KotlinLogging.logger {}
     fun handleSVG(payload: String, useDark: Boolean, backend: String): String {
         val release = Json.decodeFromString<ReleaseStrategy>(payload)
@@ -31,7 +31,8 @@ class ReleaseHandler : DocOpsHandler {
                 output = createTimelineGrouped(release, isPdf)
             }
         }
-
+        val csv = release.toCsv()
+        csvResponse.update(csv)
         return output
     }
 
@@ -52,10 +53,5 @@ class ReleaseHandler : DocOpsHandler {
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.useDark, context.backend)
-    }
-
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val release = Json.decodeFromString<ReleaseStrategy>(request.content)
-        return release.toCsv()
     }
 }

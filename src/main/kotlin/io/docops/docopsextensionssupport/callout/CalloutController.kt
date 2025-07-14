@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.callout
 
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -89,7 +90,7 @@ class CalloutController  {
     fun renderCallout(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
-            val calloutHandler = CalloutHandler()
+            val calloutHandler = CalloutHandler(DefaultCsvResponse)
             val svg = calloutHandler.makeSvgPlainText(content, 600,400)
 
             val headers = HttpHeaders()
@@ -111,7 +112,7 @@ class CalloutController  {
 
     @PostMapping("")
     fun editorFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
-        val calloutHandler = CalloutHandler()
+        val calloutHandler = CalloutHandler(DefaultCsvResponse)
         val svg = calloutHandler.makeSvgPlainText(payload, 600,400)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

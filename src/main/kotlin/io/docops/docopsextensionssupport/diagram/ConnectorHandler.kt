@@ -1,10 +1,10 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 
 
@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
  * ConnectorHandler class is responsible for handling requests related to SVG and PNG images.
  * Supports both JSON and table format for connectors.
  */
-class ConnectorHandler: DocOpsHandler {
+class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
 
 
@@ -38,6 +38,8 @@ class ConnectorHandler: DocOpsHandler {
         } else {
             decodeFromJson(contents)
         }
+        val resp = connectors.connectors.toCsv()
+        csvResponse.update(resp)
         val maker = createConnectorMaker(connectors.connectors, useDark, type)
         return makeConnectorImage(maker, scale)
     }
@@ -108,13 +110,6 @@ class ConnectorHandler: DocOpsHandler {
         return handleSVG(payload, context.type, context.scale, context.useDark)
     }
 
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val connectors = if (isTableFormat(request.content)) {
-            parseTableData(request.content)
-        } else {
-            decodeFromJson(request.content)
-        }
-        return connectors.connectors.toCsv()
-    }
+
 
 }

@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.io.File
 
@@ -692,6 +693,35 @@ class TableConfig(
 @Serializable
 class CellWidth(val index: Int, val width: Float)
 
+/**
+ * Converts a Table to CSV format
+ * @return CsvResponse with headers and rows representing the table data
+ */
+fun Table.toCsv(): CsvResponse {
+    val headers = mutableListOf<String>()
+    val csvRows = mutableListOf<List<String>>()
+
+    // Extract headers from THead if present
+    if (thead != null && thead!!.rows.isNotEmpty()) {
+        val headerRow = thead!!.rows.first()
+        headers.addAll(headerRow.cells.map { cell -> cell.data })
+    }
+
+    // Convert each row to CSV format
+    rows.forEach { row ->
+        val csvRow = row.cells.map { cell -> cell.data }
+        csvRows.add(csvRow)
+    }
+
+    // If no thead was present, generate generic headers based on first row
+    if (headers.isEmpty() && csvRows.isNotEmpty()) {
+        val columnCount = csvRows.first().size
+        headers.addAll((1..columnCount).map { "Column $it" })
+    }
+
+    return CsvResponse(headers, csvRows)
+}
+
 fun main() {
     val table = Table(display = TableConfig(mutableListOf(0.25f,0.25f,0.25f,0.25f), modernStyle = true))
 
@@ -762,3 +792,4 @@ fun main() {
     val json = prettyJson.encodeToString(table)
     println(json)*/
 }
+

@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 
 class LineChartImproved {
@@ -18,7 +20,7 @@ class LineChartImproved {
         "#27ae60", // Dark Green
         "#d35400"  // Burnt Orange
     )
-    fun makeLineSvg(payload: String): String {
+    fun makeLineSvg(payload: String, csvResponse: CsvResponse): String {
 
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
@@ -40,6 +42,7 @@ class LineChartImproved {
 
         val lineData = parseLineChartData(chartData)
 
+        csvResponse.update(convertLineDataSeriesToCsv(lineData))
 
         // Generate SVG
         val svg = generateLineChartSvg(
@@ -460,7 +463,45 @@ class LineChartImproved {
         }
     }
 
+    /**
+     * Converts a List<LineDataSeries> to CSV format
+     * @param lineDataSeries The list of line data series to convert
+     * @return CsvResponse with headers and rows representing the line data series
+     */
+    private fun convertLineDataSeriesToCsv(lineDataSeries: List<LineDataSeries>): CsvResponse {
+        val headers = mutableListOf<String>()
+        val rows = mutableListOf<List<String>>()
+
+        // Create headers
+        headers.add("Series")
+        headers.add("X")
+        headers.add("Y")
+        if (lineDataSeries.any { it.color != null }) {
+            headers.add("Color")
+        }
+
+        // Add data rows
+        for (series in lineDataSeries) {
+            for (point in series.points) {
+                val row = mutableListOf<String>()
+                row.add(series.name)
+                row.add(point.x.toString())
+                row.add(point.y.toString())
+
+                // Add color if the header exists
+                if (headers.contains("Color")) {
+                    row.add(series.color ?: "")
+                }
+
+                rows.add(row)
+            }
+        }
+
+        return CsvResponse(headers, rows)
+    }
+
     private data class DataPoint(val x: Double, val y: Double, var color: String? = null, val xLabel: String? = null)
 
     private data class LineDataSeries(val name: String, val points: List<DataPoint>, val color: String? = null)
 }
+

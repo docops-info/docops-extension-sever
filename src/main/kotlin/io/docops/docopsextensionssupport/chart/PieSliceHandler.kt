@@ -1,17 +1,15 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.diagram.piesToCsv
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 
-class PieSliceHandler : DocOpsHandler{
+class PieSliceHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     fun handleSVG(payload: String) : String {
 
         val pieChartImproved = PieChartImproved()
-        val svg = pieChartImproved.makePieSvg(payload)
+        val svg = pieChartImproved.makePieSvg(payload, csvResponse)
         return svg
     }
 
@@ -22,8 +20,4 @@ class PieSliceHandler : DocOpsHandler{
         return handleSVG(payload)
     }
 
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val pieChartImproved = PieChartImproved()
-        return pieChartImproved.payloadToCsv(request.content)
-    }
 }

@@ -1,11 +1,9 @@
 package io.docops.docopsextensionssupport.button
 
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
-import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.serialization.json.Json
+import io.docops.docopsextensionssupport.web.update
 import org.springframework.http.ResponseEntity
 
 /**
@@ -18,9 +16,8 @@ import org.springframework.http.ResponseEntity
  *
  * The handler measures and logs the execution time of operations for performance monitoring.
  */
-class ButtonHandler : DocOpsHandler {
+class ButtonHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
-    val log = KotlinLogging.logger {}
 
     /**
      * Processes a URL-encoded payload and generates an SVG representation of buttons.
@@ -36,6 +33,7 @@ class ButtonHandler : DocOpsHandler {
      */
     fun handleSVG(payload: String, useDark: Boolean, type: String, backend: String, docname: String): String {
         val content = Buttons.fromJsonWithDocname(payload, docname)
+        csvResponse.update(content.toCsv())
         return createResponse(content, useDark, backend, docname)
     }
 
@@ -62,11 +60,5 @@ class ButtonHandler : DocOpsHandler {
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.useDark, context.type, context.backend, docname = context.docname)
-    }
-
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val tempButtons = Json.decodeFromString<Buttons>(request.content)
-
-        return tempButtons.toCsv()
     }
 }

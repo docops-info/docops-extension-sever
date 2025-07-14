@@ -1,13 +1,9 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.web.CsvRequest
-import io.docops.docopsextensionssupport.web.CsvResponse
-import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
-import io.docops.docopsextensionssupport.web.ShapeResponse
+import io.docops.docopsextensionssupport.web.*
 import kotlinx.serialization.json.Json
 
-class PlacematHandler : DocOpsHandler{
+class PlacematHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)  {
     fun handleSVG(payload: String, type: String, backend: String): String {
         val isPDF = backend == "pdf"
         val svg = fromRequestToPlaceMat(payload, type, isPDF)
@@ -17,6 +13,8 @@ class PlacematHandler : DocOpsHandler{
     fun fromRequestToPlaceMat(contents: String, type: String = "SVG", isPDF: Boolean): ShapeResponse {
         val pms = Json.decodeFromString<PlaceMatRequest>(contents)
         val maker = PlaceMatMaker(placeMatRequest = pms, type, isPDF)
+        val csv = pms.toCsv()
+        csvResponse.update(csv)
         return maker.makePlacerMat()
     }
 
@@ -27,8 +25,4 @@ class PlacematHandler : DocOpsHandler{
         return handleSVG(payload, context.type, context.backend)
     }
 
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val pms = Json.decodeFromString<PlaceMatRequest>(request.content)
-        return pms.toCsv()
-    }
 }

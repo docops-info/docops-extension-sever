@@ -153,8 +153,9 @@ class RoadmapPlanController {
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val index = httpServletRequest.getParameter("index")
             val rmm = PlannerMaker()
-
-            val svg = rmm.makePlannerImage(contents, title, "1.0")
+            val parser = PlannerParser()
+            val planItems = parser.parse(contents)
+            val svg = rmm.makePlannerImage(planItems, title, "1.0")
             val compressedPayload = compressString(contents)
             val imageUrl = "https://roach.gy/extension/api/docops/svg?kind=roadmap&payload=${compressedPayload}&type=SVG&useDark=false&title=$title&numChars=$numChars&scale=$scale&filename=planner.svg"
 
@@ -228,8 +229,9 @@ class RoadmapPlanController {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val rmm = PlannerMaker()
-
-            val svg = rmm.makePlannerImage(data, title, scale)
+            val parser = PlannerParser()
+            val planItems = parser.parse(data)
+            val svg = rmm.makePlannerImage(planItems, title, scale)
             val headers = HttpHeaders()
 
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -247,7 +249,9 @@ class RoadmapPlanController {
         val timing = measureTimedValue {
             val rmm = PlannerMaker()
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val svg = rmm.makePlannerImage(data, "title", "0.6")
+            val parser = PlannerParser()
+            val planItems = parser.parse(data)
+            val svg = rmm.makePlannerImage(planItems, "title", "0.6")
             val headers = HttpHeaders()
 
             headers.cacheControl = CacheControl.noCache().headerValue

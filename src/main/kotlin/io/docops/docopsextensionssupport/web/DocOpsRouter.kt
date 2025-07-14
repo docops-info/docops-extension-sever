@@ -6,11 +6,7 @@ import io.docops.docopsextensionssupport.badge.ShieldHandler
 import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
-import io.docops.docopsextensionssupport.chart.BarGroupHandler
-import io.docops.docopsextensionssupport.chart.BarHandler
-import io.docops.docopsextensionssupport.chart.CombinationChartHandler
-import io.docops.docopsextensionssupport.chart.LineHandler
-import io.docops.docopsextensionssupport.chart.PieSliceHandler
+import io.docops.docopsextensionssupport.chart.*
 import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
@@ -19,27 +15,25 @@ import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.FeatureCardHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
-import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.svgtable.TableHandler
+import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.*
-import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
@@ -47,9 +41,7 @@ import kotlin.time.measureTimedValue
 @RestController
 @RequestMapping("/api/docops")
 class DocOpsRouter (
-    private val applicationEventPublisher: ApplicationEventPublisher,
-    private val badgeHandler: BadgeHandler,
-    private val combinationChartHandler: CombinationChartHandler) {
+    private val applicationEventPublisher: ApplicationEventPublisher) {
 
 
     private val logger = KotlinLogging.logger {}
@@ -61,36 +53,41 @@ class DocOpsRouter (
     fun getEventCounts(): Map<String, Int> = eventCounts.toMap()
 
     // Registry of handlers by kind
-    private val handlers: Map<String, DocOpsHandler> = mapOf(
-        "connector" to ConnectorHandler(),
-        "placemat" to PlacematHandler(),
-        "timeline" to TimelineHandler(),
-        "scorecard" to ScorecardHandler(),
-        "release" to ReleaseHandler(),
-        "cal" to CalHandler(),
-        "badge" to badgeHandler,
-        "buttons" to ButtonHandler(),
-        "adr" to AdrHandler(),
-        "planner" to PlannerHandler(),
-        "roadmap" to RoadmapHandler(),
-        "pie" to PieHandler(),
-        "pieslice" to PieSliceHandler(),
-        "bar" to BarHandler(),
-        "bargroup" to BarGroupHandler(),
-        "line" to LineHandler(),
-        "combination" to combinationChartHandler,
-        "comp" to ComparisonChartHandler(),
-        "table" to TableHandler(),
-        "treechart" to TreeChartHandler(),
-        "callout" to CalloutHandler(),
-        "metricscard" to MetricsCardHandler(),
-        "wordcloud" to WordCloudHandler(),
-        "quadrant" to QuadrantHandler(),
-        "swim" to SwimLaneHandler(),
-        "feature" to FeatureCardHandler(),
-        "shield" to ShieldHandler()
-        // Add more handlers as needed
-    )
+
+    private fun createHandler(kind: String, csvResponse: CsvResponse): DocOpsHandler {
+        return when (kind.lowercase()) {
+            "connector" -> ConnectorHandler(csvResponse)
+            "placemat" -> PlacematHandler(csvResponse)
+            "timeline" -> TimelineHandler(csvResponse)
+            "scorecard" -> ScorecardHandler(csvResponse)
+            "release" -> ReleaseHandler(csvResponse)
+            "cal" -> CalHandler(csvResponse)
+            "badge" -> BadgeHandler(csvResponse) // Injected dependency, reuse
+            "buttons" -> ButtonHandler(csvResponse)
+            "adr" -> AdrHandler(csvResponse)
+            "planner" -> PlannerHandler(csvResponse)
+            "roadmap" -> RoadmapHandler(csvResponse)
+            "pie" -> PieHandler(csvResponse)
+            "pieslice" -> PieSliceHandler(csvResponse)
+            "bar" -> BarHandler(csvResponse)
+            "bargroup" -> BarGroupHandler(csvResponse)
+            "line" -> LineHandler(csvResponse)
+            "combination" -> CombinationChartHandler(csvResponse)
+            "comp" -> ComparisonChartHandler(csvResponse)
+            "table" -> TableHandler(csvResponse)
+            "treechart" -> TreeChartHandler(csvResponse)
+            "callout" -> CalloutHandler(csvResponse)
+            "metricscard" -> MetricsCardHandler(csvResponse)
+            "wordcloud" -> WordCloudHandler(csvResponse)
+            "quadrant" -> QuadrantHandler(csvResponse)
+            "swim" -> SwimLaneHandler(csvResponse)
+            "feature" -> FeatureCardHandler(csvResponse)
+            "shield" -> ShieldHandler(csvResponse)
+            else -> throw IllegalArgumentException("Unknown handler kind: $kind")
+        }
+    }
+
+
 
     @Traceable
     @GetMapping("/svg")
@@ -116,8 +113,9 @@ class DocOpsRouter (
         )
 
         val headers = HttpHeaders()
-        val handler = handlers[kind.lowercase()]
-            ?: throw IllegalArgumentException("Unknown handler kind: $kind")
+        val response = CsvResponse(mutableListOf<String>(), mutableListOf<List<String>>())
+        val handler = createHandler(kind.lowercase(), response)
+
         val timing = measureTimedValue {
             // First try to URL decode the payload, if it fails, use the original payload
             val decodedPayload = try {
@@ -129,9 +127,10 @@ class DocOpsRouter (
 
             val data = uncompressString(decodedPayload)
             val finalPayload = decodePayloadIfNeeded(data)
-            val csvResponse = handler.toCsv(CsvRequest(finalPayload, kind))
-            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), csvResponse))
+
+            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), response))
         }
+
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
 
         // Increment the count for this event
@@ -185,10 +184,17 @@ data class CsvRequest(
 
 @Serializable
 data class CsvResponse(
-    val headers: List<String>,
-    val rows: List<List<String>>
+    var headers: List<String>,
+    var rows: List<List<String>>
 )
+fun CsvResponse.update(csvResponse: CsvResponse) {
+    this.headers = csvResponse.headers
+    this.rows = csvResponse.rows
+}
 
+
+
+val DefaultCsvResponse =  CsvResponse(mutableListOf(), mutableListOf(mutableListOf()))
 
 fun CsvResponse.toCsvJsonMetaData(): String {
     val json = Json { encodeDefaults = true }

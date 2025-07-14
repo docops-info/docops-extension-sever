@@ -1,19 +1,19 @@
 package io.docops.docopsextensionssupport.diagram
 
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
 
-class PieHandler : DocOpsHandler {
+class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     fun handleSVG(payload: String): String {
         val pies = parseInput(payload)
         val pieMaker = PieMaker()
+        csvResponse.update(pies.piesToCsv())
         return pieMaker.makePies(pies)
     }
 
@@ -22,11 +22,6 @@ class PieHandler : DocOpsHandler {
         context: DocOpsContext
     ): String {
         return handleSVG(payload)
-    }
-
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val pies = parseInput(request.content)
-        return pies.piesToCsv()
     }
 
 

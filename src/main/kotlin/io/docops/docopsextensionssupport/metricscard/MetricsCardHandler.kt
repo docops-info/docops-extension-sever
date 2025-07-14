@@ -1,12 +1,14 @@
 package io.docops.docopsextensionssupport.metricscard
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 
 /**
  * Handler for metrics card visualizations
  */
-class MetricsCardHandler : DocOpsHandler{
+class MetricsCardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     /**
      * Handles the creation of metrics card SVGs
@@ -19,7 +21,7 @@ class MetricsCardHandler : DocOpsHandler{
         width: Int = 800,
         height: Int = 400
     ): String {
-        val maker = MetricsCardMaker()
+        val maker = MetricsCardMaker(csvResponse)
         val svg = maker.createMetricsCardSvg(payload, width, height)
         return svg
     }

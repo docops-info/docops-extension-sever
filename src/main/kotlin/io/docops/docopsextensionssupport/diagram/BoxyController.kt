@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
@@ -227,8 +228,8 @@ class BoxyController {
     }
 
     fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
-        val handler = ConnectorHandler()
-        val response = handler.fromRequestToConnector(contents, scale = scale, useDark)
+        val handler = ConnectorHandler(DefaultCsvResponse)
+        val response = handler.fromRequestToConnector(contents, scale = scale, useDark, type = "SVG")
         return response.shapeSvg
     }
 

@@ -1,11 +1,11 @@
 package io.docops.docopsextensionssupport.timeline
 
-import io.docops.docopsextensionssupport.web.CsvRequest
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
+import io.docops.docopsextensionssupport.web.update
 
-class TimelineHandler : DocOpsHandler {
+class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     fun handleSVG(
         payload: String,
         type: String,
@@ -17,7 +17,10 @@ class TimelineHandler : DocOpsHandler {
     ): String {
         val isPdf = backend == "pdf"
         val tm = TimelineMaker(useDark = useDark, useGlass = useGlass)
-        val svg = tm.makeTimelineSvg(payload, title, scale, isPdf = isPdf)
+        val entries = TimelineParser().parse(payload)
+        val svg = tm.makeTimelineSvg(entries, title, scale, isPdf = isPdf)
+        val csv = entries.toCsv()
+        csvResponse.update(csv)
         return svg
     }
 
@@ -36,8 +39,4 @@ class TimelineHandler : DocOpsHandler {
         )
     }
 
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val entries = TimelineParser().parse(request.content)
-        return entries.toCsv()
-    }
 }

@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.chart.STUNNINGPIE
 import io.docops.docopsextensionssupport.roadmap.DOCOPS_BRANDING_COLORS
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -91,3 +92,21 @@ class PlanItems(val items : MutableList<PlanItem> = mutableListOf()) {
 
     }
 }
+/**
+ * Convert PlanItems to basic CSV
+ */
+fun PlanItems.toCsv(): CsvResponse {
+    val headers = listOf("Type", "Item Number", "Content", "Is Parent")
+
+    val rows = this.items.mapIndexed { index, item ->
+        listOf(
+            item.type,
+            (index + 1).toString(),
+            item.content ?: "",
+            item.isParent.toString()
+        )
+    }
+
+    return CsvResponse(headers, rows)
+}
+

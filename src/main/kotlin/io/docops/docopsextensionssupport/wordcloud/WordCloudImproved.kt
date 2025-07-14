@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.wordcloud
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 
 class WordCloudImproved {
@@ -19,14 +21,15 @@ class WordCloudImproved {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeWordCloudSvg(payload: String): String {
+    fun makeWordCloudSvg(payload: String, csvResponse: CsvResponse): String {
         // Parse configuration and data from content
         val (config, cloudData) = parseConfigAndData(payload)
 
         // Create WordCloud object from parsed data
         val wordCloud = createWordCloudFromData(config, cloudData)
 
-        // Use WordCloudMaker to generate SVG
+        csvResponse.update(wordCloud.toCsv())
+        // Use  WordCloudMaker to generate SVG
         val wordCloudMaker = WordCloudMaker()
         return wordCloudMaker.makeWordCloud(wordCloud)
     }

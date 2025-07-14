@@ -2,6 +2,7 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.json.Json
 import java.util.*
@@ -234,3 +235,27 @@ data class RoadmapData(
     val categories: Map<String, CategoryConfig> = emptyMap(),
     val features: List<RoadmapFeature> = emptyList()
 )
+
+/**
+ * Convert Pair<RoadmapConfig, List<RoadmapFeature>> to basic CSV
+ */
+fun Pair<RoadmapConfig, List<RoadmapFeature>>.toCsv(): CsvResponse {
+    val (config, features) = this
+    val headers = listOf("Feature ID", "Title", "Category", "Quarter", "Status", "Release Date", "Priority", "Effort", "Assignee")
+
+    val rows = features.map { feature ->
+        listOf(
+            feature.id,
+            feature.title,
+            feature.category,
+            feature.quarter,
+            feature.status.name,
+            feature.releaseDate,
+            feature.priority.name,
+            feature.effort.name,
+            feature.assignee
+        )
+    }
+
+    return CsvResponse(headers, rows)
+}

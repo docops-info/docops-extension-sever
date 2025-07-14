@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.badge
 
+import io.docops.docopsextensionssupport.web.CsvResponse
+
 /**
  * Data class representing an iOS-style shield/badge configuration
  */
@@ -152,3 +154,43 @@ enum class ShieldArrangement {
     GRID
 }
 
+/**
+ * Converts a List<ShieldData> to CSV format
+ * @return CsvResponse with headers and rows representing the shield data
+ */
+fun List<ShieldData>.toCsv(): CsvResponse {
+    val headers = listOf(
+        "Shield Number", "Label", "Message", "Link", "Left Color", "Right Color",
+        "Icon", "Icon Color", "Style", "Label Color", "Message Color",
+        "Width", "Height", "Status"
+    )
+    val csvRows = mutableListOf<List<String>>()
+
+    if (this.isNotEmpty()) {
+        this.forEachIndexed { index, shield ->
+            csvRows.add(listOf(
+                (index + 1).toString(),
+                shield.label,
+                shield.message,
+                shield.link ?: "",
+                shield.leftColor,
+                shield.rightColor,
+                shield.icon ?: "",
+                shield.iconColor,
+                shield.style.value,
+                shield.labelColor,
+                shield.messageColor,
+                shield.width?.toString() ?: "",
+                shield.height.toString(),
+                shield.status?.name ?: ""
+            ))
+        }
+    } else {
+        // If no shields, add an empty row
+        csvRows.add(listOf(
+            "0", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        ))
+    }
+
+    return CsvResponse(headers, csvRows)
+}

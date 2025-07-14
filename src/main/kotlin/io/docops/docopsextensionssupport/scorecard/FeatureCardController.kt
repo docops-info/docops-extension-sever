@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
@@ -21,7 +22,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/featurecard")
 class FeatureCardController {
     private val log = KotlinLogging.logger {}
-    private val featureCardHandler = FeatureCardHandler()
+    private val featureCardHandler = FeatureCardHandler(DefaultCsvResponse)
 
     @GetMapping("/edit-mode")
     @ResponseBody

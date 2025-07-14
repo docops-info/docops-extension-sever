@@ -20,6 +20,7 @@ import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.util.UrlUtil
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -51,8 +52,9 @@ import javax.xml.xpath.*
 @RequestMapping("/api")
 class BadgeController @Autowired constructor(
     private val docOpsBadgeGenerator: DocOpsBadgeGenerator,
-    private val badgeHandler: BadgeHandler
+
 ){
+    private val badgeHandler: BadgeHandler = BadgeHandler(DefaultCsvResponse)
 
     @GetMapping("/badge/edit-mode")
     @ResponseBody

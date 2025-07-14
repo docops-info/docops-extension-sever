@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.metricscard
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 import java.util.*
 
@@ -23,7 +25,7 @@ import java.util.*
  *    Label1 | Value1
  *    Label2 | Value2
  */
-class MetricsCardMaker {
+class MetricsCardMaker(val csvResponse: CsvResponse) {
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
@@ -49,6 +51,7 @@ class MetricsCardMaker {
                 createDefaultMetricsCardData()
             }
         }
+        csvResponse.update(metricsCardData.toCsv())
         val svg = generateMetricsCardSvg(metricsCardData, width, height)
         return svg
     }
@@ -302,4 +305,33 @@ class MetricsCardMaker {
             )
         )
     }
+    /**
+     * Converts a MetricsCardData to CSV format
+     * @return CsvResponse with headers and rows representing the metrics card data
+     */
+    fun MetricsCardData.toCsv(): CsvResponse {
+        val headers = listOf("Title", "Metric Number", "Value", "Label", "Sublabel", "Theme", "Use Glass")
+        val csvRows = mutableListOf<List<String>>()
+
+        // Add metrics rows
+        if (metrics.isNotEmpty()) {
+            metrics.forEachIndexed { index, metric ->
+                csvRows.add(listOf(
+                    if (index == 0) title else "", // Only show title in first row
+                    (index + 1).toString(),
+                    metric.value,
+                    metric.label,
+                    metric.sublabel ?: "",
+                    if (index == 0) theme else "", // Only show theme in first row
+                    if (index == 0) useGlass.toString() else "" // Only show useGlass in first row
+                ))
+            }
+        } else {
+            // If no metrics, just add title row with configuration
+            csvRows.add(listOf(title, "0", "", "", "", theme, useGlass.toString()))
+        }
+
+        return CsvResponse(headers, csvRows)
+    }
+
 }

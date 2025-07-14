@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.min
@@ -21,7 +22,7 @@ class PieChartImproved {
         "#27ae60", // Dark Green
         "#d35400"  // Burnt Orange
     )
-    fun makePieSvg(payload: String): String {
+    fun makePieSvg(payload: String, csvResponse: CsvResponse): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
         // Parse colors from config or attributes
@@ -39,7 +40,7 @@ class PieChartImproved {
         val darkMode = config["darkMode"]?.toBoolean() ?: false
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-
+        csvResponse.update(payloadToSimpleCsv(pieData))
         // Generate SVG
         val svg = generatePieChartSvg(
             pieData,
@@ -472,24 +473,13 @@ class PieChartImproved {
     }
 
     /**
-     * Convert input payload to CSV format
-     */
-    fun payloadToCsv(payload: String): CsvResponse {
-        return payloadToSimpleCsv(payload)
-    }
-
-    /**
      * Convert input payload to simple CSV format (just label and value)
      */
-    fun payloadToSimpleCsv(payload: String): CsvResponse {
-        val (_, chartData) = parseConfigAndData(payload)
-        val pieData = parsePieChartData(chartData)
-
+    private fun payloadToSimpleCsv(pieData: List<PieSegment>): CsvResponse {
         val headers = listOf("Label", "Value")
         val rows = pieData.map { segment ->
             listOf(segment.label, segment.value.toString())
         }
-
         return CsvResponse(headers, rows)
     }
 

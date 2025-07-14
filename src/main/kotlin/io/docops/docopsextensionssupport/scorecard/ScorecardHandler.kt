@@ -1,15 +1,17 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvRequest
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
+import io.docops.docopsextensionssupport.web.update
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.http.*
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
 
-class ScorecardHandler : DocOpsHandler{
+class ScorecardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     private val log = KotlinLogging.logger {}
 
     /**
@@ -21,18 +23,20 @@ class ScorecardHandler : DocOpsHandler{
      */
     fun handleSVG(payload: String, backend: String): String {
         try {
-                val isPdf = backend == "pdf"
-                val parser = ScoreCardParser()
-                val migrationScorecard = parser.parse(payload)
-                val maker = ScoreCardMaker()
-                val svg = maker.make(migrationScorecard, isPdf)
-                return svg
+            val isPdf = backend == "pdf"
+            val parser = ScoreCardParser()
+            val migrationScorecard = parser.parse(payload)
+            val maker = ScoreCardMaker()
+            val svg = maker.make(migrationScorecard, isPdf)
+            val csv = migrationScorecard.toCsv()
+            csvResponse.update(csv)
+            return svg
         } catch (e: Exception) {
             log.error(e) { "Error generating migration scorecard" }
             throw e
         }
     }
-    
+
     /**
      * Handles the HTML rendering process for the UI.
      *
@@ -46,11 +50,11 @@ class ScorecardHandler : DocOpsHandler{
                 val migrationScorecard = parser.parse(payload)
                 val maker = ScoreCardMaker()
                 val svg = maker.make(migrationScorecard, false)
-                
+
                 val headers = HttpHeaders()
                 headers.cacheControl = CacheControl.noCache().headerValue
                 headers.contentType = MediaType.parseMediaType("text/html")
-                
+
                 val div = """
                     <div id='imageblock'>
                     $svg
@@ -59,11 +63,11 @@ class ScorecardHandler : DocOpsHandler{
                     var scorecardSource = `[docops,scorecard]\n----\n${payload}\n----`;
                     </script>
                 """.trimIndent()
-                
+
                 ResponseEntity(div.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
             }
-            
-            log.info{"renderMigrationScorecard executed in ${timing.duration.inWholeMilliseconds}ms "}
+
+            log.info { "renderMigrationScorecard executed in ${timing.duration.inWholeMilliseconds}ms " }
             return timing.value
         } catch (e: Exception) {
             log.error(e) { "Error rendering migration scorecard HTML" }
@@ -76,11 +80,5 @@ class ScorecardHandler : DocOpsHandler{
         context: DocOpsContext
     ): String {
         return handleSVG(payload, context.backend)
-    }
-
-    override fun toCsv(request: CsvRequest): CsvResponse {
-        val parser = ScoreCardParser()
-        val migrationScorecard = parser.parse(request.content)
-        return migrationScorecard.toCsv()
     }
 }

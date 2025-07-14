@@ -1,8 +1,11 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.ShapeResponse
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
 
@@ -11,7 +14,7 @@ import kotlinx.serialization.decodeFromString
  * Supports both JSON and table format for quadrant charts.
  * Updated to use QuadrantChartGenerator for better chart generation.
  */
-class QuadrantHandler : DocOpsHandler {
+class QuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     /**
      * Handles the SVG request and returns the SVG image as a byte array.
@@ -61,7 +64,7 @@ class QuadrantHandler : DocOpsHandler {
 
         val generator = QuadrantChartGenerator()
         val svgContent = generator.generateSVG(points, config)
-
+        csvResponse.update(points.toCsv())
         return ShapeResponse(svgContent, width=800f, height= 1000f)
     }
 

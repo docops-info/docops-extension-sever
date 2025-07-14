@@ -1,13 +1,14 @@
 package io.docops.docopsextensionssupport.callout
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 
 /**
  * Generic handler for callout visualizations
  */
 
-class CalloutHandler : DocOpsHandler{
+class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     /**
      * Extracts the callout type from the uncompressed payload
@@ -58,7 +59,7 @@ class CalloutHandler : DocOpsHandler{
     }
 
     fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int): String {
-        val maker = CalloutMaker()
+        val maker = CalloutMaker(csvResponse)
 
         // Parse the callout type from the uncompressed payload
         val calloutType = extractCalloutType(uncompressedPayload)

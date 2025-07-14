@@ -1,17 +1,18 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 import kotlinx.serialization.json.Json
 
-class BarGroupHandler : DocOpsHandler{
+class BarGroupHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
     fun handleSVG(payload: String): String {
 
         // Check if the data is in table format (contains "---" separator)
         val svg = if (payload.contains("---") || !payload.trim().startsWith("{")) {
             // Use BarChartImproved for table format
             val barChartImproved = BarChartImproved()
-            barChartImproved.makeGroupBarSvg(payload)
+            barChartImproved.makeGroupBarSvg(payload, csvResponse)
         } else {
             // Use traditional JSON format
             val maker = BarGroupMaker()

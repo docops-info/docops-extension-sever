@@ -1,13 +1,14 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
+import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 
-class BarHandler : DocOpsHandler{
+class BarHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     fun handleSVG(payload: String) : String {
         val barChartImproved = BarChartImproved()
-        val svg = barChartImproved.makeBarSvg(payload)
+        val svg = barChartImproved.makeBarSvg(payload, csvResponse)
         return svg
     }
 

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
 /**
@@ -83,3 +84,29 @@ data class QuadrantConfig(
 
 @Serializable
 data class DataRange(val min: Double, val max: Double)
+
+/**
+ * Converts a List<QuadrantPoint> to CSV format
+ * @return CsvResponse with headers and rows representing the quadrant points
+ */
+fun List<QuadrantPoint>.toCsv(): CsvResponse {
+    val headers = listOf("Point Number", "X", "Y", "Label", "Category")
+    val csvRows = mutableListOf<List<String>>()
+
+    if (this.isNotEmpty()) {
+        this.forEachIndexed { index, point ->
+            csvRows.add(listOf(
+                (index + 1).toString(),
+                point.x.toString(),
+                point.y.toString(),
+                point.label,
+                point.category ?: ""
+            ))
+        }
+    } else {
+        // If no points, add an empty row
+        csvRows.add(listOf("0", "", "", "", ""))
+    }
+
+    return CsvResponse(headers, csvRows)
+}

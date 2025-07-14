@@ -2,13 +2,12 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.util.UrlUtil
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.json.Json
-import org.apache.commons.logging.LogFactory
 import org.springframework.http.CacheControl
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -123,7 +122,7 @@ class LineController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val lineChartImproved = LineChartImproved()
-            val svg = lineChartImproved.makeLineSvg(contents)
+            val svg = lineChartImproved.makeLineSvg(contents, DefaultCsvResponse)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -179,7 +178,7 @@ class LineController {
     @PostMapping("", produces = ["image/svg+xml"])
     fun lineFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val lineChartImproved = LineChartImproved()
-        val svg = lineChartImproved.makeLineSvg(payload)
+        val svg = lineChartImproved.makeLineSvg(payload, DefaultCsvResponse)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)

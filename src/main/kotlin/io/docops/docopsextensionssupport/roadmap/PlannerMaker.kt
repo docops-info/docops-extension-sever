@@ -1,9 +1,6 @@
 package io.docops.docopsextensionssupport.roadmap
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.chart.STUNNINGPIE
-import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 
@@ -21,9 +18,7 @@ val DOCOPS_BRANDING_COLORS = listOf(
 
 class PlannerMaker {
 
-    fun makePlannerImage(source: String, title: String, scale: String, useDark: Boolean = false): String {
-        val parser = PlannerParser()
-        val planItems = parser.parse(source)
+    fun makePlannerImage(planItems: PlanItems, title: String, scale: String, useDark: Boolean = false): String {
         val sb = StringBuilder()
         val cols = planItems.toColumns()
         val grads = planItems.colorDefs(cols)
@@ -317,7 +312,9 @@ HTML, CSS, JavaScript
 [[https://github.com GitHub]]
     """.trimIndent()
     val p = PlannerMaker()
-    val svg =p.makePlannerImage(str, "Enhanced Development Roadmap", "1.0")
+    val parser = PlannerParser()
+    val planItems = parser.parse(str)
+    val svg =p.makePlannerImage(planItems, "Enhanced Development Roadmap", "1.0")
     val f = File("gen/plannernew.svg")
     f.writeBytes(svg.toByteArray())
     println("Generated enhanced planner with larger size, chevron bullets, and wiki links")

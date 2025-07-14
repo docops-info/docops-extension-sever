@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.diagram
 
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
@@ -23,7 +24,7 @@ import kotlin.time.measureTimedValue
 @RequestMapping("/api/quadrant")
 class QuadrantController {
     private val log = KotlinLogging.logger {}
-    private val quadrantHandler = QuadrantHandler()
+    private val quadrantHandler = QuadrantHandler(DefaultCsvResponse)
 
     /**
      * Returns the edit mode HTML for the quadrant chart.

@@ -141,7 +141,8 @@ class TimelineController {
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3", useGlass = true)
-            val svg = tm.makeTimelineSvg(contents, title, scale, false)
+            val entries = TimelineParser().parse(contents)
+            val svg = tm.makeTimelineSvg(entries, title, scale, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -220,7 +221,8 @@ class TimelineController {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, useGlass = useGlass)
             val isPdf = "PDF" == type
-            val svg = tm.makeTimelineSvg(data, title, scale, isPdf)
+            val entries = TimelineParser().parse(data)
+            val svg = tm.makeTimelineSvg(entries, title, scale, isPdf)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -271,7 +273,8 @@ class TimelineController {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(false)
-            val svg = tm.makeTimelineSvg(data, "title", "0.6", false)
+            val entries = TimelineParser().parse(data)
+            val svg = tm.makeTimelineSvg(entries, "title", "0.6", false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.TEXT_PLAIN
