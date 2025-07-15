@@ -143,6 +143,8 @@ class DocOpsRouter (
         // Publish the event with the count
         applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds, true, count))
         headers.cacheControl = CacheControl.noCache().headerValue
+        headers["X-Content-Type-Options"] = "nosniff"
+        headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
         headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
 
 
