@@ -25,6 +25,7 @@ import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
+import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriComponentsBuilder
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import kotlin.time.measureTimedValue
@@ -100,7 +102,7 @@ class DocOpsRouter (
                @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
                @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
                @RequestParam("docname", defaultValue = "unknown") docname: String,
-               @RequestParam("backend", required = false, defaultValue = "html") backend: String
+               @RequestParam("backend", required = false, defaultValue = "html") backend: String, httpServletRequest: HttpServletRequest
     ) : ResponseEntity<ByteArray> {
         val context = DocOpsContext(
             scale = scale,
@@ -112,6 +114,7 @@ class DocOpsRouter (
             docname = docname
         )
 
+        //println(buildDocOpsSvgUriWithBuilder(httpServletRequest, kind= kind, payload = payload, scale = scale, type = type, title = title, useDark = useDark, useGlass = useGlass, docname = docname, backend = backend))
         val headers = HttpHeaders()
         val response = CsvResponse(mutableListOf<String>(), mutableListOf<List<String>>())
         val handler = createHandler(kind.lowercase(), response)
@@ -172,6 +175,37 @@ class DocOpsRouter (
         }
     }
 
+    fun buildDocOpsSvgUriWithBuilder(
+        request: HttpServletRequest,
+        kind: String,
+        payload: String,
+        scale: String = "1.0",
+        type: String = "SVG",
+        title: String = "",
+        useDark: Boolean = false,
+        useGlass: Boolean = false,
+        docname: String = "unknown",
+        backend: String = "html"
+    ): String {
+        val baseUrl = "${request.scheme}://${request.serverName}" +
+                (if (request.serverPort != 80 && request.serverPort != 443)
+                    ":${request.serverPort}" else "") +
+                request.contextPath
+
+        return UriComponentsBuilder.fromUriString(baseUrl)
+            .path("/api/docops/svg")
+            .queryParam("kind", kind)
+            .queryParam("payload", payload)
+            .queryParam("scale", scale)
+            .queryParam("type", type)
+            .queryParam("title", title)
+            .queryParam("useDark", useDark)
+            .queryParam("useGlass", useGlass)
+            .queryParam("docname", docname)
+            .queryParam("backend", backend)
+            .build()
+            .toUriString()
+    }
 
 
 }
