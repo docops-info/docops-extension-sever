@@ -8,6 +8,7 @@ import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.*
 import io.docops.docopsextensionssupport.diagram.*
+import io.docops.docopsextensionssupport.domain.DomainHandler
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
@@ -85,6 +86,7 @@ class DocOpsRouter (
             "swim" -> SwimLaneHandler(csvResponse)
             "feature" -> FeatureCardHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)
+            "domain" -> DomainHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }

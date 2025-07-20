@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.domain
 
 import io.docops.docopsextensionssupport.domain.model.DomainElement
+import io.docops.docopsextensionssupport.web.CsvResponse
 import org.springframework.stereotype.Service
 
 @Service
@@ -92,3 +93,4 @@ class MarkupParser {
         return colorPalette[color] ?: "#3498db"
     }
 }
+
