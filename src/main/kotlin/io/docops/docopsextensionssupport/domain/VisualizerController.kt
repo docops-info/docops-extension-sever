@@ -19,8 +19,9 @@ class VisualizerController(
     @PostMapping("/generate-svg")
     fun generateSvg(@RequestBody request: MarkupRequest): ResponseEntity<SvgResponse> {
         try {
-            val structure = markupParser.parseMarkup(request.markup)
-            val svg = svgGenerator.generateSvg(structure)
+            val (structure, config) = markupParser.parseMarkup(request.markup)
+
+            val svg = svgGenerator.generateSvg(structure, config.useGradients, config.useGlass)
 
             // Extract dimensions from SVG (simple regex)
             val widthMatch = Regex("width=\"(\\d+)\"").find(svg)

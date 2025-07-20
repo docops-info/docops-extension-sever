@@ -12,10 +12,11 @@ class DomainHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
         context: DocOpsContext
     ): String {
         val parser = MarkupParser()
-        val elems = parser.parseMarkup(payload)
+        val (structure, config) = parser.parseMarkup(payload)
+
         val generator = SvgGenerator()
-        val svg = generator.generateSvg(elems)
-        csvResponse.update(elems.toCsv())
+        val svg = generator.generateSvg(structure, config.useGradients, config.useGlass)
+        csvResponse.update(structure.toCsv())
         return svg
     }
 }

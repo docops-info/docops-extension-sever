@@ -35,6 +35,11 @@ sealed class DomainElement(
     object Separator : DomainElement("separator")
 }
 
+data class DiagramConfig(
+    val useGradients: Boolean = false,
+    val useGlass: Boolean = false
+)
+
 fun List<DomainElement>.toCsv(): CsvResponse {
     // Define headers for the CSV
     val headers = listOf("Type", "Title", "Color", "Parent")

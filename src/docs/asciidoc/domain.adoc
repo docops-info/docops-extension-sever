@@ -94,6 +94,25 @@ You can also use hex colors:
 ## Digital Marketing [#C70039]
 ....
 
+=== Configuration Options
+
+The domain markup parser supports a configuration block that allows you to customize the visual appearance of your domain diagrams. The configuration block starts with `@config{` and ends with `}`, and should be placed at the beginning of your markup.
+
+[source,asciidoc]
+....
+@config{
+useGradients = true
+useGlass = true
+}
+....
+
+Available configuration options:
+
+* `useGradients` - When set to `true`, applies gradient effects to the domain and subdomain backgrounds, creating a more visually appealing and modern look. Default is `false`.
+* `useGlass` - When set to `true`, applies a glass-like effect to the domain elements, giving them a translucent appearance with subtle highlights and shadows. Default is `false`.
+
+These visual enhancements can make your domain diagrams more engaging and help distinguish between different domains and hierarchies.
+
 === Special Features
 
 The markup also supports:
@@ -179,6 +198,236 @@ You can use separators to visually group related domains:
 # Support Functions [purple]
 ## HR [pink]
 ## Finance [yellow]
+----
+
+=== Styling with Configuration Options
+
+You can use the configuration options to create different visual styles for your domain diagrams. Here are examples showing the same domain structure with different configuration settings:
+
+==== Default Style (No Configuration)
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+....
+
+[docops,domain,controls=true]
+----
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+
+==== With Gradients
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+@config{
+useGradients = true
+useGlass = false
+}
+
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+....
+
+[docops,domain,controls=true]
+----
+@config{
+useGradients = true
+useGlass = false
+}
+
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+
+==== With Glass Effect
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+@config{
+useGradients = false
+useGlass = true
+}
+
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+....
+
+[docops,domain,controls=true]
+----
+@config{
+useGradients = false
+useGlass = true
+}
+
+# Cloud Architecture [blue]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+
+==== With Both Gradients and Glass Effect
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+@config{
+useGradients = true
+useGlass = true
+}
+
+# Cloud Architecture [#2c3e50]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
+----
+....
+
+[docops,domain,controls=true]
+----
+@config{
+useGradients = false
+useGlass = true
+}
+
+# Cloud Architecture [#2c3e50]
+## Frontend Services [green]
+### Web Applications
+### Mobile Applications
+
+## Backend Services [purple]
+### API Gateway
+### Microservices
+### Data Services
+
+# DevOps [orange]
+## CI/CD Pipeline [red]
+### Build Automation
+### Deployment Automation
+
+## Monitoring [teal]
+### Performance Monitoring
+### Error Tracking
 ----
 
 === Complex Domain Structure

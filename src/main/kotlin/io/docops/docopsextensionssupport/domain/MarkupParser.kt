@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.domain
 
+import io.docops.docopsextensionssupport.domain.model.DiagramConfig
 import io.docops.docopsextensionssupport.domain.model.DomainElement
 import io.docops.docopsextensionssupport.web.CsvResponse
 import org.springframework.stereotype.Service
@@ -20,11 +21,16 @@ class MarkupParser {
         "indigo" to "#6c5ce7"
     )
 
-    fun parseMarkup(markup: String): List<DomainElement> {
+    fun parseMarkup(markup: String): Pair<List<DomainElement>, DiagramConfig> {
         val lines = markup.split('\n')
         val structure = mutableListOf<DomainElement>()
         var currentDomain: DomainElement.Domain? = null
         var currentSubdomain: DomainElement.Subdomain? = null
+
+        // Default configuration
+        var config = DiagramConfig()
+        var inConfigBlock = false
+        val configLines = mutableListOf<String>()
 
         for (line in lines) {
             val trimmedLine = line.trim()
@@ -32,6 +38,27 @@ class MarkupParser {
             // Skip empty lines and comments
             if (trimmedLine.isEmpty() || trimmedLine.startsWith("//")) continue
 
+            // Check for config block start/end
+            if (trimmedLine == "@config{") {
+                inConfigBlock = true
+                continue
+            } else if (trimmedLine == "}") {
+                if (inConfigBlock) {
+                    // Process config block
+                    config = parseConfigBlock(configLines)
+                    inConfigBlock = false
+                    configLines.clear()
+                    continue
+                }
+            }
+
+            // If in config block, add line to config lines
+            if (inConfigBlock) {
+                configLines.add(trimmedLine)
+                continue
+            }
+
+            // Existing parsing logic for domain elements...
             // Horizontal separator
             if (trimmedLine == "---") {
                 structure.add(DomainElement.Separator)
@@ -76,8 +103,32 @@ class MarkupParser {
             }
         }
 
-        return structure
+        return Pair(structure, config)
     }
+
+    private fun parseConfigBlock(configLines: List<String>): DiagramConfig {
+        var useGradients = false
+        var useGlass = false
+
+        for (line in configLines) {
+            val trimmedLine = line.trim()
+
+            // Parse useGradients setting
+            val gradientsMatch = Regex("useGradients\\s*=\\s*(true|false)").find(trimmedLine)
+            if (gradientsMatch != null) {
+                useGradients = gradientsMatch.groupValues[1].lowercase() == "true"
+            }
+
+            // Parse useGlass setting
+            val glassMatch = Regex("useGlass\\s*=\\s*(true|false)").find(trimmedLine)
+            if (glassMatch != null) {
+                useGlass = glassMatch.groupValues[1].lowercase() == "true"
+            }
+        }
+
+        return DiagramConfig(useGradients, useGlass)
+    }
+
 
     private fun parseColor(colorStr: String): String {
         if (colorStr.isEmpty()) return "#3498db" // default blue
