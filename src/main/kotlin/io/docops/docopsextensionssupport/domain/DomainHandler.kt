@@ -15,7 +15,7 @@ class DomainHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
         val (structure, config) = parser.parseMarkup(payload)
 
         val generator = SvgGenerator()
-        val svg = generator.generateSvg(structure, config.useGradients, config.useGlass)
+        val svg = generator.generateSvg(structure, config.useGradients, config.useGlass, config.glassStyle)
         csvResponse.update(structure.toCsv())
         return svg
     }

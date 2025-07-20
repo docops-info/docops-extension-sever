@@ -7,7 +7,11 @@ import kotlin.math.min
 @Service
 class SvgGenerator {
 
-    fun generateSvg(structure: List<DomainElement>, useGradients: Boolean = false, useGlass: Boolean = false): String {
+    fun generateSvg(structure: List<DomainElement>,
+                    useGradients: Boolean = false,
+                    useGlass: Boolean = false,
+                    glassStyle: String = "standard"
+    ): String {
         val padding = 20
         val domainWidth = 300
         val domainHeight = 50
@@ -63,6 +67,15 @@ class SvgGenerator {
         svg.append("<defs>")
         // Add glass effect filter
         if (useGlass) {
+            when (glassStyle.lowercase()) {
+                "frosted" -> addGlassmorphismFilter(svg)
+                "neumorphic" -> addNeumorphicGlassFilter(svg)
+                "colorful" -> addColorfulGlassFilter(svg)
+                "reflection" -> addReflectionGlassFilter(svg)
+                "iridescent" -> addIridescentGlassFilter(svg)
+                else -> addStandardGlassFilter(svg) // Your existing glass filter
+            }
+
             svg.append("""
             <filter id="glass" x="-10%" y="-10%" width="120%" height="120%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
@@ -144,9 +157,18 @@ class SvgGenerator {
                     } else {
                         element.color
                     }
+                    // Determine filter ID based on glass style
+                    val glassFilterId = when (glassStyle.lowercase()) {
+                        "frosted" -> "glassmorphism"
+                        "neumorphic" -> "neuGlass"
+                        "colorful" -> "colorfulGlass"
+                        "reflection" -> "reflectionGlass"
+                        "iridescent" -> "iridGlass"
+                        else -> "glass" // Your existing glass filter ID
+                    }
 
                     // Determine filter
-                    val domainFilter = if (useGlass) "filter=\"url(#glass)\"" else "filter=\"url(#shadow)\""
+                    val domainFilter = if (useGlass) "filter=\"url(#$glassFilterId)\"" else "filter=\"url(#shadow)\""
 
                     // Glass effect typically needs higher opacity to see through
                     val opacity = if (useGlass) "0.85" else "1.0"
@@ -214,6 +236,28 @@ class SvgGenerator {
 
     }
 
+    private fun addStandardGlassFilter(svg: StringBuilder) {
+        svg.append("""
+            <filter id="glass" x="-10%" y="-10%" width="120%" height="120%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                <feOffset in="blur" dx="0" dy="0" result="offsetBlur"/>
+                <feComponentTransfer in="offsetBlur" result="compTransfer">
+                    <feFuncA type="linear" slope="0.5"/>
+                </feComponentTransfer>
+                <feComposite in="SourceGraphic" in2="compTransfer" operator="over" result="composite"/>
+                
+                <!-- Light reflection on top -->
+                <feSpecularLighting in="composite" surfaceScale="3" specularConstant=".75" 
+                                   specularExponent="20" lighting-color="#white" result="specOut">
+                    <fePointLight x="-5000" y="-10000" z="20000"/>
+                </feSpecularLighting>
+                <feComposite in="specOut" in2="composite" operator="in" result="specOut2"/>
+                <feComposite in="composite" in2="specOut2" operator="arithmetic" 
+                            k1="0" k2="1" k3="1" k4="0" result="final"/>
+            </filter>
+        """.trimIndent())
+    }
+
     // Helper function to create a lighter version of a color for the gradient
     private fun createLighterColor(hexColor: String): String {
         // Parse the hex color
@@ -240,4 +284,111 @@ class SvgGenerator {
             .replace("\"", "&quot;")
             .replace("'", "&#39;")
     }
+    fun addIridescentGlassFilter(svg: StringBuilder) {
+        svg.append("""
+        <linearGradient id="iridescent" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(45)">
+            <stop offset="0%" stop-color="#8A2BE2" />
+            <stop offset="25%" stop-color="#4169E1" />
+            <stop offset="50%" stop-color="#00BFFF" />
+            <stop offset="75%" stop-color="#00CED1" />
+            <stop offset="100%" stop-color="#20B2AA" />
+        </linearGradient>
+        
+        <filter id="iridGlass">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+            <feOffset in="blur" dx="0" dy="0" result="offsetBlur" />
+            <feFlood flood-color="white" flood-opacity="0.3" result="highlightColor"/>
+            <feComposite in="highlightColor" in2="SourceAlpha" operator="in" result="highlight"/>
+            <feComposite in="SourceGraphic" in2="highlight" operator="over" result="withHighlight"/>
+            <feComposite in="withHighlight" in2="offsetBlur" operator="over"/>
+            <feColorMatrix type="matrix" values="
+                0.7 0 0 0 0
+                0 0.7 0 0 0
+                0 0 0.7 0 0
+                0 0 0 0.8 0"/>
+        </filter>
+    """.trimIndent())
+
+        // Add animated gradient movement (optional)
+        svg.append("""
+        <animate xlink:href="#iridescent" attributeName="x1" from="0%" to="100%" dur="3s" repeatCount="indefinite" />
+    """.trimIndent())
+    }
+    fun addReflectionGlassFilter(svg: StringBuilder) {
+        svg.append("""
+        <filter id="reflectionGlass">
+            <!-- Base glass effect -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+            <feColorMatrix in="blur" type="matrix" values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 0.5 0" result="glass"/>
+            
+            <!-- Top reflection highlight -->
+            <feSpecularLighting in="blur" surfaceScale="3" specularConstant="0.7" 
+                               specularExponent="25" lighting-color="white" result="highlight">
+                <fePointLight x="-50" y="-100" z="150"/>
+            </feSpecularLighting>
+            <feComposite in="highlight" in2="SourceGraphic" operator="in" result="highlight2"/>
+            
+            <!-- Combine everything -->
+            <feComposite in="SourceGraphic" in2="glass" operator="over" result="withGlass"/>
+            <feComposite in="withGlass" in2="highlight2" operator="over"/>
+        </filter>
+    """.trimIndent())
+    }
+    fun addColorfulGlassFilter(svg: StringBuilder) {
+        svg.append("""
+        <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF9AA2" />
+            <stop offset="20%" stop-color="#FFB7B2" />
+            <stop offset="40%" stop-color="#FFDAC1" />
+            <stop offset="60%" stop-color="#E2F0CB" />
+            <stop offset="80%" stop-color="#B5EAD7" />
+            <stop offset="100%" stop-color="#C7CEEA" />
+        </linearGradient>
+        
+        <filter id="colorfulGlass" x="-10%" y="-10%" width="120%" height="120%">
+            <feColorMatrix type="matrix" values="
+                0.3 0 0 0 0
+                0 0.3 0 0 0
+                0 0 0.3 0 0
+                0 0 0 0.7 0" result="tint" />
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+    """.trimIndent())
+    }
+    fun addNeumorphicGlassFilter(svg: StringBuilder) {
+        svg.append("""
+        <filter id="neuGlass">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feOffset in="blur" dx="-2" dy="-2" result="offsetBlur1" />
+            <feOffset in="blur" dx="2" dy="2" result="offsetBlur2" />
+            <feComposite in="SourceGraphic" in2="offsetBlur1" operator="over" result="comp1" />
+            <feComposite in="comp1" in2="offsetBlur2" operator="over" result="comp2" />
+            <feColorMatrix in="comp2" type="matrix" values="
+                1 0 0 0 0
+                0 1 0 0 0  
+                0 0 1 0 0
+                0 0 0 0.9 0" />
+            <feGaussianBlur stdDeviation="0.7" />
+        </filter>
+    """.trimIndent())
+    }
+    fun addGlassmorphismFilter(svg: StringBuilder) {
+        svg.append("""
+        <filter id="glassmorphism" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 20 -7" result="glassmorphism" />
+            <feComposite in="SourceGraphic" in2="glassmorphism" operator="atop"/>
+        </filter>
+    """.trimIndent())
+    }
+
 }

@@ -21,7 +21,7 @@ class VisualizerController(
         try {
             val (structure, config) = markupParser.parseMarkup(request.markup)
 
-            val svg = svgGenerator.generateSvg(structure, config.useGradients, config.useGlass)
+            val svg = svgGenerator.generateSvg(structure, config.useGradients, config.useGlass, config.glassStyle)
 
             // Extract dimensions from SVG (simple regex)
             val widthMatch = Regex("width=\"(\\d+)\"").find(svg)

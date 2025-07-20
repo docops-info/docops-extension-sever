@@ -37,7 +37,8 @@ sealed class DomainElement(
 
 data class DiagramConfig(
     val useGradients: Boolean = false,
-    val useGlass: Boolean = false
+    val useGlass: Boolean = false,
+    val glassStyle: String = "standard"
 )
 
 fun List<DomainElement>.toCsv(): CsvResponse {

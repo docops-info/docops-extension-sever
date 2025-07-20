@@ -357,23 +357,7 @@
 <div class="container">
     <h1>🎨 Domain Visualization Markup Parser</h1>
 
-    <div class="server-status" id="serverStatus">
-        <div class="indicator"></div>
-        <span id="statusText">Checking server connection...</span>
-    </div>
 
-    <div class="config-section">
-        <h3>🔧 Server Configuration</h3>
-        <div class="config-row">
-            <label for="serverUrl">Server URL:</label>
-            <input type="text" id="serverUrl" value="/extension" placeholder="/extension">
-        </div>
-        <div class="config-row">
-            <label for="testConnection">
-                <button onclick="testConnection()" style="padding: 5px 15px; font-size: 14px; margin: 0;">Test Connection</button>
-            </label>
-        </div>
-    </div>
 
     <div class="editor-container">
         <div class="editor-section">
@@ -397,6 +381,17 @@
                     <label>
                         <input type="checkbox" id="useGlass"> Use Glass Effect
                     </label>
+                    <div id="glassStyleOptions" style="display: none; margin-left: 20px;">
+                        <select id="glassStyle">
+                            <option value="standard">Standard Glass</option>
+                            <option value="frosted">Frosted Glass</option>
+                            <option value="neumorphic">Neumorphic Glass</option>
+                            <option value="colorful">Colorful Glass</option>
+                            <option value="reflection">Reflection Glass</option>
+                            <option value="iridescent">Iridescent Glass</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
             <textarea id="markupInput" placeholder="Enter your domain markup here..."></textarea>
@@ -460,6 +455,23 @@ Empty lines create visual spacing</pre>
 # Operations [orange]
 ## HR & Recruitment [red]
 ## Finance & Accounting [yellow]</pre>
+    </div>
+    <div class="server-status" id="serverStatus">
+        <div class="indicator"></div>
+        <span id="statusText">Checking server connection...</span>
+    </div>
+
+    <div class="config-section">
+        <h3>🔧 Server Configuration</h3>
+        <div class="config-row">
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" value="/extension" placeholder="/extension">
+        </div>
+        <div class="config-row">
+            <label for="testConnection">
+                <button onclick="testConnection()" style="padding: 5px 15px; font-size: 14px; margin: 0;">Test Connection</button>
+            </label>
+        </div>
     </div>
 </div>
 
@@ -549,6 +561,7 @@ Empty lines create visual spacing</pre>
         // Get the state of the useGradients and useGlass checkboxes
         const useGradients = document.getElementById('useGradients').checked;
         const useGlass = document.getElementById('useGlass').checked;
+        const glassStyle = document.getElementById('glassStyle').value;
 
         // Add config block to the beginning of the markup if either checkbox is checked
         if (useGradients || useGlass) {
@@ -557,6 +570,7 @@ Empty lines create visual spacing</pre>
                 const configBlock = `@config{
 useGradients = ${useGradients}
 useGlass = ${useGlass}
+${useGlass ? `glassStyle = "${glassStyle}"` : ""}
 }
 
 `;
@@ -566,6 +580,7 @@ useGlass = ${useGlass}
                 markup = markup.replace(/@config\{[\s\S]*?\}/g, `@config{
 useGradients = ${useGradients}
 useGlass = ${useGlass}
+${useGlass ? `glassStyle = "${glassStyle}"` : ""}
 }`);
             }
         }
@@ -703,13 +718,15 @@ useGlass = ${useGlass}
         
         const useGradients = document.getElementById('useGradients').checked;
         const useGlass = document.getElementById('useGlass').checked;
+        const glassStyle = document.getElementById('glassStyle').value;
         
         store.put({
             id: 'currentEditor',
             content: editorContent,
             config: {
                 useGradients: useGradients,
-                useGlass: useGlass
+                useGlass: useGlass,
+                glassStyle: glassStyle
             },
             timestamp: new Date().toISOString()
         });
@@ -742,6 +759,10 @@ useGlass = ${useGlass}
                 document.getElementById('markupInput').value = request.result.content;
                 document.getElementById('useGradients').checked = request.result.config.useGradients;
                 document.getElementById('useGlass').checked = request.result.config.useGlass;
+                // Set glassStyle if available
+                if (request.result.config.glassStyle) {
+                    document.getElementById("glassStyle").value = request.result.config.glassStyle;
+                }
                 
                 showMessage('Content loaded successfully!', 'success');
                 
@@ -765,12 +786,14 @@ useGlass = ${useGlass}
         const editorContent = document.getElementById('markupInput').value;
         const useGradients = document.getElementById('useGradients').checked;
         const useGlass = document.getElementById('useGlass').checked;
+        const glassStyle = document.getElementById('glassStyle').value;
         
         const exportData = JSON.stringify({
             content: editorContent,
             config: {
                 useGradients: useGradients,
-                useGlass: useGlass
+                useGlass: useGlass,
+                glassStyle: glassStyle
             },
             exportDate: new Date().toISOString()
         }, null, 2);
@@ -901,5 +924,13 @@ useGlass = ${useGlass}
         }
     });
 </script>
+<script>
+    // Show glass style options only when glass effect is enabled
+    document.getElementById('useGlass').addEventListener('change', function() {
+        document.getElementById('glassStyleOptions').style.display =
+            this.checked ? 'block' : 'none';
+    });
+</script>
+
 </body>
 </html>

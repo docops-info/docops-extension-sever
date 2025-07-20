@@ -109,6 +109,7 @@ class MarkupParser {
     private fun parseConfigBlock(configLines: List<String>): DiagramConfig {
         var useGradients = false
         var useGlass = false
+        var glassStyle = "standard"
 
         for (line in configLines) {
             val trimmedLine = line.trim()
@@ -124,9 +125,15 @@ class MarkupParser {
             if (glassMatch != null) {
                 useGlass = glassMatch.groupValues[1].lowercase() == "true"
             }
+
+            // Parse glassStyle setting
+            val glassStyleMatch = Regex("glassStyle\\s*=\\s*\"?([\\w]+)\"?").find(trimmedLine)
+            if (glassStyleMatch != null) {
+                glassStyle = glassStyleMatch.groupValues[1]
+            }
         }
 
-        return DiagramConfig(useGradients, useGlass)
+        return DiagramConfig(useGradients, useGlass, glassStyle)
     }
 
 
