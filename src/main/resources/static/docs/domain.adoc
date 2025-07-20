@@ -1,0 +1,279 @@
+include::_base.adoc[]
+= Domain Markup Parser/Generator
+:imagesdir: images
+
+include::shared/buttons.adoc[]
+
+== Introduction
+
+The DocOps Domain Markup Parser/Generator allows you to create visual domain diagrams using a simple markup syntax. This tool is useful for visualizing domain-driven design (DDD) concepts, organizational structures, or any hierarchical domain relationships in your AsciiDoctor documents.
+
+This guide will help you understand the basic concepts of domain visualization, how to use the markup syntax, and provide examples of different ways to create domain diagrams.
+
+== Basic Concepts
+
+=== What is Domain Visualization?
+
+Domain visualization in the DocOps extension is a way to represent hierarchical domain structures using a simple markup language. The visualization creates SVG-based diagrams that show:
+
+* Domains (top-level entities)
+* Subdomains (second-level entities)
+* Sub-subdomains (third-level entities)
+* Visual relationships between these entities
+
+The extension supports customizing the appearance of domains and subdomains with different colors, allowing you to create visually distinct and meaningful diagrams.
+
+=== Domain Diagram Components
+
+A domain diagram includes:
+
+* *Domains*: Top-level entities represented as rectangles with titles
+* *Subdomains*: Second-level entities that belong to a domain
+* *Sub-subdomains*: Third-level entities that belong to a subdomain
+* *Separators*: Horizontal lines that can be used to visually separate groups of domains
+
+Each component can have:
+
+* A title (the name of the domain/subdomain)
+* A color (optional, to visually distinguish different domains)
+
+== AsciiDoctor Syntax for Domain Diagrams
+
+To include domain diagrams in your AsciiDoctor document, you use a special markup syntax within the DocOps macro.
+
+=== Basic Syntax
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+# Domain Name [color]
+## Subdomain Name [color]
+### Sub-subdomain Name
+
+# Another Domain [color]
+## Another Subdomain [color]
+### Another Sub-subdomain
+----
+....
+
+The markup uses a hierarchical structure with hash symbols (#) to indicate the level:
+
+* `#` - Defines a domain (top level)
+* `##` - Defines a subdomain (second level)
+* `###` - Defines a sub-subdomain (third level)
+
+=== Color Options
+
+You can specify colors for domains and subdomains using square brackets after the name:
+
+[source,asciidoc]
+....
+# Finance [blue]
+## Accounting [green]
+## Budgeting [red]
+....
+
+Available color options include:
+* blue
+* green
+* red
+* yellow
+* purple
+* orange
+* pink
+* gray
+* teal
+* indigo
+
+You can also use hex colors:
+
+[source,asciidoc]
+....
+# Marketing [#FF5733]
+## Digital Marketing [#C70039]
+....
+
+=== Special Features
+
+The markup also supports:
+
+* Comments (lines starting with `//` are ignored)
+* Separators (use `---` to create a horizontal line)
+* Empty lines (create visual spacing in the markup)
+
+== Examples
+
+=== Basic Domain Structure
+
+Here's a simple example of a domain diagram:
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+# Technology [blue]
+## Software Development [green]
+### Frontend Development
+### Backend Development
+### DevOps
+
+## Data & Analytics [purple]
+### Data Science
+### Business Intelligence
+
+# Operations [orange]
+## HR & Recruitment [red]
+## Finance & Accounting [yellow]
+----
+....
+
+
+[docops,domain,controls=true]
+----
+# Technology [blue]
+## Software Development [green]
+### Frontend Development
+### Backend Development
+### DevOps
+
+## Data & Analytics [purple]
+### Data Science
+### Business Intelligence
+
+# Operations [orange]
+## HR & Recruitment [red]
+## Finance & Accounting [yellow]
+----
+
+This creates a diagram with two main domains (Technology and Operations), each with their own subdomains and sub-subdomains.
+
+=== Using Separators
+
+You can use separators to visually group related domains:
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+# Core Business [blue]
+## Product Development [green]
+## Sales [teal]
+
+---
+
+# Support Functions [purple]
+## HR [pink]
+## Finance [yellow]
+----
+....
+
+[docops,domain,controls=true]
+----
+# Core Business [blue]
+## Product Development [green]
+## Sales [teal]
+
+---
+
+# Support Functions [purple]
+## HR [pink]
+## Finance [yellow]
+----
+
+=== Complex Domain Structure
+
+Here's a more complex example showing multiple levels and colors:
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+# Enterprise Architecture [#3498db]
+## Application Architecture [#2ecc71]
+### API Design
+### Integration Patterns
+### Microservices
+
+## Data Architecture [#9b59b6]
+### Data Modeling
+### Data Governance
+### Analytics Platform
+
+## Infrastructure [#e74c3c]
+### Cloud Services
+### On-Premises
+### Hybrid Solutions
+
+---
+
+# Business Domains [#f39c12]
+## Customer Management [#d35400]
+### Acquisition
+### Retention
+### Support
+
+## Product Management [#16a085]
+### Research
+### Development
+### Lifecycle
+
+// This is a comment and won't be rendered
+## Financial Operations [#2c3e50]
+### Billing
+### Reporting
+### Compliance
+----
+....
+
+[docops,domain,controls=true]
+----
+# Enterprise Architecture [#3498db]
+## Application Architecture [#2ecc71]
+### API Design
+### Integration Patterns
+### Microservices
+
+## Data Architecture [#9b59b6]
+### Data Modeling
+### Data Governance
+### Analytics Platform
+
+## Infrastructure [#e74c3c]
+### Cloud Services
+### On-Premises
+### Hybrid Solutions
+
+---
+
+# Business Domains [#f39c12]
+## Customer Management [#d35400]
+### Acquisition
+### Retention
+### Support
+
+## Product Management [#16a085]
+### Research
+### Development
+### Lifecycle
+
+// This is a comment and won't be rendered
+## Financial Operations [#2c3e50]
+### Billing
+### Reporting
+### Compliance
+----
+
+== Using the Web Editor
+
+The DocOps Extension Server includes a web-based editor for creating domain diagrams. You can access it at `/domain/editor.html`. The editor provides:
+
+* A markup editor where you can write your domain structure
+* Real-time SVG generation
+* Example loading
+* SVG downloading
+* Syntax guide with examples
+
+The editor makes it easy to experiment with different domain structures and visualize them instantly before including them in your AsciiDoctor documents.
+
+include::shared/buttons.adoc[]

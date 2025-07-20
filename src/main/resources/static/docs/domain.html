@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>Domain Markup Parser/Generator</title>
+<style>
+:root{--primary-color:#3b82f6;--primary-hover:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--primary-gradient-start:#3b82f6;--primary-gradient-end:#8b5cf6;--secondary-color:#64748b;--secondary-light:#f1f5f9;--secondary-dark:#334155;--text-color:#1e293b;--text-light:#64748b;--text-muted:#94a3b8;--bg-color:#ffffff;--bg-light:#f8fafc;--bg-dark:#0f172a;--border-color:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;--code-bg:#f1f5f9;--code-text:#334155;--code-border:#e2e8f0;--note-bg:#eff6ff;--note-border:#bfdbfe;--note-icon:#3b82f6;--tip-bg:#f0fdf4;--tip-border:#bbf7d0;--tip-icon:#22c55e;--warning-bg:#fff7ed;--warning-border:#fed7aa;--warning-icon:#f97316;--caution-bg:#fef2f2;--caution-border:#fecaca;--caution-icon:#ef4444;--important-bg:#faf5ff;--important-border:#e9d5ff;--important-icon:#8b5cf6;--body-font:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;--heading-font:var(--body-font);--monospace-font:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--shadow-sm:0 1px 2px 0 rgba(0, 0, 0, 0.05);--shadow-md:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--radius-sm:0.25rem;--radius-md:0.375rem;--radius-lg:0.5rem;--content-width:50rem;--content-width-wide:70rem;--theme-transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease}html{font-size:100%;text-size-adjust:100%;box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:var(--body-font);font-size:1rem;line-height:1.7;background-color:var(--bg-color);max-width:var(--content-width);margin:0 auto;padding:var(--spacing-lg) var(--spacing-xl)}h1{font-size:2.5rem;border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm);margin-top:var(--spacing-xl);background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}body,h1,h2,h3,h4,h5{color:var(--text-color)}dl,h1,h2,h3,h4,h5,h6,p{margin-bottom:var(--spacing-lg)}h1,h2,h3,h4,h5,h6{font-family:var(--heading-font);font-weight:700;line-height:1.3;scroll-margin-top:var(--spacing-2xl)}h2,h3,h4,h5,h6{margin-top:var(--spacing-2xl)}h6{font-size:1rem;color:var(--secondary-color)}h2{font-size:2rem}h3{font-size:1.5rem}h4{font-size:1.25rem}h5{font-size:1.125rem}dl,p{margin-top:0}a{color:var(--primary-color);text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:focus,a:hover{color:var(--primary-hover);border-bottom-color:var(--primary-hover)}ol,ul{margin-top:0;margin-bottom:var(--spacing-lg);padding-left:var(--spacing-xl)}li,li>ol,li>p,li>ul{margin-bottom:var(--spacing-sm)}li>ol,li>p,li>ul{margin-top:var(--spacing-sm)}dt{font-weight:700;margin-top:var(--spacing-lg)}dd{margin-left:var(--spacing-xl);margin-bottom:var(--spacing-md)}code,pre{font-family:var(--monospace-font);font-size:.9rem;border-radius:var(--radius-md)}code{background-color:var(--code-bg);color:var(--code-text);padding:var(--spacing-xs) var(--spacing-sm)}pre,table td,table th{padding:var(--spacing-md)}pre,table{margin-bottom:var(--spacing-lg)}pre{margin-top:0;background-color:var(--code-bg);border:1px solid var(--code-border);overflow-x:auto;line-height:1.5}pre code{background-color:transparent;padding:0;border-radius:0}.hljs-comment,.hljs-quote{color:#6a737d;font-style:italic}.hljs-keyword,.hljs-selector-tag{color:#d73a49}.hljs-attr,.hljs-string{color:#032f62}.hljs-literal,.hljs-number{color:#005cc5}.hljs-section,.hljs-selector-id,.hljs-title{color:#6f42c1}.hljs-built_in,.hljs-name,.hljs-tag{color:#22863a}table{width:100%;border-collapse:collapse;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden}table td,table th{text-align:left}table th{font-weight:600;background-color:var(--secondary-light);border-bottom:2px solid var(--border-dark)}table td{border-bottom:1px solid var(--border-color)}table tr:last-child td{border-bottom:none}tbody tr:hover{background-color:var(--secondary-light)}.admonitionblock{margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);border:0;position:relative}.admonitionblock>table{margin-bottom:0;border:0}.admonitionblock td.icon{width:3rem;padding:var(--spacing-md);text-align:center;font-weight:700}.admonitionblock td.icon:before{font-family:"Font Awesome 5 Free";font-weight:900;font-size:1.5rem;display:block;margin-bottom:var(--spacing-xs)}.admonitionblock td.content,blockquote{padding:var(--spacing-md) var(--spacing-lg)}.admonitionblock.note{background-color:var(--note-bg);border-color:var(--note-border)}.admonitionblock.note td.icon{background-color:var(--note-icon);color:#fff}.admonitionblock.note td.icon:before{content:""}.admonitionblock.tip{background-color:var(--tip-bg);border-color:var(--tip-border)}.admonitionblock.tip td.icon{background-color:var(--tip-icon);color:#fff}.admonitionblock.tip td.icon:before{content:""}.admonitionblock.warning{background-color:var(--warning-bg);border-color:var(--warning-border)}.admonitionblock.warning td.icon{background-color:var(--warning-icon);color:#fff}.admonitionblock.warning td.icon:before{content:""}.admonitionblock.caution{background-color:var(--caution-bg);border-color:var(--caution-border)}.admonitionblock.caution td.icon{background-color:var(--caution-icon);color:#fff}.admonitionblock.caution td.icon:before{content:""}.admonitionblock.important{background-color:#fff;border-color:transparent;position:relative}.admonitionblock.important td.icon,.admonitionblock.important::before,.gradient-border-left::before{background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.admonitionblock.important::before,.gradient-border-left::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%}.admonitionblock.important td.icon{color:#fff}.admonitionblock.important td.icon:before{content:""}blockquote{margin:0 0 var(--spacing-lg)0;color:var(--secondary-color);background-color:var(--secondary-light);border-left:4px solid var(--primary-color);border-radius:0 var(--radius-md) var(--radius-md)0}blockquote p:last-child{margin-bottom:0}hr{border:0;height:1px;background-color:var(--border-color);margin:var(--spacing-xl)0}#toc,img{border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}img{max-width:100%;height:auto;margin:var(--spacing-md)0}.hero{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;padding:var(--spacing-2xl) var(--spacing-xl);margin-bottom:var(--spacing-2xl);border-radius:var(--radius-lg);text-align:center}#toc a,.hero h1{border-bottom:none}.hero h1{color:#fff;background-image:none;-webkit-text-fill-color:#fff}.hero p{font-size:1.25rem;max-width:42rem;margin-left:auto;margin-right:auto}#toc{background-color:var(--secondary-light);padding:var(--spacing-lg);margin-bottom:var(--spacing-xl);border:1px solid var(--border-color);position:sticky;top:var(--spacing-lg)}#toc.toc2{position:fixed;left:0;top:0;width:20rem;height:100%;overflow-y:auto;border-radius:0;border-right:1px solid var(--border-color);padding:var(--spacing-xl) var(--spacing-lg);background-color:var(--bg-light);z-index:1000}#toc.toc2 #toctitle,.hero h1{margin-top:0}body.toc2{padding-left:22rem;max-width:none}#toc .title,.sidebarblock>.content>.title{margin-top:0;font-size:1.25rem;color:var(--text-color);margin-bottom:var(--spacing-md)}#toc .title{font-weight:700}#toc ul{list-style-type:none;padding-left:0;margin-bottom:0}#toc li{margin-top:var(--spacing-sm);line-height:1.4}#toc a{display:block;padding:var(--spacing-xs)0;color:var(--text-color)}#toc a:hover{color:var(--primary-color)}#toc ul ul{padding-left:var(--spacing-lg)}#toc ul ul a{font-size:.9rem}#footer{margin-top:var(--spacing-2xl);padding-top:var(--spacing-lg);color:var(--text-muted);font-size:.875rem;border-top:1px solid var(--border-color)}@media print{@page{margin:1.5cm}body,html{font-size:11pt;line-height:1.5;background-color:#fff;color:#000}body{padding:0;max-width:none}a{color:var(--text-color);text-decoration:underline;border-bottom:none}a[href^=http]:after{content:" ("attr(href)")";font-size:.9em;font-weight:400}code,pre{border:1px solid var(--border-color);background-color:#f8f8f8!important}.admonitionblock,h1,h2,h3,h4,h5,h6,img,pre,table{page-break-inside:avoid}h1,h2,h3,h4,h5,h6{page-break-after:avoid;color:#000}img{max-width:100%!important}.admonitionblock,table{border:1px solid #ddd}.admonitionblock,img{box-shadow:none}h1+*,h2+*,h3+*,h4+*,h5+*,h6+*{page-break-before:avoid}#footer,#header,#toc{display:none}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}}@media (max-width:1200px){body.toc2{padding-left:0}#toc.toc2{position:static;width:auto;height:auto;border-right:none;border-radius:var(--radius-md)}}@media (max-width:768px){body{padding:var(--spacing-md);font-size:.95rem}h1{font-size:2rem}h2{font-size:1.6rem}h3{font-size:1.3rem}h4{font-size:1.1rem}code,pre{font-size:.85rem}.admonitionblock td.icon{width:2.5rem}}@media (max-width:480px){body{padding:var(--spacing-sm);font-size:.9rem}h1{font-size:1.8rem}h2{font-size:1.4rem}h3{font-size:1.2rem}.admonitionblock td.icon{width:2rem}.admonitionblock td.content,.admonitionblock td.icon,table td,table th{padding:var(--spacing-sm)}}.listingblock .title{font-style:italic;color:var(--secondary-color);margin-bottom:var(--spacing-sm)}.listingblock pre.highlightjs{padding:0;border-radius:var(--radius-md);overflow:hidden}.listingblock pre.highlightjs>code,.literalblock pre{background-color:var(--code-bg);border:1px solid var(--code-border)}.listingblock pre.highlightjs>code{padding:var(--spacing-md);display:block;overflow-x:auto;line-height:1.5}.literalblock pre{border-radius:var(--radius-md)}.sidebarblock{border:1px solid var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);box-shadow:var(--shadow-sm)}.sidebarblock>.content>.title{border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm)}kbd,mark{border-radius:var(--radius-sm)}.button.secondary:hover,.sidebarblock,kbd{background-color:var(--secondary-light)}.button,kbd{display:inline-block}kbd{padding:var(--spacing-xs) var(--spacing-sm);font-size:.85rem;font-family:var(--monospace-font);border:1px solid var(--border-dark);box-shadow:0 2px 0 var(--border-dark);margin:0 var(--spacing-xs)}.button{padding:var(--spacing-sm) var(--spacing-lg);background-color:var(--primary-color);color:#fff;border-radius:var(--radius-md);font-weight:500;text-align:center;transition:all .2s ease;border-bottom:none;box-shadow:var(--shadow-sm)}.button:hover{background-color:var(--primary-hover);text-decoration:none;color:#fff;box-shadow:var(--shadow-md)}.button.gradient{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.button.secondary{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.button.secondary:hover{color:var(--text-color)}mark{background-color:#fef9c3;padding:var(--spacing-xs)}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.gradient-bg,.gradient-text{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-text{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}.gradient-bg{color:#fff}.gradient-border-left{position:relative;border-left:none;padding-left:var(--spacing-lg)}.gradient-border{border:2px solid transparent;background-clip:padding-box;position:relative}.callout.gradient .callout-title,.gradient-border::before{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-border::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;margin:-2px;border-radius:inherit;z-index:-1}.callout{padding:var(--spacing-md);margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);background-color:var(--primary-light);border-left:4px solid var(--primary-color);box-shadow:var(--shadow-sm)}.callout.gradient{background-color:#fff;border-left:none;border-radius:var(--radius-lg);padding:var(--spacing-lg);box-shadow:var(--shadow-md);position:relative;overflow:hidden}.callout.gradient::before{content:"";position:absolute;top:0;left:0;width:6px;height:100%;background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.callout-title{font-weight:700;margin-top:0;margin-bottom:var(--spacing-sm);color:var(--primary-dark)}.callout.gradient .callout-title{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;display:inline-block}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}:focus{outline:2px solid var(--primary-color);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}.skip-to-content{position:absolute;top:-40px;left:0;background:var(--primary-color);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:100;transition:top .2s ease}.skip-to-content:focus{top:0}@media (prefers-color-scheme:dark){:root.dark-mode,:root.dark-mode-auto{--bg-color:#0f172a;--bg-light:#1e293b;--text-color:#f8fafc;--text-light:#cbd5e1;--text-muted:#94a3b8;--border-color:#334155;--border-light:#1e293b;--border-dark:#475569;--code-bg:#1e293b;--code-text:#e2e8f0;--code-border:#334155;--primary-light:#1e40af;--secondary-light:#1e293b}}#toc,.admonitionblock,.sidebarblock,blockquote,body,code,pre,table{transition:var(--theme-transition)}.theme-toggle{position:fixed;top:65px;right:20px;z-index:1000;background:var(--primary-color);color:#fff;border:0;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease;display:flex;align-items:center;justify-content:center;font-size:1.2rem}.theme-toggle:hover{background:var(--primary-hover);transform:scale(1.1)}.theme-toggle:focus{outline:2px solid var(--primary-color);outline-offset:2px}.theme-toggle .light-icon{display:none}.theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:none}@media (max-width:768px){.theme-toggle{top:15px;right:15px;width:45px;height:45px;font-size:1.1rem}}:root.dark-mode img,:root.dark-mode-auto img{opacity:.9}:root.dark-mode .hero,:root.dark-mode-auto .hero{background-image:linear-gradient(135deg,#1e293b,#334155)}:root.dark-mode a,:root.dark-mode-auto a{color:#60a5fa}:root.dark-mode a:hover,:root.dark-mode-auto a:hover{color:#93c5fd}:root.dark-mode code,:root.dark-mode-auto code{color:var(--code-text);background-color:var(--code-bg)}:root.dark-mode pre,:root.dark-mode-auto pre{background-color:var(--code-bg);border-color:var(--code-border)}:root.dark-mode pre code,:root.dark-mode-auto pre code{color:var(--code-text)}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+    },
+
+    closeCsv(id) {
+        const container = document.getElementById(`csv-container-${id}`);
+        container.style.display = 'none';
+    },
+    async loadCsvData(id) {
+        const svgContainer = document.getElementById(id);
+        const svg = svgContainer.querySelector('svg');
+
+        if (!svg) {
+            console.error('No SVG found');
+            return;
+        }
+
+        try {
+            // Method 1: Standard metadata with type
+            let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                return;
+            }
+
+            // Method 2: Custom csv-data element
+            csvMetadata = svg.querySelector('metadata csv-data');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            // Method 3: Data attribute
+            const csvDataAttr = svg.getAttribute('data-csv');
+            if (csvDataAttr) {
+                const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            console.error('No CSV data found in SVG');
+        } catch (error) {
+            console.error('Failed to parse CSV data:', error);
+        }
+    },
+
+    renderCsvTable(container, csvData, tableId) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+            return;
+        }
+
+        // Generate a unique table ID if not provided or make existing ID unique
+        const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        const table = document.createElement('table');
+        table.className = 'csv-table';
+        table.id = uniqueTableId;
+        // Create header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        csvData.headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        // Add button cell to header
+        const buttonTh = document.createElement('th');
+        buttonTh.className = 'csv-header-button-cell';
+
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'csv-copy-button';
+        copyButton.textContent = 'Copy';
+        copyButton.title = 'Copy as Tab-Delimited';
+        copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+        buttonTh.appendChild(copyButton);
+        headerRow.appendChild(buttonTh);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create body
+        const tbody = document.createElement('tbody');
+
+        csvData.rows.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            // Add empty cell for button column
+            const emptyTd = document.createElement('td');
+            tr.appendChild(emptyTd);
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.innerHTML = '';
+        container.appendChild(table);
+        const tableElement = document.getElementById(uniqueTableId);
+        if (tableElement) {
+            tableElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+
+    },
+
+    copyCsvAsTabDelimited(csvData) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            console.error('Invalid CSV data for copying');
+            return;
+        }
+
+        // Create tab-delimited string
+        let tabDelimitedData = '';
+
+        // Add headers
+        tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+        // Add rows
+        csvData.rows.forEach(row => {
+            tabDelimitedData += row.join('\t') + '\n';
+        });
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(tabDelimitedData).then(() => {
+            // Provide visual feedback
+            const buttons = document.querySelectorAll('.csv-copy-button');
+            buttons.forEach(button => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#007acc';
+                }, 2000);
+            });
+        }).catch(err => {
+            console.error('Failed to copy to clipboard:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = tabDelimitedData;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            } catch (fallbackErr) {
+                console.error('Fallback copy failed:', fallbackErr);
+                alert('Copy failed. Please select and copy the data manually.');
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_domain_markup_parsergenerator">Domain Markup Parser/Generator</a>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_basic_concepts">2. Basic Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_what_is_domain_visualization">2.1. What is Domain Visualization?</a></li>
+<li><a href="#_domain_diagram_components">2.2. Domain Diagram Components</a></li>
+</ul>
+</li>
+<li><a href="#_asciidoctor_syntax_for_domain_diagrams">3. AsciiDoctor Syntax for Domain Diagrams</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_syntax">3.1. Basic Syntax</a></li>
+<li><a href="#_color_options">3.2. Color Options</a></li>
+<li><a href="#_special_features">3.3. Special Features</a></li>
+</ul>
+</li>
+<li><a href="#_examples">4. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_domain_structure">4.1. Basic Domain Structure</a></li>
+<li><a href="#_using_separators">4.2. Using Separators</a></li>
+<li><a href="#_complex_domain_structure">4.3. Complex Domain Structure</a></li>
+</ul>
+</li>
+<li><a href="#_using_the_web_editor">5. Using the Web Editor</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_domain_markup_parsergenerator" class="sect0">Domain Markup Parser/Generator</h1>
+<div class="openblock partintro">
+<div class="content">
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="484d49db-3c45-4f0d-bd12-398111201c03" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#2563eb","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#2563eb","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#2563eb","true","false"],["Callout","callout.html","Callout Documentation","documentation","#2563eb","true","false"],["Charts","charts.html","Charts Documentation","documentation","#2563eb","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#2563eb","true","false"],["DocOps Core","docops.html","DocOps Block Processor Documentation","documentation","#2563eb","true","false"],["Domain Markup Parser","domain.html","Domain Markup Parser Documentation","documentation","#ef4444","true","true"],["Examples","examples.html","Examples Documentation","documentation","#2563eb","true","false"],["Feature Cards","featurecard.html","Documentation to the tool for creating visually appealing, interactive feature cards","documentation","#2563eb","true","false"],["Index","index.html","Index of all documentation","documentation","#2563eb","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#2563eb","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#2563eb","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#2563eb","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#2563eb","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#2563eb","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#2563eb","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#2563eb","true","false"],["Shield","shield.html","Shield Documentation","documentation","#2563eb","true","false"],["Story","story.html","What is DocOps","documentation","#2563eb","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#2563eb","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#2563eb","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#2563eb","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#2563eb","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#2563eb","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>            <defs><filter id="nnneon-filter" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/></filter><filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"></filter><linearGradient id="nnneon-grad0-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad1-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad2-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad3-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad4-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad5-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad6-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad7-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#a72f2f"/></linearGradient><linearGradient id="nnneon-grad8-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad9-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad10-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad11-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad12-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad13-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad14-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad15-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad16-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad17-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad18-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad19-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad20-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad21-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad22-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad23-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad24-484d49db-3c45-4f0d-bd12-398111201c03" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><style>.raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); } .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; } .bar:hover { filter: grayscale(100%) sepia(100%); }</style></defs><g transform="scale(1.0)"><g transform="translate(70,65)" cursor="pointer"><a xlink:href="adr.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad0-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Architecture Decision Records</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> ADR</tspan></text></a></g><g transform="translate(200,65)" cursor="pointer"><a xlink:href="arch.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad1-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Implementation Architecture</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Architecture</tspan></text></a></g><g transform="translate(330,65)" cursor="pointer"><a xlink:href="buttons.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad2-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Button Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Buttons</tspan></text></a></g><g transform="translate(460,65)" cursor="pointer"><a xlink:href="callout.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad3-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Callout Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Callout</tspan></text></a></g><g transform="translate(590,65)" cursor="pointer"><a xlink:href="charts.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad4-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Charts Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Charts</tspan></text></a></g><g transform="translate(720,65)" cursor="pointer"><a xlink:href="connectors.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad5-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Connector Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Connectors</tspan></text></a></g><g transform="translate(850,65)" cursor="pointer"><a xlink:href="docops.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad6-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Block Processor Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> DocOps Core</tspan></text></a></g><g transform="translate(980,65)" cursor="pointer"><a xlink:href="domain.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad7-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Domain Markup Parser Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #ef4444"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Domain Markup</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;">Parser</tspan></text></a></g><g transform="translate(1110,65)" cursor="pointer"><a xlink:href="examples.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad8-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Examples Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Examples</tspan></text></a></g><g transform="translate(70,195)" cursor="pointer"><a xlink:href="featurecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad9-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Documentation to the tool for creating visually appealing, interactive feature cards</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Feature Cards</tspan></text></a></g><g transform="translate(200,195)" cursor="pointer"><a xlink:href="index.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad10-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Index of all documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Index</tspan></text></a></g><g transform="translate(330,195)" cursor="pointer"><a xlink:href="metricscard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad11-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Metrics Card Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Metrics Card</tspan></text></a></g><g transform="translate(460,195)" cursor="pointer"><a xlink:href="placemat.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad12-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Placemat Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Placemat</tspan></text></a></g><g transform="translate(590,195)" cursor="pointer"><a xlink:href="planner.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad13-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Project Planner Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Planner</tspan></text></a></g><g transform="translate(720,195)" cursor="pointer"><a xlink:href="quadrant.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad14-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Quadrant Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Quadrant</tspan></text></a></g><g transform="translate(850,195)" cursor="pointer"><a xlink:href="releasestrategy.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad15-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Release Strategy Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;">Strategy</tspan></text></a></g><g transform="translate(980,195)" cursor="pointer"><a xlink:href="roadmap.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad16-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Roadmap Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Roadmap</tspan></text></a></g><g transform="translate(1110,195)" cursor="pointer"><a xlink:href="scorecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad17-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Scorecard Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Scorecard</tspan></text></a></g><g transform="translate(70,330)" cursor="pointer"><a xlink:href="shield.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad18-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Shield Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Shield</tspan></text></a></g><g transform="translate(200,330)" cursor="pointer"><a xlink:href="story.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad19-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">What is DocOps</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Story</tspan></text></a></g><g transform="translate(330,330)" cursor="pointer"><a xlink:href="swimlane.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad20-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Swimlane Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Swimlane</tspan></text></a></g><g transform="translate(460,330)" cursor="pointer"><a xlink:href="timeline.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad21-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Timeline Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Timeline</tspan></text></a></g><g transform="translate(590,330)" cursor="pointer"><a xlink:href="treechart.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad22-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Tree Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Tree Chart</tspan></text></a></g><g transform="translate(720,330)" cursor="pointer"><a xlink:href="tutorial.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad23-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Sample Tutorials</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Tutorial</tspan></text></a></g><g transform="translate(850,330)" cursor="pointer"><a xlink:href="wordcloud.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad24-484d49db-3c45-4f0d-bd12-398111201c03)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Word Cloud Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Word Cloud</tspan></text></a></g></g></svg></div></div><script>
+window.docOpsServerUrl = 'http://localhost:8010/extension';
+</script>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Domain Markup Parser/Generator allows you to create visual domain diagrams using a simple markup syntax. This tool is useful for visualizing domain-driven design (DDD) concepts, organizational structures, or any hierarchical domain relationships in your AsciiDoctor documents.</p>
+</div>
+<div class="paragraph">
+<p>This guide will help you understand the basic concepts of domain visualization, how to use the markup syntax, and provide examples of different ways to create domain diagrams.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_concepts">2. Basic Concepts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_is_domain_visualization">2.1. What is Domain Visualization?</h3>
+<div class="paragraph">
+<p>Domain visualization in the DocOps extension is a way to represent hierarchical domain structures using a simple markup language. The visualization creates SVG-based diagrams that show:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Domains (top-level entities)</p>
+</li>
+<li>
+<p>Subdomains (second-level entities)</p>
+</li>
+<li>
+<p>Sub-subdomains (third-level entities)</p>
+</li>
+<li>
+<p>Visual relationships between these entities</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The extension supports customizing the appearance of domains and subdomains with different colors, allowing you to create visually distinct and meaningful diagrams.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_domain_diagram_components">2.2. Domain Diagram Components</h3>
+<div class="paragraph">
+<p>A domain diagram includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Domains</strong>: Top-level entities represented as rectangles with titles</p>
+</li>
+<li>
+<p><strong>Subdomains</strong>: Second-level entities that belong to a domain</p>
+</li>
+<li>
+<p><strong>Sub-subdomains</strong>: Third-level entities that belong to a subdomain</p>
+</li>
+<li>
+<p><strong>Separators</strong>: Horizontal lines that can be used to visually separate groups of domains</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Each component can have:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A title (the name of the domain/subdomain)</p>
+</li>
+<li>
+<p>A color (optional, to visually distinguish different domains)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asciidoctor_syntax_for_domain_diagrams">3. AsciiDoctor Syntax for Domain Diagrams</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To include domain diagrams in your AsciiDoctor document, you use a special markup syntax within the DocOps macro.</p>
+</div>
+<div class="sect2">
+<h3 id="_basic_syntax">3.1. Basic Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,domain,controls=true]
+----
+# Domain Name [color]
+## Subdomain Name [color]
+### Sub-subdomain Name
+
+# Another Domain [color]
+## Another Subdomain [color]
+### Another Sub-subdomain
+----</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The markup uses a hierarchical structure with hash symbols (#) to indicate the level:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>#</code> - Defines a domain (top level)</p>
+</li>
+<li>
+<p><code>##</code> - Defines a subdomain (second level)</p>
+</li>
+<li>
+<p><code><mark>#</mark></code> - Defines a sub-subdomain (third level)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_color_options">3.2. Color Options</h3>
+<div class="paragraph">
+<p>You can specify colors for domains and subdomains using square brackets after the name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc"># Finance [blue]
+## Accounting [green]
+## Budgeting [red]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Available color options include:
+* blue
+* green
+* red
+* yellow
+* purple
+* orange
+* pink
+* gray
+* teal
+* indigo</p>
+</div>
+<div class="paragraph">
+<p>You can also use hex colors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc"># Marketing [#FF5733]
+## Digital Marketing [#C70039]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_special_features">3.3. Special Features</h3>
+<div class="paragraph">
+<p>The markup also supports:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Comments (lines starting with <code>//</code> are ignored)</p>
+</li>
+<li>
+<p>Separators (use <code>---</code> to create a horizontal line)</p>
+</li>
+<li>
+<p>Empty lines (create visual spacing in the markup)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">4. Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_domain_structure">4.1. Basic Domain Structure</h3>
+<div class="paragraph">
+<p>Here&#8217;s a simple example of a domain diagram:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,domain,controls=true]
+----
+# Technology [blue]
+## Software Development [green]
+### Frontend Development
+### Backend Development
+### DevOps
+
+## Data &amp; Analytics [purple]
+### Data Science
+### Business Intelligence
+
+# Operations [orange]
+## HR &amp; Recruitment [red]
+## Finance &amp; Accounting [yellow]
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-89458feb28c7f8a5" data-theme="light" data-original-content="# Technology [blue]
+## Software Development [green]
+### Frontend Development
+### Backend Development
+### DevOps
+
+## Data & Analytics [purple]
+### Data Science
+### Business Intelligence
+
+# Operations [orange]
+## HR & Recruitment [red]
+## Finance & Accounting [yellow]" data-kind="domain">
+<svg width="640" height="400" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Title","Color","Parent"],"rows":[["Domain","Technology","#3498db",""],["Subdomain","Software Development","#2ecc71","Technology"],["Item","Frontend Development","#3498db","Software Development"],["Item","Backend Development","#3498db","Software Development"],["Item","DevOps","#3498db","Software Development"],["Subdomain","Data & Analytics","#9b59b6","Technology"],["Item","Data Science","#3498db","Data & Analytics"],["Item","Business Intelligence","#3498db","Data & Analytics"],["Domain","Operations","#e67e22",""],["Subdomain","HR & Recruitment","#e74c3c","Operations"],["Subdomain","Finance & Accounting","#f1c40f","Operations"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#grad1)" opacity="0.1"/><rect x="20" y="20" width="300" height="50" fill="#3498db" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="170" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Technology</text><rect x="20" y="80" width="300" height="40" fill="#2ecc71" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="104" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Software Development</text><rect x="40" y="130" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="149" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Frontend Development</text><rect x="40" y="170" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="189" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Backend Development</text><rect x="40" y="210" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="229" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">DevOps</text><rect x="20" y="250" width="300" height="40" fill="#9b59b6" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="274" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Data &amp; Analytics</text><rect x="40" y="300" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="319" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Data Science</text><rect x="40" y="340" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="359" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Business Intelligence</text><rect x="330" y="20" width="300" height="50" fill="#e67e22" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="480" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Operations</text><rect x="330" y="80" width="300" height="40" fill="#e74c3c" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="104" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">HR &amp; Recruitment</text><rect x="330" y="130" width="300" height="40" fill="#f1c40f" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="154" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Finance &amp; Accounting</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-89458feb28c7f8a5')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-89458feb28c7f8a5">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-89458feb28c7f8a5')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-89458feb28c7f8a5')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-89458feb28c7f8a5')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-89458feb28c7f8a5')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-89458feb28c7f8a5')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-89458feb28c7f8a5')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-89458feb28c7f8a5')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-89458feb28c7f8a5" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-89458feb28c7f8a5')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-89458feb28c7f8a5">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+window.docOpsServerUrl = 'http://localhost:8010/extension';
+</script>
+<div class="paragraph">
+<p>This creates a diagram with two main domains (Technology and Operations), each with their own subdomains and sub-subdomains.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_separators">4.2. Using Separators</h3>
+<div class="paragraph">
+<p>You can use separators to visually group related domains:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,domain,controls=true]
+----
+# Core Business [blue]
+## Product Development [green]
+## Sales [teal]
+
+---
+
+# Support Functions [purple]
+## HR [pink]
+## Finance [yellow]
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-93bd1720391660ce" data-theme="light" data-original-content="# Core Business [blue]
+## Product Development [green]
+## Sales [teal]
+
+---
+
+# Support Functions [purple]
+## HR [pink]
+## Finance [yellow]" data-kind="domain">
+<svg width="640" height="220" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Title","Color","Parent"],"rows":[["Domain","Core Business","#3498db",""],["Subdomain","Product Development","#2ecc71","Core Business"],["Subdomain","Sales","#1abc9c","Core Business"],["Separator","---","",""],["Domain","Support Functions","#9b59b6",""],["Subdomain","HR","#ff6b9d","Support Functions"],["Subdomain","Finance","#f1c40f","Support Functions"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#grad1)" opacity="0.1"/><rect x="20" y="20" width="300" height="50" fill="#3498db" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="170" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Core Business</text><rect x="20" y="80" width="300" height="40" fill="#2ecc71" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="104" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Product Development</text><rect x="20" y="130" width="300" height="40" fill="#1abc9c" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="154" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Sales</text><line x1="20" y1="20" x2="620" y2="20" stroke="#bdc3c7" stroke-width="2" stroke-dasharray="5,5"/><rect x="330" y="40" width="300" height="50" fill="#9b59b6" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="480" y="70" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Support Functions</text><rect x="330" y="100" width="300" height="40" fill="#ff6b9d" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="124" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">HR</text><rect x="330" y="150" width="300" height="40" fill="#f1c40f" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="174" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Finance</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-93bd1720391660ce')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-93bd1720391660ce">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-93bd1720391660ce')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-93bd1720391660ce')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-93bd1720391660ce')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-93bd1720391660ce')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-93bd1720391660ce')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-93bd1720391660ce')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-93bd1720391660ce')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-93bd1720391660ce" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-93bd1720391660ce')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-93bd1720391660ce">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+window.docOpsServerUrl = 'http://localhost:8010/extension';
+</script>
+</div>
+<div class="sect2">
+<h3 id="_complex_domain_structure">4.3. Complex Domain Structure</h3>
+<div class="paragraph">
+<p>Here&#8217;s a more complex example showing multiple levels and colors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,domain,controls=true]
+----
+# Enterprise Architecture [#3498db]
+## Application Architecture [#2ecc71]
+### API Design
+### Integration Patterns
+### Microservices
+
+## Data Architecture [#9b59b6]
+### Data Modeling
+### Data Governance
+### Analytics Platform
+
+## Infrastructure [#e74c3c]
+### Cloud Services
+### On-Premises
+### Hybrid Solutions
+
+---
+
+# Business Domains [#f39c12]
+## Customer Management [#d35400]
+### Acquisition
+### Retention
+### Support
+
+## Product Management [#16a085]
+### Research
+### Development
+### Lifecycle
+
+// This is a comment and won't be rendered
+## Financial Operations [#2c3e50]
+### Billing
+### Reporting
+### Compliance
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-0c99dde0921a4be7" data-theme="light" data-original-content="# Enterprise Architecture [#3498db]
+## Application Architecture [#2ecc71]
+### API Design
+### Integration Patterns
+### Microservices
+
+## Data Architecture [#9b59b6]
+### Data Modeling
+### Data Governance
+### Analytics Platform
+
+## Infrastructure [#e74c3c]
+### Cloud Services
+### On-Premises
+### Hybrid Solutions
+
+---
+
+# Business Domains [#f39c12]
+## Customer Management [#d35400]
+### Acquisition
+### Retention
+### Support
+
+## Product Management [#16a085]
+### Research
+### Development
+### Lifecycle
+
+// This is a comment and won't be rendered
+## Financial Operations [#2c3e50]
+### Billing
+### Reporting
+### Compliance" data-kind="domain">
+<svg width="640" height="630" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Title","Color","Parent"],"rows":[["Domain","Enterprise Architecture","#3498db",""],["Subdomain","Application Architecture","#2ecc71","Enterprise Architecture"],["Item","API Design","#3498db","Application Architecture"],["Item","Integration Patterns","#3498db","Application Architecture"],["Item","Microservices","#3498db","Application Architecture"],["Subdomain","Data Architecture","#9b59b6","Enterprise Architecture"],["Item","Data Modeling","#3498db","Data Architecture"],["Item","Data Governance","#3498db","Data Architecture"],["Item","Analytics Platform","#3498db","Data Architecture"],["Subdomain","Infrastructure","#e74c3c","Enterprise Architecture"],["Item","Cloud Services","#3498db","Infrastructure"],["Item","On-Premises","#3498db","Infrastructure"],["Item","Hybrid Solutions","#3498db","Infrastructure"],["Separator","---","",""],["Domain","Business Domains","#f39c12",""],["Subdomain","Customer Management","#d35400","Business Domains"],["Item","Acquisition","#3498db","Customer Management"],["Item","Retention","#3498db","Customer Management"],["Item","Support","#3498db","Customer Management"],["Subdomain","Product Management","#16a085","Business Domains"],["Item","Research","#3498db","Product Management"],["Item","Development","#3498db","Product Management"],["Item","Lifecycle","#3498db","Product Management"],["Subdomain","Financial Operations","#2c3e50","Business Domains"],["Item","Billing","#3498db","Financial Operations"],["Item","Reporting","#3498db","Financial Operations"],["Item","Compliance","#3498db","Financial Operations"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#grad1)" opacity="0.1"/><rect x="20" y="20" width="300" height="50" fill="#3498db" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="170" y="50" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Enterprise Architecture</text><rect x="20" y="80" width="300" height="40" fill="#2ecc71" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="104" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Application Architecture</text><rect x="40" y="130" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="149" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">API Design</text><rect x="40" y="170" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="189" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Integration Patterns</text><rect x="40" y="210" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="229" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Microservices</text><rect x="20" y="250" width="300" height="40" fill="#9b59b6" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="274" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Data Architecture</text><rect x="40" y="300" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="319" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Data Modeling</text><rect x="40" y="340" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="359" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Data Governance</text><rect x="40" y="380" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="399" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Analytics Platform</text><rect x="20" y="420" width="300" height="40" fill="#e74c3c" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="170" y="444" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Infrastructure</text><rect x="40" y="470" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="489" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Cloud Services</text><rect x="40" y="510" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="529" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">On-Premises</text><rect x="40" y="550" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="170" y="569" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Hybrid Solutions</text><line x1="20" y1="20" x2="620" y2="20" stroke="#bdc3c7" stroke-width="2" stroke-dasharray="5,5"/><rect x="330" y="40" width="300" height="50" fill="#f39c12" stroke="white" stroke-width="2" rx="8" filter="url(#shadow)"/><text x="480" y="70" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Business Domains</text><rect x="330" y="100" width="300" height="40" fill="#d35400" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="124" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Customer Management</text><rect x="350" y="150" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="169" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Acquisition</text><rect x="350" y="190" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="209" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Retention</text><rect x="350" y="230" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="249" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Support</text><rect x="330" y="270" width="300" height="40" fill="#16a085" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="294" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Product Management</text><rect x="350" y="320" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="339" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Research</text><rect x="350" y="360" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="379" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Development</text><rect x="350" y="400" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="419" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Lifecycle</text><rect x="330" y="440" width="300" height="40" fill="#2c3e50" stroke="white" stroke-width="1" rx="5" filter="url(#shadow)"/><text x="480" y="464" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Financial Operations</text><rect x="350" y="490" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="509" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Billing</text><rect x="350" y="530" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="549" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Reporting</text><rect x="350" y="570" width="260" height="30" fill="#3498db" stroke="white" stroke-width="1" rx="3" filter="url(#shadow)"/><text x="480" y="589" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">Compliance</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-0c99dde0921a4be7')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-0c99dde0921a4be7">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-0c99dde0921a4be7')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-0c99dde0921a4be7')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-0c99dde0921a4be7')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-0c99dde0921a4be7')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-0c99dde0921a4be7')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-0c99dde0921a4be7')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-0c99dde0921a4be7')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-0c99dde0921a4be7" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-0c99dde0921a4be7')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-0c99dde0921a4be7">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+window.docOpsServerUrl = 'http://localhost:8010/extension';
+</script>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_the_web_editor">5. Using the Web Editor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Extension Server includes a web-based editor for creating domain diagrams. You can access it at <code>/domain/editor.html</code>. The editor provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A markup editor where you can write your domain structure</p>
+</li>
+<li>
+<p>Real-time SVG generation</p>
+</li>
+<li>
+<p>Example loading</p>
+</li>
+<li>
+<p>SVG downloading</p>
+</li>
+<li>
+<p>Syntax guide with examples</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The editor makes it easy to experiment with different domain structures and visualize them instantly before including them in your AsciiDoctor documents.</p>
+</div>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-07-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#2563eb","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#2563eb","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#2563eb","true","false"],["Callout","callout.html","Callout Documentation","documentation","#2563eb","true","false"],["Charts","charts.html","Charts Documentation","documentation","#2563eb","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#2563eb","true","false"],["DocOps Core","docops.html","DocOps Block Processor Documentation","documentation","#2563eb","true","false"],["Domain Markup Parser","domain.html","Domain Markup Parser Documentation","documentation","#ef4444","true","true"],["Examples","examples.html","Examples Documentation","documentation","#2563eb","true","false"],["Feature Cards","featurecard.html","Documentation to the tool for creating visually appealing, interactive feature cards","documentation","#2563eb","true","false"],["Index","index.html","Index of all documentation","documentation","#2563eb","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#2563eb","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#2563eb","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#2563eb","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#2563eb","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#2563eb","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#2563eb","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#2563eb","true","false"],["Shield","shield.html","Shield Documentation","documentation","#2563eb","true","false"],["Story","story.html","What is DocOps","documentation","#2563eb","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#2563eb","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#2563eb","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#2563eb","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#2563eb","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#2563eb","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>            <defs><filter id="nnneon-filter" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/></filter><filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"></filter><linearGradient id="nnneon-grad0-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad1-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad2-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad3-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad4-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad5-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad6-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad7-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#a72f2f"/></linearGradient><linearGradient id="nnneon-grad8-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad9-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad10-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad11-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad12-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad13-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad14-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad15-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad16-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad17-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad18-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad19-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad20-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad21-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad22-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad23-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><linearGradient id="nnneon-grad24-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><style>.raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); } .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; } .bar:hover { filter: grayscale(100%) sepia(100%); }</style></defs><g transform="scale(1.0)"><g transform="translate(70,65)" cursor="pointer"><a xlink:href="adr.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad0-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Architecture Decision Records</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> ADR</tspan></text></a></g><g transform="translate(200,65)" cursor="pointer"><a xlink:href="arch.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad1-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Implementation Architecture</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Architecture</tspan></text></a></g><g transform="translate(330,65)" cursor="pointer"><a xlink:href="buttons.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad2-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Button Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Buttons</tspan></text></a></g><g transform="translate(460,65)" cursor="pointer"><a xlink:href="callout.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad3-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Callout Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Callout</tspan></text></a></g><g transform="translate(590,65)" cursor="pointer"><a xlink:href="charts.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad4-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Charts Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Charts</tspan></text></a></g><g transform="translate(720,65)" cursor="pointer"><a xlink:href="connectors.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad5-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Connector Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Connectors</tspan></text></a></g><g transform="translate(850,65)" cursor="pointer"><a xlink:href="docops.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad6-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Block Processor Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> DocOps Core</tspan></text></a></g><g transform="translate(980,65)" cursor="pointer"><a xlink:href="domain.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad7-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Domain Markup Parser Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #ef4444"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Domain Markup</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;">Parser</tspan></text></a></g><g transform="translate(1110,65)" cursor="pointer"><a xlink:href="examples.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad8-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Examples Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Examples</tspan></text></a></g><g transform="translate(70,195)" cursor="pointer"><a xlink:href="featurecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad9-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Documentation to the tool for creating visually appealing, interactive feature cards</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Feature Cards</tspan></text></a></g><g transform="translate(200,195)" cursor="pointer"><a xlink:href="index.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad10-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Index of all documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Index</tspan></text></a></g><g transform="translate(330,195)" cursor="pointer"><a xlink:href="metricscard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad11-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Metrics Card Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Metrics Card</tspan></text></a></g><g transform="translate(460,195)" cursor="pointer"><a xlink:href="placemat.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad12-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Placemat Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Placemat</tspan></text></a></g><g transform="translate(590,195)" cursor="pointer"><a xlink:href="planner.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad13-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Project Planner Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Planner</tspan></text></a></g><g transform="translate(720,195)" cursor="pointer"><a xlink:href="quadrant.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad14-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Quadrant Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Quadrant</tspan></text></a></g><g transform="translate(850,195)" cursor="pointer"><a xlink:href="releasestrategy.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad15-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Release Strategy Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;">Strategy</tspan></text></a></g><g transform="translate(980,195)" cursor="pointer"><a xlink:href="roadmap.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad16-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Roadmap Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Roadmap</tspan></text></a></g><g transform="translate(1110,195)" cursor="pointer"><a xlink:href="scorecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad17-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Scorecard Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Scorecard</tspan></text></a></g><g transform="translate(70,330)" cursor="pointer"><a xlink:href="shield.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad18-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Shield Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Shield</tspan></text></a></g><g transform="translate(200,330)" cursor="pointer"><a xlink:href="story.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad19-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">What is DocOps</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Story</tspan></text></a></g><g transform="translate(330,330)" cursor="pointer"><a xlink:href="swimlane.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad20-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Swimlane Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Swimlane</tspan></text></a></g><g transform="translate(460,330)" cursor="pointer"><a xlink:href="timeline.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad21-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Timeline Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Timeline</tspan></text></a></g><g transform="translate(590,330)" cursor="pointer"><a xlink:href="treechart.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad22-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Tree Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Tree Chart</tspan></text></a></g><g transform="translate(720,330)" cursor="pointer"><a xlink:href="tutorial.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad23-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Sample Tutorials</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Tutorial</tspan></text></a></g><g transform="translate(850,330)" cursor="pointer"><a xlink:href="wordcloud.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad24-e5037ed6-ff9c-4e05-a26f-62a7da85cb0f)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Word Cloud Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #111111; font-weight: bold;"> Word Cloud</tspan></text></a></g></g></svg></div></div><script>
+window.docOpsServerUrl = 'http://localhost:8010/extension';
+</script>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #657786;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .reading-time {
+        background: rgba(32, 35, 42, 0.95);
+        border-color: #444;
+        color: #8899a6;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .reading-time {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .reading-time {
+        display: none;
+    }
+}
+</style>
+<div class="reading-time">
+    <p>📖 3 min read • 1187 words</p>
+</div>
+</body>
+</html>
