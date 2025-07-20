@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Visualization Markup Parser</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .server-status {
+            background: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .server-status.offline {
+            background: #e74c3c;
+        }
+
+        .server-status .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .config-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .config-section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .config-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .config-row label {
+            min-width: 120px;
+            font-weight: 600;
+        }
+
+        .config-row input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .config-row input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .editor-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.3);
+        }
+
+        .download-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
+        }
+
+        .example-btn {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.3);
+        }
+
+        .example-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+        }
+
+        .output-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .syntax-help {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .syntax-help h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .syntax-help pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .success {
+            background: #efe;
+            color: #363;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #363;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 200px;
+            }
+
+            .config-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .config-row label {
+                min-width: auto;
+            }
+
+            .config-row input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎨 Domain Visualization Markup Parser</h1>
+
+    <div class="server-status" id="serverStatus">
+        <div class="indicator"></div>
+        <span id="statusText">Checking server connection...</span>
+    </div>
+
+    <div class="config-section">
+        <h3>🔧 Server Configuration</h3>
+        <div class="config-row">
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" value="/extension" placeholder="/extension">
+        </div>
+        <div class="config-row">
+            <label for="testConnection">
+                <button onclick="testConnection()" style="padding: 5px 15px; font-size: 14px; margin: 0;">Test Connection</button>
+            </label>
+        </div>
+    </div>
+
+    <div class="editor-container">
+        <div class="editor-section">
+            <div class="section-title">📝 Markup Editor</div>
+            <textarea id="markupInput" placeholder="Enter your domain markup here..."></textarea>
+        </div>
+
+        <div class="editor-section">
+            <div class="section-title">🎯 Generated SVG</div>
+            <textarea id="svgOutput" readonly placeholder="Generated SVG will appear here..."></textarea>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button class="generate-btn" onclick="generateSVG()" id="generateBtn">
+            <span id="generateText">🚀 Generate SVG</span>
+            <div class="loading" id="generateLoading" style="display: none;"></div>
+        </button>
+        <button class="download-btn" onclick="downloadSVG()" id="downloadBtn">💾 Download SVG</button>
+        <button class="example-btn" onclick="loadExample()" id="exampleBtn">📋 Load Example</button>
+    </div>
+
+    <div class="output-container">
+        <div class="section-title">🖼️ Visual Preview</div>
+        <div id="svgPreview"></div>
+        <div id="messages"></div>
+    </div>
+
+    <div class="syntax-help">
+        <h3>🔧 Markup Syntax Guide</h3>
+        <p>Create your domain diagrams using this simple markup syntax:</p>
+
+        <h4>Basic Structure:</h4>
+        <pre># Domain Name [color]
+## Subdomain Name [color]
+### Sub-subdomain Name [color]
+
+# Groups domains into sections
+## Groups subdomains under domains
+### Creates sub-levels under subdomains</pre>
+
+        <h4>Color Options:</h4>
+        <pre>Available colors: blue, green, red, yellow, purple, orange, pink, gray, teal, indigo
+Example: # Finance [blue]
+You can also use hex colors: # Finance [#FF5733]</pre>
+
+        <h4>Special Features:</h4>
+        <pre>// Comments (ignored in rendering)
+--- (horizontal separator line)
+Empty lines create visual spacing</pre>
+
+        <h4>Example Structure:</h4>
+        <pre># Technology [blue]
+## Software Development [green]
+### Frontend Development
+### Backend Development
+### DevOps
+
+## Data & Analytics [purple]
+### Data Science
+### Business Intelligence
+
+# Operations [orange]
+## HR & Recruitment [red]
+## Finance & Accounting [yellow]</pre>
+    </div>
+</div>
+
+<script>
+    let serverOnline = false;
+    let currentSvg = '';
+
+    function getServerUrl() {
+        const serverUrl = document.getElementById('serverUrl').value.trim();
+        // If empty, use the context root; otherwise remove trailing slash
+        return serverUrl === '' ? '/extension' : serverUrl.replace(/\/$/, '');
+    }
+
+    async function testConnection() {
+        const serverUrl = getServerUrl();
+        const statusEl = document.getElementById('serverStatus');
+        const statusText = document.getElementById('statusText');
+
+        statusText.textContent = 'Testing connection...';
+        statusEl.className = 'server-status';
+
+        try {
+            const response = await fetch(`${serverUrl}/api/visualizer/example`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                serverOnline = true;
+                statusEl.className = 'server-status';
+                statusText.textContent = `✅ Connected to Kotlin server at ${serverUrl}`;
+                updateButtonStates();
+            } else {
+                throw new Error(`Server returned ${response.status}`);
+            }
+        } catch (error) {
+            serverOnline = false;
+            statusEl.className = 'server-status offline';
+            statusText.textContent = `❌ Cannot connect to server: ${error.message}`;
+            updateButtonStates();
+        }
+    }
+
+    function updateButtonStates() {
+        const buttons = ['generateBtn', 'exampleBtn'];
+        buttons.forEach(btnId => {
+            const btn = document.getElementById(btnId);
+            btn.disabled = !serverOnline;
+        });
+    }
+
+    async function generateSVG() {
+        if (!serverOnline) {
+            showMessage('Please connect to the Kotlin server first', 'error');
+            return;
+        }
+
+        const markup = document.getElementById('markupInput').value.trim();
+        if (!markup) {
+            showMessage('Please enter some markup to generate SVG', 'error');
+            return;
+        }
+
+        const generateBtn = document.getElementById('generateBtn');
+        const generateText = document.getElementById('generateText');
+        const generateLoading = document.getElementById('generateLoading');
+
+        // Show loading state
+        generateBtn.disabled = true;
+        generateText.style.display = 'none';
+        generateLoading.style.display = 'inline-block';
+
+        try {
+            const serverUrl = getServerUrl();
+            const response = await fetch(`${serverUrl}/api/visualizer/generate-svg`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ markup: markup })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            currentSvg = data.svg;
+
+            document.getElementById('svgOutput').value = currentSvg;
+            document.getElementById('svgPreview').innerHTML = currentSvg;
+            document.getElementById('downloadBtn').disabled = false;
+
+            showMessage(`✅ SVG generated successfully! (${data.width}x${data.height}px)`, 'success');
+
+        } catch (error) {
+            showMessage(`❌ Error generating SVG: ${error.message}`, 'error');
+            console.error('Generation error:', error);
+        } finally {
+            // Reset loading state
+            generateBtn.disabled = false;
+            generateText.style.display = 'inline';
+            generateLoading.style.display = 'none';
+        }
+    }
+
+    async function loadExample() {
+        if (!serverOnline) {
+            showMessage('Please connect to the Kotlin server first', 'error');
+            return;
+        }
+
+        const exampleBtn = document.getElementById('exampleBtn');
+        exampleBtn.disabled = true;
+        exampleBtn.innerHTML = '<div class="loading"></div>';
+
+        try {
+            const serverUrl = getServerUrl();
+            const response = await fetch(`${serverUrl}/api/visualizer/example`);
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+
+            const example = await response.text();
+            document.getElementById('markupInput').value = example;
+
+            // Auto-generate after loading example
+            await generateSVG();
+
+            showMessage('Example loaded and SVG generated!', 'success');
+
+        } catch (error) {
+            showMessage(`Error loading example: ${error.message}`, 'error');
+        } finally {
+            exampleBtn.disabled = false;
+            exampleBtn.innerHTML = '📋 Load Example';
+        }
+    }
+
+    function downloadSVG() {
+        if (!currentSvg) {
+            showMessage('Please generate SVG first', 'error');
+            return;
+        }
+
+        const blob = new Blob([currentSvg], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'domain-diagram.svg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showMessage('SVG downloaded successfully!', 'success');
+    }
+
+    function showMessage(message, type = 'info') {
+        const messagesDiv = document.getElementById('messages');
+        const messageEl = document.createElement('div');
+        messageEl.className = type;
+        messageEl.textContent = message;
+
+        messagesDiv.innerHTML = '';
+        messagesDiv.appendChild(messageEl);
+
+        // Auto-clear success messages
+        if (type === 'success') {
+            setTimeout(() => {
+                if (messagesDiv.contains(messageEl)) {
+                    messagesDiv.removeChild(messageEl);
+                }
+            }, 3000);
+        }
+    }
+
+    // Auto-generate on input change (with debounce)
+    let debounceTimer;
+    document.getElementById('markupInput').addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const markup = this.value.trim();
+            if (markup && serverOnline) {
+                generateSVG();
+            }
+        }, 1000); // 1 second debounce
+    });
+
+    // Initialize on page load
+    window.addEventListener('load', function() {
+        updateButtonStates();
+        testConnection();
+
+        // Try to load example after connection is established
+        setTimeout(() => {
+            if (serverOnline) {
+                loadExample();
+            }
+        }, 1000);
+    });
+
+    // Update server URL and test connection when URL changes
+    document.getElementById('serverUrl').addEventListener('change', function() {
+        testConnection();
+    });
+
+    // Handle Enter key in server URL input
+    document.getElementById('serverUrl').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            testConnection();
+        }
+    });
+</script>
+</body>
+</html>
