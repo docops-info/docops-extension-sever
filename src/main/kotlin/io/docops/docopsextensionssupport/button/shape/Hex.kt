@@ -87,10 +87,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
             parseStyleForFontSize(style, button.buttonStyle?.fontSize ?: 24)
         } ?: button.buttonStyle?.fontSize ?: 24
 
-        println("Button: ${button.label}, fontSize from buttonStyle: ${button.buttonStyle?.fontSize}, using: $fontSize")
-
         val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245F, fontSize = fontSize)
-        println("$textSpans $fontSize")
         // Calculate startTextY based on font size and number of text spans
         val startTextY = 187 - (textSpans.size * fontSize / 2)
 
@@ -100,7 +97,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                 dy = fontSize
             }
             val fontColor = determineTextColor(button.color!!)
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="fill:${fontColor}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight:500;">${s.escapeXml()}</tspan>""")
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="${button.buttonStyle?.labelStyle}">${s.escapeXml()}</tspan>""")
         }
 
         var win = "_top"
@@ -171,11 +168,11 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     <g transform="translate(125,50) scale(1.0)">
      $img 
     </g>
-    <text x="149" y="$startTextY" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.labelStyle}">$spans</text>
+    <text x="149" y="$startTextY" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">$spans</text>
     $endAnchor
     $l1
     $l2
-    <text x="149" y="${endY+24}" text-anchor="middle" style="fill: $textColor; ${button.buttonStyle?.typeStyle}; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 0.9em;">$typeText</text>
+    <text x="149" y="${endY+24}" text-anchor="middle" style="${button.buttonStyle?.descriptionStyle};">$typeText</text>
     </g>
     """.trimIndent()
     }
