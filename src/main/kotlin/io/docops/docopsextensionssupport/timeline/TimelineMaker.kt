@@ -27,7 +27,34 @@ import java.util.*
  * @constructor Creates a new instance of the `TimelineMaker` class.
  * @param useDark A boolean value indicating whether to use the dark theme.
  */
-class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", var pdf: Boolean = false, val id: String = UUID.randomUUID().toString(), val useGlass: Boolean = false) {
+/**
+ * The orientation of the timeline.
+ */
+enum class TimelineOrientation {
+    HORIZONTAL, // Default orientation with vertical spine and entries on left/right
+    VERTICAL    // New orientation with horizontal spine and entries above/below
+}
+
+/**
+ * The `TimelineMaker` class is used to create a SVG timeline based on the provided parameters.
+ * @constructor Creates a new instance of the `TimelineMaker` class.
+ * @param useDark A boolean value indicating whether to use the dark theme.
+ * @param outlineColor The color of the timeline outline.
+ * @param pdf A boolean value indicating whether the output is for PDF.
+ * @param id A unique identifier for the timeline.
+ * @param useGlass A boolean value indicating whether to use glass effects.
+ * @param orientation The orientation of the timeline (HORIZONTAL or VERTICAL).
+ * @param enableDetailView A boolean value indicating whether to enable clickable items to show details.
+ */
+class TimelineMaker(
+    val useDark: Boolean, 
+    val outlineColor: String= "#38383a", 
+    var pdf: Boolean = false, 
+    val id: String = UUID.randomUUID().toString(), 
+    val useGlass: Boolean = false,
+    val orientation: TimelineOrientation = TimelineOrientation.HORIZONTAL,
+    val enableDetailView: Boolean = false
+) {
     private var textColor: String = "#000000"
     private var fillColor = ""
     private var cardBackgroundColor = ""
@@ -262,8 +289,34 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
     }
 
 
+    /**
+     * Creates a timeline SVG based on the provided entries and parameters.
+     *
+     * @param entries The list of timeline entries.
+     * @param title The title of the timeline.
+     * @param scale The scale factor for the timeline.
+     * @param isPdf Whether the output is for PDF.
+     * @return The SVG string representation of the timeline.
+     */
     fun makeTimelineSvg(entries: MutableList<Entry>, title: String, scale: String, isPdf: Boolean): String {
         this.pdf = isPdf
+        
+        return when (orientation) {
+            TimelineOrientation.HORIZONTAL -> makeHorizontalTimelineSvg(entries, title, scale, isPdf)
+            TimelineOrientation.VERTICAL -> makeVerticalTimelineSvg(entries, title, scale, isPdf)
+        }
+    }
+    
+    /**
+     * Creates a horizontal timeline SVG (original implementation with vertical spine).
+     *
+     * @param entries The list of timeline entries.
+     * @param title The title of the timeline.
+     * @param scale The scale factor for the timeline.
+     * @param isPdf Whether the output is for PDF.
+     * @return The SVG string representation of the horizontal timeline.
+     */
+    private fun makeHorizontalTimelineSvg(entries: MutableList<Entry>, title: String, scale: String, isPdf: Boolean): String {
         val sb = StringBuilder()
         val id = UUID.randomUUID().toString()
 
@@ -353,32 +406,303 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
         sb.append("</svg>")
         return sb.toString()
     }
+    
+    /**
+     * Creates a vertical timeline SVG (horizontal spine with entries above/below).
+     *
+     * @param entries The list of timeline entries.
+     * @param title The title of the timeline.
+     * @param scale The scale factor for the timeline.
+     * @param isPdf Whether the output is for PDF.
+     * @return The SVG string representation of the vertical timeline.
+     */
+    private fun makeVerticalTimelineSvg(entries: MutableList<Entry>, title: String, scale: String, isPdf: Boolean): String {
+        val sb = StringBuilder()
+        val id = UUID.randomUUID().toString()
+
+        // Normalize scale
+        val scaleF = maxOf(0.1f, minOf(5.0f, scale.toFloatOrNull() ?: 1.0f))
+
+        // Calculate base dimensions - wider cards with modern iOS-style look
+        val cardWidth = 240 // Increased from 180 to provide more space for text
+        val cardPadding = 16 // Increased padding for better text spacing
+        val contentWidth = cardWidth - (cardPadding * 2)
+        val fontSize = 13 // Slightly larger font for better readability
+        val lineHeight = 18 // Increased line height for better text spacing
+
+        val topMargin = 80 // Reduced from 100
+        val bottomMargin = 50
+        val leftMargin = 80
+        val rightMargin = 80
+        val spineHeight = 40 // Reduced from 60
+        val cardSpacing = 25 // Reduced from 40 for more condensed layout
+
+        // Use fixed card height like in the API timeline design
+        val cardHeights = mutableListOf<Int>()
+        entries.forEach { entry ->
+            // Calculate height based on text content to accommodate wiki links
+            val textHeight = calculateTextHeight(entry.text, contentWidth, fontSize, lineHeight)
+            val headerHeight = 30 // Header height for date
+            // Allow card to grow as needed based on content
+            val cardHeight = maxOf(60, headerHeight + textHeight + cardPadding)
+            cardHeights.add(cardHeight)
+        }
+
+        // Calculate total width based on entries
+        val totalWidth = if (entries.isNotEmpty()) {
+            leftMargin + (cardWidth * entries.size) + (cardSpacing * (entries.size - 1)) + rightMargin
+        } else {
+            600
+        }
+
+        // Calculate total height - account for cards both above and below the timeline
+        // In the API design, the timeline is in the middle with cards above and below
+        val maxCardHeight = cardHeight(cardHeights)
+        // We need space for cards above and below, plus margins
+        val totalHeight = topMargin + maxCardHeight + spineHeight + maxCardHeight + bottomMargin
+
+        // Calculate scaled dimensions
+        val scaledWidth = (totalWidth * scaleF).toInt()
+        val scaledHeight = (totalHeight * scaleF).toInt()
+
+        // SVG WITHOUT background styling in the element itself
+        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">""".trimIndent())
+
+        val defs = modernDefs(isPdf, id)
+        sb.append(defs.first)
+        val colors = defs.second
+
+        // Add the background as a scalable SVG rectangle instead of CSS style
+        val backgroundGradient = if (useDark) "#0a0a0a" else "#fafafa"
+        sb.append("""
+    <!-- Scalable background -->
+    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient)"/>
+    """.trimIndent())
+
+        // Title and content
+        sb.append("""
+    <text x="${totalWidth/2}" y="50" text-anchor="middle" class="timeline-title">
+          ${title.escapeXml()}
+    </text>
+    """.trimIndent())
+
+        // Timeline spine (horizontal line) - position in the middle to allow cards above and below
+        val spineY = topMargin + maxCardHeight + (spineHeight / 2)
+        val spineStartX = leftMargin - 30
+        val spineEndX = totalWidth - rightMargin + 30
+
+        sb.append("""
+    <!-- Timeline spine (horizontal) -->
+    <line x1="$spineStartX" y1="$spineY" x2="$spineEndX" y2="$spineY" class="timeline-spine"/>
+    """.trimIndent())
+
+        // Generate timeline entries
+        var currentX = leftMargin
+        entries.forEachIndexed { index, entry ->
+            val gradIndex = index % colors.size
+            val cardHeight = cardHeights[index]
+
+            sb.append(verticalTimelineEntry(
+                index, entry, colors[gradIndex], gradIndex, id,
+                currentX, cardHeight, totalWidth, totalHeight, cardWidth, cardPadding,
+                contentWidth, fontSize, lineHeight, spineY
+            ))
+
+            currentX += cardWidth + cardSpacing
+        }
+
+        sb.append("</svg>")
+        return sb.toString()
+    }
+    
+    /**
+     * Helper function to calculate the maximum card height.
+     */
+    private fun cardHeight(cardHeights: List<Int>): Int {
+        return if (cardHeights.isNotEmpty()) cardHeights.maxOrNull()!! else 150
+    }
+    
+    /**
+     * Creates a timeline entry for the vertical timeline.
+     *
+     * @param index The index of the entry.
+     * @param entry The entry to render.
+     * @param color The color for the entry.
+     * @param gradIndex The gradient index for the entry.
+     * @param id The unique identifier for the timeline.
+     * @param xPosition The x position of the entry.
+     * @param cardHeight The height of the card.
+     * @param totalWidth The total width of the timeline.
+     * @param cardWidth The width of the card.
+     * @param cardPadding The padding of the card.
+     * @param contentWidth The width of the content.
+     * @param fontSize The font size for the text.
+     * @param lineHeight The line height for the text.
+     * @param spineY The y position of the timeline spine.
+     * @return The SVG string representation of the timeline entry.
+     */
+    private fun verticalTimelineEntry(
+        index: Int, entry: Entry, color: String, gradIndex: Int, id: String,
+        xPosition: Int, cardHeight: Int, totalWidth: Int, totalHeight: Int, cardWidth: Int,
+        cardPadding: Int, contentWidth: Int, fontSize: Int, lineHeight: Int,
+        spineY: Int
+    ): String {
+        val isAbove = index % 2 == 0 // Alternate entries above and below the timeline
+        val headerHeight = 36 // Increased header height for modern iOS look
+        val cardRadius = 16 // Increased radius for modern iOS-style rounded corners
+        val dotX = xPosition + (cardWidth / 2)
+        val dotY = spineY
+        val cardY = if (isAbove) spineY - cardHeight - 10 else spineY + 10 // Reduced spacing
+        
+        // Create a unique ID for this entry for detail view
+        val entryId = "entry_${id}_$index"
+        
+        // Detail view popup (only shown when clicked)
+        val detailView = if (enableDetailView) {
+            """
+            <!-- Detail view for entry ${index + 1} -->
+            <g id="detail_$entryId" style="display: none;">
+                <!-- Semi-transparent overlay -->
+                <rect x="0" y="0" width="$totalWidth" height="$totalHeight" 
+                      fill="rgba(0,0,0,0.5)" onclick="document.getElementById('detail_$entryId').style.display='none'"/>
+                
+                <!-- Detail card -->
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150}" width="400" height="300" 
+                      rx="16" ry="16" fill="${if (useGlass) "url(#glassGradient)" else cardBackgroundColor}"
+                      stroke="${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor}" stroke-width="1"/>
+                
+                <!-- Header -->
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150}" width="400" height="50" 
+                      rx="16" ry="16" fill="url(#timeline_grad_$gradIndex)"/>
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150 + 16}" width="400" height="34" 
+                      fill="url(#timeline_grad_$gradIndex)"/>
+                
+                <!-- Close button -->
+                <circle cx="${totalWidth/2 + 180}" cy="${totalHeight/2 - 130}" r="15" 
+                        fill="rgba(0,0,0,0.3)" stroke="white" stroke-width="1"
+                        onclick="document.getElementById('detail_$entryId').style.display='none'"
+                        style="cursor: pointer;"/>
+                <text x="${totalWidth/2 + 180}" y="${totalHeight/2 - 125}" text-anchor="middle" 
+                      fill="white" font-size="16" font-weight="bold"
+                      onclick="document.getElementById('detail_$entryId').style.display='none'"
+                      style="cursor: pointer;">×</text>
+                
+                <!-- Date -->
+                <text x="${totalWidth/2 - 180}" y="${totalHeight/2 - 115}" 
+                      class="timeline-text timeline-date" fill="white">
+                      ${entry.date.escapeXml()}
+                </text>
+                
+                <!-- Content -->
+                <text x="${totalWidth/2 - 180}" y="${totalHeight/2 - 80}" 
+                      class="timeline-text timeline-content">
+                      ${wrapTextWithLinksToTspans(entry.text, (totalWidth/2 - 180).toInt(), (totalHeight/2 - 80).toInt(), 360, lineHeight, fontSize)}
+                </text>
+            </g>
+            """
+        } else ""
+        
+        // Click handler for showing detail view
+        val clickHandler = if (enableDetailView) {
+            """onclick="document.getElementById('detail_$entryId').style.display='block'" style="cursor: pointer;" """
+        } else ""
+
+        return """
+    <!-- Timeline Entry ${index + 1} -->
+    <g class="timeline-entry" id="$entryId" $clickHandler>
+        <!-- Straight connector line (no dash) to match API design -->
+        <line x1="$dotX" y1="${if (isAbove) cardY + cardHeight else cardY}" 
+              x2="$dotX" y2="$spineY" 
+              stroke="${separatorColor}" stroke-width="1.5"/>
+        
+        <!-- Timeline dot with concentric circles like in API design -->
+        <circle cx="$dotX" cy="$dotY" r="8" 
+                fill="url(#timeline_grad_$gradIndex)" 
+                filter="url(#cardShadow)"/>
+        <circle cx="$dotX" cy="$dotY" r="4" 
+                fill="#ffffff"/>
+        
+        <!-- Modern iOS-style card with white background and enhanced drop shadow -->
+        <rect x="$xPosition" y="$cardY" width="$cardWidth" height="$cardHeight" 
+              rx="$cardRadius" ry="$cardRadius" fill="#ffffff" filter="url(#cardShadow)" class="timeline-card"/>
+        
+        <!-- Colored header section to match detail view -->
+        <rect x="$xPosition" y="$cardY" 
+              width="$cardWidth" height="$headerHeight" 
+              rx="$cardRadius" ry="$cardRadius" 
+              fill="url(#timeline_grad_$gradIndex)"/>
+        <rect x="$xPosition" y="${cardY + cardRadius}" 
+              width="$cardWidth" height="${headerHeight - cardRadius}" 
+              fill="url(#timeline_grad_$gradIndex)"/>
+        
+        <!-- Date text -->
+        <text x="${xPosition + cardWidth/2}" y="${cardY + 20}" 
+              class="marker-date" text-anchor="middle" fill="white">
+              ${entry.date.escapeXml()}
+        </text>
+        
+        <!-- Event text with wiki-style links support -->
+        <text x="${xPosition + cardPadding}" y="${cardY + 50}" 
+              class="marker-event">
+              <!-- Using a nested SVG to handle wiki links while maintaining marker-event class -->
+              <tspan x="${xPosition + cardPadding}" dy="0">
+                ${wrapTextWithLinksToTspans(entry.text, xPosition + cardPadding, cardY + 50, contentWidth, lineHeight, fontSize)}
+              </tspan>
+        </text>
+        
+        <!-- Small colored circle in corner like in API design -->
+        <circle cx="${xPosition + cardWidth - 20}" cy="${cardY + 15}" r="3" 
+                fill="url(#timeline_grad_$gradIndex)"/>
+    </g>
+    $detailView
+    """.trimIndent()
+    }
 
     private fun modernDefs(isPdf: Boolean, id: String): Pair<String, List<String>> {
         val colors = DEFAULT_COLORS.shuffled()
 
         val shadowFilter = if (useDark) {
             """
+        <!-- Modern iOS-style shadow for dark mode -->
         <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-            <feOffset dx="0" dy="6" result="offset"/>
-            <feFlood flood-color="#000000" flood-opacity="0.4"/>
-            <feComposite in2="offset" operator="in"/>
+            <!-- First shadow layer - closer, sharper shadow -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+            <feOffset dx="0" dy="3" result="offsetBlur1"/>
+            <feFlood flood-color="#000000" flood-opacity="0.3"/>
+            <feComposite in2="offsetBlur1" operator="in" result="shadow1"/>
+            
+            <!-- Second shadow layer - further, softer shadow for depth -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+            <feOffset dx="0" dy="8" result="offsetBlur2"/>
+            <feFlood flood-color="#000000" flood-opacity="0.2"/>
+            <feComposite in2="offsetBlur2" operator="in" result="shadow2"/>
+            
             <feMerge> 
-                <feMergeNode/>
+                <feMergeNode in="shadow2"/>
+                <feMergeNode in="shadow1"/>
                 <feMergeNode in="SourceGraphic"/> 
             </feMerge>
         </filter>
         """
         } else {
             """
+        <!-- Modern iOS-style shadow for light mode -->
         <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <!-- First shadow layer - closer, sharper shadow -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
+            <feOffset dx="0" dy="2" result="offsetBlur1"/>
+            <feFlood flood-color="#000000" flood-opacity="0.1"/>
+            <feComposite in2="offsetBlur1" operator="in" result="shadow1"/>
+            
+            <!-- Second shadow layer - further, softer shadow for depth -->
             <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
-            <feOffset dx="0" dy="4" result="offset"/>
-            <feFlood flood-color="#000000" flood-opacity="0.15"/>
-            <feComposite in2="offset" operator="in"/>
+            <feOffset dx="0" dy="6" result="offsetBlur2"/>
+            <feFlood flood-color="#000000" flood-opacity="0.08"/>
+            <feComposite in2="offsetBlur2" operator="in" result="shadow2"/>
+            
             <feMerge> 
-                <feMergeNode/>
+                <feMergeNode in="shadow2"/>
+                <feMergeNode in="shadow1"/>
                 <feMergeNode in="SourceGraphic"/> 
             </feMerge>
         </filter>
@@ -471,6 +795,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
             }
             .timeline-title {
                 font-size: 32px;
+                font-family: $DEFAULT_FONT_FAMILY;
                 font-weight: 800;
                 letter-spacing: -1px;
                 fill: ${if (useGlass) "white" else textColor};
@@ -504,6 +829,19 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
                 stroke-dasharray: 3,3;
                 opacity: 0.6;
             }
+            /* API timeline specific styles */
+            .marker-date {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: 12px;
+                font-weight: 500;
+                fill: #374151;
+            }
+            .marker-event {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: 14px;
+                font-weight: 400;
+                fill: #1f2937;
+            }
             $linkStyle
         </style>
         $shadowFilter
@@ -527,10 +865,64 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
         val headerHeight = 45
         val cardRadius = 16
         val dotY = yPosition + (cardHeight / 2)
+        
+        // Create a unique ID for this entry for detail view
+        val entryId = "entry_${id}_$index"
+        
+        // Detail view popup (only shown when clicked)
+        val detailView = if (enableDetailView) {
+            val totalHeight = 800 // Approximate height for the detail view
+            """
+            <!-- Detail view for entry ${index + 1} -->
+            <g id="detail_$entryId" style="display: none;">
+                <!-- Semi-transparent overlay -->
+                <rect x="0" y="0" width="$totalWidth" height="$totalHeight" 
+                      fill="rgba(0,0,0,0.5)" onclick="document.getElementById('detail_$entryId').style.display='none'"/>
+                
+                <!-- Detail card -->
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150}" width="400" height="300" 
+                      rx="16" ry="16" fill="${if (useGlass) "url(#glassGradient)" else cardBackgroundColor}"
+                      stroke="${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor}" stroke-width="1"/>
+                
+                <!-- Header -->
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150}" width="400" height="50" 
+                      rx="16" ry="16" fill="url(#timeline_grad_$gradIndex)"/>
+                <rect x="${totalWidth/2 - 200}" y="${totalHeight/2 - 150 + 16}" width="400" height="34" 
+                      fill="url(#timeline_grad_$gradIndex)"/>
+                
+                <!-- Close button -->
+                <circle cx="${totalWidth/2 + 180}" cy="${totalHeight/2 - 130}" r="15" 
+                        fill="rgba(0,0,0,0.3)" stroke="white" stroke-width="1"
+                        onclick="document.getElementById('detail_$entryId').style.display='none'"
+                        style="cursor: pointer;"/>
+                <text x="${totalWidth/2 + 180}" y="${totalHeight/2 - 125}" text-anchor="middle" 
+                      fill="white" font-size="16" font-weight="bold"
+                      onclick="document.getElementById('detail_$entryId').style.display='none'"
+                      style="cursor: pointer;">×</text>
+                
+                <!-- Date -->
+                <text x="${totalWidth/2 - 180}" y="${totalHeight/2 - 115}" 
+                      class="timeline-text timeline-date" fill="white">
+                      ${entry.date.escapeXml()}
+                </text>
+                
+                <!-- Content -->
+                <text x="${totalWidth/2 - 180}" y="${totalHeight/2 - 80}" 
+                      class="timeline-text timeline-content">
+                      ${wrapTextWithLinksToTspans(entry.text, (totalWidth/2 - 180).toInt(), (totalHeight/2 - 80).toInt(), 360, lineHeight, fontSize)}
+                </text>
+            </g>
+            """
+        } else ""
+        
+        // Click handler for showing detail view
+        val clickHandler = if (enableDetailView) {
+            """onclick="document.getElementById('detail_$entryId').style.display='block'" style="cursor: pointer;" """
+        } else ""
 
         return """
     <!-- Timeline Entry ${index + 1} -->
-    <g class="timeline-entry">
+    <g class="timeline-entry" id="$entryId" $clickHandler>
         <!-- Dashed connector line -->
         <line x1="${if (isLeft) xPosition + cardWidth else xPosition}" y1="$dotY"  x2="$spineX"  y2="$dotY" class="timeline-connector"/>
 
@@ -570,6 +962,7 @@ class TimelineMaker(val useDark: Boolean, val outlineColor: String= "#38383a", v
               ${wrapTextWithLinksToTspans(entry.text, xPosition + cardPadding, yPosition + headerHeight + 25, contentWidth, lineHeight, fontSize)}
         </text>
     </g>
+    $detailView
     """.trimIndent()
     }
 
