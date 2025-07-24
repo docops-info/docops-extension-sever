@@ -196,4 +196,36 @@ Literature reflected the social, economic, and cultural changes of the Industria
         output.writeBytes(svg.toByteArray())
         println("[DEBUG_LOG] API Style Vertical SVG written to ${output.absolutePath}")
     }
+
+
+    @Test
+    fun `test vertical timeline text positioning`() {
+        // Create a vertical timeline
+        val maker = TimelineMaker(
+            useDark = false,
+            outlineColor = "#38383a",
+            pdf = false,
+            id = "test_id",
+            useGlass = false,
+            orientation = TimelineOrientation.VERTICAL
+        )
+        val entries = TimelineParser().parse(testTimelineContent)
+
+        // Generate the SVG
+        val svg = maker.makeTimelineSvg(entries.entries, "Text Positioning Test", "1.0", false)
+
+        // Write the SVG to a file for inspection
+        val output = File("gen/timeline_text_positioning_test.svg")
+        output.writeBytes(svg.toByteArray())
+        println("[DEBUG_LOG] Test SVG written to ${output.absolutePath}")
+
+        // Print the y-coordinates of the text elements for each entry
+        val textYCoordinates = svg.lines().filter { it.contains("<text") && it.contains("marker-event") }
+            .map { line ->
+                val yMatch = Regex("y=\"(\\d+)\"").find(line)
+                yMatch?.groupValues?.get(1)?.toIntOrNull() ?: 0
+            }
+
+        println("[DEBUG_LOG] Text y-coordinates: $textYCoordinates")
+    }
 }
