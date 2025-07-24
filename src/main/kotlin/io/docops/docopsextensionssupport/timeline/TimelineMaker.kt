@@ -466,7 +466,7 @@ class TimelineMaker(
         val scaledHeight = (totalHeight * scaleF).toInt()
 
         // SVG WITHOUT background styling in the element itself
-        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">""".trimIndent())
+        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" id="tl_$id">""".trimIndent())
 
         val defs = modernDefs(isPdf, id)
         sb.append(defs.first)
@@ -816,7 +816,6 @@ class TimelineMaker(
                 stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else separatorColor};
                 stroke-width: 2;
                 stroke-linecap: round;
-                ${if (useGlass) "filter: url(#blur);" else ""}
             }
             #tl_$id .timeline-dot {
                 stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else cardBackgroundColor};
