@@ -29,11 +29,11 @@ Literature reflected the social, economic, and cultural changes of the Industria
         
         // Debug: Print entries to see if they're parsed correctly
         println("[DEBUG_LOG] Parsed entries: $entries")
-        entries.forEachIndexed { index, entry ->
+        entries.entries.forEachIndexed { index, entry ->
             println("[DEBUG_LOG] Entry $index - date: ${entry.date}, text: ${entry.text}")
         }
         
-        val svg = maker.makeTimelineSvg(entries, "Literary Periods", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "1.0", false)
         
         // Debug: Print part of the SVG to see if text is included
         println("[DEBUG_LOG] SVG excerpt (first 500 chars): ${svg.take(500)}")
@@ -69,11 +69,11 @@ Literature reflected the social, economic, and cultural changes of the Industria
         
         // Debug: Print entries to see if they're parsed correctly
         println("[DEBUG_LOG] Parsed entries for vertical timeline: $entries")
-        entries.forEachIndexed { index, entry ->
+        entries.entries.forEachIndexed { index, entry ->
             println("[DEBUG_LOG] Vertical Entry $index - date: ${entry.date}, text: ${entry.text}")
         }
         
-        val svg = maker.makeTimelineSvg(entries, "Literary Periods", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "1.0", false)
         
         // Debug: Print part of the SVG to see if text is included
         println("[DEBUG_LOG] Vertical SVG excerpt (first 500 chars): ${svg.take(500)}")
@@ -108,7 +108,7 @@ Literature reflected the social, economic, and cultural changes of the Industria
             enableDetailView = true
         )
         val entries = TimelineParser().parse(testTimelineContent)
-        val svg = maker.makeTimelineSvg(entries, "Literary Periods", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "1.0", false)
         
         // Verify the SVG contains clickable elements
         assertTrue(svg.contains("onclick="), "SVG should contain onclick handlers")
@@ -131,7 +131,7 @@ Literature reflected the social, economic, and cultural changes of the Industria
             useGlass = false
         )
         val entries = TimelineParser().parse(testTimelineContent)
-        val svg = maker.makeTimelineSvg(entries, "Literary Periods", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "1.0", false)
         
         // Verify the SVG contains dark mode elements
         assertTrue(svg.contains("#ffffff"), "SVG should use white text in dark mode")
@@ -149,7 +149,7 @@ Literature reflected the social, economic, and cultural changes of the Industria
             useGlass = true
         )
         val entries = TimelineParser().parse(testTimelineContent)
-        val svg = maker.makeTimelineSvg(entries, "Literary Periods", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "1.0", false)
         
         // Verify the SVG contains glass effect elements
         assertTrue(svg.contains("url(#glassGradient)"), "SVG should use glass gradients")
@@ -169,7 +169,7 @@ Literature reflected the social, economic, and cultural changes of the Industria
             orientation = TimelineOrientation.VERTICAL
         )
         val entries = TimelineParser().parse(testTimelineContent)
-        val svg = maker.makeTimelineSvg(entries, "API Style Timeline", "1.0", false)
+        val svg = maker.makeTimelineSvg(entries.entries, "API Style Timeline", "1.0", false)
         
         // Verify the SVG contains expected elements
         assertTrue(svg.contains("<svg"), "SVG should start with <svg tag")

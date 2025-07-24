@@ -13,13 +13,23 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         useDark: Boolean,
         scale: String,
         backend: String,
-        useGlass: Boolean = true
+        useGlass: Boolean = false
     ): String {
         val isPdf = backend == "pdf"
-        val tm = TimelineMaker(useDark = useDark, useGlass = useGlass)
         val entries = TimelineParser().parse(payload)
-        val svg = tm.makeTimelineSvg(entries, title, scale, isPdf = isPdf)
-        val csv = entries.toCsv()
+        val orientation = entries.config.orientation?.let { TimelineOrientation.valueOf(it.uppercase()) }
+
+        val tm = TimelineMaker(useDark = entries.config.useDark, useGlass = entries.config.useGlass, orientation = orientation ?: TimelineOrientation.HORIZONTAL, enableDetailView = entries.config.enableDetailView)
+        var ti: String
+
+        if(entries.config.title.isNullOrEmpty()) {
+            ti = title
+        } else {
+            ti = entries.config.title
+        }
+
+        val svg = tm.makeTimelineSvg(entries.entries, ti, scale, isPdf = isPdf)
+        val csv = entries.entries.toCsv()
         csvResponse.update(csv)
         return svg
     }

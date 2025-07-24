@@ -26,10 +26,11 @@ Timelines in the DocOps extension are SVG-based graphical elements that display 
 A timeline includes:
 
 * A title
-* A horizontal timeline road with directional arrow
+* A timeline road (horizontal or vertical)
 * Multiple event entries, each containing:
   ** A date
   ** Descriptive text (which can include links)
+* Optional clickable items to show detailed information
 * Display settings for visual appearance
 
 == AsciiDoctor Syntax for Timelines
@@ -74,6 +75,8 @@ The macro processes the timeline entries and generates an SVG representation tha
 * `useDark` (optional): Whether to use dark mode (default: false)
 * `outlineColor` (optional): The color for the timeline outline (default: "#37cdbe")
 * `useGlass` (optional): Whether to use glass styling with transparency and highlights (default: true)
+* `orientation` (optional): The orientation of the timeline, either "horizontal" or "vertical" (default: "horizontal")
+* `enableDetailView` (optional): Whether to enable clickable items to show detailed information (default: false)
 
 
 ==== Entry Properties
@@ -108,6 +111,70 @@ and spans multiple lines for longer descriptions
 ....
 
 == Examples
+
+=== Vertical Timeline
+
+To create a vertical timeline with entries arranged horizontally along a horizontal spine:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Project Milestones",scale="1",orientation="vertical"]
+----
+-
+date: Q1 2024
+text: Project Kickoff
+Initial planning and team formation completed.
+-
+date: Q2 2024
+text: Design Phase
+UI/UX design and architecture planning.
+-
+date: Q3 2024
+text: Development
+Core functionality implementation.
+-
+date: Q4 2024
+text: Testing & Launch
+Quality assurance and public release.
+----
+....
+
+The vertical timeline now features an API-style layout where entries alternate above and below the timeline, creating a more condensed and balanced design. This layout is particularly useful for displaying version histories, release timelines, or any sequence of events where the chronological order is important.
+
+Key features of the vertical timeline:
+
+* Entries alternate between positions above and below the horizontal timeline
+* Compact card design with a white background and subtle drop shadow
+* Concentric circle markers at the intersection of each entry with the timeline
+* Small colored indicator in the corner of each card
+* Straight connector lines between cards and timeline markers
+
+=== Clickable Timeline Items
+
+To create a timeline with clickable items that show detailed information when clicked:
+
+[source,asciidoc]
+....
+[docops,timeline,title="Product Releases",scale="1",enableDetailView="true"]
+----
+-
+date: January 2024
+text: Version 1.0
+Initial release with core features.
+-
+date: March 2024
+text: Version 1.5
+Performance improvements and bug fixes.
+-
+date: June 2024
+text: Version 2.0
+Major update with new UI and additional features.
+----
+....
+
+When a user clicks on a timeline item, a detailed view will appear showing the complete information for that item.
+
+=== Standard Examples
 
 === Basic Timeline Example
 
@@ -434,6 +501,7 @@ text: Postmodernism
 Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]].
 ----
 
+
 === Product Roadmap Timeline
 
 Timelines are perfect for visualizing product roadmaps and future plans:
@@ -531,8 +599,12 @@ text: Final delivery of the project
 ----
 ....
 
-[docops,timeline,title="Traditional Style Timeline",scale="1",role="center",useGlass="false",controls=true]
+[docops,timeline,scale="1",role="center",controls=true]
 ----
+title: Traditional Style Timeline
+useGlass: false
+orientation: vertical
+---
 -
 date: January 2024
 text: First milestone in the project
@@ -575,6 +647,38 @@ date: March 2024
 text: Final delivery of the project
 ----
 
+=== Vertical Orientation
+
+[docops,timeline,controls=true]
+----
+title: My Timeline
+useDark: false
+orientation: vertical
+useGlass: true
+dateFormat: MMM dd, yyyy
+showIndex: false
+customColor: #FF5733
+---
+-
+date: July 23rd, 2023
+text: DocOps extension Server releases a new feature, Timeline Maker
+for asciidoctorj. With a simple text markup block you can
+create very powerful timeline images. Enjoy!
+-
+date: August 15th, 2023
+text: DocOps.io revamping website with updated documentation. All
+our work will be updated with latest documentation for Panels,
+for extension server are the various plug-ing for asciidoctorj.
+-
+date: January 2024
+text: First milestone in the project
+-
+date: February 2024
+text: Second milestone with important achievements
+-
+date: March 2024
+text: Final delivery of the project
+----
 == Conclusion
 
 The DocOps Timeline Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing timelines. By using the simple text-based syntax, you can create customized timelines that display chronological events in a clear and engaging format.

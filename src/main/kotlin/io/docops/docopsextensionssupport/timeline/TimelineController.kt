@@ -142,7 +142,7 @@ class TimelineController {
             val useDarkInput = httpServletRequest.getParameter("useDark")
             val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3", useGlass = true)
             val entries = TimelineParser().parse(contents)
-            val svg = tm.makeTimelineSvg(entries, title, scale, false)
+            val svg = tm.makeTimelineSvg(entries.entries, title, scale, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -222,7 +222,7 @@ class TimelineController {
             val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, useGlass = useGlass)
             val isPdf = "PDF" == type
             val entries = TimelineParser().parse(data)
-            val svg = tm.makeTimelineSvg(entries, title, scale, isPdf)
+            val svg = tm.makeTimelineSvg(entries.entries, title, scale, isPdf)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -255,7 +255,7 @@ class TimelineController {
             sb.append("[%header,cols=\"1,2\",stripes=even]\n")
             sb.append("!===\n")
             sb.append("|Date |Event\n")
-            entries.forEach {
+            entries.entries.forEach {
                 sb.append("a|${it.date} |${it.text}\n")
             }
             sb.append("!===")
@@ -274,7 +274,7 @@ class TimelineController {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
             val tm = TimelineMaker(false)
             val entries = TimelineParser().parse(data)
-            val svg = tm.makeTimelineSvg(entries, "title", "0.6", false)
+            val svg = tm.makeTimelineSvg(entries.entries, "title", "0.6", false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.TEXT_PLAIN

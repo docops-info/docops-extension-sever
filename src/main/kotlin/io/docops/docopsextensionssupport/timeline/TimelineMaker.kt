@@ -70,7 +70,7 @@ class TimelineMaker(
             textColor = "#1d1d1f"
             fillColor = "#f2f2f7"
             cardBackgroundColor = "#ffffff"
-            separatorColor = "#e5e5e5"
+            separatorColor = "#666666"
         }
     }
 
@@ -358,7 +358,7 @@ class TimelineMaker(
         val scaledHeight = (totalHeight * scaleF).toInt()
 
         // SVG WITHOUT background styling in the element itself
-        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">""".trimIndent())
+        sb.append("""<svg width="$scaledWidth" height="$scaledHeight" viewBox="0 0 $totalWidth $totalHeight" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" id="tl_$id">""".trimIndent())
 
         val defs = modernDefs(isPdf, id)
         sb.append(defs.first)
@@ -368,7 +368,7 @@ class TimelineMaker(
         val backgroundGradient = if (useDark) "#0a0a0a" else "#fafafa"
         sb.append("""
     <!-- Scalable background -->
-    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient)"/>
+    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient_$id)"/>
     """.trimIndent())
 
         // Title and content
@@ -476,7 +476,7 @@ class TimelineMaker(
         val backgroundGradient = if (useDark) "#0a0a0a" else "#fafafa"
         sb.append("""
     <!-- Scalable background -->
-    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient)"/>
+    <rect width="$totalWidth" height="$totalHeight" fill="url(#backgroundGradient_$id)"/>
     """.trimIndent())
 
         // Title and content
@@ -749,7 +749,7 @@ class TimelineMaker(
 
         // Add background gradient definition
         val backgroundGradient = """
-    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:${if (useGlass) "#1d4ed8" else fillColor};stop-opacity:1" />
         <stop offset="100%" style="stop-color:${if (useGlass) "#1d4ed8" else if (useDark) "#0a0a0a" else "#fafafa"};stop-opacity:1" />
     </linearGradient>
@@ -778,65 +778,65 @@ class TimelineMaker(
         val defs = """
     <defs>
         <style>
-            .timeline-card {
+            #tl_$id .timeline-card {
                 fill: ${if (useGlass) "url(#glassGradient)" else cardBackgroundColor};
                 stroke: ${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor};
                 stroke-width: ${if (useGlass) "1" else "0.5"};
                 filter: url(#${if (useGlass) "shadow" else "cardShadow"});
                 transition: transform 0.2s ease;
             }
-            .timeline-card:hover {
+            #tl_$id .timeline-card:hover {
                 transform: translateY(-2px);
             }
-            .timeline-text {
+            #tl_$id .timeline-text {
                 font-family: $DEFAULT_FONT_FAMILY;
                 fill: ${if (useGlass) "white" else textColor};
                 text-rendering: optimizeLegibility;
             }
-            .timeline-title {
+            #tl_$id .timeline-title {
                 font-size: 32px;
                 font-family: $DEFAULT_FONT_FAMILY;
                 font-weight: 800;
                 letter-spacing: -1px;
                 fill: ${if (useGlass) "white" else textColor};
             }
-            .timeline-date {
+            #tl_$id .timeline-date {
                 font-size: 13px;
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
-            .timeline-content {
+            #tl_$id .timeline-content {
                 font-size: 15px;
                 font-weight: 400;
                 line-height: 1.5;
                 fill: ${if (useGlass) "rgba(255,255,255,0.9)" else textColor};
             }
-            .timeline-spine {
+            #tl_$id .timeline-spine {
                 stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else separatorColor};
                 stroke-width: 2;
                 stroke-linecap: round;
                 ${if (useGlass) "filter: url(#blur);" else ""}
             }
-            .timeline-dot {
+            #tl_$id .timeline-dot {
                 stroke: ${if (useGlass) "rgba(255,255,255,0.4)" else cardBackgroundColor};
                 stroke-width: 3;
                 filter: ${if (useGlass) "url(#shadow)" else "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"};
             }
-            .timeline-connector {
+            #tl_$id .timeline-connector {
                 stroke: ${if (useGlass) "rgba(255,255,255,0.3)" else separatorColor};
                 stroke-width: 1.5;
                 stroke-dasharray: 3,3;
                 opacity: 0.6;
             }
             /* API timeline specific styles */
-            .marker-date {
+            #tl_$id .marker-date {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 font-size: 12px;
                 font-weight: 500;
                 fill: #374151;
             }
-            .marker-event {
+            #tl_$id .marker-event {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 font-size: 14px;
                 font-weight: 400;
@@ -996,13 +996,13 @@ Challenges the distinction between high and low culture and emphasizes fragmenta
     // Test normal output
     val maker = TimelineMaker(false, "#a1d975", useGlass = true)
     val entries = TimelineParser().parse(entry)
-    val svg = maker.makeTimelineSvg(entries, "Literary Periods", "0.6", false)
+    val svg = maker.makeTimelineSvg(entries.entries, "Literary Periods", "0.6", false)
     val f = File("gen/timeline_normal.svg")
     f.writeBytes(svg.toByteArray())
 
     // Test PDF output
     val makerPdf = TimelineMaker(false, "#a1d975", useGlass = true)
-    val svgPdf = makerPdf.makeTimelineSvg(entries, "Literary Periods", "1", true)
+    val svgPdf = makerPdf.makeTimelineSvg(entries.entries, "Literary Periods", "1", true)
     val fPdf = File("gen/timeline_pdf.svg")
     fPdf.writeBytes(svgPdf.toByteArray())
 
