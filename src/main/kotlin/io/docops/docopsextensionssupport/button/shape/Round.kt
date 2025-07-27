@@ -21,6 +21,7 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.SVGColor
+import java.awt.Color
 
 
 /**
@@ -42,7 +43,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
         }
         val sb = StringBuilder("<g transform=\"scale($scale)\">")
         val rows = toRows()
-        var itemNumber = ItemCount(0)
+        val itemNumber = ItemCount(0)
         rows.forEachIndexed { index, buttons ->
             sb.append(drawButtons(index, buttons, itemNumber))
         }
@@ -112,7 +113,11 @@ class Round(buttons: Buttons) : Regular(buttons) {
             <g stroke-width="16" stroke="$stroke" fill="#fcfcfc" cursor="pointer" class="raise bar">
                 <title class="description">${button.description?.escapeXml()}</title>
                 <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
-                <circle r="55" cx="0" cy="0"/>
+                <circle r="55" cx="0" cy="0" fill="url(#raisedButton_${button.id})" 
+                        filter="url(#buttonShadow)"
+                        stroke="${darkenColor(button.color!!, 0.4)}" 
+                        stroke-width="1"
+                />
             </g>
             <text  x="0" y="$lineY" text-anchor="middle" style="fill: ${button.color}">
                 $title
@@ -160,7 +165,9 @@ class Round(buttons: Buttons) : Regular(buttons) {
         buttons.buttons.forEachIndexed {
             i, b ->
             val grad = SVGColor(b.color!!, "nnneon-grad$i-${buttons.id}")
-           linGrad.append(grad.linearGradient)
+            val gradientDef = createRaisedButtonGradient(b)
+            linGrad.append(gradientDef)
+            linGrad.append(grad.linearGradient)
         }
         var style = """
              <style>
@@ -191,9 +198,59 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 <filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
                    
                 </filter>
+                <filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+                    <feOffset dx="1" dy="3" result="offset"/>
+                    <feFlood flood-color="#000000" flood-opacity="0.2"/>
+                    <feComposite in2="offset" operator="in" result="shadow"/>
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+                    <feOffset dx="0" dy="1" result="innerOffset"/>
+                    <feFlood flood-color="#000000" flood-opacity="0.1"/>
+                    <feComposite in2="innerOffset" operator="in" result="innerShadow"/>
+        
+                    <feMerge>
+                        <feMergeNode in="shadow"/>
+                        <feMergeNode in="SourceGraphic"/>
+                        <feMergeNode in="innerShadow"/>
+                    </feMerge>
+                </filter>
+        
+           
                 $linGrad
            $style
             </defs>
         """.trimIndent()
     }
+    // In the Round class, modify the gradient definition method
+    private fun createRaisedButtonGradient(button: Button): String {
+        val baseColor = button.color
+        val darkerColor = darkenColor(baseColor!!, 0.3) // Create a darker shade
+        val lighterColor = lightenColor(baseColor, 0.2) // Create a lighter shade
+
+        return """
+    <radialGradient id="raisedButton_${button.id}" cx="30%" cy="25%" r="80%">
+        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+        <stop offset="40%" style="stop-color:${baseColor};stop-opacity:1" />
+        <stop offset="100%" style="stop-color:${darkerColor};stop-opacity:1" />
+    </radialGradient>
+    """
+    }
+
+    // Helper functions to create color variations
+    private fun darkenColor(hexColor: String, factor: Double): String {
+        val color = Color.decode(hexColor)
+        val r = (color.red * (1 - factor)).toInt().coerceAtLeast(0)
+        val g = (color.green * (1 - factor)).toInt().coerceAtLeast(0)
+        val b = (color.blue * (1 - factor)).toInt().coerceAtLeast(0)
+        return String.format("#%02x%02x%02x", r, g, b)
+    }
+
+    private fun lightenColor(hexColor: String, factor: Double): String {
+        val color = Color.decode(hexColor)
+        val r = (color.red + (255 - color.red) * factor).toInt().coerceAtMost(255)
+        val g = (color.green + (255 - color.green) * factor).toInt().coerceAtMost(255)
+        val b = (color.blue + (255 - color.blue) * factor).toInt().coerceAtMost(255)
+        return String.format("#%02x%02x%02x", r, g, b)
+    }
+
 }
