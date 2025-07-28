@@ -59,8 +59,8 @@ class ReleaseRoadMapMaker {
         }
 
         // Determine colors based on dark mode
-        var iosBgColor = if(releaseStrategy.useDark) "#000000" else "#f2f2f7"
-        var iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
+        val iosBgColor = if(releaseStrategy.useDark) "#000000" else "#f2f2f7"
+        val iosTextColor = if(releaseStrategy.useDark) "#ffffff" else "#1c1c1e"
 
         return """
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -149,7 +149,6 @@ class ReleaseRoadMapMaker {
                 <rect x="100" y="20" height="140" width="1000" fill="$iosCardBg" stroke="$iosCardStroke" stroke-width="1"
                       rx="16" ry="16" filter="url(#iosCardShadow)" class="ios-card-bg"/>
 
-                <!-- iOS-style milestone indicator -->
                 <g class="ios-milestone">
                     <circle cx="200" cy="90" r="35" fill="$milestoneColor" opacity="0.1"/>
                     <circle cx="200" cy="90" r="30" fill="$milestoneColor" stroke="#ffffff" stroke-width="3"/>
@@ -158,12 +157,10 @@ class ReleaseRoadMapMaker {
                           font-weight="600" font-size="12px" fill="white">${release.type}</text>
                 </g>
 
-                <!-- Release date -->
                 <text x="200" y="140" text-anchor="middle"
                       font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
                       font-size="12px" font-weight="500" fill="$iosSecondaryText" class="ios-secondary-text">${release.date}</text>
 
-                <!-- Goal Content (Default View) -->
                 <g class="goal-content">
                     <text x="280" y="75" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
                           font-size="18px" font-weight="500" fill="$iosTextColor" class="ios-text">
@@ -171,42 +168,37 @@ class ReleaseRoadMapMaker {
                         ${if (lines.size > 1) "<tspan x=\"280\" dy=\"22\">${lines.getOrNull(1) ?: ""}</tspan>" else ""}
                     </text>
 
-                    <!-- Completion indicator -->
                     $completedMark
 
-                    <!-- iOS-style chevron -->
                     <path class="chevron-right" d="M1050 85 L1060 90 L1050 95" stroke="$iosSecondaryText" stroke-width="2"
                           fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
                 </g>
             </g>
         """.trimIndent()
 
+        
         // Detail panel for this card (separate from the card)
         val detailPanelContent = """
             <!-- Detail panel for this card -->
             <g id="detail-panel-${id}_$index" class="detail-panel" style="display:none;">
                 <!-- Gray background with rounded corners -->
-                <rect x="100" y="180" width="1000" height="260" fill="#444444" rx="16" ry="16" class="detail-panel-bg"/>
+                <rect x="100" y="0" width="1000" height="260" fill="#444444" rx="16" ry="16" class="detail-panel-bg"/>
 
-                <!-- Dark header bar -->
-                <rect x="100" y="180" width="1000" height="50" fill="#333333" rx="16" ry="16" class="detail-panel-header"/>
-                <rect x="100" y="210" width="1000" height="20" fill="#333333" class="detail-panel-header-bottom"/>
+                <rect x="100" y="0" width="1000" height="50" fill="#333333" rx="16" ry="16" class="detail-panel-header"/>
+                <rect x="100" y="30" width="1000" height="20" fill="#333333" class="detail-panel-header-bottom"/>
 
-                <!-- Title -->
-                <text x="120" y="210" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                <text x="120" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
                       font-size="20px" font-weight="600" fill="#ffffff" class="detail-panel-title">${lines.firstOrNull() ?: ""}</text>
 
-                <!-- Content area -->
-                <g class="detail-panel-content" transform="translate(120, 240)">
+                <g class="detail-panel-content" transform="translate(120, 60)">
                     <text class="detail-text" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif">
                         $detailContent
                     </text>
                 </g>
 
-                <!-- Close button -->
                 <g class="detail-panel-close" onclick="toggleCardDetail('card${id}_$index')">
-                    <circle cx="1060" cy="205" r="15" fill="#666666"/>
-                    <path d="M1053 198 L1067 212 M1067 198 L1053 212" stroke="#ffffff" stroke-width="2"
+                    <circle cx="1060" cy="25" r="15" fill="#666666"/>
+                    <path d="M1053 18 L1067 32 M1067 18 L1053 32" stroke="#ffffff" stroke-width="2"
                           fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </g>
             </g>
@@ -353,6 +345,7 @@ class ReleaseRoadMapMaker {
                     .box2Clicked { transition-timing-function: ease-out; transition: 2.25s; transform: translateX(-330%); }
                     </style>
                     <script>
+                    <![CDATA[
                      function toggleItem(item1, item2) {
                         var elem2 = document.querySelector("#"+item2);
                         elem2.classList.toggle("box2Clicked");
@@ -391,8 +384,28 @@ class ReleaseRoadMapMaker {
                         if (!isActive) {
                             card.classList.add('detail-active');
                             detailPanel.style.display = 'block';
-
-                           
+                            
+                            const cardRect = card.getBoundingClientRect();
+                            const cardTransform = card.getAttribute('transform');
+                            
+                            if (cardTransform) {
+                                const translateMatch = cardTransform.match(/translate\(0,(\d+)\)/);
+                                if (translateMatch && translateMatch[1]) {
+                                    const cardY = parseInt(translateMatch[1]);
+                                    const detailPanelHeight = 260; 
+                                    
+                                   
+                                    const svgElement = document.querySelector('svg');
+                                    const svgHeight = svgElement ? parseFloat(svgElement.getAttribute('height')) / parseFloat(svgElement.getAttribute('viewBox').split(' ')[3]) * 1200 : 1000;
+                                    
+                                    if (cardY + 160 + detailPanelHeight > svgHeight) {
+                                        
+                                        detailPanel.setAttribute('transform', 'translate(0,' + (cardY - detailPanelHeight) + ')');
+                                    } else {
+                                        detailPanel.setAttribute('transform', 'translate(0,' + (cardY + 160) + ')');
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -403,6 +416,7 @@ class ReleaseRoadMapMaker {
                             el.classList.toggle('dark-active');
                         });
                     }
+                    ]]>
              </script>
         """.trimIndent()
         if(isPdf) {
