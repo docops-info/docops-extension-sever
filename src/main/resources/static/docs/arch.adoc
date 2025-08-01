@@ -197,6 +197,8 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 
 === Component Diagram
 
+
+
 [plantuml, comp,svg]
 ----
 @startuml
@@ -398,13 +400,81 @@ note bottom of spring
     • Web MVC
 end note
 
-
-
 @enduml
 ----
 
 == Example Badge Sequence
 
+=== Mermaid
+
+[docops,mermaid]
+----
+sequenceDiagram
+    title DocOps Badge Generation Flow
+
+    participant C as Client
+    participant Router as DocOpsRouter
+    participant Handler as BadgeHandler
+    participant Generator as DocOpsBadgeGenerator
+    participant Publisher as ApplicationEventPublisher
+    participant Log as Logger
+
+    C->>+Router: GET /api/docops/svg?kind=badge&payload=...
+
+    note right of Router: Parameters:<br/>• kind: "badge"<br/>• payload: encoded badge data<br/>• scale: "1.0" (default)<br/>• useDark: false (default)<br/>• backend: "html" (default)
+
+    Router->>Router: Create DocOpsContext
+    Router->>Router: Get handler for "badge" kind
+    Router->>Router: Start measureTimedValue
+
+    rect rgb(255, 255, 255)
+        note over Router: Payload Processing
+        Router->>Router: URL decode payload
+        alt URL decode fails
+            Router->>Log: warn("Failed to URL decode payload")
+        end
+        Router->>Router: uncompressString(decodedPayload)
+        Router->>Router: decodePayloadIfNeeded(data)
+    end
+
+    Router->>+Handler: handleSVG(finalPayload, context)
+
+    Handler->>Handler: Parse badge configuration
+    Handler->>Handler: processPipeDelimitedData()
+
+    Handler->>+Generator: createBadgeFromString(data, isPdf)
+
+    Generator->>Generator: Parse badge data
+    Generator->>Generator: Apply styling and colors
+    Generator->>Generator: Generate SVG markup
+
+    Generator-->>-Handler: SVG string
+
+    Handler-->>-Router: Generated SVG
+
+    Router->>Router: joinXmlLines(addSvgMetadata(svg))
+    Router->>Router: End timing measurement
+
+    Router->>Log: info("badge executed in ${duration}ms")
+
+    rect rgb(255, 255, 255)
+        note over Router, Publisher: Event Tracking & Publishing
+        Router->>Router: Increment eventCounts["badge"]
+        Router->>+Publisher: publishEvent(DocOpsExtensionEvent)
+
+        note right of Publisher: Event contains:<br/>• kind: "badge"<br/>• duration: execution time<br/>• success: true<br/>• count: execution count
+
+        Publisher-->>-Router: Event published
+    end
+
+    Router->>Router: Set response headers
+
+    note right of Router: Headers:<br/>• Cache-Control: no-cache<br/>• Content-Type: image/svg+xml
+
+    Router-->>-C: ResponseEntity(svg, headers, 200)
+----
+
+=== Plantuml
 [plantuml,badge,svg]
 ----
 @startuml

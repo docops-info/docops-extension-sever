@@ -87,6 +87,7 @@ class DocOpsRouter (
             "feature" -> FeatureCardHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)
             "domain" -> DomainHandler(csvResponse)
+            "mermaid" -> DocOpsMermaid(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }
@@ -123,6 +124,7 @@ class DocOpsRouter (
 
         val timing = measureTimedValue {
             // First try to URL decode the payload, if it fails, use the original payload
+
             val decodedPayload = try {
                 URLDecoder.decode(payload, "UTF-8")
             } catch (e: IllegalArgumentException) {
@@ -132,9 +134,13 @@ class DocOpsRouter (
 
             val data = uncompressString(decodedPayload)
             val finalPayload = decodePayloadIfNeeded(data)
-
-            joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), response))
+            if(handler is DocOpsMermaid) {
+                 handler.handleSVG(finalPayload, context)
+            } else {
+                joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), response))
+            }
         }
+
 
         logger.info { "$kind executed in ${timing.duration.inWholeMilliseconds}ms" }
 
@@ -147,7 +153,11 @@ class DocOpsRouter (
         headers.cacheControl = CacheControl.noCache().headerValue
         headers["X-Content-Type-Options"] = "nosniff"
         headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
-        headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+        if(handler is DocOpsMermaid) {
+            headers.contentType = MediaType("text", "html", StandardCharsets.UTF_8)
+        } else {
+            headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
+        }
 
 
         return ResponseEntity(timing.value.toByteArray(
