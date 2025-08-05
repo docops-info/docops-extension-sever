@@ -40,7 +40,7 @@ logging:
     path: .
   pattern:
     level:
-    console: '%date %green(%level) %yellow([%thread]) %cyan(%logger{10}) [%file : %line] [${spring.application.name:}] - %X - %msg%n'
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}){magenta} %clr(${PID:- }){blue} %clr(---){faint} [%clr(%X{traceId}){magenta}, %clr(%X{spanId}){magenta}] %clr([%t]){green} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
     file: '%date %green(%level) %yellow([%thread]) %cyan(%logger{10}) [%file : %line] [${spring.application.name:}] - %X - %msg%n'
   level:
     io.docops.docopsextensionssupport.web.StatsController: DEBUG
