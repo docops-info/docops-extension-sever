@@ -9,6 +9,7 @@ import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.*
 import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.domain.DomainHandler
+import io.docops.docopsextensionssupport.gherkin.GherkinHandler
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
@@ -88,6 +89,7 @@ class DocOpsRouter (
             "shield" -> ShieldHandler(csvResponse)
             "domain" -> DomainHandler(csvResponse)
             "mermaid" -> DocOpsMermaid(csvResponse)
+            "gherkin" -> GherkinHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }
