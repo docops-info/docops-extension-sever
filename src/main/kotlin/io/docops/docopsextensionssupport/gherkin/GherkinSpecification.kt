@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.gherkin
 
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -76,4 +77,42 @@ enum class GherkinStepStatus {
 @Serializable
 enum class GherkinScenarioStatus {
     PASSING, FAILING, PENDING, SKIPPED
+}
+
+// CSV conversion for Gherkin
+fun GherkinSpec.toCsv(): CsvResponse {
+    val headers = listOf(
+        "Feature",
+        "Scenario",
+        "Scenario Status",
+        "Step #",
+        "Step Type",
+        "Step Text",
+        "Step Status"
+    )
+    val rows = mutableListOf<List<String>>()
+    if (scenarios.isEmpty()) {
+        rows.add(listOf(feature, "", "", "", "", "", ""))
+    } else {
+        scenarios.forEach { scenario ->
+            if (scenario.steps.isEmpty()) {
+                rows.add(listOf(feature, scenario.title, scenario.status.name, "", "", "", ""))
+            } else {
+                scenario.steps.forEachIndexed { index, step ->
+                    rows.add(
+                        listOf(
+                            feature,
+                            scenario.title,
+                            scenario.status.name,
+                            (index + 1).toString(),
+                            step.type.name,
+                            step.text,
+                            step.status.name
+                        )
+                    )
+                }
+            }
+        }
+    }
+    return CsvResponse(headers, rows)
 }

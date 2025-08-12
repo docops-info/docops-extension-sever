@@ -4,6 +4,7 @@ package io.docops.docopsextensionssupport.gherkin
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 
 
@@ -81,6 +82,8 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         return try {
             val gherkinMaker = GherkinMaker()
             val gherkinSpec = parseGherkinContent(payload)
+            // Update CSV response similar to other handlers
+            csvResponse.update(gherkinSpec.toCsv())
             val svg = gherkinMaker.makeGherkin(gherkinSpec, context.useDark)
             svg
         } catch (e: Exception) {
