@@ -6,6 +6,81 @@ import org.springframework.stereotype.Service
 @Service
 class GherkinMaker {
 
+    // Approximate text wrapping based on available width and font size.
+    private fun wrapByWidth(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
+        if (text.isBlank() || maxWidthPx <= 0) return listOf(text)
+        // Approximate average character width factor for sans-serif fonts
+        val avgCharWidth = (fontSizePx * 0.6)
+        val maxChars = if (avgCharWidth <= 0) text.length else kotlin.math.max(1, kotlin.math.floor(maxWidthPx / avgCharWidth).toInt())
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var current = StringBuilder()
+        for (word in words) {
+            if (current.isEmpty()) {
+                if (word.length > maxChars) {
+                    // Hard split long single word
+                    var start = 0
+                    while (start < word.length) {
+                        val end = kotlin.math.min(start + maxChars, word.length)
+                        val chunk = word.substring(start, end)
+                        if (end == word.length) {
+                            current.append(chunk)
+                        } else {
+                            lines.add(chunk)
+                        }
+                        start = end
+                    }
+                } else {
+                    current.append(word)
+                }
+            } else {
+                val candidate = current.length + 1 + word.length
+                if (candidate <= maxChars) {
+                    current.append(' ').append(word)
+                } else {
+                    lines.add(current.toString())
+                    current = StringBuilder(word)
+                }
+            }
+        }
+        if (current.isNotEmpty()) lines.add(current.toString())
+        return lines
+    }
+
+    // Header wrapping helpers
+    private fun featureLines(featureTitle: String, theme: GherkinTheme): List<String> {
+        val rectWidth = theme.layout.width - (theme.layout.padding * 2)
+        val textBoxWidth = rectWidth - 60 // 50 for icon space + ~10 right margin
+        return wrapByWidth("Feature: $featureTitle", textBoxWidth, theme.typography.featureSize)
+    }
+    private fun featureHeaderHeight(featureTitle: String, theme: GherkinTheme): Int {
+        val lines = featureLines(featureTitle, theme)
+        val lineHeight = theme.typography.featureSize + 6
+        return kotlin.math.max(50, lines.size * lineHeight + 16)
+    }
+    private fun scenarioHeaderLines(title: String, theme: GherkinTheme): List<String> {
+        val rectWidth = theme.layout.width - (theme.layout.padding * 2) - 20
+        val textBoxWidth = rectWidth - 65 // 45 from left inside rect + ~20 right margin
+        return wrapByWidth("Scenario: $title", textBoxWidth, theme.typography.scenarioSize)
+    }
+    private fun scenarioHeaderHeight(title: String, theme: GherkinTheme): Int {
+        val lines = scenarioHeaderLines(title, theme)
+        val lineHeight = theme.typography.scenarioSize + 6
+        return kotlin.math.max(40, lines.size * lineHeight + 12)
+    }
+
+    private fun stepLines(step: GherkinStep, theme: GherkinTheme): List<String> {
+        val keywordWidth = step.type.name.length * 8 + 20 // same heuristic as used in rendering
+        val textBoxWidth = (theme.layout.width - 160) - (keywordWidth + 10)
+        return wrapByWidth(step.text, textBoxWidth, theme.typography.stepSize)
+    }
+
+    private fun calculateStepHeight(step: GherkinStep, theme: GherkinTheme): Int {
+        val lines = stepLines(step, theme)
+        val lineHeight = 20 // px per line, aligns with existing rect height of 20 for single line
+        return kotlin.math.max(20, lines.size * lineHeight)
+    }
+
     fun makeGherkin(spec: GherkinSpec, useDark: Boolean = false): String {
         val theme = if (useDark) spec.theme.copy(
             colors = spec.theme.colors.copy(
@@ -20,9 +95,10 @@ class GherkinMaker {
             append(createSvgHeader(theme.layout.width, totalHeight))
             append(createDefinitions(theme))
             append(createBackground(theme.layout.width, totalHeight, useDark))
-            append(createFeatureHeader(spec.feature, theme))
+            val featureHeader = createFeatureHeader(spec.feature, theme)
+            append(featureHeader.first)
             
-            var yOffset = 90
+            var yOffset = 20 + featureHeader.second + 20
             spec.scenarios.forEachIndexed { index, scenario ->
                 append(createScenario(scenario, theme, yOffset, index))
                 yOffset += calculateScenarioHeight(scenario, theme) + theme.layout.scenarioSpacing
@@ -71,26 +147,46 @@ class GherkinMaker {
         return """<rect width="$width" height="$height" fill="$bgColor" rx="8"/>"""
     }
 
-    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme): String {
+    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme): Pair<String, Int> {
         val width = theme.layout.width - (theme.layout.padding * 2)
-        return """
-            <rect x="${theme.layout.padding}" y="20" width="$width" height="50" 
+        val lines = featureLines(featureTitle, theme)
+        val lineHeight = theme.typography.featureSize + 6
+        val bgHeight = kotlin.math.max(50, lines.size * lineHeight + 16)
+        val centerY = 20 + (bgHeight / 2)
+        val firstBaseline = centerY - ((lines.size - 1) * lineHeight) / 2
+        val sb = StringBuilder()
+        sb.append(
+            """
+            <rect x="${theme.layout.padding}" y="20" width="$width" height="$bgHeight" 
                   fill="url(#featureGradient)" rx="8" filter="url(#dropShadow)"/>
             
-            <circle cx="${theme.layout.padding + 25}" cy="45" r="12" fill="#ffffff" opacity="0.3"/>
-            <text x="${theme.layout.padding + 25}" y="50" 
+            <circle cx="${theme.layout.padding + 25}" cy="$centerY" r="12" fill="#ffffff" opacity="0.3"/>
+            <text x="${theme.layout.padding + 25}" y="$centerY" 
                   font-family="${theme.typography.fontFamily}" font-size="16" 
-                  fill="#ffffff" text-anchor="middle">🎯</text>
-            
-            <text x="${theme.layout.padding + 50}" y="50" 
-                  font-family="${theme.typography.fontFamily}" font-size="${theme.typography.featureSize}" 
-                  font-weight="bold" fill="#ffffff">Feature: $featureTitle</text>
+                  fill="#ffffff" text-anchor="middle" dominant-baseline="middle">🎯</text>
         """.trimIndent()
+        )
+        lines.forEachIndexed { idx, line ->
+            val y = firstBaseline + (idx * lineHeight)
+            sb.append(
+                """
+            <text x="${theme.layout.padding + 50}" y="$y" 
+                  font-family="${theme.typography.fontFamily}" font-size="${theme.typography.featureSize}" 
+                  font-weight="bold" fill="#ffffff">$line</text>
+                """.trimIndent()
+            )
+        }
+        return Pair(sb.toString(), bgHeight)
     }
 
     private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int, index: Int): String {
         val scenarioHeight = calculateScenarioHeight(scenario, theme)
         val width = theme.layout.width - (theme.layout.padding * 2) - 20
+        val headerHeight = scenarioHeaderHeight(scenario.title, theme)
+        val headerCenterY = yOffset + headerHeight / 2
+        val headerLines = scenarioHeaderLines(scenario.title, theme)
+        val lineHeightHeader = theme.typography.scenarioSize + 6
+        val headerFirstBaseline = headerCenterY - ((headerLines.size - 1) * lineHeightHeader) / 2
         
         return buildString {
             // Scenario background
@@ -101,21 +197,27 @@ class GherkinMaker {
             
             // Scenario header
             append("""
-                <rect x="${theme.layout.padding + 20}" y="$yOffset" width="$width" height="40" 
+                <rect x="${theme.layout.padding + 20}" y="$yOffset" width="$width" height="$headerHeight" 
                       fill="#ffffff" rx="6"/>
                 
-                <circle cx="${theme.layout.padding + 45}" cy="${yOffset + 20}" r="10" fill="#6c757d" opacity="0.2"/>
-                <text x="${theme.layout.padding + 45}" y="${yOffset + 24}" 
+                <circle cx="${theme.layout.padding + 45}" cy="$headerCenterY" r="10" fill="#6c757d" opacity="0.2"/>
+                <text x="${theme.layout.padding + 45}" y="$headerCenterY" 
                       font-family="${theme.typography.fontFamily}" font-size="14" 
-                      fill="#6c757d" text-anchor="middle">📋</text>
-                
-                <text x="${theme.layout.padding + 65}" y="${yOffset + 24}" 
-                      font-family="${theme.typography.fontFamily}" font-size="${theme.typography.scenarioSize}" 
-                      font-weight="600" fill="#495057">Scenario: ${scenario.title}</text>
+                      fill="#6c757d" text-anchor="middle" dominant-baseline="middle">📋</text>
             """.trimIndent())
+            headerLines.forEachIndexed { idx, line ->
+                val y = headerFirstBaseline + (idx * lineHeightHeader)
+                append(
+                    """
+                <text x="${theme.layout.padding + 65}" y="$y" 
+                      font-family="${theme.typography.fontFamily}" font-size="${theme.typography.scenarioSize}" 
+                      font-weight="600" fill="#495057">$line</text>
+                    """.trimIndent()
+                )
+            }
             
             // Connecting line
-            val lineStartY = yOffset + 50
+            val lineStartY = yOffset + headerHeight + 10
             val lineEndY = yOffset + scenarioHeight - 20
             append("""
                 <line x1="${theme.layout.padding + 60}" y1="$lineStartY" 
@@ -125,19 +227,20 @@ class GherkinMaker {
             
             // Steps
             var stepY = lineStartY + 15
+            val interStepGap = 8
             scenario.steps.forEach { step ->
                 append(createStep(step, theme, stepY))
-                stepY += theme.layout.stepSpacing
+                stepY += calculateStepHeight(step, theme) + interStepGap
             }
             
             // Scenario status indicator
             val statusColor = getStatusColor(scenario.status, theme)
             val statusIcon = getStatusIcon(scenario.status)
             append("""
-                <circle cx="${theme.layout.width - 40}" cy="${yOffset + 20}" r="8" fill="$statusColor"/>
-                <text x="${theme.layout.width - 40}" y="${yOffset + 24}" 
+                <circle cx="${theme.layout.width - 40}" cy="$headerCenterY" r="8" fill="$statusColor"/>
+                <text x="${theme.layout.width - 40}" y="$headerCenterY" 
                       font-family="${theme.typography.fontFamily}" font-size="10" 
-                      fill="#ffffff" text-anchor="middle">$statusIcon</text>
+                      fill="#ffffff" text-anchor="middle" dominant-baseline="middle">$statusIcon</text>
             """.trimIndent())
         }
     }
@@ -147,43 +250,54 @@ class GherkinMaker {
         val statusColor = getStatusColor(step.status, theme)
         val stepIcon = getStepIcon(step.type)
         val statusIcon = getStatusIcon(step.status)
+
+        val lines = stepLines(step, theme)
+        val lineHeight = 20
+        val bgHeight = kotlin.math.max(20, lines.size * lineHeight)
+        val firstLineBaseline = yOffset + 2
+        // Center relative to text block rather than background rect to avoid downward shift
+        val centerY = firstLineBaseline + (bgHeight - lineHeight) / 2
+        val keywordWidth = step.type.name.length * 8 + 20
+        val textX = theme.layout.padding + 90 + keywordWidth
         
         return buildString {
-            // Step circle
+            // Step circle centered vertically on block
             append("""
-                <circle cx="${theme.layout.padding + 60}" cy="$yOffset" r="8" fill="$stepColor"/>
-                <text x="${theme.layout.padding + 60}" y="${yOffset + 3}" 
+                <circle cx="${theme.layout.padding + 60}" cy="$centerY" r="8" fill="$stepColor"/>
+                <text x="${theme.layout.padding + 60}" y="$centerY" 
                       font-family="${theme.typography.fontFamily}" font-size="10" 
-                      fill="#ffffff" text-anchor="middle">$stepIcon</text>
+                      fill="#ffffff" text-anchor="middle" dominant-baseline="middle">$stepIcon</text>
             """.trimIndent())
             
-            // Step background
+            // Step background sized to wrapped content
             append("""
-                <rect x="${theme.layout.padding + 80}" y="${yOffset - 10}" width="${theme.layout.width - 160}" height="20" 
+                <rect x="${theme.layout.padding + 80}" y="${yOffset - 10}" width="${theme.layout.width - 160}" height="$bgHeight" 
                       fill="$stepColor" opacity="0.1" rx="4"/>
             """.trimIndent())
             
-            // Step keyword
+            // Step keyword (kept at first line baseline)
             append("""
-                <text x="${theme.layout.padding + 90}" y="${yOffset + 2}" 
+                <text x="${theme.layout.padding + 90}" y="$firstLineBaseline" 
                       font-family="Monaco, monospace" font-size="${theme.typography.stepSize}" 
                       font-weight="bold" fill="$stepColor">${step.type.name.lowercase().capitalize()}</text>
             """.trimIndent())
             
-            // Step text
-            val keywordWidth = step.type.name.length * 8 + 20
-            append("""
-                <text x="${theme.layout.padding + 90 + keywordWidth}" y="${yOffset + 2}" 
+            // Step text with wrapping
+            lines.forEachIndexed { idx, line ->
+                val y = firstLineBaseline + (idx * lineHeight)
+                append("""
+                <text x="$textX" y="$y" 
                       font-family="${theme.typography.fontFamily}" font-size="${theme.typography.stepSize}" 
-                      fill="#495057">${step.text}</text>
-            """.trimIndent())
+                      fill="#495057">$line</text>
+                """.trimIndent())
+            }
             
-            // Status indicator
+            // Status indicator centered vertically on block
             append("""
-                <circle cx="${theme.layout.width - 60}" cy="$yOffset" r="6" fill="$statusColor"/>
-                <text x="${theme.layout.width - 60}" y="${yOffset + 2}" 
+                <circle cx="${theme.layout.width - 60}" cy="$centerY" r="6" fill="$statusColor"/>
+                <text x="${theme.layout.width - 60}" y="$centerY" 
                       font-family="${theme.typography.fontFamily}" font-size="8" 
-                      fill="#ffffff" text-anchor="middle">$statusIcon</text>
+                      fill="#ffffff" text-anchor="middle" dominant-baseline="middle">$statusIcon</text>
             """.trimIndent())
         }
     }
@@ -245,11 +359,16 @@ class GherkinMaker {
     }
 
     private fun calculateScenarioHeight(scenario: GherkinScenario, theme: GherkinTheme): Int {
-        return 40 + (scenario.steps.size * theme.layout.stepSpacing) + 20
+        val headerHeight = scenarioHeaderHeight(scenario.title, theme)
+        if (scenario.steps.isEmpty()) return headerHeight + 20
+        val interStepGap = 8
+        val stepsHeight = scenario.steps.sumOf { calculateStepHeight(it, theme) } + interStepGap * (scenario.steps.size - 1)
+        return headerHeight + stepsHeight + 20
     }
 
     private fun calculateTotalHeight(spec: GherkinSpec, theme: GherkinTheme): Int {
-        var height = 90 // Feature header
+        val featureHeight = featureHeaderHeight(spec.feature, theme)
+        var height = 20 + featureHeight + 20
         spec.scenarios.forEach { scenario ->
             height += calculateScenarioHeight(scenario, theme) + theme.layout.scenarioSpacing
         }

@@ -14,7 +14,9 @@ data class GherkinSpec(
 data class GherkinScenario(
     val title: String,
     val steps: List<GherkinStep>,
-    val status: GherkinScenarioStatus = GherkinScenarioStatus.PASSING
+    val status: GherkinScenarioStatus = GherkinScenarioStatus.PASSING,
+    val outline: Boolean = false,
+    val examples: GherkinExamples? = null
 )
 
 @Serializable
@@ -62,6 +64,12 @@ data class GherkinTypography(
     val stepSize: Int = 12,
     val descriptionSize: Int = 10,
     val fontFamily: String = "Arial, sans-serif"
+)
+
+@Serializable
+data class GherkinExamples(
+    val headers: List<String>,
+    val rows: List<List<String>>
 )
 
 @Serializable

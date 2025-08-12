@@ -428,10 +428,49 @@ The Gherkin block supports the standard DocOps attributes described in xref:doco
 |role     |String  |center |Alignment for the rendered block (left/center/right)
 |===
 
+
+[docops,gherkin]
+----
+Feature: Represents a specific functionality or feature of the system. It's a high-level description of what the system should do.
+Scenario: A specific instance of the feature's behavior. It outlines a particular use case or test case.
+Given: Describes the initial context or setup before the action. It sets the stage for the scenario.
+When: Describes the action or event that triggers the behavior. It's the user action or system event.
+Then: Describes the expected outcome or result after the action. It verifies the behavior.
+And:Used to add more steps to the Given, When, or Then parts, making the scenario more detailed.
+But: Similar to "And", but used to add an exception or negative condition.
+----
+
+[docops,gherkin]
+----
+Feature: User Login, As a user, I want to be able to log in to the system.
+
+  Scenario: Successful Login
+    Given I am on the login page
+    When I enter a valid username and password
+    Then I should be redirected to the homepage
+    And I should see a welcome message
+
+  Scenario: Invalid Login
+    Given I am on the login page
+    When I enter an invalid username and password
+    Then I should see an error message
+
+  Scenario Outline: Login with different users
+    Given I am on the login page
+    When I enter username  and password
+    Then I should see the message
+    Examples:
+      | username | password | message |
+      | user1 | pass1 | Welcome |
+      | user2 | wrong_password | Invalid credentials |
+----
+
 == Notes
 
 - Plain text parsing supports: Feature:, Scenario:, and step keywords Given/When/Then/And/But
 - Plain text steps default to PASSING status; use JSON to specify statuses and theme overrides
 - The same server endpoint used by other DocOps visuals is called under the hood: kind=gherkin
+
+
 
 include::shared/buttons.adoc[]

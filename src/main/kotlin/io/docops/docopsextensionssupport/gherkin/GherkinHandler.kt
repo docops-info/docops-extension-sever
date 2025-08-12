@@ -28,29 +28,77 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         val lines = content.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var featureTitle = ""
         val scenarios = mutableListOf<GherkinScenario>()
-        var currentScenario: GherkinScenario? = null
+        var currentScenarioTitle: String? = null
         var currentSteps = mutableListOf<GherkinStep>()
+        var currentOutline = false
+        var inExamples = false
+        var exampleHeaders: List<String>? = null
+        val exampleRows = mutableListOf<List<String>>()
+
+        fun flushCurrentScenario() {
+            val title = currentScenarioTitle ?: return
+            val examples = if (currentOutline && exampleHeaders != null) {
+                GherkinExamples(exampleHeaders!!, exampleRows.toList())
+            } else null
+            scenarios.add(
+                GherkinScenario(
+                    title = title,
+                    steps = currentSteps.toList(),
+                    outline = currentOutline,
+                    examples = examples
+                )
+            )
+            // reset
+            currentScenarioTitle = null
+            currentSteps = mutableListOf()
+            currentOutline = false
+            inExamples = false
+            exampleHeaders = null
+            exampleRows.clear()
+        }
 
         for (line in lines) {
             when {
-                line.startsWith("Feature:") -> {
-                    featureTitle = line.substringAfter("Feature:").trim()
+                // Feature line: allow optional spaces around colon
+                line.matches(Regex("^Feature\\s*:\\s*(.*)$")) -> {
+                    val match = Regex("^Feature\\s*:\\s*(.*)$").find(line)
+                    featureTitle = match?.groupValues?.get(1)?.trim().orEmpty()
                 }
-                line.startsWith("Scenario:") -> {
+                // Start of a new Scenario or Scenario Outline
+                line.matches(Regex("^Scenario(?: Outline)?\\s*:\\s*(.*)$")) -> {
                     // Save previous scenario if exists
-                    currentScenario?.let { 
-                        scenarios.add(it.copy(steps = currentSteps.toList()))
+                    if (currentScenarioTitle != null) {
+                        flushCurrentScenario()
                     }
-                    // Start new scenario
-                    currentScenario = GherkinScenario(
-                        title = line.substringAfter("Scenario:").trim(),
-                        steps = emptyList()
-                    )
+                    val outline = line.startsWith("Scenario Outline")
+                    val titleText = Regex("^Scenario(?: Outline)?\\s*:\\s*(.*)$").find(line)?.groupValues?.get(1)?.trim().orEmpty()
+                    currentScenarioTitle = titleText
+                    currentOutline = outline
                     currentSteps.clear()
+                    inExamples = false
+                    exampleHeaders = null
+                    exampleRows.clear()
                 }
-                line.matches(Regex("^(Given|When|Then|And|But)\\s+.*")) -> {
-                    val keyword = line.split(" ")[0]
-                    val text = line.substringAfter("$keyword ").trim()
+                // Examples block start
+                line.matches(Regex("^Examples\\s*:\\s*$")) -> {
+                    inExamples = true
+                    exampleHeaders = null
+                    exampleRows.clear()
+                }
+                // Examples table rows (only when inExamples)
+                inExamples && line.startsWith("|") -> {
+                    val cells = line.trim().trim('|').split('|').map { it.trim() }
+                    if (exampleHeaders == null) {
+                        exampleHeaders = cells
+                    } else {
+                        exampleRows.add(cells)
+                    }
+                }
+                // Step lines: support optional colon after keyword and optional spaces
+                line.matches(Regex("^(Given|When|Then|And|But)\\s*:?\\s*(.*)$")) -> {
+                    val m = Regex("^(Given|When|Then|And|But)\\s*:?\\s*(.*)$").find(line)
+                    val keyword = m?.groupValues?.get(1) ?: "Given"
+                    val text = m?.groupValues?.get(2)?.trim().orEmpty()
                     val stepType = when (keyword) {
                         "Given" -> GherkinStepType.GIVEN
                         "When" -> GherkinStepType.WHEN
@@ -65,8 +113,8 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         }
 
         // Don't forget the last scenario
-        currentScenario?.let {
-            scenarios.add(it.copy(steps = currentSteps.toList()))
+        if (currentScenarioTitle != null) {
+            flushCurrentScenario()
         }
 
         return GherkinSpec(
