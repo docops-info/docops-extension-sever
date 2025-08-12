@@ -144,13 +144,6 @@ class MainController @Autowired constructor(private val applicationContext: Appl
     }
 
 
-    @GetMapping("/simpleicons.html")
-    @Counted
-    @Timed(value = "docops.simpleicons.html")
-    fun getSimpleIcons(): String {
-        return "icons/simpleicons"
-    }
-
 
     @GetMapping("/stats.html")
     @Counted

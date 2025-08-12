@@ -1,128 +1,191 @@
-<H1>Simple Icons</H1>
+<!-- src/main/resources/templates/icons/simpleicons.ftlh -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleIcons Browser</title>
+    <link href="css/output.css" rel="stylesheet">
+    <script src="js/htmx.min.2.0.4.js"></script>
+    <style>
+        .icon-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .icon-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .letter-nav {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .htmx-indicator {
+            opacity: 0;
+            transition: opacity 500ms ease-in;
+        }
+        .htmx-request .htmx-indicator {
+            opacity: 1;
+        }
+        .htmx-request.htmx-indicator {
+            opacity: 1;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900" 
+      hx-boost="true" 
+      hx-target="#content" 
+      hx-push-url="false"
+>
 
-<div>
-    <p>This is a list of Icon by Letter, Select a letter and this list you can interact with to preview the output.</p>
-</div>
-
-
-<div class="pure-g">
-    <div class="pure-u-1-2">
-        <div class="pure-1-1-10">
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-post="api/simple/icons"
-                   value="A" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "A"}'
-            >
-
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="B" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "B"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="C" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "C"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="D" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "D"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="E" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "E"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="F" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "F"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="G" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "G"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="H" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "H"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="I" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "I"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="J" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "J"}'
-            >
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center space-x-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">SimpleIcons Browser</h1>
+                        <p class="text-sm text-gray-600">Browse SVG icons for popular brands</p>
+                    </div>
+                </div>
+                <div>
+                    <form class="flex items-center" hx-get="icons/search" hx-target="#search-results" hx-trigger="submit, input changed delay:500ms">
+                        <input 
+                            type="text" 
+                            name="query" 
+                            placeholder="Search icons..." 
+                            class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            hx-indicator="#search-indicator">
+                        <div id="search-indicator" class="htmx-indicator ml-2">
+                            <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <div class="pure-1-1-10">
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="K" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "K"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="L" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "L"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="M" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "M"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="N" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "N"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="O" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "O"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="P" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "P"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="Q" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "Q"}'
-            >
+    <main id="content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search Results Section -->
+        <div id="search-results"></div>
 
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="R" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "R"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="S" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "S"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="T" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "T"}'
-            >
+        <!-- Alphabet Navigation -->
+        <div class="letter-nav flex flex-wrap justify-center gap-2 mb-8">
+            <#list letters as letter>
+                <a href="icons#${letter}"
+                   class="letter-link px-3 py-1 rounded-md shadow-sm font-medium <#if letter == currentLetter>bg-blue-500 text-white<#else>bg-white text-gray-800 hover:bg-gray-100</#if>"
+                   hx-get="icons/letter/${letter}"
+                   hx-target="#icon-grid-container"
+                   hx-push-url="false">
+                    ${letter}
+                </a>
+            </#list>
         </div>
-        <div class="pure-1-1-10">
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="U" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "U"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="V" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "V"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="W" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "W"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="X" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "X"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="Y" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "Y"}'
-            >
-            <input class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" type="button"  data-hx-get="api/simple/icons"
-                   value="Z" data-hx-target="#content"
-                   data-hx-vals='{"SEL": "Z"}'
-            >
+        
+        <!-- Icon Grid Container -->
+        <div id="icon-grid-container">
+            <#include "icon-grid.ftlh">
+        </div>
+    </main>
+
+    <!-- Modal for icon details -->
+    <div id="icon-details-modal" class="modal hide fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 m-4">
+            <div id="icon-details-content">
+                <!-- Content loaded via HTMX -->
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md" onclick="closeModal()">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
-    <div id="placeholder"></div>
-</div>
 
-<div class="divider"></div>
-<div id="content"></div>
+    <script>
+        function showModal() {
+            const modal = document.getElementById('icon-details-modal');
+            modal.classList.remove('hide');
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('icon-details-modal');
+            modal.classList.remove('show');
+            modal.classList.add('hide');
+        }
+
+        // Handle clicks on show-icon-details buttons
+        document.body.addEventListener('click', function(e) {
+            if (e.target.closest('.show-icon-details')) {
+                e.preventDefault();
+                showModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('icon-details-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Update navigation after HTMX loads new content
+        document.addEventListener('htmx:afterSwap', function(e) {
+            if (e.detail.target.id === 'icon-grid-container') {
+                // Update active letter styling
+                const currentLetter = document.querySelector('#current-letter')?.textContent;
+                if (currentLetter) {
+                    document.querySelectorAll('.letter-link').forEach(link => {
+                        if (link.textContent.trim() === currentLetter) {
+                            link.className = 'letter-link px-3 py-1 rounded-md shadow-sm font-medium bg-blue-500 text-white';
+                        } else {
+                            link.className = 'letter-link px-3 py-1 rounded-md shadow-sm font-medium bg-white text-gray-800 hover:bg-gray-100';
+                        }
+                    });
+                }
+            }
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('SVG copied to clipboard!');
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('SVG copied to clipboard!');
+                } catch (err) {
+                    console.error('Could not copy text: ', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -17,6 +17,7 @@
 package io.docops.docopsextensionssupport.web
 
 import io.docops.docopsextensionssupport.badge.BadgeFormatException
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -31,16 +32,19 @@ import java.lang.IllegalArgumentException
  */
 @ControllerAdvice
 class ProblemDetailErrorHandlingControllingAdvice {
+    private val logger = KotlinLogging.logger {}
 
     @ExceptionHandler(IllegalArgumentException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun onException(request: HttpServletRequest, ex: IllegalArgumentException): ProblemDetail {
+        logger.error(ex) { "Bad request: ${ex.message}" }
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message!!)
     }
 
     @ExceptionHandler(BadgeFormatException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun onBadgeException(request: HttpServletRequest, ex: BadgeFormatException): ProblemDetail {
+        logger.error(ex) { "Bad badge request: ${ex.message}" }
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message!!)
     }
 }

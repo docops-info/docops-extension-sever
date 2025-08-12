@@ -64,6 +64,7 @@
     <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
     <link href="css/output.css" rel="stylesheet">
     <script src="js/htmx.min.2.0.4.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
@@ -72,7 +73,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900"
+      hx-boost="true"
+      hx-target="#content"
+      hx-select="#content"
+      hx-push-url="true"
+      hx-ext="head-support"
+      hx-history-cache-size="20"
+>
 <!-- Header -->
 <header class="bg-white shadow-sm border-b">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,6 +117,9 @@
         </div>
     </div>
 </header>
+
+<!-- Wrap all dynamic page content in a history element -->
+<main id="content" hx-history-elt hx-swap="innerHTML transition:true">
 
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
@@ -1059,7 +1070,10 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
 
     </div>
 </section>
+</main>
 
+<!-- Optional loading indicator -->
+<div id="loading" class="htmx-indicator fixed top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow">Loading…</div>
 
 <!-- Footer -->
 <footer class="bg-gray-900 text-white py-12">
@@ -1179,5 +1193,17 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
         }
     }
 </script>
+<script>
+    // Re-run client-side enhancements after swaps or history restores
+    document.addEventListener('htmx:afterSwap', (e) => {
+        if (e.detail.target && e.detail.target.id === 'content') {
+            if (window.Prism) { Prism.highlightAll(); }
+        }
+    });
+    document.addEventListener('htmx:historyRestore', (e) => {
+        if (window.Prism) { Prism.highlightAll(); }
+    });
+</script>
+
 </body>
 </html>
