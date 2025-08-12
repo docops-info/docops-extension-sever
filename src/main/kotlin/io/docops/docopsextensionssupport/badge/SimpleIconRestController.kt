@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.badge
 
 import org.silentsoft.simpleicons.SimpleIcons
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -36,13 +35,15 @@ class SimpleIconRestController {
         }
     }
 
-    private fun colorizeSVG(svg: String, hex: String): String {
-        // Replace common uses of currentColor with the brand hex
-        var out = svg.replace("currentColor", "#$hex")
-        // If there is still no explicit fill attribute anywhere, set it on the root <svg>
-        if (!Regex("\\bfill=").containsMatchIn(out)) {
-            out = out.replaceFirst("<svg", "<svg fill=\"#$hex\"")
-        }
-        return out
+
+}
+
+fun colorizeSVG(svg: String, hex: String): String {
+    // Replace common uses of currentColor with the brand hex
+    var out = svg.replace("currentColor", "#$hex")
+    // If there is still no explicit fill attribute anywhere, set it on the root <svg>
+    if (!Regex("\\bfill=").containsMatchIn(out)) {
+        out = out.replaceFirst("<svg", "<svg fill=\"#$hex\"")
     }
+    return out
 }

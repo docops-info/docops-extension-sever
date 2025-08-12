@@ -89,7 +89,7 @@ class SimpleIconsController {
         try {
             val icon = SimpleIcons.get(slug)
             model.addAttribute("slug", slug)
-            model.addAttribute("svg", icon.svg)
+            model.addAttribute("svg", colorizeSVG(icon.svg, icon.hex))
             model.addAttribute("hex", icon.hex)
             model.addAttribute("title", icon.title)
             model.addAttribute("hasIcon", true)
