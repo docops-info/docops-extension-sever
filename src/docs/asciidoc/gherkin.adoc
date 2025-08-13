@@ -429,6 +429,16 @@ The Gherkin block supports the standard DocOps attributes described in xref:doco
 |===
 
 
+
+
+== Notes
+
+- Plain text parsing supports: Feature:, Scenario:, and step keywords Given/When/Then/And/But
+- Plain text steps default to PASSING status; use JSON to specify statuses and theme overrides
+- The same server endpoint used by other DocOps visuals is called under the hood: kind=gherkin
+
+== Additional Examples for Testing
+
 [docops,gherkin]
 ----
 Feature: Represents a specific functionality or feature of the system. It's a high-level description of what the system should do.
@@ -464,13 +474,6 @@ Feature: User Login, As a user, I want to be able to log in to the system.
       | user1 | pass1 | Welcome |
       | user2 | wrong_password | Invalid credentials |
 ----
-
-== Notes
-
-- Plain text parsing supports: Feature:, Scenario:, and step keywords Given/When/Then/And/But
-- Plain text steps default to PASSING status; use JSON to specify statuses and theme overrides
-- The same server endpoint used by other DocOps visuals is called under the hood: kind=gherkin
-
 
 
 include::shared/buttons.adoc[]

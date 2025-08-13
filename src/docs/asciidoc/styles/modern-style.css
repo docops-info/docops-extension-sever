@@ -1140,3 +1140,123 @@ blockquote {
 :root.dark-mode-auto pre code {
     color: var(--code-text);
 }
+
+
+/* Add these styles at the end of your existing CSS file */
+
+/* Collapsible TOC Styles */
+#toc .toc-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+#toc .toc-item {
+    margin: 0;
+}
+
+#toc .toc-item > a {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    color: var(--text-color);
+    border-bottom: none;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+#toc .toc-item > a:hover {
+    color: var(--primary-color);
+}
+
+/* Collapsible TOC items with children */
+#toc .toc-item.has-children > a {
+    position: relative;
+    padding-left: var(--spacing-lg);
+}
+
+/* Expand/collapse arrow */
+#toc .toc-item.has-children > a::before {
+    content: '▶';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+    width: var(--spacing-md);
+    text-align: center;
+}
+
+/* Expanded state arrow */
+#toc .toc-item.has-children.expanded > a::before {
+    transform: translateY(-50%) rotate(90deg);
+    color: var(--primary-color);
+}
+
+/* Nested TOC items */
+#toc .toc-item .toc-list {
+    padding-left: var(--spacing-lg);
+    margin-top: var(--spacing-xs);
+    border-left: 1px solid var(--border-light);
+    margin-left: calc(var(--spacing-lg) / 2);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    opacity: 0;
+}
+
+/* Show nested items when expanded */
+#toc .toc-item.expanded > .toc-list {
+    max-height: 1000px; /* Adjust as needed */
+    opacity: 1;
+    transition: max-height 0.3s ease-in, opacity 0.2s ease-in 0.1s;
+}
+
+/* Deeper nesting levels */
+#toc .toc-item .toc-item > a {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    padding-left: var(--spacing-md);
+}
+
+#toc .toc-item .toc-item .toc-item > a {
+    font-size: 0.85rem;
+    padding-left: var(--spacing-lg);
+}
+
+/* Active/current section highlighting */
+#toc .toc-item > a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Optional: Collapse all button */
+.toc-controls {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.toc-control-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-right: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.toc-control-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
