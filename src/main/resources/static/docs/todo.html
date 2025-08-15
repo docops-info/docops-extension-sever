@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Todo</title>
+<style>
+:root{--primary-color:#3b82f6;--primary-hover:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--primary-gradient-start:#3b82f6;--primary-gradient-end:#8b5cf6;--secondary-color:#64748b;--secondary-light:#f1f5f9;--secondary-dark:#334155;--text-color:#1e293b;--text-light:#64748b;--text-muted:#94a3b8;--bg-color:#ffffff;--bg-light:#f8fafc;--bg-dark:#0f172a;--border-color:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;--code-bg:#f1f5f9;--code-text:#334155;--code-border:#e2e8f0;--note-bg:#eff6ff;--note-border:#bfdbfe;--note-icon:#3b82f6;--tip-bg:#f0fdf4;--tip-border:#bbf7d0;--tip-icon:#22c55e;--warning-bg:#fff7ed;--warning-border:#fed7aa;--warning-icon:#f97316;--caution-bg:#fef2f2;--caution-border:#fecaca;--caution-icon:#ef4444;--important-bg:#faf5ff;--important-border:#e9d5ff;--important-icon:#8b5cf6;--body-font:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;--heading-font:var(--body-font);--monospace-font:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--shadow-sm:0 1px 2px 0 rgba(0, 0, 0, 0.05);--shadow-md:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--radius-sm:0.25rem;--radius-md:0.375rem;--radius-lg:0.5rem;--content-width:50rem;--content-width-wide:70rem;--theme-transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease}html{font-size:100%;text-size-adjust:100%;box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:var(--body-font);font-size:1rem;line-height:1.7;background-color:var(--bg-color);max-width:var(--content-width);margin:0 auto;padding:var(--spacing-lg) var(--spacing-xl)}h1{font-size:2.5rem;border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm);margin-top:var(--spacing-xl);background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}body,h1,h2,h3,h4,h5{color:var(--text-color)}dl,h1,h2,h3,h4,h5,h6,p{margin-bottom:var(--spacing-lg)}h1,h2,h3,h4,h5,h6{font-family:var(--heading-font);font-weight:700;line-height:1.3;scroll-margin-top:var(--spacing-2xl)}h2,h3,h4,h5,h6{margin-top:var(--spacing-2xl)}h6{font-size:1rem;color:var(--secondary-color)}h2{font-size:2rem}h3{font-size:1.5rem}h4{font-size:1.25rem}h5{font-size:1.125rem}dl,p{margin-top:0}a{color:var(--primary-color);text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:focus,a:hover{color:var(--primary-hover);border-bottom-color:var(--primary-hover)}ol,ul{margin-top:0;margin-bottom:var(--spacing-lg);padding-left:var(--spacing-xl)}li,li>ol,li>p,li>ul{margin-bottom:var(--spacing-sm)}li>ol,li>p,li>ul{margin-top:var(--spacing-sm)}dt{font-weight:700;margin-top:var(--spacing-lg)}dd{margin-left:var(--spacing-xl);margin-bottom:var(--spacing-md)}code,pre{font-family:var(--monospace-font);font-size:.9rem;border-radius:var(--radius-md)}code{background-color:var(--code-bg);color:var(--code-text);padding:var(--spacing-xs) var(--spacing-sm)}pre,table td,table th{padding:var(--spacing-md)}pre,table{margin-bottom:var(--spacing-lg)}pre{margin-top:0;background-color:var(--code-bg);border:1px solid var(--code-border);overflow-x:auto;line-height:1.5}pre code{background-color:transparent;padding:0;border-radius:0}.hljs-comment,.hljs-quote{color:#6a737d;font-style:italic}.hljs-keyword,.hljs-selector-tag{color:#d73a49}.hljs-attr,.hljs-string{color:#032f62}.hljs-literal,.hljs-number{color:#005cc5}.hljs-section,.hljs-selector-id,.hljs-title{color:#6f42c1}.hljs-built_in,.hljs-name,.hljs-tag{color:#22863a}table{width:100%;border-collapse:collapse;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden}table td,table th{text-align:left}table th{font-weight:600;background-color:var(--secondary-light);border-bottom:2px solid var(--border-dark)}table td{border-bottom:1px solid var(--border-color)}table tr:last-child td{border-bottom:none}tbody tr:hover{background-color:var(--secondary-light)}.admonitionblock{margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);border:0;position:relative}.admonitionblock>table{margin-bottom:0;border:0}.admonitionblock td.icon{width:3rem;padding:var(--spacing-md);text-align:center;font-weight:700}.admonitionblock td.icon:before{font-family:"Font Awesome 5 Free";font-weight:900;font-size:1.5rem;display:block;margin-bottom:var(--spacing-xs)}.admonitionblock td.content,blockquote{padding:var(--spacing-md) var(--spacing-lg)}.admonitionblock.note{background-color:var(--note-bg);border-color:var(--note-border)}.admonitionblock.note td.icon{background-color:var(--note-icon);color:#fff}.admonitionblock.note td.icon:before{content:""}.admonitionblock.tip{background-color:var(--tip-bg);border-color:var(--tip-border)}.admonitionblock.tip td.icon{background-color:var(--tip-icon);color:#fff}.admonitionblock.tip td.icon:before{content:""}.admonitionblock.warning{background-color:var(--warning-bg);border-color:var(--warning-border)}.admonitionblock.warning td.icon{background-color:var(--warning-icon);color:#fff}.admonitionblock.warning td.icon:before{content:""}.admonitionblock.caution{background-color:var(--caution-bg);border-color:var(--caution-border)}.admonitionblock.caution td.icon{background-color:var(--caution-icon);color:#fff}.admonitionblock.caution td.icon:before{content:""}.admonitionblock.important{background-color:#fff;border-color:transparent;position:relative}.admonitionblock.important td.icon,.admonitionblock.important::before,.gradient-border-left::before{background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.admonitionblock.important::before,.gradient-border-left::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%}.admonitionblock.important td.icon{color:#fff}.admonitionblock.important td.icon:before{content:""}blockquote{margin:0 0 var(--spacing-lg)0;color:var(--secondary-color);background-color:var(--secondary-light);border-left:4px solid var(--primary-color);border-radius:0 var(--radius-md) var(--radius-md)0}blockquote p:last-child{margin-bottom:0}hr{border:0;height:1px;background-color:var(--border-color);margin:var(--spacing-xl)0}img{max-width:100%;height:auto;margin:var(--spacing-md)0;border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}.hero{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;padding:var(--spacing-2xl) var(--spacing-xl);margin-bottom:var(--spacing-2xl);border-radius:var(--radius-lg);text-align:center}#toc a,.hero h1{border-bottom:none}.hero h1{color:#fff;background-image:none;-webkit-text-fill-color:#fff}.hero p{font-size:1.25rem;max-width:42rem;margin-left:auto;margin-right:auto}#toc.toc2 #toctitle,.hero h1{margin-top:0}#toc .title,.sidebarblock>.content>.title{margin-top:0;font-size:1.25rem;color:var(--text-color);margin-bottom:var(--spacing-md)}#toc .title{font-weight:700}#toc ul{list-style-type:none;padding-left:0;margin-bottom:0}#toc li{margin-top:var(--spacing-sm);line-height:1.4}#toc a{display:block;padding:var(--spacing-xs)0;color:var(--text-color)}#toc .toc-item>a:hover,#toc a:hover{color:var(--primary-color)}#toc ul ul{padding-left:var(--spacing-lg)}#toc ul ul a{font-size:.9rem}#footer{margin-top:var(--spacing-2xl);padding-top:var(--spacing-lg);color:var(--text-muted);font-size:.875rem;border-top:1px solid var(--border-color)}@media print{@page{margin:1.5cm}body,html{font-size:11pt;line-height:1.5;background-color:#fff;color:#000}body{padding:0;max-width:none}a{color:var(--text-color);text-decoration:underline;border-bottom:none}a[href^=http]:after{content:" ("attr(href)")";font-size:.9em;font-weight:400}code,pre{border:1px solid var(--border-color);background-color:#f8f8f8!important}.admonitionblock,h1,h2,h3,h4,h5,h6,img,pre,table{page-break-inside:avoid}h1,h2,h3,h4,h5,h6{page-break-after:avoid;color:#000}img{max-width:100%!important}.admonitionblock,table{border:1px solid #ddd}.admonitionblock,img{box-shadow:none}h1+*,h2+*,h3+*,h4+*,h5+*,h6+*{page-break-before:avoid}#footer,#header,#toc{display:none}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}}@media (max-width:1200px){body.toc2{padding-left:0}#toc.toc2{position:static;width:auto;height:auto;border-right:none;border-radius:var(--radius-md)}}@media (max-width:768px){body{padding:var(--spacing-md);font-size:.95rem}h1{font-size:2rem}h2{font-size:1.6rem}h3{font-size:1.3rem}h4{font-size:1.1rem}code,pre{font-size:.85rem}.admonitionblock td.icon{width:2.5rem}}@media (max-width:480px){body{padding:var(--spacing-sm);font-size:.9rem}h1{font-size:1.8rem}h2{font-size:1.4rem}h3{font-size:1.2rem}.admonitionblock td.icon{width:2rem}.admonitionblock td.content,.admonitionblock td.icon,table td,table th{padding:var(--spacing-sm)}}.listingblock .title{font-style:italic;color:var(--secondary-color);margin-bottom:var(--spacing-sm)}.listingblock pre.highlightjs{padding:0;border-radius:var(--radius-md);overflow:hidden}.listingblock pre.highlightjs>code,.literalblock pre{background-color:var(--code-bg);border:1px solid var(--code-border)}.listingblock pre.highlightjs>code{padding:var(--spacing-md);display:block;overflow-x:auto;line-height:1.5}.literalblock pre{border-radius:var(--radius-md)}.sidebarblock{border:1px solid var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);box-shadow:var(--shadow-sm)}.sidebarblock>.content>.title{border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm)}kbd,mark{border-radius:var(--radius-sm)}.button.secondary:hover,.sidebarblock,kbd{background-color:var(--secondary-light)}.button,kbd{display:inline-block}kbd{padding:var(--spacing-xs) var(--spacing-sm);font-size:.85rem;font-family:var(--monospace-font);border:1px solid var(--border-dark);box-shadow:0 2px 0 var(--border-dark);margin:0 var(--spacing-xs)}.button{padding:var(--spacing-sm) var(--spacing-lg);background-color:var(--primary-color);color:#fff;border-radius:var(--radius-md);font-weight:500;text-align:center;transition:all .2s ease;border-bottom:none;box-shadow:var(--shadow-sm)}.button:hover{background-color:var(--primary-hover);text-decoration:none;color:#fff;box-shadow:var(--shadow-md)}.button.gradient{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.button.secondary{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.button.secondary:hover{color:var(--text-color)}mark{background-color:#fef9c3;padding:var(--spacing-xs)}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.gradient-bg,.gradient-text{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-text{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}.gradient-bg{color:#fff}.gradient-border-left{position:relative;border-left:none;padding-left:var(--spacing-lg)}.gradient-border{border:2px solid transparent;background-clip:padding-box;position:relative}.callout.gradient .callout-title,.gradient-border::before{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-border::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;margin:-2px;border-radius:inherit;z-index:-1}.callout{padding:var(--spacing-md);margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);background-color:var(--primary-light);border-left:4px solid var(--primary-color);box-shadow:var(--shadow-sm)}.callout.gradient{background-color:#fff;border-left:none;border-radius:var(--radius-lg);padding:var(--spacing-lg);box-shadow:var(--shadow-md);position:relative;overflow:hidden}.callout.gradient::before{content:"";position:absolute;top:0;left:0;width:6px;height:100%;background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.callout-title{font-weight:700;margin-top:0;margin-bottom:var(--spacing-sm);color:var(--primary-dark)}.callout.gradient .callout-title{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;display:inline-block}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}:focus{outline:2px solid var(--primary-color);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}.skip-to-content{position:absolute;top:-40px;left:0;background:var(--primary-color);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:100;transition:top .2s ease}.skip-to-content:focus{top:0}@media (prefers-color-scheme:dark){:root.dark-mode,:root.dark-mode-auto{--bg-color:#0f172a;--bg-light:#1e293b;--text-color:#f8fafc;--text-light:#cbd5e1;--text-muted:#94a3b8;--border-color:#334155;--border-light:#1e293b;--border-dark:#475569;--code-bg:#1e293b;--code-text:#e2e8f0;--code-border:#334155;--primary-light:#1e40af;--secondary-light:#1e293b}}#toc,.admonitionblock,.sidebarblock,blockquote,body,code,pre,table{transition:var(--theme-transition)}.theme-toggle{position:fixed;top:65px;right:20px;z-index:1000;background:var(--primary-color);color:#fff;border:0;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease;display:flex;align-items:center;justify-content:center;font-size:1.2rem}.theme-toggle:hover{background:var(--primary-hover);transform:scale(1.1)}.theme-toggle:focus{outline:2px solid var(--primary-color);outline-offset:2px}.theme-toggle .light-icon{display:none}.theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:none}@media (max-width:768px){.theme-toggle{top:15px;right:15px;width:45px;height:45px;font-size:1.1rem}}:root.dark-mode img,:root.dark-mode-auto img{opacity:.9}:root.dark-mode .hero,:root.dark-mode-auto .hero{background-image:linear-gradient(135deg,#1e293b,#334155)}:root.dark-mode a,:root.dark-mode-auto a{color:#60a5fa}:root.dark-mode a:hover,:root.dark-mode-auto a:hover{color:#93c5fd}:root.dark-mode code,:root.dark-mode-auto code{color:var(--code-text);background-color:var(--code-bg)}:root.dark-mode pre,:root.dark-mode-auto pre{background-color:var(--code-bg);border-color:var(--code-border)}:root.dark-mode pre code,:root.dark-mode-auto pre code{color:var(--code-text)}#toc .toc-list{list-style:none;padding-left:0}#toc .toc-item{margin:0}#toc .toc-item>a{display:block;padding:var(--spacing-xs)0;color:var(--text-color);border-bottom:none;text-decoration:none;transition:color .2s ease}#toc .toc-item.has-children>a{position:relative;padding-left:var(--spacing-lg)}#toc .toc-item.has-children>a::before{content:"▶";position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--text-muted);transition:transform .2s ease,color .2s ease;cursor:pointer;width:var(--spacing-md);text-align:center}#toc .toc-item.has-children.expanded>a::before{transform:translateY(-50%) rotate(90deg);color:var(--primary-color)}#toc .toc-item .toc-list{padding-left:var(--spacing-lg);margin-top:var(--spacing-xs);border-left:1px solid var(--border-light);margin-left:calc(var(--spacing-lg)/2);max-height:0;overflow:hidden;transition:max-height .3s ease-out,opacity .2s ease-out;opacity:0}#toc .toc-item.expanded>.toc-list{max-height:1000px;opacity:1;transition:max-height .3s ease-in,opacity .2s ease-in .1s}#toc .toc-item .toc-item>a{font-size:.9rem;color:var(--text-light);padding-left:var(--spacing-md)}#toc .toc-item .toc-item .toc-item>a{font-size:.85rem;padding-left:var(--spacing-lg)}#toc .toc-item>a.active{color:var(--primary-color);font-weight:600}html{scroll-behavior:smooth}.toc-controls{margin-bottom:var(--spacing-md);padding-bottom:var(--spacing-sm);border-bottom:1px solid var(--border-light)}.toc-control-btn{background:0 0;border:1px solid var(--border-color);color:var(--text-color);padding:var(--spacing-xs) var(--spacing-sm);margin-right:var(--spacing-xs);border-radius:var(--radius-sm);cursor:pointer;font-size:.8rem;transition:all .2s ease}.toc-control-btn:hover{background-color:var(--primary-color);color:#fff;border-color:var(--primary-color)}#toc,.toc-toggle{top:var(--spacing-lg)}#toc{background-color:var(--secondary-light);border-radius:var(--radius-md);padding:var(--spacing-lg);margin-bottom:var(--spacing-xl);box-shadow:var(--shadow-sm);border:1px solid var(--border-color);position:sticky}#toc.toc2{position:fixed;left:0;top:0;width:20rem;height:100%;overflow-y:auto;border-radius:0;border-right:1px solid var(--border-color);padding:var(--spacing-xl) var(--spacing-lg);background-color:var(--bg-light);z-index:1000;transition:transform .3s ease-in-out;transform:translateX(0)}#toc.toc2.toc-collapsed{transform:translateX(-100%)}body.toc2{padding-left:22rem;max-width:none;transition:padding-left .3s ease-in-out}body.toc2.toc-collapsed{padding-left:0}.toc-toggle{position:fixed;z-index:1001;background:linear-gradient(135deg,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;border:0;width:3rem;height:3rem;border-radius:50%;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease-in-out;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700}.toc-toggle:hover{transform:scale(1.1);box-shadow:var(--shadow-lg)}.toc-toggle,body.toc2.toc-collapsed .toc-toggle{left:var(--spacing-lg)}body.toc2:not(.toc-collapsed) .toc-toggle{left:21rem}@media (max-width:768px){.toc-toggle{display:none}#toc.toc2{transform:translateX(-100%)}#toc.toc2.toc-mobile-open{transform:translateX(0)}body.toc2{padding-left:0}}.toc-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:999;opacity:0;transition:opacity .3s ease-in-out}.toc-overlay.active{display:block;opacity:1}@media (max-width:768px){.toc-toggle{display:flex;top:var(--spacing-md);left:var(--spacing-md);width:2.5rem;height:2.5rem;font-size:1rem}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+    },
+
+    closeCsv(id) {
+        const container = document.getElementById(`csv-container-${id}`);
+        container.style.display = 'none';
+    },
+    async loadCsvData(id) {
+        const svgContainer = document.getElementById(id);
+        const svg = svgContainer.querySelector('svg');
+
+        if (!svg) {
+            console.error('No SVG found');
+            return;
+        }
+
+        try {
+            // Method 1: Standard metadata with type
+            let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                return;
+            }
+
+            // Method 2: Custom csv-data element
+            csvMetadata = svg.querySelector('metadata csv-data');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            // Method 3: Data attribute
+            const csvDataAttr = svg.getAttribute('data-csv');
+            if (csvDataAttr) {
+                const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            console.error('No CSV data found in SVG');
+        } catch (error) {
+            console.error('Failed to parse CSV data:', error);
+        }
+    },
+
+    renderCsvTable(container, csvData, tableId) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+            return;
+        }
+
+        // Generate a unique table ID if not provided or make existing ID unique
+        const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        const table = document.createElement('table');
+        table.className = 'csv-table';
+        table.id = uniqueTableId;
+        // Create header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        csvData.headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        // Add button cell to header
+        const buttonTh = document.createElement('th');
+        buttonTh.className = 'csv-header-button-cell';
+
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'csv-copy-button';
+        copyButton.textContent = 'Copy';
+        copyButton.title = 'Copy as Tab-Delimited';
+        copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+        buttonTh.appendChild(copyButton);
+        headerRow.appendChild(buttonTh);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create body
+        const tbody = document.createElement('tbody');
+
+        csvData.rows.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            // Add empty cell for button column
+            const emptyTd = document.createElement('td');
+            tr.appendChild(emptyTd);
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.innerHTML = '';
+        container.appendChild(table);
+        const tableElement = document.getElementById(uniqueTableId);
+        if (tableElement) {
+            tableElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+
+    },
+
+    copyCsvAsTabDelimited(csvData) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            console.error('Invalid CSV data for copying');
+            return;
+        }
+
+        // Create tab-delimited string
+        let tabDelimitedData = '';
+
+        // Add headers
+        tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+        // Add rows
+        csvData.rows.forEach(row => {
+            tabDelimitedData += row.join('\t') + '\n';
+        });
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(tabDelimitedData).then(() => {
+            // Provide visual feedback
+            const buttons = document.querySelectorAll('.csv-copy-button');
+            buttons.forEach(button => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#007acc';
+                }, 2000);
+            });
+        }).catch(err => {
+            console.error('Failed to copy to clipboard:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = tabDelimitedData;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            } catch (fallbackErr) {
+                console.error('Fallback copy failed:', fallbackErr);
+                alert('Copy failed. Please select and copy the data manually.');
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+<script>
+    // Collapsible TOC JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const toc = document.getElementById('toc');
+
+        if (!toc) return;
+
+        // Transform the existing TOC structure to be collapsible
+        function initializeCollapsibleTOC() {
+            const tocLinks = toc.querySelectorAll('a');
+            const processedItems = new Set();
+
+            tocLinks.forEach(link => {
+                const listItem = link.parentElement;
+
+                if (processedItems.has(listItem)) return;
+                processedItems.add(listItem);
+
+                // Check if this item has nested lists (children)
+                const nestedList = listItem.querySelector('ul');
+                if (nestedList) {
+                    listItem.classList.add('toc-item', 'has-children');
+                    nestedList.classList.add('toc-list');
+
+                    // Add click handler to the arrow area
+                    link.addEventListener('click', function(e) {
+                        // Only handle clicks on the arrow area (first 20px)
+                        const rect = link.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+
+                        if (clickX <= 20) {
+                            e.preventDefault();
+                            toggleTOCItem(listItem);
+                        }
+                    });
+
+                    // Make nested items collapsible too
+                    const nestedItems = nestedList.querySelectorAll('li');
+                    nestedItems.forEach(nestedItem => {
+                        nestedItem.classList.add('toc-item');
+                        const nestedNestedList = nestedItem.querySelector('ul');
+                        if (nestedNestedList) {
+                            nestedItem.classList.add('has-children');
+                            nestedNestedList.classList.add('toc-list');
+                        }
+                    });
+                } else {
+                    listItem.classList.add('toc-item');
+                }
+            });
+
+            // Initially collapse all items beyond level 1
+            const level2Items = toc.querySelectorAll('.toc-list .toc-item.has-children');
+            level2Items.forEach(item => {
+                // item.classList.remove('expanded'); // Start collapsed
+            });
+        }
+
+        // Toggle a TOC item's expanded/collapsed state
+        function toggleTOCItem(item) {
+            item.classList.toggle('expanded');
+
+            // Update aria attributes for accessibility
+            const link = item.querySelector('a');
+            const isExpanded = item.classList.contains('expanded');
+            link.setAttribute('aria-expanded', isExpanded.toString());
+        }
+
+        // Add control buttons (optional)
+        function addTOCControls() {
+            const tocTitle = toc.querySelector('#toctitle, .title');
+            if (!tocTitle) return;
+
+            const controls = document.createElement('div');
+            controls.className = 'toc-controls';
+
+            const expandAllBtn = document.createElement('button');
+            expandAllBtn.className = 'toc-control-btn';
+            expandAllBtn.textContent = 'Expand All';
+            expandAllBtn.onclick = () => expandAllTOCItems(true);
+
+            const collapseAllBtn = document.createElement('button');
+            collapseAllBtn.className = 'toc-control-btn';
+            collapseAllBtn.textContent = 'Collapse All';
+            collapseAllBtn.onclick = () => expandAllTOCItems(false);
+
+            controls.appendChild(expandAllBtn);
+            controls.appendChild(collapseAllBtn);
+
+            tocTitle.parentNode.insertBefore(controls, tocTitle.nextSibling);
+        }
+
+        // Expand or collapse all TOC items
+        function expandAllTOCItems(expand) {
+            const tocItems = toc.querySelectorAll('.toc-item.has-children');
+            tocItems.forEach(item => {
+                if (expand) {
+                    item.classList.add('expanded');
+                } else {
+                    item.classList.remove('expanded');
+                }
+
+                const link = item.querySelector('a');
+                link.setAttribute('aria-expanded', expand.toString());
+            });
+        }
+
+        // Highlight current section in TOC
+        function highlightCurrentSection() {
+            const sections = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            const tocLinks = toc.querySelectorAll('a[href^="#"]');
+
+            function updateActiveSection() {
+                let currentSection = null;
+                const scrollPos = window.scrollY + 100; // Offset for better UX
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollPos >= sectionTop) {
+                        currentSection = section;
+                    }
+                });
+
+                // Remove all active classes
+                tocLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active class to current section
+                if (currentSection && currentSection.id) {
+                    const activeLink = toc.querySelector(`a[href="#${currentSection.id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+
+                        // Expand parent items to show active link
+                        let parent = activeLink.parentElement;
+                        while (parent && parent !== toc) {
+                            if (parent.classList.contains('has-children')) {
+                                parent.classList.add('expanded');
+                            }
+                            parent = parent.parentElement;
+                        }
+                    }
+                }
+            }
+
+            // Update on scroll (throttled)
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(updateActiveSection, 100);
+            });
+
+            // Initial update
+            updateActiveSection();
+        }
+
+        // Initialize everything
+        initializeCollapsibleTOC();
+        addTOCControls(); // Optional: comment out if you don't want control buttons
+        highlightCurrentSection();
+    });
+
+    // TOC Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const body = document.body;
+        const toc = document.getElementById('toc');
+
+        // Only add toggle functionality if TOC exists and is in sidebar mode (toc2)
+        if (toc && toc.classList.contains('toc2')) {
+            // Create toggle button
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'toc-toggle';
+            toggleButton.innerHTML = '☰';
+            toggleButton.setAttribute('aria-label', 'Toggle Table of Contents');
+            toggleButton.setAttribute('title', 'Toggle Table of Contents');
+
+            // Create overlay for mobile
+            const overlay = document.createElement('div');
+            overlay.className = 'toc-overlay';
+
+            // Add elements to DOM
+            body.appendChild(toggleButton);
+            body.appendChild(overlay);
+
+            // Toggle function
+            function toggleTOC() {
+                const isCollapsed = toc.classList.contains('toc-collapsed');
+                const isMobile = window.innerWidth <= 768;
+
+                if (isCollapsed) {
+                    // Show TOC
+                    toc.classList.remove('toc-collapsed');
+                    body.classList.remove('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.add('toc-mobile-open');
+                        overlay.classList.add('active');
+                    }
+                    toggleButton.innerHTML = '✕';
+                    toggleButton.setAttribute('title', 'Hide Table of Contents');
+                } else {
+                    // Hide TOC
+                    toc.classList.add('toc-collapsed');
+                    body.classList.add('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                    }
+                    toggleButton.innerHTML = '☰';
+                    toggleButton.setAttribute('title', 'Show Table of Contents');
+                }
+            }
+
+            // Event listeners
+            toggleButton.addEventListener('click', toggleTOC);
+
+            // Close TOC when clicking overlay (mobile)
+            overlay.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toggleTOC();
+                    }
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // On mobile, always start with TOC hidden
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toc.classList.add('toc-collapsed');
+                        body.classList.add('toc-collapsed');
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                        toggleButton.innerHTML = '☰';
+                    }
+                } else {
+                    // On desktop, remove mobile classes
+                    toc.classList.remove('toc-mobile-open');
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                // Toggle TOC with Ctrl/Cmd + \
+                if ((e.ctrlKey || e.metaKey) && e.key === '\\') {
+                    e.preventDefault();
+                    toggleTOC();
+                }
+                // Close TOC with Escape key (when open)
+                else if (e.key === 'Escape' && !toc.classList.contains('toc-collapsed')) {
+                    toggleTOC();
+                }
+            });
+
+            // Auto-hide TOC on mobile by default
+            if (window.innerWidth <= 768) {
+                toc.classList.add('toc-collapsed');
+                body.classList.add('toc-collapsed');
+                toggleButton.innerHTML = '☰';
+            }
+        }
+    });
+</script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.9.0/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_todo">DocOps Todo</a>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_basic_concepts">2. Basic Concepts</a>
+<ul class="sectlevel2">
+<li><a href="#_what_are_todo_visualizations">2.1. What are Todo Visualizations?</a></li>
+<li><a href="#_todo_components">2.2. Todo Components</a></li>
+</ul>
+</li>
+<li><a href="#_asciidoctor_syntax_for_todo_lists">3. AsciiDoctor Syntax for Todo Lists</a>
+<ul class="sectlevel2">
+<li><a href="#_table_format_simple">3.1. Table Format (Simple)</a></li>
+<li><a href="#_json_format_advanced">3.2. JSON Format (Advanced)</a></li>
+</ul>
+</li>
+<li><a href="#_configuration_options">4. Configuration Options</a>
+<ul class="sectlevel2">
+<li><a href="#_layout_types">4.1. Layout Types</a></li>
+<li><a href="#_status_options">4.2. Status Options</a></li>
+<li><a href="#_priority_levels">4.3. Priority Levels</a></li>
+<li><a href="#_grouping_options">4.4. Grouping Options</a></li>
+</ul>
+</li>
+<li><a href="#_examples">5. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_simple_project_todo_list_table_format">5.1. Simple Project Todo List (Table Format)</a></li>
+<li><a href="#_team_task_board_with_assignees">5.2. Team Task Board with Assignees</a></li>
+<li><a href="#_personal_task_list_list_layout">5.3. Personal Task List (List Layout)</a></li>
+<li><a href="#_grid_layout_for_quick_overview">5.4. Grid Layout for Quick Overview</a></li>
+<li><a href="#_dark_mode_example">5.5. Dark Mode Example</a></li>
+</ul>
+</li>
+<li><a href="#_advanced_features">6. Advanced Features</a>
+<ul class="sectlevel2">
+<li><a href="#_using_emojis_for_visual_enhancement">6.1. Using Emojis for Visual Enhancement</a></li>
+<li><a href="#_custom_status_indicators">6.2. Custom Status Indicators</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">7. Best Practices</a></li>
+<li><a href="#_integration_tips">8. Integration Tips</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_todo" class="sect0">DocOps Todo</h1>
+<div class="openblock partintro">
+<div class="content">
+<div id="reactions-todo" class="reactions-container" style="display: flex; align-items: center; margin: 20px 0; justify-content: flex-end;">
+    <div class="reactions-buttons" style="display: flex; gap: 2px;">
+        <button class="reaction-button reaction-thumbs_up"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Thumbs Up"
+        onclick="handleReactionClick('thumbs_up', 'todo', 'anonymous', 'reactions-todo')">
+    👍
+</button>
+<button class="reaction-button reaction-thumbs_down"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Thumbs Down"
+        onclick="handleReactionClick('thumbs_down', 'todo', 'anonymous', 'reactions-todo')">
+    👎
+</button>
+<button class="reaction-button reaction-smile"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Smile"
+        onclick="handleReactionClick('smile', 'todo', 'anonymous', 'reactions-todo')">
+    😄
+</button>
+<button class="reaction-button reaction-party"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Celebration"
+        onclick="handleReactionClick('party', 'todo', 'anonymous', 'reactions-todo')">
+    🎉
+</button>
+<button class="reaction-button reaction-confused"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Confused"
+        onclick="handleReactionClick('confused', 'todo', 'anonymous', 'reactions-todo')">
+    😕
+</button>
+<button class="reaction-button reaction-heart"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Love"
+        onclick="handleReactionClick('heart', 'todo', 'anonymous', 'reactions-todo')">
+    ❤️
+</button>
+<button class="reaction-button reaction-rocket"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Rocket"
+        onclick="handleReactionClick('rocket', 'todo', 'anonymous', 'reactions-todo')">
+    🚀
+</button>
+    </div>
+    <div class="comment-bubble"
+         style="margin-left: 15px; cursor: pointer; font-size: 20px;"
+         onclick="showCommentForm('todo', 'anonymous')">
+        💬
+    </div>
+</div>
+
+<!-- Comment Form Modal -->
+<div id="commentFormModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+     background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 20px; border-radius: 5px; width: 80%; max-width: 500px;">
+        <h3>Leave a Comment</h3>
+        <input type="hidden" id="commentDocName" value="">
+        <input type="hidden" id="commentAuthor" value="">
+        <input type="hidden" id="commentReactionType" value="">
+        <textarea id="commentText" style="width: 100%; height: 100px; margin: 10px 0; padding: 5px;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="closeCommentForm()" style="padding: 5px 10px;">Cancel</button>
+            <button onclick="submitComment()" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none;">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize reactions on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        restoreUserReactions('reactions-todo');
+    });
+
+    function getStorageKey(reactionsId, reactionType) {
+        return 'reaction_' + reactionsId + '_' + reactionType;
+    }
+
+    function saveUserReaction(reactionsId, reactionType, selected) {
+        const key = getStorageKey(reactionsId, reactionType);
+        if (selected) {
+            localStorage.setItem(key, 'true');
+        } else {
+            localStorage.removeItem(key);
+        }
+    }
+
+    function getUserReaction(reactionsId, reactionType) {
+        const key = getStorageKey(reactionsId, reactionType);
+        return localStorage.getItem(key) === 'true';
+    }
+
+    function restoreUserReactions(reactionsId) {
+        const container = document.getElementById(reactionsId);
+        if (!container) return;
+
+        const reactionButtons = container.querySelectorAll('.reaction-button');
+        let hasSelection = false;
+
+        reactionButtons.forEach(btn => {
+            // Look for classes that match the pattern 'reaction-' followed by a reaction ID
+            // Exclude 'reaction-button' by checking the class is longer than 'reaction-'.length
+            const reactionType = Array.from(btn.classList)
+                .find(cls => cls.startsWith('reaction-') && cls !== 'reaction-button')
+                ?.replace('reaction-', '');
+
+            if (reactionType && getUserReaction(reactionsId, reactionType)) {
+                btn.style.transform = 'scale(1.2)';
+                btn.style.opacity = '1';
+                hasSelection = true;
+            } else {
+                btn.style.transform = 'scale(1)';
+                btn.style.opacity = hasSelection ? '0.5' : '1';
+            }
+        });
+    }
+
+
+    function handleReactionClick(reactionType, docName, author, reactionsId) {
+        const container = document.getElementById(reactionsId);
+        const reactionButtons = container.querySelectorAll('.reaction-button');
+        const clickedButton = container.querySelector('.reaction-' + reactionType);
+
+        // Check if this reaction is already selected
+        const isCurrentlySelected = getUserReaction(reactionsId, reactionType);
+
+        // Clear all previous selections for this reactions block
+        reactionButtons.forEach(btn => {
+            // Same fix here - exclude 'reaction-button' class
+            const btnReactionType = Array.from(btn.classList)
+                .find(cls => cls.startsWith('reaction-') && cls !== 'reaction-button')
+                ?.replace('reaction-', '');
+            if (btnReactionType) {
+                saveUserReaction(reactionsId, btnReactionType, false);
+            }
+        });
+
+        // Toggle the clicked reaction
+        const newSelectionState = !isCurrentlySelected;
+        if (newSelectionState) {
+            saveUserReaction(reactionsId, reactionType, true);
+        }
+
+        // Update visual state
+        reactionButtons.forEach(btn => {
+            if (btn.classList.contains('reaction-' + reactionType) && newSelectionState) {
+                btn.style.transform = 'scale(1.2)';
+                btn.style.opacity = '1';
+            } else {
+                btn.style.transform = 'scale(1)';
+                btn.style.opacity = newSelectionState ? '0.5' : '1';
+            }
+        });
+
+        // Post the data only if a reaction is selected
+        if (newSelectionState) {
+            const data = {
+                documentName: docName,
+                author: author,
+                reactionType: reactionType
+            };
+
+            console.log('Reaction data:', data);
+
+            // You can implement actual AJAX post here
+             fetch('reactions/api/feedback', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(data)
+             });
+        }
+    }
+
+
+    function showCommentForm(docName, author, reactionType = null) {
+        document.getElementById('commentDocName').value = docName;
+        document.getElementById('commentAuthor').value = author;
+        if (reactionType) {
+            document.getElementById('commentReactionType').value = reactionType;
+        }
+
+        const modal = document.getElementById('commentFormModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeCommentForm() {
+        const modal = document.getElementById('commentFormModal');
+        modal.style.display = 'none';
+        document.getElementById('commentText').value = '';
+    }
+
+    function submitComment() {
+        const docName = document.getElementById('commentDocName').value;
+        const author = document.getElementById('commentAuthor').value;
+        const comment = document.getElementById('commentText').value;
+        const reactionType = document.getElementById('commentReactionType').value;
+
+        if (!comment.trim()) {
+            alert('Please enter a comment');
+            return;
+        }
+
+        const data = {
+            documentName: docName,
+            author: author,
+            comment: comment,
+            reactionType: reactionType
+        };
+
+        console.log('Comment data:', data);
+
+        // You can implement actual AJAX post here
+         fetch('/reactions/api/comment', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify(data)
+         });
+
+        closeCommentForm();
+        alert('Thank you for your feedback!');
+    }
+</script>
+<div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="395b18c9-87d2-44e3-bb05-fb1d8033f352" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#2563eb","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#2563eb","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#2563eb","true","false"],["Callout","callout.html","Callout Documentation","documentation","#2563eb","true","false"],["Charts","charts.html","Charts Documentation","documentation","#2563eb","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#2563eb","true","false"],["DocOps Core","docops.html","DocOps Block Processor Documentation","documentation","#2563eb","true","false"],["Domain Markup Parser","domain.html","Domain Markup Parser Documentation","documentation","#2563eb","true","false"],["Examples","examples.html","Examples Documentation","documentation","#2563eb","true","false"],["Feature Cards","featurecard.html","Documentation to the tool for creating visually appealing, interactive feature cards","documentation","#2563eb","true","false"],["Gherkin","gherkin.html","Gherkin Format support for DocOps","documentation","#2563eb","true","false"],["Index","index.html","Index of all documentation","documentation","#2563eb","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#2563eb","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#2563eb","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#2563eb","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#2563eb","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#2563eb","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#2563eb","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#2563eb","true","false"],["Shield","shield.html","Shield Documentation","documentation","#2563eb","true","false"],["Story","story.html","What is DocOps","documentation","#2563eb","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#2563eb","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#2563eb","true","false"],["Todo","todo.html","Todo Documentation","documentation","#ef4444","true","true"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#2563eb","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#2563eb","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#2563eb","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>            <defs><filter id="nnneon-filter" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/></filter><filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"></filter><filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="1" dy="3" result="offset"/><feFlood flood-color="#000000" flood-opacity="0.2"/><feComposite in2="offset" operator="in" result="shadow"/><feGaussianBlur in="SourceAlpha" stdDeviation="1"/><feOffset dx="0" dy="1" result="innerOffset"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="innerOffset" operator="in" result="innerShadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="innerShadow"/></feMerge></filter><radialGradient id="raisedButton_936a66a0-f948-47c8-9e91-8ae5d493cc26" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad0-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_1f7239c4-ac28-42c8-ad5f-d29ae48fbf55" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad1-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_a90b38cd-9b16-4e7f-957d-4851db5d8587" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad2-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_293ebe78-03fa-4a2f-8eae-781b8cff91fe" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad3-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_3e7bc3d0-ea53-48d6-9f79-fef599b8002f" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad4-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_826cd854-7d85-429a-a0e6-8e5b4510dbec" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad5-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_32930f7e-ab7e-4016-9d88-93031c92d584" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad6-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_e1a9f1ad-f694-46cd-937a-8f89c73a81aa" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad7-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_65179ed0-8cb8-4322-9c03-95f9b2bca033" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad8-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_61e6bab9-46f5-48d0-aceb-7cb5af4f965a" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad9-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_de447959-01e3-47f3-b822-8fa41ad3fa55" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad10-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_e7d09bfb-c733-4f1c-8ebb-e31da4033bef" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad11-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_443a56ff-df2c-4f56-ad19-b489d0ff474e" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad12-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_e94f329d-12ac-48e5-9645-32a323c86b40" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad13-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_41f27e7d-f729-41af-b9a7-3f1858819b67" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad14-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_0a1f88a0-1e52-4c7f-b5ba-3beb82feba96" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad15-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_a51c400e-dbcd-4be3-9917-126e3d302571" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad16-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_05f2916e-bdd3-418a-b95b-2d31425d049c" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad17-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_435c6432-3eab-4868-99ef-5eb988884e4b" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad18-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_5cc2817b-5d44-4eda-b99e-6792a53a53be" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad19-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_08e4667f-c458-46df-8944-1869d1cd5306" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad20-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_aa4dbd74-0616-4498-a51e-a95a1adbd582" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad21-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_216570e9-d54d-4d8e-9fe3-ce82bd0f7421" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad22-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_63306bb9-079e-405e-ae3a-4e10e0700a85" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#ef4444;stop-opacity:1" /><stop offset="100%" style="stop-color:#a72f2f;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad23-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#a72f2f"/></linearGradient><radialGradient id="raisedButton_e976d42a-391c-42f8-b643-969ec1361bc9" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad24-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_43036da7-5fc2-48af-bfa6-8784eceef5dc" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad25-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><radialGradient id="raisedButton_ec1d96de-13b3-4a30-af3c-6cd58ddfe171" cx="30%" cy="25%" r="80%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" /><stop offset="40%" style="stop-color:#2563eb;stop-opacity:1" /><stop offset="100%" style="stop-color:#1945a4;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad26-395b18c9-87d2-44e3-bb05-fb1d8033f352" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1945a4"/></linearGradient><style>.raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4)); } .raise:hover { stroke: gold; stroke-width: 3px; opacity: 0.9; } .bar:hover { filter: grayscale(100%) sepia(100%); }</style></defs><g transform="scale(1.0)"><g transform="translate(70,65)" cursor="pointer"><a xlink:href="adr.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad0-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Architecture Decision Records</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_936a66a0-f948-47c8-9e91-8ae5d493cc26)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> ADR</tspan></text></a></g><g transform="translate(200,65)" cursor="pointer"><a xlink:href="arch.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad1-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Implementation Architecture</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_1f7239c4-ac28-42c8-ad5f-d29ae48fbf55)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Architecture</tspan></text></a></g><g transform="translate(330,65)" cursor="pointer"><a xlink:href="buttons.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad2-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Button Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a90b38cd-9b16-4e7f-957d-4851db5d8587)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Buttons</tspan></text></a></g><g transform="translate(460,65)" cursor="pointer"><a xlink:href="callout.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad3-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Callout Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_293ebe78-03fa-4a2f-8eae-781b8cff91fe)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Callout</tspan></text></a></g><g transform="translate(590,65)" cursor="pointer"><a xlink:href="charts.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad4-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Charts Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_3e7bc3d0-ea53-48d6-9f79-fef599b8002f)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Charts</tspan></text></a></g><g transform="translate(720,65)" cursor="pointer"><a xlink:href="connectors.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad5-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Connector Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_826cd854-7d85-429a-a0e6-8e5b4510dbec)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Connectors</tspan></text></a></g><g transform="translate(850,65)" cursor="pointer"><a xlink:href="docops.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad6-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">DocOps Block Processor Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_32930f7e-ab7e-4016-9d88-93031c92d584)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> DocOps Core</tspan></text></a></g><g transform="translate(980,65)" cursor="pointer"><a xlink:href="domain.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad7-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Domain Markup Parser Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e1a9f1ad-f694-46cd-937a-8f89c73a81aa)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Domain Markup</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;">Parser</tspan></text></a></g><g transform="translate(1110,65)" cursor="pointer"><a xlink:href="examples.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad8-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Examples Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_65179ed0-8cb8-4322-9c03-95f9b2bca033)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Examples</tspan></text></a></g><g transform="translate(70,195)" cursor="pointer"><a xlink:href="featurecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad9-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Documentation to the tool for creating visually appealing, interactive feature cards</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_61e6bab9-46f5-48d0-aceb-7cb5af4f965a)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Feature Cards</tspan></text></a></g><g transform="translate(200,195)" cursor="pointer"><a xlink:href="gherkin.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad10-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Gherkin Format support for DocOps</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_de447959-01e3-47f3-b822-8fa41ad3fa55)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Gherkin</tspan></text></a></g><g transform="translate(330,195)" cursor="pointer"><a xlink:href="index.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad11-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Index of all documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e7d09bfb-c733-4f1c-8ebb-e31da4033bef)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Index</tspan></text></a></g><g transform="translate(460,195)" cursor="pointer"><a xlink:href="metricscard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad12-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Metrics Card Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_443a56ff-df2c-4f56-ad19-b489d0ff474e)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Metrics Card</tspan></text></a></g><g transform="translate(590,195)" cursor="pointer"><a xlink:href="placemat.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad13-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Placemat Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e94f329d-12ac-48e5-9645-32a323c86b40)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Placemat</tspan></text></a></g><g transform="translate(720,195)" cursor="pointer"><a xlink:href="planner.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad14-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Project Planner Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_41f27e7d-f729-41af-b9a7-3f1858819b67)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Planner</tspan></text></a></g><g transform="translate(850,195)" cursor="pointer"><a xlink:href="quadrant.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad15-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Quadrant Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_0a1f88a0-1e52-4c7f-b5ba-3beb82feba96)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Quadrant</tspan></text></a></g><g transform="translate(980,195)" cursor="pointer"><a xlink:href="releasestrategy.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad16-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Release Strategy Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a51c400e-dbcd-4be3-9917-126e3d302571)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-12" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;">Strategy</tspan></text></a></g><g transform="translate(1110,195)" cursor="pointer"><a xlink:href="roadmap.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad17-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Roadmap Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_05f2916e-bdd3-418a-b95b-2d31425d049c)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Roadmap</tspan></text></a></g><g transform="translate(70,330)" cursor="pointer"><a xlink:href="scorecard.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad18-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Scorecard Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_435c6432-3eab-4868-99ef-5eb988884e4b)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Scorecard</tspan></text></a></g><g transform="translate(200,330)" cursor="pointer"><a xlink:href="shield.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad19-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Shield Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_5cc2817b-5d44-4eda-b99e-6792a53a53be)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Shield</tspan></text></a></g><g transform="translate(330,330)" cursor="pointer"><a xlink:href="story.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad20-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">What is DocOps</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_08e4667f-c458-46df-8944-1869d1cd5306)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Story</tspan></text></a></g><g transform="translate(460,330)" cursor="pointer"><a xlink:href="swimlane.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad21-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Swimlane Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_aa4dbd74-0616-4498-a51e-a95a1adbd582)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Swimlane</tspan></text></a></g><g transform="translate(590,330)" cursor="pointer"><a xlink:href="timeline.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad22-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Timeline Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_216570e9-d54d-4d8e-9fe3-ce82bd0f7421)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Timeline</tspan></text></a></g><g transform="translate(720,330)" cursor="pointer"><a xlink:href="todo.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad23-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Todo Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_63306bb9-079e-405e-ae3a-4e10e0700a85)" filter="url(#buttonShadow)" stroke="#8f2828" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #ef4444"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Todo</tspan></text></a></g><g transform="translate(850,330)" cursor="pointer"><a xlink:href="treechart.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad24-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Tree Chart Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e976d42a-391c-42f8-b643-969ec1361bc9)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Tree Chart</tspan></text></a></g><g transform="translate(980,330)" cursor="pointer"><a xlink:href="tutorial.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad25-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Sample Tutorials</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_43036da7-5fc2-48af-bfa6-8784eceef5dc)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Tutorial</tspan></text></a></g><g transform="translate(1110,330)" cursor="pointer"><a xlink:href="wordcloud.html" target="_top"><g stroke-width="16" stroke="url(#nnneon-grad26-395b18c9-87d2-44e3-bb05-fb1d8033f352)" fill="#fcfcfc" cursor="pointer" class="raise bar"><title class="description">Word Cloud Documentation</title><circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/><circle r="55" cx="0" cy="0" fill="url(#raisedButton_ec1d96de-13b3-4a30-af3c-6cd58ddfe171)" filter="url(#buttonShadow)" stroke="#163b8d" stroke-width="1"/></g><text  x="0" y="-6" text-anchor="middle" style="fill: #2563eb"><tspan x="0" dy="12" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #fcfcfc; font-weight: bold;"> Word Cloud</tspan></text></a></g></g></svg></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps Todo Extension allows you to create visually appealing todo list visualizations in your AsciiDoctor documents. Todo lists are useful for project management, task tracking, and organizing work items in a visual format.</p>
+</div>
+<div class="paragraph">
+<p>This guide will help you understand how to create different styles of todo visualizations, from simple lists to advanced Kanban boards.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_concepts">2. Basic Concepts</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_are_todo_visualizations">2.1. What are Todo Visualizations?</h3>
+<div class="paragraph">
+<p>Todo visualizations in the DocOps extension are SVG-based visual elements that display task lists with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Task descriptions</p>
+</li>
+<li>
+<p>Status tracking (Pending, In Progress, Completed, etc.)</p>
+</li>
+<li>
+<p>Priority levels (Low, Medium, High, Critical)</p>
+</li>
+<li>
+<p>Optional categories, assignees, and due dates</p>
+</li>
+<li>
+<p>Multiple layout options (Kanban, List, Grid, Timeline)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_todo_components">2.2. Todo Components</h3>
+<div class="paragraph">
+<p>A todo visualization includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Tasks</strong>: The main items to be completed</p>
+</li>
+<li>
+<p><strong>Status</strong>: Current state of each task</p>
+</li>
+<li>
+<p><strong>Priority</strong>: Importance level of each task</p>
+</li>
+<li>
+<p><strong>Categories</strong>: Optional grouping for tasks</p>
+</li>
+<li>
+<p><strong>Assignees</strong>: Who is responsible for each task</p>
+</li>
+<li>
+<p><strong>Due Dates</strong>: When tasks should be completed</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_asciidoctor_syntax_for_todo_lists">3. AsciiDoctor Syntax for Todo Lists</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To include todo lists in your AsciiDoctor document, you use the DocOps macro. The extension supports both table format and JSON format.</p>
+</div>
+<div class="sect2">
+<h3 id="_table_format_simple">3.1. Table Format (Simple)</h3>
+<div class="paragraph">
+<p>Here&#8217;s the basic table format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: My Project Tasks
+layout=kanban
+groupBy=status
+---
+Task | Status | Priority | Category | Assignee | Due Date | Tags | Description
+Setup development environment | pending | high | Development | Alice | 2024-01-15 | setup,env | Configure local development tools
+Create project wireframes | in_progress | medium | Design | Bob | 2024-01-20 | design,ui | Design initial user interface mockups
+Implement user authentication | pending | high | Development | Alice | 2024-01-25 | auth,backend | Add login and registration functionality
+Write API documentation | pending | medium | Documentation | Carol | 2024-01-30 | docs,api | Document REST API endpoints
+Deploy to staging | pending | low | DevOps | Bob | 2024-02-05 | deploy,staging | Set up staging environment
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_format_advanced">3.2. JSON Format (Advanced)</h3>
+<div class="paragraph">
+<p>For more control, you can use the JSON format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+{
+  "config": {
+    "title": "Sprint Planning",
+    "layout": "KANBAN",
+    "groupBy": "STATUS",
+    "showStats": true,
+    "showCategories": true,
+    "showAssignees": true,
+    "showDueDates": true,
+    "useGlass": true
+  },
+  "items": [
+    {
+      "task": "Design user dashboard",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH",
+      "category": "Frontend",
+      "assignee": "Alice",
+      "dueDate": "2024-01-20",
+      "tags": ["ui", "dashboard"],
+      "description": "Create responsive dashboard layout"
+    },
+    {
+      "task": "API integration tests",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "category": "Backend",
+      "assignee": "Bob",
+      "dueDate": "2024-01-25",
+      "tags": ["testing", "api"],
+      "description": "Write comprehensive API tests"
+    }
+  ]
+}
+----</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_options">4. Configuration Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_layout_types">4.1. Layout Types</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>KANBAN</strong>: Board with columns for each status (default)</p>
+</li>
+<li>
+<p><strong>LIST</strong>: Simple vertical list of tasks</p>
+</li>
+<li>
+<p><strong>GRID</strong>: Grid layout with task cards</p>
+</li>
+<li>
+<p><strong>TIMELINE</strong>: Timeline view (best with due dates)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_status_options">4.2. Status Options</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>PENDING</strong> (⏳): Not started yet</p>
+</li>
+<li>
+<p><strong>IN_PROGRESS</strong> (🔄): Currently being worked on</p>
+</li>
+<li>
+<p><strong>COMPLETED</strong> (✅): Finished</p>
+</li>
+<li>
+<p><strong>BLOCKED</strong> (🚫): Cannot proceed</p>
+</li>
+<li>
+<p><strong>CANCELLED</strong> (❌): No longer needed</p>
+</li>
+<li>
+<p><strong>ON_HOLD</strong> (⏸️): Temporarily paused</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_priority_levels">4.3. Priority Levels</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>LOW</strong> (🔵): Nice to have</p>
+</li>
+<li>
+<p><strong>MEDIUM</strong> (🟡): Normal priority</p>
+</li>
+<li>
+<p><strong>HIGH</strong> (🟠): Important</p>
+</li>
+<li>
+<p><strong>CRITICAL</strong> (🔴): Urgent</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grouping_options">4.4. Grouping Options</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>NONE</strong>: No grouping</p>
+</li>
+<li>
+<p><strong>STATUS</strong>: Group by task status</p>
+</li>
+<li>
+<p><strong>PRIORITY</strong>: Group by priority level</p>
+</li>
+<li>
+<p><strong>CATEGORY</strong>: Group by category</p>
+</li>
+<li>
+<p><strong>ASSIGNEE</strong>: Group by assignee</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">5. Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_simple_project_todo_list_table_format">5.1. Simple Project Todo List (Table Format)</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: Website Redesign Project
+layout=kanban
+---
+Task | Status | Priority | Category
+Research competitor websites | completed | medium | Research
+Create style guide | completed | high | Design
+Design homepage mockup | in_progress | high | Design
+Develop responsive layout | pending | high | Development
+Write content for about page | pending | medium | Content
+Implement contact form | pending | medium | Development
+SEO optimization | pending | low | Marketing
+User testing | pending | medium | QA
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-6d3f75e80d76729e" data-theme="light" data-original-content="title: Website Redesign Project
+layout=kanban
+---
+Task | Status | Priority | Category
+Research competitor websites | completed | medium | Research
+Create style guide | completed | high | Design
+Design homepage mockup | in_progress | high | Design
+Develop responsive layout | pending | high | Development
+Write content for about page | pending | medium | Content
+Implement contact form | pending | medium | Development
+SEO optimization | pending | low | Marketing
+User testing | pending | medium | QA" data-kind="todo">
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Research competitor websites","COMPLETED","MEDIUM","Research","",""],["Create style guide","COMPLETED","HIGH","Design","",""],["Design homepage mockup","IN_PROGRESS","HIGH","Design","",""],["Develop responsive layout","PENDING","HIGH","Development","",""],["Write content for about page","PENDING","MEDIUM","Content","",""],["Implement contact form","PENDING","MEDIUM","Development","",""],["SEO optimization","PENDING","LOW","Marketing","",""],["User testing","PENDING","MEDIUM","QA","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Website Redesign Project</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(5)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Develop respons...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write content f...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Content</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Implement conta...</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="515" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="537" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="537" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">SEO optimization</text><!-- Priority Badge --><rect x="152" y="523" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="534" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="560" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Marketing</text><rect x="23" y="645" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="667" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="667" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">User testing</text><!-- Priority Badge --><rect x="152" y="653" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="664" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="690" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 QA</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Design homepage...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Research compet...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Research</text><rect x="453" y="255" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="277" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Create style guide</text><!-- Priority Badge --><rect x="582" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 2</text><text x="1105" y="145" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 5</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-6d3f75e80d76729e')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-6d3f75e80d76729e">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-6d3f75e80d76729e')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-6d3f75e80d76729e')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-6d3f75e80d76729e')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-6d3f75e80d76729e')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-6d3f75e80d76729e')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-6d3f75e80d76729e')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-6d3f75e80d76729e')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-6d3f75e80d76729e" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-6d3f75e80d76729e')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-6d3f75e80d76729e">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_team_task_board_with_assignees">5.2. Team Task Board with Assignees</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: Development Team Sprint Board
+layout=kanban
+showAssignees=true
+showDueDates=true
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
+Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
+Database migration script | completed | high | Backend | Carol | 2024-01-17
+Add password reset | pending | medium | Backend | Alice | 2024-01-22
+Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
+Write unit tests | pending | low | Testing | Dave | 2024-01-25
+Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-65afc2e184e1f832" data-theme="light" data-original-content="title: Development Team Sprint Board
+layout=kanban
+showAssignees=true
+showDueDates=true
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
+Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
+Database migration script | completed | high | Backend | Carol | 2024-01-17
+Add password reset | pending | medium | Backend | Alice | 2024-01-22
+Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
+Write unit tests | pending | low | Testing | Dave | 2024-01-25
+Deploy to production | blocked | high | DevOps | Carol | 2024-01-30" data-kind="todo">
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Fix login bug","IN_PROGRESS","CRITICAL","Backend","",""],["Update user profile UI","PENDING","HIGH","Frontend","",""],["Database migration script","COMPLETED","HIGH","Backend","",""],["Add password reset","PENDING","MEDIUM","Backend","",""],["Mobile responsive fixes","IN_PROGRESS","MEDIUM","Frontend","",""],["Write unit tests","PENDING","LOW","Testing","",""],["Deploy to production","BLOCKED","HIGH","DevOps","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Development Team Sprint Board</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update user pro...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Add password reset</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write unit tests</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Testing</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Fix login bug</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="238" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Mobile responsi...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Database migrat...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="668" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="680" y="147" fill="#ef5350" font-size="16" font-family="Arial, sans-serif">🚫</text><!-- Task Title with proper wrapping --><text x="703" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Deploy to produ...</text><!-- Priority Badge --><rect x="797" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="820" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="680" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 DevOps</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text><text x="1105" y="165" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="185" fill="#ef5350" font-size="12" font-family="Arial, sans-serif">🚫 Blocked: 1</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-65afc2e184e1f832')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-65afc2e184e1f832">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-65afc2e184e1f832')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-65afc2e184e1f832')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-65afc2e184e1f832')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-65afc2e184e1f832')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-65afc2e184e1f832')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-65afc2e184e1f832')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-65afc2e184e1f832')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-65afc2e184e1f832" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-65afc2e184e1f832')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-65afc2e184e1f832">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_personal_task_list_list_layout">5.3. Personal Task List (List Layout)</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: Personal Goals Q1 2024
+layout=list
+sortBy=priority
+---
+Task | Status | Priority | Tags
+Learn Kotlin programming | in_progress | high | learning,programming
+Read 5 technical books | pending | medium | reading,growth
+Complete online course | pending | high | education,certification
+Exercise 3x per week | in_progress | medium | health,fitness
+Plan summer vacation | pending | low | personal,travel
+Organize home office | completed | medium | organization,productivity
+Start side project | pending | high | programming,project
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-658a9dd4feba78d6" data-theme="light" data-original-content="title: Personal Goals Q1 2024
+layout=list
+sortBy=priority
+---
+Task | Status | Priority | Tags
+Learn Kotlin programming | in_progress | high | learning,programming
+Read 5 technical books | pending | medium | reading,growth
+Complete online course | pending | high | education,certification
+Exercise 3x per week | in_progress | medium | health,fitness
+Plan summer vacation | pending | low | personal,travel
+Organize home office | completed | medium | organization,productivity
+Start side project | pending | high | programming,project" data-kind="todo">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="570" viewBox="0 0 800 570">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Learn Kotlin programming","IN_PROGRESS","HIGH","learning,programming","",""],["Read 5 technical books","PENDING","MEDIUM","reading,growth","",""],["Complete online course","PENDING","HIGH","education,certification","",""],["Exercise 3x per week","IN_PROGRESS","MEDIUM","health,fitness","",""],["Plan summer vacation","PENDING","LOW","personal,travel","",""],["Organize home office","COMPLETED","MEDIUM","organization,productivity","",""],["Start side project","PENDING","HIGH","programming,project","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="800" height="570" fill="#ffffff"/><!-- Title --><text x="400" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Personal Goals Q1 2024</text><rect x="20" y="80" width="760" height="50" fill="#f8f9fa" stroke="#ff7043" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="110" fill="#42a5f5" font-size="20" font-family="Arial, sans-serif">🔄</text><!-- Task Title --><text x="70" y="110" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Learn Kotlin programming</text><!-- Priority Badge --><rect x="700" y="95" width="60" height="25" fill="#ff7043" rx="12"/><text x="730" y="110" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><rect x="20" y="140" width="760" height="50" fill="#f8f9fa" stroke="#ff7043" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="170" fill="#ffa726" font-size="20" font-family="Arial, sans-serif">⏳</text><!-- Task Title --><text x="70" y="170" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Complete online course</text><!-- Priority Badge --><rect x="700" y="155" width="60" height="25" fill="#ff7043" rx="12"/><text x="730" y="170" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><rect x="20" y="200" width="760" height="50" fill="#f8f9fa" stroke="#ff7043" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="230" fill="#ffa726" font-size="20" font-family="Arial, sans-serif">⏳</text><!-- Task Title --><text x="70" y="230" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Start side project</text><!-- Priority Badge --><rect x="700" y="215" width="60" height="25" fill="#ff7043" rx="12"/><text x="730" y="230" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><rect x="20" y="260" width="760" height="50" fill="#f8f9fa" stroke="#ffa726" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="290" fill="#ffa726" font-size="20" font-family="Arial, sans-serif">⏳</text><!-- Task Title --><text x="70" y="290" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Read 5 technical books</text><!-- Priority Badge --><rect x="700" y="275" width="60" height="25" fill="#ffa726" rx="12"/><text x="730" y="290" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">MEDIUM</text><rect x="20" y="320" width="760" height="50" fill="#f8f9fa" stroke="#ffa726" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="350" fill="#42a5f5" font-size="20" font-family="Arial, sans-serif">🔄</text><!-- Task Title --><text x="70" y="350" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Exercise 3x per week</text><!-- Priority Badge --><rect x="700" y="335" width="60" height="25" fill="#ffa726" rx="12"/><text x="730" y="350" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">MEDIUM</text><rect x="20" y="380" width="760" height="50" fill="#f8f9fa" stroke="#ffa726" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="410" fill="#66bb6a" font-size="20" font-family="Arial, sans-serif">✅</text><!-- Task Title --><text x="70" y="410" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Organize home office</text><!-- Priority Badge --><rect x="700" y="395" width="60" height="25" fill="#ffa726" rx="12"/><text x="730" y="410" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">MEDIUM</text><rect x="20" y="440" width="760" height="50" fill="#f8f9fa" stroke="#42a5f5" stroke-width="2" stroke-left-width="4" rx="4" class="glass"/><!-- Status Icon --><text x="35" y="470" fill="#ffa726" font-size="20" font-family="Arial, sans-serif">⏳</text><!-- Task Title --><text x="70" y="470" fill="#2d3748" font-size="16" font-family="Arial, sans-serif">Plan summer vacation</text><!-- Priority Badge --><rect x="700" y="455" width="60" height="25" fill="#42a5f5" rx="12"/><text x="730" y="470" fill="white" font-size="12" text-anchor="middle" font-family="Arial, sans-serif">LOW</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-658a9dd4feba78d6')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-658a9dd4feba78d6">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-658a9dd4feba78d6')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-658a9dd4feba78d6')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-658a9dd4feba78d6')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-658a9dd4feba78d6')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-658a9dd4feba78d6')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-658a9dd4feba78d6')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-658a9dd4feba78d6')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-658a9dd4feba78d6" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-658a9dd4feba78d6')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-658a9dd4feba78d6">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grid_layout_for_quick_overview">5.4. Grid Layout for Quick Overview</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: Sprint Tasks Overview
+layout=grid
+useGlass=true
+---
+Task | Status | Priority
+Code review PR #123 | pending | high
+Fix CSS alignment | in_progress | medium
+Update documentation | completed | low
+Merge feature branch | pending | high
+Test mobile layout | in_progress | medium
+Deploy hotfix | completed | critical
+Write changelog | pending | low
+Update dependencies | pending | medium
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-d0f711045db7b2f9" data-theme="light" data-original-content="title: Sprint Tasks Overview
+layout=grid
+useGlass=true
+---
+Task | Status | Priority
+Code review PR #123 | pending | high
+Fix CSS alignment | in_progress | medium
+Update documentation | completed | low
+Merge feature branch | pending | high
+Test mobile layout | in_progress | medium
+Deploy hotfix | completed | critical
+Write changelog | pending | low
+Update dependencies | pending | medium" data-kind="todo">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="460" viewBox="0 0 1100 460">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Code review PR #123","PENDING","HIGH","","",""],["Fix CSS alignment","IN_PROGRESS","MEDIUM","","",""],["Update documentation","COMPLETED","LOW","","",""],["Merge feature branch","PENDING","HIGH","","",""],["Test mobile layout","IN_PROGRESS","MEDIUM","","",""],["Deploy hotfix","COMPLETED","CRITICAL","","",""],["Write changelog","PENDING","LOW","","",""],["Update dependencies","PENDING","MEDIUM","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1100" height="460" fill="#ffffff"/><!-- Title --><text x="550" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Sprint Tasks Overview</text><rect x="20" y="80" width="250" height="150" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="32" y="102" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="55" y="102" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Code review PR #123</text><!-- Priority Badge --><rect x="215" y="88" width="45" height="18" fill="#ff7043" rx="9"/><text x="238" y="99" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><rect x="290" y="80" width="250" height="150" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="302" y="102" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="325" y="102" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Fix CSS alignment</text><!-- Priority Badge --><rect x="485" y="88" width="45" height="18" fill="#ffa726" rx="9"/><text x="508" y="99" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><rect x="560" y="80" width="250" height="150" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="572" y="102" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="595" y="102" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update documentation</text><!-- Priority Badge --><rect x="755" y="88" width="45" height="18" fill="#42a5f5" rx="9"/><text x="778" y="99" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><rect x="830" y="80" width="250" height="150" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="842" y="102" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="865" y="102" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Merge feature branch</text><!-- Priority Badge --><rect x="1025" y="88" width="45" height="18" fill="#ff7043" rx="9"/><text x="1048" y="99" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><rect x="20" y="250" width="250" height="150" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="32" y="272" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="55" y="272" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Test mobile layout</text><!-- Priority Badge --><rect x="215" y="258" width="45" height="18" fill="#ffa726" rx="9"/><text x="238" y="269" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><rect x="290" y="250" width="250" height="150" fill="#ffffff" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="302" y="272" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="325" y="272" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Deploy hotfix</text><!-- Priority Badge --><rect x="485" y="258" width="45" height="18" fill="#ef5350" rx="9"/><text x="508" y="269" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><rect x="560" y="250" width="250" height="150" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="572" y="272" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="595" y="272" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write changelog</text><!-- Priority Badge --><rect x="755" y="258" width="45" height="18" fill="#42a5f5" rx="9"/><text x="778" y="269" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><rect x="830" y="250" width="250" height="150" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="842" y="272" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="865" y="272" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update dependencies</text><!-- Priority Badge --><rect x="1025" y="258" width="45" height="18" fill="#ffa726" rx="9"/><text x="1048" y="269" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-d0f711045db7b2f9')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-d0f711045db7b2f9">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-d0f711045db7b2f9')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-d0f711045db7b2f9')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-d0f711045db7b2f9')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-d0f711045db7b2f9')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-d0f711045db7b2f9')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-d0f711045db7b2f9')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-d0f711045db7b2f9')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-d0f711045db7b2f9" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-d0f711045db7b2f9')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-d0f711045db7b2f9">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dark_mode_example">5.5. Dark Mode Example</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true,useDark=true]
+----
+title: Night Shift Tasks
+layout=kanban
+---
+Task | Status | Priority | Category
+Monitor system performance | in_progress | high | Operations
+Backup database | completed | critical | Maintenance
+Review security logs | pending | medium | Security
+Update server patches | pending | high | Maintenance
+Check application logs | in_progress | medium | Monitoring
+Respond to alerts | pending | critical | Support
+----</code></pre>
+</div>
+</div>
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-40e69c48c61d9a48" data-theme="light" data-original-content="title: Night Shift Tasks
+layout=kanban
+---
+Task | Status | Priority | Category
+Monitor system performance | in_progress | high | Operations
+Backup database | completed | critical | Maintenance
+Review security logs | pending | medium | Security
+Update server patches | pending | high | Maintenance
+Check application logs | in_progress | medium | Monitoring
+Respond to alerts | pending | critical | Support" data-kind="todo">
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-08-15</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Monitor system performance","IN_PROGRESS","HIGH","Operations","",""],["Backup database","COMPLETED","CRITICAL","Maintenance","",""],["Review security logs","PENDING","MEDIUM","Security","",""],["Update server patches","PENDING","HIGH","Maintenance","",""],["Check application logs","IN_PROGRESS","MEDIUM","Monitoring","",""],["Respond to alerts","PENDING","CRITICAL","Support","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#1a1a1a"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#e0e0e0" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Night Shift Tasks</text><rect x="15" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Review security...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Security</text><rect x="23" y="255" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update server p...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="23" y="385" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Respond to alerts</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ef5350" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="35" y="430" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Support</text><rect x="230" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Monitor system ...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Operations</text><rect x="238" y="255" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Check applicati...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Monitoring</text><rect x="445" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Backup database</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="465" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="660" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-40e69c48c61d9a48')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-40e69c48c61d9a48">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-40e69c48c61d9a48')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-40e69c48c61d9a48')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-40e69c48c61d9a48')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-40e69c48c61d9a48')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-40e69c48c61d9a48')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-40e69c48c61d9a48')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-40e69c48c61d9a48')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-40e69c48c61d9a48" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-40e69c48c61d9a48')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-40e69c48c61d9a48">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_advanced_features">6. Advanced Features</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_using_emojis_for_visual_enhancement">6.1. Using Emojis for Visual Enhancement</h3>
+<div class="paragraph">
+<p>You can use emojis in task names and descriptions to make your todo lists more visually appealing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,todo,controls=true]
+----
+title: 🎯 Project Milestones
+---
+Task | Status | Priority
+🚀 Launch MVP | pending | critical
+📊 Analytics setup | in_progress | high
+🎨 Brand identity | completed | medium
+📱 Mobile app | pending | high
+🔒 Security audit | pending | medium
+📝 User documentation | in_progress | medium
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_status_indicators">6.2. Custom Status Indicators</h3>
+<div class="paragraph">
+<p>The todo visualization automatically detects various status formats:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Text: "pending", "in_progress", "completed", etc.</p>
+</li>
+<li>
+<p>Emojis: "⏳", "🔄", "✅", etc.</p>
+</li>
+<li>
+<p>Short forms: "todo", "working", "done", etc.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">7. Best Practices</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Keep task names concise</strong> - Use clear, actionable language</p>
+</li>
+<li>
+<p><strong>Use consistent categories</strong> - This helps with organization and filtering</p>
+</li>
+<li>
+<p><strong>Set realistic priorities</strong> - Don&#8217;t make everything critical</p>
+</li>
+<li>
+<p><strong>Regular updates</strong> - Keep status current for team visibility</p>
+</li>
+<li>
+<p><strong>Use due dates wisely</strong> - Only when truly needed</p>
+</li>
+<li>
+<p><strong>Leverage tags</strong> - For cross-cutting concerns and filtering</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration_tips">8. Integration Tips</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The todo visualization integrates well with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Project management workflows</p>
+</li>
+<li>
+<p>Sprint planning documents</p>
+</li>
+<li>
+<p>Team status reports</p>
+</li>
+<li>
+<p>Personal productivity tracking</p>
+</li>
+<li>
+<p>Documentation of development processes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Use the CSV export feature to integrate with external project management tools and track progress over time.</p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #657786;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .reading-time {
+        background: rgba(32, 35, 42, 0.95);
+        border-color: #444;
+        color: #8899a6;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .reading-time {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .reading-time {
+        display: none;
+    }
+}
+</style>
+<div class="reading-time">
+    <p>📖 5 min read • 1727 words</p>
+</div>
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+        <script>
+        mermaid.initialize({
+            startOnLoad: true,
+                theme: 'neo',
+                look: 'neo'
+            });
+        mermaid.run({
+            querySelector: '.mermaid',
+            postRenderCallback: (id) => {
+            console.log('Post-render callback for diagram:', id);
+            const svg = document.getElementById(id);
+            const container =svg.parentNode;
+
+            // Initialize Panzoom
+            const panzoomInstance = svgPanZoom(svg, {
+                controlIconsEnabled: true,
+
+                center: true,
+            });
+            var sizes= panzoomInstance.getSizes();
+
+            container.style.width = sizes.width + 'px';
+            container.style.height = sizes.height + 'px';
+            console.log('Panzoom instance:', panzoomInstance.getSizes());
+            svg.setAttribute('width', sizes.width);
+            svg.setAttribute('height', sizes.height);
+    }
+});
+            </script>
+</body>
+</html>
