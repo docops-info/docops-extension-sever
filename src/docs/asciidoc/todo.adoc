@@ -1,0 +1,377 @@
+include::_base.adoc[]
+= DocOps Todo
+
+reactions::[role=right]
+include::shared/buttons.adoc[]
+
+== Introduction
+
+The DocOps Todo Extension allows you to create visually appealing todo list visualizations in your AsciiDoctor documents. Todo lists are useful for project management, task tracking, and organizing work items in a visual format.
+
+This guide will help you understand how to create different styles of todo visualizations, from simple lists to advanced Kanban boards.
+
+== Basic Concepts
+
+=== What are Todo Visualizations?
+
+Todo visualizations in the DocOps extension are SVG-based visual elements that display task lists with:
+
+* Task descriptions
+* Status tracking (Pending, In Progress, Completed, etc.)
+* Priority levels (Low, Medium, High, Critical)
+* Optional categories, assignees, and due dates
+* Multiple layout options (Kanban, List, Grid, Timeline)
+
+=== Todo Components
+
+A todo visualization includes:
+
+* **Tasks**: The main items to be completed
+* **Status**: Current state of each task
+* **Priority**: Importance level of each task
+* **Categories**: Optional grouping for tasks
+* **Assignees**: Who is responsible for each task
+* **Due Dates**: When tasks should be completed
+
+== AsciiDoctor Syntax for Todo Lists
+
+To include todo lists in your AsciiDoctor document, you use the DocOps macro. The extension supports both table format and JSON format.
+
+=== Table Format (Simple)
+
+Here's the basic table format:
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: My Project Tasks
+layout=kanban
+groupBy=status
+---
+Task | Status | Priority | Category | Assignee | Due Date | Tags | Description
+Setup development environment | pending | high | Development | Alice | 2024-01-15 | setup,env | Configure local development tools
+Create project wireframes | in_progress | medium | Design | Bob | 2024-01-20 | design,ui | Design initial user interface mockups
+Implement user authentication | pending | high | Development | Alice | 2024-01-25 | auth,backend | Add login and registration functionality
+Write API documentation | pending | medium | Documentation | Carol | 2024-01-30 | docs,api | Document REST API endpoints
+Deploy to staging | pending | low | DevOps | Bob | 2024-02-05 | deploy,staging | Set up staging environment
+----
+....
+
+=== JSON Format (Advanced)
+
+For more control, you can use the JSON format:
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+{
+  "config": {
+    "title": "Sprint Planning",
+    "layout": "KANBAN",
+    "groupBy": "STATUS",
+    "showStats": true,
+    "showCategories": true,
+    "showAssignees": true,
+    "showDueDates": true,
+    "useGlass": true
+  },
+  "items": [
+    {
+      "task": "Design user dashboard",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH",
+      "category": "Frontend",
+      "assignee": "Alice",
+      "dueDate": "2024-01-20",
+      "tags": ["ui", "dashboard"],
+      "description": "Create responsive dashboard layout"
+    },
+    {
+      "task": "API integration tests",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "category": "Backend",
+      "assignee": "Bob",
+      "dueDate": "2024-01-25",
+      "tags": ["testing", "api"],
+      "description": "Write comprehensive API tests"
+    }
+  ]
+}
+----
+....
+
+== Configuration Options
+
+=== Layout Types
+
+* **KANBAN**: Board with columns for each status (default)
+* **LIST**: Simple vertical list of tasks
+* **GRID**: Grid layout with task cards
+* **TIMELINE**: Timeline view (best with due dates)
+
+=== Status Options
+
+* **PENDING** (⏳): Not started yet
+* **IN_PROGRESS** (🔄): Currently being worked on
+* **COMPLETED** (✅): Finished
+* **BLOCKED** (🚫): Cannot proceed
+* **CANCELLED** (❌): No longer needed
+* **ON_HOLD** (⏸️): Temporarily paused
+
+=== Priority Levels
+
+* **LOW** (🔵): Nice to have
+* **MEDIUM** (🟡): Normal priority
+* **HIGH** (🟠): Important
+* **CRITICAL** (🔴): Urgent
+
+=== Grouping Options
+
+* **NONE**: No grouping
+* **STATUS**: Group by task status
+* **PRIORITY**: Group by priority level
+* **CATEGORY**: Group by category
+* **ASSIGNEE**: Group by assignee
+
+== Examples
+
+=== Simple Project Todo List (Table Format)
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: Website Redesign Project
+layout=kanban
+---
+Task | Status | Priority | Category
+Research competitor websites | completed | medium | Research
+Create style guide | completed | high | Design
+Design homepage mockup | in_progress | high | Design
+Develop responsive layout | pending | high | Development
+Write content for about page | pending | medium | Content
+Implement contact form | pending | medium | Development
+SEO optimization | pending | low | Marketing
+User testing | pending | medium | QA
+----
+....
+
+[docops,todo,controls=true]
+----
+title: Website Redesign Project
+layout=kanban
+---
+Task | Status | Priority | Category
+Research competitor websites | completed | medium | Research
+Create style guide | completed | high | Design
+Design homepage mockup | in_progress | high | Design
+Develop responsive layout | pending | high | Development
+Write content for about page | pending | medium | Content
+Implement contact form | pending | medium | Development
+SEO optimization | pending | low | Marketing
+User testing | pending | medium | QA
+----
+
+=== Team Task Board with Assignees
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: Development Team Sprint Board
+layout=kanban
+showAssignees=true
+showDueDates=true
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
+Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
+Database migration script | completed | high | Backend | Carol | 2024-01-17
+Add password reset | pending | medium | Backend | Alice | 2024-01-22
+Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
+Write unit tests | pending | low | Testing | Dave | 2024-01-25
+Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
+----
+....
+
+[docops,todo,controls=true]
+----
+title: Development Team Sprint Board
+layout=kanban
+showAssignees=true
+showDueDates=true
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
+Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
+Database migration script | completed | high | Backend | Carol | 2024-01-17
+Add password reset | pending | medium | Backend | Alice | 2024-01-22
+Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
+Write unit tests | pending | low | Testing | Dave | 2024-01-25
+Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
+----
+
+=== Personal Task List (List Layout)
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: Personal Goals Q1 2024
+layout=list
+sortBy=priority
+---
+Task | Status | Priority | Tags
+Learn Kotlin programming | in_progress | high | learning,programming
+Read 5 technical books | pending | medium | reading,growth
+Complete online course | pending | high | education,certification
+Exercise 3x per week | in_progress | medium | health,fitness
+Plan summer vacation | pending | low | personal,travel
+Organize home office | completed | medium | organization,productivity
+Start side project | pending | high | programming,project
+----
+....
+
+[docops,todo,controls=true]
+----
+title: Personal Goals Q1 2024
+layout=list
+sortBy=priority
+---
+Task | Status | Priority | Tags
+Learn Kotlin programming | in_progress | high | learning,programming
+Read 5 technical books | pending | medium | reading,growth
+Complete online course | pending | high | education,certification
+Exercise 3x per week | in_progress | medium | health,fitness
+Plan summer vacation | pending | low | personal,travel
+Organize home office | completed | medium | organization,productivity
+Start side project | pending | high | programming,project
+----
+
+=== Grid Layout for Quick Overview
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: Sprint Tasks Overview
+layout=grid
+useGlass=true
+---
+Task | Status | Priority
+Code review PR #123 | pending | high
+Fix CSS alignment | in_progress | medium
+Update documentation | completed | low
+Merge feature branch | pending | high
+Test mobile layout | in_progress | medium
+Deploy hotfix | completed | critical
+Write changelog | pending | low
+Update dependencies | pending | medium
+----
+....
+
+[docops,todo,controls=true]
+----
+title: Sprint Tasks Overview
+layout=grid
+useGlass=true
+---
+Task | Status | Priority
+Code review PR #123 | pending | high
+Fix CSS alignment | in_progress | medium
+Update documentation | completed | low
+Merge feature branch | pending | high
+Test mobile layout | in_progress | medium
+Deploy hotfix | completed | critical
+Write changelog | pending | low
+Update dependencies | pending | medium
+----
+
+=== Dark Mode Example
+
+[source,asciidoc]
+....
+[docops,todo,controls=true,useDark=true]
+----
+title: Night Shift Tasks
+layout=kanban
+---
+Task | Status | Priority | Category
+Monitor system performance | in_progress | high | Operations
+Backup database | completed | critical | Maintenance
+Review security logs | pending | medium | Security
+Update server patches | pending | high | Maintenance
+Check application logs | in_progress | medium | Monitoring
+Respond to alerts | pending | critical | Support
+----
+....
+
+[docops,todo,controls=true,useDark=true]
+----
+title: Night Shift Tasks
+layout=kanban
+---
+Task | Status | Priority | Category
+Monitor system performance | in_progress | high | Operations
+Backup database | completed | critical | Maintenance
+Review security logs | pending | medium | Security
+Update server patches | pending | high | Maintenance
+Check application logs | in_progress | medium | Monitoring
+Respond to alerts | pending | critical | Support
+----
+
+== Advanced Features
+
+=== Using Emojis for Visual Enhancement
+
+You can use emojis in task names and descriptions to make your todo lists more visually appealing:
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: 🎯 Project Milestones
+---
+Task | Status | Priority
+🚀 Launch MVP | pending | critical
+📊 Analytics setup | in_progress | high
+🎨 Brand identity | completed | medium
+📱 Mobile app | pending | high
+🔒 Security audit | pending | medium
+📝 User documentation | in_progress | medium
+----
+....
+
+
+
+=== Custom Status Indicators
+
+The todo visualization automatically detects various status formats:
+
+* Text: "pending", "in_progress", "completed", etc.
+* Emojis: "⏳", "🔄", "✅", etc.
+* Short forms: "todo", "working", "done", etc.
+
+== Best Practices
+
+1. **Keep task names concise** - Use clear, actionable language
+2. **Use consistent categories** - This helps with organization and filtering
+3. **Set realistic priorities** - Don't make everything critical
+4. **Regular updates** - Keep status current for team visibility
+5. **Use due dates wisely** - Only when truly needed
+6. **Leverage tags** - For cross-cutting concerns and filtering
+
+== Integration Tips
+
+The todo visualization integrates well with:
+
+* Project management workflows
+* Sprint planning documents
+* Team status reports
+* Personal productivity tracking
+* Documentation of development processes
+
+Use the CSV export feature to integrate with external project management tools and track progress over time.

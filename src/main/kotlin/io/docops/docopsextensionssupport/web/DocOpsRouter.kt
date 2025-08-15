@@ -23,6 +23,7 @@ import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
+import io.docops.docopsextensionssupport.todo.TodoHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.github.sercasti.tracing.Traceable
@@ -90,6 +91,7 @@ class DocOpsRouter (
             "domain" -> DomainHandler(csvResponse)
             "mermaid" -> DocOpsMermaid(csvResponse)
             "gherkin" -> GherkinHandler(csvResponse)
+            "todo" -> TodoHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }
