@@ -114,8 +114,9 @@ fun calculateLuminance(rgb: Triple<Int, Int, Int>): Double {
 fun determineTextColor(hexColor: String): String {
     val rgb = hexToRgb(hexColor)
     val luminance = calculateLuminance(Triple(rgb["r"]!!, rgb["g"]!!, rgb["b"]!!))
-    return if (luminance < 0.5) "#000000" else "#FCFCFC"
+    return if (luminance < 0.5) "#FCFCFC" else "#000000"
 }
+
 
 @Serializable
 class SVGColor(
