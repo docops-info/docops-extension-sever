@@ -199,69 +199,15 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 
 
 
-[plantuml, comp,svg]
+[plantuml, comp,format=svg]
 ----
 @startuml
+!theme docops from plantuml/themes
 !pragma layout teoz
 skinparam linetype ortho
-' iOS Modern Theme
-skinparam backgroundColor #F2F2F7
-skinparam DefaultFontName SF Pro Display
-skinparam DefaultFontSize 11
 
-' iOS Color Palette
-skinparam component {
-    BackgroundColor white
-    BorderColor #D1D1D6
-    FontColor #1C1C1E
-    FontStyle bold
-    BorderThickness 1
-}
 
-skinparam package {
-    BackgroundColor #F2F2F7
-    BorderColor #C7C7CC
-    FontColor #1C1C1E
-    FontStyle bold
-}
-
-skinparam node {
-    BackgroundColor #E3F2FD
-    BorderColor #007AFF
-    FontColor #1C1C1E
-    FontStyle bold
-}
-
-skinparam database {
-    BackgroundColor #E8F5E8
-    BorderColor #34C759
-    FontColor #1C1C1E
-    FontStyle bold
-}
-
-skinparam interface {
-    BackgroundColor #FFF3E0
-    BorderColor #FF9500
-    FontColor #1C1C1E
-    FontStyle bold
-}
-
-skinparam arrow {
-    Color #007AFF
-    FontColor #1C1C1E
-    FontSize 10
-    Thickness 2
-}
-
-skinparam roundcorner 8
-skinparam shadowing true
-skinparam participant {
-    BackgroundColor #FFFFFF
-    BorderColor #E5E5EA
-    BorderThickness 1
-}
-
-title DocOps Extension Server Architecture \n Modern Visualization Platform for AsciiDoctor
+title DocOps Extension Server Architecture \n <color:#8E8E93><size:13>Modern Visualization Platform for AsciiDoctor</size></color>
 
 
 ' External Systems
@@ -478,59 +424,9 @@ sequenceDiagram
 [plantuml,badge,svg]
 ----
 @startuml
-' iOS Modern Theme
-skinparam backgroundColor #F2F2F7
-skinparam DefaultFontName "SF Pro Display"
-skinparam DefaultFontSize 11
-skinparam actorStyle awesome
+!theme docops from plantuml/themes
 
-' iOS Color Palette
-skinparam participant {
-    BackgroundColor white
-    BorderColor #D1D1D6
-    FontColor #1C1C1E
-    FontStyle bold
-    Padding 10
-}
-
-skinparam sequence {
-    ArrowColor #007AFF
-    ArrowFontColor #1C1C1E
-    ArrowFontSize 10
-    ArrowThickness 2
-    LifeLineBorderColor #D1D1D6
-    LifeLineBackgroundColor #F2F2F7
-}
-
-skinparam actor {
-    BackgroundColor #007AFF
-    BorderColor #0051D0
-    FontColor #111111
-    FontStyle bold
-}
-
-skinparam note {
-    BackgroundColor #FFCC02
-    BorderColor #FFB000
-    FontColor #1C1C1E
-    FontSize 9
-}
-
-skinparam sequenceGroup {
-    BackgroundColor #FFFFFF
-    BorderColor #C7C7CC
-    FontColor #1C1C1E
-    FontStyle bold
-}
-skinparam roundcorner 10
-skinparam shadowing true
-skinparam participant {
-    BackgroundColor #FFFFFF
-    BorderColor #E5E5EA
-    BorderThickness 1
-}
-
-title DocOps Badge Generation Flow
+title DocOps Badge Generation Flow\n<color:#8E8E93><size:13>SpringBoot Architecture</size></color>
 
 actor Client as C
 participant "DocOpsRouter" as Router #E3F2FD
@@ -618,7 +514,10 @@ deactivate Router
 @enduml
 ----
 
+== Reference
 
+Interested in the DocOps Plantuml Theme? Check out the following link:
+link:plantuml/themes/puml-theme-docops.puml[DocOps PlantUML Themes]
 
 [docops,buttons]
 ----

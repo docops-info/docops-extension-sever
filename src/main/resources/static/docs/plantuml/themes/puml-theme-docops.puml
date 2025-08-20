@@ -1,0 +1,324 @@
+!$THEME = "docops"
+
+''
+'' Modern iOS Style PlantUML Theme
+'' Inspired by iOS Human Interface Guidelines
+''
+
+'' iOS Color Palette
+!define iOS_Blue #007AFF
+!define iOS_Green #34C759
+!define iOS_Orange #FF9500
+!define iOS_Red #FF3B30
+!define iOS_Purple #AF52DE
+!define iOS_Gray #8E8E93
+!define iOS_LightGray #F2F2F7
+!define iOS_DarkGray #1C1C1E
+!define iOS_White #FFFFFF
+!define iOS_SystemGray2 #AEAEB2
+!define iOS_SystemGray3 #C7C7CC
+!define iOS_SystemGray4 #D1D1D6
+!define iOS_SystemGray5 #E5E5EA
+!define iOS_SystemGray6 #F2F2F7
+
+'' Global Settings
+skinparam backgroundColor iOS_SystemGray6
+skinparam defaultFontName "SF Pro Display"
+skinparam defaultFontSize 13
+skinparam defaultTextAlignment center
+skinparam roundcorner 12
+skinparam shadowing false
+skinparam linetype ortho
+skinparam padding 3
+skinparam minClassWidth 100
+skinparam nodesep 15
+skinparam ranksep 20
+
+'' Arrow Settings
+skinparam arrow {
+    Color iOS_SystemGray2
+    Thickness 2
+}
+
+'' Activity Diagram - Modern Card Style
+skinparam activity {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray5
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 13
+    FontStyle plain
+    StartColor iOS_Green
+    EndColor iOS_Red
+    BarColor iOS_Blue
+}
+
+skinparam activityDiamond {
+    BackgroundColor iOS_Blue
+    BorderColor iOS_Blue
+    FontColor iOS_White
+    FontSize 12
+    FontStyle bold
+}
+
+skinparam activityStart {
+    Color iOS_Green
+}
+
+skinparam activityEnd {
+    Color iOS_Red
+}
+
+skinparam activityBar {
+    Color iOS_Blue
+}
+
+'' Sequence Diagram - Clean iOS Style with darker dashed lines
+skinparam sequence {
+    ArrowColor iOS_DarkGray
+    ArrowFontColor iOS_DarkGray
+    ArrowFontSize 12
+    ArrowThickness 2
+    LifeLineBorderColor iOS_DarkGray
+    LifeLineBackgroundColor iOS_White
+    ParticipantBorderColor iOS_SystemGray4
+    ParticipantBackgroundColor iOS_White
+    ParticipantFontColor iOS_DarkGray
+    ParticipantFontSize 14
+    ParticipantFontStyle bold
+    ActorBorderColor iOS_SystemGray4
+    ActorBackgroundColor iOS_White
+    ActorFontColor iOS_DarkGray
+    ActorFontSize 14
+    BoxBorderColor iOS_SystemGray4
+    BoxBackgroundColor iOS_SystemGray6
+    BoxFontColor iOS_DarkGray
+}
+
+skinparam actorStyle awesome
+
+'' Use Case - Modern Rounded Style
+skinparam usecase {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+    StereotypeFontColor iOS_Gray
+}
+
+'' Actor - Better contrast with white background
+skinparam actor {
+    BackgroundColor iOS_White
+    BorderColor iOS_Blue
+    BorderThickness 2
+    FontColor iOS_Blue
+    FontSize 12
+    FontStyle bold
+}
+
+
+'' Class Diagram - Card-based Design
+skinparam class {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+    HeaderBackgroundColor iOS_SystemGray6
+    AttributeFontColor iOS_DarkGray
+    AttributeFontSize 11
+    StereotypeFontColor iOS_Gray
+    ArrowColor iOS_SystemGray2
+}
+
+skinparam interface {
+    BackgroundColor iOS_White
+    BorderColor iOS_Blue
+    BorderThickness 2
+    FontColor iOS_Blue
+    FontSize 12
+    FontStyle bold
+}
+
+skinparam abstract {
+    BackgroundColor iOS_SystemGray6
+    BorderColor iOS_SystemGray3
+    FontColor iOS_DarkGray
+    FontStyle italic
+}
+
+'' State Diagram - iOS Button Style
+skinparam state {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+    StartColor iOS_Green
+    EndColor iOS_Red
+    AttributeFontColor iOS_Gray
+    AttributeFontSize 10
+}
+
+'' Object Diagram
+skinparam object {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    FontColor iOS_DarkGray
+    FontSize 12
+    AttributeFontColor iOS_Gray
+    AttributeFontSize 11
+}
+
+'' Component Diagram - Modern Container Style
+skinparam component {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+    InterfaceBackgroundColor iOS_Blue
+    InterfaceBorderColor iOS_Blue
+    InterfaceFontColor iOS_White
+}
+
+
+skinparam package {
+    BackgroundColor iOS_SystemGray6
+    BorderColor iOS_SystemGray3
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 13
+    FontStyle bold
+}
+
+skinparam folder {
+    BackgroundColor iOS_Orange
+    BorderColor iOS_Orange
+    FontColor iOS_White
+    FontSize 12
+}
+
+skinparam file {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    FontColor iOS_DarkGray
+    FontSize 11
+}
+
+'' Node and Cloud - Infrastructure Style  
+skinparam node {
+    BackgroundColor iOS_Purple
+    BorderColor iOS_Purple
+    FontColor iOS_SystemGray2
+    FontSize 12
+    FontStyle bold
+}
+
+
+skinparam cloud {
+    BackgroundColor iOS_Blue
+    BorderColor iOS_Blue
+    FontColor iOS_White
+    FontSize 12
+}
+
+skinparam database {
+    BackgroundColor iOS_Green
+    BorderColor iOS_Green
+    FontColor iOS_White
+    FontSize 12
+}
+
+'' Notes - iOS Alert Style
+skinparam note {
+    BackgroundColor #FFF3CD
+    BorderColor iOS_Orange
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 11
+}
+
+'' Partition - iOS Section Style
+skinparam partition {
+    BackgroundColor iOS_SystemGray6
+    BorderColor iOS_SystemGray3
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 13
+    FontStyle bold
+}
+
+'' Swimlane - Clean Separation
+skinparam swimlane {
+    BackgroundColor iOS_SystemGray6
+    BorderColor iOS_SystemGray3
+    BorderThickness 1
+    TitleFontColor iOS_DarkGray
+    TitleFontSize 14
+    TitleFontStyle bold
+}
+
+'' Title and Footer - Typography Hierarchy
+skinparam title {
+    FontColor iOS_DarkGray
+    FontSize 18
+    FontStyle bold
+}
+
+skinparam footer {
+    FontColor iOS_Gray
+    FontSize 10
+}
+
+skinparam header {
+    FontColor iOS_Gray
+    FontSize 10
+}
+
+'' Legend - Subtle Information
+skinparam legend {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 11
+}
+
+'' Stereotype Colors - Semantic Meaning
+skinparam stereotype {
+    ABackgroundColor iOS_Blue
+    AFontColor iOS_White
+    CBackgroundColor iOS_Green  
+    CFontColor iOS_White
+    EBackgroundColor iOS_Red
+    EFontColor iOS_White
+    IBackgroundColor iOS_Purple
+    IFontColor iOS_White
+    NBackgroundColor iOS_Orange
+    NFontColor iOS_White
+}
+
+'' Mindmap - Modern Hierarchy
+skinparam mindmap {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+    RootBackgroundColor iOS_Blue
+    RootFontColor iOS_White
+}
+
+'' Wbs - Clean Structure
+skinparam wbs {
+    BackgroundColor iOS_White
+    BorderColor iOS_SystemGray4
+    BorderThickness 1
+    FontColor iOS_DarkGray
+    FontSize 12
+}
+
+skinparam roundcorner 8
+skinparam shadowing true
