@@ -3,6 +3,7 @@
 ''
 '' Modern iOS Style PlantUML Theme
 '' Inspired by iOS Human Interface Guidelines
+'' Enhanced with C4 Model Support
 ''
 
 '' iOS Color Palette
@@ -21,6 +22,14 @@
 !define iOS_SystemGray5 #E5E5EA
 !define iOS_SystemGray6 #F2F2F7
 
+'' C4 Model Color Palette
+!define C4_PersonColor #08427B
+!define C4_SoftwareSystemColor #1168BD
+!define C4_ContainerColor #438DD5
+!define C4_ComponentColor #85BBF0
+!define C4_ExternalPersonColor #999999
+!define C4_ExternalSystemColor #999999
+
 '' Global Settings
 skinparam backgroundColor iOS_SystemGray6
 skinparam defaultFontName Helvetica
@@ -37,6 +46,164 @@ skinparam ranksep 20
 '' Arrow Settings
 skinparam arrow {
     Color iOS_SystemGray2
+    Thickness 2
+}
+
+'' C4 Model Specific Styling
+'' Person (Context Level)
+skinparam rectangle<<person>> {
+    BackgroundColor C4_PersonColor
+    BorderColor C4_PersonColor
+    FontColor iOS_White
+    FontSize 14
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 12
+}
+
+'' External Person
+skinparam rectangle<<external_person>> {
+    BackgroundColor C4_ExternalPersonColor
+    BorderColor C4_ExternalPersonColor
+    FontColor iOS_White
+    FontSize 14
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 12
+}
+
+'' Software System (Context Level)
+skinparam rectangle<<system>> {
+    BackgroundColor C4_SoftwareSystemColor
+    BorderColor C4_SoftwareSystemColor
+    FontColor iOS_White
+    FontSize 14
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 12
+}
+
+'' External Software System
+skinparam rectangle<<external_system>> {
+    BackgroundColor C4_ExternalSystemColor
+    BorderColor C4_ExternalSystemColor
+    FontColor iOS_White
+    FontSize 14
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 12
+}
+
+'' Container (Container Level)
+skinparam rectangle<<container>> {
+    BackgroundColor C4_ContainerColor
+    BorderColor C4_ContainerColor
+    FontColor iOS_White
+    FontSize 13
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 11
+}
+
+'' External Container
+skinparam rectangle<<external_container>> {
+    BackgroundColor C4_ExternalSystemColor
+    BorderColor C4_ExternalSystemColor
+    FontColor iOS_White
+    FontSize 13
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 11
+}
+
+'' Component (Component Level)
+skinparam rectangle<<component>> {
+    BackgroundColor C4_ComponentColor
+    BorderColor C4_ComponentColor
+    FontColor iOS_DarkGray
+    FontSize 12
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_DarkGray
+    StereotypeFontSize 10
+}
+
+'' External Component
+skinparam rectangle<<external_component>> {
+    BackgroundColor C4_ExternalSystemColor
+    BorderColor C4_ExternalSystemColor
+    FontColor iOS_White
+    FontSize 12
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 10
+}
+
+'' Database (all levels)
+skinparam rectangle<<database>> {
+    BackgroundColor iOS_Green
+    BorderColor iOS_Green
+    FontColor iOS_White
+    FontSize 12
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 10
+}
+
+'' Queue/Message Bus
+skinparam rectangle<<queue>> {
+    BackgroundColor iOS_Orange
+    BorderColor iOS_Orange
+    FontColor iOS_White
+    FontSize 12
+    FontStyle bold
+    BorderThickness 2
+    StereotypeFontColor iOS_White
+    StereotypeFontSize 10
+}
+
+'' C4 Boundary Styling
+skinparam package<<system_boundary>> {
+    BackgroundColor transparent
+    BorderColor C4_SoftwareSystemColor
+    BorderThickness 2
+    FontColor C4_SoftwareSystemColor
+    FontSize 14
+    FontStyle bold
+    BorderStyle dashed
+}
+
+skinparam package<<container_boundary>> {
+    BackgroundColor transparent
+    BorderColor C4_ContainerColor
+    BorderThickness 2
+    FontColor C4_ContainerColor
+    FontSize 13
+    FontStyle bold
+    BorderStyle dashed
+}
+
+skinparam package<<enterprise_boundary>> {
+    BackgroundColor iOS_SystemGray6
+    BorderColor iOS_DarkGray
+    BorderThickness 3
+    FontColor iOS_DarkGray
+    FontSize 16
+    FontStyle bold
+    BorderStyle solid
+}
+
+'' C4 Relationship Styling
+skinparam arrow {
+    Color iOS_DarkGray
     Thickness 2
 }
 
@@ -208,7 +375,7 @@ skinparam file {
     FontSize 11
 }
 
-'' Node and Cloud - Infrastructure Style  
+'' Node and Cloud - Infrastructure Style
 skinparam node {
     BackgroundColor iOS_Purple
     BorderColor iOS_Purple
@@ -291,7 +458,7 @@ skinparam legend {
 skinparam stereotype {
     ABackgroundColor iOS_Blue
     AFontColor iOS_White
-    CBackgroundColor iOS_Green  
+    CBackgroundColor iOS_Green
     CFontColor iOS_White
     EBackgroundColor iOS_Red
     EFontColor iOS_White

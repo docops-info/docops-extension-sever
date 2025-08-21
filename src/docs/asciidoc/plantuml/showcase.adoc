@@ -651,5 +651,84 @@ Deploy -down-> Operation
 @enduml
 ----
 
+== C4
+
+[plantuml,c4100, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context Diagram for Online Store
+
+Person(customer, "Customer", "A customer browsing and purchasing products online.")
+System(online_store, "Online Store", "Allows customers to browse products, place orders, and manage accounts.")
+System_Ext(payment_gateway, "Payment Gateway", "Processes credit card payments securely.")
+System_Ext(shipping_service, "Shipping Service", "Handles the delivery of ordered products.")
+
+Rel(customer, online_store, "Uses")
+Rel(online_store, payment_gateway, "Processes payments using")
+Rel(online_store, shipping_service, "Sends order details to")
+
+@enduml
+----
+
+[plantuml,c4101, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include <C4/C4_Context>
+
+title System Context Diagram
+
+Person(customer, "Customer", "Uses the system")
+System(webapp, "Web Application", "Provides functionality")
+System_Ext(email, "Email System", "Sends emails")
+
+Rel(customer, webapp, "Uses")
+Rel(webapp, email, "Sends email via")
+@enduml
+----
+
+[plantuml,c4102, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include <C4/C4_Component>
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
+
+LAYOUT_WITH_LEGEND()
+
+title CRM Order Management System - Component Diagram
+
+System_Boundary(CRMSystem, "CRM Order Management System") {
+    Container(api, "API", "ASP.NET Core", "Handles incoming HTTP requests.") {
+        Component(orderController, "OrderController", "Handles order-related endpoints.")
+        Component(productController, "ProductController", "Handles product-related endpoints.")
+        Component(paymentService, "PaymentService", "Processes payments using external payment gateway.")
+        Component(orderService, "OrderService", "Manages the business logic of order processing.")
+        Component(productService, "ProductService", "Manages product catalog and inventory.")
+        Component(orderRepository, "OrderRepository", "Handles CRUD operations for orders.")
+        Component(productRepository, "ProductRepository", "Handles CRUD operations for products.")
+    }
+    ContainerDb(database, "Orders Database", "SQL Database", "Stores order and product data")
+}
+
+System_Ext(paymentGateway, "Payment Gateway", "External Service", "Handles payment transactions")
+
+Rel(orderController, orderService, "Processes order requests", $tags="sync")
+Rel(productController, productService, "Processes product requests", $tags="sync")
+Rel(orderService, orderRepository, "Stores orders in the database", $tags="sync")
+Rel(productService, productRepository, "Stores products in the database", $tags="sync")
+Rel(orderRepository, database, "Reads/Writes order data", $tags="sync")
+Rel(productRepository, database, "Reads/Writes product data", $tags="sync")
+Rel(orderService, paymentGateway, "Processes payments through", $tags="sync")
+
+@enduml
+
+----
+
 == Download Theme
 Our theme is link:themes/puml-theme-docops.puml[here]
