@@ -203,8 +203,6 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 ----
 @startuml
 !theme docops from plantuml/themes
-!pragma layout teoz
-skinparam linetype ortho
 
 
 title DocOps Extension Server Architecture \n <color:#8E8E93><size:13>Modern Visualization Platform for AsciiDoctor</size></color>
@@ -244,6 +242,7 @@ package "DocOps Extension Server" as server #F2F2F7 {
         component "SVG Builders" as svg_builders #F3E5F5
     }
 
+
     ' Support Services
     package "Support Services" as support #FFF8E1 {
         component "SVG Support\nUtilities" as svg_support #FFF8E1
@@ -268,6 +267,7 @@ database "Static Resources" as static #E8F5E8 {
     component "JavaScript Assets" as js_assets
     component "Image Assets" as image_assets
 }
+
 
 ' Client/Browser
 node "Web Browser\nClient" as browser #E3F2FD
