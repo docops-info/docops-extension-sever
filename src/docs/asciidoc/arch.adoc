@@ -17,6 +17,9 @@ include::shared/buttons.adoc[]
 
 The DocOps Extension Server represents a transformative approach to technical documentation, bridging the gap between static documentation and dynamic, interactive visualizations. Built as a comprehensive Spring Boot microservice, this platform extends AsciiDoctor's capabilities by providing on-demand SVG generation for over 15 different visualization types, from simple pie charts to complex architectural diagrams.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Business Value Proposition
 
 **Enhanced Documentation Experience**: Traditional technical documentation often struggles to convey complex data relationships and system architectures effectively. The DocOps Extension Server transforms static text into compelling visual narratives through charts, diagrams, scorecards, and interactive elements that make information more accessible and actionable.
@@ -24,6 +27,9 @@ The DocOps Extension Server represents a transformative approach to technical do
 **Developer Productivity**: By integrating seamlessly with existing AsciiDoctor workflows, the platform eliminates the need for external diagramming tools, manual chart creation, or image management. Developers can embed sophisticated visualizations directly within their documentation source code, maintaining consistency and version control.
 
 **Scalability and Performance**: The server-side architecture ensures that complex visualizations are generated efficiently without burdening client systems. Built-in compression, caching, and performance monitoring enable the platform to handle enterprise-scale documentation needs while maintaining sub-second response times.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Technical Innovation
 
@@ -33,6 +39,9 @@ The DocOps Extension Server represents a transformative approach to technical do
 
 **Compression and Encoding**: The system handles compressed and Base64-encoded payloads from AsciiDoctor block processors, enabling efficient data transmission while maintaining security and performance standards.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Strategic Impact
 
 **Documentation as Code**: The platform reinforces the "docs-as-code" philosophy by allowing visualizations to be defined in the same repositories as the code they document, ensuring documentation stays current and accurate.
@@ -40,6 +49,9 @@ The DocOps Extension Server represents a transformative approach to technical do
 **Cross-Platform Compatibility**: SVG output ensures visualizations work consistently across web browsers, PDF exports, mobile devices, and print media without requiring additional plugins or dependencies.
 
 **Enterprise Integration**: Built on Spring Boot with comprehensive metrics, monitoring, and event publishing, the platform integrates seamlessly into enterprise DevOps pipelines and monitoring systems.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Key Metrics and Capabilities
 
@@ -52,11 +64,17 @@ The DocOps Extension Server represents a transformative approach to technical do
 
 The DocOps Extension Server positions organizations to create documentation that not only informs but engages, making complex technical concepts accessible to both technical and non-technical stakeholders while maintaining the efficiency and consistency required for enterprise-scale operations.
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Architecture Overview
 
 image::arch.svg[DocOps Extension Server Architecture,800,600]
 
 The DocOps Extension Server follows a layered architecture pattern designed for extensibility, performance, and maintainability. The system processes requests from AsciiDoctor documents through a series of well-defined layers, each responsible for specific aspects of the visualization generation pipeline.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Core Components
 
@@ -67,12 +85,18 @@ The web layer serves as the primary interface for both programmatic and interact
 * **DocOpsRouter**: Central routing component that handles request processing, payload decompression, and response formatting
 * **Web Controllers**: Additional endpoints for testing, configuration, and administrative functions
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Handler Layer
 The handler layer implements the strategy pattern for extensible visualization processing:
 
 * **Pluggable Handlers**: Each visualization type (pie, scorecard, badge, etc.) has a dedicated handler
 * **Standardized Interface**: All handlers implement the `DocOpsHandler` interface for consistency
 * **Dynamic Registration**: Handlers are automatically discovered and registered through Spring's dependency injection
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Visualization Makers
 The core business logic layer responsible for SVG generation:
@@ -82,6 +106,9 @@ The core business logic layer responsible for SVG generation:
 * **Template Engine**: Reusable SVG templates and component libraries
 * **Color Management**: Sophisticated color palette and gradient management
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Support Services
 Cross-cutting concerns and utilities:
 
@@ -90,6 +117,9 @@ Cross-cutting concerns and utilities:
 * **Performance Monitoring**: Metrics collection and event publishing
 * **Configuration Management**: Centralized configuration for all visualization types
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Spring Boot Infrastructure
 The foundational layer providing enterprise-grade capabilities:
 
@@ -97,6 +127,9 @@ The foundational layer providing enterprise-grade capabilities:
 * **Event Publishing**: Performance metrics and usage analytics
 * **Configuration Management**: Externalized configuration and feature flags
 * **Monitoring and Health Checks**: Built-in health endpoints and metrics exposure
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Data Flow Architecture
 
@@ -109,12 +142,18 @@ The foundational layer providing enterprise-grade capabilities:
 5. **Visualization Generation**: Handler processes data and generates SVG markup
 6. **Response Delivery**: SVG returned to AsciiDoctor for embedding in the document
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Performance Optimizations
 
 * **Compression**: Reduces network overhead for complex visualizations
 * **Caching**: Response caching for frequently requested visualizations
 * **Metrics Collection**: Real-time performance monitoring and bottleneck identification
 * **Event-Driven Architecture**: Asynchronous processing for non-critical operations
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Extensibility Model
 
@@ -127,12 +166,18 @@ The platform's architecture makes adding new visualization types straightforward
 3. **Registration**: Spring Boot automatically discovers and registers the new handler
 4. **Integration**: No changes required to existing components
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Configuration and Customization
 
 * **Theme System**: Centralized theme management supporting custom color schemes
 * **Template Library**: Reusable SVG components and templates
 * **Format Support**: Flexible input format support (JSON, tabular, custom formats)
 * **Output Customization**: Configurable scaling, styling, and interaction behaviors
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Security and Reliability
 
@@ -141,15 +186,25 @@ The platform's architecture makes adding new visualization types straightforward
 * **Compression Security**: Safe decompression with size limits and validation
 * **Output Sanitization**: SVG output sanitization to prevent XSS vulnerabilities
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Error Handling
 * **Graceful Degradation**: Fallback mechanisms for failed visualizations
 * **Comprehensive Logging**: Detailed error tracking and debugging information
 * **Circuit Breakers**: Protection against cascading failures
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Monitoring and Observability
+
 * **Performance Metrics**: Response times, throughput, and error rates
 * **Usage Analytics**: Visualization type popularity and usage patterns
 * **Health Monitoring**: System health checks and dependency validation
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Technology Stack
 
@@ -159,11 +214,17 @@ The platform's architecture makes adding new visualization types straightforward
 * **Jakarta EE**: Enterprise Java specifications for web services
 * **SVG**: Scalable vector graphics for visualization output
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Supporting Technologies
 * **Kotlinx Serialization**: JSON processing and data serialization
 * **Spring MVC**: Web layer and REST API implementation
 * **Micrometer**: Metrics collection and monitoring
 * **SLF4J**: Logging abstraction and implementation
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Deployment and Operations
 
@@ -172,10 +233,16 @@ The platform's architecture makes adding new visualization types straightforward
 * **Kubernetes Ready**: Designed for cloud-native deployment patterns
 * **Health Endpoints**: Built-in health checks for orchestration platforms
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Configuration Management
 * **Externalized Configuration**: Environment-specific configuration support
 * **Feature Flags**: Runtime feature toggling and A/B testing support
 * **Dynamic Reconfiguration**: Hot-reloading of configuration changes
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Monitoring Integration
 * **Metrics Export**: Prometheus-compatible metrics endpoint
@@ -184,7 +251,8 @@ The platform's architecture makes adding new visualization types straightforward
 
 This architecture provides a solid foundation for the DocOps Extension Server while maintaining the flexibility to evolve with changing requirements and new visualization needs. The clean separation of concerns, extensive use of dependency injection, and event-driven design patterns ensure the system remains maintainable and extensible as it grows.
 
-
+[.back-to-top]
+<<top, 🔝>>
 
 == Architecture Layers
 
@@ -195,6 +263,9 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 5. *Support Services*: Utilities and helpers
 6. *Spring Boot Infrastructure*: DI, events, metrics
 7. *Static Resources*: Web assets
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Component Diagram
 
@@ -349,6 +420,9 @@ end note
 @enduml
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Example Badge Sequence
 
 === Mermaid
@@ -419,6 +493,9 @@ sequenceDiagram
 
     Router-->>-C: ResponseEntity(svg, headers, 200)
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Plantuml
 
@@ -515,10 +592,16 @@ deactivate Router
 @enduml
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Reference
 
 Interested in the DocOps Plantuml Theme? Check out the following link:
 link:plantuml/showcase.html[DocOps PlantUML Themes]
+
+[.back-to-top]
+<<top, 🔝>>
 
 [docops,buttons]
 ----

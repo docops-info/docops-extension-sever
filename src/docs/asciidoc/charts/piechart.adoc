@@ -1,7 +1,7 @@
 = DocOps Pie Charts
 :imagesdir: images
 
-
+[[top]]
 == Introduction
 
 The DocOps Pie Chart Extension allows you to create visually appealing pie charts in your AsciiDoctor documents. Pie charts are useful for showing the proportion of different categories within a whole and comparing relative sizes of data.
@@ -12,6 +12,9 @@ The extension supports two different pie chart implementations:
 
 * `pieslice` - Traditional pie charts with customizable slices
 * `pie` - Modern, animated pie charts with percentage indicators
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Basic Concepts
 
@@ -36,6 +39,9 @@ Each type can be displayed in various styles, including:
 * Percentage labels
 * Dark mode support for better visibility in dark-themed documents.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Pie Chart Components
 
 A pie chart or donut chart includes:
@@ -43,6 +49,9 @@ A pie chart or donut chart includes:
 * A title
 * A series of slices, each with a label and value
 * Optional configuration parameters for visual appearance
+
+[.back-to-top]
+<<top, 🔝>>
 
 == AsciiDoctor Syntax for Pie Charts
 
@@ -83,6 +92,10 @@ Product E | 10
 
 The macro processes the configuration and data to generate an SVG representation of the pie chart that is embedded in your document.
 
+[.back-to-top]
+<<top, 🔝>>
+
+
 === Parsing Format
 
 Pie charts use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:
@@ -92,6 +105,8 @@ Pie charts use the unified parsing framework provided by the DocOps Extension Se
 
 For more information about the parsing framework, see the xref:../parsing.adoc[Parsing Utilities] documentation
 
+[.back-to-top]
+<<top, 🔝>>
 
 === Configuration Parameters
 
@@ -106,6 +121,9 @@ The following configuration parameters are available:
 * `donut` (optional): Whether to display as a donut chart (default: false)
 * `colors` (optional): A comma-separated list of custom colors for the chart
 * `darkMode` (optional): Whether to use dark mode styling (default: false)
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Data Format
 
@@ -122,6 +140,9 @@ Where:
 * `Color` (optional) is a custom color for this specific slice (e.g., #ff5733)
 
 If you include configuration parameters, you must separate them from the data with a line containing three dashes (`---`).
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Examples
 
@@ -150,6 +171,9 @@ Product C | 20
 Product D | 15
 Product E | 10
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Pie Chart with Configuration
 
@@ -189,6 +213,9 @@ Product C | 20
 Product D | 15
 Product E | 10
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Pie Chart with Positioning
 
@@ -233,6 +260,9 @@ My Hero Academia | 6.0
 Demon Slayer | 10.0
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Donut Chart Example
 
 You can create donut charts by setting the `donut` parameter to `true`:
@@ -276,6 +306,9 @@ My Hero Academia | 6.0
 Demon Slayer | 10.0
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Custom Colors for Individual Slices
 
 You can specify custom colors for individual slices:
@@ -300,6 +333,9 @@ Product C | 20 | #3357ff
 Product D | 15 | #f3ff33
 Product E | 10 | #ff33f3
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Custom Color Palette
 
@@ -331,6 +367,10 @@ Product C | 20
 Product D | 15
 Product E | 10
 ----
+
+[.back-to-top]
+<<top, 🔝>>
+
 
 === Dark Mode Example
 
@@ -368,6 +408,9 @@ Product D | 15
 Product E | 5
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Interactive Features
 
 Pie charts in the DocOps extension include several interactive features:
@@ -378,9 +421,15 @@ Pie charts in the DocOps extension include several interactive features:
 
 These interactive features enhance the user experience and make it easier to interpret the data in your charts.
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Modern Pie Charts with the `pie` Macro
 
 The `pie` macro provides a modern, animated approach to pie charts. Each pie chart displays a percentage value with a circular progress indicator and a label. Multiple pie charts can be displayed in a row, making it ideal for comparing different metrics.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === AsciiDoctor Syntax for Modern Pie Charts
 
@@ -422,6 +471,9 @@ Electronics | 28
 ----
 ....
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Configuration Parameters
 
 The following configuration parameters are available for the `pie` macro:
@@ -430,6 +482,9 @@ The following configuration parameters are available for the `pie` macro:
 * `outlineColor` (optional): The outline color for the pie charts (default: "#050C9C")
 * `scale` (optional): The scale factor for the chart (default: 1.0)
 * `useDark` (optional): Whether to use dark mode styling (default: false)
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Data Format
 
@@ -447,6 +502,9 @@ Product B | 25
 Where:
 * `Label` is the category name
 * `Percent` is the numerical value for the slice (percentage)
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== JSON Format
 
@@ -471,6 +529,9 @@ You can also use JSON format for more complex configurations:
   }
 }
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Examples
 
@@ -509,6 +570,9 @@ Home Decoration | 15
 Electronics | 28
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Pie Chart with Left Alignment
 
 You can position your chart using the `role` attribute:
@@ -543,6 +607,9 @@ Furniture | 43
 Home Decoration | 15
 Electronics | 28
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Pie Chart with JSON Format
 
@@ -591,6 +658,9 @@ For more complex configurations, you can use JSON format:
 }
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Pie Chart with Dark Mode
 
 You can enable dark mode for better visibility in dark-themed documents:
@@ -626,8 +696,15 @@ Marketing | 18
 Sales | 25
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
+
 == Conclusion
 
 The DocOps Pie Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing pie charts. By using the simple pipe-separated format and configuration parameters, you can create customized charts that match your document's style and purpose.
 
 The extension supports both traditional pie charts (`pieslice`) and modern animated pie charts (`pie`), with various display options including custom colors, interactive features, and dark mode. The dark mode support is particularly useful for documents that are viewed in low-light environments or for users who prefer dark-themed interfaces.
+
+[.back-to-top]
+<<top, 🔝>>

@@ -10,6 +10,9 @@ include::shared/buttons.adoc[]
 
 The DocOpsBlockProcessor is a powerful AsciidoctorJ extension that enables dynamic content generation through server-side processing. It creates interactive SVG visualizations and panels in AsciiDoc documents by connecting to a DocOps server.
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Core Capabilities
 
 === Dynamic Content Generation
@@ -17,6 +20,9 @@ The DocOpsBlockProcessor is a powerful AsciidoctorJ extension that enables dynam
 - **Content Processing**: Processes block content through external services
 - **Multiple Output Formats**: Supports SVG and PDF generation
 - **Compression**: Automatically compresses payload data using GZIP
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Interactive Features
 - **Zoom Controls**: In/out zoom with reset functionality
@@ -35,6 +41,9 @@ The processor uses the `docops` block name with a required `kind` parameter:
 Your content here
 ----
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Configuration Parameters
 
@@ -102,6 +111,9 @@ Your content here
 
 |===
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Interactive Controls
 
 When `controls=true` is enabled, the processor generates an interactive SVG viewer:
@@ -133,6 +145,9 @@ Welcome to #[company-name]
 ----
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Environment Detection
 
 === IntelliJ IDEA Integration
@@ -146,6 +161,9 @@ When `backend=pdf`:
 - Automatically detects PDF output
 - Generates appropriate image links
 - Handles scaling and formatting for print
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Server Configuration
 
@@ -165,10 +183,16 @@ When `backend=pdf`:
 |Enable debug logging (true/false)
 |===
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Server Health Checking
 - Automatic server availability verification via `/api/ping`
 - Graceful degradation when server unavailable
 - Configurable timeouts (20s connection, 1min request)
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Alignment and Styling
 
@@ -192,10 +216,16 @@ Right-aligned content
 ----
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Responsive Design
 - Automatic width adjustment
 - Mobile-friendly controls
 - Scalable vector graphics
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Error Handling
 
@@ -206,6 +236,9 @@ The processor includes comprehensive error handling:
 - **Network Timeouts**: Configurable timeout handling
 - **Compression Errors**: Safe error recovery with logging
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Performance Features
 
 === Optimization
@@ -214,10 +247,16 @@ The processor includes comprehensive error handling:
 - **Server-side Caching**: Caching through URL parameters
 - **Lazy Loading**: On-demand content generation
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Resource Management
 - Connection pooling for HTTP requests
 - Automatic resource cleanup
 - Memory-efficient processing
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Example Usage Scenarios
 
@@ -230,6 +269,9 @@ Start -> Process -> End
 ----
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Interactive Dashboard
 [source,asciidoc]
 ----
@@ -241,6 +283,9 @@ metric3: 92%
 ----
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === PDF-Optimized Content
 [source,asciidoc]
 ----
@@ -250,6 +295,9 @@ Component A --> Component B
 Component B --> Component C
 ----
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Advanced Configuration
 [source,asciidoc]
@@ -268,12 +316,18 @@ Component B --> Component C
 ----
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Integration Requirements
 
 === Prerequisites
 1. **DocOps Server**: Running DocOps server instance
 2. **Network Access**: Server accessible from AsciiDoc processing environment
 3. **AsciidoctorJ**: Compatible with AsciidoctorJ extension framework
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Installation
 The processor is automatically registered through the `PanelsRegistry` extension:
@@ -282,6 +336,9 @@ The processor is automatically registered through the `PanelsRegistry` extension
 ----
 registry.block(DocOpsBlockProcessor::class.java)
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == API Integration
 
@@ -297,6 +354,8 @@ registry.block(DocOpsBlockProcessor::class.java)
 - `filename`: Output filename
 - `scale`: Scaling factor (for PDF output)
 
+[.back-to-top]
+<<top, 🔝>>
 
 === URL Parameters
 The processor constructs URLs with compressed payloads and configuration parameters, enabling server-side processing and caching.
@@ -326,6 +385,9 @@ The processor constructs URLs with compressed payloads and configuration paramet
 |Set `controls=true` and ensure JavaScript is enabled
 |===
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Debug Mode
 Enable debug logging by setting the document attribute:
 
@@ -340,17 +402,27 @@ This enables detailed logging of:
 - Content processing
 - Error details
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Best Practices
 
 === Performance
+
 - Use appropriate `scale` values to balance quality and file size
 - Enable server-side caching for repeated content
 - Consider PDF-specific optimizations for print output
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Accessibility
 - Provide meaningful `title` attributes
 - Use sufficient color contrast in custom themes
 - Ensure keyboard navigation works with interactive controls
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Security
 - Validate server URLs in production environments
@@ -359,5 +431,7 @@ This enables detailed logging of:
 
 This comprehensive documentation covers all aspects of the DocOpsBlockProcessor capabilities, from basic usage to advanced configuration and troubleshooting.
 
+[.back-to-top]
+<<top, 🔝>>
 
 include::shared/buttons.adoc[]

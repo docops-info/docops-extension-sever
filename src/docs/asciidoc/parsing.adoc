@@ -29,6 +29,9 @@ Data Line 3
 
 The configuration section appears before the `---` separator and consists of key-value pairs in the format `key=value`. The data section appears after the separator and can be in various formats depending on the visualization type.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Using ParsingUtils
 
 The `ParsingUtils.parseConfigAndData()` method handles this common pattern:
@@ -39,6 +42,9 @@ val (config, data) = ParsingUtils.parseConfigAndData(content)
 // config is a Map<String, String> of configuration parameters
 // data is a String containing everything after the separator
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Key-Value Parsing
 
@@ -52,6 +58,9 @@ val config = ParsingUtils.parseKeyValuePairs(content)
 // Parse key-value pairs with custom delimiter "="
 val config = ParsingUtils.parseKeyValuePairs(content, "=")
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Table Parsing
 
@@ -70,6 +79,9 @@ The table parser can automatically detect the following delimiters:
 - Pipe-delimited (`|`)
 - Tab-delimited (`\t`)
 - Comma-delimited (CSV)
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Content Sectioning
 
@@ -94,6 +106,9 @@ val config = ParsingUtils.extractConfiguration(content)
 val config = ParsingUtils.extractConfiguration(content, "key:value")
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Benefits of the Unified Parsing Framework
 
 The unified parsing framework provides several benefits:
@@ -104,5 +119,7 @@ The unified parsing framework provides several benefits:
 4. **Error Handling**: The framework includes comprehensive error handling, ensuring robust parsing.
 5. **Performance**: The framework is optimized for performance, handling large content efficiently.
 
+[.back-to-top]
+<<top, 🔝>>
 
 include::shared/buttons.adoc[]

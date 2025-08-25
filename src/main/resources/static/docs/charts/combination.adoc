@@ -1,11 +1,15 @@
 = DocOps Combination Charts
 :imagesdir: images
 
+[[top]]
 == Introduction
 
 The DocOps Combination Chart Extension allows you to create powerful combination charts that display multiple data series using different chart types (bars and lines) on the same chart. This is particularly useful for visualizing related metrics that have different scales or units, such as revenue (bars) and growth rates (lines), or sales volume (bars) and profit margins (lines).
 
 This guide will help you understand the basic concepts of combination charts, how to include them in your AsciiDoctor documents, and provide examples of different types of combination charts with various styling options.
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Basic Concepts
 
@@ -30,6 +34,9 @@ The extension supports various features including:
 * Grid lines and axis ticks for better readability
 * Responsive scaling and sizing options
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Combination Chart Components
 
 A combination chart includes:
@@ -45,6 +52,9 @@ A combination chart includes:
 * Grid lines and axis ticks
 * Support for dual Y-axes when needed
 * Display settings for visual appearance
+
+[.back-to-top]
+<<top, 🔝>>
 
 == AsciiDoctor Syntax for Combination Charts
 
@@ -76,9 +86,15 @@ Growth Rate | LINE | Q2 | 18.2 | #e74c3c | SECONDARY
 
 The macro processes this tabular data and generates an SVG representation of the combination chart that is embedded in your document.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Combination Chart Configuration
 
 The configuration parameters are specified at the beginning of the content, followed by a separator line (`---`), and then the actual chart data.
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Parsing Format
 
@@ -88,6 +104,9 @@ Combination charts use the unified parsing framework provided by the DocOps Exte
 2. **Data Section**: Contains the chart data after the separator in a tabular format
 
 For more information about the parsing framework, see the xref:../parsing.adoc[Parsing Utilities] documentation.
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Configuration Parameters
 
@@ -106,6 +125,9 @@ For more information about the parsing framework, see the xref:../parsing.adoc[P
 * `backgroundColor` (optional): Background color for the chart (default: "#f8f9fa")
 * `scale` (optional): Scaling factor for the chart (default: 1.0)
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Data Format
 
 The data for the combination chart is specified in a tabular format with the following columns:
@@ -122,6 +144,9 @@ Where:
 * `Y-Value` is the numerical value for the data point
 * `Color` (optional) is the hex color code for this series (e.g., #3498db)
 * `Y-Axis` is either "PRIMARY" or "SECONDARY" to specify which Y-axis to use
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Examples
 
@@ -168,6 +193,9 @@ Growth Rate | LINE | Q2 | 18.2 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q3 | 22.8 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q4 | 28.5 | #e74c3c | SECONDARY
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Sales Performance with Multiple Metrics
 
@@ -236,6 +264,9 @@ Customer Satisfaction | LINE | May | 90.2 | #f39c12 | SECONDARY
 Customer Satisfaction | LINE | Jun | 91.5 | #f39c12 | SECONDARY
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 
 ==== Dark Mode & Glass effect
 
@@ -270,6 +301,9 @@ Customer Satisfaction | LINE | Apr | 88.9 | #f39c12 | SECONDARY
 Customer Satisfaction | LINE | May | 90.2 | #f39c12 | SECONDARY
 Customer Satisfaction | LINE | Jun | 91.5 | #f39c12 | SECONDARY
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Website Analytics Dashboard
 
@@ -320,6 +354,9 @@ Bounce Rate | LINE | Week 3 | 38.5 | #e74c3c | SECONDARY
 Bounce Rate | LINE | Week 4 | 41.2 | #e74c3c | SECONDARY
 Bounce Rate | LINE | Week 5 | 36.9 | #e74c3c | SECONDARY
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Dark Mode Example
 
@@ -380,6 +417,9 @@ Response Time | LINE | 12:00 | 250 | #e74c3c | SECONDARY
 Response Time | LINE | 16:00 | 320 | #e74c3c | SECONDARY
 Response Time | LINE | 20:00 | 200 | #e74c3c | SECONDARY
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 ==== Dark Mode  & SmoothLines is false
 
@@ -471,6 +511,10 @@ Profit Margin | LINE | Q3 2024 | 34.5 | #27ae60 | SECONDARY
 Profit Margin | LINE | Q4 2024 | 35.4 | #27ae60 | SECONDARY
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
+
 ==== Dark Mode & Glass Effects
 
 This example shows the combination chart with dark mode and glass effects enabled:
@@ -503,6 +547,9 @@ Profit Margin | LINE | Q2 2024 | 32.7 | #27ae60 | SECONDARY
 Profit Margin | LINE | Q3 2024 | 34.5 | #27ae60 | SECONDARY
 Profit Margin | LINE | Q4 2024 | 35.4 | #27ae60 | SECONDARY
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 
 === Production Metrics with Quality Control
@@ -572,6 +619,9 @@ Defect Rate | LINE | May | 1.2 | #f39c12 | SECONDARY
 Defect Rate | LINE | Jun | 1.4 | #f39c12 | SECONDARY
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Glass Effect Example
 
 This example demonstrates the glass effect styling for bars, which creates a modern, translucent appearance with realistic lighting effects:
@@ -623,11 +673,17 @@ Growth Rate | LINE | Q3 | 22.8 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q4 | 28.5 | #e74c3c | SECONDARY
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Advanced Features
 
 === Dual Y-Axis Support
 
 When your data series have significantly different scales (e.g., revenue in thousands vs. percentages), you can use the dual Y-axis feature by setting `dualYAxis=true` and assigning series to either `PRIMARY` or `SECONDARY` Y-axis.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Glass Effect Support
 
@@ -641,9 +697,15 @@ Enable glass effect styling for bars by setting `useGlass=true` in the configura
 
 The glass effect works well with both light and dark modes and provides a premium, modern appearance for your charts.
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Dark Mode Support
 
 Enable dark mode by setting `useDark=true` in the configuration. This provides better contrast and readability in dark-themed documents.
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Customization Options
 
@@ -654,6 +716,9 @@ Enable dark mode by setting `useDark=true` in the configuration. This provides b
 * **Legend**: Control legend visibility with `showLegend`
 * **Scaling**: Adjust chart size with the `scale` parameter
 
+[.back-to-top]
+<<top, 🔝>>
+
 == Best Practices
 
 1. **Use Dual Y-Axis Wisely**: Only use dual Y-axis when your data series have significantly different scales
@@ -661,6 +726,9 @@ Enable dark mode by setting `useDark=true` in the configuration. This provides b
 3. **Data Clarity**: Ensure your data points are meaningful and contribute to the story you're telling
 4. **Dark Mode**: Consider your document's theme when choosing between light and dark modes
 5. **Legend**: Keep series names concise but descriptive for better legend readability
+
+[.back-to-top]
+<<top, 🔝>>
 
 == Troubleshooting
 
@@ -671,9 +739,15 @@ Enable dark mode by setting `useDark=true` in the configuration. This provides b
 * **Color Issues**: Verify that color codes are valid hex values (e.g., #3498db)
 * **Chart Type**: Ensure chart types are specified as either "BAR" or "LINE" (case-sensitive)
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Tips
 
 * Test your charts with both light and dark modes to ensure readability
 * Use meaningful series names that will display well in the legend
 * Consider the overall document layout when setting chart dimensions
 * Preview your charts to ensure all data is visible and properly scaled
+
+[.back-to-top]
+<<top, 🔝>>

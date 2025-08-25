@@ -1,8 +1,12 @@
 = 👩‍💻*Frontend Integration*
 
+[[top]]
 == *Overview*
 
 The DocOps Extension Server provides a powerful REST API through the `DocOpsRouter` that enables engineers to generate rich visualizations programmatically. This document demonstrates how to integrate with the DocOpsRouter using modern frontend frameworks like Vue.js, React, Angular, and HTMX.
+
+[.back-to-top]
+<<top, 🔝>>
 
 == *DocOpsRouter API*
 
@@ -26,6 +30,9 @@ The DocOpsRouter exposes a REST endpoint at `/api/docops/svg` that accepts vario
 |backend |String |html |Backend type (html, html5)
 |===
 
+[.back-to-top]
+<<top, 🔝>>
+
 ==== Payload Encoding
 
 The payload parameter must be URL-encoded before sending to the server. The DocOpsRouter will:
@@ -43,6 +50,9 @@ The DocOpsRouter supports the following visualization kinds:
 * **Planning**: timeline, roadmap, planner, scorecard, release
 * **Diagrams**: connector, placemat, quadrant, swim
 * **Miscellaneous**: badge, shield, cal, table, metricscard, wordcloud, feature
+
+[.back-to-top]
+<<top, 🔝>>
 
 == *Vue.js Integration*
 
@@ -211,6 +221,9 @@ export default {
 </style>
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Vue Usage Example
 
 [source,vue]
@@ -269,6 +282,9 @@ consequences: Improved developer experience and type safety
 }
 </script>
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == *React Integration*
 
@@ -368,6 +384,9 @@ const DocOpsVisualizer = ({
 export default DocOpsVisualizer;
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === React Usage Example
 
 [source,javascript]
@@ -428,6 +447,9 @@ quarters:
 export default App;
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Custom React Hook
 
 [source,javascript]
@@ -476,6 +498,9 @@ export const useDocOpsRouter = (baseUrl = 'http://localhost:8010') => {
   return { generateSvg, loading, error };
 };
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == *Angular Integration*
 
@@ -532,6 +557,9 @@ export class DocOpsRouterService {
   }
 }
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Angular Component
 
@@ -660,6 +688,9 @@ export class DocOpsVisualizerComponent implements OnInit, OnChanges {
 }
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Angular Usage Example
 
 [source,typescript]
@@ -724,6 +755,10 @@ metrics:
   `;
 }
 ----
+
+[.back-to-top]
+<<top, 🔝>>
+
 
 == *HTMX Integration*
 
@@ -834,6 +869,9 @@ HTMX provides a unique approach by generating URLs server-side and using hyperme
 </body>
 </html>
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Server-Side Handler (Spring Boot)
 
@@ -955,6 +993,9 @@ public class DocOpsHtmxController {
 }
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === HTMX with Client-Side URL Building
 
 For cases where you want to build URLs client-side with HTMX:
@@ -1003,6 +1044,9 @@ document.getElementById('generate-btn').addEventListener('click', function() {
 </div>
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 == *Advanced Integration Patterns*
 
 === Payload Compression
@@ -1028,6 +1072,9 @@ function preparePayload(payload) {
     return encodeURIComponent(payload);
 }
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 === Error Handling Best Practices
 
@@ -1064,6 +1111,9 @@ async function fetchDocOpsVisualization(config) {
 }
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Performance Optimization
 
 [source,javascript]
@@ -1094,6 +1144,9 @@ function setCachedVisualization(config, svg) {
     visualizationCache.set(key, svg);
 }
 ----
+
+[.back-to-top]
+<<top, 🔝>>
 
 == *Security Considerations*
 
@@ -1130,6 +1183,9 @@ function validatePayload(payload, kind) {
 }
 ----
 
+[.back-to-top]
+<<top, 🔝>>
+
 === Content Security Policy
 
 When displaying SVG content, ensure proper CSP headers:
@@ -1155,3 +1211,6 @@ The DocOpsRouter provides a flexible API for generating visualizations across mu
 7. **Cache responses** when appropriate
 
 Whether using Vue.js, React, Angular, HTMX, or Markdown processors, the pattern remains consistent: encode the payload, build the URL with proper parameters, and handle the SVG response appropriately for your chosen framework or platform.
+
+[.back-to-top]
+<<top, 🔝>>
