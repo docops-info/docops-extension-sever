@@ -45,8 +45,9 @@ import kotlin.time.measureTimedValue
 
 @RestController
 @RequestMapping("/api/docops")
-class DocOpsRouter (
-    private val applicationEventPublisher: ApplicationEventPublisher) {
+class DocOpsRouter(
+    private val applicationEventPublisher: ApplicationEventPublisher
+) {
 
 
     private val logger = KotlinLogging.logger {}
@@ -97,20 +98,25 @@ class DocOpsRouter (
     }
 
 
-
     @Traceable
     @GetMapping("/svg")
-    @Timed(value = "docops.router.svg", description="Creating a docops visual using http get", percentiles=[0.5, 0.9])
-    fun getSvg(@RequestParam(value = "kind", required = true) kind: String,
-               @RequestParam(name = "payload") payload: String,
-               @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
-               @RequestParam("type", required = false, defaultValue = "SVG") type: String,
-               @RequestParam("title", required = false, defaultValue = "") title: String,
-               @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
-               @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
-               @RequestParam("docname", defaultValue = "unknown") docname: String,
-               @RequestParam("backend", required = false, defaultValue = "html") backend: String, httpServletRequest: HttpServletRequest
-    ) : ResponseEntity<ByteArray> {
+    @Timed(
+        value = "docops.router.svg",
+        description = "Creating a docops visual using http get",
+        percentiles = [0.5, 0.9]
+    )
+    fun getSvg(
+        @RequestParam(value = "kind", required = true) kind: String,
+        @RequestParam(name = "payload") payload: String,
+        @RequestParam(name = "scale", defaultValue = "1.0") scale: String,
+        @RequestParam("type", required = false, defaultValue = "SVG") type: String,
+        @RequestParam("title", required = false, defaultValue = "") title: String,
+        @RequestParam("useDark", defaultValue = "false") useDark: Boolean,
+        @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
+        @RequestParam("docname", defaultValue = "unknown") docname: String,
+        @RequestParam("backend", required = false, defaultValue = "html") backend: String,
+        httpServletRequest: HttpServletRequest
+    ): ResponseEntity<ByteArray> {
         val context = DocOpsContext(
             scale = scale,
             type = type,
@@ -132,7 +138,7 @@ class DocOpsRouter (
             val decodedPayload = try {
                 URLDecoder.decode(payload, "UTF-8")
             } catch (e: IllegalArgumentException) {
-                logger.warn { "Failed to URL decode payload: ${e.message}" }
+                logger.error(e) { "Failed to URL decode payload: ${e.message}" }
                 payload
             }
 
@@ -153,20 +159,30 @@ class DocOpsRouter (
         eventCounts[kind] = count
 
         // Publish the event with the count
-        applicationEventPublisher.publishEvent(DocOpsExtensionEvent(kind, timing.duration.inWholeMilliseconds, true, count))
+        applicationEventPublisher.publishEvent(
+            DocOpsExtensionEvent(
+                kind,
+                timing.duration.inWholeMilliseconds,
+                true,
+                count
+            )
+        )
         headers.cacheControl = CacheControl.noCache().headerValue
         headers["X-Content-Type-Options"] = "nosniff"
-        headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
-        if(handler is DocOpsMermaid) {
+        headers["Content-Security-Policy"] =
+            "default-src 'self'; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"
+        if (handler is DocOpsMermaid) {
             headers.contentType = MediaType("text", "html", StandardCharsets.UTF_8)
         } else {
             headers.contentType = MediaType("image", "svg+xml", StandardCharsets.UTF_8)
         }
 
 
-        return ResponseEntity(timing.value.toByteArray(
-            StandardCharsets.UTF_8
-        ), headers, HttpStatus.OK)
+        return ResponseEntity(
+            timing.value.toByteArray(
+                StandardCharsets.UTF_8
+            ), headers, HttpStatus.OK
+        )
     }
 
     private fun isUrlEncoded(payload: String): Boolean {
@@ -185,7 +201,8 @@ class DocOpsRouter (
             try {
                 URLDecoder.decode(payload, "UTF-8")
             } catch (e: IllegalArgumentException) {
-                logger.warn { "Failed to URL decode payload in decodePayloadIfNeeded: ${e.message}" }
+                logger.warn { "Original Payload $payload" }
+                logger.warn(e) { "Failed to URL decode payload in decodePayloadIfNeeded: ${e.message}" }
                 payload
             }
         } else {
@@ -239,14 +256,14 @@ data class CsvResponse(
     var headers: List<String>,
     var rows: List<List<String>>
 )
+
 fun CsvResponse.update(csvResponse: CsvResponse) {
     this.headers = csvResponse.headers
     this.rows = csvResponse.rows
 }
 
 
-
-val DefaultCsvResponse =  CsvResponse(mutableListOf(), mutableListOf(mutableListOf()))
+val DefaultCsvResponse = CsvResponse(mutableListOf(), mutableListOf(mutableListOf()))
 
 fun CsvResponse.toCsvJsonMetaData(): String {
     val json = Json { encodeDefaults = true }

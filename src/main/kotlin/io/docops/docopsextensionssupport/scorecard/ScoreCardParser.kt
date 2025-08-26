@@ -1,378 +1,131 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+/**
+ * Parser for ScoreCard content blocks.
+ * Expected simple INI-like sections as currently used in ScorecardController default content.
+ * This parser is intentionally minimal to unblock rendering; it can be extended later.
+ */
 class ScoreCardParser {
+    private val log = KotlinLogging.logger {}
 
-    /**
-     * Parses the input string into a MigrationScoreCard object.
-     *
-     * @param input The input string in table format
-     * @return A MigrationScoreCard object
-     */
-    fun parse(input: String): MigrationScoreCard {
-        val sections = splitIntoSections(input)
+    fun parse(payload: String): ScoreCard {
+        val lines = payload.lines()
+        var title = ""
+        var subtitle = ""
+        var initiativeTitle = "BEFORE"
+        var outcomeTitle = "AFTER"
+        val beforeSections: MutableList<BeforeSection> = mutableListOf()
+        val afterSections: MutableList<AfterSection> = mutableListOf()
+        val outcomeItems: MutableList<ScoreCardItem> = mutableListOf()
 
-        // Parse general configuration
-        val config = parseConfig(sections["config"] ?: "")
+        var currentSection: Section? = null
+        var inBefore = false
+        var inAfter = false
 
-        // Parse before section
-        val beforeSection = parseBeforeSection(
-            sections["before"] ?: "",
-            sections["before.items"] ?: "",
-            sections["before.performance"] ?: ""
-        )
+        var currentItemsTitle: String? = null
 
-        // Parse after section
-        val afterSection = parseAfterSection(
-            sections["after"] ?: "",
-            sections["after.items"] ?: "",
-            sections["after.performance"] ?: ""
-        )
-
-        // Parse metrics sections
-        val metricsCategories = parseMetricsCategories(sections)
-
-        // Parse optimizations
-        val optimizations = parseOptimizations(sections["optimizations"] ?: "")
-
-        // Parse summary
-        val summary = parseSummary(sections["summary"] ?: "")
-
-        // Parse team members
-        val teamMembers = parseTeamMembers(sections["team"] ?: "")
-
-        // Create and return the MigrationScoreCard
-        return MigrationScoreCard(
-            title = config["title"] ?: "Migration ScoreCard",
-            subtitle = config["subtitle"] ?: "",
-            headerTitle = config["headerTitle"] ?: "",
-            beforeSection = beforeSection,
-            afterSection = afterSection,
-            scale = config["scale"]?.toFloatOrNull() ?: 1.0f,
-            theme = parseTheme(config),
-            teamMembers = teamMembers
-        )
-    }
-
-    /**
-     * Splits the input string into sections based on the [section] markers.
-     *
-     * @param input The input string
-     * @return A map of section names to section content
-     */
-    private fun splitIntoSections(input: String): Map<String, String> {
-        val lines = input.lines()
-        val sections = mutableMapOf<String, String>()
-        var currentSection = "config"
-        val sectionContent = StringBuilder()
-
-        for (line in lines) {
-            if (line.trim().startsWith("[") && line.trim().endsWith("]")) {
-                // Save the previous section
-                sections[currentSection] = sectionContent.toString().trim()
-
-                // Start a new section - EXTRACT THE SECTION NAME
-                currentSection = line.trim().removeSurrounding("[", "]")
-                sectionContent.clear()
-            } else if (line.trim() == "---") {
-                // Ignore section separators
-                continue
-            } else {
-                sectionContent.append(line).append("\n")
+        fun startBeforeSectionIfNeeded() {
+            if (currentSection !is BeforeSection) {
+                currentSection = BeforeSection()
+                beforeSections.add(currentSection as BeforeSection)
+            }
+        }
+        fun startAfterSectionIfNeeded() {
+            if (currentSection !is AfterSection) {
+                currentSection = AfterSection()
+                afterSections.add(currentSection as AfterSection)
             }
         }
 
-        // Save the last section - THIS IS CRITICAL FOR FOOTER
-        if (currentSection.isNotBlank()) {
-            val content = sectionContent.toString().trim()
-            if (content.isNotBlank()) {
-                sections[currentSection] = content
-            }
-        }
+        lines.forEach { raw ->
+            val line = raw.trim()
+            if (line.isBlank()) return@forEach
+            when {
+                // section toggles
+                line == "[before]" -> { inBefore = true; inAfter = false; currentSection = null }
+                line == "[after]" -> { inAfter = true; inBefore = false; currentSection = null }
 
+                // items blocks
+                line == "[before.items]" -> { inBefore = true; inAfter = false; /* do not start a section yet; wait for === or items */ currentSection = null }
+                line == "[after.items]" -> { inAfter = true; inBefore = false; /* do not start a section yet; wait for === or items */ currentSection = null }
 
-        return sections
-    }
-    /**
-     * Parses the configuration section.
-     *
-     * @param configSection The configuration section content
-     * @return A map of configuration keys to values
-     */
-    private fun parseConfig(configSection: String): Map<String, String> {
-        val config = mutableMapOf<String, String>()
-
-        configSection.lines().forEach { line ->
-            if (line.contains("=")) {
-                val (key, value) = line.split("=", limit = 2)
-                config[key.trim()] = value.trim()
-            }
-        }
-
-        return config
-    }
-
-    /**
-     * Parses the before section.
-     *
-     * @param titleSection The title section content
-     * @param itemsSection The items section content
-     * @param performanceSection The performance section content
-     * @return A BeforeSection object
-     */
-    private fun parseBeforeSection(
-        titleSection: String,
-        itemsSection: String,
-        performanceSection: String
-    ): BeforeSection {
-        val titleLine = titleSection.lines().firstOrNull() ?: "Before"
-        // Parse the title, removing the "title=" prefix if it exists
-        val title = if (titleLine.startsWith("title=")) {
-            titleLine.substring("title=".length)
-        } else {
-            titleLine
-        }
-        val items = parseInfrastructureItems(itemsSection)
-        val performanceBaseline = parsePerformanceMetric(performanceSection)
-
-        return BeforeSection(title, items, performanceBaseline)
-    }
-
-    /**
-     * Parses the after section.
-     *
-     * @param titleSection The title section content
-     * @param itemsSection The items section content
-     * @param performanceSection The performance section content
-     * @return An AfterSection object
-     */
-    private fun parseAfterSection(
-        titleSection: String,
-        itemsSection: String,
-        performanceSection: String
-    ): AfterSection {
-        val titleLine = titleSection.lines().firstOrNull() ?: "After"
-        // Parse the title, removing the "title=" prefix if it exists
-        val title = if (titleLine.startsWith("title=")) {
-            titleLine.substring("title=".length)
-        } else {
-            titleLine
-        }
-        val items = parseInfrastructureItems(itemsSection)
-        val performanceImprovement = parsePerformanceMetric(performanceSection)
-
-        return AfterSection(title, items, performanceImprovement)
-    }
-
-    /**
-     * Parses infrastructure items.
-     *
-     * @param itemsSection The items section content
-     * @return A list of InfrastructureItem objects
-     */
-    private fun parseInfrastructureItems(itemsSection: String): List<InfrastructureItem> {
-        val items = mutableListOf<InfrastructureItem>()
-
-        itemsSection.lines().forEach { line ->
-            if (line.isNotBlank()) {
-                val parts = line.split("|").map { it.trim() }
-                if (parts.size >= 4) {
-                    items.add(
-                        InfrastructureItem(
-                            title = parts[0],
-                            description = parts[1],
-                            status = parts[2],
-                            statusIcon = parts[3]
-                        )
-                    )
+                // group headings within items
+                line.startsWith("=== ") -> {
+                    val heading = line.removePrefix("=== ").trim()
+                    if (inBefore) {
+                        // Always start a NEW BeforeSection for each heading
+                        currentSection = BeforeSection().also {
+                            it.title = heading
+                            beforeSections.add(it)
+                        }
+                    } else if (inAfter) {
+                        // Always start a NEW AfterSection for each heading
+                        currentSection = AfterSection().also {
+                            it.title = heading
+                            afterSections.add(it)
+                        }
+                    }
+                    currentItemsTitle = heading
                 }
-            }
-        }
 
-        return items
-    }
+                // section titles within before/after (header titles for the column, not groups)
+                inBefore && line.startsWith("title=") -> {
+                    initiativeTitle = line.removePrefix("title=").trim()
+                }
+                inAfter && line.startsWith("title=") -> {
+                    outcomeTitle = line.removePrefix("title=").trim()
+                }
 
-    /**
-     * Parses a performance metric.
-     *
-     * @param performanceSection The performance section content
-     * @return A PerformanceMetric object
-     */
-    private fun parsePerformanceMetric(performanceSection: String): PerformanceMetric {
-        val parts = performanceSection.lines().firstOrNull()?.split("|")?.map { it.trim() }
+                // top-level attributes
+                line.startsWith("title=") -> title = line.removePrefix("title=").trim()
+                line.startsWith("subtitle=") -> subtitle = line.removePrefix("subtitle=").trim()
+                line == "---" -> { currentSection = null; currentItemsTitle = null }
 
-        return if (parts != null && parts.size >= 3) {
-            PerformanceMetric(
-                label = parts[0],
-                percentage = parts[1].toIntOrNull() ?: 0,
-                color = parts[2]
-            )
-        } else {
-            PerformanceMetric("Performance", 0, "#cccccc")
-        }
-    }
-
-    /**
-     * Parses metrics categories.
-     *
-     * @param sections The map of all sections
-     * @return A list of MetricCategory objects
-     */
-    private fun parseMetricsCategories(sections: Map<String, String>): List<MetricCategory> {
-        val categories = mutableListOf<MetricCategory>()
-
-        // Find all metrics sections (not metrics.items)
-        val metricsSections = sections.filter { it.key.startsWith("metrics") && !it.key.endsWith(".items") }
-
-        for ((sectionKey, sectionContent) in metricsSections) {
-            if (sectionKey == "metrics") {
-                // Parse category header: "Test Metrics | #3498db"
-                val lines = sectionContent.split("\n").filter { it.isNotBlank() }
-                for (line in lines) {
+                // item lines
+                line.contains("|") && (inBefore || inAfter) -> {
                     val parts = line.split("|").map { it.trim() }
-                    if (parts.size >= 2) {
-                        val categoryName = parts[0]
-                        val categoryColor = parts[1]
-
-                        // Find corresponding metrics.items section
-                        val itemsSection = sections["metrics.items"] ?: ""
-                        val metrics = parseMetrics(itemsSection)
-
-                        categories.add(MetricCategory(
-                            title = categoryName,
-                            headerColor = categoryColor, // or derive from borderColor
-                            metrics = metrics
-                        ))
+                    val display = if (parts.isNotEmpty()) parts[0] else line
+                    val desc = if (parts.size > 1) parts[1] else ""
+                    val item = ScoreCardItem(displayText = display, description = desc)
+                    if (inBefore) {
+                        if (currentSection !is BeforeSection) {
+                            // Create a default section if none active yet
+                            currentSection = BeforeSection().also {
+                                it.title = currentItemsTitle ?: initiativeTitle
+                                beforeSections.add(it)
+                            }
+                        }
+                        currentSection!!.items.add(item)
+                        if (currentSection!!.title.isBlank()) currentSection!!.title = currentItemsTitle ?: initiativeTitle
+                    } else if (inAfter) {
+                        if (currentSection !is AfterSection) {
+                            currentSection = AfterSection().also {
+                                it.title = currentItemsTitle ?: outcomeTitle
+                                afterSections.add(it)
+                            }
+                        }
+                        currentSection!!.items.add(item)
+                        if (currentSection!!.title.isBlank()) currentSection!!.title = currentItemsTitle ?: outcomeTitle
                     }
                 }
+                else -> { /* ignore */ }
             }
         }
 
-        return categories
-    }
+        // Column titles must come from [before] and [after] sections only per spec
+        val combinedTitle = if (subtitle.isNotBlank()) {
+            if (title.isNotBlank()) "$title — $subtitle" else subtitle
+        } else title
 
-
-    /**
-     * Parses metrics.
-     *
-     * @param metricsSection The metrics section content
-     * @return A list of Metric objects
-     */
-    private fun parseMetrics(metricsSection: String): List<Metric> {
-        val metrics = mutableListOf<Metric>()
-
-        metricsSection.lines().forEach { line ->
-            if (line.isNotBlank()) {
-                val parts = line.split("|").map { it.trim() }
-                if (parts.size >= 2) {
-                    metrics.add(
-                        Metric(
-                            label = parts[0],
-                            value = parts[1]
-                        )
-                    )
-                }
-            }
-        }
-
-        return metrics
-    }
-
-    /**
-     * Parses optimizations.
-     *
-     * @param optimizationsSection The optimizations section content
-     * @return A list of Optimization objects
-     */
-    private fun parseOptimizations(optimizationsSection: String): List<Optimization> {
-        val optimizations = mutableListOf<Optimization>()
-
-
-        val lines = optimizationsSection.split("\n").filter { it.isNotBlank() }
-
-
-        for ((index, line) in lines.withIndex()) {
-            val parts = line.split("|").map { it.trim() }
-
-            if (parts.size >= 3) {
-                val number = parts[0].toIntOrNull() ?: 0
-                val title = parts[1]
-                val description = parts[2]
-                optimizations.add(Optimization(number, title, description))
-            }
-        }
-
-
-        return optimizations
-    }
-    /**
-     * Parses the summary section.
-     *
-     * @param summarySection The summary section content
-     * @return A MigrationSummary object
-     */
-    private fun parseSummary(summarySection: String): MigrationSummary {
-        // Process all lines of the summary section, not just the first one
-        val lines = summarySection.lines().filter { it.isNotBlank() }
-
-        // If there are no lines, return a default summary
-        if (lines.isEmpty()) {
-            return MigrationSummary( "Unknown")
-        }
-
-        // Process the first line to extract the overall improvement and status
-        val firstLine = lines[0]
-        val parts = firstLine.split("|").map { it.trim() }
-
-        return if (parts.size >= 3) {
-            // Extract highlights from all parts starting from index 2
-            val highlights = if (parts.size > 2) parts.subList(2, parts.size) else emptyList()
-
-            MigrationSummary(
-                status = parts[1]
-            )
-        } else {
-            MigrationSummary("Unknown",)
-        }
-    }
-    /**
-     * Parses theme settings.
-     *
-     * @param config The configuration map
-     * @return A MigrationScoreCardTheme object
-     */
-    private fun parseTheme(config: Map<String, String>): MigrationScoreCardTheme {
-        return MigrationScoreCardTheme(
-            backgroundColor = config["backgroundColor"] ?: "#f8f9fa",
-            titleColor = config["titleColor"] ?: "#2c3e50",
-            headerColor = config["headerColor"] ?: "#8e44ad",
+        return ScoreCard(
+            title = combinedTitle.ifBlank { "ScoreCard" },
+            beforeTitle = initiativeTitle.ifBlank { "BEFORE" },
+            beforeSections = beforeSections,
+            afterTitle = outcomeTitle.ifBlank { "AFTER" },
+            afterSections = afterSections,
+            scale = 1.0f
         )
-    }
-
-    /**
-     * Parses team members.
-     *
-     * @param teamSection The team section content
-     * @return A list of TeamMember objects
-     */
-    private fun parseTeamMembers(teamSection: String): List<TeamMember> {
-        val teamMembers = mutableListOf<TeamMember>()
-
-        teamSection.lines().forEach { line ->
-            if (line.isNotBlank()) {
-                val parts = line.split("|").map { it.trim() }
-                if (parts.size >= 3) {
-                    teamMembers.add(
-                        TeamMember(
-                            initials = parts[0],
-                            emoji = parts[1],
-                            color = parts[2]
-                        )
-                    )
-                }
-            }
-        }
-
-        // Return the team members list, which will be empty if none are specified
-        return teamMembers
     }
 }

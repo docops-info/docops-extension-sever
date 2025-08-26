@@ -37,25 +37,35 @@ import kotlin.math.max
  */
 @Serializable
 class ScoreCard (val id: String = UUID.randomUUID().toString(),
-                 val title: String, val initiativeTitle: String,
-                 val outcomeTitle: String,
-                 val initiativeItems: MutableList<ScoreCardItem>,
-                 val outcomeItems: MutableList<ScoreCardItem>,
-    val scale: Float = 1.0f, val scoreCardTheme: ScoreCardTheme = ScoreCardTheme(), val slideShow: Boolean = false
+                 val title: String,
+                 val beforeTitle: String,
+                 val beforeSections: MutableList<BeforeSection>,
+                 val afterTitle: String,
+                 val afterSections: MutableList<AfterSection>,
+                val scale: Float = 1.0f
 )
 
-fun ScoreCard.scoreCardHeight(numChars: Int = 40, factor: Float = 35.1f) : Float {
-    var count = 0
-    initiativeItems.forEach {
-        count += it.displayTextToList(numChars).size
-    }
-    var outcomeCount = 0
-    outcomeItems.forEach {
-        outcomeCount += it.displayTextToList(numChars).size
-    }
-    return max(count, outcomeCount) * factor
-}
+// Convert a ScoreCard to a CSV representation for metadata embedding
+fun ScoreCard.toCsv(): io.docops.docopsextensionssupport.web.CsvResponse {
+    val headers = listOf("column", "section", "item", "description")
+    val rows = mutableListOf<List<String>>()
 
+    // BEFORE sections
+    beforeSections.forEach { section ->
+        val sectionTitle = section.title.ifBlank { beforeTitle }
+        section.items.forEach { item ->
+            rows.add(listOf("BEFORE", sectionTitle, item.displayText, item.description ?: ""))
+        }
+    }
+    // AFTER sections
+    afterSections.forEach { section ->
+        val sectionTitle = section.title.ifBlank { afterTitle }
+        section.items.forEach { item ->
+            rows.add(listOf("AFTER", sectionTitle, item.displayText, item.description ?: ""))
+        }
+    }
+    return io.docops.docopsextensionssupport.web.CsvResponse(headers, rows)
+}
 
 
 
@@ -73,32 +83,17 @@ fun ScoreCardItem.displayTextToList(size: Int): MutableList<String> {
     return wrapText(this.displayText, size.toFloat())
 }
 
-/**
- * Represents a scorecard theme.
- *
- * A scorecard theme is used to customize the appearance of a scorecard. It defines various properties such as the
- * title color, background color, initiative title color, outcome title color, initiative display text color, outcome
- * display text color, initiative background color, outcome background color, and arrow color.
- *
- * @param titleColor The color of the scorecard's title.
- * @param backgroundColor The background color of the scorecard.
- * @param initiativeTitleColor The color of the initiative title.
- * @param outcomeTitleColor The color of the outcome title.
- * @param initiativeDisplayTextColor The color of the initiative display text.
- * @param outcomeDisplayTextColor The color of the outcome display text.
- * @param initiativeBackgroundColor The background color of the initiative.
- * @param outcomeBackgroundColor The background color of the outcome.
- * @param arrowColor The color of the arrows used in the scorecard.
- */
+
 @Serializable
-open class ScoreCardTheme(val titleColor: String = "#fcfcfc",
-                          val backgroundColor: String = "#EEEEEE",
-                          val initiativeTitleColor: String = "#fcfcfc",
-                          val outcomeTitleColor: String= "#fcfcfc",
-                          val initiativeDisplayTextColor: String = "#111111",
-                          val outcomeDisplayTextColor: String = "#111111",
-                          val initiativeBackgroundColor: String = "#fcfcfc",
-                          val outcomeBackgroundColor: String = "#fcfcfc",
-                          val headerColor: String = "#102C57",
-                          val arrowColor: String = "#e0349c")
+open class Section
+{
+    var title: String = ""
+    var items: MutableList<ScoreCardItem> = mutableListOf()
+    
+}
+
+@Serializable
+class BeforeSection : Section()
+@Serializable
+class AfterSection : Section()
 

@@ -1,480 +1,217 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.roadmap.wrapText
-import kotlin.math.max
+import io.github.oshai.kotlinlogging.KotlinLogging
 
+/**
+ * Maker to generate an iOS-style two-column ScoreCard SVG based on ScoreCard model.
+ * This follows the general pattern of other Makers in the project: pure-SVG generation as a String.
+ */
 class ScoreCardMaker {
+    private val log = KotlinLogging.logger {}
 
-    /**
-     * Generates an SVG representation of the migration scorecard using iOS-style design.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @param isPdf Whether the SVG is being generated for PDF output
-     * @return The SVG as a string
-     */
-    fun make(scorecard: MigrationScoreCard, isPdf: Boolean = false): String {
-        val svg = StringBuilder()
+    fun make(scorecard: ScoreCard): String {
+        // Overall canvas settings adjusted for wider layout
+        val width = 1024
+        val margin = 40
+        val gutter = 40
+        // Two cards side by side within width
+        val cardWidth = ((width - (margin * 2) - gutter) / 2)
+        // Title wrapping configuration
+        val titleFontSize = 20
+        val titleLineHeight = 24
+        val titleMaxWidth = width - (margin * 2)
+        val titleLines = wrapByCharsForTitle(scorecard.title, titleMaxWidth, titleFontSize)
+        val titleBlockHeight = titleLines.size * titleLineHeight
+        val titleStartY = 28
+        val titleEndY = titleStartY + titleBlockHeight
 
-        // Calculate the heights of the before and after cards
-        val beforeItemsHeight = calculateItemsHeight(scorecard.beforeSection.items)
-        val afterItemsHeight = calculateItemsHeight(scorecard.afterSection.items)
-        val defaultCardHeight = 380
-        val beforeCardHeight = maxOf(defaultCardHeight, beforeItemsHeight)
-        val afterCardHeight = maxOf(defaultCardHeight, afterItemsHeight)
+        val topY = titleEndY + 20 // start cards after title block
+        val leftX = margin
+        val rightX = margin + cardWidth + gutter
 
-        // Calculate the maximum card height
-        val maxCardHeight = maxOf(beforeCardHeight, afterCardHeight)
+        // Compute dynamic card heights based on wrapped content
+        val beforeCard = buildCard(cardWidth, scorecard.beforeSections, "url(#redGrad)",
+            headerTitle = scorecard.beforeTitle.ifBlank { scorecard.beforeSections.firstOrNull()?.title ?: scorecard.beforeTitle },
+            bulletColor = "#ff4444", checkmark = false)
+        val afterCard = buildCard(cardWidth, scorecard.afterSections, "url(#greenGrad)",
+            headerTitle = (scorecard.afterTitle.ifBlank { scorecard.afterSections.firstOrNull()?.title ?: scorecard.afterTitle }),
+            bulletColor = "#22cc44", checkmark = true)
+        val cardHeightLeft = beforeCard.height
+        val cardHeightRight = afterCard.height
+        val cardHeightMax = maxOf(cardHeightLeft, cardHeightRight)
+        val height = cardHeightMax + topY + margin
 
-        // Calculate the positions of the key improvements and team avatars sections
-        // The default position for key improvements is 500, which is 120px below the bottom of the cards (380 + 120 = 500)
-        // We'll maintain this spacing
-        val keyImprovementsY = 100 + maxCardHeight + 20
-        val teamAvatarsY = keyImprovementsY + 65
-
-        // Add SVG header with iOS-style gradients and filters
-        svg.append("""
-            <svg width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" xmlns="http://www.w3.org/2000/svg">
-                <!-- iOS-style background with subtle gradient -->
+        val sb = StringBuilder()
+        sb.append("""
+            <svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#f1f3f4;stop-opacity:1" />
+                    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ee5253;stop-opacity:1" />
                     </linearGradient>
-
-                    <!-- iOS-style shadows -->
-                    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.08"/>
-                    </filter>
-
-                    <filter id="lightShadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.06"/>
-                    </filter>
-
-                    <!-- iOS System Blue gradient -->
-                    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" />
+                    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#26a69a;stop-opacity:1" />
                     </linearGradient>
-
-                    <!-- iOS System Green gradient -->
-                    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#30D158;stop-opacity:1" />
-                    </linearGradient>
-
-                    <!-- iOS System Red -->
-                    <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#FF3B30;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#FF453A;stop-opacity:1" />
-                    </linearGradient>
-
-                    <!-- iOS System Orange -->
-                    <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#FF9500;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#FF9F0A;stop-opacity:1" />
-                    </linearGradient>
+                    <filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
                 </defs>
-
-                <rect width="${scorecard.calcWidth()}" height="${scorecard.calcHeight()}" fill="url(#bgGradient)"/>
+                <rect width="$width" height="$height" fill="#f8f9fa"/>
         """.trimIndent())
-
-        // Add title and subtitle
-        svg.append(generateTitle(scorecard))
-
-        // Add before section
-        svg.append(generateBeforeSection(scorecard))
-
-        // Add migration arrow
-        svg.append(generateMigrationArrow())
-
-        // Add after section
-        svg.append(generateAfterSection(scorecard))
-
-        // Add key improvements summary
-        svg.append(generateKeyImprovements(scorecard, keyImprovementsY))
-
-        // Add team avatars
-        svg.append(generateTeamAvatars(scorecard, teamAvatarsY))
-
-        // Close SVG
-        svg.append("</svg>")
-
-        return svg.toString()
-    }
-
-    /**
-     * Generates the iOS-style title and subtitle section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateTitle(scorecard: MigrationScoreCard): String {
-        return """
-            <!-- iOS-style title -->
-            <text x="${scorecard.calcWidth() / 2}" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif"
-                  font-size="24" font-weight="600" fill="#1D1D1F">
-                ${(scorecard.title.escapeXml())}
-            </text>
-
-            <text x="${scorecard.calcWidth() / 2}" y="65" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                  font-size="17" font-weight="400" fill="#86868B">
-                ${(scorecard.subtitle.escapeXml())}
-            </text>
-        """.trimIndent()
-    }
-
-    /**
-     * Generates the header section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateHeader(scorecard: MigrationScoreCard): String {
-        return """
-            <!-- Header -->
-            <rect x="50" y="100" width="1300" height="50" rx="5" fill="${scorecard.theme.headerColor}"/>
-            <text x="700" y="135" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">${(scorecard.headerTitle.escapeXml())}</text>
-        """.trimIndent()
-    }
-
-    /**
-     * Generates the iOS-style before section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateBeforeSection(scorecard: MigrationScoreCard): String {
-        val beforeSection = scorecard.beforeSection
-        val svg = StringBuilder()
-
-        // Calculate the height needed for the before section items
-        val beforeItemsHeight = calculateItemsHeight(beforeSection.items)
-
-        // The default card height is 380, which can accommodate about 4-5 items
-        // If we need more height, use the calculated height
-        val defaultCardHeight = 380
-        val cardHeight = maxOf(defaultCardHeight, beforeItemsHeight)
-
-        // Before Card - iOS style with shadow
-        svg.append("""
-            <!-- Before Card -->
-            <g>
-                <rect x="40" y="100" width="300" height="${cardHeight}" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
-
-                <!-- Before Header -->
-                <rect x="60" y="120" width="260" height="44" fill="url(#redGradient)" rx="12"/>
-                <text x="190" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="16" font-weight="600" fill="white">
-                    ${(beforeSection.title.escapeXml())}
-                </text>
-        """.trimIndent())
-
-        // Legacy issues
-        svg.append("""
-                <!-- Legacy issues -->
-                <g transform="translate(80, 190)">
-        """.trimIndent())
-
-        // Add items with iOS-style
-        var currentY = 0
-        beforeSection.items.forEach { item ->
-            val statusColor = when (item.status) {
-                "critical" -> "url(#redGradient)"
-                "warning" -> "url(#orangeGradient)"
-                "good" -> "url(#greenGradient)"
-                else -> "#cccccc"
-            }
-
-            val emoji = when (item.statusIcon) {
-                "!" -> "⚠️"
-                "$" -> "💰"
-                "✓" -> "✅"
-                else -> item.statusIcon
-            }
-
-            // Wrap title and description text
-            val titleLines = wrapText(item.title, 20f)
-            val descLines = wrapText(item.description, 25f)
-
-            // Calculate y position for this item
-            val y = currentY
-
-            // Add circle and emoji
-            svg.append("""
-                    <!-- ${item.title} -->
-                    <circle cx="12" cy="${y + 12}" r="8" fill="${statusColor}" opacity="0.15"/>
-                    <text x="12" y="${y + 17}" text-anchor="middle" font-size="10" fill="${statusColor}">${emoji}</text>
+        // Render wrapped title lines centered
+        titleLines.forEachIndexed { idx: Int, line: String ->
+            val y = titleStartY + (idx * titleLineHeight)
+            sb.append("""
+                <text x="${width/2}" y="$y" text-anchor="middle" font-family="Arial, sans-serif" font-size="$titleFontSize" font-weight="bold" fill="#333">${escape(line)}</text>
             """.trimIndent())
-
-            // Add title with multiple lines if needed
-            svg.append("""
-                    <text x="30" y="${y + 12}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                          font-size="15" font-weight="500" fill="#1D1D1F">
-            """.trimIndent())
-
-            titleLines.forEachIndexed { i, line ->
-                val lineY = if (i == 0) 0 else 18
-                svg.append("""
-                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
-                """.trimIndent())
-            }
-
-            svg.append("</text>")
-
-            // Calculate y position for description based on number of title lines
-            val descY = y + 12 + (titleLines.size * 18)
-
-            // Add description with multiple lines if needed
-            svg.append("""
-                    <text x="30" y="${descY}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                          font-size="13" font-weight="400" fill="#86868B">
-            """.trimIndent())
-
-            descLines.forEachIndexed { i, line ->
-                val lineY = if (i == 0) 0 else 16
-                svg.append("""
-                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
-                """.trimIndent())
-            }
-
-            svg.append("</text>")
-
-            // Update currentY for next item
-            currentY = y + 30 + (titleLines.size * 18) + (descLines.size * 16)
         }
 
-        svg.append("""
+        // BEFORE card
+        sb.append(beforeCard.svg.replaceFirst("<g", "<g transform=\"translate($leftX, $topY)\""))
+
+        // AFTER card
+        sb.append(afterCard.svg.replaceFirst("<g", "<g transform=\"translate($rightX, $topY)\""))
+
+        // Transition arrow between cards (vertically centered to tallest card)
+        sb.append("""
+            <g transform="translate(${(leftX + cardWidth + rightX)/2}, ${topY + cardHeightMax/2})">
+                <path d="M0,0 L30,0 L25,-8 M30,0 L25,8" stroke="#4ecdc4" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+        """.trimIndent())
+
+        sb.append("</svg>")
+        return sb.toString()
+    }
+
+    // Helper structure for prebuilt card
+    private data class BuiltCard(val svg: String, val height: Int)
+
+    // Build a card group SVG with dynamic height and wrapped items, returned untranslated (caller sets translate)
+    private fun buildCard(
+        width: Int,
+        sections: List<Section>,
+        headerFill: String,
+        headerTitle: String,
+        bulletColor: String,
+        checkmark: Boolean
+    ): BuiltCard {
+        val headerHeight = 60
+        val innerPadding = 20
+        val contentX = innerPadding
+        val contentWidth = width - innerPadding * 2 - 20 // 20 for bullet area
+        val lineHeight = 16
+        val itemGap = 6
+
+        var currentY = headerHeight + innerPadding
+        val sb = StringBuilder()
+        sb.append("<g>")
+        // We will compute height; draw rect later with computed height via string replace
+        // Header visuals
+        // We'll append the rects after knowing height; for now collect body and track Y
+        val body = StringBuilder()
+        sections.forEach { section ->
+            if (section.items.isEmpty()) return@forEach
+            // Section header
+            body.append("""
+                <g transform="translate($contentX, $currentY)">
+                    <text x="0" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${escape(section.title)}</text>
                 </g>
+            """.trimIndent())
+            currentY += 35
+            // Items block under header
+            val itemsStartY = currentY
+            val itemsBuilt = buildItems(section.items, contentX, itemsStartY, bulletColor, checkmark, contentWidth, lineHeight)
+            body.append(itemsBuilt.svg)
+            currentY = itemsBuilt.nextY + 10 // bottom spacing after items
+        }
+        val totalHeight = maxOf(currentY + innerPadding, headerHeight + innerPadding * 2)
+
+        // Now draw the card container and header, then inject body
+        sb.append("""
+            <rect x="0" y="0" width="$width" height="$totalHeight" rx="12" fill="white" stroke="#ddd" stroke-width="2" filter="url(#shadow)"/>
+            <rect x="0" y="0" width="$width" height="$headerHeight" rx="12" fill="$headerFill"/>
+            <rect x="0" y="${headerHeight - 12}" width="$width" height="12" fill="white"/>
+            <text x="${width/2}" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">${escape(headerTitle)}</text>
         """.trimIndent())
-
-        // Legacy score indicator
-        val baseline = beforeSection.performanceBaseline
-
-        // Calculate the y position for the baseline label based on the last item's position
-        // Add a margin of 30 pixels between the last item and the baseline label
-        val baselineY = Math.min(450, 190 + currentY + 30)
-
-        svg.append("""
-                <!-- Legacy score indicator -->
-                <text x="190" y="${baselineY}" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="12" font-weight="600" fill="#86868B">${(baseline.label.escapeXml())}</text>
-            </g>
-        """.trimIndent())
-
-        return svg.toString()
+        sb.append(body.toString())
+        sb.append("</g>")
+        return BuiltCard(sb.toString(), totalHeight)
     }
 
-    /**
-     * Generates the iOS-style upgrade arrow between the before and after sections.
-     *
-     * @return The SVG fragment as a string
-     */
-    private fun generateMigrationArrow(): String {
-        return """
-            <!-- iOS-style upgrade arrow -->
-            <g transform="translate(400, 290)">
-                <circle cx="0" cy="0" r="30" fill="url(#blueGradient)" filter="url(#lightShadow)"/>
-                <path d="M-10,0 L10,0 M5,-6 L10,0 L5,6" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                <text x="0" y="-45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="14" font-weight="500" fill="#007AFF">UPGRADE</text>
-            </g>
-        """.trimIndent()
-    }
+    private data class BuiltItems(val svg: String, val nextY: Int)
 
-    /**
-     * Generates the iOS-style after section of the SVG.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @return The SVG fragment as a string
-     */
-    private fun generateAfterSection(scorecard: MigrationScoreCard): String {
-        val afterSection = scorecard.afterSection
-        val svg = StringBuilder()
-
-        // Calculate the height needed for the after section items
-        val afterItemsHeight = calculateItemsHeight(afterSection.items)
-
-        // The default card height is 380, which can accommodate about 4-5 items
-        // If we need more height, use the calculated height
-        val defaultCardHeight = 380
-        val cardHeight = maxOf(defaultCardHeight, afterItemsHeight)
-
-        // After Card - iOS style with shadow
-        svg.append("""
-            <!-- After Card -->
-            <g>
-                <rect x="460" y="100" width="300" height="${cardHeight}" fill="white" stroke="none" rx="20" filter="url(#cardShadow)"/>
-
-                <!-- After Header -->
-                <rect x="480" y="120" width="260" height="44" fill="url(#greenGradient)" rx="12"/>
-                <text x="610" y="147" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="16" font-weight="600" fill="white">
-                    ${(afterSection.title.escapeXml())}
-                </text>
-        """.trimIndent())
-
-        // Modern improvements
-        svg.append("""
-                <!-- Modern improvements -->
-                <g transform="translate(500, 190)">
-        """.trimIndent())
-
-        // Add items with iOS-style
-        var currentY = 0
-        afterSection.items.forEach { item ->
-            val statusColor = when (item.status) {
-                "critical" -> "url(#redGradient)"
-                "warning" -> "url(#orangeGradient)"
-                "good" -> "url(#greenGradient)"
-                else -> "#cccccc"
-            }
-
-            val emoji = when (item.statusIcon) {
-                "!" -> "⚠️"
-                "$" -> "💰"
-                "✓" -> "✅"
-                else -> item.statusIcon
-            }
-
-            // Wrap title and description text
-            val titleLines = wrapText(item.title, 20f)
-            val descLines = wrapText(item.description, 25f)
-
-            // Calculate y position for this item
-            val y = currentY
-
-            // Add circle and emoji
-            svg.append("""
-                    <!-- ${item.title} -->
-                    <circle cx="12" cy="${y + 12}" r="8" fill="${statusColor}" opacity="0.15"/>
-                    <text x="12" y="${y + 17}" text-anchor="middle" font-size="10" fill="${statusColor}">${emoji}</text>
-            """.trimIndent())
-
-            // Add title with multiple lines if needed
-            svg.append("""
-                    <text x="30" y="${y + 12}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                          font-size="15" font-weight="500" fill="#1D1D1F">
-            """.trimIndent())
-
-            titleLines.forEachIndexed { i, line ->
-                val lineY = if (i == 0) 0 else 18
-                svg.append("""
-                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+    private fun buildItems(
+        items: List<ScoreCardItem>,
+        xStart: Int,
+        yStart: Int,
+        bulletColor: String,
+        checkmark: Boolean,
+        maxTextWidth: Int,
+        lineHeight: Int
+    ): BuiltItems {
+        val sb = StringBuilder()
+        var y = yStart
+        val itemGap = 6
+        items.forEach { item ->
+            val text = listOfNotNull(item.displayText.takeIf { it.isNotBlank() }?.let { escape(it) },
+                item.description?.takeIf { it.isNotBlank() }?.let { escape(it) })
+                .joinToString(" — ")
+            val lines = wrapByChars(text, maxTextWidth)
+            // bullet or checkmark at first line baseline
+            if (checkmark) {
+                sb.append("""
+                    <path d="M${xStart + 5},${y + 8} L${xStart + 8},${y + 11} L${xStart + 13},${y + 6}" stroke="$bulletColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                """.trimIndent())
+            } else {
+                sb.append("""
+                    <circle cx="${xStart + 8}" cy="${y + 8}" r="4" fill="$bulletColor"/>
                 """.trimIndent())
             }
-
-            svg.append("</text>")
-
-            // Calculate y position for description based on number of title lines
-            val descY = y + 12 + (titleLines.size * 18)
-
-            // Add description with multiple lines if needed
-            svg.append("""
-                    <text x="30" y="${descY}" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                          font-size="13" font-weight="400" fill="#86868B">
-            """.trimIndent())
-
-            descLines.forEachIndexed { i, line ->
-                val lineY = if (i == 0) 0 else 16
-                svg.append("""
-                        <tspan x="30" dy="${lineY}">${line.trim()}</tspan>
+            lines.forEachIndexed { idx, line ->
+                val yy = y + 12 + idx * lineHeight
+                sb.append("""
+                    <text x="${xStart + 20}" y="$yy" font-family="Arial, sans-serif" font-size="12" fill="#666">$line</text>
                 """.trimIndent())
             }
-
-            svg.append("</text>")
-
-            // Update currentY for next item
-            currentY = y + 30 + (titleLines.size * 18) + (descLines.size * 16)
+            y += 12 + (lines.size * lineHeight) + itemGap
         }
-
-        svg.append("""
-                </g>
-        """.trimIndent())
-
-        // Modern score indicator
-        val improvement = afterSection.performanceImprovement
-
-        // Calculate the y position for the improvement label based on the last item's position
-        // Add a margin of 30 pixels between the last item and the improvement label
-        val improvementY = Math.min(450, 190 + currentY + 30)
-
-        svg.append("""
-                <!-- Modern score indicator -->
-                <text x="610" y="${improvementY}" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="12" font-weight="600" fill="#86868B">${(improvement.label.escapeXml())}</text>
-            </g>
-        """.trimIndent())
-
-        return svg.toString()
+        return BuiltItems(sb.toString(), y)
     }
 
-
-
-    /**
-     * Generates the iOS-style key improvements summary section.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @param yPosition The y-coordinate for the key improvements section
-     * @return The SVG fragment as a string
-     */
-    private fun generateKeyImprovements(scorecard: MigrationScoreCard, yPosition: Int = 500): String {
-        return """
-            <!-- Key improvements summary -->
-            <g transform="translate(200, ${yPosition})">
-                <rect x="0" y="0" width="400" height="70" fill="white" stroke="none" rx="12" filter="url(#lightShadow)"/>
-                <text x="200" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="13" font-weight="500" fill="#1D1D1F">Key Improvements Delivered</text>
-                <text x="200" y="45" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="11" font-weight="400" fill="#86868B">Significant Performance Improvement</text>
-            </g>
-        """.trimIndent()
+    // Very simple character-based wrapper using approximate chars-per-line for 12px font
+    private fun wrapByChars(text: String, maxWidthPx: Int): List<String> {
+        // Approx width per character at 12px Arial ~6.5px
+        val pxPerChar = 6.5
+        val maxChars = maxOf(10, (maxWidthPx / pxPerChar).toInt())
+        return wrapByWords(text, maxChars)
     }
 
-    /**
-     * Generates the iOS-style team avatars section.
-     *
-     * @param scorecard The MigrationScoreCard object
-     * @param yPosition The y-coordinate for the team avatars section
-     * @return The SVG fragment as a string
-     */
-    private fun generateTeamAvatars(scorecard: MigrationScoreCard, yPosition: Int = 565): String {
-        // If no team members are specified, don't generate any avatars
-        if (scorecard.teamMembers.isEmpty()) {
-            return ""
-        }
+    // Title wrapper uses different font size; approximate px-per-char by size*0.6
+    private fun wrapByCharsForTitle(text: String, maxWidthPx: Int, fontSize: Int): List<String> {
+        val pxPerChar = fontSize * 0.6 // rough approximation for Arial
+        val maxChars = maxOf(8, (maxWidthPx / pxPerChar).toInt())
+        return wrapByWords(text, maxChars)
+    }
 
-        val svg = StringBuilder()
-
-        svg.append("""
-            <!-- iOS-style team avatars with initials -->
-            <g transform="translate(260, ${yPosition})">
-        """.trimIndent())
-
-        // Calculate the number of team members to display (max 4)
-        val teamMembers = scorecard.teamMembers.take(4)
-
-        // Generate avatars for each team member
-        teamMembers.forEachIndexed { index, member ->
-            val x = 40 + (index * 60) // 60 pixels between avatars
-
-            svg.append("""
-                <!-- Team member ${index + 1} -->
-                <circle cx="${x}" cy="25" r="18" fill="${member.color}" filter="url(#lightShadow)"/>
-                <text x="${x}" y="31" text-anchor="middle" font-size="16">${member.emoji}</text>
-                <text x="${x}" y="52" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"
-                      font-size="12" font-weight="500" fill="#86868B">${member.initials}</text>
-            """.trimIndent())
-
-            // Add a newline between team members for better readability in the SVG
-            if (index < teamMembers.size - 1) {
-                svg.append("\n\n")
+    private fun wrapByWords(text: String, maxChars: Int): List<String> {
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var current = StringBuilder()
+        words.forEach { w ->
+            if (current.isEmpty()) {
+                current.append(w)
+            } else if (current.length + 1 + w.length <= maxChars) {
+                current.append(' ').append(w)
+            } else {
+                lines.add(current.toString())
+                current = StringBuilder(w)
             }
         }
-
-        svg.append("\n            </g>")
-
-        return svg.toString()
+        if (current.isNotEmpty()) lines.add(current.toString())
+        return lines
     }
+
+    private fun escape(text: String): String = text
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
 }
