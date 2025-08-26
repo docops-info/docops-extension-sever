@@ -10,16 +10,18 @@ class ScoreCardMaker {
     private val log = KotlinLogging.logger {}
 
     fun make(scorecard: ScoreCard): String {
+        val useDark = scorecard.theme.useDark
+        val scale = scorecard.theme.scale
         // Overall canvas settings adjusted for wider layout
-        val width = 1024
+        val baseWidth = 1024
         val margin = 40
         val gutter = 40
         // Two cards side by side within width
-        val cardWidth = ((width - (margin * 2) - gutter) / 2)
+        val cardWidth = ((baseWidth - (margin * 2) - gutter) / 2)
         // Title wrapping configuration
         val titleFontSize = 20
         val titleLineHeight = 24
-        val titleMaxWidth = width - (margin * 2)
+        val titleMaxWidth = baseWidth - (margin * 2)
         val titleLines = wrapByCharsForTitle(scorecard.title, titleMaxWidth, titleFontSize)
         val titleBlockHeight = titleLines.size * titleLineHeight
         val titleStartY = 28
@@ -29,21 +31,33 @@ class ScoreCardMaker {
         val leftX = margin
         val rightX = margin + cardWidth + gutter
 
+        // Theme colors
+        val bg = if (useDark) "#0f172a" else "#f8f9fa"
+        val panelFill = if (useDark) "#111827" else "white"
+        val panelStroke = if (useDark) "#334155" else "#ddd"
+        val sectionHeaderTextFill = if (useDark) "#e5e7eb" else "#333"
+        val itemTextFill = if (useDark) "#cbd5e1" else "#666"
+        val titleFill = if (useDark) "#e5e7eb" else "#333"
+
         // Compute dynamic card heights based on wrapped content
         val beforeCard = buildCard(cardWidth, scorecard.beforeSections, "url(#redGrad)",
             headerTitle = scorecard.beforeTitle.ifBlank { scorecard.beforeSections.firstOrNull()?.title ?: scorecard.beforeTitle },
-            bulletColor = "#ff4444", checkmark = false)
+            bulletColor = "#ff4444", checkmark = false,
+            panelFill = panelFill, panelStroke = panelStroke, sectionHeaderTextFill = sectionHeaderTextFill, itemTextFill = itemTextFill)
         val afterCard = buildCard(cardWidth, scorecard.afterSections, "url(#greenGrad)",
             headerTitle = (scorecard.afterTitle.ifBlank { scorecard.afterSections.firstOrNull()?.title ?: scorecard.afterTitle }),
-            bulletColor = "#22cc44", checkmark = true)
+            bulletColor = "#22cc44", checkmark = true,
+            panelFill = panelFill, panelStroke = panelStroke, sectionHeaderTextFill = sectionHeaderTextFill, itemTextFill = itemTextFill)
         val cardHeightLeft = beforeCard.height
         val cardHeightRight = afterCard.height
         val cardHeightMax = maxOf(cardHeightLeft, cardHeightRight)
-        val height = cardHeightMax + topY + margin
+        val baseHeight = cardHeightMax + topY + margin
+        val canvasWidth = (baseWidth * scale).toInt()
+        val canvasHeight = (baseHeight * scale).toInt()
 
         val sb = StringBuilder()
         sb.append("""
-            <svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg">
+            <svg width="$canvasWidth" height="$canvasHeight" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
@@ -55,13 +69,13 @@ class ScoreCardMaker {
                     </linearGradient>
                     <filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
                 </defs>
-                <rect width="$width" height="$height" fill="#f8f9fa"/>
+                <rect width="$baseWidth" height="$baseHeight" fill="$bg"/>
         """.trimIndent())
         // Render wrapped title lines centered
         titleLines.forEachIndexed { idx: Int, line: String ->
             val y = titleStartY + (idx * titleLineHeight)
             sb.append("""
-                <text x="${width/2}" y="$y" text-anchor="middle" font-family="Arial, sans-serif" font-size="$titleFontSize" font-weight="bold" fill="#333">${escape(line)}</text>
+                <text x="${baseWidth/2}" y="$y" text-anchor="middle" font-family="Arial, sans-serif" font-size="$titleFontSize" font-weight="bold" fill="$titleFill">${escape(line)}</text>
             """.trimIndent())
         }
 
@@ -73,7 +87,7 @@ class ScoreCardMaker {
 
         // Transition arrow between cards (vertically centered to tallest card)
         sb.append("""
-            <g transform="translate(${(leftX + cardWidth + rightX)/2}, ${topY + cardHeightMax/2})">
+            <g transform="translate(${(leftX + cardWidth + rightX)/2 - 12}, ${topY + cardHeightMax/2})">
                 <path d="M0,0 L30,0 L25,-8 M30,0 L25,8" stroke="#4ecdc4" stroke-width="3" fill="none" stroke-linecap="round"/>
             </g>
         """.trimIndent())
@@ -92,7 +106,11 @@ class ScoreCardMaker {
         headerFill: String,
         headerTitle: String,
         bulletColor: String,
-        checkmark: Boolean
+        checkmark: Boolean,
+        panelFill: String,
+        panelStroke: String,
+        sectionHeaderTextFill: String,
+        itemTextFill: String
     ): BuiltCard {
         val headerHeight = 60
         val innerPadding = 20
@@ -113,13 +131,13 @@ class ScoreCardMaker {
             // Section header
             body.append("""
                 <g transform="translate($contentX, $currentY)">
-                    <text x="0" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">${escape(section.title)}</text>
+                    <text x="0" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="$sectionHeaderTextFill">${escape(section.title)}</text>
                 </g>
             """.trimIndent())
             currentY += 35
             // Items block under header
             val itemsStartY = currentY
-            val itemsBuilt = buildItems(section.items, contentX, itemsStartY, bulletColor, checkmark, contentWidth, lineHeight)
+            val itemsBuilt = buildItems(section.items, contentX, itemsStartY, bulletColor, checkmark, contentWidth, lineHeight, itemTextFill)
             body.append(itemsBuilt.svg)
             currentY = itemsBuilt.nextY + 10 // bottom spacing after items
         }
@@ -127,9 +145,9 @@ class ScoreCardMaker {
 
         // Now draw the card container and header, then inject body
         sb.append("""
-            <rect x="0" y="0" width="$width" height="$totalHeight" rx="12" fill="white" stroke="#ddd" stroke-width="2" filter="url(#shadow)"/>
+            <rect x="0" y="0" width="$width" height="$totalHeight" rx="12" fill="$panelFill" stroke="$panelStroke" stroke-width="2" filter="url(#shadow)"/>
             <rect x="0" y="0" width="$width" height="$headerHeight" rx="12" fill="$headerFill"/>
-            <rect x="0" y="${headerHeight - 12}" width="$width" height="12" fill="white"/>
+            <rect x="0" y="${headerHeight - 12}" width="$width" height="12" fill="$panelFill"/>
             <text x="${width/2}" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">${escape(headerTitle)}</text>
         """.trimIndent())
         sb.append(body.toString())
@@ -146,7 +164,8 @@ class ScoreCardMaker {
         bulletColor: String,
         checkmark: Boolean,
         maxTextWidth: Int,
-        lineHeight: Int
+        lineHeight: Int,
+        itemTextFill: String
     ): BuiltItems {
         val sb = StringBuilder()
         var y = yStart
@@ -169,7 +188,7 @@ class ScoreCardMaker {
             lines.forEachIndexed { idx, line ->
                 val yy = y + 12 + idx * lineHeight
                 sb.append("""
-                    <text x="${xStart + 20}" y="$yy" font-family="Arial, sans-serif" font-size="12" fill="#666">$line</text>
+                    <text x="${xStart + 20}" y="$yy" font-family="Arial, sans-serif" font-size="12" fill="$itemTextFill">$line</text>
                 """.trimIndent())
             }
             y += 12 + (lines.size * lineHeight) + itemGap

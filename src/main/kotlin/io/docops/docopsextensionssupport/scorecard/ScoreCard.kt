@@ -42,7 +42,8 @@ class ScoreCard (val id: String = UUID.randomUUID().toString(),
                  val beforeSections: MutableList<BeforeSection>,
                  val afterTitle: String,
                  val afterSections: MutableList<AfterSection>,
-                val scale: Float = 1.0f
+                 val theme: ScoreCardTheme = ScoreCardTheme()
+
 )
 
 // Convert a ScoreCard to a CSV representation for metadata embedding
@@ -97,3 +98,5 @@ class BeforeSection : Section()
 @Serializable
 class AfterSection : Section()
 
+@Serializable
+class ScoreCardTheme(val useDark: Boolean = false, val scale: Float = 1.0f)

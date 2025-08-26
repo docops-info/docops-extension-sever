@@ -24,9 +24,9 @@ class ScorecardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
      * @param useDark Whether to use dark mode
      * @return A ResponseEntity containing the SVG
      */
-    fun handleSVG(payload: String, backend: String, useDark: Boolean = false): String {
+    fun handleSVG(payload: String, backend: String, useDark: Boolean = false, scale: String = "1.0f"): String {
         val parser = ScoreCardParser()
-        val model = parser.parse(payload)
+        val model = parser.parse(payload, useDark, scale)
         // populate CSV metadata for router embedding
         csvResponse.update(model.toCsv())
         val maker = ScoreCardMaker()
@@ -72,6 +72,6 @@ class ScorecardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVG(payload, context.backend, context.useDark)
+        return handleSVG(payload, context.backend, context.useDark, context.scale)
     }
 }

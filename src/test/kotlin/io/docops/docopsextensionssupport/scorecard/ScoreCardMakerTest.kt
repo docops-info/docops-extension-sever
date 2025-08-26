@@ -1,7 +1,8 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -54,12 +55,21 @@ class ScoreCardMakerTest {
         Report generation errors | Async report generation with progress tracking
     """.trimIndent()
 
-    @Test
-    fun `parses payload and generates valid svg`() {
+    @ParameterizedTest
+    @CsvSource(
+        value = [
+            "false,1.0,gen/scorecard_light_1.0.svg",
+            "true,1.0,gen/scorecard_dark_1.0.svg",
+            "false,1.5,gen/scorecard_light_1.5.svg",
+            "true,0.75,gen/scorecard_dark_0.75.svg"
+        ]
+    )
+    fun `parses payload and generates valid svg`(useDark: Boolean, scale: String, outputPath: String) {
         val payload = samplePayload()
 
         val parser = ScoreCardParser()
-        val model = parser.parse(payload)
+
+        val model = parser.parse(payload, useDark, scale)
 
         // Basic model sanity checks
         assertEquals("Software Release v2.4.0 - Feature & Bug Summary — Migration from Legacy System to Modern Architecture", model.title)
@@ -84,7 +94,7 @@ class ScoreCardMakerTest {
         val maker = ScoreCardMaker()
         val svg = maker.make(model)
 
-        val f = File("gen/scorecard.svg")
+        val f = File(outputPath)
         f.writeBytes(svg.toByteArray())
         // Root is svg and contains escaped ampersands
         assertTrue(svg.startsWith("<svg"), "SVG should start with <svg")

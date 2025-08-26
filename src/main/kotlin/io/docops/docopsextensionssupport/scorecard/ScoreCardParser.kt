@@ -10,7 +10,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class ScoreCardParser {
     private val log = KotlinLogging.logger {}
 
-    fun parse(payload: String): ScoreCard {
+    fun parse(payload: String, useDark: Boolean, scale: String): ScoreCard {
         val lines = payload.lines()
         var title = ""
         var subtitle = ""
@@ -125,7 +125,7 @@ class ScoreCardParser {
             beforeSections = beforeSections,
             afterTitle = outcomeTitle.ifBlank { "AFTER" },
             afterSections = afterSections,
-            scale = 1.0f
+            theme = ScoreCardTheme(useDark, scale.toFloat())
         )
     }
 }
