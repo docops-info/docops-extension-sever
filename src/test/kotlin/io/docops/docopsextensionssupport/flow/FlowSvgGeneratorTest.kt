@@ -9,41 +9,42 @@ class FlowSvgGeneratorTest {
     private val data = """
         = Car Selection Flow
 
-        [.flow-definition]
-        --
-        description:: Complete car purchasing workflow
-        theme:: modern
-        --
+[.flow-definition]
+--
+description:: Complete car purchasing workflow
+theme:: modern
+--
 
-        [.steps]
-        |===
-        |Type |Name |Color
+[.steps]
+|===
+|Type |Name |Color
 
-        |start |Select Year |green
-        |common |Choose Make |blue
-        |common |Pick Model |blue
-        |decision |Engine Type? |orange
-        |branch |Configure Electric |purple
-        |branch |Configure Gas Engine |pink
-        |convergence |Join |slate
-        |parallel |Configure Interior |slate
-        |parallel |Configure Exterior |slate
-        |final |Complete Purchase |green
-        |===
+|start |Select Year |green
+|common |Choose Make |blue
+|common |Pick Model |blue
+|decision |Engine Type? |orange
+|branch |Configure Electric |purple
+|branch |Configure Gas Engine |pink
+|convergence |Join |slate
+|common |Configure Interior |blue
+|common |Configure Exterior |blue
+|final |Complete Purchase |green
+|===
 
-        [.connections]
-        ---
-        Select Year -> Choose Make -> Pick Model -> Engine Type?
-        Engine Type? --Electric--> Configure Electric
-        Engine Type? --Gas--> Configure Gas Engine
-        Configure Electric -> Join
-        Configure Gas Engine -> Join
-        Join => Configure Interior
-        Join => Configure Exterior
-        Configure Interior -> Complete Purchase
-        Configure Exterior -> Complete Purchase
-        ---
+[.connections]
+---
+Select Year -> Choose Make -> Pick Model -> Engine Type?
+Engine Type? --Electric--> Configure Electric
+Engine Type? --Gas--> Configure Gas Engine
+Configure Electric -> Join
+Configure Gas Engine -> Join
+Join -> Configure Interior
+Configure Interior -> Configure Exterior
+Configure Exterior -> Complete Purchase
+---
     """.trimIndent()
+
+
     @Test
     fun generate() {
 

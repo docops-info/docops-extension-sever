@@ -58,9 +58,32 @@ class FlowSvgGenerator {
             stepDependencies.getOrPut(connection.to) { mutableSetOf() }.add(connection.from)
         }
 
-        // Find the root steps (no dependencies)
-        val rootSteps = steps.filter { step ->
-            stepDependencies[step.id]?.isEmpty() != false
+        // Find steps that come after parallel steps (sequential sub-flows)
+        val parallelSteps = steps.filter { it.type == StepType.PARALLEL }
+        val sequentialAfterParallel = mutableMapOf<String, MutableList<String>>()
+
+        parallelSteps.forEach { parallelStep ->
+            stepChildren[parallelStep.id]?.forEach { childId ->
+                val childStep = steps.find { it.id == childId }
+                if (childStep != null && childStep.type in listOf(StepType.BRANCH, StepType.COMMON)) {
+                    // This is a sequential step after a parallel step
+                    val sequence = mutableListOf<String>()
+                    var currentStepId: String? = childId
+                    while (currentStepId != null) {
+                        sequence.add(currentStepId)
+                        val nextChildren = stepChildren[currentStepId]
+                        currentStepId = if (nextChildren?.size == 1) {
+                            val nextStep = steps.find { it.id == nextChildren.first() }
+                            if (nextStep?.type in listOf(StepType.BRANCH, StepType.COMMON)) {
+                                nextChildren.first()
+                            } else null
+                        } else null
+                    }
+                    if (sequence.isNotEmpty()) {
+                        sequentialAfterParallel[parallelStep.id] = sequence
+                    }
+                }
+            }
         }
 
         // Find steps that come after convergence
@@ -69,7 +92,6 @@ class FlowSvgGenerator {
 
         convergenceSteps.forEach { convergence ->
             stepChildren[convergence.id]?.forEach { childId ->
-                // Add all steps reachable from convergence
                 val visited = mutableSetOf<String>()
                 fun collectPostConvergence(stepId: String) {
                     if (stepId in visited) return
@@ -84,14 +106,18 @@ class FlowSvgGenerator {
             }
         }
 
+        // Identify steps that are in sequential sub-flows
+        val stepsInSequentialFlows = sequentialAfterParallel.values.flatten().toSet()
+
         // Group steps by their logical positioning needs
         val startSteps = steps.filter { it.type == StepType.START }
         val preDecisionCommonSteps = steps.filter {
-            it.type == StepType.COMMON && it.id !in postConvergenceSteps
+            it.type == StepType.COMMON && it.id !in postConvergenceSteps && it.id !in stepsInSequentialFlows
         }
         val decisionSteps = steps.filter { it.type == StepType.DECISION }
-        val branchSteps = steps.filter { it.type == StepType.BRANCH }
-        val parallelSteps = steps.filter { it.type == StepType.PARALLEL }
+        val branchSteps = steps.filter {
+            it.type == StepType.BRANCH && it.id !in stepsInSequentialFlows
+        }
         val postConvergenceCommonSteps = steps.filter {
             it.type == StepType.COMMON && it.id in postConvergenceSteps
         }
@@ -143,39 +169,44 @@ class FlowSvgGenerator {
         }
         currentX += 130
 
-        // Position parallel steps
+        // Position parallel steps and their sequential sub-flows
         if (parallelSteps.isNotEmpty()) {
             val parallelCount = parallelSteps.size
-            when {
-                parallelCount <= 2 -> {
-                    parallelSteps.forEachIndexed { index, step ->
-                        val yOffset = if (index % 2 == 0) -75 else 95
-                        positions[step.id] = Position(currentX, baseY + yOffset)
-                    }
-                }
-                parallelCount == 3 -> {
-                    parallelSteps.forEachIndexed { index, step ->
-                        val yOffset = when (index) {
-                            0 -> -90   // Top
-                            1 -> 0     // Middle
-                            2 -> 90    // Bottom
-                            else -> 0
-                        }
-                        positions[step.id] = Position(currentX, baseY + yOffset)
-                    }
-                }
-                else -> {
-                    val spacing = 200 / (parallelCount - 1)
-                    val startY = baseY - 100
 
-                    parallelSteps.forEachIndexed { index, step ->
-                        val yOffset = startY + (index * spacing) - baseY
-                        positions[step.id] = Position(currentX, baseY + yOffset)
+            parallelSteps.forEachIndexed { index, step ->
+                val yOffset = when {
+                    parallelCount <= 2 -> if (index % 2 == 0) -75 else 95
+                    parallelCount == 3 -> when (index) {
+                        0 -> -90   // Top
+                        1 -> 0     // Middle
+                        2 -> 90    // Bottom
+                        else -> 0
+                    }
+                    else -> {
+                        val spacing = 200 / (parallelCount - 1)
+                        val startY = baseY - 100
+                        startY + (index * spacing) - baseY
+                    }
+                }
+                positions[step.id] = Position(currentX, baseY + yOffset)
+
+                // Position sequential steps after this parallel step
+                sequentialAfterParallel[step.id]?.let { sequence ->
+                    var subCurrentX = currentX + 100  // Start after the parallel step
+                    sequence.forEach { seqStepId ->
+                        positions[seqStepId] = Position(subCurrentX, baseY + yOffset)
+                        subCurrentX += 130
                     }
                 }
             }
         }
         currentX += 120
+
+        // Add extra space for sequential sub-flows
+        val maxSequentialLength = sequentialAfterParallel.values.maxOfOrNull { it.size } ?: 0
+        if (maxSequentialLength > 0) {
+            currentX += maxSequentialLength * 130
+        }
 
         // Position convergence steps
         convergenceSteps.forEach { step ->
@@ -183,7 +214,7 @@ class FlowSvgGenerator {
             currentX += 100
         }
 
-        // Position post-convergence common steps (rate, payment, delivery)
+        // Position post-convergence common steps
         postConvergenceCommonSteps.forEach { step ->
             positions[step.id] = Position(currentX, baseY)
             currentX += 130
@@ -197,6 +228,8 @@ class FlowSvgGenerator {
 
         return positions
     }
+
+
     private fun generateDefs(): String = """
         <defs>
             <!-- Background gradient -->
