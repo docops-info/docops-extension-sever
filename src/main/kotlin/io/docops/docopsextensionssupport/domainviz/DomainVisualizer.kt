@@ -88,8 +88,8 @@ class SVGDiagramGenerator {
         calculatePositions(data)
 
         val svg = StringBuilder()
-        val totalWidth = 1200
-        val totalHeight = 800
+        // Compute dynamic SVG dimensions based on positioned nodes
+        val (totalWidth, totalHeight) = computeCanvasSize(data)
         val id = Uuid.random().toHexString()
         svg.append("""
             <svg width="$totalWidth" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
@@ -175,6 +175,42 @@ class SVGDiagramGenerator {
             }
         }
     }
+
+    private fun computeCanvasSize(data: DiagramData): Pair<Int, Int> {
+        // Determine overall bounds from all nodes (including main node)
+        val padding = 40.0 // outer padding for shadows and breathing room
+        var maxRight = data.mainNode.x + data.mainNode.width
+        var maxBottom = data.mainNode.y + data.mainNode.height
+        var minLeft = data.mainNode.x
+        var minTop = 0.0
+
+        fun consider(node: DiagramNode) {
+            if (node.x < minLeft) minLeft = node.x
+            if (node.y < minTop) minTop = node.y
+            val right = node.x + node.width
+            val bottom = node.y + node.height
+            if (right > maxRight) maxRight = right
+            if (bottom > maxBottom) maxBottom = bottom
+        }
+
+        data.commonRows.forEach { row -> row.forEach { consider(it) } }
+        data.specializedGroups.forEach { g -> g.rows.forEach { row -> row.forEach { consider(it) } } }
+
+        // Account for plus symbols and vertical buses rendered 20px to the left of first node in a group
+        if (data.specializedGroups.any()) {
+            val firstNodes = data.specializedGroups.mapNotNull { it.rows.firstOrNull()?.firstOrNull() }
+            if (firstNodes.isNotEmpty()) {
+                val leftMostPlus = firstNodes.minOf { it.x - 20 }
+                if (leftMostPlus < minLeft) minLeft = leftMostPlus
+            }
+        }
+
+        val width = ((maxRight - minLeft) + padding * 2).coerceAtLeast(300.0)
+        val height = ((maxBottom - minTop) + padding * 2).coerceAtLeast(200.0)
+        // Return ints for SVG width/height attributes
+        return width.toInt() to height.toInt()
+    }
+
 
     private fun drawNode(svg: StringBuilder, node: DiagramNode, rectClass: String, textClass: String) {
         // Draw rect first
