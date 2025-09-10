@@ -1,5 +1,5 @@
 include::_base.adoc[]
-= Domain Markup Parser/Generator
+= DocOps Domain Visualizer
 :imagesdir: images
 
 reactions::[role=right]
@@ -7,592 +7,199 @@ reactions::[role=right]
 [[top]]
 include::shared/buttons.adoc[]
 
-== Introduction
+[.back-to-top]
+<<top, 🔝>>
 
-The DocOps Domain Markup Parser/Generator allows you to create visual domain diagrams using a simple markup syntax. This tool is useful for visualizing domain-driven design (DDD) concepts, organizational structures, or any hierarchical domain relationships in your AsciiDoctor documents.
+== Overview
 
-This guide will help you understand the basic concepts of domain visualization, how to use the markup syntax, and provide examples of different ways to create domain diagrams.
+The DocOps Domain Visualizer renders a high-level view of a business or technical domain with:
+
+- A single MAIN node (the domain you’re describing)
+- One or more COMMON capability rows (shared across the domain)
+- Zero or more Specialized Groups (verticals or high-level operations with their own rows)
+
+Author diagrams directly in AsciiDoc using a compact CSV-like syntax inside a DocOps block. The server parses your payload and returns an SVG.
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Basic Concepts
-
-=== What is Domain Visualization?
-
-Domain visualization in the DocOps extension is a way to represent hierarchical domain structures using a simple markup language. The visualization creates SVG-based diagrams that show:
-
-* Domains (top-level entities)
-* Subdomains (second-level entities)
-* Sub-subdomains (third-level entities)
-* Visual relationships between these entities
-
-The extension supports customizing the appearance of domains and subdomains with different colors, allowing you to create visually distinct and meaningful diagrams.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Domain Diagram Components
-
-A domain diagram includes:
-
-* *Domains*: Top-level entities represented as rectangles with titles
-* *Subdomains*: Second-level entities that belong to a domain
-* *Sub-subdomains*: Third-level entities that belong to a subdomain
-* *Separators*: Horizontal lines that can be used to visually separate groups of domains
-
-Each component can have:
-
-* A title (the name of the domain/subdomain)
-* A color (optional, to visually distinguish different domains)
-
-[.back-to-top]
-<<top, 🔝>>
-
-== AsciiDoctor Syntax for Domain Diagrams
-
-To include domain diagrams in your AsciiDoctor document, you use a special markup syntax within the DocOps macro.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Basic Syntax
+== Quick Start
 
 [source,asciidoc]
 ....
 [docops,domain,controls=true]
 ----
-# Domain Name [color]
-## Subdomain Name [color]
-### Sub-subdomain Name
+main,TECHNOLOGY
 
-# Another Domain [color]
-## Another Subdomain [color]
-### Another Sub-subdomain
+type,emoji,rowIndex,nodes
+COMMON,,0,"FRONTEND,BACKEND,DATABASE"
+COMMON,,1,"DEVOPS,DOCOPS"
+COMMON,,2,"SECURITY"
+FRONTEND,🧑🏻‍💻,0,"FRONTEND,HTML,CSS,JAVASCRIPT,TYPESCRIPT,KOTLIN,SWIFT"
+BACKEND,🧑🏻‍💻,1,"BACKEND,KOTLIN,JAVA,.NET,PYTHON,GO,RUST"
 ----
 ....
 
-The markup uses a hierarchical structure with hash symbols (#) to indicate the level:
+[docops,domain,controls=true]
+----
+main,TECHNOLOGY
 
-* `#` - Defines a domain (top level)
-* `##` - Defines a subdomain (second level)
-* \### - Defines a sub-subdomain (third level)
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Color Options
-
-You can specify colors for domains and subdomains using square brackets after the name:
-
-[source,asciidoc]
-....
-# Finance [blue]
-## Accounting [green]
-## Budgeting [red]
-....
-
-Available color options include:
-* blue
-* green
-* red
-* yellow
-* purple
-* orange
-* pink
-* gray
-* teal
-* indigo
-
-You can also use hex colors:
-
-[source,asciidoc]
-....
-# Marketing [#FF5733]
-## Digital Marketing [#C70039]
-....
+type,emoji,rowIndex,nodes
+COMMON,,0,"FRONTEND,BACKEND,DATABASE"
+COMMON,,1,"DEVOPS,DOCOPS"
+COMMON,,2,"SECURITY"
+FRONTEND,🧑🏻‍💻,0,"FRONTEND,HTML,CSS,JAVASCRIPT,TYPESCRIPT,KOTLIN,SWIFT"
+BACKEND,🧑🏻‍💻,1,"BACKEND,KOTLIN,JAVA,.NET,PYTHON,GO,RUST"
+----
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Configuration Options
+== Syntax
 
-The domain markup parser supports a configuration block that allows you to customize the visual appearance of your domain diagrams. The configuration block starts with `@config{` and ends with `}`, and should be placed at the beginning of your markup.
+The payload is a minimal CSV with a header and rows.
 
-[source,asciidoc]
-....
-@config{
-useGradients = true
-useGlass = true
-}
-....
+Required lines:
 
-Available configuration options:
+- main,<NAME>
+- type,emoji,rowIndex,nodes  (header)
 
-* `useGradients` - When set to `true`, applies gradient effects to the domain and subdomain backgrounds, creating a more visually appealing and modern look. Default is `false`.
-* `useGlass` - When set to `true`, applies a glass-like effect to the domain elements, giving them a translucent appearance with subtle highlights and shadows. Default is `false`.
+Rows:
 
-These visual enhancements can make your domain diagrams more engaging and help distinguish between different domains and hierarchies.
+- COMMON rows populate the shared capability band across the diagram.
+- Any other value in the type column becomes a Specialized Group. Its emoji applies to all nodes in that group. Use rowIndex to add multiple rows within the same group.
 
-[.back-to-top]
-<<top, 🔝>>
+Column meanings:
 
-=== Special Features
+- type: COMMON or Group Name (e.g., FRONTEND, BACKEND, PAYMENTS)
+- emoji: An optional emoji displayed for each node in that row/group
+- rowIndex: 0-based index for the row order within COMMON or the specialized group
+- nodes: a quoted, comma-separated list of node titles (no extra quotes inside)
 
-The markup also supports:
+Notes:
 
-* Comments (lines starting with `//` are ignored)
-* Separators (use `---` to create a horizontal line)
-* Empty lines (create visual spacing in the markup)
+- You may specify MAIN as a row (MAIN,,0,"NAME"). If omitted, the first line main,NAME is used.
+- Header line is mandatory for the data section: type,emoji,rowIndex,nodes
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Examples
+== Creative Examples
 
-=== Basic Domain Structure
-
-Here's a simple example of a domain diagram:
+=== Product Platform with Shared Services
 
 [source,asciidoc]
 ....
 [docops,domain,controls=true]
 ----
-# Technology [blue]
-## Software Development [green]
-### Frontend Development
-### Backend Development
-### DevOps
+main,PRODUCT PLATFORM
 
-## Data & Analytics [purple]
-### Data Science
-### Business Intelligence
-
-# Operations [orange]
-## HR & Recruitment [red]
-## Finance & Accounting [yellow]
+type,emoji,rowIndex,nodes
+COMMON,,0,"IDENTITY,OBSERVABILITY,SECURITY"
+COMMON,,1,"BILLING,NOTIFICATIONS,SEARCH"
+WEB,🧑🏻‍💻,0,"WEB,SSR,SPA,EDGE-CACHE"
+MOBILE,📱,0,"MOBILE,IOS,ANDROID,CROSS-PLATFORM"
+DATA,🧠,0,"DATA,WAREHOUSE,LAKEHOUSE,FEATURE STORE"
 ----
 ....
 
-
 [docops,domain,controls=true]
 ----
-# Technology [blue]
-## Software Development [green]
-### Frontend Development
-### Backend Development
-### DevOps
+main,PRODUCT PLATFORM
 
-## Data & Analytics [purple]
-### Data Science
-### Business Intelligence
-
-# Operations [orange]
-## HR & Recruitment [red]
-## Finance & Accounting [yellow]
+type,emoji,rowIndex,nodes
+COMMON,,0,"IDENTITY,OBSERVABILITY,SECURITY"
+COMMON,,1,"BILLING,NOTIFICATIONS,SEARCH"
+WEB,🧑🏻‍💻,0,"WEB,SSR,SPA,EDGE-CACHE"
+MOBILE,📱,0,"MOBILE,IOS,ANDROID,CROSS-PLATFORM"
+DATA,🧠,0,"DATA,WAREHOUSE,LAKEHOUSE,FEATURE STORE"
 ----
 
-This creates a diagram with two main domains (Technology and Operations), each with their own subdomains and sub-subdomains.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Using Separators
-
-You can use separators to visually group related domains:
+=== Payments Domain with Operations
 
 [source,asciidoc]
 ....
-[docops,domain,controls=true]
+[docops,domain]
 ----
-# Core Business [blue]
-## Product Development [green]
-## Sales [teal]
+main,PAYMENTS
 
----
-
-# Support Functions [purple]
-## HR [pink]
-## Finance [yellow]
-----
-....
-
-[docops,domain,controls=true]
-----
-# Core Business [blue]
-## Product Development [green]
-## Sales [teal]
-
----
-
-# Support Functions [purple]
-## HR [pink]
-## Finance [yellow]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Styling with Configuration Options
-
-You can use the configuration options to create different visual styles for your domain diagrams. Here are examples showing the same domain structure with different configuration settings:
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Default Style (No Configuration)
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
+type,emoji,rowIndex,nodes
+COMMON,,0,"AUTHN,ZERO-TRUST,SECRETS MGMT"
+COMMON,,1,"EVENT BUS,METRICS,ALERTING"
+ACQUIRING,🏦,0,"ACQUIRING,ONBOARDING,RISK SCORING,CHARGEBACKS"
+PROCESSING,⚙️,0,"PROCESSING,AUTHORIZATION,CAPTURE,SETTLEMENT"
+WALLETS,💳,0,"WALLETS,APPLE PAY,GOOGLE PAY,VAULTING"
 ----
 ....
-
-[docops,domain,controls=true]
-----
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== With Gradients
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-@config{
-useGradients = true
-useGlass = false
-}
-
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-....
-
-[docops,domain,controls=true]
-----
-@config{
-useGradients = true
-useGlass = false
-}
-
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== With Glass Effect
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-@config{
-useGradients = false
-useGlass = true
-}
-
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-....
-
-[docops,domain,controls=true]
-----
-@config{
-useGradients = false
-useGlass = true
-}
-
-# Cloud Architecture [blue]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== With Both Gradients and Glass Effect
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-@config{
-useGradients = true
-useGlass = true
-}
-
-# Cloud Architecture [#2c3e50]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-....
-
-[docops,domain,controls=true]
-----
-@config{
-useGradients = false
-useGlass = true
-}
-
-# Cloud Architecture [#2c3e50]
-## Frontend Services [green]
-### Web Applications
-### Mobile Applications
-
-## Backend Services [purple]
-### API Gateway
-### Microservices
-### Data Services
-
-# DevOps [orange]
-## CI/CD Pipeline [red]
-### Build Automation
-### Deployment Automation
-
-## Monitoring [teal]
-### Performance Monitoring
-### Error Tracking
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Complex Domain Structure
-
-Here's a more complex example showing multiple levels and colors:
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-# Enterprise Architecture [#3498db]
-## Application Architecture [#2ecc71]
-### API Design
-### Integration Patterns
-### Microservices
-
-## Data Architecture [#9b59b6]
-### Data Modeling
-### Data Governance
-### Analytics Platform
-
-## Infrastructure [#e74c3c]
-### Cloud Services
-### On-Premises
-### Hybrid Solutions
-
----
-
-# Business Domains [#f39c12]
-## Customer Management [#d35400]
-### Acquisition
-### Retention
-### Support
-
-## Product Management [#16a085]
-### Research
-### Development
-### Lifecycle
-
-// This is a comment and won't be rendered
-## Financial Operations [#2c3e50]
-### Billing
-### Reporting
-### Compliance
-----
-....
-
-[docops,domain,controls=true]
-----
-# Enterprise Architecture [#3498db]
-## Application Architecture [#2ecc71]
-### API Design
-### Integration Patterns
-### Microservices
-
-## Data Architecture [#9b59b6]
-### Data Modeling
-### Data Governance
-### Analytics Platform
-
-## Infrastructure [#e74c3c]
-### Cloud Services
-### On-Premises
-### Hybrid Solutions
-
----
-
-# Business Domains [#f39c12]
-## Customer Management [#d35400]
-### Acquisition
-### Retention
-### Support
-
-## Product Management [#16a085]
-### Research
-### Development
-### Lifecycle
-
-// This is a comment and won't be rendered
-## Financial Operations [#2c3e50]
-### Billing
-### Reporting
-### Compliance
-----
-
 
 [docops,domain]
 ----
-# Quote
+main,PAYMENTS
 
-# Policy
+type,emoji,rowIndex,nodes
+COMMON,,0,"AUTHN,ZERO-TRUST,SECRETS MGMT"
+COMMON,,1,"EVENT BUS,METRICS,ALERTING"
+ACQUIRING,🏦,0,"ACQUIRING,ONBOARDING,RISK SCORING,CHARGEBACKS"
+PROCESSING,⚙️,0,"PROCESSING,AUTHORIZATION,CAPTURE,SETTLEMENT"
+WALLETS,💳,0,"WALLETS,APPLE PAY,GOOGLE PAY,VAULTING"
+----
 
-# Content & Communication [orange]
+=== Platform Engineering View (Dark Mode)
 
-# Risk
-## Vehicle
-## PAF
-## Boat
-## Yatch
+[source,asciidoc]
+....
+[docops,domain,useDark=true,controls=true]
+----
+main,PLATFORM ENGINEERING
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"IAM,SSO,SECRETS,COMPLIANCE"
+COMMON,,1,"LOGGING,TRACING,DASHBOARDS"
+DEVELOPER EXPERIENCE,🧰,0,"DX,CLI,TEMPLATES,SCAFFOLDERS"
+RUNTIMES,🚀,0,"RUNTIMES,KUBERNETES,FARGATE,NOMAD"
+DELIVERY,📦,0,"DELIVERY,CD,ARTIFACTORY,SBOM"
+----
+....
+
+[docops,domain,useDark=true,controls=true]
+----
+main,PLATFORM ENGINEERING
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"IAM,SSO,SECRETS,COMPLIANCE"
+COMMON,,1,"LOGGING,TRACING,DASHBOARDS"
+DEVELOPER EXPERIENCE,🧰,0,"DX,CLI,TEMPLATES,SCAFFOLDERS"
+RUNTIMES,🚀,0,"RUNTIMES,KUBERNETES,FARGATE,NOMAD"
+DELIVERY,📦,0,"DELIVERY,CD,ARTIFACTORY,SBOM"
 ----
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Using the Web Editor
+== Block Attributes
 
-The DocOps Extension Server includes a web-based editor for creating domain diagrams. You can access it at link:../domain/editor.html[editor]. The editor provides:
+The Domain block supports the standard DocOps attributes described in xref:docops.adoc[DocOps Block Processor]:
 
-* A markup editor where you can write your domain structure
-* Real-time SVG generation
-* Example loading
-* SVG downloading
-* Syntax guide with examples
+[cols="1,1,1,3"]
+|===
+|Attribute |Type |Default |Description
 
-The editor makes it easy to experiment with different domain structures and visualize them instantly before including them in your AsciiDoctor documents.
+|controls |Boolean |false |Show the interactive viewer (zoom/copy/fullscreen)
+|title    |String  |SVG Viewer |Viewer title (for controls)
+|useDark  |Boolean |false |Render using the dark theme palette
+|scale    |String  |1.0 |Scale factor sent to the server
+|role     |String  |center |Alignment for the rendered block (left/center/right)
+|===
 
 [.back-to-top]
 <<top, 🔝>>
+
+== Tips
+
+- Keep nodes concise; multi-word titles are fine (use commas to separate nodes, keep the whole list quoted)
+- Use rowIndex to organize large groups into multiple rows
+- Emojis help quickly identify specialized groups
+- You can also post JSON to the service, but CSV is the simplest path for docs
+- Server endpoint behind the scenes is kind=domain
 
 include::shared/buttons.adoc[]
