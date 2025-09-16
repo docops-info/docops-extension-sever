@@ -7,8 +7,7 @@ import kotlinx.serialization.json.Json
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class DomainVisualizer {
-}
+class DomainVisualizer
 
 data class DiagramNode(
     val title: String,
@@ -72,6 +71,7 @@ data class SpecializedGroup(
 )
 
 
+
 class SVGDiagramGenerator {
     companion object {
         private const val MAIN_NODE_Y = 20.0
@@ -83,7 +83,7 @@ class SVGDiagramGenerator {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    fun generateSVG(data: DiagramData): String {
+    fun generateSVG(data: DiagramData, useDark: Boolean): String {
         // Calculate positions first
         calculatePositions(data)
 
@@ -91,9 +91,44 @@ class SVGDiagramGenerator {
         // Compute dynamic SVG dimensions based on positioned nodes
         val (totalWidth, totalHeight) = computeCanvasSize(data)
         val id = Uuid.random().toHexString()
+        val backgroundColor = if (useDark) """
+            <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+            </linearGradient>""" else """
+            <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop class="stop1" offset="0%" stop-color="#ffffff"/>
+                <stop class="stop2" offset="50%" stop-color="#F8FAFC"/>
+                <stop class="stop3" offset="100%" stop-color="#e2e8f0"/>
+            </linearGradient>"""
         svg.append("""
-            <svg width="$totalWidth" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
                 <defs>
+                <!-- Enhanced filters for glass effect -->
+                <filter id="glassDropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+                    <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+                    <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+                    <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+                    <feMerge>
+                        <feMergeNode in="shadow"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+        
+                <!-- Glass Border -->
+                <linearGradient id="glassBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+                <!-- Apple Glass Effect Gradients -->
+                <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" />
+                </linearGradient>
                     <style>
                         #id_$id .node-rect { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
                         #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
@@ -103,7 +138,7 @@ class SVGDiagramGenerator {
                         #id_$id .specialized-text { font-size: 12px; }
                         #id_$id .connection-line { stroke: #6b7280; stroke-width: 2; }
                         #id_$id .dashed-line { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 6,6; }
-                        #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; }
+                        #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
                         #id_$id .neon-green { fill: #39FF14; }
                         #id_$id .neon-pink { fill: #FF1493; }
                         #id_$id .neon-cyan { fill: #00FFFF; }
@@ -114,12 +149,15 @@ class SVGDiagramGenerator {
                         #id_$id .neon-lime { fill: #CCFF00; }
                         #id_$id .neon-magenta { fill: #FF00FF; }
                         #id_$id .neon-red { fill: #FF073A; }
-
+                        #id_$id .glass-card { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
                     </style>
                     <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.35"/>
                     </filter>
+                    
+                    $backgroundColor
                 </defs>
+                <rect width="100%" height="100%" fill="url(#backgroundGradient_$id)"/>
         """.trimIndent())
 
         // Draw connections first (so they appear behind nodes)
@@ -211,11 +249,19 @@ class SVGDiagramGenerator {
         return width.toInt() to height.toInt()
     }
 
-
     private fun drawNode(svg: StringBuilder, node: DiagramNode, rectClass: String, textClass: String) {
         // Draw rect first
         svg.append("""
-            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" class="$rectClass" rx="12" ry="12"/>
+            <g class="glass-card">
+            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" class="$rectClass" rx="12" ry="12"
+            fill="rgba(0,122,255,0.1)"
+              stroke="url(#glassBorder)"
+              stroke-width="1"
+              filter="url(#glassDropShadow)"
+          />
+          <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
+            fill="url(#glassOverlay)"
+            opacity="0.6"/>
         """.trimIndent())
 
         // Prepare text content with optional emoji prefix
@@ -306,6 +352,7 @@ class SVGDiagramGenerator {
         }
         svg.append("""
             </text>
+            </g>
         """.trimIndent())
     }
 
@@ -424,6 +471,7 @@ class SVGDiagramGenerator {
         }
     }
 }
+
 
 class DiagramParser {
 
