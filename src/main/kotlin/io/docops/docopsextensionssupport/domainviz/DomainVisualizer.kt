@@ -72,7 +72,9 @@ data class SpecializedGroup(
 
 
 
-class SVGDiagramGenerator {
+class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
+    constructor(val useDark: Boolean = false,
+    val id: String = Uuid.random().toHexDashString()) {
     companion object {
         private const val MAIN_NODE_Y = 20.0
         private const val ROW_HEIGHT = 60.0
@@ -83,14 +85,13 @@ class SVGDiagramGenerator {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    fun generateSVG(data: DiagramData, useDark: Boolean): String {
+    fun generateSVG(data: DiagramData): String {
         // Calculate positions first
         calculatePositions(data)
 
         val svg = StringBuilder()
         // Compute dynamic SVG dimensions based on positioned nodes
         val (totalWidth, totalHeight) = computeCanvasSize(data)
-        val id = Uuid.random().toHexString()
         val backgroundColor = if (useDark) """
             <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
@@ -101,6 +102,60 @@ class SVGDiagramGenerator {
                 <stop class="stop2" offset="50%" stop-color="#F8FAFC"/>
                 <stop class="stop3" offset="100%" stop-color="#e2e8f0"/>
             </linearGradient>"""
+        val glassColors = if (useDark) {
+            """
+                <!-- Glass Border (Dark Mode) -->
+                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+                <!-- Apple Glass Effect Gradients (Dark Mode) -->
+                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" />
+                </linearGradient>
+            """
+        } else {
+            """
+                <!-- Glass Border (Light Mode) -->
+                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" />
+                </linearGradient>
+                <!-- Apple Glass Effect Gradients (Light Mode) -->
+                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                </linearGradient>
+            """
+        }
+
+        val nodeStyles = if (useDark) {
+            """
+                #id_$id .node-rect { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
+                #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
+                #id_$id .node-text { fill: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 600; text-anchor: middle; }
+                #id_$id .connection-line { stroke: #6b7280; stroke-width: 2; }
+                #id_$id .dashed-line { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 6,6; }
+                #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
+            """
+        } else {
+            """
+                #id_$id .node-rect { fill: rgba(255,255,255,0.9); stroke: rgba(0,122,255,0.3); stroke-width: 1.5; rx: 12; ry: 12; filter: url(#dropShadow); }
+                #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: rgba(255,255,255,0.9); stroke: rgba(0,122,255,0.3); stroke-width: 1.5; rx: 12; ry: 12; filter: url(#dropShadow); }
+                #id_$id .node-text { fill: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 600; text-anchor: middle; }
+                #id_$id .connection-line { stroke: #4a5568; stroke-width: 2; }
+                #id_$id .dashed-line { stroke: #718096; stroke-width: 2; stroke-dasharray: 6,6; }
+                #id_$id .plus-symbol { fill: #4a5568; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
+            """
+        }
+
         svg.append("""
             <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -116,29 +171,12 @@ class SVGDiagramGenerator {
                     </feMerge>
                 </filter>
         
-                <!-- Glass Border -->
-                <linearGradient id="glassBorder" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                </linearGradient>
-                <!-- Apple Glass Effect Gradients -->
-                <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" />
-                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
-                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" />
-                </linearGradient>
+                $glassColors
                     <style>
-                        #id_$id .node-rect { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
-                        #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
-                        #id_$id .node-text { fill: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 600; text-anchor: middle; }
+                        $nodeStyles
                         #id_$id .main-text { font-size: 16px; }
                         #id_$id .common-text { font-size: 12px; }
                         #id_$id .specialized-text { font-size: 12px; }
-                        #id_$id .connection-line { stroke: #6b7280; stroke-width: 2; }
-                        #id_$id .dashed-line { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 6,6; }
-                        #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
                         #id_$id .neon-green { fill: #39FF14; }
                         #id_$id .neon-pink { fill: #FF1493; }
                         #id_$id .neon-cyan { fill: #00FFFF; }
@@ -159,6 +197,7 @@ class SVGDiagramGenerator {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#backgroundGradient_$id)"/>
         """.trimIndent())
+
 
         // Draw connections first (so they appear behind nodes)
         drawConnections(svg, data)
@@ -251,18 +290,21 @@ class SVGDiagramGenerator {
 
     private fun drawNode(svg: StringBuilder, node: DiagramNode, rectClass: String, textClass: String) {
         // Draw rect first
+        //fill="rgba(0,122,255,0.1)
+        val fill = if(useDark) "rgba(0,122,255,0.1)" else "rgba(255,255,255,0.8)"
         svg.append("""
             <g class="glass-card">
-            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" class="$rectClass" rx="12" ry="12"
-            fill="rgba(0,122,255,0.1)"
-              stroke="url(#glassBorder)"
-              stroke-width="1"
+            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
+            fill="$fill"
+              stroke="url(#glassBorder_$id)"
+              stroke-width="1.5"
               filter="url(#glassDropShadow)"
           />
           <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
-            fill="url(#glassOverlay)"
-            opacity="0.6"/>
+            fill="url(#glassOverlay_$id)"
+            opacity="0.7"/>
         """.trimIndent())
+
 
         // Prepare text content with optional emoji prefix
         val fullText = buildString {
@@ -359,7 +401,6 @@ class SVGDiagramGenerator {
     private fun drawSpecializedGroup(svg: StringBuilder, group: SpecializedGroup, groupIndex: Int) {
         // Define list of neon colors to cycle through
         val neonColors = listOf(
-            "neon-lime",       // #CCFF00 (Electric Lime)
             "neon-green",      // #39FF14 (Electric Green)
             "neon-pink",       // #FF1493 (Hot Pink)
             "neon-cyan",       // #00FFFF (Electric Cyan)
@@ -368,7 +409,9 @@ class SVGDiagramGenerator {
             "neon-purple",     // #9D00FF (Electric Purple)
             "neon-blue",       // #0080FF (Electric Blue)
             "neon-magenta",    // #FF00FF (Electric Magenta)
-            "neon-red"         // #FF073A (Electric Red)
+            "neon-red",         // #FF073A (Electric Red)
+            "neon-lime",       // #CCFF00 (Electric Lime)
+
         )
 
         val neonClass = neonColors[groupIndex % neonColors.size]
@@ -452,11 +495,11 @@ class SVGDiagramGenerator {
     private fun drawRowConnections(svg: StringBuilder, nodes: List<DiagramNode>, startX: Double, verticalLineY: Double) {
         if (nodes.isEmpty()) return
 
-        val firstNodeCenterX = nodes.first().x + nodes.first().width / 2
+        val firstNodeLeftEdge = nodes.first().x
 
-        // Horizontal from start point to center of first node
+        // Horizontal from start point to left edge of first node
         svg.append("""
-            <line x1="$startX" y1="$verticalLineY" x2="$firstNodeCenterX" y2="$verticalLineY" class="dashed-line"/>
+            <line x1="$startX" y1="$verticalLineY" x2="$firstNodeLeftEdge" y2="$verticalLineY" class="dashed-line"/>
         """.trimIndent())
 
         // Draw segments between consecutive nodes

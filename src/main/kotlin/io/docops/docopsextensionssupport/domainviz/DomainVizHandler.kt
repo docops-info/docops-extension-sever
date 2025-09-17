@@ -12,8 +12,8 @@ class DomainVizHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse)
     ): String {
         val parser = DiagramParser()
         val data = parser.parseCSV(payload)
-        val diagramGenerator = SVGDiagramGenerator()
-        val svg = diagramGenerator.generateSVG(data, context.useDark)
+        val diagramGenerator = SVGDiagramGenerator(context.useDark)
+        val svg = diagramGenerator.generateSVG(data)
         csvResponse.update(data.toCsv())
         return svg
     }
