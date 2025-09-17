@@ -160,7 +160,7 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
             <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                 <!-- Enhanced filters for glass effect -->
-                <filter id="glassDropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="glassDropShadow_$id" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
                     <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
                     <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
@@ -298,7 +298,7 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
             fill="$fill"
               stroke="url(#glassBorder_$id)"
               stroke-width="1.5"
-              filter="url(#glassDropShadow)"
+              filter="url(#glassDropShadow_$id)"
           />
           <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
             fill="url(#glassOverlay_$id)"
