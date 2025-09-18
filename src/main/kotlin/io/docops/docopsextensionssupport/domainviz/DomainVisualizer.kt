@@ -4,77 +4,18 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.json.Json
+import kotlin.compareTo
+import kotlin.div
+import kotlin.text.compareTo
+import kotlin.text.toInt
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class DomainVisualizer
 
-data class DiagramNode(
-    val title: String,
-    val emoji: String? = null,
-    val isMainNode: Boolean = false,
-    val isSpecializedNode: Boolean = false,
-    // Remove x, y - these will be calculated automatically
-    val width: Double = 120.0,
-    val height: Double = 40.0,
-    // Add calculated position properties
-    var x: Double = 0.0,
-    var y: Double = 0.0
-)
-
-data class DiagramConnection(
-    val fromNode: DiagramNode,
-    val toNode: DiagramNode,
-    val connectionType: ConnectionType = ConnectionType.SOLID
-)
-
-enum class ConnectionType {
-    SOLID,
-    DASHED
-}
-
-data class DiagramData(
-    val mainNode: DiagramNode,
-    val commonRows: List<List<DiagramNode>>, // Changed to rows instead of flat list
-    val specializedGroups: List<SpecializedGroup>
-) {
-    fun toCsv(): CsvResponse {
-        val headers = listOf("Type", "Emoji", "Row", "Nodes")
-        val rows = mutableListOf<List<String>>()
-
-        // Add main node row
-        rows.add(listOf("MAIN", mainNode.emoji ?: "", "0", mainNode.title))
-
-        // Add common rows
-        commonRows.forEachIndexed { rowIndex, nodeList ->
-            val nodeNames = nodeList.joinToString(",") { it.title }
-            rows.add(listOf("COMMON", "", rowIndex.toString(), "\"$nodeNames\""))
-        }
-
-        // Add specialized groups
-        specializedGroups.forEach { group ->
-            group.rows.forEachIndexed { rowIndex, nodeList ->
-                val nodeNames = nodeList.joinToString(",") { it.title }
-                rows.add(listOf(group.title, group.emoji, rowIndex.toString(), "\"$nodeNames\""))
-            }
-        }
-
-        return CsvResponse(headers, rows)
-    }
-
-}
-
-data class SpecializedGroup(
-    val title: String,
-    val emoji: String,
-    val rows: List<List<DiagramNode>> // Changed to rows instead of flat list
-)
-
-
-
-class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
-    constructor(val useDark: Boolean = false,
-    val id: String = Uuid.random().toHexDashString()) {
+class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toHexString(),
+    val useDark: Boolean = false) {
     companion object {
         private const val MAIN_NODE_Y = 20.0
         private const val ROW_HEIGHT = 60.0
@@ -110,6 +51,12 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
                     <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
                     <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
                 </linearGradient>
+                <!-- Link Border (Dark Mode) -->
+                <linearGradient id="linkBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" />
+                </linearGradient>
                 <!-- Apple Glass Effect Gradients (Dark Mode) -->
                 <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" />
@@ -125,6 +72,12 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
                     <stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" />
                     <stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" />
                     <stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" />
+                </linearGradient>
+                <!-- Link Border (Light Mode) -->
+                <linearGradient id="linkBorderLight_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" />
                 </linearGradient>
                 <!-- Apple Glass Effect Gradients (Light Mode) -->
                 <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -144,6 +97,16 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
                 #id_$id .connection-line { stroke: #6b7280; stroke-width: 2; }
                 #id_$id .dashed-line { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 6,6; }
                 #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
+                #id_$id .neon-green { fill: #39FF14; }
+                #id_$id .neon-pink { fill: #FF1493; }
+                #id_$id .neon-cyan { fill: #00FFFF; }
+                #id_$id .neon-yellow { fill: #FFFF00; }
+                #id_$id .neon-orange { fill: #FF6600; }
+                #id_$id .neon-purple { fill: #9D00FF; }
+                #id_$id .neon-blue { fill: #0080FF; }
+                #id_$id .neon-lime { fill: #CCFF00; }
+                #id_$id .neon-magenta { fill: #FF00FF; }
+                #id_$id .neon-red { fill: #FF073A; }
             """
         } else {
             """
@@ -153,6 +116,26 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
                 #id_$id .connection-line { stroke: #4a5568; stroke-width: 2; }
                 #id_$id .dashed-line { stroke: #718096; stroke-width: 2; stroke-dasharray: 6,6; }
                 #id_$id .plus-symbol { fill: #4a5568; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
+                #id_$id .light-green { fill: #059669; }
+                #id_$id .light-pink { fill: #BE185D; }
+                #id_$id .light-cyan { fill: #0891B2; }
+                #id_$id .light-orange { fill: #C2410C; }
+                #id_$id .light-purple { fill: #7C3AED; }
+                #id_$id .light-blue { fill: #1D4ED8; }
+                #id_$id .light-magenta { fill: #BE185D; }
+                #id_$id .light-red { fill: #DC2626; }
+                #id_$id .light-teal { fill: #0D9488; }
+                #id_$id .light-indigo { fill: #4338CA; }
+                #id_$id .neon-green { fill: #059669; }
+                #id_$id .neon-pink { fill: #BE185D; }
+                #id_$id .neon-cyan { fill: #0891B2; }
+                #id_$id .neon-yellow { fill: #D97706; }
+                #id_$id .neon-orange { fill: #C2410C; }
+                #id_$id .neon-purple { fill: #7C3AED; }
+                #id_$id .neon-blue { fill: #1D4ED8; }
+                #id_$id .neon-lime { fill: #65A30D; }
+                #id_$id .neon-magenta { fill: #BE185D; }
+                #id_$id .neon-red { fill: #DC2626; }
             """
         }
 
@@ -289,14 +272,33 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
     }
 
     private fun drawNode(svg: StringBuilder, node: DiagramNode, rectClass: String, textClass: String) {
+        // Check if node has links to make it clickable
+        val hasLinks = node.links.isNotEmpty()
+
+        if (hasLinks) {
+            // If node has links, wrap in a clickable group with the primary link
+            val primaryLink = node.links.first()
+            svg.append("""
+                <g class="glass-card clickable-node" style="cursor: pointer;" onclick="window.open('${primaryLink.url.escapeXml()}', '_blank')">
+            """.trimIndent())
+        } else {
+            svg.append("""
+                <g class="glass-card">
+            """.trimIndent())
+        }
+
         // Draw rect first
-        //fill="rgba(0,122,255,0.1)
         val fill = if(useDark) "rgba(0,122,255,0.1)" else "rgba(255,255,255,0.8)"
+        val strokeColor = if (hasLinks) {
+            if (useDark) "url(#linkBorder_$id)" else "url(#linkBorderLight_$id)"
+        } else {
+            "url(#glassBorder_$id)"
+        }
+
         svg.append("""
-            <g class="glass-card">
             <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
             fill="$fill"
-              stroke="url(#glassBorder_$id)"
+              stroke="$strokeColor"
               stroke-width="1.5"
               filter="url(#glassDropShadow_$id)"
           />
@@ -305,6 +307,7 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
             opacity="0.7"/>
         """.trimIndent())
 
+        // ... existing text rendering code ...
 
         // Prepare text content with optional emoji prefix
         val fullText = buildString {
@@ -378,8 +381,14 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
         val centerX = (node.x + node.width / 2).toInt()
 
         // Output text with tspans, centered via text-anchor middle
+        val textFill = if (hasLinks) {
+            if (useDark) "#60A5FA" else "#2563EB" // Blue color for linked nodes
+        } else {
+            if (useDark) "#e5e7eb" else "#1a1a1a" // Default colors
+        }
+
         svg.append("""
-            <text x="$centerX" y="$startY" class="node-text $textClass" text-anchor="middle">
+            <text x="$centerX" y="$startY" class="node-text $textClass" text-anchor="middle" fill="$textFill">
         """.trimIndent())
         finalLines.forEachIndexed { idx, line ->
             if (idx == 0) {
@@ -394,13 +403,24 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
         }
         svg.append("""
             </text>
-            </g>
         """.trimIndent())
+
+        // Add link indicator icon if node has links
+        if (hasLinks) {
+            val iconX = node.x + node.width - 16
+            val iconY = node.y + 8
+            svg.append("""
+                <text x="$iconX" y="$iconY" class="link-icon" text-anchor="middle" fill="$textFill" font-size="10">🔗</text>
+            """.trimIndent())
+        }
+
+        svg.append("</g>")
     }
 
+
     private fun drawSpecializedGroup(svg: StringBuilder, group: SpecializedGroup, groupIndex: Int) {
-        // Define list of neon colors to cycle through
-        val neonColors = listOf(
+        // Define neon colors for dark mode and contrasting colors for light mode
+        val darkModeColors = listOf(
             "neon-green",      // #39FF14 (Electric Green)
             "neon-pink",       // #FF1493 (Hot Pink)
             "neon-cyan",       // #00FFFF (Electric Cyan)
@@ -409,12 +429,28 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
             "neon-purple",     // #9D00FF (Electric Purple)
             "neon-blue",       // #0080FF (Electric Blue)
             "neon-magenta",    // #FF00FF (Electric Magenta)
-            "neon-red",         // #FF073A (Electric Red)
+            "neon-red",        // #FF073A (Electric Red)
             "neon-lime",       // #CCFF00 (Electric Lime)
-
         )
 
-        val neonClass = neonColors[groupIndex % neonColors.size]
+        val lightModeColors = listOf(
+            "light-green",     // Darker green for light backgrounds
+            "light-pink",      // Darker pink for light backgrounds
+            "light-cyan",      // Darker cyan for light backgrounds
+            "light-orange",    // Darker orange for light backgrounds
+            "light-purple",    // Darker purple for light backgrounds
+            "light-blue",      // Darker blue for light backgrounds
+            "light-magenta",   // Darker magenta for light backgrounds
+            "light-red",       // Darker red for light backgrounds
+            "light-teal",      // Teal for light backgrounds
+            "light-indigo",    // Indigo for light backgrounds
+        )
+
+        val colorClass = if (useDark) {
+            darkModeColors[groupIndex % darkModeColors.size]
+        } else {
+            lightModeColors[groupIndex % lightModeColors.size]
+        }
 
         // Draw plus symbol
         val firstNode = group.rows.first().first()
@@ -427,7 +463,7 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
         group.rows.forEach { row ->
             row.forEachIndexed { index, node ->
                 val nodeClass = if (index == 0 && row == group.rows.first()) "specialized-title" else "specialized-node"
-                val textClass = "specialized-text $neonClass"
+                val textClass = "specialized-text $colorClass"
                 drawNode(svg, node, nodeClass, textClass)
             }
         }
@@ -516,127 +552,3 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class)
 }
 
 
-class DiagramParser {
-
-    fun parseJson(json: String): DiagramData {
-        val input = Json.decodeFromString<DiagramJsonInput>(json)
-        return convertToDiagramData(input)
-    }
-
-    fun parseCSV(csv: String): DiagramData {
-        val lines = csv.lines().filter { it.isNotBlank() }
-        if (lines.size < 2) throw IllegalArgumentException("CSV must have at least 2 lines")
-
-        // Handle the case where first line is "main,QUOTE" format or has header
-        var mainNode = "QUOTE" // default
-        var dataStartIndex = 1 // skip header by default
-
-        // Check if first line is the old format "main,QUOTE"
-        if (lines[0].lowercase().startsWith("main,")) {
-            val parts = lines[0].split(",")
-            if (parts.size >= 2) {
-                mainNode = parts[1].trim()
-            }
-            dataStartIndex = 2 // skip both main line and header
-        } else {
-            // Look for MAIN row in the data
-            val mainNodeLine = lines.drop(1).find { it.startsWith("MAIN,") }
-            if (mainNodeLine != null) {
-                val mainNodeParts = parseCSVRow(mainNodeLine)
-                if (mainNodeParts.size >= 4) {
-                    mainNode = mainNodeParts[3] // The node name is in the 4th column
-                }
-            }
-        }
-
-        val commonRows = mutableListOf<List<String>>()
-        val specializedGroupsMap = mutableMapOf<String, MutableMap<Int, Pair<String?, List<String>>>>()
-
-        lines.drop(dataStartIndex).forEach { line -> // Skip header and/or main line
-            if (line.startsWith("MAIN,") || line.lowercase().startsWith("type,")) return@forEach // Skip main node line and header
-
-            val parts = parseCSVRow(line)
-            if (parts.size < 4) return@forEach // Skip invalid lines
-
-            val type = parts[0]
-            val emoji = parts[1].takeIf { it.isNotBlank() }
-            val rowIndex = parts[2].toIntOrNull() ?: return@forEach
-            val nodesString = parts[3].trim('"')
-            val nodes = nodesString.split(",").map { it.trim() }
-
-            if (type == "COMMON") {
-                while (commonRows.size <= rowIndex) {
-                    commonRows.add(emptyList())
-                }
-                commonRows[rowIndex] = nodes
-            } else {
-                specializedGroupsMap.getOrPut(type) { mutableMapOf() }[rowIndex] = emoji to nodes
-            }
-        }
-
-        val specializedGroups = specializedGroupsMap.map { (title, rowsMap) ->
-            val emoji = rowsMap.values.firstOrNull()?.first ?: ""
-            val rows = rowsMap.entries.sortedBy { it.key }.map { it.value.second }
-            SpecializedGroupInput(title, emoji, rows)
-        }
-
-        return convertToDiagramData(DiagramJsonInput(mainNode, commonRows, specializedGroups))
-    }
-
-
-    private fun parseCSVRow(line: String): List<String> {
-        val result = mutableListOf<String>()
-        var current = StringBuilder()
-        var inQuotes = false
-        var i = 0
-
-        while (i < line.length) {
-            val char = line[i]
-            when {
-                char == '"' && (i == 0 || line[i-1] != '\\') -> {
-                    inQuotes = !inQuotes
-                }
-                char == ',' && !inQuotes -> {
-                    result.add(current.toString().trim())
-                    current = StringBuilder()
-                }
-                else -> {
-                    current.append(char)
-                }
-            }
-            i++
-        }
-
-        result.add(current.toString().trim())
-        return result
-    }
-
-    private fun convertToDiagramData(input: DiagramJsonInput): DiagramData {
-        val mainNode = DiagramNode(input.mainNode, isMainNode = true)
-
-        val commonRows = input.commonRows.map { row ->
-            row.map { title -> DiagramNode(title) }
-        }
-
-        val specializedGroups = input.specializedGroups.map { group ->
-            val rows = group.rows.map { row ->
-                row.map { title -> DiagramNode(title, emoji = group.emoji) }
-            }
-            SpecializedGroup(group.title, group.emoji, rows)
-        }
-
-        return DiagramData(mainNode, commonRows, specializedGroups)
-    }
-}
-
-data class DiagramJsonInput(
-    val mainNode: String,
-    val commonRows: List<List<String>>,
-    val specializedGroups: List<SpecializedGroupInput>
-)
-
-data class SpecializedGroupInput(
-    val title: String,
-    val emoji: String,
-    val rows: List<List<String>>
-)
