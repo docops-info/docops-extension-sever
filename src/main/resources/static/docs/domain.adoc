@@ -280,6 +280,66 @@ DELIVERY,📦,0,"[[https://argocd.readthedocs.io ArgoCD]];[[https://jfrog.com JF
 [.back-to-top]
 <<top, 🔝>>
 
+
+=== Enterprise Data Platform (Multi-Row Groups)
+
+This example shows how specialized groups can span multiple rows using different `rowIndex` values, perfect for organizing complex domains with many components.
+
+[source,asciidoc]
+....
+[docops,domain,controls=true]
+----
+main,ENTERPRISE DATA PLATFORM
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"[[https://keycloak.org Single Sign-On]];[[https://wiki.company.com/governance Data Governance]];[[https://wiki.company.com/privacy Privacy Controls]]"
+COMMON,,1,"[[https://grafana.company.com Monitoring]];[[https://wiki.company.com/lineage Data Lineage]];[[https://wiki.company.com/catalog Data Catalog]]"
+INGESTION,📥,0,"[[https://kafka.apache.org Apache Kafka]];[[https://pulsar.apache.org Apache Pulsar]];[[https://nifi.apache.org Apache NiFi]]"
+INGESTION,📥,1,"[[https://airbyte.com Airbyte]];[[https://fivetran.com Fivetran]];[[https://wiki.company.com/api API Connectors]]"
+INGESTION,📥,2,"[[https://wiki.company.com/batch Batch Jobs]];[[https://wiki.company.com/streaming Stream Processing]];[[https://wiki.company.com/cdc Change Data Capture]]"
+STORAGE,💾,0,"[[https://snowflake.com Snowflake]];[[https://databricks.com Delta Lake]];[[https://iceberg.apache.org Apache Iceberg]]"
+STORAGE,💾,1,"[[https://aws.amazon.com/s3 Amazon S3]];[[https://hadoop.apache.org HDFS]];[[https://wiki.company.com/cache Redis Cache]]"
+PROCESSING,⚡,0,"[[https://spark.apache.org Apache Spark]];[[https://flink.apache.org Apache Flink]];[[https://beam.apache.org Apache Beam]]"
+PROCESSING,⚡,1,"[[https://dbt.com dbt Core]];[[https://wiki.company.com/etl Custom ETL]];[[https://airflow.apache.org Apache Airflow]]"
+ANALYTICS,📊,0,"[[https://tableau.com Tableau]];[[https://powerbi.microsoft.com Power BI]];[[https://superset.apache.org Apache Superset]]"
+ANALYTICS,📊,1,"[[https://jupyter.org Jupyter Notebooks]];[[https://rstudio.com RStudio]];[[https://wiki.company.com/reports Custom Reports]]"
+ML/AI,🤖,0,"[[https://mlflow.org MLflow]];[[https://kubeflow.org Kubeflow]];[[https://wiki.company.com/experiments Experiment Tracking]]"
+ML/AI,🤖,1,"[[https://tensorflow.org TensorFlow]];[[https://pytorch.org PyTorch]];[[https://scikit-learn.org Scikit-learn]]"
+ML/AI,🤖,2,"[[https://wiki.company.com/models Model Registry]];[[https://wiki.company.com/serving Model Serving]];[[https://wiki.company.com/monitoring ML Monitoring]]"
+----
+....
+
+[docops,domain,controls=true, useDark=true]
+----
+main,ENTERPRISE DATA PLATFORM
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"[[https://keycloak.org Single Sign-On]];[[https://wiki.company.com/governance Data Governance]];[[https://wiki.company.com/privacy Privacy Controls]]"
+COMMON,,1,"[[https://grafana.company.com Monitoring]];[[https://wiki.company.com/lineage Data Lineage]];[[https://wiki.company.com/catalog Data Catalog]]"
+INGESTION,📥,0,"[[https://kafka.apache.org Apache Kafka]];[[https://pulsar.apache.org Apache Pulsar]];[[https://nifi.apache.org Apache NiFi]]"
+INGESTION,📥,1,"[[https://airbyte.com Airbyte]];[[https://fivetran.com Fivetran]];[[https://wiki.company.com/api API Connectors]]"
+INGESTION,📥,2,"[[https://wiki.company.com/batch Batch Jobs]];[[https://wiki.company.com/streaming Stream Processing]];[[https://wiki.company.com/cdc Change Data Capture]]"
+STORAGE,💾,0,"[[https://snowflake.com Snowflake]];[[https://databricks.com Delta Lake]];[[https://iceberg.apache.org Apache Iceberg]]"
+STORAGE,💾,1,"[[https://aws.amazon.com/s3 Amazon S3]];[[https://hadoop.apache.org HDFS]];[[https://wiki.company.com/cache Redis Cache]]"
+PROCESSING,⚡,0,"[[https://spark.apache.org Apache Spark]];[[https://flink.apache.org Apache Flink]];[[https://beam.apache.org Apache Beam]]"
+PROCESSING,⚡,1,"[[https://dbt.com dbt Core]];[[https://wiki.company.com/etl Custom ETL]];[[https://airflow.apache.org Apache Airflow]]"
+ANALYTICS,📊,0,"[[https://tableau.com Tableau]];[[https://powerbi.microsoft.com Power BI]];[[https://superset.apache.org Apache Superset]]"
+ANALYTICS,📊,1,"[[https://jupyter.org Jupyter Notebooks]];[[https://rstudio.com RStudio]];[[https://wiki.company.com/reports Custom Reports]]"
+ML/AI,🤖,0,"[[https://mlflow.org MLflow]];[[https://kubeflow.org Kubeflow]];[[https://wiki.company.com/experiments Experiment Tracking]]"
+ML/AI,🤖,1,"[[https://tensorflow.org TensorFlow]];[[https://pytorch.org PyTorch]];[[https://scikit-learn.org Scikit-learn]]"
+ML/AI,🤖,2,"[[https://wiki.company.com/models Model Registry]];[[https://wiki.company.com/serving Model Serving]];[[https://wiki.company.com/monitoring ML Monitoring]]"
+----
+
+Notice how each specialized group (INGESTION, STORAGE, PROCESSING, ANALYTICS, ML/AI) uses multiple `rowIndex` values:
+- **INGESTION**: 3 rows (0, 1, 2) for streaming tools, connectors, and processing methods
+- **STORAGE**: 2 rows (0, 1) separating cloud warehouses from file systems
+- **PROCESSING**: 2 rows (0, 1) for big data engines vs. workflow orchestration
+- **ANALYTICS**: 2 rows (0, 1) for BI tools vs. interactive analysis
+- **ML/AI**: 3 rows (0, 1, 2) for MLOps, frameworks, and model lifecycle
+
+[.back-to-top]
+<<top, 🔝>>
+
 == Block Attributes
 
 The Domain block supports the standard DocOps attributes described in xref:docops.adoc[DocOps Block Processor]:
