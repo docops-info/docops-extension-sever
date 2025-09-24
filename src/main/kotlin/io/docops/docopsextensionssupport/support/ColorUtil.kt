@@ -190,11 +190,11 @@ class SVGColor(
 
         return rgbToHex(r, g, b)
     }
-    private fun darkenColor(hexColor: String, factor: Double): String {
+    fun darkenColor(hexColor: String, factor: Double): String {
         return adjustColor(hexColor, factor, false)
     }
 
-    private fun brightenColor(hexColor: String, factor: Double): String {
+    fun brightenColor(hexColor: String, factor: Double): String {
         return adjustColor(hexColor, factor, true)
     }
 

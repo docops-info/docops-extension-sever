@@ -4,7 +4,10 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import kotlin.compareTo
+import kotlin.times
 
 /**
  * Implements a circular button shape with centered text.
@@ -51,7 +54,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 60
+        var startX = 20
         var startY = 10
         if (index > 0) {
             startY += 110
@@ -59,7 +62,8 @@ class Circle(buttons: Buttons): Regular(buttons) {
 
         buttonList.forEach { button: Button ->
             var fill = "class=\"btn_${button.id}_cls\""
-            var baseColor = button.color ?: "#3498db"
+            val baseColor = button.color ?: "#3498db"
+            val svgColor = SVGColor(baseColor, "btn_${button.id}")
 
             if(isPdf) {
                 fill = "fill='${baseColor}'"
@@ -71,51 +75,60 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 lineY = lines.size * -6
             }
             val title = linesToMultiLineTextInternal(button.buttonStyle?.labelStyle,
-                lines, 12, 50)
+                lines, 12, 60)
 
-            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
-            var endAnchor = "</a>"
+            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
                 href = ""
-                endAnchor = ""
             }
+
+            // Define colors and styles based on dark/light mode
+            val (circleBackground, circleBorder, textColor, shadowColor) = if (buttons.useDark) {
+                arrayOf(
+                    "rgba(255,255,255,0.2)",
+                    "url(#borderGradientDark_${buttons.id})",
+                    "rgba(255,255,255,0.95)",
+                    "rgba(0,0,0,0.5)"
+                )
+            } else {
+                arrayOf(
+                    "rgba(0,0,0,0.1)",
+                    "url(#borderGradientLight_${buttons.id})",
+                    "#2d3748",
+                    "rgba(255,255,255,0.8)"
+                )
+            }
+
+            val glassGradientId = if (buttons.useDark) "circleGradient_${button.id}" else "circleGradient_${button.id}"
 
             btns.append(
                 """
-        $href
-        <g role="button" cursor="pointer" transform="translate($startX,$startY)" class="circle-button">
+        <g role="button" transform="translate($startX,$startY)" class="circle-button" $href>
             <title class="description">${button.description?.escapeXml() ?: ""}</title>
             
-            <!-- Enhanced circle with gradient and shadow -->
-            <circle id="button-shadow" cx="50" cy="52" r="50" 
-                    fill="${darkenColor(baseColor, 0.6)}" 
-                    opacity="0.3" 
-                    filter="url(#circleShadowBlur)" />
+            <circle cx="60" cy="60" r="50"
+                    fill="$circleBackground"
+                    stroke="$circleBorder"
+                    stroke-width="2"
+                    filter="url(#dropShadow)"
+                    style="backdrop-filter: blur(20px);"/>
+
+            <!-- Glass overlay -->
+            <circle cx="60" cy="60" r="50"
+                    fill="url(#$glassGradientId)"
+                    opacity="0.8"/>
             
-            <circle id="button-base" cx="50" cy="50" r="50" 
-                    fill="url(#circleGradient_${button.id})" 
-                    stroke="${darkenColor(baseColor, 0.4)}" 
-                    stroke-width="2" />
-            
-            <!-- Highlight for 3D effect - constrained within the main circle -->
-            <circle id="button-highlight" cx="50" cy="40" r="30" 
-                    fill="url(#circleHighlight_${button.id})" 
-                    opacity="0.4" />
-            
-            <!-- Inner shadow for depth -->
-            <circle id="button-inner-shadow" cx="50" cy="50" r="48" 
-                    fill="none" 
-                    stroke="${darkenColor(baseColor, 0.8)}" 
-                    stroke-width="1" 
-                    opacity="0.2" />
-            
-            <!-- Text with enhanced styling -->
-            <text id="label" x="50" y="50" text-anchor="middle" 
-                  style="fill: #ffffff; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); ${button.buttonStyle?.labelStyle ?: ""}">
+            <text id="label" 
+                  x="60" y="60"
+                  text-anchor="middle"
+                  dominant-baseline="central"
+                  fill="$textColor"
+                  filter="url(#textShadow)"
+                  style="font-weight: bold; text-shadow: 1px 1px 2px $shadowColor; ${button.buttonStyle?.labelStyle ?: ""}">
                 $title
             </text>
         </g>
-        $endAnchor
+       
         """.trimIndent()
             )
 
@@ -171,7 +184,35 @@ class Circle(buttons: Buttons): Regular(buttons) {
             gradientDefs.append(createCircleGradient(button))
             gradientDefs.append(createCircleHighlight(button))
         }
-
+        val darkModeDefs = if (buttons.useDark) {
+            """
+                <linearGradient id="glassBorder_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+        </linearGradient>
+        <filter id="glassDropShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+            <feMerge>
+                <feMergeNode in="shadow"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="glassOverlay_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
+            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
+            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="backgroundGradient_${buttons.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
+        </linearGradient>
+            """.trimIndent()
+        } else {""}
         // Enhanced styles for interactive states - WITHOUT transform changes
         if (!isPdf) {
             styleDefs.append("""
@@ -208,6 +249,40 @@ class Circle(buttons: Buttons): Regular(buttons) {
                     <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
                 </filter>
                 
+                <!-- Gradient for the glass effect -->
+            <radialGradient id="glassGradient" cx="0.3" cy="0.3" r="0.8">
+                <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                <stop offset="70%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+            </radialGradient>
+
+            <!-- Border gradient -->
+            <radialGradient id="borderGradient" cx="0.3" cy="0.3" r="0.9">
+                <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+            </radialGradient>
+
+            <!-- Shadow filter -->
+            <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                <feOffset dx="0" dy="2" result="offset" />
+                <feFlood flood-color="rgba(0,0,0,0.15)"/>
+                <feComposite in2="offset" operator="in"/>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+
+            <!-- Inner glow -->
+            <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+                $darkModeDefs
                 $gradientDefs
                 $styleDefs
             </defs>
@@ -219,8 +294,10 @@ class Circle(buttons: Buttons): Regular(buttons) {
      */
     private fun createCircleGradient(button: Button): String {
         val baseColor = button.color ?: "#3498db"
-        val darkerColor = darkenColor(baseColor, 0.3)
-        val lighterColor = lightenColor(baseColor, 0.2)
+        val svgColor = SVGColor(baseColor, "btn_${button.id}")
+        val darkerColor = svgColor.darkenColor(baseColor, 0.3)
+        val lighterColor = svgColor.brightenColor(baseColor, 0.2)
+
 
         return """
             <radialGradient id="circleGradient_${button.id}" cx="30%" cy="25%" r="80%">
@@ -242,27 +319,5 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
             </radialGradient>
         """.trimIndent()
-    }
-
-    /**
-     * Helper function to darken a color by a specified factor
-     */
-    private fun darkenColor(hexColor: String, factor: Double): String {
-        val color = java.awt.Color.decode(hexColor)
-        val r = (color.red * (1 - factor)).toInt().coerceAtLeast(0)
-        val g = (color.green * (1 - factor)).toInt().coerceAtLeast(0)
-        val b = (color.blue * (1 - factor)).toInt().coerceAtLeast(0)
-        return String.format("#%02x%02x%02x", r, g, b)
-    }
-
-    /**
-     * Helper function to lighten a color by a specified factor
-     */
-    private fun lightenColor(hexColor: String, factor: Double): String {
-        val color = java.awt.Color.decode(hexColor)
-        val r = (color.red + (255 - color.red) * factor).toInt().coerceAtMost(255)
-        val g = (color.green + (255 - color.green) * factor).toInt().coerceAtMost(255)
-        val b = (color.blue + (255 - color.blue) * factor).toInt().coerceAtMost(255)
-        return String.format("#%02x%02x%02x", r, g, b)
     }
 }
