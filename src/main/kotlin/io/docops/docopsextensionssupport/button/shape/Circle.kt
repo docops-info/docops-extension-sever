@@ -37,10 +37,10 @@ import kotlin.times
 class Circle(buttons: Buttons): Regular(buttons) {
 
     companion object {
-        const val BUTTON_HEIGHT: Int = 50
-        const val BUTTON_WIDTH = 300
-        const val BUTTON_PADDING = 10
-        const val BUTTON_SPACING = 10
+        const val BUTTON_HEIGHT: Int = 120  // Circle diameter (100) + padding (20)
+        const val BUTTON_WIDTH = 120       // Circle diameter (100) + padding (20)
+        const val BUTTON_PADDING = 20      // Padding between circles
+        const val BUTTON_SPACING = 20      // Additional spacing
     }
 
     override fun drawButton(
@@ -55,9 +55,12 @@ class Circle(buttons: Buttons): Regular(buttons) {
             }
         }
         var startX = 20
-        var startY = 10
+        var startY = 20 // Start with some top padding
+
+        // Calculate Y position based on row index
+        // Each circle needs 120px height (diameter 100px + 20px padding)
         if (index > 0) {
-            startY += 110
+            startY = 20 + (index * 120) // 20px top padding + 120px per row
         }
 
         buttonList.forEach { button: Button ->
@@ -99,7 +102,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 )
             }
 
-            val glassGradientId = if (buttons.useDark) "circleGradient_${button.id}" else "circleGradient_${button.id}"
+            val glassGradientId = if (buttons.useDark) "glassGradientDark_${buttons.id}" else "circleGradient_${button.id}"
 
             btns.append(
                 """
@@ -132,11 +135,10 @@ class Circle(buttons: Buttons): Regular(buttons) {
         """.trimIndent()
             )
 
-            startX += 105
+            startX += 120 // Increase horizontal spacing to accommodate 100px diameter + padding
         }
         return btns.toString()
     }
-
     fun linesToMultiLineTextInternal(style: String?, lines: MutableList<String>, dy: Int, x: Int): String {
         val text = StringBuilder()
         var indexes = mutableListOf<Int>(0)
@@ -161,7 +163,9 @@ class Circle(buttons: Buttons): Regular(buttons) {
             scale = it.scale
         }
         val size = toRows().size
-        return (((size * 125) + (size * 5)) + size * 5) * scale
+        // Each row needs 120px (100px circle diameter + 20px padding)
+        // Add extra 40px for top and bottom margins
+        return ((size * 120) + 40) * scale
     }
 
     override fun width(): Float {
@@ -171,7 +175,9 @@ class Circle(buttons: Buttons): Regular(buttons) {
             scale = it.scale
             cols = it.columns
         }
-        return ((cols * 105) + 60) * scale
+        // Each circle needs 120px width (100px diameter + 20px padding)
+        // Add 40px for left and right margins
+        return ((cols * 120) + 40) * scale
     }
 
     override fun defs(): String {
@@ -320,4 +326,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
             </radialGradient>
         """.trimIndent()
     }
+
+
+
 }
