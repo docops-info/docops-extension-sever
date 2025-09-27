@@ -22,6 +22,10 @@ import io.docops.docopsextensionssupport.button.EmbeddedImage
 import io.docops.docopsextensionssupport.button.Link
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.svgsupport.textWidth
+import java.awt.Font
+import kotlin.compareTo
+import kotlin.times
 
 /**
  * Implements a rectangular card-style button layout with enhanced visual features.
@@ -51,25 +55,25 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
     /**
      * Draws the buttons using the specified theme scale and returns the generated SVG code as a string.
-     *
-     * @return The SVG code representing the buttons.
      */
-    override fun draw() : String{
+    override fun draw(): String {
         var scale = 1.0f
         buttons.theme?.let {
             scale = it.scale
         }
+
         val sb = StringBuilder("<g transform=\"scale($scale)\">")
         val rows = toRows()
         var count = 0
-        rows.forEachIndexed { index, buttons ->
 
+        rows.forEachIndexed { index, buttons ->
             sb.append(drawButtonInternal(index, buttons, count))
             count += buttons.size
         }
         sb.append("</g>")
         return sb.toString()
     }
+
     private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): String {
         val btns = StringBuilder()
         var win = "_top"
@@ -78,101 +82,211 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 10
 
+        var startX = 10
         var startY = 10
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
+            startY = index * CARD_HEIGHT + (index * CARD_PADDING) + CARD_SPACING
         }
         var localCount = count
 
         buttonList.forEach { button: Button ->
             localCount++
-            var textFillColor = "#111111"
-            button.color?.let {
-                textFillColor = determineTextColor(it)
-            }
-            var link = """<a xlink:href="${button.link}" target="$win" fill="$textFillColor">$localCount</a>"""
-            if(isPdf) {
-                link = "$localCount"
+
+            val isDark = buttons.useDark
+            val cardColors = getCardColors(isDark)
+            val textColors = getTextColors(isDark)
+
+            // Truncate main label if needed
+            val maxLabelWidth = CARD_WIDTH - CIRCLE_SIZE - 40 // Leave space for circle and padding
+            val truncatedLabel = truncateText(button.label, maxLabelWidth.toFloat(), 16)
+            val showTooltip = truncatedLabel != button.label
+
+            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+            if (!button.enabled) {
+                href = ""
             }
 
-            var imageOrLabel = """
-            <rect id="button" x="10" y="10" height="98" width="98" class="btn_${button.id}_cls" rx="20" ry="20" filter="url(#buttonBlur)"/>
-            <rect id="buttongrad" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="url(#overlayGrad)"/>
-            <rect id="buttontop" x="15" y="12" height="40" width="88" rx="18" ry="18" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
-            <rect id="buttonbottom" x="20" y="100" height="5" width="78" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
-            <g transform="translate(10,10)">
-            <text x="49" y="68" text-anchor="middle" alignment-baseline="central" font-family="Helvetica, sans-serif" font-size="60px" class="glass">
-                $link
-            </text>
-            </g>
-            """.trimIndent()
-            button.embeddedImage?.let {
-                imageOrLabel = makeEmbedImage( it)
-            }
-            var href = """<a xlink:href="${button.link}" class="linkText" target="$win">"""
-            var endAnchor = "</a>"
-            if(!button.enabled) {
-                href = ""
-                endAnchor = ""
-            }
             btns.append(
                 """
-        <g transform="translate($startX,$startY)" cursor="pointer">
-            <rect id="mainButton" x="0" y="0" width="310" height="120" rx="15" ry="15" class="btn_${button.id}_cls" filter="url(#buttonBlur)"/>
-            <rect id="mainButtongrad" x="0" y="0" width="310" height="120" rx="15" ry="15" fill="url(#overlayGrad)" fill-opacity="0.7"/>
-            <rect id="mainButtontop" x="5" y="2" width="300" height="50" rx="13" ry="13" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
-            <rect id="mainButtonbottom" x="10" y="112" width="290" height="5" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
-            $href
-            <text x="115" y="16" class="glass" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
-            $endAnchor
-            $href
-            $imageOrLabel
-            $endAnchor
-            ${linksToText(button.links, button.buttonStyle?.linkStyle)}
+        <g transform="translate($startX,$startY)" class="card-button" $href>
+            ${if (showTooltip) """<title>${button.label.escapeXml()}</title>""" else ""}
+            
+            <!-- Card Background -->
+            <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
+                  rx="$CARD_RADIUS" ry="$CARD_RADIUS"
+                  fill="${cardColors.background}"
+                  stroke="${cardColors.border}"
+                  stroke-width="1"
+                  filter="url(#cardShadow_${buttons.id})"/>
+            
+            <!-- Circle for number -->
+            <circle cx="$CIRCLE_CENTER_X" cy="$CIRCLE_CENTER_Y" r="${CIRCLE_SIZE / 2}"
+                    fill="${button.color ?: "#3498db"}"
+                    stroke="${cardColors.circleBorder}"
+                    stroke-width="1"/>
+            
+            <!-- Number in circle -->
+            <text x="$CIRCLE_CENTER_X" y="$CIRCLE_CENTER_Y" 
+                  text-anchor="middle" 
+                  dominant-baseline="central"
+                  fill="white"
+                  font-family="Arial, Helvetica, sans-serif"
+                  font-size="14"
+                  font-weight="bold">$localCount</text>
+            
+            <!-- Main label -->
+            <text x="$LABEL_START_X" y="$MAIN_LABEL_Y"
+                  fill="${textColors.primary}"
+                  font-family="Arial, Helvetica, sans-serif"
+                  font-size="16"
+                  font-weight="600"
+                  style="${button.buttonStyle?.labelStyle ?: ""}">${truncatedLabel.escapeXml()}</text>
+            
+            <!-- Additional links -->
+            ${renderAdditionalLinks(button.links, textColors, win)}
+            
         </g>
         """.trimIndent()
             )
 
-            startX += BUTTON_WIDTH + BUTTON_PADDING
-
+            startX += CARD_WIDTH + CARD_PADDING
         }
         return btns.toString()
     }
 
-    private fun makeEmbedImage( buttonImage: EmbeddedImage): String {
-        return """
-            <rect id="imageFrame" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="#fcfcfc" filter="url(#buttonBlur)"/>
-            <rect id="imageFrameGrad" x="10" y="10" height="98" width="98" rx="20" ry="20" fill="url(#overlayGrad)" fill-opacity="0.3"/>
-            <image id="embeddedImage" x="10" y="10" width="98" height="98" href="${buttonImage.ref}" filter="url(#naturalShadow)"/>
-            <rect id="imageFrameTop" x="15" y="12" height="30" width="88" rx="18" ry="18" fill="url(#topshineGrad)" fill-opacity="0.5" filter="url(#topshineBlur)"/>""".trimIndent()
+    private fun renderAdditionalLinks(links: MutableList<Link>?, textColors: TextColors, win: String): String {
+        if (links.isNullOrEmpty()) return ""
 
-    }
-    private fun linksToText(links: MutableList<Link>?, style: String?): String {
-        val sb = StringBuilder("""<text id="linkText" x="115" y="20" class="glass">""")
-        var linkClass = "linkText"
-        buttons.theme?.let {
-            if(it.useDark) {
-                linkClass = "linkTextDark"
+        val sb = StringBuilder()
+        val maxLinkWidth = CARD_WIDTH - LABEL_START_X - 10 // Available width for links
+
+        links.forEachIndexed { index, link ->
+            val linkY = LINKS_START_Y + (index * LINK_LINE_HEIGHT)
+            if (linkY > CARD_HEIGHT - 10) return@forEachIndexed // Don't overflow card
+
+            val truncatedLinkLabel = truncateText(link.label, maxLinkWidth.toFloat(), 12)
+            val showLinkTooltip = truncatedLinkLabel != link.label
+
+            var linkElement = if (isPdf) {
+                truncatedLinkLabel.escapeXml()
+            } else {
+                """<a xlink:href="${link.href}" href="${link.href}" 
+                      target="$win" 
+                      fill="${textColors.link}" 
+                      style="text-decoration: underline; cursor: pointer;">
+                   ${truncatedLinkLabel.escapeXml()}
+                   </a>"""
             }
+
+            sb.append("""
+                <text x="$LABEL_START_X" y="$linkY"
+                      fill="${textColors.link}"
+                      font-family="Arial, Helvetica, sans-serif"
+                      font-size="12"
+                      style="text-decoration: underline;">
+                    ${if (showLinkTooltip) """<title>${link.label.escapeXml()}</title>""" else ""}
+                    $linkElement
+                </text>
+            """.trimIndent())
         }
-        links?.let {
-            it.forEach { link ->
-                var linkElement = """<a xlink:href="${link.href}" href="${link.href}" class="$linkClass" style="$style" target="_blank">${link.label.escapeXml()}</a>"""
-                if(isPdf) {
-                    linkElement = link.label.escapeXml()
-                }
-                sb.append("""
-            <tspan x="115" dy="14" style="$style" class="glass">
-                $linkElement
-            </tspan>
-                """.trimIndent())
-            }
-        }
-       sb.append("</text>")
+
         return sb.toString()
     }
+
+    private fun truncateText(text: String, maxWidth: Float, fontSize: Int): String {
+        val textWidthPx = text.textWidth("Arial", fontSize)
+        return if (textWidthPx > maxWidth) {
+            // Binary search for the right length
+            var low = 0
+            var high = text.length
+            var result = text
+
+            while (low <= high) {
+                val mid = (low + high) / 2
+                val candidate = text.substring(0, mid) + "..."
+                val candidateWidth = candidate.textWidth("Arial", fontSize)
+
+                if (candidateWidth <= maxWidth) {
+                    result = candidate
+                    low = mid + 1
+                } else {
+                    high = mid - 1
+                }
+            }
+            result
+        } else {
+            text
+        }
+    }
+
+    private fun getCardColors(isDark: Boolean): CardColors {
+        return if (isDark) {
+            CardColors(
+                background = "#2d3748",
+                border = "rgba(255,255,255,0.2)",
+                circleBorder = "rgba(255,255,255,0.3)"
+            )
+        } else {
+            CardColors(
+                background = "#ffffff",
+                border = "rgba(0,0,0,0.1)",
+                circleBorder = "rgba(0,0,0,0.2)"
+            )
+        }
+    }
+
+    private fun getTextColors(isDark: Boolean): TextColors {
+        return if (isDark) {
+            TextColors(
+                primary = "#f7fafc",
+                secondary = "#a0aec0",
+                link = "#63b3ed"
+            )
+        } else {
+            TextColors(
+                primary = "#2d3748",
+                secondary = "#718096",
+                link = "#3182ce"
+            )
+        }
+    }
+
+    override fun defs(): String {
+        return """
+            <defs>
+                <!-- Card shadow filter -->
+                <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="4" 
+                                  flood-color="${if (buttons.useDark) "rgba(0,0,0,0.5)" else "rgba(0,0,0,0.1)"}"/>
+                </filter>
+                
+                <!-- Hover effects for interactivity -->
+                <style>
+                    .card-button {
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .card-button:hover rect {
+                        stroke-width: 2;
+                        filter: url(#cardShadowHover_${buttons.id});
+                    }
+                    
+                    .card-button:hover text {
+                        opacity: 0.8;
+                    }
+                </style>
+                
+                <!-- Enhanced shadow for hover state -->
+                <filter id="cardShadowHover_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="8" 
+                                  flood-color="${if (buttons.useDark) "rgba(0,0,0,0.7)" else "rgba(0,0,0,0.15)"}"/>
+                </filter>
+            </defs>
+        """.trimIndent()
+    }
+
     override fun height(): Float {
         val size = toRows().size
         var scale = 1.0f
@@ -180,10 +294,9 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
         if (size > 1) {
-            return (size * Slim.BUTTON_HEIGHT + (size * 10)) * scale + 10
+            return (size * CARD_HEIGHT + (size * CARD_PADDING) + CARD_SPACING * 2) * scale
         }
-        val h = Slim.BUTTON_HEIGHT + 30
-        return h * scale
+        return (CARD_HEIGHT + 40) * scale
     }
 
     override fun width(): Float {
@@ -193,12 +306,37 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
+        return (columns * CARD_WIDTH + (columns - 1) * CARD_PADDING + 20) * scale
     }
+
+    private data class CardColors(
+        val background: String,
+        val border: String,
+        val circleBorder: String
+    )
+
+    private data class TextColors(
+        val primary: String,
+        val secondary: String,
+        val link: String
+    )
+
     companion object {
-        const val BUTTON_HEIGHT: Int = 120
-        const val BUTTON_WIDTH = 310
-        const val BUTTON_PADDING = 10
-        const val  BUTTON_SPACING = 10
+        const val CARD_HEIGHT: Int = 100
+        const val CARD_WIDTH = 300
+        const val CARD_PADDING = 15
+        const val CARD_SPACING = 15
+        const val CARD_RADIUS = 8
+
+        // Circle positioning
+        const val CIRCLE_SIZE = 32
+        const val CIRCLE_CENTER_X = 25
+        const val CIRCLE_CENTER_Y = 50
+
+        // Text positioning
+        const val LABEL_START_X = 50
+        const val MAIN_LABEL_Y = 35
+        const val LINKS_START_Y = 55
+        const val LINK_LINE_HEIGHT = 16
     }
 }
