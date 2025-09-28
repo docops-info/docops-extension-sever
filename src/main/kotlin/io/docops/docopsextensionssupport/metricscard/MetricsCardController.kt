@@ -90,7 +90,7 @@ class MetricsCardController {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
             val maker = MetricsCardMaker(DefaultCsvResponse)
-            val svg = maker.createCards(content, 650, 300)
+            val svg = maker.createCards(content, 650, 300, false)
 
 
             val headers = HttpHeaders()
@@ -114,11 +114,11 @@ class MetricsCardController {
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val maker = MetricsCardMaker(DefaultCsvResponse)
-            val svg = maker.createCards(payload, 650, 300)
+            val svg = maker.createCards(payload, 650, 300, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
-            ResponseEntity(svg.toByteArray(), headers, HttpStatus.OK)
+            ResponseEntity(svg.first.toByteArray(), headers, HttpStatus.OK)
         }
         return timings.value
     }

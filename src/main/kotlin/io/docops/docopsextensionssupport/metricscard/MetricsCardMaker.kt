@@ -5,6 +5,11 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 import java.util.*
+import kotlin.div
+import kotlin.times
+import kotlin.toString
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Class responsible for creating metrics card SVGs
@@ -31,17 +36,15 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
     /**
      * Creates an SVG for metrics cards from JSON or table-like data
      */
-    fun createMetricsCardSvg(data: String, width: Int = 800, height: Int = 400): String {
-
-
-        return createCards(data, width, height)
+    fun createMetricsCardSvg(payload: String, width: Int = 800, height: Int = 400, useDark: Boolean): Pair<String, CsvResponse> {
+        return createCards(payload, width, height, useDark)
     }
 
-    fun createCards(uncompressedData: String, width: Int, height: Int): String {
+    fun createCards(uncompressedData: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
         // Determine if the data is in table format or JSON format
         val metricsCardData = if (isTableFormat(uncompressedData)) {
             // Parse table format
-            parseTableData(uncompressedData)
+            parseTableData(uncompressedData,useDark)
         } else {
             // Parse JSON format
             try {
@@ -51,9 +54,8 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
                 createDefaultMetricsCardData()
             }
         }
-        csvResponse.update(metricsCardData.toCsv())
-        val svg = generateMetricsCardSvg(metricsCardData, width, height)
-        return svg
+        val svg = generateMetricsCardSvg(metricsCardData, width, height, useDark)
+        return Pair(svg, metricsCardData.toCsv())
     }
 
     /**
@@ -66,10 +68,10 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
     /**
      * Parses table-like data into MetricsCardData
      */
-    private fun parseTableData(data: String): MetricsCardData {
+    private fun parseTableData(data: String, useDark: Boolean): MetricsCardData {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Metrics"
-        var useGlass = true // Default value
+
         val metrics = mutableListOf<MetricCard>()
         var inDataSection = false
 
@@ -77,8 +79,6 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
             when {
                 line.startsWith("title:") -> title = line.substring(6).trim()
                 line.startsWith("title=") -> title = line.substring(6).trim()
-                line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
-                line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
                 line == "---" -> inDataSection = true
                 inDataSection && line.contains("|") && !isHeaderRow(line) -> {
                     val parts = line.split("|").map { it.trim() }
@@ -92,7 +92,7 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
             }
         }
 
-        return MetricsCardData(title = title, metrics = metrics, useGlass = useGlass)
+        return MetricsCardData(title = title, metrics = metrics, useGlass = useDark)
     }
 
     /**
@@ -100,9 +100,9 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
      */
     private fun isHeaderRow(line: String): Boolean {
         val lowerLine = line.lowercase()
-        return lowerLine.contains("metric") || 
-               lowerLine.contains("label") || 
-               lowerLine.contains("value")
+        return lowerLine.contains("metric") ||
+                lowerLine.contains("label") ||
+                lowerLine.contains("value")
     }
 
     /**
@@ -116,26 +116,40 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
     /**
      * Generates the SVG for metrics cards
      */
-    private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int): String {
+    @OptIn(ExperimentalUuidApi::class)
+    private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int, useGlass: Boolean): String {
         // Calculate dynamic width based on number of metrics
         // Each metric card takes 180px width + 20px margin
         val metricsCount = metricsCardData.metrics.size
         val cardWidth = 180
         val cardMargin = 20
+
+        val horizontalPadding = 40 // Add 20px padding on each side
         val totalCardWidth = metricsCount * (cardWidth + cardMargin) - cardMargin // Subtract last margin
 
-        // Use the larger of calculated width or provided width
-        val finalWidth = totalCardWidth.coerceAtLeast(width)
+        // Use the larger of calculated width or provided width, adding padding
+        val finalWidth = (totalCardWidth + horizontalPadding).coerceAtLeast(width)
+
 
         return buildString {
-            val id = UUID.randomUUID().toString()
+            val id = Uuid.random().toHexString()
             append("""
-            <svg id="ID_$id" width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
+            <svg id="ID_$id" width="$finalWidth" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
                 <defs>
             """.trimIndent())
 
+            var back = """<rect width="$finalWidth" height="$height" fill="#F2F2F7" rx="0" ry="0"/>"""
             // Add glass-specific definitions if useGlass is true
             if (metricsCardData.useGlass) {
+                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_$id)" rx="12" ry="12"/>
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="rgba(0,122,255,0.1)"
+                      stroke="url(#glassBorder_$id)" stroke-width="1.5"
+                      filter="url(#glassDropShadow_$id)"
+                />
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="url(#glassOverlay_$id)" opacity="0.7"
+                />"""
                 append("""
                     <!-- Glass gradients -->
                     <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -167,6 +181,31 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
                         <feComposite in2="offset-blur" operator="in"/>
                         <feComposite in2="SourceGraphic" operator="over"/>
                     </filter>
+                    <linearGradient id="glassBorder_${id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+        </linearGradient>
+        <filter id="glassDropShadow_${id}" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+            <feMerge>
+                <feMergeNode in="shadow"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="glassOverlay_${id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
+            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
+            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="backgroundGradient_${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
+        </linearGradient>
                 """.trimIndent())
             }
 
@@ -182,7 +221,7 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
                 </defs>
 
                 <!-- Background -->
-                <rect width="$finalWidth" height="$height" fill="${if (metricsCardData.useGlass) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
+                $back
 
                 <!-- Metrics Container -->
                 <g class="metrics">
@@ -206,10 +245,6 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
                         <rect width="$cardWidth" height="200" rx="16" ry="16" 
                               fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" 
                               filter="url(#shadow)"/>
-                        <!-- Card highlight -->
-                        <rect x="5" y="5" width="${cardWidth - 10}" height="30" rx="10" 
-                              fill="url(#highlight)"/>
-
                         <!-- Metric Value -->
                         <text x="${cardWidth/2}" y="80" 
                               font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 

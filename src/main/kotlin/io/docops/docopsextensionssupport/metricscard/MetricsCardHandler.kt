@@ -22,8 +22,8 @@ class MetricsCardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvRespon
         height: Int = 400
     ): String {
         val maker = MetricsCardMaker(csvResponse)
-        val svg = maker.createMetricsCardSvg(payload, width, height)
-        return svg
+        val svg = maker.createMetricsCardSvg(payload = payload, width = width, height = height, useDark = useDark)
+        return svg.first
     }
 
     override fun handleSVG(
