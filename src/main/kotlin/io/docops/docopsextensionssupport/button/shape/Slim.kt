@@ -20,6 +20,8 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import kotlin.compareTo
+import kotlin.times
 
 /**
  * The Slim class represents a slim version of a button display. It extends the Regular class.
@@ -82,37 +84,48 @@ class Slim(buttons: Buttons) : Regular(buttons) {
                 overlay = "${button.color}"
                 clz = ""
             }
-            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
+            var href = """window.open('${button.link}', '$win')"""
             var endAnchor = "</a>"
             if(!button.enabled) {
                 href = ""
                 endAnchor = ""
             }
             btns.append("""
-         <g transform="translate($startX,$startY)" cursor="pointer">
-        $href
-        <rect id="button" x="0" y="0" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="8" ry="8" $fill filter="url(#buttonBlur)">
-            <title>${button.label.escapeXml()}</title>
+         <g transform="translate($startX,$startY)" class="slim-card" cursor="pointer" onclick="$href">
+
+               
+        <!-- Faint thin border -->
+        <rect x="0" y="0" width="150" height="150" rx="17.5" ry="17.5"
+              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"
+              $fill/>
+
+        <!-- Inner shadow to add depth -->
+        <rect x="0" y="0" width="150" height="150" rx="18" ry="18"
+              fill="transparent" filter="url(#inner-shadow)"/>
+
+
+        <!-- Subtle noise overlay for organic texture -->
+        <rect x="0" y="0" width="150" height="150" rx="18" ry="18" fill="url(#noise)" opacity="0.04" clip-path="url(#rect-clip)"/>
+
+        <!-- Slight colored tint (like iOS accent) -->
+        <rect x="0" y="0" width="150" height="150" rx="18" ry="18"
+              fill="rgba(100,140,255,0.06)" style="mix-blend-mode:overlay">
+            <title>Netflix</title>
         </rect>
-        <rect id="buttongrad" x="0" y="0" width="$BUTTON_HEIGHT" height="$BUTTON_HEIGHT" rx="8" ry="8" fill="$overlay"/>
-        <rect id="buttontop" x="5" y="2" width="${BUTTON_HEIGHT - 10}" height="20" rx="6" ry="6" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
-        <rect id="buttonbottom" x="10" y="${BUTTON_HEIGHT - 8}" width="${BUTTON_HEIGHT - 20}" height="5" rx="2" ry="2" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)"/>
-        <path id="labelPath" d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z" $fill filter="url(#buttonBlur)"/>
-        <path id="labelPathGrad" d="M 0 5.0 A 5.0 5.0 0 0 1 5.0 0 L 145.0 0 A 5.0 5.0 0 0 1 150.0 5.0 L 150.0 35.0 A 0.0 0.0 0 0 1 150.0 35.0 L 0.0 35.0 A 0.0 0.0 0 0 1 0 35.0 Z" fill="$overlay"/>
-        <path id="labelPathTop" d="M 5 2 L 145 2 A 3.0 3.0 0 0 1 148.0 5.0 L 148.0 15 A 0.0 0.0 0 0 1 148.0 15.0 L 2.0 15.0 A 0.0 0.0 0 0 1 2 15 L 2 5 A 3.0 3.0 0 0 1 5.0 2.0 Z" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
+        
         <text text-anchor="middle" x="75" y="8" class="$clz">
             $title
         </text>
         $linesOrImage
         <text x="145" y="135" text-anchor="end">${authors}</text>
         <text x="145" y="145" style="${button.buttonStyle?.dateStyle}" text-anchor="end">${btnDate}</text>
-        $endAnchor
         </g>
             """.trimIndent())
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
         return btns.toString()
     }
+
     override fun height(): Float {
         val size = toRows().size
         var scale = 1.0f
@@ -133,7 +146,9 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
+        // Add padding on left and right, plus padding between buttons
+        // Left padding + (columns * button width) + ((columns - 1) * padding between buttons) + right padding
+        return (BUTTON_PADDING + columns * BUTTON_WIDTH + (columns - 1) * BUTTON_PADDING + BUTTON_PADDING) * scale
     }
 
     fun authorsToTSpans(authors: List<String>, x: String, style: String?): String {
@@ -145,6 +160,125 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         }
         return s.toString()
     }
+
+    override fun defs(): String {
+        var strokeColor: String = "gold"
+        buttons.theme?.let {
+            strokeColor = it.strokeColor
+        }
+
+        // Dark mode styles
+        val darkModeStyles = if (buttons.useDark) {
+            """
+            #${buttons.id} .dark-mode {
+                filter: brightness(0.8) contrast(1.2);
+            }
+            #${buttons.id} .dark-text {
+                fill: #e5e7eb !important;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            }
+            #${buttons.id} .dark-shadow {
+                text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
+            }
+            #${buttons.id} .slim-card.dark-mode:hover {
+                filter: brightness(1.2) sepia(30%);
+            }
+            """
+        } else {
+            ""
+        }
+
+        val darkModeDefs = if (buttons.useDark) {
+            """
+                <linearGradient id="glassBorder_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+        </linearGradient>
+        <filter id="glassDropShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+            <feMerge>
+                <feMergeNode in="shadow"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="glassOverlay_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
+            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
+            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="backgroundGradient_${buttons.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
+        </linearGradient>
+            """.trimIndent()
+        } else {""}
+
+        var style = """
+             <style>
+            ${glass()}
+            ${lightShadow()}
+            ${raise(strokeColor = strokeColor)}
+            ${baseCard()}
+            ${gradientStyle()}
+            ${myBox()}
+            ${keyFrame()}
+            ${linkText()}
+            ${modernText()}
+            ${modernCard()}
+            $darkModeStyles
+            
+            /* Slim-specific hover effects */
+            #${buttons.id} .slim-card {
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            
+            #${buttons.id} .slim-card:hover {
+                filter: brightness(1.1) saturate(1.2);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            }
+            
+            #${buttons.id} .slim-card:hover rect {
+                stroke-width: 2;
+                stroke: rgba(255, 255, 255, 0.3);
+            }
+            
+            #${buttons.id} .slim-card:hover text {
+                filter: brightness(1.2);
+            }
+            
+            /* Enhanced glass effect on hover */
+            #${buttons.id} .glass:hover {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            
+            </style>
+        """.trimIndent()
+
+        if(isPdf) {
+            style = """
+
+            """.trimIndent()
+        }
+
+        return """
+            <defs>
+            $darkModeDefs
+            ${filters()}
+            ${naturalShadow()}
+            ${gradient()}
+            ${modernGradients()}
+            ${uses()}
+           $style
+            </defs>
+        """.trimIndent()
+    }
+
     companion object {
         const val BUTTON_HEIGHT = 150
         const val BUTTON_WIDTH = 150
