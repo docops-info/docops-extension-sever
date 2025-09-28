@@ -91,7 +91,7 @@ class CalloutController  {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
             val calloutHandler = CalloutHandler(DefaultCsvResponse)
-            val svg = calloutHandler.makeSvgPlainText(content, 600,400)
+            val svg = calloutHandler.makeSvgPlainText(content, 600, 400, false)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -113,7 +113,7 @@ class CalloutController  {
     @PostMapping("")
     fun editorFormSubmit(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val calloutHandler = CalloutHandler(DefaultCsvResponse)
-        val svg = calloutHandler.makeSvgPlainText(payload, 600,400)
+        val svg = calloutHandler.makeSvgPlainText(payload, 600, 400, false)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         headers.contentType = MediaType.parseMediaType("text/html")

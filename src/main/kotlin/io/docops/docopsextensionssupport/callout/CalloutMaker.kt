@@ -1,10 +1,17 @@
 package io.docops.docopsextensionssupport.callout
 
 import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 import java.lang.Boolean.parseBoolean
 import java.util.UUID
+import kotlin.compareTo
+import kotlin.div
+import kotlin.rem
+import kotlin.times
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Generic class for creating callout SVGs
@@ -14,53 +21,54 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
     private val json = Json { ignoreUnknownKeys = true }
 
     // Table format parsing methods
-    fun createSystematicApproachFromTable(data: String, width: Int, height: Int): String {
-        val calloutData = parseTableData(data, "systematic")
-        csvResponse.update(calloutData.toCsv())
-        return generateSystematicSvg(calloutData, width, height)
+    fun createSystematicApproachFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+        val calloutData = parseTableData(payload, "systematic", useDark)
+        val svg = generateSystematicSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
-    fun createMetricsFromTable(data: String, width: Int, height: Int): String {
-        val calloutData = parseTableData(data, "metrics")
-        csvResponse.update(calloutData.toCsv())
-        return generateMetricsSvg(calloutData, width, height)
+    fun createMetricsFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+        val calloutData = parseTableData(payload, "metrics", useDark)
+        val svg = generateMetricsSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
-    fun createTimelineFromTable(data: String, width: Int, height: Int): String {
-        val calloutData = parseTableData(data, "timeline")
-        csvResponse.update(calloutData.toCsv())
-        return generateTimelineSvg(calloutData, width, height)
+    fun createTimelineFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+        val calloutData = parseTableData(payload, "timeline", useDark)
+        val svg = generateTimelineSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
     // JSON format methods
-    fun createSystematicApproachSvg(data: String, width: Int, height: Int): String {
+    fun createSystematicApproachSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(data)
+            json.decodeFromString<CalloutData>(payload)
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
-        csvResponse.update(calloutData.toCsv())
-        return generateSystematicSvg(calloutData, width, height)
+
+        val svg = generateSystematicSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
-    fun createMetricsSvg(data: String, width: Int, height: Int): String {
+    fun createMetricsSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(data)
+            json.decodeFromString<CalloutData>(payload)
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
-        csvResponse.update(calloutData.toCsv())
-        return generateMetricsSvg(calloutData, width, height)
+        val svg = generateMetricsSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
-    fun createTimelineSvg(data: String, width: Int, height: Int): String {
+    fun createTimelineSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(data)
+            json.decodeFromString<CalloutData>(payload)
         } catch (e: Exception) {
             createDefaultCalloutData()
         }
-        csvResponse.update(calloutData.toCsv())
-        return generateTimelineSvg(calloutData, width, height)
+        val svg = generateTimelineSvg(calloutData, width, height)
+        return Pair(svg, calloutData.toCsv())
     }
 
     /**
@@ -86,10 +94,9 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
         }
     }
 
-    private fun parseTableData(data: String, type: String): CalloutData {
+    private fun parseTableData(data: String, type: String, useDark: Boolean): CalloutData {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Callout"
-        var useGlass = true // Default value
 
         return when (type) {
             "metrics" -> {
@@ -99,8 +106,6 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     when {
                         line.startsWith("title:") -> title = line.substring(6).trim()
                         line.startsWith("title=") -> title = line.substring(6).trim()
-                        line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
-                        line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
 
                         line == "---" -> inDataSection = true
                         inDataSection && line.contains("|") && !isHeaderRow(line) -> {
@@ -112,7 +117,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     }
                 }
 
-                CalloutData(title = title, metrics = metrics, useGlass = useGlass)
+                CalloutData(title = title, metrics = metrics, useDark = useDark)
             }
             "systematic" -> {
                 val steps = mutableListOf<CalloutStep>()
@@ -122,8 +127,6 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     when {
                         line.startsWith("title:") -> title = line.substring(6).trim()
                         line.startsWith("title=") -> title = line.substring(6).trim()
-                        line.startsWith("useGlass:") -> useGlass = parseBoolean(line.substring(9).trim())
-                        line.startsWith("useGlass=") -> useGlass = parseBoolean(line.substring(9).trim())
 
                         line == "---" -> inDataSection = true
                         inDataSection && line.contains("|") && !isHeaderRow(line) -> {
@@ -139,12 +142,13 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     }
                 }
 
-                CalloutData(title = title, steps = steps, useGlass = useGlass)
+                CalloutData(title = title, steps = steps, useDark = useDark)
             }
             else -> createDefaultCalloutData()
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun generateSystematicSvg(calloutData: CalloutData, width: Int, height: Int): String {
         // Calculate dynamic height based on number of steps
         // Header height (92) + (steps count * stepHeight) + bottom padding (20)
@@ -160,14 +164,25 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
         val finalHeight = calculatedHeight.coerceAtLeast(height)
 
         return buildString {
-            val id = UUID.randomUUID().toString()
+            val id = Uuid.random().toHexString()
             append("""
                 <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
                     <defs>
             """.trimIndent())
 
+            var back = """<rect width="$width" height="$finalHeight" fill="#F2F2F7" rx="0" ry="0"/>"""
+
             // Add glass-specific definitions if useGlass is true
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
+                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_${calloutData.id})" rx="12" ry="12"/>
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="rgba(0,122,255,0.1)"
+                      stroke="url(#glassBorder_${calloutData.id})" stroke-width="1.5"
+                      filter="url(#glassDropShadow_${calloutData.id})"
+                />
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="url(#glassOverlay_${calloutData.id})" opacity="0.7"
+                />"""
                 append("""
                         <!-- Glass gradients -->
                         <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -206,30 +221,53 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
             append("""
                         <!-- Original gradients -->
                         <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0A84FF;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
-                            <stop offset="100%" style="stop-color:#007AFF;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
+                            <stop offset="0%" style="stop-color:#0A84FF;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
+                            <stop offset="100%" style="stop-color:#007AFF;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
                         </linearGradient>
                         <linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:${if (calloutData.useGlass) "rgba(255,255,255,0.2)" else "#FFFFFF"};stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:${if (calloutData.useGlass) "rgba(242,242,247,0.1)" else "#F2F2F7"};stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:${if (calloutData.useDark) "rgba(255,255,255,0.2)" else "#FFFFFF"};stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:${if (calloutData.useDark) "rgba(242,242,247,0.1)" else "#F2F2F7"};stop-opacity:1" />
                         </linearGradient>
                         <filter id="iosShadow">
                             <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
                         </filter>
+                        <linearGradient id="glassBorder_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+                    </linearGradient>
+                    <filter id="glassDropShadow_${calloutData.id}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+                        <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+                        <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+                        <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+                        <feMerge>
+                            <feMergeNode in="shadow"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <linearGradient id="glassOverlay_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
+                        <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
+                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
+                    </linearGradient>
+                    <linearGradient id="backgroundGradient_${calloutData.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
+                    </linearGradient>
                     </defs>
 
                     <!-- Background -->
-                    <rect width="$width" height="$finalHeight" fill="${if (calloutData.useGlass) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
+                    $back
 
                     <!-- Header -->
             """.trimIndent())
 
             // Conditionally apply glass or original styling to header
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
                 append("""
                     <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                    <!-- Header highlight -->
-                    <rect x="21" y="21" width="${width - 42}" height="20" rx="10" fill="url(#highlight)"/>
                 """.trimIndent())
             } else {
                 append("""
@@ -251,18 +289,15 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                 val y = startY + (index * stepHeight)
 
                 // Conditionally apply glass or original styling to steps
-                if (calloutData.useGlass) {
+                if (calloutData.useDark) {
                     append("""
+                        <g>
                         <!-- Step ${index + 1} Background -->
                         <rect x="16" y="$y" width="${width - 32}" height="80" fill="url(#glassGradient)" 
                               stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/>
-                        <!-- Step highlight -->
-                        <rect x="21" y="${y + 5}" width="${width - 42}" height="20" rx="10" fill="url(#highlight)"/>
-
+                        
                         <!-- Step Number -->
                         <circle cx="48" cy="${y + 40}" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                        <!-- Circle highlight -->
-                        <ellipse cx="43" cy="${y + 35}" rx="6" ry="5" fill="rgba(255,255,255,0.5)"/>
                         <text x="48" y="${y + 45}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="14" font-weight="600" text-anchor="middle">${index + 1}</text>
 
@@ -278,9 +313,11 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                         <!-- Result -->
                         <text x="80" y="${y + 70}" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="14" font-weight="600">${step.result}</text>
+                              </g>
                     """.trimIndent())
                 } else {
                     append("""
+                        <g>
                         <!-- Step ${index + 1} Background -->
                         <rect x="16" y="$y" width="${width - 32}" height="80" fill="url(#stepGrad)" 
                               stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/>
@@ -302,6 +339,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                         <!-- Result -->
                         <text x="80" y="${y + 70}" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                               font-size="14" font-weight="600">${step.result}</text>
+                              </g>
                     """.trimIndent())
                 }
 
@@ -312,13 +350,11 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     val rectX = width - textWidth - 20 // 20px padding from right edge
                     val textX = rectX + (textWidth / 2) // Center text in rectangle
 
-                    if (calloutData.useGlass) {
+                    if (calloutData.useDark) {
                         append("""
                             <rect x="$rectX" y="${y + 15}" width="$textWidth" height="24" fill="url(#glassGradient)" 
                                   stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/>
-                            <!-- Improvement highlight -->
-                            <rect x="${rectX + 2}" y="${y + 17}" width="${textWidth - 4}" height="10" rx="5" fill="url(#highlight)"/>
-                            <text x="$textX" y="${y + 30}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
+                              <text x="$textX" y="${y + 30}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                                   font-size="12" font-weight="600" text-anchor="middle">$improvement</text>
                         """.trimIndent())
                     } else {
@@ -354,8 +390,20 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                 <defs>
             """.trimIndent())
 
+            var back = """<rect width="$width" height="$finalHeight" fill="#F2F2F7" rx="0" ry="0"/>"""
+
             // Add glass-specific definitions if useGlass is true
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
+                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_${calloutData.id})" rx="12" ry="12"/>
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="rgba(0,122,255,0.1)"
+                      stroke="url(#glassBorder_${calloutData.id})" stroke-width="1.5"
+                      filter="url(#glassDropShadow_${calloutData.id})"
+                />
+                <rect width="100%" height="100%" rx="12" ry="12"
+                      fill="url(#glassOverlay_${calloutData.id})" opacity="0.7"
+                />"""
+
                 append("""
                     <!-- Glass gradients -->
                     <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -387,6 +435,31 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                         <feComposite in2="offset-blur" operator="in"/>
                         <feComposite in2="SourceGraphic" operator="over"/>
                     </filter>
+                    <linearGradient id="glassBorder_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
+                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+                    </linearGradient>
+                    <filter id="glassDropShadow_${calloutData.id}" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+                        <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+                        <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+                        <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
+                        <feMerge>
+                            <feMergeNode in="shadow"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <linearGradient id="glassOverlay_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
+                        <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
+                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
+                    </linearGradient>
+                    <linearGradient id="backgroundGradient_${calloutData.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
+                        <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
+                    </linearGradient>
                 """.trimIndent())
             }
 
@@ -394,8 +467,8 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
             append("""
                     <!-- Original gradients -->
                     <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#5856D6;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
-                        <stop offset="100%" style="stop-color:#AF52DE;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
+                        <stop offset="0%" style="stop-color:#5856D6;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
+                        <stop offset="100%" style="stop-color:#AF52DE;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
                     </linearGradient>
                     <filter id="iosShadow">
                         <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
@@ -403,17 +476,14 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                 </defs>
 
                 <!-- Background -->
-                <rect width="$width" height="$finalHeight" fill="${if (calloutData.useGlass) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
-
+                $back
                 <!-- Header -->
             """.trimIndent())
 
             // Conditionally apply glass or original styling to header
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
                 append("""
                 <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                <!-- Header highlight -->
-                <rect x="21" y="21" width="${width - 42}" height="20" rx="10" fill="url(#highlight)"/>
                 """.trimIndent())
             } else {
                 append("""
@@ -428,17 +498,12 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
 
             var y = 92
             calloutData.metrics.forEach { (key, value) ->
-                if (calloutData.useGlass) {
+                if (calloutData.useDark) {
                     append("""
                     <rect x="16" y="$y" width="${width - 32}" height="60" fill="url(#glassGradient)" 
-                          stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/>
-                    <!-- Metric highlight -->
-                    <rect x="21" y="${y + 5}" width="${width - 42}" height="15" rx="7" fill="url(#highlight)"/>
-
+                          stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/>                
                     <!-- Metric Icon -->
                     <circle cx="48" cy="${y + 30}" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                    <!-- Circle highlight -->
-                    <ellipse cx="43" cy="${y + 25}" rx="6" ry="5" fill="rgba(255,255,255,0.5)"/>
                     <text x="48" y="${y + 35}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                           font-size="14" font-weight="600" text-anchor="middle">📊</text>
 
@@ -500,7 +565,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
             """.trimIndent())
 
             // Add glass-specific definitions if useGlass is true
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
                 append("""
                         <!-- Glass gradients -->
                         <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -539,8 +604,8 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
             append("""
                         <!-- Original gradients -->
                         <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FF9500;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
-                            <stop offset="100%" style="stop-color:#FF2D55;stop-opacity:${if (calloutData.useGlass) "0.8" else "1"}" />
+                            <stop offset="0%" style="stop-color:#FF9500;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
+                            <stop offset="100%" style="stop-color:#FF2D55;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
                         </linearGradient>
                         <filter id="iosShadow">
                             <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
@@ -548,17 +613,16 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     </defs>
 
                     <!-- Background -->
-                    <rect width="$width" height="$finalHeight" fill="${if (calloutData.useGlass) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
+                    <rect width="$width" height="$finalHeight" fill="${if (calloutData.useDark) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
 
                     <!-- Header -->
             """.trimIndent())
 
             // Conditionally apply glass or original styling to header
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
                 append("""
                     <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                    <!-- Header highlight -->
-                    <rect x="21" y="21" width="${width - 42}" height="20" rx="10" fill="url(#highlight)"/>
+                    
                 """.trimIndent())
             } else {
                 append("""
@@ -578,7 +642,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
             val endX = startX + timelineLength
 
             // Timeline line with conditional styling
-            if (calloutData.useGlass) {
+            if (calloutData.useDark) {
                 append("""
                     <!-- Timeline Line -->
                     <line x1="$startX" y1="$timelineY" x2="$endX" y2="$timelineY" 
@@ -605,14 +669,12 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     val lineY1 = if (index % 2 == 0) timelineY - 20 else timelineY
                     val lineY2 = if (index % 2 == 0) timelineY else timelineY + 40
 
-                    if (calloutData.useGlass) {
+                    if (calloutData.useDark) {
                         append("""
                             <!-- Step ${index + 1} -->
                             <line x1="$x" y1="$lineY1" x2="$x" y2="$lineY2" 
                                   stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="${if (isCompleted) "none" else "4,4"}"/>
                             <circle cx="$x" cy="$timelineY" r="8" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                            <!-- Circle highlight -->
-                            <ellipse cx="${x-3}" cy="${timelineY-3}" rx="3" ry="2" fill="rgba(255,255,255,0.5)"/>
                             <text x="$x" y="$textY" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
                                   font-size="14" font-weight="600" text-anchor="middle">${step.phase}</text>
                         """.trimIndent())
@@ -631,7 +693,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
                     // Ensure cards for odd-indexed steps don't overlap with the header
                     val cardY = if (index % 2 == 0) timelineY + 30 else timelineY - 100
                     if (index % 2 == 1) {
-                        if (calloutData.useGlass) {
+                        if (calloutData.useDark) {
                             append("""
                                 <rect x="${x - 100}" y="$cardY" width="200" height="80" rx="16" fill="url(#glassGradient)" 
                                       stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>

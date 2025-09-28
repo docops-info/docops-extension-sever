@@ -145,7 +145,7 @@ Alternatively, you can use JSON format for more control:
 
 * `type` (required): The type of callout visualization (systematic, metrics, ). Default is "systematic".
 * `title` (required): The title of the callout.
-* `useGlass` (optional): Boolean value to enable or disable the glass look and feel. Default is true.
+
 
 [.back-to-top]
 <<top, 🔝>>
@@ -162,7 +162,6 @@ Here's an example of a systematic approach callout for a software development pr
 ----
 title: Software Development Process
 type=systematic
-useGlass=false
 ---
 Phase | Action | Result | Improvement
 Requirements | Gather user needs and system requirements | Detailed requirements document | Involve end-users earlier in the process
@@ -178,7 +177,6 @@ Maintenance | Monitor performance and fix issues | Stable system with ongoing im
 ----
 title: Software Development Process
 type=systematic
-useGlass=false
 ---
 Phase | Action | Result | Improvement
 Requirements | Gather user needs and system requirements | Detailed requirements document | Involve end-users earlier in the process
@@ -281,7 +279,7 @@ Use a metrics callout to track health and fitness progress:
 
 [source,asciidoc]
 ....
-[docops,callout,controls=true]
+[docops,callout,controls=true, useDark=true]
 ----
 title: 90-Day Fitness Challenge Results
 type=metrics
@@ -298,7 +296,7 @@ Sleep Quality Score | +18%
 ----
 ....
 
-[docops,callout,controls=true]
+[docops,callout,controls=true, useDark=true]
 ----
 title: 90-Day Fitness Challenge Results
 type=metrics
@@ -408,7 +406,7 @@ For more complex callouts, you can use the JSON format directly:
 
 [source,asciidoc]
 ....
-[docops,callout,controls=true]
+[docops,callout,controls=true, useDark=true]
 ----
 {
   "type": "systematic",
@@ -455,7 +453,7 @@ For more complex callouts, you can use the JSON format directly:
 ----
 ....
 
-[docops,callout,controls=true]
+[docops,callout,controls=true, useDark=true]
 ----
 {
   "type": "systematic",
@@ -551,73 +549,7 @@ You can use JSON format to create metrics callouts with custom formatting:
 [.back-to-top]
 <<top, 🔝>>
 
-=== Styling Options
 
-You can customize the visual appearance of callouts using the `useGlass` attribute. By default, callouts use a glass-like styling with transparency and highlights. You can disable this to use a more traditional flat design:
-
-[source,asciidoc]
-....
-[docops,callout,controls=true]
-----
-{
-  "type": "systematic",
-  "title": "Project Phases",
-  "useGlass": false,
-  "steps": [
-    {
-      "phase": "Planning",
-      "action": "Define project scope and requirements",
-      "result": "Approved project plan",
-      "improvement": "More stakeholder involvement"
-    },
-    {
-      "phase": "Execution",
-      "action": "Implement project deliverables",
-      "result": "Completed work products",
-      "improvement": "Better resource allocation"
-    },
-    {
-      "phase": "Monitoring",
-      "action": "Track progress and manage issues",
-      "result": "Status reports and issue logs",
-      "improvement": "More frequent check-ins"
-    }
-  ]
-}
-----
-....
-
-[docops,callout,controls=true]
-----
-{
-  "type": "systematic",
-  "title": "Project Phases",
-  "useGlass": false,
-  "steps": [
-    {
-      "phase": "Planning",
-      "action": "Define project scope and requirements",
-      "result": "Approved project plan",
-      "improvement": "More stakeholder involvement"
-    },
-    {
-      "phase": "Execution",
-      "action": "Implement project deliverables",
-      "result": "Completed work products",
-      "improvement": "Better resource allocation"
-    },
-    {
-      "phase": "Monitoring",
-      "action": "Track progress and manage issues",
-      "result": "Status reports and issue logs",
-      "improvement": "More frequent check-ins"
-    }
-  ]
-}
-----
-
-[.back-to-top]
-<<top, 🔝>>
 
 == Conclusion
 

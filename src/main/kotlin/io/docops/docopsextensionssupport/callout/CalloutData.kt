@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.callout
 
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Generic data class for callout steps
@@ -18,12 +20,14 @@ data class CalloutStep(
  * Generic data class for callout data
  */
 @Serializable
-data class CalloutData(
+data class CalloutData @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toHexString(),
     val title: String = "Callout",
     val steps: List<CalloutStep> = emptyList(),
     val metrics: Map<String, String> = emptyMap(),
-    val useGlass: Boolean = true
+    val useDark: Boolean = true
 )
+
 
 /**
  * Converts a CalloutData to CSV format

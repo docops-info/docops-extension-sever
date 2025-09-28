@@ -52,13 +52,14 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         payload: String,
         outputFormat: String = "SVG",
         width: Int = 800,
-        height: Int = 600
+        height: Int = 600,
+        useDark: Boolean = false
     ): String {
 
-        return makeSvgPlainText(payload, width, height)
+        return makeSvgPlainText(payload, width, height, useDark)
     }
 
-    fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int): String {
+    fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int, useDark: Boolean): String {
         val maker = CalloutMaker(csvResponse)
 
         // Parse the callout type from the uncompressed payload
@@ -68,9 +69,9 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         val svg = if (uncompressedPayload.contains("---") || !uncompressedPayload.trim().startsWith("{")) {
             // Use table format parsing
             when (calloutType) {
-                "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height)
-                "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height)
-                else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height)
+                "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height, useDark)
+                "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height, useDark)
+                else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height, useDark)
             }
         } else {
             // Use traditional JSON format
@@ -81,14 +82,14 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
             }
         }
 
-        return svg
+        return svg.first
     }
 
     override fun handleSVG(
         payload: String,
         context: DocOpsContext
     ): String {
-        return makeCalloutSvg(payload=payload, outputFormat= context.type)
+        return makeCalloutSvg(payload=payload, outputFormat= context.type, useDark = context.useDark)
     }
 
 
