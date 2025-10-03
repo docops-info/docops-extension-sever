@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.timeline
 
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
+import io.docops.extension.wasm.timeline.TimelineMaker
 import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
@@ -140,9 +141,9 @@ class TimelineController {
 
             val outlineColor = httpServletRequest.getParameter("outline")
             val useDarkInput = httpServletRequest.getParameter("useDark")
-            val tm = TimelineMaker("on" == useDarkInput, "#3a0ca3", useGlass = true)
+            val tm = TimelineMaker()
             val entries = TimelineParser().parse(contents)
-            val svg = tm.makeTimelineSvg(entries.entries, title, scale, false)
+            val svg = tm.makeSvg(entries, "on" == useDarkInput, scale)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -219,10 +220,10 @@ class TimelineController {
     ): ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(useDark = useDark, outlineColor = outlineColor, useGlass = useGlass)
+            val tm = TimelineMaker()
             val isPdf = "PDF" == type
             val entries = TimelineParser().parse(data)
-            val svg = tm.makeTimelineSvg(entries.entries, title, scale, isPdf)
+            val svg = tm.makeSvg(entries, false, scale)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("image/svg+xml")
@@ -255,7 +256,7 @@ class TimelineController {
             sb.append("[%header,cols=\"1,2\",stripes=even]\n")
             sb.append("!===\n")
             sb.append("|Date |Event\n")
-            entries.entries.forEach {
+            entries.events.forEach {
                 sb.append("a|${it.date} |${it.text}\n")
             }
             sb.append("!===")
@@ -272,9 +273,9 @@ class TimelineController {
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
         val timing = measureTimedValue {
             val data = uncompressString(URLDecoder.decode(payload, "UTF-8"))
-            val tm = TimelineMaker(false)
+            val tm = TimelineMaker()
             val entries = TimelineParser().parse(data)
-            val svg = tm.makeTimelineSvg(entries.entries, "title", "0.6", false)
+            val svg = tm.makeSvg(entries, false, "0.6")
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.TEXT_PLAIN

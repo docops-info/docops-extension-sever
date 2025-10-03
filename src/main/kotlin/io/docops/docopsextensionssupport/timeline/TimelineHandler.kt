@@ -4,6 +4,7 @@ import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.update
+import io.docops.extension.wasm.timeline.TimelineMaker
 
 class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     fun handleSVG(
@@ -15,22 +16,11 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         backend: String,
         useGlass: Boolean = false
     ): String {
-        val isPdf = backend == "pdf"
-        val entries = TimelineParser().parse(payload)
-        val orientation = entries.config.orientation?.let { TimelineOrientation.valueOf(it.uppercase()) }
-
-        val tm = TimelineMaker(useDark = entries.config.useDark, useGlass = entries.config.useGlass, orientation = orientation ?: TimelineOrientation.HORIZONTAL, enableDetailView = entries.config.enableDetailView)
-        var ti: String
-
-        if(entries.config.title.isNullOrEmpty()) {
-            ti = title
-        } else {
-            ti = entries.config.title
-        }
-
-        val svg = tm.makeTimelineSvg(entries.entries, ti, scale, isPdf = isPdf)
-        val csv = entries.entries.toCsv()
-        csvResponse.update(csv)
+        val parser = TimelineParser()
+        val config = parser.parse(payload)
+        val maker = TimelineMaker()
+        val svg = maker.makeSvg(config, useDark, scale = scale )
+        csvResponse.update(config.timelineEventsToCsv())
         return svg
     }
 
