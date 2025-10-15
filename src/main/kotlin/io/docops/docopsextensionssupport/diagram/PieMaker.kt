@@ -1,8 +1,13 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.support.formatHex
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import java.io.File
+import kotlin.div
+import kotlin.text.toFloat
+import kotlin.times
 
 class PieMaker {
 
@@ -25,14 +30,15 @@ class PieMaker {
         val sb = StringBuilder()
         sb.append(makeHead(width, pies))
         sb.append("<defs>")
-            sb.append(filters(pies))
-            sb.append(gradients(pies))
+        sb.append(filters(pies))
+        sb.append(gradients(pies))
+        sb.append(BackgroundHelper.getBackgroundGradient(pies.pieDisplay.useDark, pies.pieDisplay.id))
         sb.append("</defs>")
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
             sb.append("""<g transform="translate($x,5)" class="pie-container">""")
             sb.append(makePieSvg(pie, pies.pieDisplay, index))
-            sb.append(makeLabel(pie, pies.pieDisplay, index))
+            sb.append(makeLabel(pie, pies.pieDisplay))
             sb.append("</g>")
         }
         sb.append(tail())
@@ -41,7 +47,7 @@ class PieMaker {
     }
 
     private fun makeHead(width: Int, pies: Pies) : String {
-        val height = pies.maxRows() * 10 + 40
+        val height = pies.maxRows() * 10 + 50  // Increased from 40 to 50 to accommodate multi-line labels
         // Add padding for the shadow effect (20% on each side)
         val shadowPadding = 20
         val paddedWidth = width + shadowPadding * 2
@@ -50,28 +56,14 @@ class PieMaker {
         val outerHeight = (1+pies.pieDisplay.scale) * paddedHeight
         val outerWidth = (1+pies.pieDisplay.scale) * paddedWidth
 
-        // Enhanced background with glass effect
-        val backgroundColor = if(pies.pieDisplay.useDark) {
-            """
-            <!-- Dark mode glass container -->
-            <rect width="100%" height="100%" rx="15" ry="15" fill="#374151" filter="url(#glassDropShadow)"/>
-            <rect width="100%" height="100%" rx="15" ry="15" fill="url(#glassOverlay)" class="glass-overlay" opacity="0.2"/>
-            <rect x="10" y="10" width="calc(100% - 20px)" height="40" rx="10" ry="10" fill="url(#glassHighlight)" class="glass-highlight" opacity="0.1"/>
-            """
-        } else {
-            """
-            <!-- Light mode glass container -->
-            <rect width="100%" height="100%" rx="15" ry="15" fill="rgba(255,255,255,0.7)" filter="url(#glassDropShadow)"/>
-            <rect width="100%" height="100%" rx="15" ry="15" fill="url(#glassOverlay)" class="glass-overlay"/>
-            <rect x="10" y="10" width="calc(100% - 20px)" height="40" rx="10" ry="10" fill="url(#glassHighlight)" class="glass-highlight" opacity="0.4"/>
-            """
-        }
+        val bg =  BackgroundHelper.getBackGroundPath(pies.pieDisplay.useDark, pies.pieDisplay.id, width = width.toFloat(), height = height.toFloat())
 
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="${height+10}" viewBox="0 0 $width ${height+10}" >
-            $backgroundColor
+            $bg
             """
     }
+
 
     private fun tail() = """</svg></svg>"""
 
@@ -102,11 +94,6 @@ class PieMaker {
                 <animate attributeName="stroke-dashoffset" values="${pie.percent};0" dur="1.5s" repeatCount="1"/>
             </path>
 
-            <!-- Glass highlight for top of circle -->
-            <ellipse cx="14" cy="10" rx="10" ry="5" fill="url(#glassHighlight)" class="glass-highlight" opacity="0.5"/>
-
-            <!-- Small radial highlight for realistic light effect -->
-            <circle cx="12" cy="12" r="4" fill="url(#glassRadial)" class="glass-highlight" opacity="0.7"/>
 
             <!-- Percentage text with animation and improved styling -->
             <text x="18" y="18" dy="0.35em" style="font-family: Arial, Helvetica, sans-serif; font-size: 8px; font-weight: bold; text-anchor: middle; fill: ${textColor}; opacity: 0; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
@@ -117,25 +104,9 @@ class PieMaker {
         """.trimIndent()
     }
 
-    private fun makeLabel(pie: Pie, display: PieDisplay, index: Int): String {
+    private fun makeLabel(pie: Pie, display: PieDisplay): String {
         val textColor = if(display.useDark) "#f9fafb" else "#333333"
         val sb = StringBuilder()
-
-        // Create a subtle glass-style background for the label
-        val labelWidth = 34
-        val labelHeight = 6 * pie.label.split(" ").size + 4
-        val labelBgX = 18 - labelWidth/2
-        val labelBgY = 46
-
-        // Only add glass background if there's enough text to warrant it
-        if (pie.label.length > 3) {
-            // Label background with glass effect
-            sb.append("""<rect x="$labelBgX" y="$labelBgY" width="$labelWidth" height="$labelHeight" """)
-            sb.append("""rx="3" ry="3" fill="${if(display.useDark) "rgba(45,55,72,0.7)" else "rgba(255,255,255,0.5)"}" """)
-            sb.append("""filter="url(#glassBlur)" class="glass-overlay" opacity="0.5" />""")
-        }
-
-        // Enhanced text styling
         sb.append("""<text x="18" y="48" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif; font-size: 6px; font-weight: 600; text-anchor: middle; letter-spacing: -0.02em; text-shadow: 0 1px 1px rgba(0,0,0,0.1);">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { idx, s ->
@@ -152,7 +123,7 @@ class PieMaker {
     }
 
     private fun filters(pies: Pies) =
-         """
+        """
              <style>
                #id_${pies.pieDisplay.id} .pie {
                     transition: transform 0.3s ease;
@@ -292,22 +263,23 @@ class PieMaker {
 
     /**
      * Helper function to brighten a color by a given factor.
-     * 
+     *
      * @param hexColor The hex color to brighten (e.g., "#4361ee")
      * @param factor The factor to brighten by (0.0 to 1.0)
      * @return The brightened hex color
      */
     private fun brightenColor(hexColor: String, factor: Double): String {
         val hex = hexColor.replace("#", "")
-        val r = Integer.parseInt(hex.substring(0, 2), 16)
-        val g = Integer.parseInt(hex.substring(2, 4), 16)
-        val b = Integer.parseInt(hex.substring(4, 6), 16)
+        val r = hex.substring(0, 2).toInt(16)
+        val g = hex.substring(2, 4).toInt(16)
+        val b = hex.substring(4, 6).toInt(16)
+
 
         val newR = (r + (255 - r) * factor).toInt().coerceIn(0, 255)
         val newG = (g + (255 - g) * factor).toInt().coerceIn(0, 255)
         val newB = (b + (255 - b) * factor).toInt().coerceIn(0, 255)
 
-        return String.format("#%02x%02x%02x", newR, newG, newB)
+        return formatHex( newR, newG, newB)
     }
 }
 
@@ -319,7 +291,7 @@ fun main() {
     ), Pie(percent = 10f, label = "Science"))
     val svg = pieMaker.makePies(Pies(
         pies = pies,
-        pieDisplay = PieDisplay(baseColor = "#B9B4C7", outlineColor = "#DA0C81", scale = 2f, useDark = false)
+        pieDisplay = PieDisplay(baseColor = "#B9B4C7", outlineColor = "#DA0C81", scale = 2f, useDark = true)
     ))
     val outfile2 = File("gen/pies.svg")
     outfile2.writeBytes(svg.toByteArray())

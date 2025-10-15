@@ -1,12 +1,17 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.svgsupport.formatDecimal
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import java.util.*
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class PieChartImproved {
     // Modern color palette for pie chart
@@ -29,9 +34,9 @@ class PieChartImproved {
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
         val customColors = configColors
 
-        val title = config.getOrDefault("title", "Pie Chart")
-        val width = config.getOrDefault("width", "500")
-        val height = config.getOrDefault("height", "500")
+        val title = config["title"] ?: "Pie Chart"
+        val width = config["width"] ?: "500"
+        val height = config["height"] ?: "500"
         val showLegend = config["legend"]?.toBoolean() ?: true
         val showPercentages = config["percentages"]?.toBoolean() ?: true
         val enableHoverEffects = config["hover"]?.toBoolean() ?: true
@@ -40,7 +45,7 @@ class PieChartImproved {
         val darkMode = config["darkMode"]?.toBoolean() ?: false
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-        csvResponse.update(payloadToSimpleCsv(pieData))
+        val csvResponse = payloadToSimpleCsv(pieData)
         // Generate SVG
         val svg = generatePieChartSvg(
             pieData,
@@ -89,6 +94,7 @@ class PieChartImproved {
         return segments
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun generatePieChartSvg(
         segments: List<PieSegment>,
         title: String,
@@ -102,7 +108,7 @@ class PieChartImproved {
         darkMode: Boolean = false
     ): String {
         val svgBuilder = StringBuilder()
-        val id = UUID.randomUUID().toString()
+        val id = Uuid.random().toHexString()
 
         // Calculate chart dimensions considering legend
         val legendWidth = if (showLegend) 200 else 0
@@ -134,10 +140,13 @@ class PieChartImproved {
         }
 
         // Set background based on dark mode
+
         val backgroundColor = if (darkMode) "#1e293b" else "#ffffff"
 
-        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\" style=\"background-color: $backgroundColor;\">")
+        svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
+        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = darkMode, id)
+        //svgBuilder.append(BackgroundHelper.getBackgroundGradient(darkMode, id))
         // Enhanced glass effect definitions
         svgBuilder.append("""
         <defs>
@@ -184,6 +193,7 @@ class PieChartImproved {
                 <stop offset="50%" style="stop-color:rgba(255,255,255,${if (darkMode) "0.1" else "0.15"});stop-opacity:1"/>
                 <stop offset="100%" style="stop-color:rgba(255,255,255,${if (darkMode) "0.03" else "0.05"});stop-opacity:1"/>
             </linearGradient>
+            $darkModeDefs
         </defs>
     """.trimIndent())
 
@@ -236,6 +246,8 @@ class PieChartImproved {
         </style>
     """.trimIndent())
 
+        svgBuilder.append(BackgroundHelper.getBackGroundPath(darkMode, id, width = width.toFloat(), height = height.toFloat()))
+
         // Generate pie segments with improved glass effects
         segmentsWithAngles.forEachIndexed { index, segmentData ->
             val pathData = createPieSegmentPath(
@@ -246,8 +258,8 @@ class PieChartImproved {
             // Calculate label position for percentage display
             val midAngle = (segmentData.startAngle + segmentData.endAngle) / 2.0
             val labelRadius = if (isDonut) (radius + innerRadius) / 2.0 else radius * 0.75
-            val labelX = centerX + labelRadius * cos(Math.toRadians(midAngle))
-            val labelY = centerY + labelRadius * sin(Math.toRadians(midAngle))
+            val labelX = centerX + labelRadius * cos(midAngle * PI / 180.0)
+            val labelY = centerY + labelRadius * sin(midAngle * PI / 180.0)
 
             svgBuilder.append("""
             <g>
@@ -256,7 +268,7 @@ class PieChartImproved {
                       fill="${segmentData.color}" 
                       stroke="rgba(255,255,255,${if (darkMode) "0.15" else "0.2"})" 
                       stroke-width="1">
-                    <title>${segmentData.segment.label}: ${segmentData.segment.value} (${String.format("%.1f", segmentData.percentage)}%)</title>
+                    <title>${segmentData.segment.label}: ${segmentData.segment.value} (${formatDecimal( segmentData.percentage, 1)}%)</title>
                 </path>
 
                 <!-- Improved glass overlay -->
@@ -284,7 +296,7 @@ class PieChartImproved {
                       dominant-baseline="middle"
                       fill="white" 
                       style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-                    ${String.format("%.1f", segmentData.percentage)}%
+                    ${formatDecimal(segmentData.percentage, 1)}%
                 </text>
             """.trimIndent())
             }
@@ -318,7 +330,9 @@ class PieChartImproved {
         if (showLegend) {
             val legendX = chartWidth + 20  // 20px padding from chart area
             val legendY = 80  // Start below title
+            svgBuilder.append("<g transform='translate(-10,0)'>")
             svgBuilder.append(generateLegend(segmentsWithAngles, legendX, legendY, darkMode, id))
+            svgBuilder.append("</g>")
         }
 
         svgBuilder.append("</svg>")
@@ -411,7 +425,7 @@ class PieChartImproved {
                       font-weight="400"
                       dominant-baseline="middle"
                       fill="${if (darkMode) "#9ca3af" else "#6b7280"}">
-                    ${String.format("%.1f", segment.percentage)}%
+                    ${formatDecimal(segment.percentage, 1)}%
                 </text>
 
                 <!-- Value Text (right aligned) -->
@@ -441,8 +455,8 @@ class PieChartImproved {
         startAngle: Double,
         endAngle: Double
     ): String {
-        val startAngleRad = Math.toRadians(startAngle)
-        val endAngleRad = Math.toRadians(endAngle)
+        val startAngleRad = startAngle * PI / 180.0
+        val endAngleRad = endAngle * PI / 180.0
 
         val x1 = centerX + radius * cos(startAngleRad)
         val y1 = centerY + radius * sin(startAngleRad)

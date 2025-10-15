@@ -117,6 +117,9 @@ fun determineTextColor(hexColor: String): String {
     return if (luminance < 0.5) "#FCFCFC" else "#000000"
 }
 
+fun formatHex(r: Int, g: Int, b: Int): String {
+    return "#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}"
+}
 
 @Serializable
 class SVGColor(

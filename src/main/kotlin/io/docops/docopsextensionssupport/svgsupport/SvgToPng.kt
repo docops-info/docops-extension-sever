@@ -30,6 +30,8 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.round
 
 const val DISPLAY_RATIO_16_9 = 1.7777777778
 
@@ -420,4 +422,30 @@ fun joinXmlLines(str: String): String {
         .replace("\"transform=", "\" transform=")
         .replace("\"viewBox=", "\" viewBox=")
         .replace("\"xmlns=", "\" xmlns=")
+}
+
+fun formatDecimal(value: Double, decimals: Int): String {
+    val multiplier = when (decimals) {
+        0 -> 1.0
+        1 -> 10.0
+        2 -> 100.0
+        else ->  decimals.toDouble().pow(10.0)
+    }
+    val rounded = round(value * multiplier) / multiplier
+    return if (decimals == 0) {
+        rounded.toInt().toString()
+    } else {
+        val str = rounded.toString()
+        val dotIndex = str.indexOf('.')
+        if (dotIndex == -1) {
+            str + "." + "0".repeat(decimals)
+        } else {
+            val currentDecimals = str.length - dotIndex - 1
+            when {
+                currentDecimals < decimals -> str + "0".repeat(decimals - currentDecimals)
+                currentDecimals > decimals -> str.substring(0, dotIndex + decimals + 1)
+                else -> str
+            }
+        }
+    }
 }
