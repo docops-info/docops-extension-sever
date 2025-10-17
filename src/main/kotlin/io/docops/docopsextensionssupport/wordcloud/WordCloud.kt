@@ -2,30 +2,29 @@ package io.docops.docopsextensionssupport.wordcloud
 
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
-import java.util.UUID
-import kotlin.math.log10
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Serializable
-class WordCloud(
+class WordCloud @OptIn(ExperimentalUuidApi::class) constructor(
     val title: String,
     val words: MutableList<Word>,
-    val display: WordCloudDisplay = WordCloudDisplay()
+    val display: WordCloudDisplay = WordCloudDisplay(baseColor = null),
+    val id: String = Uuid.random().toHexString()
 )
 
 @Serializable
-class Word(
+class Word @OptIn(ExperimentalUuidApi::class) constructor(
     val text: String,
     val weight: Double,
     val itemDisplay: WordCloudDisplay? = null,
-    val id: String = UUID.randomUUID().toString()
+    val id: String = Uuid.random().toHexString()
 )
 
 @Serializable
-class WordCloudDisplay(
-    val id: String = UUID.randomUUID().toString(),
-    val baseColor: String = "#3498db",
+class WordCloudDisplay @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toHexString(),
+    val baseColor: String?,
     val useDark: Boolean = false,
     val width: Int = 800,
     val height: Int = 600,
@@ -40,14 +39,14 @@ fun WordCloud.calcFontSize(word: Word): Int {
     val weights = words.map { it.weight }
     val minWeight = weights.minOrNull() ?: 1.0
     val maxWeight = weights.maxOrNull() ?: 100.0
-    
+
     // Normalize the weight to a value between 0 and 1
     val normalizedWeight = if (maxWeight == minWeight) {
         0.5 // If all weights are the same, use middle font size
     } else {
         (word.weight - minWeight) / (maxWeight - minWeight)
     }
-    
+
     // Calculate font size using logarithmic scale for better distribution
     val fontSize = display.minFontSize + (normalizedWeight * (display.maxFontSize - display.minFontSize))
     return fontSize.toInt()
@@ -85,7 +84,6 @@ fun WordCloud.toCsv(): CsvResponse {
                 word.text,
                 word.weight.toString(),
                 word.id,
-                word.itemDisplay?.baseColor ?: display.baseColor,
                 if (index == 0) display.useDark.toString() else "", // Only show display settings in first row
                 if (index == 0) display.width.toString() else "",
                 if (index == 0) display.height.toString() else "",
@@ -103,7 +101,6 @@ fun WordCloud.toCsv(): CsvResponse {
             "",
             "",
             "",
-            display.baseColor,
             display.useDark.toString(),
             display.width.toString(),
             display.height.toString(),
