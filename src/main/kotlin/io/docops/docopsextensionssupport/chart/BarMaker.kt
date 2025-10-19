@@ -352,7 +352,8 @@ class BarMaker {
             series = mutableListOf(Series("Q1", 320.0), Series("Q2", 480.0), Series("Q3", 290.0), Series("Q4", 410.0)),
             display = BarDisplay(baseColor = "#f72585", useDark = false, type = "C"))
 
-        val cylinderSvg = makeHorizontalBar(cylinderBar)
+        val cylinderBarMaker = CylinderBarMaker()
+        val cylinderSvg = cylinderBarMaker.makeVerticalCylinderBar(cylinderBar)
         val cylinderOutfile = File("gen/cylinder_bars.svg")
         cylinderOutfile.writeBytes(cylinderSvg.toByteArray())
         println("Cylinder bar chart saved to ${cylinderOutfile.absolutePath}")

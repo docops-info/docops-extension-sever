@@ -3,7 +3,12 @@ package io.docops.docopsextensionssupport.chart
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.util.BackgroundHelper
+import kotlin.compareTo
+import kotlin.div
 import kotlin.math.min
+import kotlin.text.toInt
+import kotlin.times
 
 class VBarMaker {
     private var fontColor = ""
@@ -53,10 +58,14 @@ class VBarMaker {
             barSpacing
         }
 
+        // Calculate total width occupied by all bars and center them
+        val totalBarsWidth = (bar.series.size - 1) * adjustedBarSpacing + barWidth
+        val centerOffset = (availableWidth - totalBarsWidth) / 2
+
         // Create each bar with its own gradient
         bar.series.forEachIndexed { index, series ->
             val barHeight = (series.value / maxValue) * (yAxisEnd - yAxisStart)
-            val barX = xAxisStart + (index * adjustedBarSpacing) + (adjustedBarSpacing - barWidth) / 2
+            val barX = xAxisStart + centerOffset + (index * adjustedBarSpacing)
             val barY = yAxisEnd - barHeight
             val gradientId = "gradient${index + 1}"
 
@@ -89,16 +98,8 @@ class VBarMaker {
                         <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
                         <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
                     </rect>
-
-                    <!-- Radial highlight for realistic light effect -->
-                    <ellipse cx="${barX + barWidth/4}" cy="${barY + barHeight/5}" rx="${barWidth/3}" ry="${barHeight/6}"
-                             fill="url(#glassRadial)"
-                             opacity="0.7">
-                        <animate attributeName="cy" from="${yAxisEnd + 10}" to="${barY + barHeight/5}" dur="1s" fill="freeze"/>
-                    </ellipse>
-
                     <!-- Top highlight for shine -->
-                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${kotlin.math.min(barHeight/4, 20.0)}" rx="4" ry="4"
+                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${min(barHeight/4, 20.0)}" rx="4" ry="4"
                           fill="url(#glassHighlight)">
                         <animate attributeName="y" from="${yAxisEnd - 3}" to="${barY + 3}" dur="1s" fill="freeze"/>
                     </rect>
@@ -202,10 +203,7 @@ class VBarMaker {
     }
 
     private fun makeBackground(bar: Bar): String {
-        val backgroundColor = if (bar.display.useDark) "#1f2937" else "#f8f9fa"
-        return """
-            <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
-        """.trimIndent()
+        return BackgroundHelper.getBackground(bar.display.useDark, bar.display.id)
     }
 
     private fun head(bar: Bar): String {
@@ -287,8 +285,10 @@ class VBarMaker {
     }
 
     private fun addDefs(bar: Bar): String {
+        val background = BackgroundHelper.getBackgroundGradient(bar.display.useDark, bar.display.id)
         return """
             <defs>
+            $background
                 <!-- Glass effect gradients -->
                 <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />

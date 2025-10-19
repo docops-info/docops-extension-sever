@@ -21,16 +21,21 @@ class BarChartImproved {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeBarSvg(payload: String, csvResponse: CsvResponse): String {
+    fun makeBarSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
         // Create Bar object from parsed data
         val bar = createBarFromData(config, chartData)
+        csvResponse.update(bar.toCsv())
+        bar.display.useDark = useDark
 
+        if(bar.display.type == "C") {
+            val cylinderBarMaker = CylinderBarMaker()
+            return cylinderBarMaker.makeVerticalCylinderBar(bar)
+        }
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
-        csvResponse.update(bar.toCsv())
         return barMaker.makeVerticalBar(bar)
     }
 

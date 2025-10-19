@@ -48,8 +48,7 @@ A regular bar chart includes:
 * A series of data points, each with a label and value
 * Display settings for visual appearance
 
-[.back-to-top]
-<<top, 🔝>>
+
 
 ==== Grouped Bar Charts
 
@@ -76,7 +75,7 @@ yLabel=Y-Axis Label
 xLabel=X-Axis Label
 baseColor=#4361ee
 vBar=false
-useDark=false
+darkMode=false
 type=R
 ---
 Category 1 | 120.0
@@ -109,7 +108,7 @@ xLabel=X-Axis Label
 baseColor=#D988B9
 vBar=false
 condensed=false
-useDark=false
+darkMode=true
 ---
 Group 1 | Category 1 | 5000.0
 Group 1 | Category 2 | 7000.0
@@ -167,7 +166,7 @@ Label | Value [| Color]
 * `lineColor` (optional): The color for grid lines (default: "#FFBB5C")
 * `vBar` (optional): Whether to display vertical bars (default: false)
 * `condensed` (optional): Whether to use condensed mode (default: false)
-* `useDark` (optional): Whether to use dark mode (default: false)
+* `darkMode` (optional): Whether to use dark mode (default: false)
 * `scale` (optional): A scaling factor for the chart (default: 1.0)
 
 [.back-to-top]
@@ -282,29 +281,39 @@ You can create cylinder-style bar charts by setting the `type` property to `"C"`
 
 [source,asciidoc]
 ....
-[docops,bar,controls=true]
+[docops,bar,controls=true,useDark=true]
 ----
 title=Quarterly Performance
 yLabel=Revenue ($)
 xLabel=Quarter
-baseColor=#f72585
 type=C
 ---
 Q1 | 320.0
 Q2 | 480.0
 Q3 | 290.0
-Q4 | 410.0
+Q4 | 410.0 |#f72585
 ----
 ....
 
-image::cylinder.svg[opts=inline]
+[docops,bar,controls=true,useDark=true]
+----
+title=Quarterly Performance
+yLabel=Revenue ($)
+xLabel=Quarter
+type=C
+---
+Q1 | 320.0
+Q2 | 480.0
+Q3 | 290.0
+Q4 | 410.0 |#f72585
+----
 
 [.back-to-top]
 <<top, 🔝>>
 
 === Dark Mode Bar Chart Example
 
-You can create dark mode bar charts by setting the `useDark` property to `true`:
+You can create dark mode bar charts by setting the `darkMode` property to `true`:
 
 [source,asciidoc]
 ....
@@ -314,7 +323,7 @@ title=Monthly Sales Performance (Dark Mode)
 yLabel=Revenue ($)
 xLabel=Month
 baseColor=#4cc9f0
-useDark=true
+darkMode=true
 type=R
 ---
 January | 120.0
@@ -332,7 +341,7 @@ title=Monthly Sales Performance (Dark Mode)
 yLabel=Revenue ($)
 xLabel=Month
 baseColor=#4cc9f0
-useDark=true
+darkMode=true
 type=R
 ---
 January | 120.0

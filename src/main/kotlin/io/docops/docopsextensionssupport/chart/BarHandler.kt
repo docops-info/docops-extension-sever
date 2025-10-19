@@ -6,9 +6,9 @@ import io.docops.docopsextensionssupport.web.DocOpsContext
 
 class BarHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
-    fun handleSVG(payload: String) : String {
+    fun handleSVGInternal(payload: String, useDark: Boolean) : String {
         val barChartImproved = BarChartImproved()
-        val svg = barChartImproved.makeBarSvg(payload, csvResponse)
+        val svg = barChartImproved.makeBarSvg(payload, csvResponse, useDark)
         return svg
     }
 
@@ -16,6 +16,6 @@ class BarHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVG(payload)
+        return handleSVGInternal(payload, context.useDark)
     }
 }
