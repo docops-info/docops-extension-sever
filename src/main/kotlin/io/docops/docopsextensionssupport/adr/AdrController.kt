@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
@@ -178,7 +177,7 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
                 val adrText = adrFromTemplate(title, date, status, context, decision, consequences, participants)
                 val generator = AdrSvgGenerator()
                 val adr = AdrParser().parseContent(adrText)
-                val svg = generator.generate(adr)
+                val svg = generator.generate(adr,)
 
                 val results = makeAdrSource(adrText, svg, servletRequest).lines().joinToString(transform = String::trim, separator = "\n")
                 servletResponse.contentType = "text/html"
@@ -309,7 +308,7 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
         val contents = uncompressString(data)
         val generator = AdrSvgGenerator()
         val adr = AdrParser().parseContent(contents)
-        val svg = generator.generate(adr)
+        val svg = generator.generate(adr,)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
@@ -332,7 +331,7 @@ Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager)"""
     fun adrFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val generator = AdrSvgGenerator()
         val adr = AdrParser().parseContent(payload)
-        val svg = generator.generate(adr, width = 700)
+        val svg = generator.generate(adr, width = 700,)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)

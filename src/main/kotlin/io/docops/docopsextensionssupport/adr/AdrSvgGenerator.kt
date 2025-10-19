@@ -1,6 +1,9 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.UrlUtil.urlEncode
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 /**
@@ -443,8 +446,10 @@ class AdrSvgGenerator {
      * @param width Optional width of the SVG (default: 800)
      * @return String containing the complete SVG content
      */
-    fun generate(adr: Adr, width: Int = DEFAULT_WIDTH): String {
+    @OptIn(ExperimentalUuidApi::class)
+    fun generate(adr: Adr, width: Int = DEFAULT_WIDTH, darkMode: Boolean): String {
         val svg = kotlin.text.StringBuilder()
+        val id = Uuid.random().toHexString()
         var currentY = DEFAULT_PADDING
         val contentX = DEFAULT_PADDING + CARD_PADDING
 
@@ -469,11 +474,11 @@ class AdrSvgGenerator {
                           (if (adr.references.isEmpty()) 4 else 5) * CARD_SPACING + (2 * DEFAULT_PADDING)
 
         val color = STATUS_COLORS[adr.status] ?: "#999999"
-        // Add SVG header
-        svg.append(String.format(SVG_HEADER, width, totalHeight, width, totalHeight, color))
+        // Add SVG header with dark mode support
+        svg.append(makeSvgHeader(width, totalHeight, color, darkMode, id))
 
         // Add background card
-        svg.append(BACK_CARD)
+        svg.append(BackgroundHelper.getBackGroundPath(useDark = darkMode, id, width=width.toFloat(), height=totalHeight.toFloat()))
 
         // Title Card
         svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" class="card" rx="10" ry="10"/>""")
@@ -567,10 +572,232 @@ class AdrSvgGenerator {
         return svg.toString()
     }
 
+    @OptIn(ExperimentalUuidApi::class)
+    private fun makeSvgHeader(width: Int, height: Int, color: String, darkMode: Boolean = false, id: String): String {
+
+
+        val styles = if (darkMode) {
+            createDarkModeStyles(id, color)
+        } else {
+            createLightModeStyles(id, color)
+        }
+
+        return  """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        |<svg xmlns="http://www.w3.org/2000/svg" id="id_$id" width="$width" height="$height" viewBox="0 0 $width $height" preserveAspectRatio='xMidYMid meet'>
+        |<defs>
+        |   ${BackgroundHelper.getBackgroundGradient(darkMode, id)}
+        |  <style type="text/css">
+        |$styles
+        |  </style>
+        |  <!-- Font Awesome style user icon -->
+        |  <symbol id="user-icon" viewBox="0 0 448 512">
+        |    <path stroke="$color" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
+        |  </symbol>
+        |</defs>""".trimMargin()
+    }
     /**
      * Extension function to capitalize the first letter of a string.
      */
     private fun String.capitalize(): String {
         return if (this.isEmpty()) this else this[0].uppercase() + this.substring(1)
     }
+
+    private fun createLightModeStyles(id: String, color: String): String {
+        return """
+        |    #id_$id .card { 
+        |      fill: #ffffff; 
+        |      stroke: #e1e1e1; 
+        |      stroke-width: 1; 
+        |      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+        |    }
+        |    #id_$id .title { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 600; 
+        |      font-size: 20px; 
+        |      fill: #000000; 
+        |    }
+        |    #id_$id .subtitle { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 500; 
+        |      font-size: 16px; 
+        |      fill: #666666; 
+        |    }
+        |    #id_$id .status { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 500; 
+        |      font-size: 14px; 
+        |      fill: #ffffff; 
+        |    }
+        |    #id_$id .content { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 400; 
+        |      font-size: 14px; 
+        |      fill: #333333; 
+        |    }
+        |    #id_$id .section-title { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 600; 
+        |      font-size: 16px; 
+        |      fill: #333333; 
+        |    }
+        |    #id_$id .participant-title {
+        |       font-family: Arial, Helvetica, sans-serif;
+        |       font-weight: 600;
+        |       font-size: 12px;
+        |       fill: #333333;
+        |    }
+        |    #id_$id .participant-name { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 400; 
+        |      font-size: 12px; 
+        |      fill: #333333; 
+        |      text-anchor: middle; 
+        |    }
+        |    #id_$id .participant-name-with-email {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 500;
+        |      font-size: 12px;
+        |      fill: #007AFF;
+        |      text-anchor: middle;
+        |      border-bottom: 1px dotted #007AFF;
+        |    }
+        |    #id_$id .participant-name-with-email:hover {
+        |      fill: #0056CC;
+        |      font-weight: 600;
+        |    }
+        |    #id_$id .participant-container {
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .participant-container:hover .participant-icon {
+        |      filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5));
+        |      transition: filter 0.3s ease;
+        |    }
+        |    #id_$id .participant-container:hover .participant-name {
+        |      fill: #007AFF;
+        |      transition: fill 0.3s ease;
+        |    }
+        |    #id_$id .group-chat-link {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 400;
+        |      font-size: 12px;
+        |      fill: #007AFF;
+        |      text-decoration: underline;
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .reference-link {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 400;
+        |      font-size: 14px;
+        |      fill: #007AFF;
+        |      text-decoration: underline;
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .reference-link:hover {
+        |      fill: #0056CC;
+        |      font-weight: 500;
+        |    }
+        |    #id_$id a {
+        |      cursor: pointer;
+        |    }""".trimMargin()
+    }
+
+    private fun createDarkModeStyles(id: String, color: String): String {
+        return """
+        |    #id_$id .card { 
+        |      fill: #1f2937; 
+        |      stroke: #374151; 
+        |      stroke-width: 1; 
+        |      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3));
+        |    }
+        |    #id_$id .title { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 600; 
+        |      font-size: 20px; 
+        |      fill: #f9fafb; 
+        |    }
+        |    #id_$id .subtitle { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 500; 
+        |      font-size: 16px; 
+        |      fill: #9ca3af; 
+        |    }
+        |    #id_$id .status { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 500; 
+        |      font-size: 14px; 
+        |      fill: #ffffff; 
+        |    }
+        |    #id_$id .content { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 400; 
+        |      font-size: 14px; 
+        |      fill: #e5e7eb; 
+        |    }
+        |    #id_$id .section-title { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 600; 
+        |      font-size: 16px; 
+        |      fill: #f3f4f6; 
+        |    }
+        |    #id_$id .participant-title {
+        |       font-family: Arial, Helvetica, sans-serif;
+        |       font-weight: 600;
+        |       font-size: 12px;
+        |       fill: #f3f4f6;
+        |    }
+        |    #id_$id .participant-name { 
+        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-weight: 400; 
+        |      font-size: 12px; 
+        |      fill: #d1d5db; 
+        |      text-anchor: middle; 
+        |    }
+        |    #id_$id .participant-name-with-email {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 500;
+        |      font-size: 12px;
+        |      fill: #60a5fa;
+        |      text-anchor: middle;
+        |      border-bottom: 1px dotted #60a5fa;
+        |    }
+        |    #id_$id .participant-name-with-email:hover {
+        |      fill: #93c5fd;
+        |      font-weight: 600;
+        |    }
+        |    #id_$id .participant-container {
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .participant-container:hover .participant-icon {
+        |      filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6));
+        |      transition: filter 0.3s ease;
+        |    }
+        |    #id_$id .participant-container:hover .participant-name {
+        |      fill: #60a5fa;
+        |      transition: fill 0.3s ease;
+        |    }
+        |    #id_$id .group-chat-link {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 400;
+        |      font-size: 12px;
+        |      fill: #60a5fa;
+        |      text-decoration: underline;
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .reference-link {
+        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-weight: 400;
+        |      font-size: 14px;
+        |      fill: #60a5fa;
+        |      text-decoration: underline;
+        |      cursor: pointer;
+        |    }
+        |    #id_$id .reference-link:hover {
+        |      fill: #93c5fd;
+        |      font-weight: 500;
+        |    }
+        |    #id_$id a {
+        |      cursor: pointer;
+        |    }""".trimMargin()
+    }
+
 }
