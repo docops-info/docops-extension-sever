@@ -111,7 +111,7 @@ class CylinderBarMaker {
             val y = yAxisBottom - barHeight
 
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index)
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index).color
             val gradientId = "cylinderGradient${index}_${bar.display.id}"
 
             sb.append(generateCylinderBar(
@@ -145,7 +145,7 @@ class CylinderBarMaker {
         // Generate gradients for each bar using modern colors
         series.forEachIndexed { index, seriesItem ->
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index)
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index).color
             val gradientId = "cylinderGradient${index}_${display.id}"
 
             sb.append(generateRadialGradient(gradientId, color))

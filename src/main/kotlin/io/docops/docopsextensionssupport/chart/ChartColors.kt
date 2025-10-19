@@ -10,63 +10,64 @@ class ChartColors {
     companion object {
         // Primary color scheme - vibrant colors with good contrast
         val PRIMARY = listOf(
-            "#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#00bfa0"
+            SVGColor("#e60049"), SVGColor("#0bb4ff"), SVGColor("#50e991"),
+            SVGColor("#e6d800"), SVGColor("#9b19f5"), SVGColor("#ffa300"),
+            SVGColor("#dc0ab4"), SVGColor("#00bfa0")
         )
 
         // Pastel color scheme - softer colors for less intense visualizations
         val PASTEL = listOf(
-            "#a7d5ed", "#e1a692", "#98d1d1", "#e4bcad", "#df979e", "#b392f0", "#F7B7A3", "#95adbe"
+            SVGColor("#a7d5ed"), SVGColor("#e1a692"), SVGColor("#98d1d1"),
+            SVGColor("#e4bcad"), SVGColor("#df979e"), SVGColor("#b392f0"),
+            SVGColor("#F7B7A3"), SVGColor("#95adbe")
         )
 
         // Blue color scheme - variations of blue for monochromatic charts
         val BLUE = listOf(
-            "#1984c5", "#22a7f0", "#63bff0", "#b3d4ff", "#076678", "#5998de", "#639CD9", "#36A2EB"
+            SVGColor("#1984c5"), SVGColor("#22a7f0"), SVGColor("#63bff0"),
+            SVGColor("#b3d4ff"), SVGColor("#076678"), SVGColor("#5998de"),
+            SVGColor("#639CD9"), SVGColor("#36A2EB")
         )
 
         // Red color scheme - variations of red for monochromatic charts
         val RED = listOf(
-            "#e14b31", "#c23728", "#9e2a2b", "#752123", "#9d0006", "#e74c3c", "#f34141", "#E74C3C"
+            SVGColor("#e14b31"), SVGColor("#c23728"), SVGColor("#9e2a2b"),
+            SVGColor("#752123"), SVGColor("#9d0006"), SVGColor("#e74c3c"),
+            SVGColor("#f34141"), SVGColor("#E74C3C")
         )
 
         // Green color scheme - variations of green for monochromatic charts
         val GREEN = listOf(
-            "#54bebe", "#76c8c8", "#98971a", "#689d6a", "#427b58", "#50e991", "#37cdbe", "#2ECC71"
+            SVGColor("#54bebe"), SVGColor("#76c8c8"), SVGColor("#98971a"),
+            SVGColor("#689d6a"), SVGColor("#427b58"), SVGColor("#50e991"),
+            SVGColor("#37cdbe"), SVGColor("#2ECC71")
         )
 
         // Purple color scheme - variations of purple for monochromatic charts
         val PURPLE = listOf(
-            "#58508d", "#bc5090", "#574f7d", "#503a65", "#3c2a4d", "#7149c6", "#7e22ce", "#9966FF"
+            SVGColor("#58508d"), SVGColor("#bc5090"), SVGColor("#574f7d"),
+            SVGColor("#503a65"), SVGColor("#3c2a4d"), SVGColor("#7149c6"),
+            SVGColor("#7e22ce"), SVGColor("#9966FF")
         )
 
         // Categorical color scheme - distinct colors for categorical data
         val CATEGORICAL = listOf(
-            "#003f5c", "#bc5090", "#ffa600", "#ff6361", "#4BC0C0", "#FFCE56", "#FF9F40", "#C9CBCF"
+            SVGColor("#003f5c"), SVGColor("#bc5090"), SVGColor("#ffa600"),
+            SVGColor("#ff6361"), SVGColor("#4BC0C0"), SVGColor("#FFCE56"),
+            SVGColor("#FF9F40"), SVGColor("#C9CBCF")
         )
 
         val modernColors = listOf(
-            "#2563EB", // Blue
-            "#10B981", // Emerald
-            "#F59E0B", // Amber
-            "#EF4444", // Red
-            "#8B5CF6", // Violet
-            "#EC4899", // Pink
-            "#06B6D4", // Cyan
-            "#F97316", // Orange
-            "#14B8A6", // Teal
-            "#6366F1", // Indigo
-            "#84CC16", // Lime
-            "#F43F5E", // Rose
-            "#0EA5E9", // Sky Blue
-            "#A855F7", // Purple
-            "#22C55E", // Green
-            "#FB923C", // Light Orange
-            "#3B82F6", // Bright Blue
-            "#14B8A6", // Turquoise
-            "#F59E0B", // Gold
-            "#DC2626"  // Dark Red
+            SVGColor("#2563EB"), SVGColor("#10B981"), SVGColor("#F59E0B"),
+            SVGColor("#EF4444"), SVGColor("#8B5CF6"), SVGColor("#EC4899"),
+            SVGColor("#06B6D4"), SVGColor("#F97316"), SVGColor("#14B8A6"),
+            SVGColor("#6366F1"), SVGColor("#84CC16"), SVGColor("#F43F5E"),
+            SVGColor("#0EA5E9"), SVGColor("#A855F7"), SVGColor("#22C55E"),
+            SVGColor("#FB923C"), SVGColor("#3B82F6"), SVGColor("#14B8A6"),
+            SVGColor("#F59E0B"), SVGColor("#DC2626")
         )
 
-        fun getColorForIndex(index: Int): String {
+        fun getColorForIndex(index: Int): SVGColor {
             return modernColors[index % modernColors.size]
         }
     }

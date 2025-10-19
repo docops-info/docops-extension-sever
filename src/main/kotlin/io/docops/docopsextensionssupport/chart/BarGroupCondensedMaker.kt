@@ -7,6 +7,7 @@ import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.util.UUID
+import kotlin.collections.get
 
 
 class BarGroupCondensedMaker {
@@ -105,7 +106,8 @@ class BarGroupCondensedMaker {
         val labels = barGroup.uniqueLabels()
         val sz = labels.size
         for(i in 0 until sz) {
-            defs.append(SVGColor(ChartColors.modernColors[i], labels[i].replace(" ", "")).linearGradient)
+            val color = ChartColors.modernColors[i]
+            defs.append(color.createSimpleGradient(color.original(), labels[i].replace(" ", "")))
         }
 
         defs.append("<style type=\"text/css\">")

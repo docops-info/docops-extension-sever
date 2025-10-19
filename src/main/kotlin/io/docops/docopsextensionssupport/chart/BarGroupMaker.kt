@@ -329,7 +329,7 @@ class BarGroupMaker {
         // Create gradients matching bar.svg format
         for(i in 0 until sz) {
 
-            val svgColor = SVGColor(ChartColors.getColorForIndex(i))
+            val svgColor = ChartColors.getColorForIndex(i)
             defGrad.append("""
                 <linearGradient id="svgGradientColor_$i" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="${svgColor.lighter()}"/>

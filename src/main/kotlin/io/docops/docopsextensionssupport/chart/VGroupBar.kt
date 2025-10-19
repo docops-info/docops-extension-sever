@@ -195,17 +195,9 @@ class VGroupBar {
 
         ChartColors.modernColors.forEachIndexed { idx, item->
             // Create more vibrant gradients for each color
-            val baseColor = item
-            val brighterColor = brightenColor(baseColor, 0.2)
-            val darkerColor = darkenColor(baseColor, 0.2)
+            val svgColor = item.createSimpleGradient(item.color, "defColor_$idx")
 
-            defGrad.append("""
-                <linearGradient id="defColor_$idx" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="$brighterColor"/>
-                    <stop offset="50%" stop-color="$baseColor"/>
-                    <stop offset="100%" stop-color="$darkerColor"/>
-                </linearGradient>
-            """.trimIndent())
+            defGrad.append(svgColor)
         }
 
         val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")

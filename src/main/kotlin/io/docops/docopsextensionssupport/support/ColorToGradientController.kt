@@ -39,7 +39,7 @@ class ColorToGradientController {
 
     @GetMapping("/grad")
     fun gradList(): ResponseEntity<String> {
-        val l = ChartColors.modernColors.sortedBy { it.replace("#","").toInt(16) }.chunked(10)
+        val l = ChartColors.modernColors.sortedBy { it.color.replace("#","").toInt(16) }.chunked(10)
 
         val h = 10 * 30 + 50
         val w = 50 * l.size
@@ -47,9 +47,9 @@ class ColorToGradientController {
         val grads = StringBuilder()
         l.forEachIndexed { index, s ->
             s.forEachIndexed { i, color ->
-                val gradient = SVGColor(color, "grad${index}_$i")
-                val fontColor = determineTextColor(color)
-                grads.append(gradient.linearGradient)
+                val gradient = color.createSimpleGradient(color.color, "grad${index}_$i")
+                val fontColor = determineTextColor(color.color)
+                grads.append(gradient)
                 sb.append("""<g transform="translate(${index*50},${i*30})">""")
                 sb.append("""<rect x="0" y="0" width="50" height="30" fill="url(#grad${index}_$i)"/>""")
                 sb.append("""<text x="25" y="15" text-anchor="middle" style="font-size:8px; font-family: Arial, Helvetica;fill:$fontColor;">$color</text>""")

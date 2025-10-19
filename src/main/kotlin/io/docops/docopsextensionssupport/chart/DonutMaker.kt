@@ -129,7 +129,7 @@ class DonutMaker : PieSliceMaker(){
 
         commands.forEachIndexed { index, it ->
             // Determine text color based on background
-            val textColor = determineTextColor(ChartColors.modernColors[index])
+            val textColor = determineTextColor(ChartColors.modernColors[index].color)
 
             // Add animation to the donut slices
             sb.append("""

@@ -101,7 +101,7 @@ open class PieSliceMaker {
             val labelPoint = polarToCartesian(centerX, centerY, radius / 2, midAngle)
             //val outerLabelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX.toInt(), centerY.toInt())
             //val labelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX, centerY)
-            val textColor = determineTextColor(ChartColors.modernColors[index])
+            val textColor = determineTextColor(ChartColors.modernColors[index].color)
             labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 20px; font-family: Arial, Helvetica, sans-serif;\">")
             val fontSize = 20
             val spans = itemTextWidth(segment.label, 60F, fontSize)

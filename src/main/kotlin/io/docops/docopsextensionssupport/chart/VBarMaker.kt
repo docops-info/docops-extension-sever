@@ -71,7 +71,7 @@ class VBarMaker {
             val gradientId = "gradient${index + 1}"
 
             // Add the gradient definition
-            val svgColor = SVGColor(ChartColors.getColorForIndex(index))
+            val svgColor = ChartColors.getColorForIndex(index)
             sb.append("""
                 <defs>
                     <linearGradient id="$gradientId" x1="0%" y1="0%" x2="0%" y2="100%">

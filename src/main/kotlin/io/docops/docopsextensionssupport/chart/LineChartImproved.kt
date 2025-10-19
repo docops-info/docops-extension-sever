@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
@@ -32,6 +34,13 @@ class LineChartImproved {
 
         csvResponse.update(convertLineDataSeriesToCsv(lineData))
 
+        var colors = ChartColors.modernColors
+        if (customColors != null) {
+            colors = mutableListOf<SVGColor>()
+            customColors.forEach {
+                colors.add(SVGColor(it))
+            }
+        }
         // Generate SVG
         val svg = generateLineChartSvg(
             lineData,
@@ -39,7 +48,7 @@ class LineChartImproved {
             width.toInt(),
             height.toInt(),
             showLegend,
-            customColors ?: ChartColors.modernColors,
+            colors,
             enableHoverEffects,
             smoothLines,
             showPoints,
@@ -103,7 +112,7 @@ class LineChartImproved {
         width: Int,
         height: Int,
         showLegend: Boolean,
-        colors: List<String>,
+        colors: List<SVGColor>,
         enableHoverEffects: Boolean,
         smoothLines: Boolean,
         showPoints: Boolean,
@@ -150,35 +159,29 @@ class LineChartImproved {
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
 
-
+        svgBuilder.append("<defs>")
+        svgBuilder.append(BackgroundHelper.getBackgroundGradient(darkMode, id))
         // Add responsive CSS that adapts to system color scheme
+        var chartStyle = """
+            #ID_$id .chart-text { fill: #000000; }
+            #ID_$id .chart-grid { stroke: #e0e0e0; }
+            #ID_$id .chart-axis { stroke: #000000; }
+            #ID_$id .chart-background { fill: transparent; }
+            #ID_$id .chart-point-stroke { stroke: white; } 
+        """.trimIndent()
+        if(darkMode) {
+            chartStyle = """
+               #ID_$id  .chart-text { fill: #f8fafc !important; }
+               #ID_$id  .chart-grid { stroke: #334155 !important; }
+               #ID_$id  .chart-axis { stroke: #cbd5e1 !important; }
+               #ID_$id  .chart-background { fill: #1e293b !important; }
+               #ID_$id  .chart-point-stroke { stroke: #1e293b !important; }
+            """.trimIndent()
+        }
         svgBuilder.append("""
         <style>
             <![CDATA[
-            /* Default light mode colors */
-            .chart-text { fill: #000000; }
-            .chart-grid { stroke: #e0e0e0; }
-            .chart-axis { stroke: #000000; }
-            .chart-background { fill: transparent; }
-            .chart-point-stroke { stroke: white; }
-            
-            /* Dark mode colors - automatically applied when system prefers dark */
-            @media (prefers-color-scheme: dark) {
-                .chart-text { fill: #f8fafc; }
-                .chart-grid { stroke: #334155; }
-                .chart-axis { stroke: #cbd5e1; }
-                .chart-background { fill: #1e293b; }
-                .chart-point-stroke { stroke: #1e293b; }
-            }
-            
-            /* Explicit dark mode override for when darkMode config is true */
-            ${if (darkMode) """
-                .chart-text { fill: #f8fafc !important; }
-                .chart-grid { stroke: #334155 !important; }
-                .chart-axis { stroke: #cbd5e1 !important; }
-                .chart-background { fill: #1e293b !important; }
-                .chart-point-stroke { stroke: #1e293b !important; }
-            """ else ""}
+            $chartStyle
             
             /* Hover effects */
             ${if (enableHoverEffects) """
@@ -209,8 +212,10 @@ class LineChartImproved {
         </style>
     """.trimIndent())
 
+        svgBuilder.append("</defs>")
 // Add background using CSS class
-        svgBuilder.append("<rect width='$width' height='$height' class='chart-background' />")
+        svgBuilder.append(BackgroundHelper.getBackGroundPath(useDark = darkMode, id= id, width = width.toFloat(), height = height.toFloat()))
+        //svgBuilder.append("<rect width='$width' height='$height' class='chart-background' />")
 
         // Add title using CSS class
         svgBuilder.append("<text x='${width/2}' y='25' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' class='chart-text'>$title</text>")
@@ -249,11 +254,12 @@ class LineChartImproved {
         }
 
         // Draw axes
-        svgBuilder.append("<g class='axes' stroke='$axisColor' stroke-width='1'>")
+        svgBuilder.append("<g class='axes'>")
+        //svgBuilder.append("<g class='axes' stroke='$axisColor' stroke-width='1'>")
         // X-axis
-        svgBuilder.append("<line x1='$chartX' y1='${chartY + chartHeight}' x2='${chartX + chartWidth}' y2='${chartY + chartHeight}' />")
+        svgBuilder.append("<line x1='$chartX' y1='${chartY + chartHeight}' x2='${chartX + chartWidth}' y2='${chartY + chartHeight}' stroke='$axisColor' stroke-width='1' />")
         // Y-axis
-        svgBuilder.append("<line x1='$chartX' y1='$chartY' x2='$chartX' y2='${chartY + chartHeight}' />")
+        svgBuilder.append("<line x1='$chartX' y1='$chartY' x2='$chartX' y2='${chartY + chartHeight}' stroke='$axisColor' stroke-width='1' />")
 
         // X-axis ticks and labels
         // Check if we have string labels
@@ -288,7 +294,7 @@ class LineChartImproved {
         var y = Math.ceil(paddedMinY / yStep) * yStep
         while (y <= paddedMaxY) {
             val yPos = yToSvg(y)
-            svgBuilder.append("<line x1='$chartX' y1='$yPos' x2='${chartX - 5}' y2='$yPos' />")
+            svgBuilder.append("<line x1='$chartX' y1='$yPos' x2='${chartX - 5}' y2='$yPos' stroke='$axisColor' stroke-width='1'/>")
             svgBuilder.append("<text x='${chartX - 10}' y='$yPos' font-family='Arial' font-size='12' text-anchor='end' dominant-baseline='middle' fill='$textColor'>${formatNumber(y)}</text>")
             y += yStep
         }
@@ -309,7 +315,7 @@ class LineChartImproved {
 
             // Choose color for this series
             val colorIndex = index % colors.size
-            val color = series.color ?: colors[colorIndex]
+            val color = series.color ?: colors[colorIndex].color
 
             // Create a group for this series
             svgBuilder.append("<g class='data-series' id='series-$index'>")
@@ -381,7 +387,7 @@ class LineChartImproved {
             seriesList.forEachIndexed { index, series ->
                 val yPos = legendY + index * 25
                 val colorIndex = index % colors.size
-                val color = series.color ?: colors[colorIndex]
+                val color = series.color ?: colors[colorIndex].color
 
                 // Wrap each legend item in a group for hover effects if enabled
                 if (enableHoverEffects) {

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.formatDecimal
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
@@ -34,6 +35,13 @@ class PieChartImproved {
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
         val csvResponse = payloadToSimpleCsv(pieData)
+        var colors = ChartColors.modernColors
+        if (customColors != null) {
+            colors = mutableListOf<SVGColor>()
+            customColors.forEach {
+                colors.add(SVGColor(it))
+            }
+        }
         // Generate SVG
         val svg = generatePieChartSvg(
             pieData,
@@ -42,7 +50,7 @@ class PieChartImproved {
             height.toInt(),
             showLegend,
             showPercentages,
-            customColors ?: ChartColors.modernColors,
+            colors.map { it.color },
             enableHoverEffects,
             isDonut, darkMode
         )

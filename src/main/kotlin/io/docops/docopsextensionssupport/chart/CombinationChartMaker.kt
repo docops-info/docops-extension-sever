@@ -52,7 +52,7 @@ class CombinationChartMaker {
         // Create gradients for bars
         chart.series.filter { it.type == ChartType.BAR }.forEachIndexed { index, series ->
             val colorIndex = index % defaultColors.size
-            val color = series.color ?: ChartColors.modernColors[colorIndex]
+            val color = series.color ?: ChartColors.modernColors[colorIndex].color
             val darkerColor = darkenColor(color, 0.3)
 
             sb.append("""
