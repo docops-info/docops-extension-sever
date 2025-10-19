@@ -274,7 +274,7 @@ class LineChartImproved {
             // Draw ticks and labels for each unique x-value
             uniqueXPoints.forEach { point ->
                 val xPos = xToSvg(point.x)
-                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' />")
+                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' stroke='$axisColor' stroke-width='1'/>")
                 svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-family='Arial' font-size='12' text-anchor='middle' fill='$textColor'>${point.xLabel ?: formatNumber(point.x)}</text>")
             }
         } else {
@@ -283,7 +283,7 @@ class LineChartImproved {
             var x = Math.ceil(paddedMinX / xStep) * xStep
             while (x <= paddedMaxX) {
                 val xPos = xToSvg(x)
-                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' />")
+                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' stroke='$axisColor' stroke-width='1'/>")
                 svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-family='Arial' font-size='12' text-anchor='middle' fill='$textColor'>${formatNumber(x)}</text>")
                 x += xStep
             }
