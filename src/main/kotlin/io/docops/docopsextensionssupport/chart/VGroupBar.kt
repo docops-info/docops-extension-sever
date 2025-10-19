@@ -192,7 +192,8 @@ class VGroupBar {
     }
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
-        STUNNINGPIE.forEachIndexed { idx, item->
+
+        ChartColors.modernColors.forEachIndexed { idx, item->
             // Create more vibrant gradients for each color
             val baseColor = item
             val brighterColor = brightenColor(baseColor, 0.2)

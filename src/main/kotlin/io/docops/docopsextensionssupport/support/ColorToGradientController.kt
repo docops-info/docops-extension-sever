@@ -16,8 +16,7 @@
 
 package io.docops.docopsextensionssupport.support
 
-import io.docops.docopsextensionssupport.chart.STUNNINGPIE
-import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
+import io.docops.docopsextensionssupport.chart.ChartColors
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.accepted
@@ -40,7 +39,7 @@ class ColorToGradientController {
 
     @GetMapping("/grad")
     fun gradList(): ResponseEntity<String> {
-        val l = STUNNINGPIE.sortedBy { it.replace("#","").toInt(16) }.chunked(10)
+        val l = ChartColors.modernColors.sortedBy { it.replace("#","").toInt(16) }.chunked(10)
 
         val h = 10 * 30 + 50
         val w = 50 * l.size

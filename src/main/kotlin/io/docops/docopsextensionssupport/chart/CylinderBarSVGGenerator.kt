@@ -11,28 +11,6 @@ import kotlin.uuid.Uuid
 
 class CylinderBarMaker {
 
-    // Modern color palette matching VBarMaker
-    private val modernColors = listOf(
-        "#667eea", // Soft Purple
-        "#f093fb", // Pink
-        "#4facfe", // Sky Blue
-        "#43e97b", // Mint Green
-        "#fa709a", // Rose
-        "#feca57", // Yellow
-        "#48dbfb", // Light Blue
-        "#ff6b6b", // Coral Red
-        "#5f27cd", // Deep Purple
-        "#00d2d3"  // Cyan
-    )
-
-    /**
-     * Gets a color for the given index from the modern color palette.
-     * Cycles through colors if index exceeds palette size.
-     */
-    private fun getColorForIndex(index: Int): String {
-        return modernColors[index % modernColors.size]
-    }
-
     @OptIn(ExperimentalUuidApi::class)
     fun makeVerticalCylinderBar(bar: Bar): String {
         val width = 800.0
@@ -133,8 +111,8 @@ class CylinderBarMaker {
             val y = yAxisBottom - barHeight
 
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: getColorForIndex(index)
-            val gradientId = "cylinderGradient$index"
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index)
+            val gradientId = "cylinderGradient${index}_${bar.display.id}"
 
             sb.append(generateCylinderBar(
                 x = x,
@@ -149,7 +127,8 @@ class CylinderBarMaker {
                 value = bar.valueFmt(seriesItem.value),
                 yAxisBottom = yAxisBottom,
                 textColor = textColor,
-                useDark = bar.display.useDark
+                useDark = bar.display.useDark,
+                id = bar.display.id
             ))
         }
 
@@ -166,8 +145,8 @@ class CylinderBarMaker {
         // Generate gradients for each bar using modern colors
         series.forEachIndexed { index, seriesItem ->
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: getColorForIndex(index)
-            val gradientId = "cylinderGradient$index"
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index)
+            val gradientId = "cylinderGradient${index}_${display.id}"
 
             sb.append(generateRadialGradient(gradientId, color))
         }
@@ -185,7 +164,7 @@ class CylinderBarMaker {
 
         // Shadow filter
         sb.append("""
-            <filter id="cylinderShadow">
+            <filter id="cylinderShadow_${display.id}">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
                 <feOffset dx="2" dy="2" result="offsetblur"/>
                 <feComponentTransfer>
@@ -252,39 +231,52 @@ class CylinderBarMaker {
         value: String,
         yAxisBottom: Double,
         textColor: String,
-        useDark: Boolean
+        useDark: Boolean, id: String
     ): String {
         val sb = StringBuilder()
         val cx = x + width / 2
         val highlightWidth = width * 0.3
         val highlightX = x + width * 0.15
 
-        sb.append("<g filter=\"url(#cylinderShadow)\">\n")
+        sb.append("<g filter=\"url(#cylinderShadow_$id)\">\n")
 
         // Cylinder body (main rectangle with gradient)
-        sb.append("""<rect x="$x" y="$y" width="$width" height="$height" fill="url(#$gradientId)" rx="2"/>""")
+        // Animate both y and height for upward growth effect
+        sb.append("""<rect x="$x" y="$y" width="$width" height="$height" fill="url(#${gradientId})" rx="2">""")
+        sb.append("""<animate attributeName="y" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
+        sb.append("""<animate attributeName="height" from="0" to="$height" dur="1s" fill="freeze"/>""")
+        sb.append("""</rect>""")
         sb.append("\n")
 
-        // Highlight stripe for glass effect
-        sb.append("""<rect x="$highlightX" y="${y + 5}" width="$highlightWidth" height="${height - 10}" fill="url(#highlight)" opacity="0.7"/>""")
+        // Highlight stripe for glass effect (also animate)
+        sb.append("""<rect x="$highlightX" y="${y + 5}" width="$highlightWidth" height="${height - 10}" fill="url(#highlight)" opacity="0.7">""")
+        sb.append("""<animate attributeName="y" from="${yAxisBottom + 5}" to="${y + 5}" dur="1s" fill="freeze"/>""")
+        sb.append("""<animate attributeName="height" from="0" to="${height - 10}" dur="1s" fill="freeze"/>""")
+        sb.append("""</rect>""")
         sb.append("\n")
 
-        // Bottom ellipse (base of cylinder)
+        // Bottom ellipse (base of cylinder) - stays at bottom, no animation needed
         val (_, _, darkColor) = generateColorShades(color)
         sb.append("""<ellipse cx="$cx" cy="$yAxisBottom" rx="$cylinderRadius" ry="$ellipseRy" fill="$darkColor" opacity="0.8"/>""")
         sb.append("\n")
 
-        // Top ellipse (visible top of cylinder)
+        // Top ellipse (visible top of cylinder) - animate y position
         val (lightColor, _, _) = generateColorShades(color)
-        sb.append("""<ellipse cx="$cx" cy="$y" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.9"/>""")
+        sb.append("""<ellipse cx="$cx" cy="$y" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.9">""")
+        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
+        sb.append("""</ellipse>""")
         sb.append("\n")
 
-        // Top ellipse highlight overlay
-        sb.append("""<ellipse cx="$cx" cy="${y - 2}" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.5"/>""")
+        // Top ellipse highlight overlay - also animate
+        sb.append("""<ellipse cx="$cx" cy="${y - 2}" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.5">""")
+        sb.append("""<animate attributeName="cy" from="${yAxisBottom - 2}" to="${y - 2}" dur="1s" fill="freeze"/>""")
+        sb.append("""</ellipse>""")
         sb.append("\n")
 
-        // Rim highlight on top ellipse
-        sb.append("""<ellipse cx="$cx" cy="$y" rx="${cylinderRadius * 0.85}" ry="${ellipseRy * 0.8}" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4"/>""")
+        // Rim highlight on top ellipse - also animate
+        sb.append("""<ellipse cx="$cx" cy="$y" rx="${cylinderRadius * 0.85}" ry="${ellipseRy * 0.8}" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4">""")
+        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
+        sb.append("""</ellipse>""")
         sb.append("\n")
 
         sb.append("</g>\n")
@@ -295,9 +287,10 @@ class CylinderBarMaker {
 
         // Value above the bar
         val valueColor = if (useDark) "#ffffff" else "#111111"
-        sb.append("""<text x="$cx" y="${y - 10}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor">${value}</text>""")
+        sb.append("""<text x="$cx" y="${y - 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="0">${value}""")
+        sb.append("""<animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.5s" fill="freeze"/>""")
+        sb.append("""</text>""")
         sb.append("\n")
-
         return sb.toString()
     }
 }

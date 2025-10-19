@@ -52,7 +52,7 @@ class CombinationChartMaker {
         // Create gradients for bars
         chart.series.filter { it.type == ChartType.BAR }.forEachIndexed { index, series ->
             val colorIndex = index % defaultColors.size
-            val color = series.color ?: defaultColors[colorIndex]
+            val color = series.color ?: ChartColors.modernColors[colorIndex]
             val darkerColor = darkenColor(color, 0.3)
 
             sb.append("""
@@ -66,7 +66,7 @@ class CombinationChartMaker {
         // Create gradients for line areas
         chart.series.filter { it.type == ChartType.LINE }.forEachIndexed { index, series ->
             val colorIndex = index % defaultColors.size
-            val color = series.color ?: defaultColors[colorIndex]
+            val color = series.color ?: ChartColors.modernColors[colorIndex]
 
             sb.append("""
                 <linearGradient id="lineGradient_${series.name.replace(" ", "_")}" x1="0%" y1="0%" x2="0%" y2="100%">

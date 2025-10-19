@@ -14,19 +14,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class PieChartImproved {
-    // Modern color palette for pie chart
-    private val defaultColors = listOf(
-        "#3498db", // Blue
-        "#2ecc71", // Green
-        "#e74c3c", // Red
-        "#f39c12", // Orange
-        "#9b59b6", // Purple
-        "#1abc9c", // Turquoise
-        "#34495e", // Dark Blue
-        "#e67e22", // Dark Orange
-        "#27ae60", // Dark Green
-        "#d35400"  // Burnt Orange
-    )
+
     fun makePieSvg(payload: String, csvResponse: CsvResponse): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
@@ -54,7 +42,7 @@ class PieChartImproved {
             height.toInt(),
             showLegend,
             showPercentages,
-            customColors ?: defaultColors,
+            customColors ?: ChartColors.modernColors,
             enableHoverEffects,
             isDonut, darkMode
         )

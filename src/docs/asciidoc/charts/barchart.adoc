@@ -202,7 +202,6 @@ Here's a simple example of a horizontal bar chart:
 title=Monthly Sales Performance
 yLabel=Revenue ($)
 xLabel=Month
-baseColor=#4cc9f0
 type=R
 ---
 January | 120.0
@@ -214,12 +213,15 @@ June | 223.0
 ----
 ....
 
-[docops,bar,controls=true]
+
+
+==== Rectangle Bars, type=R
+
+[docops,bar,controls=false]
 ----
 title=Monthly Sales Performance
 yLabel=Revenue ($)
 xLabel=Month
-baseColor=#4cc9f0
 type=R
 ---
 January | 120.0
@@ -229,6 +231,25 @@ April | 244.0
 May | 256.0
 June | 223.0
 ----
+
+==== Cylindrical Bars, type=C
+
+[docops,bar,controls=false,role=secondary]
+----
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+type=C
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
+----
+
+
 
 [.back-to-top]
 <<top, 🔝>>
@@ -244,7 +265,6 @@ You can create vertical bar charts by setting the `vBar` property to `true`:
 title=Berry Picking by Month 2024
 yLabel=Number of Sales
 xLabel=Month
-baseColor=#4361ee
 vBar=true
 ---
 Jan | 120.0
@@ -261,7 +281,6 @@ Jun | 223.0
 title=Berry Picking by Month 2024
 yLabel=Number of Sales
 xLabel=Month
-baseColor=#4361ee
 vBar=true
 ---
 Jan | 120.0
@@ -283,29 +302,33 @@ You can create cylinder-style bar charts by setting the `type` property to `"C"`
 ....
 [docops,bar,controls=true,useDark=true]
 ----
-title=Quarterly Performance
-yLabel=Revenue ($)
-xLabel=Quarter
+title=Berry Picking by Month 2024
+yLabel=Number of Sales
+xLabel=Month
 type=C
 ---
-Q1 | 320.0
-Q2 | 480.0
-Q3 | 290.0
-Q4 | 410.0 |#f72585
+Jan | 120.0
+Feb | 334.0
+Mar | 455.0
+Apr | 244.0
+May | 256.0
+Jun | 223.0
 ----
 ....
 
 [docops,bar,controls=true,useDark=true]
 ----
-title=Quarterly Performance
-yLabel=Revenue ($)
-xLabel=Quarter
+title=Berry Picking by Month 2024
+yLabel=Number of Sales
+xLabel=Month
 type=C
 ---
-Q1 | 320.0
-Q2 | 480.0
-Q3 | 290.0
-Q4 | 410.0 |#f72585
+Jan | 120.0
+Feb | 334.0
+Mar | 455.0
+Apr | 244.0
+May | 256.0
+Jun | 223.0
 ----
 
 [.back-to-top]
@@ -322,7 +345,6 @@ You can create dark mode bar charts by setting the `darkMode` property to `true`
 title=Monthly Sales Performance (Dark Mode)
 yLabel=Revenue ($)
 xLabel=Month
-baseColor=#4cc9f0
 darkMode=true
 type=R
 ---
@@ -340,7 +362,6 @@ June | 225.0
 title=Monthly Sales Performance (Dark Mode)
 yLabel=Revenue ($)
 xLabel=Month
-baseColor=#4cc9f0
 darkMode=true
 type=R
 ---
@@ -366,8 +387,6 @@ Here's an example of a grouped bar chart:
 title=Annual Product Sales Report
 yLabel=Sales (USD)
 xLabel=Quarters
-lineColor=#921A40
-baseColor=#F3EDED
 ---
 Product A | Q1 | 5000.0
 Product A | Q2 | 7000.0
@@ -385,8 +404,6 @@ Product B | Q4 | 9000.0
 title=Annual Product Sales Report
 yLabel=Sales (USD)
 xLabel=Quarters
-lineColor=#921A40
-baseColor=#F3EDED
 ---
 Product A | Q1 | 5000.0
 Product A | Q2 | 7000.0

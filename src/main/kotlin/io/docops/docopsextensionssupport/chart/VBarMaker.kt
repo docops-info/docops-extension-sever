@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
@@ -70,11 +71,12 @@ class VBarMaker {
             val gradientId = "gradient${index + 1}"
 
             // Add the gradient definition
+            val svgColor = SVGColor(ChartColors.getColorForIndex(index))
             sb.append("""
                 <defs>
                     <linearGradient id="$gradientId" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="${getColorForIndex(index, 0)}"/>
-                        <stop offset="100%" stop-color="${getColorForIndex(index, 1)}"/>
+                        <stop offset="0%" stop-color="${svgColor.lighter()}"/>
+                        <stop offset="100%" stop-color="${svgColor.darker()}"/>
                     </linearGradient>
                 </defs>
             """.trimIndent())
@@ -123,20 +125,7 @@ class VBarMaker {
         return sb.toString()
     }
 
-    private fun getColorForIndex(index: Int, position: Int): String {
-        // Define color palettes exactly matching bar.svg gradients
-        val modernColors = listOf(
-            Triple("#4361ee", "#3a0ca3", "#4361ee"), // Bar 1: Blue to Purple
-            Triple("#4cc9f0", "#4361ee", "#4cc9f0"), // Bar 2: Light Blue to Blue
-            Triple("#f72585", "#b5179e", "#f72585"), // Bar 3: Pink to Purple
-            Triple("#7209b7", "#560bad", "#7209b7"), // Bar 4: Purple to Dark Purple
-            Triple("#f77f00", "#d62828", "#f77f00"), // Bar 5: Orange to Red
-            Triple("#2a9d8f", "#264653", "#2a9d8f")  // Bar 6: Teal to Dark Blue
-        )
 
-        val colorSet = modernColors[index % modernColors.size]
-        return if (position == 0) colorSet.first else colorSet.second
-    }
 
     private fun addGrid(bar: Bar): String {
         val sb = StringBuilder()

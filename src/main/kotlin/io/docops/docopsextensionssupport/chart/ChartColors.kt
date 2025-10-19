@@ -42,6 +42,33 @@ class ChartColors {
         val CATEGORICAL = listOf(
             "#003f5c", "#bc5090", "#ffa600", "#ff6361", "#4BC0C0", "#FFCE56", "#FF9F40", "#C9CBCF"
         )
+
+        val modernColors = listOf(
+            "#2563EB", // Blue
+            "#10B981", // Emerald
+            "#F59E0B", // Amber
+            "#EF4444", // Red
+            "#8B5CF6", // Violet
+            "#EC4899", // Pink
+            "#06B6D4", // Cyan
+            "#F97316", // Orange
+            "#14B8A6", // Teal
+            "#6366F1", // Indigo
+            "#84CC16", // Lime
+            "#F43F5E", // Rose
+            "#0EA5E9", // Sky Blue
+            "#A855F7", // Purple
+            "#22C55E", // Green
+            "#FB923C", // Light Orange
+            "#3B82F6", // Bright Blue
+            "#14B8A6", // Turquoise
+            "#F59E0B", // Gold
+            "#DC2626"  // Dark Red
+        )
+
+        fun getColorForIndex(index: Int): String {
+            return modernColors[index % modernColors.size]
+        }
     }
 }
 

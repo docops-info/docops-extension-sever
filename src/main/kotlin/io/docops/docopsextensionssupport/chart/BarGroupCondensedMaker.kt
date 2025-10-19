@@ -90,7 +90,6 @@ class BarGroupCondensedMaker {
     private fun end() = "</svg>"
     private fun makeDefs(barGroup: BarGroup): String {
         val defs = StringBuilder()
-        val clrs = chartColorAsSVGColor()
         defs.append("<defs>")
         defs.append("""
             <linearGradient id="condensedLite" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -106,7 +105,7 @@ class BarGroupCondensedMaker {
         val labels = barGroup.uniqueLabels()
         val sz = labels.size
         for(i in 0 until sz) {
-            defs.append(SVGColor(STUNNINGPIE[i], labels[i].replace(" ", "")).linearGradient)
+            defs.append(SVGColor(ChartColors.modernColors[i], labels[i].replace(" ", "")).linearGradient)
         }
 
         defs.append("<style type=\"text/css\">")
