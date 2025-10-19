@@ -1527,86 +1527,306 @@ This document showcases the DocOps ADR.
 <div class="sect1">
 <h2 id="_adrs">1. ADRs</h2>
 <div class="sectionbody">
-<div class="docops-showcase-gallery" id="docops-gallery-a2775e1488bacbe2">
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-0">
+<div class="docops-showcase-gallery" id="docops-gallery-ac6ff9cf492164c7">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-0">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-0', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_3VSS2_bMAy-51fwmAIL0BXtJTcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcrYkuGsJMup98DWQvkvZswQNKPzjXzPnq4aWJPskwYMLJO6Wk1HVgiVuA5Z-kSb78-j2i3mN81OE3TkBRDyyZshBc9_pkE4MgN6zq762RHFyS77sbKOMNPvQhphrga-uJjC_tVqpKQL4saIq-3rGWp507Y8BayIXVLDqRgpiSqbQ3WlR-u-1kDrptFREYU1HlXwNiGV0nFf0qS7koUo7M5GFGQdRD2ycplQHR_rUBWmuvo3x1f_urERlctwRC-6yE_oCTauhjtvlJGFjNx8gKcweFgFgvmK9mSDKtS_je4yjW9Z5czXKbRqDV7QYz8WvPCO4FF3SF9Xj83N7C9Yaq0fYwMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-0', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Use Elasticsearch for Search Functionality
+status: Accepted
+date: 2024-05-15
+context:
+- Our application needs robust search capabilities across multiple data types
+- We need to support full-text search with relevance ranking
+- The search functionality must scale with growing data volumes
+- We need to support faceted search and filtering
+decision:
+- We will use Elasticsearch as our search engine
+- We will integrate it with our existing PostgreSQL database
+- We will implement a synchronization mechanism to keep data in sync
+consequences:
+- Improved search performance and capabilities
+- Additional infrastructure to maintain
+- Need for expertise in Elasticsearch configuration and optimization
+- Potential complexity in keeping data synchronized
+participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-0', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3VSS2_bMAy-51fwmAIL0BXtJTcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcrYkuGsJMup98DWQvkvZswQNKPzjXzPnq4aWJPskwYMLJO6Wk1HVgiVuA5Z-kSb78-j2i3mN81OE3TkBRDyyZshBc9_pkE4MgN6zq762RHFyS77sbKOMNPvQhphrga-uJjC_tVqpKQL4saIq-3rGWp507Y8BayIXVLDqRgpiSqbQ3WlR-u-1kDrptFREYU1HlXwNiGV0nFf0qS7koUo7M5GFGQdRD2ycplQHR_rUBWmuvo3x1f_urERlctwRC-6yE_oCTauhjtvlJGFjNx8gKcweFgFgvmK9mSDKtS_je4yjW9Z5czXKbRqDV7QYz8WvPCO4FF3SF9Xj83N7C9Yaq0fYwMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_3VSS2_bMAy-51fwmAIL0BXtJTcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcrYkuGsJMup98DWQvkvZswQNKPzjXzPnq4aWJPskwYMLJO6Wk1HVgiVuA5Z-kSb78-j2i3mN81OE3TkBRDyyZshBc9_pkE4MgN6zq762RHFyS77sbKOMNPvQhphrga-uJjC_tVqpKQL4saIq-3rGWp507Y8BayIXVLDqRgpiSqbQ3WlR-u-1kDrptFREYU1HlXwNiGV0nFf0qS7koUo7M5GFGQdRD2ycplQHR_rUBWmuvo3x1f_urERlctwRC-6yE_oCTauhjtvlJGFjNx8gKcweFgFgvmK9mSDKtS_je4yjW9Z5czXKbRqDV7QYz8WvPCO4FF3SF9Xj83N7C9Yaq0fYwMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3VSS2_bMAy-51fwmAIL0BXtJTcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcrYkuGsJMup98DWQvkvZswQNKPzjXzPnq4aWJPskwYMLJO6Wk1HVgiVuA5Z-kSb78-j2i3mN81OE3TkBRDyyZshBc9_pkE4MgN6zq762RHFyS77sbKOMNPvQhphrga-uJjC_tVqpKQL4saIq-3rGWp507Y8BayIXVLDqRgpiSqbQ3WlR-u-1kDrptFREYU1HlXwNiGV0nFf0qS7koUo7M5GFGQdRD2ycplQHR_rUBWmuvo3x1f_urERlctwRC-6yE_oCTauhjtvlJGFjNx8gKcweFgFgvmK9mSDKtS_je4yjW9Z5czXKbRqDV7QYz8WvPCO4FF3SF9Xj83N7C9Yaq0fYwMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-1">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-1">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-1', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_2VTTW_bMAy9-1fw2AJL0hXDDrkVDQZ0W9cBO_RQ5MBIdExEH55Ex3V__Sg7dbLtkEAJqcfH956ExdEa7mxsBR7ZpJgpHdlQhrtkGhYy0iWqsqB0WRuNoVbIVhZF793e3H5a3Hxe3HysTAxCr7KuFvDUJfAxRMfSsAFsW8cGhWMAzrAjEz2HPViuazadE5AIHjmIfgCDhWzQkQJt6Egutp6C9hD6DIHIlvY-pgNwsNSSfgVxAyh6QaRUultMkiHWIA1BHrKQV7xnmgHYtykeCRTBxWGcUCf63VEww8ghke0MgbCnhcSFx3QgKZzmGbpGG4OeMjRYoOZK4V82LICcqKDnypLhrBqsJyI9Owf7hLZDp-w961lISUQ_izcK85cpeGnKGafLBC8vjUib16uVchUOdewdpaWyXO0cH3i1iUXkTeIjhQ1l3odlI96BHf9f2LGggpTKdjuKVKTleoDTfNjFLlhMTPliuErpxh1VtwsW2OclenyLYeSALS_2umGPA9z9fIDTWQfVMYFxfJLUd-EUln_2KwFTnpT4bcrS1XlW3_dLG83htC9sxvN2ez1aGVU0ypL-u3bodpQCCeUlxxV8m3_qzRLoPAWCcvHsYUrMlE7csRr0npTMhb4pjnxBzVpSFc_JNYNxxTptvUjsRfKKmA_BJMKs8LGliSm6MWKOXnWStvwo0S1ipbjrssymWM5GiaWJjWaHJSaNX1UeARtuUUesy-tukBzcN-ry1X3DVJ_f-PUH-IUJG_gam5CLSvr2ntoM3wmtFjd4ZAvP7N5r83aPGHBP6br6A-gaPOxLBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-1', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Adopt Microservices Architecture
+status: Accepted
+date: 2024-06-01
+context:
+- Our monolithic application is becoming difficult to maintain and scale
+- Development teams need to work independently on different parts of the system
+- We need to improve deployment frequency and reduce time-to-market
+- Different components have different scaling requirements
+decision:
+- We will gradually migrate from monolith to microservices architecture
+- We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries
+- We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication
+- We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])
+consequences:
+- Improved scalability and resilience
+- Faster development cycles and independent deployments
+- Increased operational complexity
+- Need for robust service discovery and monitoring
+participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-1', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_2VTTW_bMAy9-1fw2AJL0hXDDrkVDQZ0W9cBO_RQ5MBIdExEH55Ex3V__Sg7dbLtkEAJqcfH956ExdEa7mxsBR7ZpJgpHdlQhrtkGhYy0iWqsqB0WRuNoVbIVhZF793e3H5a3Hxe3HysTAxCr7KuFvDUJfAxRMfSsAFsW8cGhWMAzrAjEz2HPViuazadE5AIHjmIfgCDhWzQkQJt6Egutp6C9hD6DIHIlvY-pgNwsNSSfgVxAyh6QaRUultMkiHWIA1BHrKQV7xnmgHYtykeCRTBxWGcUCf63VEww8ghke0MgbCnhcSFx3QgKZzmGbpGG4OeMjRYoOZK4V82LICcqKDnypLhrBqsJyI9Owf7hLZDp-w961lISUQ_izcK85cpeGnKGafLBC8vjUib16uVchUOdewdpaWyXO0cH3i1iUXkTeIjhQ1l3odlI96BHf9f2LGggpTKdjuKVKTleoDTfNjFLlhMTPliuErpxh1VtwsW2OclenyLYeSALS_2umGPA9z9fIDTWQfVMYFxfJLUd-EUln_2KwFTnpT4bcrS1XlW3_dLG83htC9sxvN2ez1aGVU0ypL-u3bodpQCCeUlxxV8m3_qzRLoPAWCcvHsYUrMlE7csRr0npTMhb4pjnxBzVpSFc_JNYNxxTptvUjsRfKKmA_BJMKs8LGliSm6MWKOXnWStvwo0S1ipbjrssymWM5GiaWJjWaHJSaNX1UeARtuUUesy-tukBzcN-ry1X3DVJ_f-PUH-IUJG_gam5CLSvr2ntoM3wmtFjd4ZAvP7N5r83aPGHBP6br6A-gaPOxLBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_2VTTW_bMAy9-1fw2AJL0hXDDrkVDQZ0W9cBO_RQ5MBIdExEH55Ex3V__Sg7dbLtkEAJqcfH956ExdEa7mxsBR7ZpJgpHdlQhrtkGhYy0iWqsqB0WRuNoVbIVhZF793e3H5a3Hxe3HysTAxCr7KuFvDUJfAxRMfSsAFsW8cGhWMAzrAjEz2HPViuazadE5AIHjmIfgCDhWzQkQJt6Egutp6C9hD6DIHIlvY-pgNwsNSSfgVxAyh6QaRUultMkiHWIA1BHrKQV7xnmgHYtykeCRTBxWGcUCf63VEww8ghke0MgbCnhcSFx3QgKZzmGbpGG4OeMjRYoOZK4V82LICcqKDnypLhrBqsJyI9Owf7hLZDp-w961lISUQ_izcK85cpeGnKGafLBC8vjUib16uVchUOdewdpaWyXO0cH3i1iUXkTeIjhQ1l3odlI96BHf9f2LGggpTKdjuKVKTleoDTfNjFLlhMTPliuErpxh1VtwsW2OclenyLYeSALS_2umGPA9z9fIDTWQfVMYFxfJLUd-EUln_2KwFTnpT4bcrS1XlW3_dLG83htC9sxvN2ez1aGVU0ypL-u3bodpQCCeUlxxV8m3_qzRLoPAWCcvHsYUrMlE7csRr0npTMhb4pjnxBzVpSFc_JNYNxxTptvUjsRfKKmA_BJMKs8LGliSm6MWKOXnWStvwo0S1ipbjrssymWM5GiaWJjWaHJSaNX1UeARtuUUesy-tukBzcN-ry1X3DVJ_f-PUH-IUJG_gam5CLSvr2ntoM3wmtFjd4ZAvP7N5r83aPGHBP6br6A-gaPOxLBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_2VTTW_bMAy9-1fw2AJL0hXDDrkVDQZ0W9cBO_RQ5MBIdExEH55Ex3V__Sg7dbLtkEAJqcfH956ExdEa7mxsBR7ZpJgpHdlQhrtkGhYy0iWqsqB0WRuNoVbIVhZF793e3H5a3Hxe3HysTAxCr7KuFvDUJfAxRMfSsAFsW8cGhWMAzrAjEz2HPViuazadE5AIHjmIfgCDhWzQkQJt6Egutp6C9hD6DIHIlvY-pgNwsNSSfgVxAyh6QaRUultMkiHWIA1BHrKQV7xnmgHYtykeCRTBxWGcUCf63VEww8ghke0MgbCnhcSFx3QgKZzmGbpGG4OeMjRYoOZK4V82LICcqKDnypLhrBqsJyI9Owf7hLZDp-w961lISUQ_izcK85cpeGnKGafLBC8vjUib16uVchUOdewdpaWyXO0cH3i1iUXkTeIjhQ1l3odlI96BHf9f2LGggpTKdjuKVKTleoDTfNjFLlhMTPliuErpxh1VtwsW2OclenyLYeSALS_2umGPA9z9fIDTWQfVMYFxfJLUd-EUln_2KwFTnpT4bcrS1XlW3_dLG83htC9sxvN2ez1aGVU0ypL-u3bodpQCCeUlxxV8m3_qzRLoPAWCcvHsYUrMlE7csRr0npTMhb4pjnxBzVpSFc_JNYNxxTptvUjsRfKKmA_BJMKs8LGliSm6MWKOXnWStvwo0S1ipbjrssymWM5GiaWJjWaHJSaNX1UeARtuUUesy-tukBzcN-ry1X3DVJ_f-PUH-IUJG_gam5CLSvr2ntoM3wmtFjd4ZAvP7N5r83aPGHBP6br6A-gaPOxLBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-2">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-2">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-2', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_12Sy27bQAxF9_oKLl2gBtyg6MI7A02LAA6S2gG6pmcoi8i8OjOy4359SUlWnSzncQ8vL1m5OlrDg0-OPIUKPzOm7tcWNs8PsMUL5aZUrH1Zw3OOKRayjcUqkrvV3dfl6tvyy6oxMVR6q-tmCU99ht39_kX1BTL96TkT-N5VlgqQYx8s1MypQBszmKiF30CQeP2tNoqgHuOBRWIc6wUEIgvUtmz0PCpcRMvhCGeuHXgO7NHBAYM9s62dMH5ktaYlCf3E8FEctVKVhc_1AhxGWkvVdIITnXZ_olw4BuULEWw0vVrDKpeAwjiQ2Ndn06FzFI6qtWRYZRrGbxJnzgHP6eK7fJ3mC0KrMUFsQSyVqsBC-cSGyg2jLwSbFJ2LsJdX0Wl-taOZOFcZHN5IPbJcSpcz__-EFHJA83rGbIdpiHiM5QZg6UROLCKkDotGyMc85pAchnGS45h0F4rMkYLYXw9TlKQ-jO0a9DvhEnZkeyP0QPUc8ytE6bIjtMM3P24DpuTYDLVVsifXLq-TUaLGOmyDtJxjSWSmMLaEeZil6SW9MbxhJ_rQopeOMY_CKU5dAmtZ1bJT055O26Kpz_NrEuYq3SWULtZw7z3CdzxxgYX-2WRptYqNT59hd5GwXjphFYluMS24OLPy-OT4xAiPSgv0Fxbz7g4fmn-LBDlLqgMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-2', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Implement GraphQL API Layer
+status: Proposed
+date: 2024-06-10
+context:
+- Our REST APIs require multiple round trips for complex data requirements
+- Mobile clients need efficient data loading with minimal bandwidth
+- Frontend teams need more flexibility in data fetching
+- API versioning and documentation are becoming challenging
+decision:
+- We will implement a GraphQL API layer on top of existing services
+- We will use Apollo Server for the GraphQL implementation
+- We will maintain existing REST APIs for backward compatibility
+- We will develop a phased migration plan for clients
+consequences:
+- More efficient data fetching for clients
+- Reduced network overhead for mobile applications
+- Self-documenting API with introspection
+- Learning curve for teams unfamiliar with GraphQL
+- Additional complexity in the API layer
+participants: Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-2', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_12Sy27bQAxF9_oKLl2gBtyg6MI7A02LAA6S2gG6pmcoi8i8OjOy4359SUlWnSzncQ8vL1m5OlrDg0-OPIUKPzOm7tcWNs8PsMUL5aZUrH1Zw3OOKRayjcUqkrvV3dfl6tvyy6oxMVR6q-tmCU99ht39_kX1BTL96TkT-N5VlgqQYx8s1MypQBszmKiF30CQeP2tNoqgHuOBRWIc6wUEIgvUtmz0PCpcRMvhCGeuHXgO7NHBAYM9s62dMH5ktaYlCf3E8FEctVKVhc_1AhxGWkvVdIITnXZ_olw4BuULEWw0vVrDKpeAwjiQ2Ndn06FzFI6qtWRYZRrGbxJnzgHP6eK7fJ3mC0KrMUFsQSyVqsBC-cSGyg2jLwSbFJ2LsJdX0Wl-taOZOFcZHN5IPbJcSpcz__-EFHJA83rGbIdpiHiM5QZg6UROLCKkDotGyMc85pAchnGS45h0F4rMkYLYXw9TlKQ-jO0a9DvhEnZkeyP0QPUc8ytE6bIjtMM3P24DpuTYDLVVsifXLq-TUaLGOmyDtJxjSWSmMLaEeZil6SW9MbxhJ_rQopeOMY_CKU5dAmtZ1bJT055O26Kpz_NrEuYq3SWULtZw7z3CdzxxgYX-2WRptYqNT59hd5GwXjphFYluMS24OLPy-OT4xAiPSgv0Fxbz7g4fmn-LBDlLqgMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_12Sy27bQAxF9_oKLl2gBtyg6MI7A02LAA6S2gG6pmcoi8i8OjOy4359SUlWnSzncQ8vL1m5OlrDg0-OPIUKPzOm7tcWNs8PsMUL5aZUrH1Zw3OOKRayjcUqkrvV3dfl6tvyy6oxMVR6q-tmCU99ht39_kX1BTL96TkT-N5VlgqQYx8s1MypQBszmKiF30CQeP2tNoqgHuOBRWIc6wUEIgvUtmz0PCpcRMvhCGeuHXgO7NHBAYM9s62dMH5ktaYlCf3E8FEctVKVhc_1AhxGWkvVdIITnXZ_olw4BuULEWw0vVrDKpeAwjiQ2Ndn06FzFI6qtWRYZRrGbxJnzgHP6eK7fJ3mC0KrMUFsQSyVqsBC-cSGyg2jLwSbFJ2LsJdX0Wl-taOZOFcZHN5IPbJcSpcz__-EFHJA83rGbIdpiHiM5QZg6UROLCKkDotGyMc85pAchnGS45h0F4rMkYLYXw9TlKQ-jO0a9DvhEnZkeyP0QPUc8ytE6bIjtMM3P24DpuTYDLVVsifXLq-TUaLGOmyDtJxjSWSmMLaEeZil6SW9MbxhJ_rQopeOMY_CKU5dAmtZ1bJT055O26Kpz_NrEuYq3SWULtZw7z3CdzxxgYX-2WRptYqNT59hd5GwXjphFYluMS24OLPy-OT4xAiPSgv0Fxbz7g4fmn-LBDlLqgMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_12Sy27bQAxF9_oKLl2gBtyg6MI7A02LAA6S2gG6pmcoi8i8OjOy4359SUlWnSzncQ8vL1m5OlrDg0-OPIUKPzOm7tcWNs8PsMUL5aZUrH1Zw3OOKRayjcUqkrvV3dfl6tvyy6oxMVR6q-tmCU99ht39_kX1BTL96TkT-N5VlgqQYx8s1MypQBszmKiF30CQeP2tNoqgHuOBRWIc6wUEIgvUtmz0PCpcRMvhCGeuHXgO7NHBAYM9s62dMH5ktaYlCf3E8FEctVKVhc_1AhxGWkvVdIITnXZ_olw4BuULEWw0vVrDKpeAwjiQ2Ndn06FzFI6qtWRYZRrGbxJnzgHP6eK7fJ3mC0KrMUFsQSyVqsBC-cSGyg2jLwSbFJ2LsJdX0Wl-taOZOFcZHN5IPbJcSpcz__-EFHJA83rGbIdpiHiM5QZg6UROLCKkDotGyMc85pAchnGS45h0F4rMkYLYXw9TlKQ-jO0a9DvhEnZkeyP0QPUc8ytE6bIjtMM3P24DpuTYDLVVsifXLq-TUaLGOmyDtJxjSWSmMLaEeZil6SW9MbxhJ_rQopeOMY_CKU5dAmtZ1bJT055O26Kpz_NrEuYq3SWULtZw7z3CdzxxgYX-2WRptYqNT59hd5GwXjphFYluMS24OLPy-OT4xAiPSgv0Fxbz7g4fmn-LBDlLqgMAAA==&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-3">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-3">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-3', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_31TTW_bMAy9-1fw1hRYkqLYLrl16y5DW3TNgB6KHBSJsTlYoirSSdtfP8rJWu-ymyWTj3wfUtIeV3BLbXGKcO3UbZ0gKMMdr3_ewJr7QYlTI-p0kBU84G_0iqEJ1rCCy4vLz_OLL_PLi8ZzUnzRVTOHRzwrCPiSsRAmT6kF-9xxiS55BBIZUOBA2gEPBQr2rg5xPYTTBgay5ojAu7GiXkNglHSmsCOFA_Y9ULI93bQ9csB-XABcUvKUKy2hNtGOvF1BW_hgYykdMffGL-Kx41D_GyLFXHiP0HGhNyNluOJd77bUk742AT2JjVudusg2SawQTyLuCkd4eupUs6yWy8PhsMgs2haU537BpV3C_fFsAm82deK_1ZFTy2G78ByXcFsP1183m8k0SqLoAnBWivSGo0T4QqJV6Q9wENQhTxtj7jGi0fTOd7VYtO7cktlh9kxdmvtCpqCRfx6qjTLBMauFAhYTv3vdFgrgsmlmmCOKZJPI9IbBouTNTanhEDQgA5Yq3NWerSuQlCFX76rR7wzk1fhFMQsDGKy1yDj-BvdYXGvxRBfP5KOhch3TpjRG59YSBpnVmJIR2GJCC43UIcdY1y29lbu_ObCcKJZUp9whhjEGaY-iNSn_NTOwl6UfSrFhy6l-SlkWncZ-6sjJsjGv5n1lqEMyDk125RjYpKbQD0wWWVP4BhFm7-_yKkRKNJrG5fxT882VngUeOBRqB3yD2XrUDq6K-av2Uq3oV8fRCTxaSacwu5-8xO-ppYRYzps_sheEMQoEAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-3', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Migrate Database to NoSQL Solution
+status: Rejected
+date: 2024-05-20
+context:
+- We&#39;re experiencing performance issues with our relational database
+- Some of our data doesn&#39;t fit well into a relational model
+- We anticipate significant growth in data volume
+- We want to improve horizontal scalability
+decision:
+- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
+- We will instead optimize our existing PostgreSQL setup
+- We will implement caching strategies for performance-critical queries
+- We will consider a hybrid approach for specific use cases
+consequences:
+- Avoid disruption of existing systems and processes
+- Leverage team&#39;s existing SQL expertise
+- Miss potential benefits of NoSQL for certain data patterns
+- Need to invest in [[https://www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
+participants:
+Jennifer Lee (Database Administrator),
+Carlos Rodriguez (System Architect),
+Thomas Wright (Performance Engineer)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-3', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_31TTW_bMAy9-1fw1hRYkqLYLrl16y5DW3TNgB6KHBSJsTlYoirSSdtfP8rJWu-ymyWTj3wfUtIeV3BLbXGKcO3UbZ0gKMMdr3_ewJr7QYlTI-p0kBU84G_0iqEJ1rCCy4vLz_OLL_PLi8ZzUnzRVTOHRzwrCPiSsRAmT6kF-9xxiS55BBIZUOBA2gEPBQr2rg5xPYTTBgay5ojAu7GiXkNglHSmsCOFA_Y9ULI93bQ9csB-XABcUvKUKy2hNtGOvF1BW_hgYykdMffGL-Kx41D_GyLFXHiP0HGhNyNluOJd77bUk742AT2JjVudusg2SawQTyLuCkd4eupUs6yWy8PhsMgs2haU537BpV3C_fFsAm82deK_1ZFTy2G78ByXcFsP1183m8k0SqLoAnBWivSGo0T4QqJV6Q9wENQhTxtj7jGi0fTOd7VYtO7cktlh9kxdmvtCpqCRfx6qjTLBMauFAhYTv3vdFgrgsmlmmCOKZJPI9IbBouTNTanhEDQgA5Yq3NWerSuQlCFX76rR7wzk1fhFMQsDGKy1yDj-BvdYXGvxRBfP5KOhch3TpjRG59YSBpnVmJIR2GJCC43UIcdY1y29lbu_ObCcKJZUp9whhjEGaY-iNSn_NTOwl6UfSrFhy6l-SlkWncZ-6sjJsjGv5n1lqEMyDk125RjYpKbQD0wWWVP4BhFm7-_yKkRKNJrG5fxT882VngUeOBRqB3yD2XrUDq6K-av2Uq3oV8fRCTxaSacwu5-8xO-ppYRYzps_sheEMQoEAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_31TTW_bMAy9-1fw1hRYkqLYLrl16y5DW3TNgB6KHBSJsTlYoirSSdtfP8rJWu-ymyWTj3wfUtIeV3BLbXGKcO3UbZ0gKMMdr3_ewJr7QYlTI-p0kBU84G_0iqEJ1rCCy4vLz_OLL_PLi8ZzUnzRVTOHRzwrCPiSsRAmT6kF-9xxiS55BBIZUOBA2gEPBQr2rg5xPYTTBgay5ojAu7GiXkNglHSmsCOFA_Y9ULI93bQ9csB-XABcUvKUKy2hNtGOvF1BW_hgYykdMffGL-Kx41D_GyLFXHiP0HGhNyNluOJd77bUk742AT2JjVudusg2SawQTyLuCkd4eupUs6yWy8PhsMgs2haU537BpV3C_fFsAm82deK_1ZFTy2G78ByXcFsP1183m8k0SqLoAnBWivSGo0T4QqJV6Q9wENQhTxtj7jGi0fTOd7VYtO7cktlh9kxdmvtCpqCRfx6qjTLBMauFAhYTv3vdFgrgsmlmmCOKZJPI9IbBouTNTanhEDQgA5Yq3NWerSuQlCFX76rR7wzk1fhFMQsDGKy1yDj-BvdYXGvxRBfP5KOhch3TpjRG59YSBpnVmJIR2GJCC43UIcdY1y29lbu_ObCcKJZUp9whhjEGaY-iNSn_NTOwl6UfSrFhy6l-SlkWncZ-6sjJsjGv5n1lqEMyDk125RjYpKbQD0wWWVP4BhFm7-_yKkRKNJrG5fxT882VngUeOBRqB3yD2XrUDq6K-av2Uq3oV8fRCTxaSacwu5-8xO-ppYRYzps_sheEMQoEAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_31TTW_bMAy9-1fw1hRYkqLYLrl16y5DW3TNgB6KHBSJsTlYoirSSdtfP8rJWu-ymyWTj3wfUtIeV3BLbXGKcO3UbZ0gKMMdr3_ewJr7QYlTI-p0kBU84G_0iqEJ1rCCy4vLz_OLL_PLi8ZzUnzRVTOHRzwrCPiSsRAmT6kF-9xxiS55BBIZUOBA2gEPBQr2rg5xPYTTBgay5ojAu7GiXkNglHSmsCOFA_Y9ULI93bQ9csB-XABcUvKUKy2hNtGOvF1BW_hgYykdMffGL-Kx41D_GyLFXHiP0HGhNyNluOJd77bUk742AT2JjVudusg2SawQTyLuCkd4eupUs6yWy8PhsMgs2haU537BpV3C_fFsAm82deK_1ZFTy2G78ByXcFsP1183m8k0SqLoAnBWivSGo0T4QqJV6Q9wENQhTxtj7jGi0fTOd7VYtO7cktlh9kxdmvtCpqCRfx6qjTLBMauFAhYTv3vdFgrgsmlmmCOKZJPI9IbBouTNTanhEDQgA5Yq3NWerSuQlCFX76rR7wzk1fhFMQsDGKy1yDj-BvdYXGvxRBfP5KOhch3TpjRG59YSBpnVmJIR2GJCC43UIcdY1y29lbu_ObCcKJZUp9whhjEGaY-iNSn_NTOwl6UfSrFhy6l-SlkWncZ-6sjJsjGv5n1lqEMyDk125RjYpKbQD0wWWVP4BhFm7-_yKkRKNJrG5fxT882VngUeOBRqB3yD2XrUDq6K-av2Uq3oV8fRCTxaSacwu5-8xO-ppYRYzps_sheEMQoEAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-4">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-4">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-4', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_3VSS28aQQy-76_wkUilhFS9cCOq1JSmLRJUOUQchhmTdZnHduyBJL--ng2UkKqnlXY-fy9bSDxO4CcjzO6WsEkZpkVajELWCKXYsBgpPIFF6TAzOnSNM6IzV5dXH4bj8XD8sbEpCj7KpBnCHUJEdGCgDqJHZjBnjBDQtiYShxf43kQBSZDRFYug5GZt1I9PaVs67j1VBthhps3R1klJR7l0XcryVsjYnFT-_r4V6XgyGgWqfzDvyCK_pzSCULxQ5xGOf1erc2qK1heHPXXK9PzCbL2hwPoIKqiwLcbGoSXWx0MLe_IeiuY4yf_aSy9amx7MFj--K24NyzrNF6vV36Sv2j9RUVCbAfuudEDr2mTk9p82K5Yl5YOt3uTNcjkfpuifwGqphPya9xBQOydbDWfQRQfimuVNRN0z4--CUYuqMRf_W3G_S4oPfa3K6JNxFV9D6A7rfZwP1Ohn21H0PElFGM2DtmSSJ8jEW_W0OWYzGtOm0OWkhrFK3FIg6VdXS2J61osq1T-ssRo6xHU1GKo15ayJWJrOZLVDnZ6jnvvU4yPMUhtZ3Q0WRwO3aNzFO_hmMhn4bLLVz-DaWBVz8EkJfdL2FPEVd6pwndNex6fzL_rI9BD1rfkDshO49nQDAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-4', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Use JWT for Authentication
+status: Superseded
+date: 2023-11-15
+context:
+- We need a stateless authentication mechanism
+- We want to reduce database lookups for auth verification
+- We need to support authentication across [[https://microservices.io/ multiple services]]
+- We need to include authorization claims in the token
+decision:
+- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
+- We will implement token refresh mechanism
+- We will store tokens in HTTP-only cookies
+- We will include basic user permissions in the token
+consequences:
+- Stateless authentication reducing server load
+- Simplified authentication for microservices
+- Potential security risks if tokens are compromised
+- Limited token size due to being included in every request
+participants: Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-4', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3VSS28aQQy-76_wkUilhFS9cCOq1JSmLRJUOUQchhmTdZnHduyBJL--ng2UkKqnlXY-fy9bSDxO4CcjzO6WsEkZpkVajELWCKXYsBgpPIFF6TAzOnSNM6IzV5dXH4bj8XD8sbEpCj7KpBnCHUJEdGCgDqJHZjBnjBDQtiYShxf43kQBSZDRFYug5GZt1I9PaVs67j1VBthhps3R1klJR7l0XcryVsjYnFT-_r4V6XgyGgWqfzDvyCK_pzSCULxQ5xGOf1erc2qK1heHPXXK9PzCbL2hwPoIKqiwLcbGoSXWx0MLe_IeiuY4yf_aSy9amx7MFj--K24NyzrNF6vV36Sv2j9RUVCbAfuudEDr2mTk9p82K5Yl5YOt3uTNcjkfpuifwGqphPya9xBQOydbDWfQRQfimuVNRN0z4--CUYuqMRf_W3G_S4oPfa3K6JNxFV9D6A7rfZwP1Ohn21H0PElFGM2DtmSSJ8jEW_W0OWYzGtOm0OWkhrFK3FIg6VdXS2J61osq1T-ssRo6xHU1GKo15ayJWJrOZLVDnZ6jnvvU4yPMUhtZ3Q0WRwO3aNzFO_hmMhn4bLLVz-DaWBVz8EkJfdL2FPEVd6pwndNex6fzL_rI9BD1rfkDshO49nQDAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJZq9WgA_3VSS28aQQy-76_wkUilhFS9cCOq1JSmLRJUOUQchhmTdZnHduyBJL--ng2UkKqnlXY-fy9bSDxO4CcjzO6WsEkZpkVajELWCKXYsBgpPIFF6TAzOnSNM6IzV5dXH4bj8XD8sbEpCj7KpBnCHUJEdGCgDqJHZjBnjBDQtiYShxf43kQBSZDRFYug5GZt1I9PaVs67j1VBthhps3R1klJR7l0XcryVsjYnFT-_r4V6XgyGgWqfzDvyCK_pzSCULxQ5xGOf1erc2qK1heHPXXK9PzCbL2hwPoIKqiwLcbGoSXWx0MLe_IeiuY4yf_aSy9amx7MFj--K24NyzrNF6vV36Sv2j9RUVCbAfuudEDr2mTk9p82K5Yl5YOt3uTNcjkfpuifwGqphPya9xBQOydbDWfQRQfimuVNRN0z4--CUYuqMRf_W3G_S4oPfa3K6JNxFV9D6A7rfZwP1Ohn21H0PElFGM2DtmSSJ8jEW_W0OWYzGtOm0OWkhrFK3FIg6VdXS2J61osq1T-ssRo6xHU1GKo15ayJWJrOZLVDnZ6jnvvU4yPMUhtZ3Q0WRwO3aNzFO_hmMhn4bLLVz-DaWBVz8EkJfdL2FPEVd6pwndNex6fzL_rI9BD1rfkDshO49nQDAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3VSS28aQQy-76_wkUilhFS9cCOq1JSmLRJUOUQchhmTdZnHduyBJL--ng2UkKqnlXY-fy9bSDxO4CcjzO6WsEkZpkVajELWCKXYsBgpPIFF6TAzOnSNM6IzV5dXH4bj8XD8sbEpCj7KpBnCHUJEdGCgDqJHZjBnjBDQtiYShxf43kQBSZDRFYug5GZt1I9PaVs67j1VBthhps3R1klJR7l0XcryVsjYnFT-_r4V6XgyGgWqfzDvyCK_pzSCULxQ5xGOf1erc2qK1heHPXXK9PzCbL2hwPoIKqiwLcbGoSXWx0MLe_IeiuY4yf_aSy9amx7MFj--K24NyzrNF6vV36Sv2j9RUVCbAfuudEDr2mTk9p82K5Yl5YOt3uTNcjkfpuifwGqphPya9xBQOydbDWfQRQfimuVNRN0z4--CUYuqMRf_W3G_S4oPfa3K6JNxFV9D6A7rfZwP1Ohn21H0PElFGM2DtmSSJ8jEW_W0OWYzGtOm0OWkhrFK3FIg6VdXS2J61osq1T-ssRo6xHU1GKo15ayJWJrOZLVDnZ6jnvvU4yPMUhtZ3Q0WRwO3aNzFO_hmMhn4bLLVz-DaWBVz8EkJfdL2FPEVd6pwndNex6fzL_rI9BD1rfkDshO49nQDAAA=&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-5">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-5">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-5', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_22TT2_bMAzF7_4UPKbAMmS5LbcOzYBu2B80K7qrKnExB1lSSTpp9ulHyQ3mbLsYhsVHvvejrKQRN3AvCDvkA_JyRwHhDlNAprSHH5nhAR_hupRI3inl1Ik6HWUDN1gY7RuGLthzA-vVer1cvV2-WXU-J8Vn3XRLk0NCDKAZclEa6BcCJVJyEYrbI8TsAhRkmzW45NE0u-0XIAEaSmZ1SZuPPDK0vkmXPbrDCdzM1cUgGUtVwijIAkfSHiTmI7JNVuSEWjsl9FUqk_ZY55iWMYwewUeqg6Ty-OAObueZikLh7FHE2HQBPYnpX0IeKcY6ED5b8Nc_pXmWiWrrwmeqs3pLGHGwQWbMc3szLJUweRPsMSG3fK3bS_qGTf6aOvfbn8JM1SI7i3qwqmxIkxXKf034bGoxqKrn7c8Wc97fBNzMCD6NaAdSEdwOxuZg_P9drqma33eoZqVt93Lfd415uAjxh7SBeBppolPb3FZUTqx-wmvnYpfDDI5iM63iU-Ypa8RnCFhiPrV8jn1PamsfGbvi2ChTsb3bbd7l0pODBwNCbhBYvOdGO8D1WXT1Cm5cIozwkQZYfJ2R2aY92eVjK9lq7xJ8c6do9Bb33-0_EdrbHq-63yVS6UxvAwAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-5', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Use Server-Side Rendering for Web Application
+status: Deprecated
+date: 2022-09-10
+context:
+- We need to optimize initial page load performance
+- SEO is important for our content-heavy application
+- We need to support users with slower internet connections
+- We want to reduce client-side JavaScript processing
+decision:
+- We will use Next.js for server-side rendering
+- We will implement incremental static regeneration for content pages
+- We will use client-side hydration for interactive components
+- We will implement code splitting for performance optimization
+consequences:
+- Improved initial page load times
+- Better SEO performance
+- Reduced client-side processing requirements
+- Increased server resource usage
+- More complex deployment architecture
+participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-5', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_22TT2_bMAzF7_4UPKbAMmS5LbcOzYBu2B80K7qrKnExB1lSSTpp9ulHyQ3mbLsYhsVHvvejrKQRN3AvCDvkA_JyRwHhDlNAprSHH5nhAR_hupRI3inl1Ik6HWUDN1gY7RuGLthzA-vVer1cvV2-WXU-J8Vn3XRLk0NCDKAZclEa6BcCJVJyEYrbI8TsAhRkmzW45NE0u-0XIAEaSmZ1SZuPPDK0vkmXPbrDCdzM1cUgGUtVwijIAkfSHiTmI7JNVuSEWjsl9FUqk_ZY55iWMYwewUeqg6Ty-OAObueZikLh7FHE2HQBPYnpX0IeKcY6ED5b8Nc_pXmWiWrrwmeqs3pLGHGwQWbMc3szLJUweRPsMSG3fK3bS_qGTf6aOvfbn8JM1SI7i3qwqmxIkxXKf034bGoxqKrn7c8Wc97fBNzMCD6NaAdSEdwOxuZg_P9drqma33eoZqVt93Lfd415uAjxh7SBeBppolPb3FZUTqx-wmvnYpfDDI5iM63iU-Ypa8RnCFhiPrV8jn1PamsfGbvi2ChTsb3bbd7l0pODBwNCbhBYvOdGO8D1WXT1Cm5cIozwkQZYfJ2R2aY92eVjK9lq7xJ8c6do9Bb33-0_EdrbHq-63yVS6UxvAwAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_22TT2_bMAzF7_4UPKbAMmS5LbcOzYBu2B80K7qrKnExB1lSSTpp9ulHyQ3mbLsYhsVHvvejrKQRN3AvCDvkA_JyRwHhDlNAprSHH5nhAR_hupRI3inl1Ik6HWUDN1gY7RuGLthzA-vVer1cvV2-WXU-J8Vn3XRLk0NCDKAZclEa6BcCJVJyEYrbI8TsAhRkmzW45NE0u-0XIAEaSmZ1SZuPPDK0vkmXPbrDCdzM1cUgGUtVwijIAkfSHiTmI7JNVuSEWjsl9FUqk_ZY55iWMYwewUeqg6Ty-OAObueZikLh7FHE2HQBPYnpX0IeKcY6ED5b8Nc_pXmWiWrrwmeqs3pLGHGwQWbMc3szLJUweRPsMSG3fK3bS_qGTf6aOvfbn8JM1SI7i3qwqmxIkxXKf034bGoxqKrn7c8Wc97fBNzMCD6NaAdSEdwOxuZg_P9drqma33eoZqVt93Lfd415uAjxh7SBeBppolPb3FZUTqx-wmvnYpfDDI5iM63iU-Ypa8RnCFhiPrV8jn1PamsfGbvi2ChTsb3bbd7l0pODBwNCbhBYvOdGO8D1WXT1Cm5cIozwkQZYfJ2R2aY92eVjK9lq7xJ8c6do9Bb33-0_EdrbHq-63yVS6UxvAwAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_22TT2_bMAzF7_4UPKbAMmS5LbcOzYBu2B80K7qrKnExB1lSSTpp9ulHyQ3mbLsYhsVHvvejrKQRN3AvCDvkA_JyRwHhDlNAprSHH5nhAR_hupRI3inl1Ik6HWUDN1gY7RuGLthzA-vVer1cvV2-WXU-J8Vn3XRLk0NCDKAZclEa6BcCJVJyEYrbI8TsAhRkmzW45NE0u-0XIAEaSmZ1SZuPPDK0vkmXPbrDCdzM1cUgGUtVwijIAkfSHiTmI7JNVuSEWjsl9FUqk_ZY55iWMYwewUeqg6Ty-OAObueZikLh7FHE2HQBPYnpX0IeKcY6ED5b8Nc_pXmWiWrrwmeqs3pLGHGwQWbMc3szLJUweRPsMSG3fK3bS_qGTf6aOvfbn8JM1SI7i3qwqmxIkxXKf034bGoxqKrn7c8Wc97fBNzMCD6NaAdSEdwOxuZg_P9drqma33eoZqVt93Lfd415uAjxh7SBeBppolPb3FZUTqx-wmvnYpfDDI5iM63iU-Ypa8RnCFhiPrV8jn1PamsfGbvi2ChTsb3bbd7l0pODBwNCbhBYvOdGO8D1WXT1Cm5cIozwkQZYfJ2R2aY92eVjK9lq7xJ8c6do9Bb33-0_EdrbHq-63yVS6UxvAwAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-6">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-6">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-6', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_21STU8bQQy951f4CBKJIlT1wKmIqlU_hWilnp1Zs-tmdmZqe4Agfnw9EyhR1MtK9r43z-_ZxhbpAj7NJdJMyeA9GsJX3BJcSpjYKFgVWqihVb2AyxCoGA2LAc155-vzN8v12-X5ehFyMnqwi8USfhEkogEQgj8pGPnRK6GSlS3LDm6zAMYIuQoMTRBVydSpV1WkjdG7yjEroBAUoTtvcxohSFZd3tYUjHPCCOifnXHQA2XLoLWULAabbBOoSe1GfKg0QE0HjSbl1A-1lTCju04EkVBS0-PExmh8R-oW_lR2EHoKqk1lYnVHHHyO_s5AgdXneo7hnt0l_wsX975iixcP4oWq3VrMdYD2II508EBVhztrR91AKZJ9SjgRvD9zEmFSGs66s1DFFzPAY06kp_8doo8Q_BPz2FQbbSbD3p89zbHjDrjk299E1mnPHfMdScIUfC85cmBPpm3UJurW2imoJ0WO0BaEX5c4Z3jedQ-PNxzZdl61fXZulhETP2Lbq7NuaKjhhTTU4kr9Vx-YUxPx8F3E9ZtICkLoQbwECCGr6fP-Ytw55nu7jTZqonvQrXtr__cKlDwNInmJ5NXloqD4fXHBZO7nhjYUAsLVRAmenk5kX6-C1-_oAVvQq5Dn06fFN5QtfM5T0tyhs9er3_v6CHotvEO49uVFR8JJafWqtPoI-XPKMyp89ANibK9ab6zG3jgC_0DBCb7w3IDaitWW5yPQXyKhcQIFBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-6', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Implement Data Lake Architecture
+status: Accepted
+date: 2024-06-20
+context:
+- We need a centralized repository for all our data assets
+- Current data silos are preventing cross-functional analytics
+- We need to support both structured and unstructured data
+- Future machine learning initiatives require access to historical data
+decision:
+- We will implement a data lake architecture using cloud storage
+- We will use a layered approach (raw, cleansed, and curated zones)
+- We will implement data cataloging and metadata management
+- We will establish data governance policies for the lake
+consequences:
+- Improved data accessibility across the organization
+- Reduced data duplication and inconsistencies
+- Increased storage costs initially
+- Need for new skills in data engineering and governance
+participants:
+Rebecca Chen ||(rebecca.chen@example.com)|
+Mark Johnson ||(mark.johnson@example.com)|
+Priya Patel || (priya.patel@example.com)|
+Thomas Garcia ||(thomas.garcia@example.com)|
+Sarah Kim ||(sarah.kim@example.com)|
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-6', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_21STU8bQQy951f4CBKJIlT1wKmIqlU_hWilnp1Zs-tmdmZqe4Agfnw9EyhR1MtK9r43z-_ZxhbpAj7NJdJMyeA9GsJX3BJcSpjYKFgVWqihVb2AyxCoGA2LAc155-vzN8v12-X5ehFyMnqwi8USfhEkogEQgj8pGPnRK6GSlS3LDm6zAMYIuQoMTRBVydSpV1WkjdG7yjEroBAUoTtvcxohSFZd3tYUjHPCCOifnXHQA2XLoLWULAabbBOoSe1GfKg0QE0HjSbl1A-1lTCju04EkVBS0-PExmh8R-oW_lR2EHoKqk1lYnVHHHyO_s5AgdXneo7hnt0l_wsX975iixcP4oWq3VrMdYD2II508EBVhztrR91AKZJ9SjgRvD9zEmFSGs66s1DFFzPAY06kp_8doo8Q_BPz2FQbbSbD3p89zbHjDrjk299E1mnPHfMdScIUfC85cmBPpm3UJurW2imoJ0WO0BaEX5c4Z3jedQ-PNxzZdl61fXZulhETP2Lbq7NuaKjhhTTU4kr9Vx-YUxPx8F3E9ZtICkLoQbwECCGr6fP-Ytw55nu7jTZqonvQrXtr__cKlDwNInmJ5NXloqD4fXHBZO7nhjYUAsLVRAmenk5kX6-C1-_oAVvQq5Dn06fFN5QtfM5T0tyhs9er3_v6CHotvEO49uVFR8JJafWqtPoI-XPKMyp89ANibK9ab6zG3jgC_0DBCb7w3IDaitWW5yPQXyKhcQIFBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_21STU8bQQy951f4CBKJIlT1wKmIqlU_hWilnp1Zs-tmdmZqe4Agfnw9EyhR1MtK9r43z-_ZxhbpAj7NJdJMyeA9GsJX3BJcSpjYKFgVWqihVb2AyxCoGA2LAc155-vzN8v12-X5ehFyMnqwi8USfhEkogEQgj8pGPnRK6GSlS3LDm6zAMYIuQoMTRBVydSpV1WkjdG7yjEroBAUoTtvcxohSFZd3tYUjHPCCOifnXHQA2XLoLWULAabbBOoSe1GfKg0QE0HjSbl1A-1lTCju04EkVBS0-PExmh8R-oW_lR2EHoKqk1lYnVHHHyO_s5AgdXneo7hnt0l_wsX975iixcP4oWq3VrMdYD2II508EBVhztrR91AKZJ9SjgRvD9zEmFSGs66s1DFFzPAY06kp_8doo8Q_BPz2FQbbSbD3p89zbHjDrjk299E1mnPHfMdScIUfC85cmBPpm3UJurW2imoJ0WO0BaEX5c4Z3jedQ-PNxzZdl61fXZulhETP2Lbq7NuaKjhhTTU4kr9Vx-YUxPx8F3E9ZtICkLoQbwECCGr6fP-Ytw55nu7jTZqonvQrXtr__cKlDwNInmJ5NXloqD4fXHBZO7nhjYUAsLVRAmenk5kX6-C1-_oAVvQq5Dn06fFN5QtfM5T0tyhs9er3_v6CHotvEO49uVFR8JJafWqtPoI-XPKMyp89ANibK9ab6zG3jgC_0DBCb7w3IDaitWW5yPQXyKhcQIFBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_21STU8bQQy951f4CBKJIlT1wKmIqlU_hWilnp1Zs-tmdmZqe4Agfnw9EyhR1MtK9r43z-_ZxhbpAj7NJdJMyeA9GsJX3BJcSpjYKFgVWqihVb2AyxCoGA2LAc155-vzN8v12-X5ehFyMnqwi8USfhEkogEQgj8pGPnRK6GSlS3LDm6zAMYIuQoMTRBVydSpV1WkjdG7yjEroBAUoTtvcxohSFZd3tYUjHPCCOifnXHQA2XLoLWULAabbBOoSe1GfKg0QE0HjSbl1A-1lTCju04EkVBS0-PExmh8R-oW_lR2EHoKqk1lYnVHHHyO_s5AgdXneo7hnt0l_wsX975iixcP4oWq3VrMdYD2II508EBVhztrR91AKZJ9SjgRvD9zEmFSGs66s1DFFzPAY06kp_8doo8Q_BPz2FQbbSbD3p89zbHjDrjk299E1mnPHfMdScIUfC85cmBPpm3UJurW2imoJ0WO0BaEX5c4Z3jedQ-PNxzZdl61fXZulhETP2Lbq7NuaKjhhTTU4kr9Vx-YUxPx8F3E9ZtICkLoQbwECCGr6fP-Ytw55nu7jTZqonvQrXtr__cKlDwNInmJ5NXloqD4fXHBZO7nhjYUAsLVRAmenk5kX6-C1-_oAVvQq5Dn06fFN5QtfM5T0tyhs9er3_v6CHotvEO49uVFR8JJafWqtPoI-XPKMyp89ANibK9ab6zG3jgC_0DBCb7w3IDaitWW5yPQXyKhcQIFBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-7">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-7">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-7', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_22TS24TQRCG93OKkljb2HlAkhWxnaCghICyyLrSU7YL9XQP3TV2EmURDoAQrBCbLHmcAInb5ALkCFRPO8FYrDyqx19f_dUWFks7sFv6WmBofVN2XqLwjGB48Hg4gldck2VHRRSUJmqlMVQLlUWJoo1rvbWNTu9pp9cvjHdC57JTdOC4CWCaEMjJQqcO3lCMwBEqdA1aQFcCheBDR3M6oAOnBI6oBPHAlQYVoqTa-osq6YwDvW3ImYu2MygVnrFlucidc9Qa7VROV2Io-ZLAK8aSwj0DmuD1RwiruDT2jEQowIwjZ2Fgp4Iy_QejvjekJKOV3u0s5rO1CdtSW4ZgWjPdspkPvX87mkjwnOW4jorHzrAKRBj7oMPHAaOExkgTqF0a69qyUUXvlpDi_wEa8ZWeSO2kKOwmgBrUEjVoQnEFId0OlSzwZZZPBBqMHCWpkZuxXimPS_F8C4pp-33FVOMSYeUVNd_G0grjQb5pqeEZWV9riwZK3Y9n-YyDfAEJaGhxXPBjMFN0GfnAsbC-HUsYXNpJH5m6m2DzNWsMwmqiPgZFe4FRVzkkgisY0SyZvOcmuqYOuYI3Kdu1RM_oHJNvXeMrjT9aH2yt7T_Rr7ubL9fFXlUhnLJNUlf5LwK7wUxZyIhGSPPdeZtfFer3Bttbff26_fzu988PxRHrKmRhEPzcZaZkRHuvQ8JSQ1Uu6Z6lklW9_c3tvd6gBfv47fb6_d3Np1_Fia-njDCcUpJ8vQtH6PTCacPYprpGU6tSW4PN4WLHrz-KE315FjnAKcap-irtrsmvBVZcFHTnDwWripv9_mhjPcN9V7jiD8nt3vdbBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-7', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Adopt Cloud-Native CI/CD Pipeline
+status: Accepted
+date: 2024-07-01
+context:
+- Our current CI/CD process is manual and error-prone
+- We need to improve deployment frequency and reliability
+- We want to standardize our deployment process across teams
+- We need better visibility into the deployment pipeline
+decision:
+- We will implement a cloud-native CI/CD pipeline
+- We will use GitOps principles for infrastructure and application deployments
+- We will implement automated testing at all stages
+- We will use containerization for consistent environments
+consequences:
+- Faster and more reliable deployments
+- Improved developer productivity
+- Better traceability of changes
+- Initial learning curve for teams
+participants:
+Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
+Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
+Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
+Sophia Chen | QA Manager | sophia.chen@example.com | #8B5CF6 | 🧪
+Sinclair Washington | Ops Lead | sinclair.washington@example.com | #511D43 | 👩‍
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-7', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_22TS24TQRCG93OKkljb2HlAkhWxnaCghICyyLrSU7YL9XQP3TV2EmURDoAQrBCbLHmcAInb5ALkCFRPO8FYrDyqx19f_dUWFks7sFv6WmBofVN2XqLwjGB48Hg4gldck2VHRRSUJmqlMVQLlUWJoo1rvbWNTu9pp9cvjHdC57JTdOC4CWCaEMjJQqcO3lCMwBEqdA1aQFcCheBDR3M6oAOnBI6oBPHAlQYVoqTa-osq6YwDvW3ImYu2MygVnrFlucidc9Qa7VROV2Io-ZLAK8aSwj0DmuD1RwiruDT2jEQowIwjZ2Fgp4Iy_QejvjekJKOV3u0s5rO1CdtSW4ZgWjPdspkPvX87mkjwnOW4jorHzrAKRBj7oMPHAaOExkgTqF0a69qyUUXvlpDi_wEa8ZWeSO2kKOwmgBrUEjVoQnEFId0OlSzwZZZPBBqMHCWpkZuxXimPS_F8C4pp-33FVOMSYeUVNd_G0grjQb5pqeEZWV9riwZK3Y9n-YyDfAEJaGhxXPBjMFN0GfnAsbC-HUsYXNpJH5m6m2DzNWsMwmqiPgZFe4FRVzkkgisY0SyZvOcmuqYOuYI3Kdu1RM_oHJNvXeMrjT9aH2yt7T_Rr7ubL9fFXlUhnLJNUlf5LwK7wUxZyIhGSPPdeZtfFer3Bttbff26_fzu988PxRHrKmRhEPzcZaZkRHuvQ8JSQ1Uu6Z6lklW9_c3tvd6gBfv47fb6_d3Np1_Fia-njDCcUpJ8vQtH6PTCacPYprpGU6tSW4PN4WLHrz-KE315FjnAKcap-irtrsmvBVZcFHTnDwWripv9_mhjPcN9V7jiD8nt3vdbBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_22TS24TQRCG93OKkljb2HlAkhWxnaCghICyyLrSU7YL9XQP3TV2EmURDoAQrBCbLHmcAInb5ALkCFRPO8FYrDyqx19f_dUWFks7sFv6WmBofVN2XqLwjGB48Hg4gldck2VHRRSUJmqlMVQLlUWJoo1rvbWNTu9pp9cvjHdC57JTdOC4CWCaEMjJQqcO3lCMwBEqdA1aQFcCheBDR3M6oAOnBI6oBPHAlQYVoqTa-osq6YwDvW3ImYu2MygVnrFlucidc9Qa7VROV2Io-ZLAK8aSwj0DmuD1RwiruDT2jEQowIwjZ2Fgp4Iy_QejvjekJKOV3u0s5rO1CdtSW4ZgWjPdspkPvX87mkjwnOW4jorHzrAKRBj7oMPHAaOExkgTqF0a69qyUUXvlpDi_wEa8ZWeSO2kKOwmgBrUEjVoQnEFId0OlSzwZZZPBBqMHCWpkZuxXimPS_F8C4pp-33FVOMSYeUVNd_G0grjQb5pqeEZWV9riwZK3Y9n-YyDfAEJaGhxXPBjMFN0GfnAsbC-HUsYXNpJH5m6m2DzNWsMwmqiPgZFe4FRVzkkgisY0SyZvOcmuqYOuYI3Kdu1RM_oHJNvXeMrjT9aH2yt7T_Rr7ubL9fFXlUhnLJNUlf5LwK7wUxZyIhGSPPdeZtfFer3Bttbff26_fzu988PxRHrKmRhEPzcZaZkRHuvQ8JSQ1Uu6Z6lklW9_c3tvd6gBfv47fb6_d3Np1_Fia-njDCcUpJ8vQtH6PTCacPYprpGU6tSW4PN4WLHrz-KE315FjnAKcap-irtrsmvBVZcFHTnDwWripv9_mhjPcN9V7jiD8nt3vdbBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_22TS24TQRCG93OKkljb2HlAkhWxnaCghICyyLrSU7YL9XQP3TV2EmURDoAQrBCbLHmcAInb5ALkCFRPO8FYrDyqx19f_dUWFks7sFv6WmBofVN2XqLwjGB48Hg4gldck2VHRRSUJmqlMVQLlUWJoo1rvbWNTu9pp9cvjHdC57JTdOC4CWCaEMjJQqcO3lCMwBEqdA1aQFcCheBDR3M6oAOnBI6oBPHAlQYVoqTa-osq6YwDvW3ImYu2MygVnrFlucidc9Qa7VROV2Io-ZLAK8aSwj0DmuD1RwiruDT2jEQowIwjZ2Fgp4Iy_QejvjekJKOV3u0s5rO1CdtSW4ZgWjPdspkPvX87mkjwnOW4jorHzrAKRBj7oMPHAaOExkgTqF0a69qyUUXvlpDi_wEa8ZWeSO2kKOwmgBrUEjVoQnEFId0OlSzwZZZPBBqMHCWpkZuxXimPS_F8C4pp-33FVOMSYeUVNd_G0grjQb5pqeEZWV9riwZK3Y9n-YyDfAEJaGhxXPBjMFN0GfnAsbC-HUsYXNpJH5m6m2DzNWsMwmqiPgZFe4FRVzkkgisY0SyZvOcmuqYOuYI3Kdu1RM_oHJNvXeMrjT9aH2yt7T_Rr7ubL9fFXlUhnLJNUlf5LwK7wUxZyIhGSPPdeZtfFer3Bttbff26_fzu988PxRHrKmRhEPzcZaZkRHuvQ8JSQ1Uu6Z6lklW9_c3tvd6gBfv47fb6_d3Np1_Fia-njDCcUpJ8vQtH6PTCacPYprpGU6tSW4PN4WLHrz-KE315FjnAKcap-irtrsmvBVZcFHTnDwWripv9_mhjPcN9V7jiD8nt3vdbBAAA&scale=1.0&type=SVG&useDark=false&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-a2775e1488bacbe2-8">
+<div class="gallery-item" data-kind="adr" id="gallery-item-docops-gallery-ac6ff9cf492164c7-8">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Adr</div>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a2775e1488bacbe2-8', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_3WUwU7bQBCG736KkXp2kiIIIqcGBRAttBQqcUAcJt6xs2W9a3bHcZB4hJ7a3vsMPfel-gid3RA3UPUQy7uz883s_4_Dmg1NYKpcw3DisVl8PIPSeZhenMIZPpDPAiO3Qc4UBTVMKlPIkrIz2tnNR_v5672scJZpxZMshw-th8ujq08xP8AClwRzKlxNII_G0Ao6zQuo0T4AWdU4bTlI3rmbayOHjCbZAEukgB2UxMUCpCBC6V0NdWtYC-ZZ7kyXJXnJe56u-u2UHxbYUDx-TT3ek2oLArckn6dS2laAVkFr1faWKxMjU1TooJ2drDGdNgbwH-lcu5bPJPn-nqxRGpYf0EoHjtykVH-VlDzH4q5Dr5JeyFpk0fywRdFRxjpeC6HyqFoUspY3lsYgsLxQtZ3QBoJp44xxcEVerprq8IL6pntkYkQ7A923ZAsKk-SNF8HLUhe6V7OXJrKeZJejp3XjRU0Rn5ZkXCPFaCVPHWFr6wOZMleuaGPBSBCpJPPCcVzLZQyhtzFQtNJt3ywT1nLufbQu7lnqxEJnNpbVzmp2XpZZg56l2QalqUk2jVN3qeXiCI_JmKmX3pkKljVKdOBT9A2tMCoxEOkl8mr3eHd8tCdvv398_5K9xVBrS3DtpOAjHPs49FL3jFDJ-vM6POgk_BI02jsYjw8S6NvPbIZLreCdjqFDcTtCZr1cj6KvxAd3un6JmR3s74_GCfP1V-YpTXfy6OZmwdyEyXBYRUvvzcD5atj7-yF5J9LOnmRPPt_ebuV1XTfANCQbghQdik1huBmeDe3_ELKVSEDRg8FW75um8jkFzhuPhbhDoQceyjZcbLafESuZmHaeIE_AHtbPfF61WlH659kQz_vv4STGBPkH-gkjY-gEAAA=&scale=1.0&type=SVG&useDark=true&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-ac6ff9cf492164c7-8', 'Adr', 'adr', this.getAttribute('data-content'))" data-content="title: Adopt GraphQL for API Layer
+status: Accepted
+date: 2024-07-15
+context:
+- Our REST APIs have become complex with many endpoints
+- Mobile clients need to fetch data from multiple endpoints
+- Different clients need different data shapes
+- We need to reduce over-fetching and under-fetching of data
+decision:
+- We will adopt GraphQL for our API layer
+- We will maintain existing REST endpoints for backward compatibility
+- We will implement a gradual migration strategy
+- We will use Apollo Server for the GraphQL implementation
+consequences:
+- More efficient data fetching for clients
+- Improved developer experience with self-documenting API
+- Potential learning curve for the team
+- Need for new tooling and monitoring
+participants:
+Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
+Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
+David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
+references:
+[[https://graphql.org/ GraphQL Official Documentation]]
+[[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
+[[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
+[[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-ac6ff9cf492164c7-8', 'https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3WUwU7bQBCG736KkXp2kiIIIqcGBRAttBQqcUAcJt6xs2W9a3bHcZB4hJ7a3vsMPfel-gid3RA3UPUQy7uz883s_4_Dmg1NYKpcw3DisVl8PIPSeZhenMIZPpDPAiO3Qc4UBTVMKlPIkrIz2tnNR_v5672scJZpxZMshw-th8ujq08xP8AClwRzKlxNII_G0Ao6zQuo0T4AWdU4bTlI3rmbayOHjCbZAEukgB2UxMUCpCBC6V0NdWtYC-ZZ7kyXJXnJe56u-u2UHxbYUDx-TT3ek2oLArckn6dS2laAVkFr1faWKxMjU1TooJ2drDGdNgbwH-lcu5bPJPn-nqxRGpYf0EoHjtykVH-VlDzH4q5Dr5JeyFpk0fywRdFRxjpeC6HyqFoUspY3lsYgsLxQtZ3QBoJp44xxcEVerprq8IL6pntkYkQ7A923ZAsKk-SNF8HLUhe6V7OXJrKeZJejp3XjRU0Rn5ZkXCPFaCVPHWFr6wOZMleuaGPBSBCpJPPCcVzLZQyhtzFQtNJt3ywT1nLufbQu7lnqxEJnNpbVzmp2XpZZg56l2QalqUk2jVN3qeXiCI_JmKmX3pkKljVKdOBT9A2tMCoxEOkl8mr3eHd8tCdvv398_5K9xVBrS3DtpOAjHPs49FL3jFDJ-vM6POgk_BI02jsYjw8S6NvPbIZLreCdjqFDcTtCZr1cj6KvxAd3un6JmR3s74_GCfP1V-YpTXfy6OZmwdyEyXBYRUvvzcD5atj7-yF5J9LOnmRPPt_ebuV1XTfANCQbghQdik1huBmeDe3_ELKVSEDRg8FW75um8jkFzhuPhbhDoQceyjZcbLafESuZmHaeIE_AHtbPfF61WlH659kQz_vv4STGBPkH-gkjY-gEAAA=&scale=1.0&type=SVG&useDark=true&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg', 'Adr')" title="Expand to fullscreen">⛶</button>
+</div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIAJdq9WgA_3WUwU7bQBCG736KkXp2kiIIIqcGBRAttBQqcUAcJt6xs2W9a3bHcZB4hJ7a3vsMPfel-gid3RA3UPUQy7uz883s_4_Dmg1NYKpcw3DisVl8PIPSeZhenMIZPpDPAiO3Qc4UBTVMKlPIkrIz2tnNR_v5672scJZpxZMshw-th8ujq08xP8AClwRzKlxNII_G0Ao6zQuo0T4AWdU4bTlI3rmbayOHjCbZAEukgB2UxMUCpCBC6V0NdWtYC-ZZ7kyXJXnJe56u-u2UHxbYUDx-TT3ek2oLArckn6dS2laAVkFr1faWKxMjU1TooJ2drDGdNgbwH-lcu5bPJPn-nqxRGpYf0EoHjtykVH-VlDzH4q5Dr5JeyFpk0fywRdFRxjpeC6HyqFoUspY3lsYgsLxQtZ3QBoJp44xxcEVerprq8IL6pntkYkQ7A923ZAsKk-SNF8HLUhe6V7OXJrKeZJejp3XjRU0Rn5ZkXCPFaCVPHWFr6wOZMleuaGPBSBCpJPPCcVzLZQyhtzFQtNJt3ywT1nLufbQu7lnqxEJnNpbVzmp2XpZZg56l2QalqUk2jVN3qeXiCI_JmKmX3pkKljVKdOBT9A2tMCoxEOkl8mr3eHd8tCdvv398_5K9xVBrS3DtpOAjHPs49FL3jFDJ-vM6POgk_BI02jsYjw8S6NvPbIZLreCdjqFDcTtCZr1cj6KvxAd3un6JmR3s74_GCfP1V-YpTXfy6OZmwdyEyXBYRUvvzcD5atj7-yF5J9LOnmRPPt_ebuV1XTfANCQbghQdik1huBmeDe3_ELKVSEDRg8FW75um8jkFzhuPhbhDoQceyjZcbLafESuZmHaeIE_AHtbPfF61WlH659kQz_vv4STGBPkH-gkjY-gEAAA=&scale=1.0&type=SVG&useDark=true&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=adr&payload=H4sIADJz9WgA_3WUwU7bQBCG736KkXp2kiIIIqcGBRAttBQqcUAcJt6xs2W9a3bHcZB4hJ7a3vsMPfel-gid3RA3UPUQy7uz883s_4_Dmg1NYKpcw3DisVl8PIPSeZhenMIZPpDPAiO3Qc4UBTVMKlPIkrIz2tnNR_v5672scJZpxZMshw-th8ujq08xP8AClwRzKlxNII_G0Ao6zQuo0T4AWdU4bTlI3rmbayOHjCbZAEukgB2UxMUCpCBC6V0NdWtYC-ZZ7kyXJXnJe56u-u2UHxbYUDx-TT3ek2oLArckn6dS2laAVkFr1faWKxMjU1TooJ2drDGdNgbwH-lcu5bPJPn-nqxRGpYf0EoHjtykVH-VlDzH4q5Dr5JeyFpk0fywRdFRxjpeC6HyqFoUspY3lsYgsLxQtZ3QBoJp44xxcEVerprq8IL6pntkYkQ7A923ZAsKk-SNF8HLUhe6V7OXJrKeZJejp3XjRU0Rn5ZkXCPFaCVPHWFr6wOZMleuaGPBSBCpJPPCcVzLZQyhtzFQtNJt3ywT1nLufbQu7lnqxEJnNpbVzmp2XpZZg56l2QalqUk2jVN3qeXiCI_JmKmX3pkKljVKdOBT9A2tMCoxEOkl8mr3eHd8tCdvv398_5K9xVBrS3DtpOAjHPs49FL3jFDJ-vM6POgk_BI02jsYjw8S6NvPbIZLreCdjqFDcTtCZr1cj6KvxAd3un6JmR3s74_GCfP1V-YpTXfy6OZmwdyEyXBYRUvvzcD5atj7-yF5J9LOnmRPPt_ebuV1XTfANCQbghQdik1huBmeDe3_ELKVSEDRg8FW75um8jkFzhuPhbhDoQceyjZcbLafESuZmHaeIE_AHtbPfF61WlH659kQz_vv4STGBPkH-gkjY-gEAAA=&scale=1.0&type=SVG&useDark=true&title=Adr&useGlass=false&backend=html5&docname=adrshowcase&filename=adr.svg" alt="Adr" loading="lazy" />
 </div>
 </div>
 </div>
@@ -1619,6 +1839,22 @@ This document showcases the DocOps ADR.
     </div>
     <div class="showcase-modal-body">
       <img src="" alt="" class="showcase-modal-image" />
+    </div>
+  </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+  <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+  <div class="showcase-modal-content showcase-content-modal-content">
+    <div class="showcase-modal-header">
+      <span class="showcase-modal-title"></span>
+      <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+    </div>
+    <div class="showcase-modal-body showcase-content-body">
+      <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+    </div>
+    <div class="showcase-content-footer">
+      <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
     </div>
   </div>
 </div>
@@ -1662,7 +1898,14 @@ This document showcases the DocOps ADR.
     flex: 1;
   }
 
-  .gallery-expand-btn {
+  .gallery-item-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .gallery-expand-btn,
+  .gallery-content-btn {
     background: none;
     border: none;
     font-size: 1.3rem;
@@ -1673,8 +1916,18 @@ This document showcases the DocOps ADR.
     line-height: 1;
   }
 
+  .gallery-content-btn {
+    color: #9b59b6;
+    font-weight: bold;
+  }
+
   .gallery-expand-btn:hover {
     color: #2980b9;
+    transform: scale(1.2);
+  }
+
+  .gallery-content-btn:hover {
+    color: #8e44ad;
     transform: scale(1.2);
   }
 
@@ -1730,6 +1983,11 @@ This document showcases the DocOps ADR.
     overflow: hidden;
   }
 
+  .showcase-content-modal-content {
+    max-width: 90vw;
+    width: 1000px;
+  }
+
   .showcase-modal-header {
     display: flex;
     justify-content: space-between;
@@ -1774,6 +2032,58 @@ This document showcases the DocOps ADR.
     background: white;
   }
 
+  .showcase-content-body {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    background: #282c34;
+  }
+
+  .showcase-content-pre {
+    margin: 0;
+    width: 100%;
+    max-height: calc(95vh - 150px);
+    overflow: auto;
+  }
+
+  .showcase-content-code {
+    display: block;
+    padding: 1.5rem;
+    color: #abb2bf;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    white-space: pre;
+    tab-size: 4;
+  }
+
+  .showcase-content-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .showcase-copy-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+
+  .showcase-copy-btn:hover {
+    background: #2980b9;
+  }
+
+  .showcase-copy-btn.copied {
+    background: #27ae60;
+  }
+
   .showcase-modal-image {
     max-width: 100%;
     max-height: calc(95vh - 100px);
@@ -1796,11 +2106,17 @@ This document showcases the DocOps ADR.
     .showcase-modal-body {
       padding: 1rem;
     }
+
+    .showcase-content-modal-content {
+      width: 100vw;
+    }
   }
 </style>
 
 <script>
   window.showcaseGallery = window.showcaseGallery || (function() {
+    let currentContent = '';
+
     return {
       expandItem: function(itemId, imageUrl, title) {
         const modal = document.getElementById('showcase-gallery-modal');
@@ -1814,7 +2130,6 @@ This document showcases the DocOps ADR.
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
-        // Close on ESC key
         document.addEventListener('keydown', this.handleEscKey);
       },
 
@@ -1826,9 +2141,61 @@ This document showcases the DocOps ADR.
         document.removeEventListener('keydown', this.handleEscKey);
       },
 
+      showContent: function(itemId, title, kind, content) {
+        const modal = document.getElementById('showcase-content-modal');
+        const modalTitle = modal.querySelector('.showcase-modal-title');
+        const codeElement = modal.querySelector('.showcase-content-code');
+
+        // Decode HTML entities
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = content;
+        const decodedContent = textarea.value;
+
+        currentContent = decodedContent;
+
+        modalTitle.textContent = title + ' (' + kind + ')';
+        codeElement.textContent = decodedContent;
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        document.addEventListener('keydown', this.handleContentEscKey);
+      },
+
+      closeContentModal: function() {
+        const modal = document.getElementById('showcase-content-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        currentContent = '';
+
+        document.removeEventListener('keydown', this.handleContentEscKey);
+      },
+
+      copyContent: function() {
+        const btn = document.querySelector('.showcase-copy-btn');
+
+        navigator.clipboard.writeText(currentContent).then(function() {
+          btn.textContent = '✓ Copied!';
+          btn.classList.add('copied');
+
+          setTimeout(function() {
+            btn.textContent = '📋 Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('Failed to copy:', err);
+        });
+      },
+
       handleEscKey: function(e) {
         if (e.key === 'Escape') {
           showcaseGallery.closeModal();
+        }
+      },
+
+      handleContentEscKey: function(e) {
+        if (e.key === 'Escape') {
+          showcaseGallery.closeContentModal();
         }
       }
     };
