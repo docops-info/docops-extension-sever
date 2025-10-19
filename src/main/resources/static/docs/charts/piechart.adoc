@@ -154,25 +154,13 @@ Here's a simple example of a pie chart with minimal configuration:
 ....
 [docops,pieslice,controls=true]
 ----
-legend=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie1.txt[]
 ----
 ....
 
 [docops,pieslice,controls=true,csv=true]
 ----
-legend=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie1.txt[]
 ----
 
 === With Legend
@@ -180,11 +168,7 @@ Product E | 10
 
 [docops,pieslice,controls=true,csv=true]
 ----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie2.txt[]
 ----
 
 [.back-to-top]
@@ -198,35 +182,13 @@ Here's an example with configuration parameters:
 ....
 [docops,pieslice,controls=true,csv=true]
 ----
-title=Sales Distribution by Product
-width=600
-height=400
-legend=true
-percentages=true
-donut=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie3.txt[]
 ----
 ....
 
 [docops,pieslice,controls=true,csv=true]
 ----
-title=Sales Distribution by Product
-width=600
-height=400
-legend=true
-percentages=true
-donut=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie3.txt[]
 ----
 
 [.back-to-top]
@@ -241,38 +203,14 @@ You can position your chart using the `role` attribute:
 .Pie Chart
 [docops,pieslice, role=left,controls=true]
 ----
-title=Favorite Anime
-width=600
-height=400
-legend=true
-percentages=true
-donut=false
----
-Naruto | 16.0
-Bleach | 4.0
-One Piece | 9.0
-One Punch Man | 7.0
-My Hero Academia | 6.0
-Demon Slayer | 10.0
+include::data/pie4.txt[]
 ----
 ....
 
 .Pie Chart
 [docops,pieslice, role=left,controls=true]
 ----
-title=Favorite Anime
-width=600
-height=400
-legend=true
-percentages=true
-donut=false
----
-Naruto | 16.0
-Bleach | 4.0
-One Piece | 9.0
-One Punch Man | 7.0
-My Hero Academia | 6.0
-Demon Slayer | 10.0
+include::data/pie4.txt[]
 ----
 
 [.back-to-top]
@@ -287,38 +225,14 @@ You can create donut charts by setting the `donut` parameter to `true`:
 .Pie Chart
 [docops,pieslice, role=left,controls=true]
 ----
-title=Favorite Anime
-width=600
-height=400
-legend=true
-percentages=true
-donut=true
----
-Naruto | 16.0
-Bleach | 4.0
-One Piece | 9.0
-One Punch Man | 7.0
-My Hero Academia | 6.0
-Demon Slayer | 10.0
+include::data/pie5.txt[]
 ----
 ....
 
 .Pie Chart
 [docops,pieslice, role=left,controls=true,csv=true]
 ----
-title=Favorite Anime
-width=600
-height=400
-legend=true
-percentages=true
-donut=true
----
-Naruto | 16.0
-Bleach | 4.0
-One Piece | 9.0
-One Punch Man | 7.0
-My Hero Academia | 6.0
-Demon Slayer | 10.0
+include::data/pie5.txt[]
 ----
 
 [.back-to-top]
@@ -332,21 +246,13 @@ You can specify custom colors for individual slices:
 ....
 [docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
 ----
-Product A | 30 | #ff5733
-Product B | 25 | #33ff57
-Product C | 20 | #3357ff
-Product D | 15 | #f3ff33
-Product E | 10 | #ff33f3
+include::data/pie6.txt[]
 ----
 ....
 
 [docops,pieslice, title="Sales Distribution with Custom Colors",controls=true]
 ----
-Product A | 30 | #ff5733
-Product B | 25 | #33ff57
-Product C | 20 | #3357ff
-Product D | 15 | #f3ff33
-Product E | 10 | #ff33f3
+include::data/pie6.txt[]
 ----
 
 [.back-to-top]
@@ -363,24 +269,13 @@ You can specify a custom color palette for the entire chart:
 title=Sales with Custom Palette
 colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
 ---
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie7.txt[]
 ----
 ....
 
 [docops,pieslice,controls=true]
 ----
-title=Sales with Custom Palette
-colors=#6a0dad,#0da6a0,#daad0d,#ad0d6a,#0dad6a
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::data/pie7.txt[]
 ----
 
 [.back-to-top]
@@ -395,32 +290,14 @@ You can enable dark mode for better visibility in dark-themed documents:
 ....
 [docops,pieslice,controls=true]
 ----
-title=Market Share Distribution
-width=600
-height=400
-darkMode=true
----
-Product A | 35
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 5
+include::data/pie8.txt[]
 ----
 ....
 
 .Market Share Distribution
 [docops,pieslice,controls=true]
 ----
-title=Market Share Distribution
-width=600
-height=400
-darkMode=true
----
-Product A | 35
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 5
+include::data/pie8.txt[]
 ----
 
 [.back-to-top]
@@ -550,6 +427,7 @@ You can also use JSON format for more complex configurations:
 
 === Examples
 
+
 ==== Basic Pie Chart Example
 
 Here's a simple example of modern pie charts with minimal configuration:
@@ -558,31 +436,13 @@ Here's a simple example of modern pie charts with minimal configuration:
 ....
 [docops,pie]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1
-useDark=true
----
-Label | Percent
-Toys | 14
-Furniture | 43
-Home Decoration | 15
-Electronics | 28
+include::data/pie9.txt[]
 ----
 ....
 
 [docops,pie]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1
-useDark=true
----
-Label | Percent
-Toys | 14
-Furniture | 43
-Home Decoration | 15
-Electronics | 28
+include::data/pie9.txt[]
 ----
 
 [.back-to-top]
@@ -596,31 +456,13 @@ You can position your chart using the `role` attribute:
 ....
 [docops,pie, role=left]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1
-useDark=false
----
-Label | Percent
-Toys | 14
-Furniture | 43
-Home Decoration | 15
-Electronics | 28
+include::data/pie10.txt[]
 ----
 ....
 
 [docops,pie, role=left]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1
-useDark=false
----
-Label | Percent
-Toys | 14
-Furniture | 43
-Home Decoration | 15
-Electronics | 28
+include::data/pie10.txt[]
 ----
 
 [.back-to-top]
@@ -634,43 +476,13 @@ For more complex configurations, you can use JSON format:
 ....
 [docops,pie, role=left]
 ----
-{
-  "pies": [
-    {"percent": 19, "label": "Sales Training"},
-    {"percent": 25, "label": "Conventions"},
-    {"percent": 18.0, "label": "Publications"},
-    {"percent": 12.0, "label": "Print Advertising"},
-    {"percent": 17.0, "label": "Catalogues"},
-    {"percent": 10.0, "label": "Online Advertising"}
-  ], 
-  "pieDisplay": {
-    "baseColor": "#111111", 
-    "outlineColor": "#00FF9C", 
-    "useDark": false, 
-    "scale": 1.5
-  }
-}
+include::data/pie11.txt[]
 ----
 ....
 
 [docops,pie, role=left]
 ----
-{
-  "pies": [
-    {"percent": 19, "label": "Sales Training"},
-    {"percent": 25, "label": "Conventions"},
-    {"percent": 18.0, "label": "Publications"},
-    {"percent": 12.0, "label": "Print Advertising"},
-    {"percent": 17.0, "label": "Catalogues"},
-    {"percent": 10.0, "label": "Online Advertising"}
-  ], 
-  "pieDisplay": {
-    "baseColor": "#111111", 
-    "outlineColor": "#00FF9C", 
-    "useDark": false, 
-    "scale": 1.5
-  }
-}
+include::data/pie11.txt[]
 ----
 
 [.back-to-top]
@@ -684,35 +496,18 @@ You can enable dark mode for better visibility in dark-themed documents:
 ....
 [docops,pie]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1.2
-useDark=true
----
-Label | Percent
-Research | 22
-Development | 35
-Marketing | 18
-Sales | 25
+include::data/pie12.txt[]
 ----
 ....
 
 [docops,pie]
 ----
-baseColor=#A6AEBF
-outlineColor=#FA4032
-scale=1.2
-useDark=true
----
-Label | Percent
-Research | 22
-Development | 35
-Marketing | 18
-Sales | 25
+include::data/pie12.txt[]
 ----
 
 [.back-to-top]
 <<top, 🔝>>
+
 
 == Conclusion
 

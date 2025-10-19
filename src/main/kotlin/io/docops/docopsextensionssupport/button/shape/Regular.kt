@@ -22,6 +22,7 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 
 
 /**
@@ -68,6 +69,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             scale = it.scale
         }
         val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        sb.append(BackgroundHelper.getBackGroundPath(useDark = buttons.useDark, buttons.id, vbWidth, vbHeight))
         val rows = toRows()
         rows.forEachIndexed { index, buttons ->
             sb.append(drawButton(index, buttons))
@@ -140,6 +142,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         buttons.theme?.let {
             strokeColor = it.strokeColor
         }
+        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
         var style = """
              <style>
             ${glass()}
@@ -169,6 +172,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         return """
             <defs>
+            $darkModeDefs
             ${filters()}
             ${naturalShadow()}
             ${gradient()}

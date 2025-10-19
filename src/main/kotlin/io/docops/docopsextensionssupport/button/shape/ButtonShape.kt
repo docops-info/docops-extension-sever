@@ -84,6 +84,8 @@ interface ButtonShape {
  * @property isPdf A flag indicating whether the shape is being drawn for PDF output
  */
 abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
+    protected var vbHeight = 0f
+    protected var vbWidth = 0f
     /** Indicates whether the output is intended for PDF format */
     protected var isPdf = false
 

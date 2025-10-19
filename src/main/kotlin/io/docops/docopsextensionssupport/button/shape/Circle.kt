@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import kotlin.compareTo
 import kotlin.times
 
@@ -63,7 +64,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
             startY = 20 + (index * 120) // 20px top padding + 120px per row
         }
 
-        buttonList.forEach { button: Button ->
+        buttonList.forEachIndexed { idx, button: Button ->
             var fill = "class=\"btn_${button.id}_cls\""
             val baseColor = button.color ?: "#3498db"
             val svgColor = SVGColor(baseColor, "btn_${button.id}")
@@ -103,31 +104,25 @@ class Circle(buttons: Buttons): Regular(buttons) {
             }
 
             val glassGradientId = if (buttons.useDark) "glassGradientDark_${buttons.id}" else "circleGradient_${button.id}"
-
+            val path = circleToPath(60f, 60f, 50f)
             btns.append(
                 """
         <g role="button" transform="translate($startX,$startY)" class="circle-button" $href>
             <title class="description">${button.description?.escapeXml() ?: ""}</title>
             
-            <circle cx="60" cy="60" r="50"
-                    fill="$circleBackground"
+            <path d="$path" fill="$circleBackground"
                     stroke="$circleBorder"
                     stroke-width="2"
                     filter="url(#dropShadow)"
                     style="backdrop-filter: blur(20px);"/>
-
             <!-- Glass overlay -->
-            <circle cx="60" cy="60" r="50"
-                    fill="url(#$glassGradientId)"
-                    opacity="0.8"/>
-            
-            <text id="label" 
+            <path d="$path" fill="url(#$glassGradientId)" opacity="0.8"/>
+            <text id="label_$idx" 
                   x="60" y="60"
                   text-anchor="middle"
                   dominant-baseline="central"
                   fill="$textColor"
-                  filter="url(#textShadow)"
-                  style="font-weight: bold; text-shadow: 1px 1px 2px $shadowColor; ${button.buttonStyle?.labelStyle ?: ""}">
+                  style="${button.buttonStyle?.labelStyle ?: ""}">
                 $title
             </text>
         </g>
@@ -190,42 +185,12 @@ class Circle(buttons: Buttons): Regular(buttons) {
             gradientDefs.append(createCircleGradient(button))
             gradientDefs.append(createCircleHighlight(button))
         }
-        val darkModeDefs = if (buttons.useDark) {
-            """
-                <linearGradient id="glassBorder_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-        </linearGradient>
-        <filter id="glassDropShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
-            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
-            <feMerge>
-                <feMergeNode in="shadow"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-        <linearGradient id="glassOverlay_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
-            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
-            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
-        </linearGradient>
-        <linearGradient id="backgroundGradient_${buttons.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
-        </linearGradient>
-            """.trimIndent()
-        } else {""}
+        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
         // Enhanced styles for interactive states - WITHOUT transform changes
         if (!isPdf) {
             styleDefs.append("""
                 <style>
-                    .circle-button {
-                        cursor: pointer;
-                    }
+                   
                     
                     .circle-button:hover #button-base {
                         stroke-width: 3px;
@@ -327,6 +292,28 @@ class Circle(buttons: Buttons): Regular(buttons) {
         """.trimIndent()
     }
 
+
+    fun circleToPath(cx: Float, cy: Float, r: Float): String {
+        // M (start_x), (start_y) - Move to the starting point
+        // a rx,ry x-axis-rotation large-arc-flag sweep-flag end_x,end_y - Arc command
+        // We'll create two arcs to form the circle.
+
+        // Starting point for the first arc (leftmost point of the circle)
+        val startX = cx - r
+        val startY = cy
+
+        // End point for the first arc (rightmost point of the circle)
+        val midX = cx + r
+        val midY = cy
+
+        // End point for the second arc (back to the starting point)
+        val endX = cx - r
+        val endY = cy
+
+        return "M $startX,$startY " +
+                "a $r,$r 0 1,0 ${r * 2},0 " + // First semicircle (clockwise)
+                "a $r,$r 0 1,0 ${-r * 2},0"   // Second semicircle (clockwise, back to start)
+    }
 
 
 }
