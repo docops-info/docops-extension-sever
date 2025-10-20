@@ -12,6 +12,10 @@ reactions::[role=right]
 [[top]]
 include::shared/buttons.adoc[]
 
+== Showcase
+
+link:todoshowcase.html[Todos Showcase, window=_blank]
+
 == Introduction
 
 The DocOps Todo Extension allows you to create visually appealing todo list visualizations in your AsciiDoctor documents. Todo lists are useful for project management, task tracking, and organizing work items in a visual format.
@@ -164,35 +168,13 @@ For more control, you can use the JSON format:
 ....
 [docops,todo,controls=true]
 ----
-title: Website Redesign Project
-layout=kanban
----
-Task | Status | Priority | Category
-Research competitor websites | completed | medium | Research
-Create style guide | completed | high | Design
-Design homepage mockup | in_progress | high | Design
-Develop responsive layout | pending | high | Development
-Write content for about page | pending | medium | Content
-Implement contact form | pending | medium | Development
-SEO optimization | pending | low | Marketing
-User testing | pending | medium | QA
+include::data/todo/todo1.txt[]
 ----
 ....
 
 [docops,todo,controls=true]
 ----
-title: Website Redesign Project
-layout=kanban
----
-Task | Status | Priority | Category
-Research competitor websites | completed | medium | Research
-Create style guide | completed | high | Design
-Design homepage mockup | in_progress | high | Design
-Develop responsive layout | pending | high | Development
-Write content for about page | pending | medium | Content
-Implement contact form | pending | medium | Development
-SEO optimization | pending | low | Marketing
-User testing | pending | medium | QA
+include::data/todo/todo1.txt[]
 ----
 
 === Team Task Board with Assignees
@@ -201,37 +183,13 @@ User testing | pending | medium | QA
 ....
 [docops,todo,controls=true]
 ----
-title: Development Team Sprint Board
-layout=kanban
-showAssignees=true
-showDueDates=true
----
-Task | Status | Priority | Category | Assignee | Due Date
-Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
-Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
-Database migration script | completed | high | Backend | Carol | 2024-01-17
-Add password reset | pending | medium | Backend | Alice | 2024-01-22
-Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
-Write unit tests | pending | low | Testing | Dave | 2024-01-25
-Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
+include::data/todo/todo2.txt[]
 ----
 ....
 
 [docops,todo,controls=true]
 ----
-title: Development Team Sprint Board
-layout=kanban
-showAssignees=true
-showDueDates=true
----
-Task | Status | Priority | Category | Assignee | Due Date
-Fix login bug | in_progress | critical | Backend | Alice | 2024-01-18
-Update user profile UI | pending | high | Frontend | Bob | 2024-01-20
-Database migration script | completed | high | Backend | Carol | 2024-01-17
-Add password reset | pending | medium | Backend | Alice | 2024-01-22
-Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
-Write unit tests | pending | low | Testing | Dave | 2024-01-25
-Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
+include::data/todo/todo2.txt[]
 ----
 
 === Personal Task List (List Layout)
@@ -240,35 +198,13 @@ Deploy to production | blocked | high | DevOps | Carol | 2024-01-30
 ....
 [docops,todo,controls=true]
 ----
-title: Personal Goals Q1 2024
-layout=list
-sortBy=priority
----
-Task | Status | Priority | Tags
-Learn Kotlin programming | in_progress | high | learning,programming
-Read 5 technical books | pending | medium | reading,growth
-Complete online course | pending | high | education,certification
-Exercise 3x per week | in_progress | medium | health,fitness
-Plan summer vacation | pending | low | personal,travel
-Organize home office | completed | medium | organization,productivity
-Start side project | pending | high | programming,project
+include::data/todo/todo3.txt[]
 ----
 ....
 
 [docops,todo,controls=true]
 ----
-title: Personal Goals Q1 2024
-layout=list
-sortBy=priority
----
-Task | Status | Priority | Tags
-Learn Kotlin programming | in_progress | high | learning,programming
-Read 5 technical books | pending | medium | reading,growth
-Complete online course | pending | high | education,certification
-Exercise 3x per week | in_progress | medium | health,fitness
-Plan summer vacation | pending | low | personal,travel
-Organize home office | completed | medium | organization,productivity
-Start side project | pending | high | programming,project
+include::data/todo/todo3.txt[]
 ----
 
 === Grid Layout for Quick Overview
@@ -277,37 +213,13 @@ Start side project | pending | high | programming,project
 ....
 [docops,todo,controls=true]
 ----
-title: Sprint Tasks Overview
-layout=grid
-useGlass=true
----
-Task | Status | Priority
-Code review PR #123 | pending | high
-Fix CSS alignment | in_progress | medium
-Update documentation | completed | low
-Merge feature branch | pending | high
-Test mobile layout | in_progress | medium
-Deploy hotfix | completed | critical
-Write changelog | pending | low
-Update dependencies | pending | medium
+include::data/todo/todo4.txt[]
 ----
 ....
 
 [docops,todo,controls=true]
 ----
-title: Sprint Tasks Overview
-layout=grid
-useGlass=true
----
-Task | Status | Priority
-Code review PR #123 | pending | high
-Fix CSS alignment | in_progress | medium
-Update documentation | completed | low
-Merge feature branch | pending | high
-Test mobile layout | in_progress | medium
-Deploy hotfix | completed | critical
-Write changelog | pending | low
-Update dependencies | pending | medium
+include::data/todo/todo4.txt[]
 ----
 
 === Dark Mode Example
@@ -316,31 +228,13 @@ Update dependencies | pending | medium
 ....
 [docops,todo,controls=true,useDark=true]
 ----
-title: Night Shift Tasks
-layout=kanban
----
-Task | Status | Priority | Category
-Monitor system performance | in_progress | high | Operations
-Backup database | completed | critical | Maintenance
-Review security logs | pending | medium | Security
-Update server patches | pending | high | Maintenance
-Check application logs | in_progress | medium | Monitoring
-Respond to alerts | pending | critical | Support
+include::data/todo/todo5.txt[]
 ----
 ....
 
 [docops,todo,controls=true,useDark=true]
 ----
-title: Night Shift Tasks
-layout=kanban
----
-Task | Status | Priority | Category
-Monitor system performance | in_progress | high | Operations
-Backup database | completed | critical | Maintenance
-Review security logs | pending | medium | Security
-Update server patches | pending | high | Maintenance
-Check application logs | in_progress | medium | Monitoring
-Respond to alerts | pending | critical | Support
+include::data/todo/todo5.txt[]
 ----
 
 [.back-to-top]
@@ -356,19 +250,14 @@ You can use emojis in task names and descriptions to make your todo lists more v
 ....
 [docops,todo,controls=true]
 ----
-title: 🎯 Project Milestones
----
-Task | Status | Priority
-🚀 Launch MVP | pending | critical
-📊 Analytics setup | in_progress | high
-🎨 Brand identity | completed | medium
-📱 Mobile app | pending | high
-🔒 Security audit | pending | medium
-📝 User documentation | in_progress | medium
+include::data/todo/todo6.txt[]
 ----
 ....
 
-
+[docops,todo,controls=true]
+----
+include::data/todo/todo6.txt[]
+----
 
 === Custom Status Indicators
 

@@ -42,35 +42,13 @@ AsciiDoc documentation.
 ....
 [docops,gherkin,controls=true]
 ----
-Feature: User Authentication
-  Scenario: Successful Login
-    Given the user is on the login page
-    When they enter valid credentials
-    Then they should be redirected to dashboard
-    And the login attempt should be logged
-
-  Scenario: Failed Login
-    Given the user is on the login page
-    When they enter invalid credentials
-    Then they should see an error message
-    And they should remain on the login page
+include::data/gherkin/gherkin1.feature[]
 ----
 ....
 
 [docops,gherkin,controls=true]
 ----
-Feature: User Authentication
-  Scenario: Successful Login
-    Given the user is on the login page
-    When they enter valid credentials
-    Then they should be redirected to dashboard
-    And the login attempt should be logged
-
-  Scenario: Failed Login
-    Given the user is on the login page
-    When they enter invalid credentials
-    Then they should see an error message
-    And they should remain on the login page
+include::data/gherkin/gherkin1.feature[]
 ----
 
 === More Plain Gherkin Examples
@@ -83,39 +61,13 @@ These richer examples stay within the supported syntax (Feature/Scenario/Steps) 
 ....
 [docops,gherkin,controls=true]
 ----
-Feature: Shopping Cart Discounts
-  Scenario: Apply Coupon and Member Discount
-    Given a logged-in shopper with items in the cart
-    And they have a valid 10% coupon
-    When they apply the coupon at checkout
-    Then the subtotal should reflect a 10% discount
-    And the member discount should be applied afterwards
-    But the total should not go below $0.00
-
-  Scenario: Expired Coupon Rejected
-    Given a guest user on the checkout page
-    When they enter an expired coupon code
-    Then they should see an error explaining the coupon is expired
-    And the cart total should remain unchanged
+include::data/gherkin/gherkin2.feature[]
 ----
 ....
 
 [docops,gherkin,controls=true]
 ----
-Feature: Shopping Cart Discounts
-  Scenario: Apply Coupon and Member Discount
-    Given a logged-in shopper with items in the cart
-    And they have a valid 10% coupon
-    When they apply the coupon at checkout
-    Then the subtotal should reflect a 10% discount
-    And the member discount should be applied afterwards
-    But the total should not go below $0.00
-
-  Scenario: Expired Coupon Rejected
-    Given a guest user on the checkout page
-    When they enter an expired coupon code
-    Then they should see an error explaining the coupon is expired
-    And the cart total should remain unchanged
+include::data/gherkin/gherkin2.feature[]
 ----
 
 ==== Service Resilience (Circuit Breaker)
@@ -124,37 +76,13 @@ Feature: Shopping Cart Discounts
 ....
 [docops,gherkin,controls=true]
 ----
-Feature: Circuit Breaker Behavior
-  Scenario: Open on Consecutive Failures
-    Given the downstream payment service is failing
-    When three consecutive calls fail
-    Then the circuit breaker should open
-    And subsequent calls should be short-circuited
-
-  Scenario: Half-Open Probe
-    Given the circuit breaker is open for 60s
-    When the cooldown elapses
-    Then a single probe request should be allowed
-    And if it succeeds the circuit should close
-    But if it fails the circuit should stay open
+include::data/gherkin/gherkin3.feature[]
 ----
 ....
 
 [docops,gherkin,controls=true]
 ----
-Feature: Circuit Breaker Behavior
-  Scenario: Open on Consecutive Failures
-    Given the downstream payment service is failing
-    When three consecutive calls fail
-    Then the circuit breaker should open
-    And subsequent calls should be short-circuited
-
-  Scenario: Half-Open Probe
-    Given the circuit breaker is open for 60s
-    When the cooldown elapses
-    Then a single probe request should be allowed
-    And if it succeeds the circuit should close
-    But if it fails the circuit should stay open
+include::data/gherkin/gherkin3.feature[]
 ----
 
 ==== Dark Mode Example
@@ -165,23 +93,13 @@ Render in dark theme using the useDark attribute.
 ....
 [docops,gherkin,controls=true,useDark=true]
 ----
-Feature: Search Suggestions
-  Scenario: Show Suggestions While Typing
-    Given a user is on the search page
-    When they type the first three characters
-    Then the top 5 matching suggestions should appear
-    And selecting a suggestion should populate the input
+include::data/gherkin/gherkin4.feature[]
 ----
 ....
 
 [docops,gherkin,controls=true,useDark=true]
 ----
-Feature: Search Suggestions
-  Scenario: Show Suggestions While Typing
-    Given a user is on the search page
-    When they type the first three characters
-    Then the top 5 matching suggestions should appear
-    And selecting a suggestion should populate the input
+include::data/gherkin/gherkin4.feature[]
 ----
 
 [.back-to-top]
@@ -196,95 +114,13 @@ need to show step/scenario outcomes or adjust sizes.
 ....
 [docops,gherkin]
 ----
-{
-  "feature": "User Authentication",
-  "scenarios": [
-    {
-      "title": "Successful Login",
-      "status": "PASSING",
-      "steps": [
-        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
-        { "type": "WHEN",  "text": "they enter valid credentials",     "status": "PASSING" },
-        { "type": "THEN",  "text": "they should be redirected to dashboard", "status": "PASSING" },
-        { "type": "AND",   "text": "the login attempt should be logged", "status": "PASSING" }
-      ]
-    },
-    {
-      "title": "Failed Login",
-      "status": "FAILING",
-      "steps": [
-        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
-        { "type": "WHEN",  "text": "they enter invalid credentials", "status": "FAILING" },
-        { "type": "THEN",  "text": "they should see an error message", "status": "PENDING" },
-        { "type": "AND",   "text": "they should remain on the login page", "status": "SKIPPED" }
-      ]
-    }
-  ],
-  "theme": {
-    "colors": {
-      "feature": "#4361ee",
-      "scenario": "#f8f9fa",
-      "given": "#4361ee",
-      "when": "#ff6b35",
-      "then": "#06d6a0",
-      "and": "#6c757d",
-      "but": "#6c757d",
-      "passing": "#28a745",
-      "failing": "#dc3545",
-      "pending": "#ffc107",
-      "skipped": "#6c757d"
-    },
-    "layout": { "width": 600, "height": 420, "padding": 20, "scenarioSpacing": 30, "stepSpacing": 25 },
-    "typography": { "featureSize": 18, "scenarioSize": 16, "stepSize": 12, "descriptionSize": 10, "fontFamily": "Arial, sans-serif" }
-  }
-}
+include::data/gherkin/gherkin5.json[]
 ----
 ....
 
 [docops,gherkin]
 ----
-{
-  "feature": "User Authentication",
-  "scenarios": [
-    {
-      "title": "Successful Login",
-      "status": "PASSING",
-      "steps": [
-        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
-        { "type": "WHEN",  "text": "they enter valid credentials",     "status": "PASSING" },
-        { "type": "THEN",  "text": "they should be redirected to dashboard", "status": "PASSING" },
-        { "type": "AND",   "text": "the login attempt should be logged", "status": "PASSING" }
-      ]
-    },
-    {
-      "title": "Failed Login",
-      "status": "FAILING",
-      "steps": [
-        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
-        { "type": "WHEN",  "text": "they enter invalid credentials", "status": "FAILING" },
-        { "type": "THEN",  "text": "they should see an error message", "status": "PENDING" },
-        { "type": "AND",   "text": "they should remain on the login page", "status": "SKIPPED" }
-      ]
-    }
-  ],
-  "theme": {
-    "colors": {
-      "feature": "#4361ee",
-      "scenario": "#f8f9fa",
-      "given": "#4361ee",
-      "when": "#ff6b35",
-      "then": "#06d6a0",
-      "and": "#6c757d",
-      "but": "#6c757d",
-      "passing": "#28a745",
-      "failing": "#dc3545",
-      "pending": "#ffc107",
-      "skipped": "#6c757d"
-    },
-    "layout": { "width": 600, "height": 420, "padding": 20, "scenarioSpacing": 30, "stepSpacing": 25 },
-    "typography": { "featureSize": 18, "scenarioSize": 16, "stepSize": 12, "descriptionSize": 10, "fontFamily": "Arial, sans-serif" }
-  }
-}
+include::data/gherkin/gherkin5.json[]
 ----
 
 === Additional JSON Example
@@ -295,115 +131,13 @@ This example mixes statuses and applies a distinct theme.
 ....
 [docops,gherkin,controls=true]
 ----
-{
-  "feature": "Continuous Integration Pipeline",
-  "scenarios": [
-    {
-      "title": "Successful build and deploy",
-      "status": "PASSING",
-      "steps": [
-        { "type": "GIVEN", "text": "code is pushed to main", "status": "PASSING" },
-        { "type": "WHEN",  "text": "the build pipeline runs", "status": "PASSING" },
-        { "type": "THEN",  "text": "artifacts are built and stored", "status": "PASSING" },
-        { "type": "AND",   "text": "deployment to staging succeeds", "status": "PASSING" }
-      ]
-    },
-    {
-      "title": "Unit tests failing",
-      "status": "FAILING",
-      "steps": [
-        { "type": "GIVEN", "text": "a merge request is opened", "status": "PASSING" },
-        { "type": "WHEN",  "text": "unit tests execute", "status": "FAILING" },
-        { "type": "THEN",  "text": "the pipeline should fail and block merge", "status": "FAILING" },
-        { "type": "BUT",   "text": "static analysis should still report results", "status": "PENDING" }
-      ]
-    },
-    {
-      "title": "Lint warnings do not fail build",
-      "status": "PENDING",
-      "steps": [
-        { "type": "GIVEN", "text": "linting is configured as non-blocking", "status": "PASSING" },
-        { "type": "WHEN",  "text": "lint warnings are found", "status": "PENDING" },
-        { "type": "THEN",  "text": "the pipeline should continue", "status": "PASSING" },
-        { "type": "AND",   "text": "a report should be attached to the MR", "status": "SKIPPED" }
-      ]
-    }
-  ],
-  "theme": {
-    "colors": {
-      "feature": "#5e60ce",
-      "scenario": "#f0f4f8",
-      "given": "#3a86ff",
-      "when": "#fb5607",
-      "then": "#2ec4b6",
-      "and": "#6c757d",
-      "but": "#8338ec",
-      "passing": "#2eb85c",
-      "failing": "#e03131",
-      "pending": "#f59f00",
-      "skipped": "#868e96"
-    },
-    "layout": { "width": 720, "height": 460, "padding": 24, "scenarioSpacing": 34, "stepSpacing": 26 },
-    "typography": { "featureSize": 20, "scenarioSize": 16, "stepSize": 12, "descriptionSize": 10, "fontFamily": "Inter, Arial, sans-serif" }
-  }
-}
+include::data/gherkin/gherkin6.json[]
 ----
 ....
 
 [docops,gherkin,controls=true]
 ----
-{
-  "feature": "Continuous Integration Pipeline",
-  "scenarios": [
-    {
-      "title": "Successful build and deploy",
-      "status": "PASSING",
-      "steps": [
-        { "type": "GIVEN", "text": "code is pushed to main", "status": "PASSING" },
-        { "type": "WHEN",  "text": "the build pipeline runs", "status": "PASSING" },
-        { "type": "THEN",  "text": "artifacts are built and stored", "status": "PASSING" },
-        { "type": "AND",   "text": "deployment to staging succeeds", "status": "PASSING" }
-      ]
-    },
-    {
-      "title": "Unit tests failing",
-      "status": "FAILING",
-      "steps": [
-        { "type": "GIVEN", "text": "a merge request is opened", "status": "PASSING" },
-        { "type": "WHEN",  "text": "unit tests execute", "status": "FAILING" },
-        { "type": "THEN",  "text": "the pipeline should fail and block merge", "status": "FAILING" },
-        { "type": "BUT",   "text": "static analysis should still report results", "status": "PENDING" }
-      ]
-    },
-    {
-      "title": "Lint warnings do not fail build",
-      "status": "PENDING",
-      "steps": [
-        { "type": "GIVEN", "text": "linting is configured as non-blocking", "status": "PASSING" },
-        { "type": "WHEN",  "text": "lint warnings are found", "status": "PENDING" },
-        { "type": "THEN",  "text": "the pipeline should continue", "status": "PASSING" },
-        { "type": "AND",   "text": "a report should be attached to the MR", "status": "SKIPPED" }
-      ]
-    }
-  ],
-  "theme": {
-    "colors": {
-      "feature": "#5e60ce",
-      "scenario": "#f0f4f8",
-      "given": "#3a86ff",
-      "when": "#fb5607",
-      "then": "#2ec4b6",
-      "and": "#6c757d",
-      "but": "#8338ec",
-      "passing": "#2eb85c",
-      "failing": "#e03131",
-      "pending": "#f59f00",
-      "skipped": "#868e96"
-    },
-    "layout": { "width": 720, "height": 460, "padding": 24, "scenarioSpacing": 34, "stepSpacing": 26 },
-    "typography": { "featureSize": 20, "scenarioSize": 16, "stepSize": 12, "descriptionSize": 10, "fontFamily": "Inter, Arial, sans-serif" }
-  }
-}
+include::data/gherkin/gherkin6.json[]
 ----
 
 [.back-to-top]
@@ -472,38 +206,12 @@ The Gherkin block supports the standard DocOps attributes described in xref:doco
 
 [docops,gherkin]
 ----
-Feature: Represents a specific functionality or feature of the system. It's a high-level description of what the system should do.
-Scenario: A specific instance of the feature's behavior. It outlines a particular use case or test case.
-Given: Describes the initial context or setup before the action. It sets the stage for the scenario.
-When: Describes the action or event that triggers the behavior. It's the user action or system event.
-Then: Describes the expected outcome or result after the action. It verifies the behavior.
-And:Used to add more steps to the Given, When, or Then parts, making the scenario more detailed.
-But: Similar to "And", but used to add an exception or negative condition.
+include::data/gherkin/gherkin7.feature[]
 ----
 
 [docops,gherkin]
 ----
-Feature: User Login, As a user, I want to be able to log in to the system.
-
-  Scenario: Successful Login
-    Given I am on the login page
-    When I enter a valid username and password
-    Then I should be redirected to the homepage
-    And I should see a welcome message
-
-  Scenario: Invalid Login
-    Given I am on the login page
-    When I enter an invalid username and password
-    Then I should see an error message
-
-  Scenario Outline: Login with different users
-    Given I am on the login page
-    When I enter username  and password
-    Then I should see the message
-    Examples:
-      | username | password | message |
-      | user1 | pass1 | Welcome |
-      | user2 | wrong_password | Invalid credentials |
+include::data/gherkin/gherkin8.feature[]
 ----
 
 

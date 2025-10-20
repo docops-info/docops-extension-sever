@@ -220,9 +220,7 @@ class GherkinMaker {
             val lineStartY = yOffset + headerHeight + 10
             val lineEndY = yOffset + scenarioHeight - 20
             append("""
-                <line x1="${theme.layout.padding + 60}" y1="$lineStartY" 
-                      x2="${theme.layout.padding + 60}" y2="$lineEndY" 
-                      stroke="#dee2e6" stroke-width="2"/>
+                <line x1="${theme.layout.padding + 60}" y1="$lineStartY" x2="${theme.layout.padding + 60}" y2="$lineEndY" stroke="#dee2e6" stroke-width="2"/>
             """.trimIndent())
             
             // Steps

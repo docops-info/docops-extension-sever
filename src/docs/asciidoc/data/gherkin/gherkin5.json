@@ -1,0 +1,42 @@
+{
+  "feature": "User Authentication",
+  "scenarios": [
+    {
+      "title": "Successful Login",
+      "status": "PASSING",
+      "steps": [
+        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
+        { "type": "WHEN",  "text": "they enter valid credentials",     "status": "PASSING" },
+        { "type": "THEN",  "text": "they should be redirected to dashboard", "status": "PASSING" },
+        { "type": "AND",   "text": "the login attempt should be logged", "status": "PASSING" }
+      ]
+    },
+    {
+      "title": "Failed Login",
+      "status": "FAILING",
+      "steps": [
+        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
+        { "type": "WHEN",  "text": "they enter invalid credentials", "status": "FAILING" },
+        { "type": "THEN",  "text": "they should see an error message", "status": "PENDING" },
+        { "type": "AND",   "text": "they should remain on the login page", "status": "SKIPPED" }
+      ]
+    }
+  ],
+  "theme": {
+    "colors": {
+      "feature": "#4361ee",
+      "scenario": "#f8f9fa",
+      "given": "#4361ee",
+      "when": "#ff6b35",
+      "then": "#06d6a0",
+      "and": "#6c757d",
+      "but": "#6c757d",
+      "passing": "#28a745",
+      "failing": "#dc3545",
+      "pending": "#ffc107",
+      "skipped": "#6c757d"
+    },
+    "layout": { "width": 600, "height": 420, "padding": 20, "scenarioSpacing": 30, "stepSpacing": 25 },
+    "typography": { "featureSize": 18, "scenarioSize": 16, "stepSize": 12, "descriptionSize": 10, "fontFamily": "Arial, sans-serif" }
+  }
+}
