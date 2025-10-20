@@ -345,7 +345,259 @@
     }
 
 </style>
+<style>
+    .docops-showcase-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
 
+    .gallery-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .gallery-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+
+    .gallery-item-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .gallery-item-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .gallery-expand-btn,
+    .gallery-content-btn {
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        color: #3498db;
+        transition: color 0.2s, transform 0.2s;
+        line-height: 1;
+    }
+
+    .gallery-content-btn {
+        color: #9b59b6;
+        font-weight: bold;
+    }
+
+    .gallery-expand-btn:hover {
+        color: #2980b9;
+        transform: scale(1.2);
+    }
+
+    .gallery-content-btn:hover {
+        color: #8e44ad;
+        transform: scale(1.2);
+    }
+
+    .gallery-item-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .gallery-item-image img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    .gallery-item-image img:hover {
+        opacity: 0.9;
+    }
+
+    /* Modal Styles */
+    .showcase-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        max-width: 95vw;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .showcase-content-modal-content {
+        max-width: 90vw;
+        width: 1000px;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+    }
+
+    .showcase-modal-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+
+    .showcase-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        color: #e74c3c;
+    }
+
+    .showcase-modal-body {
+        padding: 2rem;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+
+    .showcase-content-body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+        background: #282c34;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        width: 100%;
+        max-height: calc(95vh - 150px);
+        overflow: auto;
+    }
+
+    .showcase-content-code {
+        display: block;
+        padding: 1.5rem;
+        color: #abb2bf;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        white-space: pre;
+        tab-size: 4;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-copy-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+
+    .showcase-copy-btn:hover {
+        background: #2980b9;
+    }
+
+    .showcase-copy-btn.copied {
+        background: #27ae60;
+    }
+
+    .showcase-modal-image {
+        max-width: 100%;
+        max-height: calc(95vh - 100px);
+        width: auto;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .docops-showcase-gallery {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .showcase-modal-content {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .showcase-modal-body {
+            padding: 1rem;
+        }
+
+        .showcase-content-modal-content {
+            width: 100vw;
+        }
+    }
+</style>
 <script>
     window.svgViewer = window.svgViewer || {
         toggleControls(id) {
@@ -1129,6 +1381,94 @@
         }
     });
 </script>
+<script>
+    window.showcaseGallery = window.showcaseGallery || (function() {
+        let currentContent = '';
+
+        return {
+            expandItem: function(itemId, imageUrl, title) {
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const modalImage = modal.querySelector('.showcase-modal-image');
+
+                modalTitle.textContent = title;
+                modalImage.src = imageUrl;
+                modalImage.alt = title;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleEscKey);
+            },
+
+            closeModal: function() {
+                const modal = document.getElementById('showcase-gallery-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+
+                document.removeEventListener('keydown', this.handleEscKey);
+            },
+
+            showContent: function(itemId, title, kind, content) {
+                const modal = document.getElementById('showcase-content-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const codeElement = modal.querySelector('.showcase-content-code');
+
+                // Decode HTML entities
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = content;
+                const decodedContent = textarea.value;
+
+                currentContent = decodedContent;
+
+                modalTitle.textContent = title + ' (' + kind + ')';
+                codeElement.textContent = decodedContent;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleContentEscKey);
+            },
+
+            closeContentModal: function() {
+                const modal = document.getElementById('showcase-content-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContent = '';
+
+                document.removeEventListener('keydown', this.handleContentEscKey);
+            },
+
+            copyContent: function() {
+                const btn = document.querySelector('.showcase-copy-btn');
+
+                navigator.clipboard.writeText(currentContent).then(function() {
+                    btn.textContent = '✓ Copied!';
+                    btn.classList.add('copied');
+
+                    setTimeout(function() {
+                        btn.textContent = '📋 Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            handleEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeModal();
+                }
+            },
+
+            handleContentEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeContentModal();
+                }
+            }
+        };
+    })();
+</script>
 <style>
 .hidden {
     display: none;
@@ -1527,12 +1867,12 @@ This document showcases the different types of buttons available in DocOps.
 <div class="sect1">
 <h2 id="_buttons">1. Buttons</h2>
 <div class="sectionbody">
-<div class="docops-showcase-gallery" id="docops-gallery-89df85ed6f2be77f">
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-0">
+<div class="docops-showcase-gallery" id="docops-gallery-a184f5566fdf13df">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-0">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-0', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-0', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;link&quot;: &quot;https://www.google.com&quot;,
@@ -1591,18 +1931,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-0', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-0', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-1">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-1">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-1', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-1', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Amazon&quot;,
@@ -1658,18 +1998,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-1', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_8WUUU8iMRSF3_0VN8PrAIMIusMTsho1JrvRTfbB8FA6d5jGTjtpOyIY_7u3BQFldd11k4VkGM697Zx-c9qHPYBoUjunlY1SuKG_AA_hSgXJJihJjoYlW2gVxeuCULdeL5yrbNpuz2azFgs9La7LTV-GlhtROUGD19P4lhjOFW-BsMAUDEs0gtNNWUsnFPPtTIJDXigt9XQONKJiag6zQvACcs1rixa0AmxSiYZzjIFLXWehtaZZpjFkYiocTWSdQVYGiakMmHEiF1xQRSiHUoopKo4b125eobdrnTaYG63c1oqYC7WNwmpXaLOGF7QLzHM4xoW20Uoch9_H-C3AVSXxN3x9y_t4fcffgXUFc2Ar9FTEgtgKRTVla5oBUCJ3hEFwG6_4kmp17mbMYGCqFVlGsGjuBEfbgl2aZ8xkvn-XZdJpd5N258vh4ftUrx3eIVzoiV33rdWfeqEEu_0g7q-af6tsS-hd5I0bf9f0K0EzbtwQ9vGbxK8LZihXkFEiS1QuEAa8r4i7zxRF1UBG_qQmyYLTVHRIwGbCFTC0XAjyQjnb5UVz2j_N3ZLFlWa82EZ0ThG40hZf0aHrON4cAD9WD_5-fnkZRkeuwNJLS4ARp8wYu_XEqJEk3Ul_sjHVOD3tn3b7W8L-6PCo39sSRgfJKBltCQe9fufo5MUcvePhydLseClHljPprSStXrx2U5fh1OqulOUyrt1cbkw_v_VnNcppOzdzOg7kPIWhobzHcIbyDh3tlBgsU9a_fJEPILRa2g4p7B9U9yQIKVNo5Nx_ByDR0UZo2opxCkEKSpuSyUEYNkMxLVwKEy2zwS_z80lHnWTLURI-H3O00l4H6X_ZCYBWM3kLKfgzW_DBy-x_1t7-P7P3zG-9hx73HveeAKGqI8pIBwAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-1', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_8WUUU8iMRSF3_0VN8PrAIMIusMTsho1JrvRTfbB8FA6d5jGTjtpOyIY_7u3BQFldd11k4VkGM697Zx-c9qHPYBoUjunlY1SuKG_AA_hSgXJJihJjoYlW2gVxeuCULdeL5yrbNpuz2azFgs9La7LTV-GlhtROUGD19P4lhjOFW-BsMAUDEs0gtNNWUsnFPPtTIJDXigt9XQONKJiag6zQvACcs1rixa0AmxSiYZzjIFLXWehtaZZpjFkYiocTWSdQVYGiakMmHEiF1xQRSiHUoopKo4b125eobdrnTaYG63c1oqYC7WNwmpXaLOGF7QLzHM4xoW20Uoch9_H-C3AVSXxN3x9y_t4fcffgXUFc2Ar9FTEgtgKRTVla5oBUCJ3hEFwG6_4kmp17mbMYGCqFVlGsGjuBEfbgl2aZ8xkvn-XZdJpd5N258vh4ftUrx3eIVzoiV33rdWfeqEEu_0g7q-af6tsS-hd5I0bf9f0K0EzbtwQ9vGbxK8LZihXkFEiS1QuEAa8r4i7zxRF1UBG_qQmyYLTVHRIwGbCFTC0XAjyQjnb5UVz2j_N3ZLFlWa82EZ0ThG40hZf0aHrON4cAD9WD_5-fnkZRkeuwNJLS4ARp8wYu_XEqJEk3Ul_sjHVOD3tn3b7W8L-6PCo39sSRgfJKBltCQe9fufo5MUcvePhydLseClHljPprSStXrx2U5fh1OqulOUyrt1cbkw_v_VnNcppOzdzOg7kPIWhobzHcIbyDh3tlBgsU9a_fJEPILRa2g4p7B9U9yQIKVNo5Nx_ByDR0UZo2opxCkEKSpuSyUEYNkMxLVwKEy2zwS_z80lHnWTLURI-H3O00l4H6X_ZCYBWM3kLKfgzW_DBy-x_1t7-P7P3zG-9hx73HveeAKGqI8pIBwAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_8WUUU8iMRSF3_0VN8PrAIMIusMTsho1JrvRTfbB8FA6d5jGTjtpOyIY_7u3BQFldd11k4VkGM697Zx-c9qHPYBoUjunlY1SuKG_AA_hSgXJJihJjoYlW2gVxeuCULdeL5yrbNpuz2azFgs9La7LTV-GlhtROUGD19P4lhjOFW-BsMAUDEs0gtNNWUsnFPPtTIJDXigt9XQONKJiag6zQvACcs1rixa0AmxSiYZzjIFLXWehtaZZpjFkYiocTWSdQVYGiakMmHEiF1xQRSiHUoopKo4b125eobdrnTaYG63c1oqYC7WNwmpXaLOGF7QLzHM4xoW20Uoch9_H-C3AVSXxN3x9y_t4fcffgXUFc2Ar9FTEgtgKRTVla5oBUCJ3hEFwG6_4kmp17mbMYGCqFVlGsGjuBEfbgl2aZ8xkvn-XZdJpd5N258vh4ftUrx3eIVzoiV33rdWfeqEEu_0g7q-af6tsS-hd5I0bf9f0K0EzbtwQ9vGbxK8LZihXkFEiS1QuEAa8r4i7zxRF1UBG_qQmyYLTVHRIwGbCFTC0XAjyQjnb5UVz2j_N3ZLFlWa82EZ0ThG40hZf0aHrON4cAD9WD_5-fnkZRkeuwNJLS4ARp8wYu_XEqJEk3Ul_sjHVOD3tn3b7W8L-6PCo39sSRgfJKBltCQe9fufo5MUcvePhydLseClHljPprSStXrx2U5fh1OqulOUyrt1cbkw_v_VnNcppOzdzOg7kPIWhobzHcIbyDh3tlBgsU9a_fJEPILRa2g4p7B9U9yQIKVNo5Nx_ByDR0UZo2opxCkEKSpuSyUEYNkMxLVwKEy2zwS_z80lHnWTLURI-H3O00l4H6X_ZCYBWM3kLKfgzW_DBy-x_1t7-P7P3zG-9hx73HveeAKGqI8pIBwAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_8WUUU8iMRSF3_0VN8PrAIMIusMTsho1JrvRTfbB8FA6d5jGTjtpOyIY_7u3BQFldd11k4VkGM697Zx-c9qHPYBoUjunlY1SuKG_AA_hSgXJJihJjoYlW2gVxeuCULdeL5yrbNpuz2azFgs9La7LTV-GlhtROUGD19P4lhjOFW-BsMAUDEs0gtNNWUsnFPPtTIJDXigt9XQONKJiag6zQvACcs1rixa0AmxSiYZzjIFLXWehtaZZpjFkYiocTWSdQVYGiakMmHEiF1xQRSiHUoopKo4b125eobdrnTaYG63c1oqYC7WNwmpXaLOGF7QLzHM4xoW20Uoch9_H-C3AVSXxN3x9y_t4fcffgXUFc2Ar9FTEgtgKRTVla5oBUCJ3hEFwG6_4kmp17mbMYGCqFVlGsGjuBEfbgl2aZ8xkvn-XZdJpd5N258vh4ftUrx3eIVzoiV33rdWfeqEEu_0g7q-af6tsS-hd5I0bf9f0K0EzbtwQ9vGbxK8LZihXkFEiS1QuEAa8r4i7zxRF1UBG_qQmyYLTVHRIwGbCFTC0XAjyQjnb5UVz2j_N3ZLFlWa82EZ0ThG40hZf0aHrON4cAD9WD_5-fnkZRkeuwNJLS4ARp8wYu_XEqJEk3Ul_sjHVOD3tn3b7W8L-6PCo39sSRgfJKBltCQe9fufo5MUcvePhydLseClHljPprSStXrx2U5fh1OqulOUyrt1cbkw_v_VnNcppOzdzOg7kPIWhobzHcIbyDh3tlBgsU9a_fJEPILRa2g4p7B9U9yQIKVNo5Nx_ByDR0UZo2opxCkEKSpuSyUEYNkMxLVwKEy2zwS_z80lHnWTLURI-H3O00l4H6X_ZCYBWM3kLKfgzW_DBy-x_1t7-P7P3zG-9hx73HveeAKGqI8pIBwAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-2">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-2">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-2', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-2', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Amazon Web Services&quot;,
@@ -1726,18 +2066,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-2', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_51UbWvbMBD-3l9xuF-dxG3YuqZjkG2FtmwMmkEHJR8U-RyLypKRznkr-e87KS8OC-26EXDs5547nZ57pOcTgGTSEFnjkwE88ifAc3xyQIsJaoaTYSVW1sADTmCEbqYk-iTds5R5CqSSqPaDXm8-n3dFTOhKW7W8HL10qiZlTVszUFK4NbILyoMwMKzQKckvVaNJGRHoQgOhLI3VdroEzqiFWcK8VLKEwsrGowduDzsc4nSJKUhtmzxSG64yTSFXU0VcyJNDUUVImByEI1UoqTiiDKHWaopGYts1LWsM7XqyDgtnDR3sSFCMtYhoqLRur2TE7rAo4DOurE-24Dj-r9OX1K5rjX_RN1Belzcw_k9YKgWBrzGoolasrTIcM77hCoAaJbEMSvp0qy-j3hY0Fw6jptZwywh-65QuHKt5I1we-MdaZme9ftY7u7y4aGNYTTDPMb-txDSQnltxeSYh62Pc7qedwOtXBzIinCHc2Ulr4j36YFdGiac3TuqrlT9q31X2eFqnj-GtE0RANz595ImNXxzWqBSOLQk5m7lCQ3E4gIuaRxbsyC53kHN_2jLkgSwHCVnruaIShl4qxb2wRY-l5pr-X6TsdnsqBH2PMy3vzs-mx7q-zfobTe-tkOWh1Lfswnvr8Q-V-TlO2wvp584r179ickIlVm3PSYmLb-wzf23ERGPOAXINbpbh4-rsE35hY7s4jaIQeZZtm0hkwEP976IOBZOdfyM3e_fh_PJ9knIVG85ABPuiPyneJ-vDCv5gt7yEDL_Nnsa7NqTQoehZm9ZU8artb5HNXke01Ifj2FhshyYFXzudgq8tvRzA0HFPKdygniHxiU7BC-OD01RxBZHq-djyEuf1YgvMUU1LGsBFlu0oofYAjHWV0Ftsxi4UhmmeMd2RovZXfEEsqJOjtC66MqQYvEr2I1ufrE9-A5faA-JHBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-2', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_51UbWvbMBD-3l9xuF-dxG3YuqZjkG2FtmwMmkEHJR8U-RyLypKRznkr-e87KS8OC-26EXDs5547nZ57pOcTgGTSEFnjkwE88ifAc3xyQIsJaoaTYSVW1sADTmCEbqYk-iTds5R5CqSSqPaDXm8-n3dFTOhKW7W8HL10qiZlTVszUFK4NbILyoMwMKzQKckvVaNJGRHoQgOhLI3VdroEzqiFWcK8VLKEwsrGowduDzsc4nSJKUhtmzxSG64yTSFXU0VcyJNDUUVImByEI1UoqTiiDKHWaopGYts1LWsM7XqyDgtnDR3sSFCMtYhoqLRur2TE7rAo4DOurE-24Dj-r9OX1K5rjX_RN1Belzcw_k9YKgWBrzGoolasrTIcM77hCoAaJbEMSvp0qy-j3hY0Fw6jptZwywh-65QuHKt5I1we-MdaZme9ftY7u7y4aGNYTTDPMb-txDSQnltxeSYh62Pc7qedwOtXBzIinCHc2Ulr4j36YFdGiac3TuqrlT9q31X2eFqnj-GtE0RANz595ImNXxzWqBSOLQk5m7lCQ3E4gIuaRxbsyC53kHN_2jLkgSwHCVnruaIShl4qxb2wRY-l5pr-X6TsdnsqBH2PMy3vzs-mx7q-zfobTe-tkOWh1Lfswnvr8Q-V-TlO2wvp584r179ickIlVm3PSYmLb-wzf23ERGPOAXINbpbh4-rsE35hY7s4jaIQeZZtm0hkwEP976IOBZOdfyM3e_fh_PJ9knIVG85ABPuiPyneJ-vDCv5gt7yEDL_Nnsa7NqTQoehZm9ZU8artb5HNXke01Ifj2FhshyYFXzudgq8tvRzA0HFPKdygniHxiU7BC-OD01RxBZHq-djyEuf1YgvMUU1LGsBFlu0oofYAjHWV0Ftsxi4UhmmeMd2RovZXfEEsqJOjtC66MqQYvEr2I1ufrE9-A5faA-JHBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_51UbWvbMBD-3l9xuF-dxG3YuqZjkG2FtmwMmkEHJR8U-RyLypKRznkr-e87KS8OC-26EXDs5547nZ57pOcTgGTSEFnjkwE88ifAc3xyQIsJaoaTYSVW1sADTmCEbqYk-iTds5R5CqSSqPaDXm8-n3dFTOhKW7W8HL10qiZlTVszUFK4NbILyoMwMKzQKckvVaNJGRHoQgOhLI3VdroEzqiFWcK8VLKEwsrGowduDzsc4nSJKUhtmzxSG64yTSFXU0VcyJNDUUVImByEI1UoqTiiDKHWaopGYts1LWsM7XqyDgtnDR3sSFCMtYhoqLRur2TE7rAo4DOurE-24Dj-r9OX1K5rjX_RN1Belzcw_k9YKgWBrzGoolasrTIcM77hCoAaJbEMSvp0qy-j3hY0Fw6jptZwywh-65QuHKt5I1we-MdaZme9ftY7u7y4aGNYTTDPMb-txDSQnltxeSYh62Pc7qedwOtXBzIinCHc2Ulr4j36YFdGiac3TuqrlT9q31X2eFqnj-GtE0RANz595ImNXxzWqBSOLQk5m7lCQ3E4gIuaRxbsyC53kHN_2jLkgSwHCVnruaIShl4qxb2wRY-l5pr-X6TsdnsqBH2PMy3vzs-mx7q-zfobTe-tkOWh1Lfswnvr8Q-V-TlO2wvp584r179ickIlVm3PSYmLb-wzf23ERGPOAXINbpbh4-rsE35hY7s4jaIQeZZtm0hkwEP976IOBZOdfyM3e_fh_PJ9knIVG85ABPuiPyneJ-vDCv5gt7yEDL_Nnsa7NqTQoehZm9ZU8artb5HNXke01Ifj2FhshyYFXzudgq8tvRzA0HFPKdygniHxiU7BC-OD01RxBZHq-djyEuf1YgvMUU1LGsBFlu0oofYAjHWV0Ftsxi4UhmmeMd2RovZXfEEsqJOjtC66MqQYvEr2I1ufrE9-A5faA-JHBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_51UbWvbMBD-3l9xuF-dxG3YuqZjkG2FtmwMmkEHJR8U-RyLypKRznkr-e87KS8OC-26EXDs5547nZ57pOcTgGTSEFnjkwE88ifAc3xyQIsJaoaTYSVW1sADTmCEbqYk-iTds5R5CqSSqPaDXm8-n3dFTOhKW7W8HL10qiZlTVszUFK4NbILyoMwMKzQKckvVaNJGRHoQgOhLI3VdroEzqiFWcK8VLKEwsrGowduDzsc4nSJKUhtmzxSG64yTSFXU0VcyJNDUUVImByEI1UoqTiiDKHWaopGYts1LWsM7XqyDgtnDR3sSFCMtYhoqLRur2TE7rAo4DOurE-24Dj-r9OX1K5rjX_RN1Belzcw_k9YKgWBrzGoolasrTIcM77hCoAaJbEMSvp0qy-j3hY0Fw6jptZwywh-65QuHKt5I1we-MdaZme9ftY7u7y4aGNYTTDPMb-txDSQnltxeSYh62Pc7qedwOtXBzIinCHc2Ulr4j36YFdGiac3TuqrlT9q31X2eFqnj-GtE0RANz595ImNXxzWqBSOLQk5m7lCQ3E4gIuaRxbsyC53kHN_2jLkgSwHCVnruaIShl4qxb2wRY-l5pr-X6TsdnsqBH2PMy3vzs-mx7q-zfobTe-tkOWh1Lfswnvr8Q-V-TlO2wvp584r179ickIlVm3PSYmLb-wzf23ERGPOAXINbpbh4-rsE35hY7s4jaIQeZZtm0hkwEP976IOBZOdfyM3e_fh_PJ9knIVG85ABPuiPyneJ-vDCv5gt7yEDL_Nnsa7NqTQoehZm9ZU8artb5HNXke01Ifj2FhshyYFXzudgq8tvRzA0HFPKdygniHxiU7BC-OD01RxBZHq-djyEuf1YgvMUU1LGsBFlu0oofYAjHWV0Ftsxi4UhmmeMd2RovZXfEEsqJOjtC66MqQYvEr2I1ufrE9-A5faA-JHBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-3">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-3">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-3', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-3', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;link&quot;: &quot;https://www.google.com&quot;,
@@ -1833,18 +2173,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-3', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6VWTXPiOBC951eonMNeSAwksClyIiyZmdrNJBVSmcNWDrLctlWRJZUkQ8jU_PeRhAFDbMbMcOCj-_XjqZ9b0vcThIKoMEZwHYzQ__YnQt_9u00wyl9tNMiMkXoUhovF4jwVImVwTkQedDY4HAFzwE8-iWaAFcm2-Rg0UVQaKrhDfROKxX9plAttkBSyYFgh7WsQ8JRy2JaapQRXo_conbStYq_6g4wvOU5BBx27AAVJdSHUZ6pr-dE5QDQjmbAa65j0KtWa6g7LWkW5je-QlBwv_rOkPGgMlrLRl7HLNfrxhXMxx4bOARkgGRdMpEsklYgLYvRHLzKs4gVW0NIN-pAJZ-nHRe_IDqn0uPr20Qcct6GwqHqCO0x-XZ9bUH257yCaGaFarESBwZT9hoc5JUpokZgGH-_W-UYvp9yAkopqQA7nbLJfWOHyNVauMS2tvE8SSgBdDAdNTRAecWAOxu9FfQuxS-x1oJ7imeoCM2tGEVNRRzX3AO3z-4zHz1WO3wVvGiyfbHTjnltGQDlWr2Akw7Z3mMeIMFHEdsdTc9urGlfA_lkOirS15UHRHNAzjaG2HW4V0kHmDnHIm2-zWmcWutqF-tp_KY9Z82xsysPXFbBBAYM33IIEe9zxZnIwCaNvDW5-XWUb7ZwZBTinPLXHlB0zO-Q8t9_WTtYYWYW1NPNGiYWd3jsxp_WH1946wsgXNDT06RnNMptvTxSmwBWEVxcNjGWT0L2i9qi2Y9aGWmzAx3mWUpMVUdNtg5rPRdTo1kTEgDJ7x3CG-bETzNYKhT3ig1kxzIEJeYRV0zfJGg6ErfAQSlTDvcAvAj00XVXk6qay7cNBmjEpN_qDihLAxm62OsQlvJ5zIiRlwrQlIyV8z2H7_tLZXjOfym4_TidP46-f_pv6Xgcmg9zFV09CYK0Sqtr34LTbvYiGFbdPb2-HtxfDSqA_-fvKnUybwOSyO-lOKoHLwbB3Nd3hGNyMp4H__bIKB9oo8QoTp8AJPe35V1nklBW5vyz313ihzM1yo72M-O3_8Z_pY1B90MsmzMySQbXC93wdDRLBzVlidxq2HKGxoph10GdgczCU4A7SmOszu-fQ5Bp5qKbvMEK9S_lmA5SxETrt4X63T64RA2O3oDMtMbFjMEJcqByzsm4BNM3MCEWCxde1c_SnkroVSZd4MBhetZRUBncH8U_V9Cpq-tGQRN0j1exYqQn2anrn3RP3nP84-QmEkEA7Tg0AAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-3', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6VWTXPiOBC951eonMNeSAwksClyIiyZmdrNJBVSmcNWDrLctlWRJZUkQ8jU_PeRhAFDbMbMcOCj-_XjqZ9b0vcThIKoMEZwHYzQ__YnQt_9u00wyl9tNMiMkXoUhovF4jwVImVwTkQedDY4HAFzwE8-iWaAFcm2-Rg0UVQaKrhDfROKxX9plAttkBSyYFgh7WsQ8JRy2JaapQRXo_conbStYq_6g4wvOU5BBx27AAVJdSHUZ6pr-dE5QDQjmbAa65j0KtWa6g7LWkW5je-QlBwv_rOkPGgMlrLRl7HLNfrxhXMxx4bOARkgGRdMpEsklYgLYvRHLzKs4gVW0NIN-pAJZ-nHRe_IDqn0uPr20Qcct6GwqHqCO0x-XZ9bUH257yCaGaFarESBwZT9hoc5JUpokZgGH-_W-UYvp9yAkopqQA7nbLJfWOHyNVauMS2tvE8SSgBdDAdNTRAecWAOxu9FfQuxS-x1oJ7imeoCM2tGEVNRRzX3AO3z-4zHz1WO3wVvGiyfbHTjnltGQDlWr2Akw7Z3mMeIMFHEdsdTc9urGlfA_lkOirS15UHRHNAzjaG2HW4V0kHmDnHIm2-zWmcWutqF-tp_KY9Z82xsysPXFbBBAYM33IIEe9zxZnIwCaNvDW5-XWUb7ZwZBTinPLXHlB0zO-Q8t9_WTtYYWYW1NPNGiYWd3jsxp_WH1946wsgXNDT06RnNMptvTxSmwBWEVxcNjGWT0L2i9qi2Y9aGWmzAx3mWUpMVUdNtg5rPRdTo1kTEgDJ7x3CG-bETzNYKhT3ig1kxzIEJeYRV0zfJGg6ErfAQSlTDvcAvAj00XVXk6qay7cNBmjEpN_qDihLAxm62OsQlvJ5zIiRlwrQlIyV8z2H7_tLZXjOfym4_TidP46-f_pv6Xgcmg9zFV09CYK0Sqtr34LTbvYiGFbdPb2-HtxfDSqA_-fvKnUybwOSyO-lOKoHLwbB3Nd3hGNyMp4H__bIKB9oo8QoTp8AJPe35V1nklBW5vyz313ihzM1yo72M-O3_8Z_pY1B90MsmzMySQbXC93wdDRLBzVlidxq2HKGxoph10GdgczCU4A7SmOszu-fQ5Bp5qKbvMEK9S_lmA5SxETrt4X63T64RA2O3oDMtMbFjMEJcqByzsm4BNM3MCEWCxde1c_SnkroVSZd4MBhetZRUBncH8U_V9Cpq-tGQRN0j1exYqQn2anrn3RP3nP84-QmEkEA7Tg0AAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6VWTXPiOBC951eonMNeSAwksClyIiyZmdrNJBVSmcNWDrLctlWRJZUkQ8jU_PeRhAFDbMbMcOCj-_XjqZ9b0vcThIKoMEZwHYzQ__YnQt_9u00wyl9tNMiMkXoUhovF4jwVImVwTkQedDY4HAFzwE8-iWaAFcm2-Rg0UVQaKrhDfROKxX9plAttkBSyYFgh7WsQ8JRy2JaapQRXo_conbStYq_6g4wvOU5BBx27AAVJdSHUZ6pr-dE5QDQjmbAa65j0KtWa6g7LWkW5je-QlBwv_rOkPGgMlrLRl7HLNfrxhXMxx4bOARkgGRdMpEsklYgLYvRHLzKs4gVW0NIN-pAJZ-nHRe_IDqn0uPr20Qcct6GwqHqCO0x-XZ9bUH257yCaGaFarESBwZT9hoc5JUpokZgGH-_W-UYvp9yAkopqQA7nbLJfWOHyNVauMS2tvE8SSgBdDAdNTRAecWAOxu9FfQuxS-x1oJ7imeoCM2tGEVNRRzX3AO3z-4zHz1WO3wVvGiyfbHTjnltGQDlWr2Akw7Z3mMeIMFHEdsdTc9urGlfA_lkOirS15UHRHNAzjaG2HW4V0kHmDnHIm2-zWmcWutqF-tp_KY9Z82xsysPXFbBBAYM33IIEe9zxZnIwCaNvDW5-XWUb7ZwZBTinPLXHlB0zO-Q8t9_WTtYYWYW1NPNGiYWd3jsxp_WH1946wsgXNDT06RnNMptvTxSmwBWEVxcNjGWT0L2i9qi2Y9aGWmzAx3mWUpMVUdNtg5rPRdTo1kTEgDJ7x3CG-bETzNYKhT3ig1kxzIEJeYRV0zfJGg6ErfAQSlTDvcAvAj00XVXk6qay7cNBmjEpN_qDihLAxm62OsQlvJ5zIiRlwrQlIyV8z2H7_tLZXjOfym4_TidP46-f_pv6Xgcmg9zFV09CYK0Sqtr34LTbvYiGFbdPb2-HtxfDSqA_-fvKnUybwOSyO-lOKoHLwbB3Nd3hGNyMp4H__bIKB9oo8QoTp8AJPe35V1nklBW5vyz313ihzM1yo72M-O3_8Z_pY1B90MsmzMySQbXC93wdDRLBzVlidxq2HKGxoph10GdgczCU4A7SmOszu-fQ5Bp5qKbvMEK9S_lmA5SxETrt4X63T64RA2O3oDMtMbFjMEJcqByzsm4BNM3MCEWCxde1c_SnkroVSZd4MBhetZRUBncH8U_V9Cpq-tGQRN0j1exYqQn2anrn3RP3nP84-QmEkEA7Tg0AAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6VWTXPiOBC951eonMNeSAwksClyIiyZmdrNJBVSmcNWDrLctlWRJZUkQ8jU_PeRhAFDbMbMcOCj-_XjqZ9b0vcThIKoMEZwHYzQ__YnQt_9u00wyl9tNMiMkXoUhovF4jwVImVwTkQedDY4HAFzwE8-iWaAFcm2-Rg0UVQaKrhDfROKxX9plAttkBSyYFgh7WsQ8JRy2JaapQRXo_conbStYq_6g4wvOU5BBx27AAVJdSHUZ6pr-dE5QDQjmbAa65j0KtWa6g7LWkW5je-QlBwv_rOkPGgMlrLRl7HLNfrxhXMxx4bOARkgGRdMpEsklYgLYvRHLzKs4gVW0NIN-pAJZ-nHRe_IDqn0uPr20Qcct6GwqHqCO0x-XZ9bUH257yCaGaFarESBwZT9hoc5JUpokZgGH-_W-UYvp9yAkopqQA7nbLJfWOHyNVauMS2tvE8SSgBdDAdNTRAecWAOxu9FfQuxS-x1oJ7imeoCM2tGEVNRRzX3AO3z-4zHz1WO3wVvGiyfbHTjnltGQDlWr2Akw7Z3mMeIMFHEdsdTc9urGlfA_lkOirS15UHRHNAzjaG2HW4V0kHmDnHIm2-zWmcWutqF-tp_KY9Z82xsysPXFbBBAYM33IIEe9zxZnIwCaNvDW5-XWUb7ZwZBTinPLXHlB0zO-Q8t9_WTtYYWYW1NPNGiYWd3jsxp_WH1946wsgXNDT06RnNMptvTxSmwBWEVxcNjGWT0L2i9qi2Y9aGWmzAx3mWUpMVUdNtg5rPRdTo1kTEgDJ7x3CG-bETzNYKhT3ig1kxzIEJeYRV0zfJGg6ErfAQSlTDvcAvAj00XVXk6qay7cNBmjEpN_qDihLAxm62OsQlvJ5zIiRlwrQlIyV8z2H7_tLZXjOfym4_TidP46-f_pv6Xgcmg9zFV09CYK0Sqtr34LTbvYiGFbdPb2-HtxfDSqA_-fvKnUybwOSyO-lOKoHLwbB3Nd3hGNyMp4H__bIKB9oo8QoTp8AJPe35V1nklBW5vyz313ihzM1yo72M-O3_8Z_pY1B90MsmzMySQbXC93wdDRLBzVlidxq2HKGxoph10GdgczCU4A7SmOszu-fQ5Bp5qKbvMEK9S_lmA5SxETrt4X63T64RA2O3oDMtMbFjMEJcqByzsm4BNM3MCEWCxde1c_SnkroVSZd4MBhetZRUBncH8U_V9Cpq-tGQRN0j1exYqQn2anrn3RP3nP84-QmEkEA7Tg0AAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-4">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-4">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-4', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-4', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Google&quot;,
@@ -1885,18 +2225,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-4', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_61TUWvbMBB-z684vNfMSbaHrGUMulK6jD6MbdCHkYeLdLFFZcmczglu6X-fpGR22Mq2Qo0R9nfffXe6T3qYABSbTsS7UJzDj_gL8JDXGLC4IRvh4tr7ylIxHQLG3SW8FmnD-Wy23-_LKnNK5ZuRpykoNq0Y70YZMCG96OCiITYqfjSdFeMw8dCCkKqdt77qIaq16HqQGgVCS8qgNfcUBRysnBA7ktdMFoU0BOKdUZSkNbTsdackwNiN9C2lNlDviMUEasjJSbNRJIXny9nb-WxxdvZujFGzIa1JrxqsEunXiGKIaZuy3h8296E4Rh6HXOyk9jxMN2PfiCvq4SMbNxSJ8A0y9_Al1TiC68mJ2J_GXLTtv3zBRPmrLVkkjlOVL-KLimepiwpAlpSwd0aFac7oomEQ_Fb2yJRd8i62TINz5RNufULWif-EUYuDUcvls4zK2_1fn4R2BJ_9JpzadEBv_b0zePebU3FdT8db9f24i8vV18ubqyxSSB1P3tBboeJIOZzULV5t83NQXk8HWtfkW_rmiASFNuksyvkkVX6c_AROuBAzzwMAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-4', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_61TUWvbMBB-z684vNfMSbaHrGUMulK6jD6MbdCHkYeLdLFFZcmczglu6X-fpGR22Mq2Qo0R9nfffXe6T3qYABSbTsS7UJzDj_gL8JDXGLC4IRvh4tr7ylIxHQLG3SW8FmnD-Wy23-_LKnNK5ZuRpykoNq0Y70YZMCG96OCiITYqfjSdFeMw8dCCkKqdt77qIaq16HqQGgVCS8qgNfcUBRysnBA7ktdMFoU0BOKdUZSkNbTsdackwNiN9C2lNlDviMUEasjJSbNRJIXny9nb-WxxdvZujFGzIa1JrxqsEunXiGKIaZuy3h8296E4Rh6HXOyk9jxMN2PfiCvq4SMbNxSJ8A0y9_Al1TiC68mJ2J_GXLTtv3zBRPmrLVkkjlOVL-KLimepiwpAlpSwd0aFac7oomEQ_Fb2yJRd8i62TINz5RNufULWif-EUYuDUcvls4zK2_1fn4R2BJ_9JpzadEBv_b0zePebU3FdT8db9f24i8vV18ubqyxSSB1P3tBboeJIOZzULV5t83NQXk8HWtfkW_rmiASFNuksyvkkVX6c_AROuBAzzwMAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_61TUWvbMBB-z684vNfMSbaHrGUMulK6jD6MbdCHkYeLdLFFZcmczglu6X-fpGR22Mq2Qo0R9nfffXe6T3qYABSbTsS7UJzDj_gL8JDXGLC4IRvh4tr7ylIxHQLG3SW8FmnD-Wy23-_LKnNK5ZuRpykoNq0Y70YZMCG96OCiITYqfjSdFeMw8dCCkKqdt77qIaq16HqQGgVCS8qgNfcUBRysnBA7ktdMFoU0BOKdUZSkNbTsdackwNiN9C2lNlDviMUEasjJSbNRJIXny9nb-WxxdvZujFGzIa1JrxqsEunXiGKIaZuy3h8296E4Rh6HXOyk9jxMN2PfiCvq4SMbNxSJ8A0y9_Al1TiC68mJ2J_GXLTtv3zBRPmrLVkkjlOVL-KLimepiwpAlpSwd0aFac7oomEQ_Fb2yJRd8i62TINz5RNufULWif-EUYuDUcvls4zK2_1fn4R2BJ_9JpzadEBv_b0zePebU3FdT8db9f24i8vV18ubqyxSSB1P3tBboeJIOZzULV5t83NQXk8HWtfkW_rmiASFNuksyvkkVX6c_AROuBAzzwMAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_61TUWvbMBB-z684vNfMSbaHrGUMulK6jD6MbdCHkYeLdLFFZcmczglu6X-fpGR22Mq2Qo0R9nfffXe6T3qYABSbTsS7UJzDj_gL8JDXGLC4IRvh4tr7ylIxHQLG3SW8FmnD-Wy23-_LKnNK5ZuRpykoNq0Y70YZMCG96OCiITYqfjSdFeMw8dCCkKqdt77qIaq16HqQGgVCS8qgNfcUBRysnBA7ktdMFoU0BOKdUZSkNbTsdackwNiN9C2lNlDviMUEasjJSbNRJIXny9nb-WxxdvZujFGzIa1JrxqsEunXiGKIaZuy3h8296E4Rh6HXOyk9jxMN2PfiCvq4SMbNxSJ8A0y9_Al1TiC68mJ2J_GXLTtv3zBRPmrLVkkjlOVL-KLimepiwpAlpSwd0aFac7oomEQ_Fb2yJRd8i62TINz5RNufULWif-EUYuDUcvls4zK2_1fn4R2BJ_9JpzadEBv_b0zePebU3FdT8db9f24i8vV18ubqyxSSB1P3tBboeJIOZzULV5t83NQXk8HWtfkW_rmiASFNuksyvkkVX6c_AROuBAzzwMAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-5">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-5">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-5', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-5', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Google&quot;,
@@ -1940,18 +2280,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-5', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_8WTSW_bMBCF7_4VA_nqRY7jJfLJMeykRQ5FU6CHwgeaGktEKFIgx3aVIP89FL1ICdymQAJUELQ8jp4evhk-NQCC1YZIKxtE8Mu9Ajz5q1uQbIXSycGN1onEoHVaEOqh1FOi3Ebd7m636yS-psN1VtXFaLkROQmtKhsQtjyZgmmGRnD3kG0kCcXKOiaBkKdKS50U4NxypgqglBHYHLlgUjyiM1DwRREahdQ2KBlhDBbNVnAsrWPIjY43nCxUaajIsYzB4i0aEhYzVFQL60zK5XDU7Yfd3tXVuFpjG0q1ORHy2j2aBAu4NkKdCp18x4wp4BtLMDiIS39_bv0B7jTP32PLypK_ovUmDgnvfApb7uZh4xwAJXIyWgluW_6LjYMOVq9pxwx60lq5yHii3zlD_JaZuKw_A7u3hz0avQObcIvwVa9snfVe_akflWAPb3C767JVjfePQ5S76febufcIKHUT4LR9SwLusBhb-23QDMP-ariqkjUXi-GiP6wJF7PReDioCbPLcBbOasLlYNgbz195DK6n833a5V4-ZLynQlaBjjNyVIO1VtRes0zIIoKpce1qwS3KLZJrdAssU7btuiDWE_Cl1nUzgt5F_tsJQsoImj1_TEAiuT62bc64UEkESpuMyYn_bIciSSmClZbx5OzAfTRRWEsU-uPfEh20t5Pyv-J4QAenMkIEgtwW4pPXY_6Z_ftYvCO_0wZ5bjw3XgA0nuzNAwYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-5', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_8WTSW_bMBCF7_4VA_nqRY7jJfLJMeykRQ5FU6CHwgeaGktEKFIgx3aVIP89FL1ICdymQAJUELQ8jp4evhk-NQCC1YZIKxtE8Mu9Ajz5q1uQbIXSycGN1onEoHVaEOqh1FOi3Ebd7m636yS-psN1VtXFaLkROQmtKhsQtjyZgmmGRnD3kG0kCcXKOiaBkKdKS50U4NxypgqglBHYHLlgUjyiM1DwRREahdQ2KBlhDBbNVnAsrWPIjY43nCxUaajIsYzB4i0aEhYzVFQL60zK5XDU7Yfd3tXVuFpjG0q1ORHy2j2aBAu4NkKdCp18x4wp4BtLMDiIS39_bv0B7jTP32PLypK_ovUmDgnvfApb7uZh4xwAJXIyWgluW_6LjYMOVq9pxwx60lq5yHii3zlD_JaZuKw_A7u3hz0avQObcIvwVa9snfVe_akflWAPb3C767JVjfePQ5S76febufcIKHUT4LR9SwLusBhb-23QDMP-ariqkjUXi-GiP6wJF7PReDioCbPLcBbOasLlYNgbz195DK6n833a5V4-ZLynQlaBjjNyVIO1VtRes0zIIoKpce1qwS3KLZJrdAssU7btuiDWE_Cl1nUzgt5F_tsJQsoImj1_TEAiuT62bc64UEkESpuMyYn_bIciSSmClZbx5OzAfTRRWEsU-uPfEh20t5Pyv-J4QAenMkIEgtwW4pPXY_6Z_ftYvCO_0wZ5bjw3XgA0nuzNAwYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_8WTSW_bMBCF7_4VA_nqRY7jJfLJMeykRQ5FU6CHwgeaGktEKFIgx3aVIP89FL1ICdymQAJUELQ8jp4evhk-NQCC1YZIKxtE8Mu9Ajz5q1uQbIXSycGN1onEoHVaEOqh1FOi3Ebd7m636yS-psN1VtXFaLkROQmtKhsQtjyZgmmGRnD3kG0kCcXKOiaBkKdKS50U4NxypgqglBHYHLlgUjyiM1DwRREahdQ2KBlhDBbNVnAsrWPIjY43nCxUaajIsYzB4i0aEhYzVFQL60zK5XDU7Yfd3tXVuFpjG0q1ORHy2j2aBAu4NkKdCp18x4wp4BtLMDiIS39_bv0B7jTP32PLypK_ovUmDgnvfApb7uZh4xwAJXIyWgluW_6LjYMOVq9pxwx60lq5yHii3zlD_JaZuKw_A7u3hz0avQObcIvwVa9snfVe_akflWAPb3C767JVjfePQ5S76febufcIKHUT4LR9SwLusBhb-23QDMP-ariqkjUXi-GiP6wJF7PReDioCbPLcBbOasLlYNgbz195DK6n833a5V4-ZLynQlaBjjNyVIO1VtRes0zIIoKpce1qwS3KLZJrdAssU7btuiDWE_Cl1nUzgt5F_tsJQsoImj1_TEAiuT62bc64UEkESpuMyYn_bIciSSmClZbx5OzAfTRRWEsU-uPfEh20t5Pyv-J4QAenMkIEgtwW4pPXY_6Z_ftYvCO_0wZ5bjw3XgA0nuzNAwYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_8WTSW_bMBCF7_4VA_nqRY7jJfLJMeykRQ5FU6CHwgeaGktEKFIgx3aVIP89FL1ICdymQAJUELQ8jp4evhk-NQCC1YZIKxtE8Mu9Ajz5q1uQbIXSycGN1onEoHVaEOqh1FOi3Ebd7m636yS-psN1VtXFaLkROQmtKhsQtjyZgmmGRnD3kG0kCcXKOiaBkKdKS50U4NxypgqglBHYHLlgUjyiM1DwRREahdQ2KBlhDBbNVnAsrWPIjY43nCxUaajIsYzB4i0aEhYzVFQL60zK5XDU7Yfd3tXVuFpjG0q1ORHy2j2aBAu4NkKdCp18x4wp4BtLMDiIS39_bv0B7jTP32PLypK_ovUmDgnvfApb7uZh4xwAJXIyWgluW_6LjYMOVq9pxwx60lq5yHii3zlD_JaZuKw_A7u3hz0avQObcIvwVa9snfVe_akflWAPb3C767JVjfePQ5S76febufcIKHUT4LR9SwLusBhb-23QDMP-ariqkjUXi-GiP6wJF7PReDioCbPLcBbOasLlYNgbz195DK6n833a5V4-ZLynQlaBjjNyVIO1VtRes0zIIoKpce1qwS3KLZJrdAssU7btuiDWE_Cl1nUzgt5F_tsJQsoImj1_TEAiuT62bc64UEkESpuMyYn_bIciSSmClZbx5OzAfTRRWEsU-uPfEh20t5Pyv-J4QAenMkIEgtwW4pPXY_6Z_ftYvCO_0wZ5bjw3XgA0nuzNAwYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-6">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-6">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-6', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-6', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;GitHub&quot;,
@@ -1997,18 +2337,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-6', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_7VTy27bMBC8-ysI-pCL8milxKkc9NAaSAMUCVAnvRQ5kOJKIkJqBXLlxDX876Ek2zKKOughvZDSzHA5wyVXI8a4bIiw8jxlv8IvY6tuDIQREkyA-bWmb43k0Y7Q1VOLl0S1T09PC01lI08ytINGgc-crklj1Urn2LgMWIYKmIMavSZ0y0FOyxpanYIFGKwtVDSQYCUoBerGiqJVbR0GykHeLrvqLX7mG2bdzevocKDv4u1AQftmoBks7mrPaiMoR2ffNUnw9q9JvmiSTfYEdDiM3EpO0BUH83xtO5OhCZXRiQ59t0g7k3-mCuNjNNzB-80-P-4ebmfdDpxKsENVHgyiG65qQMYfVRzHe70cJ0mSnV_sAfEkhmTSb_3Yw7zxMBOuPSdyDUS76o3tXkK8QXpfc1qa_Wj98W9RnmNFx7mw2ixTdjSHAoE93BxF7F6UaEXErqGCRZh_glOiCh9eVP7Yg9P5lHWrvf4NKftwWb8EQBuTsrFQUmSTDf8MuigpZRKNmv61h__BTbLnZnJxGX86m_Jd39aj9egVCgkTQj8EAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-6', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_7VTy27bMBC8-ysI-pCL8milxKkc9NAaSAMUCVAnvRQ5kOJKIkJqBXLlxDX876Ek2zKKOughvZDSzHA5wyVXI8a4bIiw8jxlv8IvY6tuDIQREkyA-bWmb43k0Y7Q1VOLl0S1T09PC01lI08ytINGgc-crklj1Urn2LgMWIYKmIMavSZ0y0FOyxpanYIFGKwtVDSQYCUoBerGiqJVbR0GykHeLrvqLX7mG2bdzevocKDv4u1AQftmoBks7mrPaiMoR2ffNUnw9q9JvmiSTfYEdDiM3EpO0BUH83xtO5OhCZXRiQ59t0g7k3-mCuNjNNzB-80-P-4ebmfdDpxKsENVHgyiG65qQMYfVRzHe70cJ0mSnV_sAfEkhmTSb_3Yw7zxMBOuPSdyDUS76o3tXkK8QXpfc1qa_Wj98W9RnmNFx7mw2ixTdjSHAoE93BxF7F6UaEXErqGCRZh_glOiCh9eVP7Yg9P5lHWrvf4NKftwWb8EQBuTsrFQUmSTDf8MuigpZRKNmv61h__BTbLnZnJxGX86m_Jd39aj9egVCgkTQj8EAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_7VTy27bMBC8-ysI-pCL8milxKkc9NAaSAMUCVAnvRQ5kOJKIkJqBXLlxDX876Ek2zKKOughvZDSzHA5wyVXI8a4bIiw8jxlv8IvY6tuDIQREkyA-bWmb43k0Y7Q1VOLl0S1T09PC01lI08ytINGgc-crklj1Urn2LgMWIYKmIMavSZ0y0FOyxpanYIFGKwtVDSQYCUoBerGiqJVbR0GykHeLrvqLX7mG2bdzevocKDv4u1AQftmoBks7mrPaiMoR2ffNUnw9q9JvmiSTfYEdDiM3EpO0BUH83xtO5OhCZXRiQ59t0g7k3-mCuNjNNzB-80-P-4ebmfdDpxKsENVHgyiG65qQMYfVRzHe70cJ0mSnV_sAfEkhmTSb_3Yw7zxMBOuPSdyDUS76o3tXkK8QXpfc1qa_Wj98W9RnmNFx7mw2ixTdjSHAoE93BxF7F6UaEXErqGCRZh_glOiCh9eVP7Yg9P5lHWrvf4NKftwWb8EQBuTsrFQUmSTDf8MuigpZRKNmv61h__BTbLnZnJxGX86m_Jd39aj9egVCgkTQj8EAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_7VTy27bMBC8-ysI-pCL8milxKkc9NAaSAMUCVAnvRQ5kOJKIkJqBXLlxDX876Ek2zKKOughvZDSzHA5wyVXI8a4bIiw8jxlv8IvY6tuDIQREkyA-bWmb43k0Y7Q1VOLl0S1T09PC01lI08ytINGgc-crklj1Urn2LgMWIYKmIMavSZ0y0FOyxpanYIFGKwtVDSQYCUoBerGiqJVbR0GykHeLrvqLX7mG2bdzevocKDv4u1AQftmoBks7mrPaiMoR2ffNUnw9q9JvmiSTfYEdDiM3EpO0BUH83xtO5OhCZXRiQ59t0g7k3-mCuNjNNzB-80-P-4ebmfdDpxKsENVHgyiG65qQMYfVRzHe70cJ0mSnV_sAfEkhmTSb_3Yw7zxMBOuPSdyDUS76o3tXkK8QXpfc1qa_Wj98W9RnmNFx7mw2ixTdjSHAoE93BxF7F6UaEXErqGCRZh_glOiCh9eVP7Yg9P5lHWrvf4NKftwWb8EQBuTsrFQUmSTDf8MuigpZRKNmv61h__BTbLnZnJxGX86m_Jd39aj9egVCgkTQj8EAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-7">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-7">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-7', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-7', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Twitter&quot;,
@@ -2077,18 +2417,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-7', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UUW-bMBSF3_MrLPLQF9KSbk0qMk1asyJFyl7aSNNU9cHAJVgxvghflmYV_72GQEBViKIpfjDi3GP7fNj4fcCY5edEqLTlshfzyth71ZuC5D5II1urrSCCzLIPFaE2ZSEmSrV7c0N7w3WASWsKQQeZSEmgKr0eSolbluvWQbsUypLGQHDZ6pD4EIYQLhK-Lg1NIlPKICpHfKsjfbfqUlE9C7uHwOMB-IibfoSodpxkWIoNMMwzlpbBLsHRBDsXZKE08XXGk34S0VhOojxDTRIj4WX25JDtXJilSW5mVP0ssnIIdRJljkpBQMwcifhS56uJdi7KH8xXuQ_9JDvMyRhOgvzmFMTVrvwVIVxoV-pkn0FM_2q3v_-qXmC-eJovH6sFLIohaSe1ApSYtdeEUYbjnz_G3m0bZ_j1djJ96AqP4y_OZN4RHGc6fbjrCJ7nmLZP92p3lioj_eJph6rBdz8NK9pheVLdZHe1ogMuSwTn-r5W9rjPtJPd77XfyEa1IlQ0ingi5M5lV0_om3_kymaaKz3SkIloxiqLFv_AZeNJ-mYEIaXLhlHV6voWxDoml_kowxkjeKMRV0GMmcsSEYYSZkfPwv_mcI7kOLro4QgUg2LwAQH3NbIFBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-7', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UUW-bMBSF3_MrLPLQF9KSbk0qMk1asyJFyl7aSNNU9cHAJVgxvghflmYV_72GQEBViKIpfjDi3GP7fNj4fcCY5edEqLTlshfzyth71ZuC5D5II1urrSCCzLIPFaE2ZSEmSrV7c0N7w3WASWsKQQeZSEmgKr0eSolbluvWQbsUypLGQHDZ6pD4EIYQLhK-Lg1NIlPKICpHfKsjfbfqUlE9C7uHwOMB-IibfoSodpxkWIoNMMwzlpbBLsHRBDsXZKE08XXGk34S0VhOojxDTRIj4WX25JDtXJilSW5mVP0ssnIIdRJljkpBQMwcifhS56uJdi7KH8xXuQ_9JDvMyRhOgvzmFMTVrvwVIVxoV-pkn0FM_2q3v_-qXmC-eJovH6sFLIohaSe1ApSYtdeEUYbjnz_G3m0bZ_j1djJ96AqP4y_OZN4RHGc6fbjrCJ7nmLZP92p3lioj_eJph6rBdz8NK9pheVLdZHe1ogMuSwTn-r5W9rjPtJPd77XfyEa1IlQ0ingi5M5lV0_om3_kymaaKz3SkIloxiqLFv_AZeNJ-mYEIaXLhlHV6voWxDoml_kowxkjeKMRV0GMmcsSEYYSZkfPwv_mcI7kOLro4QgUg2LwAQH3NbIFBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UUW-bMBSF3_MrLPLQF9KSbk0qMk1asyJFyl7aSNNU9cHAJVgxvghflmYV_72GQEBViKIpfjDi3GP7fNj4fcCY5edEqLTlshfzyth71ZuC5D5II1urrSCCzLIPFaE2ZSEmSrV7c0N7w3WASWsKQQeZSEmgKr0eSolbluvWQbsUypLGQHDZ6pD4EIYQLhK-Lg1NIlPKICpHfKsjfbfqUlE9C7uHwOMB-IibfoSodpxkWIoNMMwzlpbBLsHRBDsXZKE08XXGk34S0VhOojxDTRIj4WX25JDtXJilSW5mVP0ssnIIdRJljkpBQMwcifhS56uJdi7KH8xXuQ_9JDvMyRhOgvzmFMTVrvwVIVxoV-pkn0FM_2q3v_-qXmC-eJovH6sFLIohaSe1ApSYtdeEUYbjnz_G3m0bZ_j1djJ96AqP4y_OZN4RHGc6fbjrCJ7nmLZP92p3lioj_eJph6rBdz8NK9pheVLdZHe1ogMuSwTn-r5W9rjPtJPd77XfyEa1IlQ0ingi5M5lV0_om3_kymaaKz3SkIloxiqLFv_AZeNJ-mYEIaXLhlHV6voWxDoml_kowxkjeKMRV0GMmcsSEYYSZkfPwv_mcI7kOLro4QgUg2LwAQH3NbIFBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UUW-bMBSF3_MrLPLQF9KSbk0qMk1asyJFyl7aSNNU9cHAJVgxvghflmYV_72GQEBViKIpfjDi3GP7fNj4fcCY5edEqLTlshfzyth71ZuC5D5II1urrSCCzLIPFaE2ZSEmSrV7c0N7w3WASWsKQQeZSEmgKr0eSolbluvWQbsUypLGQHDZ6pD4EIYQLhK-Lg1NIlPKICpHfKsjfbfqUlE9C7uHwOMB-IibfoSodpxkWIoNMMwzlpbBLsHRBDsXZKE08XXGk34S0VhOojxDTRIj4WX25JDtXJilSW5mVP0ssnIIdRJljkpBQMwcifhS56uJdi7KH8xXuQ_9JDvMyRhOgvzmFMTVrvwVIVxoV-pkn0FM_2q3v_-qXmC-eJovH6sFLIohaSe1ApSYtdeEUYbjnz_G3m0bZ_j1djJ96AqP4y_OZN4RHGc6fbjrCJ7nmLZP92p3lioj_eJph6rBdz8NK9pheVLdZHe1ogMuSwTn-r5W9rjPtJPd77XfyEa1IlQ0ingi5M5lV0_om3_kymaaKz3SkIloxiqLFv_AZeNJ-mYEIaXLhlHV6voWxDoml_kowxkjeKMRV0GMmcsSEYYSZkfPwv_mcI7kOLro4QgUg2LwAQH3NbIFBgAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-8">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-8">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-8', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-8', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Home&quot;,
@@ -2140,18 +2480,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-8', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTP0_DMBDF936KUzp0SVFQRf-kE2IApFYgAWJAHRzn3Fi4cWRfCgX1u-OkaRNKQEjNYMnvXfx-OV8-OwBelBPp1HohvLgtwGe5OkOxCJWTvRu9Qs8_yDJ9LdRu8k2O0XIjM5I6Ldw5kylkbNmooE2GhZWytVyysrC0tv4vufdGxzkn25Kd_bCO8u9yA1oINDJd2hMYHtCsJcc2BvvDOmJ4ThjBG0KsTwC4jHRO8NQGwArrzw5Y0mZzQviVTolxasnmx85R-jUSuAkgnfPkHwBuXfj1ND5Wdfe3s1n5tkcJrgppx-hxrbSpZ9Yp3SGOUUR1Vje4EI2dGA-GQdAQBq58FDcExGAymuyAFv4hJ1-VP8d5pVjOVAESnI32Chn9ilcFUdkaUT7VwdUHPdBG1fj7Fu9VT7hu9gVbSbUJoTd3OzdchlHPB8tS23c7KaZQlln5gQ5nmL07QSoVQpVY-W8olwmFEGkVT1vv55TY4LdYWxwagiSmJJ_W17rtbDtfFm_HgmgEAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-8', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTP0_DMBDF936KUzp0SVFQRf-kE2IApFYgAWJAHRzn3Fi4cWRfCgX1u-OkaRNKQEjNYMnvXfx-OV8-OwBelBPp1HohvLgtwGe5OkOxCJWTvRu9Qs8_yDJ9LdRu8k2O0XIjM5I6Ldw5kylkbNmooE2GhZWytVyysrC0tv4vufdGxzkn25Kd_bCO8u9yA1oINDJd2hMYHtCsJcc2BvvDOmJ4ThjBG0KsTwC4jHRO8NQGwArrzw5Y0mZzQviVTolxasnmx85R-jUSuAkgnfPkHwBuXfj1ND5Wdfe3s1n5tkcJrgppx-hxrbSpZ9Yp3SGOUUR1Vje4EI2dGA-GQdAQBq58FDcExGAymuyAFv4hJ1-VP8d5pVjOVAESnI32Chn9ilcFUdkaUT7VwdUHPdBG1fj7Fu9VT7hu9gVbSbUJoTd3OzdchlHPB8tS23c7KaZQlln5gQ5nmL07QSoVQpVY-W8olwmFEGkVT1vv55TY4LdYWxwagiSmJJ_W17rtbDtfFm_HgmgEAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTP0_DMBDF936KUzp0SVFQRf-kE2IApFYgAWJAHRzn3Fi4cWRfCgX1u-OkaRNKQEjNYMnvXfx-OV8-OwBelBPp1HohvLgtwGe5OkOxCJWTvRu9Qs8_yDJ9LdRu8k2O0XIjM5I6Ldw5kylkbNmooE2GhZWytVyysrC0tv4vufdGxzkn25Kd_bCO8u9yA1oINDJd2hMYHtCsJcc2BvvDOmJ4ThjBG0KsTwC4jHRO8NQGwArrzw5Y0mZzQviVTolxasnmx85R-jUSuAkgnfPkHwBuXfj1ND5Wdfe3s1n5tkcJrgppx-hxrbSpZ9Yp3SGOUUR1Vje4EI2dGA-GQdAQBq58FDcExGAymuyAFv4hJ1-VP8d5pVjOVAESnI32Chn9ilcFUdkaUT7VwdUHPdBG1fj7Fu9VT7hu9gVbSbUJoTd3OzdchlHPB8tS23c7KaZQlln5gQ5nmL07QSoVQpVY-W8olwmFEGkVT1vv55TY4LdYWxwagiSmJJ_W17rtbDtfFm_HgmgEAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTP0_DMBDF936KUzp0SVFQRf-kE2IApFYgAWJAHRzn3Fi4cWRfCgX1u-OkaRNKQEjNYMnvXfx-OV8-OwBelBPp1HohvLgtwGe5OkOxCJWTvRu9Qs8_yDJ9LdRu8k2O0XIjM5I6Ldw5kylkbNmooE2GhZWytVyysrC0tv4vufdGxzkn25Kd_bCO8u9yA1oINDJd2hMYHtCsJcc2BvvDOmJ4ThjBG0KsTwC4jHRO8NQGwArrzw5Y0mZzQviVTolxasnmx85R-jUSuAkgnfPkHwBuXfj1ND5Wdfe3s1n5tkcJrgppx-hxrbSpZ9Yp3SGOUUR1Vje4EI2dGA-GQdAQBq58FDcExGAymuyAFv4hJ1-VP8d5pVjOVAESnI32Chn9ilcFUdkaUT7VwdUHPdBG1fj7Fu9VT7hu9gVbSbUJoTd3OzdchlHPB8tS23c7KaZQlln5gQ5nmL07QSoVQpVY-W8olwmFEGkVT1vv55TY4LdYWxwagiSmJJ_W17rtbDtfFm_HgmgEAAA=&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-9">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-9">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-9', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-9', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Analytics&quot;,
@@ -2207,18 +2547,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-9', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTUWvbMBDH3_MpDuWhLymsTQqb-zS6sj50Y7TbGIw-yPI5OSpLRnem9Uq--yTHaYjjwZZhEOj-f9_9dDq9TABU3oh4xyqDn3EL8NKtUbA6RxvD6r3TthUyrGavGrnHJE31oVYgm0C1kHfJ8p3wCWoMpQ-VdgahQgl7P0hbY3IWmle516FQnbKe_YHnG2MYY2n24wOOTxF1iZBMoI3xjZP_YLhHEXLLMQw-kAYkV96VtGwCArcsWB1PcYe1DzIGEYbKgOEjOgxaEA6M_94J0wSSdrQTQ2n8TuJ0VMRMaQyP5vjshUoyWvbTvMK4cX1sWrXFv2pJXB9muzf0tbfdXP_o_lWywipFNrDKeOvD7qHFyPTczPHizSbdw6aeWuHzLTnka6dzi0X0l9oy9ipL8I94lVJ1x5ov3r0t8p41lWiq7jHPt34TTxP3Z_0-zv8HHVJLJDTbpBv-e2ntDnfb221Uld7Jaakrsm0GJ198XZPjkxmwdnwaXxWVl9B5mH5hBotF_RwDZG0G09Kkr9efkJYrySD3trgcvYlja56dH9bc3dV6sp78BmhwdcHzBAAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-9', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTUWvbMBDH3_MpDuWhLymsTQqb-zS6sj50Y7TbGIw-yPI5OSpLRnem9Uq--yTHaYjjwZZhEOj-f9_9dDq9TABU3oh4xyqDn3EL8NKtUbA6RxvD6r3TthUyrGavGrnHJE31oVYgm0C1kHfJ8p3wCWoMpQ-VdgahQgl7P0hbY3IWmle516FQnbKe_YHnG2MYY2n24wOOTxF1iZBMoI3xjZP_YLhHEXLLMQw-kAYkV96VtGwCArcsWB1PcYe1DzIGEYbKgOEjOgxaEA6M_94J0wSSdrQTQ2n8TuJ0VMRMaQyP5vjshUoyWvbTvMK4cX1sWrXFv2pJXB9muzf0tbfdXP_o_lWywipFNrDKeOvD7qHFyPTczPHizSbdw6aeWuHzLTnka6dzi0X0l9oy9ipL8I94lVJ1x5ov3r0t8p41lWiq7jHPt34TTxP3Z_0-zv8HHVJLJDTbpBv-e2ntDnfb221Uld7Jaakrsm0GJ198XZPjkxmwdnwaXxWVl9B5mH5hBotF_RwDZG0G09Kkr9efkJYrySD3trgcvYlja56dH9bc3dV6sp78BmhwdcHzBAAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTUWvbMBDH3_MpDuWhLymsTQqb-zS6sj50Y7TbGIw-yPI5OSpLRnem9Uq--yTHaYjjwZZhEOj-f9_9dDq9TABU3oh4xyqDn3EL8NKtUbA6RxvD6r3TthUyrGavGrnHJE31oVYgm0C1kHfJ8p3wCWoMpQ-VdgahQgl7P0hbY3IWmle516FQnbKe_YHnG2MYY2n24wOOTxF1iZBMoI3xjZP_YLhHEXLLMQw-kAYkV96VtGwCArcsWB1PcYe1DzIGEYbKgOEjOgxaEA6M_94J0wSSdrQTQ2n8TuJ0VMRMaQyP5vjshUoyWvbTvMK4cX1sWrXFv2pJXB9muzf0tbfdXP_o_lWywipFNrDKeOvD7qHFyPTczPHizSbdw6aeWuHzLTnka6dzi0X0l9oy9ipL8I94lVJ1x5ov3r0t8p41lWiq7jHPt34TTxP3Z_0-zv8HHVJLJDTbpBv-e2ntDnfb221Uld7Jaakrsm0GJ198XZPjkxmwdnwaXxWVl9B5mH5hBotF_RwDZG0G09Kkr9efkJYrySD3trgcvYlja56dH9bc3dV6sp78BmhwdcHzBAAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTUWvbMBDH3_MpDuWhLymsTQqb-zS6sj50Y7TbGIw-yPI5OSpLRnem9Uq--yTHaYjjwZZhEOj-f9_9dDq9TABU3oh4xyqDn3EL8NKtUbA6RxvD6r3TthUyrGavGrnHJE31oVYgm0C1kHfJ8p3wCWoMpQ-VdgahQgl7P0hbY3IWmle516FQnbKe_YHnG2MYY2n24wOOTxF1iZBMoI3xjZP_YLhHEXLLMQw-kAYkV96VtGwCArcsWB1PcYe1DzIGEYbKgOEjOgxaEA6M_94J0wSSdrQTQ2n8TuJ0VMRMaQyP5vjshUoyWvbTvMK4cX1sWrXFv2pJXB9muzf0tbfdXP_o_lWywipFNrDKeOvD7qHFyPTczPHizSbdw6aeWuHzLTnka6dzi0X0l9oy9ipL8I94lVJ1x5ov3r0t8p41lWiq7jHPt34TTxP3Z_0-zv8HHVJLJDTbpBv-e2ntDnfb221Uld7Jaakrsm0GJ198XZPjkxmwdnwaXxWVl9B5mH5hBotF_RwDZG0G09Kkr9efkJYrySD3trgcvYlja56dH9bc3dV6sp78BmhwdcHzBAAA&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-10">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-10">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-10', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-10', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Project Start&quot;,
@@ -2279,18 +2619,18 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-10', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTTW-bQBCG7_4VI3zIhYTv1DgnN4kqS2nqCkeKVOWwwGBvu14Qu7Qhkf97F4INtEHCCodFvO8y8-zM7OsEQAsLKVMutDn8UJ8Ar_WqDEZCZErWVnn6EyMJgSS51PSjT_mvyp5mWyLQao0YRZTTTNKUV_6SU0kJg4wRzinftBtlmWG1Y0cZCgWBnRhE1pZpGZZn2KbtaLW11wcgb1DQDYdVxTLEaA8yPiyNh0eI8TeyNNshl6dBOobiHAX5ToI-ozPIeJ3mCEnBo0ogjMryNEhvZCXXKkKvTX1AdxDw-wIIjyEsNpDQZxSn4X0yHHMM3h1RJdgO0XmDdKsiZDSCHBn2RmQMm_9P6dT6pLeXZ92ECO6WX-u_NbnFXSW94WtRytK8vWJKmc7QdUnc5pr6oeeHlx3B9mdm6HcEx_VncdgRrEtizrw3pif9mKrY1dfZahQREVaxWBfmQUlz-bk84jVKPaCL9W3n_DTH6FC_RXB9e3-zvP_S609TgUCWDLsB63YdVC1JuTxPiCpxOYezbxlyCAgXZzoI9ToXmNPkCupdgr6gYnWzZyVQxuYwTeqn8f8g3WzlHMKUxVfvNvsDWc3_s_an4QOx7XEnOg7YfrKf_AW28BpXoQUAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-10', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTTW-bQBCG7_4VI3zIhYTv1DgnN4kqS2nqCkeKVOWwwGBvu14Qu7Qhkf97F4INtEHCCodFvO8y8-zM7OsEQAsLKVMutDn8UJ8Ar_WqDEZCZErWVnn6EyMJgSS51PSjT_mvyp5mWyLQao0YRZTTTNKUV_6SU0kJg4wRzinftBtlmWG1Y0cZCgWBnRhE1pZpGZZn2KbtaLW11wcgb1DQDYdVxTLEaA8yPiyNh0eI8TeyNNshl6dBOobiHAX5ToI-ozPIeJ3mCEnBo0ogjMryNEhvZCXXKkKvTX1AdxDw-wIIjyEsNpDQZxSn4X0yHHMM3h1RJdgO0XmDdKsiZDSCHBn2RmQMm_9P6dT6pLeXZ92ECO6WX-u_NbnFXSW94WtRytK8vWJKmc7QdUnc5pr6oeeHlx3B9mdm6HcEx_VncdgRrEtizrw3pif9mKrY1dfZahQREVaxWBfmQUlz-bk84jVKPaCL9W3n_DTH6FC_RXB9e3-zvP_S609TgUCWDLsB63YdVC1JuTxPiCpxOYezbxlyCAgXZzoI9ToXmNPkCupdgr6gYnWzZyVQxuYwTeqn8f8g3WzlHMKUxVfvNvsDWc3_s_an4QOx7XEnOg7YfrKf_AW28BpXoQUAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_6WTTW-bQBCG7_4VI3zIhYTv1DgnN4kqS2nqCkeKVOWwwGBvu14Qu7Qhkf97F4INtEHCCodFvO8y8-zM7OsEQAsLKVMutDn8UJ8Ar_WqDEZCZErWVnn6EyMJgSS51PSjT_mvyp5mWyLQao0YRZTTTNKUV_6SU0kJg4wRzinftBtlmWG1Y0cZCgWBnRhE1pZpGZZn2KbtaLW11wcgb1DQDYdVxTLEaA8yPiyNh0eI8TeyNNshl6dBOobiHAX5ToI-ozPIeJ3mCEnBo0ogjMryNEhvZCXXKkKvTX1AdxDw-wIIjyEsNpDQZxSn4X0yHHMM3h1RJdgO0XmDdKsiZDSCHBn2RmQMm_9P6dT6pLeXZ92ECO6WX-u_NbnFXSW94WtRytK8vWJKmc7QdUnc5pr6oeeHlx3B9mdm6HcEx_VncdgRrEtizrw3pif9mKrY1dfZahQREVaxWBfmQUlz-bk84jVKPaCL9W3n_DTH6FC_RXB9e3-zvP_S609TgUCWDLsB63YdVC1JuTxPiCpxOYezbxlyCAgXZzoI9ToXmNPkCupdgr6gYnWzZyVQxuYwTeqn8f8g3WzlHMKUxVfvNvsDWc3_s_an4QOx7XEnOg7YfrKf_AW28BpXoQUAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_6WTTW-bQBCG7_4VI3zIhYTv1DgnN4kqS2nqCkeKVOWwwGBvu14Qu7Qhkf97F4INtEHCCodFvO8y8-zM7OsEQAsLKVMutDn8UJ8Ar_WqDEZCZErWVnn6EyMJgSS51PSjT_mvyp5mWyLQao0YRZTTTNKUV_6SU0kJg4wRzinftBtlmWG1Y0cZCgWBnRhE1pZpGZZn2KbtaLW11wcgb1DQDYdVxTLEaA8yPiyNh0eI8TeyNNshl6dBOobiHAX5ToI-ozPIeJ3mCEnBo0ogjMryNEhvZCXXKkKvTX1AdxDw-wIIjyEsNpDQZxSn4X0yHHMM3h1RJdgO0XmDdKsiZDSCHBn2RmQMm_9P6dT6pLeXZ92ECO6WX-u_NbnFXSW94WtRytK8vWJKmc7QdUnc5pr6oeeHlx3B9mdm6HcEx_VncdgRrEtizrw3pif9mKrY1dfZahQREVaxWBfmQUlz-bk84jVKPaCL9W3n_DTH6FC_RXB9e3-zvP_S609TgUCWDLsB63YdVC1JuTxPiCpxOYezbxlyCAgXZzoI9ToXmNPkCupdgr6gYnWzZyVQxuYwTeqn8f8g3WzlHMKUxVfvNvsDWc3_s_an4QOx7XEnOg7YfrKf_AW28BpXoQUAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-89df85ed6f2be77f-11">
+<div class="gallery-item" data-kind="buttons" id="gallery-item-docops-gallery-a184f5566fdf13df-11">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Buttons</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-89df85ed6f2be77f-11', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-a184f5566fdf13df-11', 'Buttons', 'buttons', this.getAttribute('data-content'))" data-content="{
   &quot;buttons&quot;: [
     {
       &quot;link&quot;: &quot;https://www.google.com&quot;,
@@ -2349,11 +2689,11 @@ This document showcases the different types of buttons available in DocOps.
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-89df85ed6f2be77f-11', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-a184f5566fdf13df-11', 'https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg', 'Buttons')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIAAh19WgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonshshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=buttons&payload=H4sIANMg9mgA_62UTW_iMBCG7_wKK1wDDbSwVTjRLHQP-yGxu6eKg2McYuFkIntoSqv-98ZOaIJKtLDFkSzlfWcyj8bjvHQIccItIqTa8clD8UrIi90LQ4p0U6hOjJhp_-oqz_P-GmAteZ9B4rjvcTTk0gR2H-6tvay9FddMiQwFpCaiNnCXcaNoThWLHSu_uv8GoFnWWn9qvDNqx1Stcqr46dUTwRRoiLCF4MfeP6cDRfh5FDShz5C2NcGarfVDgI3-CFHKJxOkHCMpnloQfpZuK0MCj4Ifgaj0kqLYl249n3-qmMXs_u_36cImOxjzxKglq8NAgqoHuVC6nncdjsO6VHc-H8-vxw1hGHy5HY8aQnDjBV7QEG5G48Ht7OAbo7vprORclrKjUcGGB4bAXoWBXVWSIdsm9o4N9_Gg8G73zl4pJvXX4utscXAUVQt-407yZoZt-F51IkixF9FEyJ1PpkpQ6ZJvXD5yFIy6RNNU9zRXIpoQG6rFM_fJYJg9FYKQ0ifdiJlnQiRH5KqnM8pEuvZJCiqhcmLTci7WMfokBLmaNI6YIr8kimfXaSiVdnTePsvk_Wd7PjCZIb9Ig04-nCrV1PSJQCoFa_DQLcagLkL0if4cZTyYfc2oJRz0vY75Lbx23gAArZUPtgYAAA==&scale=1.0&type=SVG&useDark=false&title=Buttons&useGlass=false&backend=html5&docname=buttonsshowcase&filename=buttons.svg" alt="Buttons" loading="lazy" />
 </div>
 </div>
 </div>
@@ -2385,349 +2725,6 @@ This document showcases the different types of buttons available in DocOps.
     </div>
   </div>
 </div>
-
-<style>
-  .docops-showcase-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin: 2rem 0;
-  }
-
-  .gallery-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-
-  .gallery-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #3498db;
-  }
-
-  .gallery-item-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #2c3e50;
-    flex: 1;
-  }
-
-  .gallery-item-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .gallery-expand-btn,
-  .gallery-content-btn {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: #3498db;
-    transition: color 0.2s, transform 0.2s;
-    line-height: 1;
-  }
-
-  .gallery-content-btn {
-    color: #9b59b6;
-    font-weight: bold;
-  }
-
-  .gallery-expand-btn:hover {
-    color: #2980b9;
-    transform: scale(1.2);
-  }
-
-  .gallery-content-btn:hover {
-    color: #8e44ad;
-    transform: scale(1.2);
-  }
-
-  .gallery-item-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-  }
-
-  .gallery-item-image img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-  }
-
-  .gallery-item-image img:hover {
-    opacity: 0.9;
-  }
-
-  /* Modal Styles */
-  .showcase-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .showcase-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .showcase-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 12px;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-
-  .showcase-content-modal-content {
-    max-width: 90vw;
-    width: 1000px;
-  }
-
-  .showcase-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f8f9fa;
-  }
-
-  .showcase-modal-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #2c3e50;
-  }
-
-  .showcase-modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7f8c8d;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-
-  .showcase-modal-close:hover {
-    color: #e74c3c;
-  }
-
-  .showcase-modal-body {
-    padding: 2rem;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-  }
-
-  .showcase-content-body {
-    padding: 0;
-    align-items: stretch;
-    justify-content: stretch;
-    background: #282c34;
-  }
-
-  .showcase-content-pre {
-    margin: 0;
-    width: 100%;
-    max-height: calc(95vh - 150px);
-    overflow: auto;
-  }
-
-  .showcase-content-code {
-    display: block;
-    padding: 1.5rem;
-    color: #abb2bf;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    white-space: pre;
-    tab-size: 4;
-  }
-
-  .showcase-content-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .showcase-copy-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-
-  .showcase-copy-btn:hover {
-    background: #2980b9;
-  }
-
-  .showcase-copy-btn.copied {
-    background: #27ae60;
-  }
-
-  .showcase-modal-image {
-    max-width: 100%;
-    max-height: calc(95vh - 100px);
-    width: auto;
-    height: auto;
-  }
-
-  @media (max-width: 768px) {
-    .docops-showcase-gallery {
-      grid-template-columns: 1fr;
-      padding: 1rem;
-    }
-
-    .showcase-modal-content {
-      max-width: 100vw;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
-    .showcase-modal-body {
-      padding: 1rem;
-    }
-
-    .showcase-content-modal-content {
-      width: 100vw;
-    }
-  }
-</style>
-
-<script>
-  window.showcaseGallery = window.showcaseGallery || (function() {
-    let currentContent = '';
-
-    return {
-      expandItem: function(itemId, imageUrl, title) {
-        const modal = document.getElementById('showcase-gallery-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const modalImage = modal.querySelector('.showcase-modal-image');
-
-        modalTitle.textContent = title;
-        modalImage.src = imageUrl;
-        modalImage.alt = title;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleEscKey);
-      },
-
-      closeModal: function() {
-        const modal = document.getElementById('showcase-gallery-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-
-        document.removeEventListener('keydown', this.handleEscKey);
-      },
-
-      showContent: function(itemId, title, kind, content) {
-        const modal = document.getElementById('showcase-content-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const codeElement = modal.querySelector('.showcase-content-code');
-
-        // Decode HTML entities
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = content;
-        const decodedContent = textarea.value;
-
-        currentContent = decodedContent;
-
-        modalTitle.textContent = title + ' (' + kind + ')';
-        codeElement.textContent = decodedContent;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleContentEscKey);
-      },
-
-      closeContentModal: function() {
-        const modal = document.getElementById('showcase-content-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        currentContent = '';
-
-        document.removeEventListener('keydown', this.handleContentEscKey);
-      },
-
-      copyContent: function() {
-        const btn = document.querySelector('.showcase-copy-btn');
-
-        navigator.clipboard.writeText(currentContent).then(function() {
-          btn.textContent = '✓ Copied!';
-          btn.classList.add('copied');
-
-          setTimeout(function() {
-            btn.textContent = '📋 Copy';
-            btn.classList.remove('copied');
-          }, 2000);
-        }).catch(function(err) {
-          console.error('Failed to copy:', err);
-        });
-      },
-
-      handleEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeModal();
-        }
-      },
-
-      handleContentEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeContentModal();
-        }
-      }
-    };
-  })();
-</script>
 </div>
 </div>
 </div>
