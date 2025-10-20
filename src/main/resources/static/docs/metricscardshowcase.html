@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<link rel="icon" type="image/0" href="../images/favicon.svg?v=2025.0.0">
+<title>DocOps Metrics Card Showcase</title>
+<style>
+:root{--primary-color:#3b82f6;--primary-hover:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--primary-gradient-start:#3b82f6;--primary-gradient-end:#8b5cf6;--secondary-color:#64748b;--secondary-light:#f1f5f9;--secondary-dark:#334155;--text-color:#1e293b;--text-light:#64748b;--text-muted:#94a3b8;--bg-color:#ffffff;--bg-light:#f8fafc;--bg-dark:#0f172a;--border-color:#e2e8f0;--border-light:#f1f5f9;--border-dark:#cbd5e1;--code-bg:#f1f5f9;--code-text:#334155;--code-border:#e2e8f0;--note-bg:#eff6ff;--note-border:#bfdbfe;--note-icon:#3b82f6;--tip-bg:#f0fdf4;--tip-border:#bbf7d0;--tip-icon:#22c55e;--warning-bg:#fff7ed;--warning-border:#fed7aa;--warning-icon:#f97316;--caution-bg:#fef2f2;--caution-border:#fecaca;--caution-icon:#ef4444;--important-bg:#faf5ff;--important-border:#e9d5ff;--important-icon:#8b5cf6;--body-font:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;--heading-font:var(--body-font);--monospace-font:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--shadow-sm:0 1px 2px 0 rgba(0, 0, 0, 0.05);--shadow-md:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);--shadow-lg:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--radius-sm:0.25rem;--radius-md:0.375rem;--radius-lg:0.5rem;--content-width:50rem;--content-width-wide:70rem;--theme-transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease}html{font-size:100%;text-size-adjust:100%;box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:var(--body-font);font-size:1rem;line-height:1.7;background-color:var(--bg-color);max-width:var(--content-width);margin:0 auto;padding:var(--spacing-lg) var(--spacing-xl)}h1{font-size:2.5rem;border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm);margin-top:var(--spacing-xl);background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}body,h1,h2,h3,h4,h5{color:var(--text-color)}dl,h1,h2,h3,h4,h5,h6,p{margin-bottom:var(--spacing-lg)}h1,h2,h3,h4,h5,h6{font-family:var(--heading-font);font-weight:700;line-height:1.3;scroll-margin-top:var(--spacing-2xl)}h2,h3,h4,h5,h6{margin-top:var(--spacing-2xl)}h6{font-size:1rem;color:var(--secondary-color)}h2{font-size:2rem}h3{font-size:1.5rem}h4{font-size:1.25rem}h5{font-size:1.125rem}dl,p{margin-top:0}a{color:var(--primary-color);text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:focus,a:hover{color:var(--primary-hover);border-bottom-color:var(--primary-hover)}ol,ul{margin-top:0;margin-bottom:var(--spacing-lg);padding-left:var(--spacing-xl)}li,li>ol,li>p,li>ul{margin-bottom:var(--spacing-sm)}li>ol,li>p,li>ul{margin-top:var(--spacing-sm)}dt{font-weight:700;margin-top:var(--spacing-lg)}dd{margin-left:var(--spacing-xl);margin-bottom:var(--spacing-md)}code,pre{font-family:var(--monospace-font);font-size:.9rem;border-radius:var(--radius-md)}code{background-color:var(--code-bg);color:var(--code-text);padding:var(--spacing-xs) var(--spacing-sm)}pre,table td,table th{padding:var(--spacing-md)}pre,table{margin-bottom:var(--spacing-lg)}pre{margin-top:0;background-color:var(--code-bg);border:1px solid var(--code-border);overflow-x:auto;line-height:1.5}pre code{background-color:transparent;padding:0;border-radius:0}.hljs-comment,.hljs-quote{color:#6a737d;font-style:italic}.hljs-keyword,.hljs-selector-tag{color:#d73a49}.hljs-attr,.hljs-string{color:#032f62}.hljs-literal,.hljs-number{color:#005cc5}.hljs-section,.hljs-selector-id,.hljs-title{color:#6f42c1}.hljs-built_in,.hljs-name,.hljs-tag{color:#22863a}table{width:100%;border-collapse:collapse;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden}table td,table th{text-align:left}table th{font-weight:600;background-color:var(--secondary-light);border-bottom:2px solid var(--border-dark)}table td{border-bottom:1px solid var(--border-color)}table tr:last-child td{border-bottom:none}tbody tr:hover{background-color:var(--secondary-light)}.admonitionblock{margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);border:0;position:relative}.admonitionblock>table{margin-bottom:0;border:0}.admonitionblock td.icon{width:3rem;padding:var(--spacing-md);text-align:center;font-weight:700}.admonitionblock td.icon:before{font-family:"Font Awesome 5 Free";font-weight:900;font-size:1.5rem;display:block;margin-bottom:var(--spacing-xs)}.admonitionblock td.content,blockquote{padding:var(--spacing-md) var(--spacing-lg)}.admonitionblock.note{background-color:var(--note-bg);border-color:var(--note-border)}.admonitionblock.note td.icon{background-color:var(--note-icon);color:#fff}.admonitionblock.note td.icon:before{content:""}.admonitionblock.tip{background-color:var(--tip-bg);border-color:var(--tip-border)}.admonitionblock.tip td.icon{background-color:var(--tip-icon);color:#fff}.admonitionblock.tip td.icon:before{content:""}.admonitionblock.warning{background-color:var(--warning-bg);border-color:var(--warning-border)}.admonitionblock.warning td.icon{background-color:var(--warning-icon);color:#fff}.admonitionblock.warning td.icon:before{content:""}.admonitionblock.caution{background-color:var(--caution-bg);border-color:var(--caution-border)}.admonitionblock.caution td.icon{background-color:var(--caution-icon);color:#fff}.admonitionblock.caution td.icon:before{content:""}.admonitionblock.important{background-color:#fff;border-color:transparent;position:relative}.admonitionblock.important td.icon,.admonitionblock.important::before,.gradient-border-left::before{background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.admonitionblock.important::before,.gradient-border-left::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%}.admonitionblock.important td.icon{color:#fff}.admonitionblock.important td.icon:before{content:""}blockquote{margin:0 0 var(--spacing-lg)0;color:var(--secondary-color);background-color:var(--secondary-light);border-left:4px solid var(--primary-color);border-radius:0 var(--radius-md) var(--radius-md)0}blockquote p:last-child{margin-bottom:0}hr{border:0;height:1px;background-color:var(--border-color);margin:var(--spacing-xl)0}img{max-width:100%;height:auto;margin:var(--spacing-md)0;border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}.hero{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;padding:var(--spacing-2xl) var(--spacing-xl);margin-bottom:var(--spacing-2xl);border-radius:var(--radius-lg);text-align:center}#toc a,.hero h1{border-bottom:none}.hero h1{color:#fff;background-image:none;-webkit-text-fill-color:#fff}.hero p{font-size:1.25rem;max-width:42rem;margin-left:auto;margin-right:auto}#toc.toc2 #toctitle,.hero h1{margin-top:0}#toc .title,.sidebarblock>.content>.title{margin-top:0;font-size:1.25rem;color:var(--text-color);margin-bottom:var(--spacing-md)}#toc .title{font-weight:700}#toc ul{list-style-type:none;padding-left:0;margin-bottom:0}#toc li{margin-top:var(--spacing-sm);line-height:1.4}#toc a{display:block;padding:var(--spacing-xs)0;color:var(--text-color)}#toc .toc-item>a:hover,#toc a:hover{color:var(--primary-color)}#toc ul ul{padding-left:var(--spacing-lg)}#toc ul ul a{font-size:.9rem}#footer{margin-top:var(--spacing-2xl);padding-top:var(--spacing-lg);color:var(--text-muted);font-size:.875rem;border-top:1px solid var(--border-color)}@media print{@page{margin:1.5cm}body,html{font-size:11pt;line-height:1.5;background-color:#fff;color:#000}body{padding:0;max-width:none}a{color:var(--text-color);text-decoration:underline;border-bottom:none}a[href^=http]:after{content:" ("attr(href)")";font-size:.9em;font-weight:400}code,pre{border:1px solid var(--border-color);background-color:#f8f8f8!important}.admonitionblock,h1,h2,h3,h4,h5,h6,img,pre,table{page-break-inside:avoid}h1,h2,h3,h4,h5,h6{page-break-after:avoid;color:#000}img{max-width:100%!important}.admonitionblock,table{border:1px solid #ddd}.admonitionblock,img{box-shadow:none}h1+*,h2+*,h3+*,h4+*,h5+*,h6+*{page-break-before:avoid}#footer,#header,#toc{display:none}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}}@media (max-width:1200px){body.toc2{padding-left:0}#toc.toc2{position:static;width:auto;height:auto;border-right:none;border-radius:var(--radius-md)}}@media (max-width:768px){body{padding:var(--spacing-md);font-size:.95rem}h1{font-size:2rem}h2{font-size:1.6rem}h3{font-size:1.3rem}h4{font-size:1.1rem}code,pre{font-size:.85rem}.admonitionblock td.icon{width:2.5rem}}@media (max-width:480px){body{padding:var(--spacing-sm);font-size:.9rem}h1{font-size:1.8rem}h2{font-size:1.4rem}h3{font-size:1.2rem}.admonitionblock td.icon{width:2rem}.admonitionblock td.content,.admonitionblock td.icon,table td,table th{padding:var(--spacing-sm)}}.listingblock .title{font-style:italic;color:var(--secondary-color);margin-bottom:var(--spacing-sm)}.listingblock pre.highlightjs{padding:0;border-radius:var(--radius-md);overflow:hidden}.listingblock pre.highlightjs>code,.literalblock pre{background-color:var(--code-bg);border:1px solid var(--code-border)}.listingblock pre.highlightjs>code{padding:var(--spacing-md);display:block;overflow-x:auto;line-height:1.5}.literalblock pre{border-radius:var(--radius-md)}.sidebarblock{border:1px solid var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);box-shadow:var(--shadow-sm)}.sidebarblock>.content>.title{border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-sm)}kbd,mark{border-radius:var(--radius-sm)}.button.secondary:hover,.sidebarblock,kbd{background-color:var(--secondary-light)}.button,kbd{display:inline-block}kbd{padding:var(--spacing-xs) var(--spacing-sm);font-size:.85rem;font-family:var(--monospace-font);border:1px solid var(--border-dark);box-shadow:0 2px 0 var(--border-dark);margin:0 var(--spacing-xs)}.button{padding:var(--spacing-sm) var(--spacing-lg);background-color:var(--primary-color);color:#fff;border-radius:var(--radius-md);font-weight:500;text-align:center;transition:all .2s ease;border-bottom:none;box-shadow:var(--shadow-sm)}.button:hover{background-color:var(--primary-hover);text-decoration:none;color:#fff;box-shadow:var(--shadow-md)}.button.gradient{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.button.secondary{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.button.secondary:hover{color:var(--text-color)}mark{background-color:#fef9c3;padding:var(--spacing-xs)}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.gradient-bg,.gradient-text{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-text{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}.gradient-bg{color:#fff}.gradient-border-left{position:relative;border-left:none;padding-left:var(--spacing-lg)}.gradient-border{border:2px solid transparent;background-clip:padding-box;position:relative}.callout.gradient .callout-title,.gradient-border::before{background-image:linear-gradient(to right,var(--primary-gradient-start),var(--primary-gradient-end))}.gradient-border::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;margin:-2px;border-radius:inherit;z-index:-1}.callout{padding:var(--spacing-md);margin-bottom:var(--spacing-lg);border-radius:var(--radius-md);background-color:var(--primary-light);border-left:4px solid var(--primary-color);box-shadow:var(--shadow-sm)}.callout.gradient{background-color:#fff;border-left:none;border-radius:var(--radius-lg);padding:var(--spacing-lg);box-shadow:var(--shadow-md);position:relative;overflow:hidden}.callout.gradient::before{content:"";position:absolute;top:0;left:0;width:6px;height:100%;background-image:linear-gradient(to bottom,var(--primary-gradient-start),var(--primary-gradient-end))}.callout-title{font-weight:700;margin-top:0;margin-bottom:var(--spacing-sm);color:var(--primary-dark)}.callout.gradient .callout-title{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent;display:inline-block}.page-break{page-break-after:always}.no-page-break{page-break-inside:avoid}:focus{outline:2px solid var(--primary-color);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--primary-color);outline-offset:2px}.skip-to-content{position:absolute;top:-40px;left:0;background:var(--primary-color);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:100;transition:top .2s ease}.skip-to-content:focus{top:0}@media (prefers-color-scheme:dark){:root.dark-mode,:root.dark-mode-auto{--bg-color:#0f172a;--bg-light:#1e293b;--text-color:#f8fafc;--text-light:#cbd5e1;--text-muted:#94a3b8;--border-color:#334155;--border-light:#1e293b;--border-dark:#475569;--code-bg:#1e293b;--code-text:#e2e8f0;--code-border:#334155;--primary-light:#1e40af;--secondary-light:#1e293b}}#toc,.admonitionblock,.sidebarblock,blockquote,body,code,pre,table{transition:var(--theme-transition)}.theme-toggle{position:fixed;top:65px;right:20px;z-index:1000;background:var(--primary-color);color:#fff;border:0;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease;display:flex;align-items:center;justify-content:center;font-size:1.2rem}.theme-toggle:hover{background:var(--primary-hover);transform:scale(1.1)}.theme-toggle:focus{outline:2px solid var(--primary-color);outline-offset:2px}.theme-toggle .light-icon{display:none}.theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:none}@media (max-width:768px){.theme-toggle{top:15px;right:15px;width:45px;height:45px;font-size:1.1rem}}:root.dark-mode img,:root.dark-mode-auto img{opacity:.9}:root.dark-mode .hero,:root.dark-mode-auto .hero{background-image:linear-gradient(135deg,#1e293b,#334155)}:root.dark-mode a,:root.dark-mode-auto a{color:#60a5fa}:root.dark-mode a:hover,:root.dark-mode-auto a:hover{color:#93c5fd}:root.dark-mode code,:root.dark-mode-auto code{color:var(--code-text);background-color:var(--code-bg)}:root.dark-mode pre,:root.dark-mode-auto pre{background-color:var(--code-bg);border-color:var(--code-border)}:root.dark-mode pre code,:root.dark-mode-auto pre code{color:var(--code-text)}#toc .toc-list{list-style:none;padding-left:0}#toc .toc-item{margin:0}#toc .toc-item>a{display:block;padding:var(--spacing-xs)0;color:var(--text-color);border-bottom:none;text-decoration:none;transition:color .2s ease}#toc .toc-item.has-children>a{position:relative;padding-left:var(--spacing-lg)}#toc .toc-item.has-children>a::before{content:"▶";position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--text-muted);transition:transform .2s ease,color .2s ease;cursor:pointer;width:var(--spacing-md);text-align:center}#toc .toc-item.has-children.expanded>a::before{transform:translateY(-50%) rotate(90deg);color:var(--primary-color)}#toc .toc-item .toc-list{padding-left:var(--spacing-lg);margin-top:var(--spacing-xs);border-left:1px solid var(--border-light);margin-left:calc(var(--spacing-lg)/2);max-height:0;overflow:hidden;transition:max-height .3s ease-out,opacity .2s ease-out;opacity:0}#toc .toc-item.expanded>.toc-list{max-height:1000px;opacity:1;transition:max-height .3s ease-in,opacity .2s ease-in .1s}#toc .toc-item .toc-item>a{font-size:.9rem;color:var(--text-light);padding-left:var(--spacing-md)}#toc .toc-item .toc-item .toc-item>a{font-size:.85rem;padding-left:var(--spacing-lg)}#toc .toc-item>a.active{color:var(--primary-color);font-weight:600}html{scroll-behavior:smooth}.toc-controls{margin-bottom:var(--spacing-md);padding-bottom:var(--spacing-sm);border-bottom:1px solid var(--border-light)}.toc-control-btn{background:0 0;border:1px solid var(--border-color);color:var(--text-color);padding:var(--spacing-xs) var(--spacing-sm);margin-right:var(--spacing-xs);border-radius:var(--radius-sm);cursor:pointer;font-size:.8rem;transition:all .2s ease}.toc-control-btn:hover{background-color:var(--primary-color);color:#fff;border-color:var(--primary-color)}#toc,.toc-toggle{top:var(--spacing-lg)}#toc{background-color:var(--secondary-light);border-radius:var(--radius-md);padding:var(--spacing-lg);margin-bottom:var(--spacing-xl);box-shadow:var(--shadow-sm);border:1px solid var(--border-color);position:sticky}#toc.toc2{position:fixed;left:0;top:0;width:20rem;height:100%;overflow-y:auto;border-radius:0;border-right:1px solid var(--border-color);padding:var(--spacing-xl) var(--spacing-lg);background-color:var(--bg-light);z-index:1000;transition:transform .3s ease-in-out;transform:translateX(0)}#toc.toc2.toc-collapsed{transform:translateX(-100%)}body.toc2{padding-left:22rem;max-width:none;transition:padding-left .3s ease-in-out}body.toc2.toc-collapsed{padding-left:0}.toc-toggle{position:fixed;z-index:1001;background:linear-gradient(135deg,var(--primary-gradient-start),var(--primary-gradient-end));color:#fff;border:0;width:3rem;height:3rem;border-radius:50%;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .3s ease-in-out;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700}.toc-toggle:hover{transform:scale(1.1);box-shadow:var(--shadow-lg)}.toc-toggle,body.toc2.toc-collapsed .toc-toggle{left:var(--spacing-lg)}body.toc2:not(.toc-collapsed) .toc-toggle{left:21rem}@media (max-width:768px){.toc-toggle{display:none}#toc.toc2{transform:translateX(-100%)}#toc.toc2.toc-mobile-open{transform:translateX(0)}body.toc2{padding-left:0}}.toc-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:999;opacity:0;transition:opacity .3s ease-in-out}.toc-overlay.active{display:block;opacity:1}@media (max-width:768px){.toc-toggle{display:flex;top:var(--spacing-md);left:var(--spacing-md);width:2.5rem;height:2.5rem;font-size:1rem}}.back-to-top{text-align:right;margin-top:1em}.page-navigation{margin-top:3rem;padding:1.5rem 0;border-top:1px solid #e2e8f0;background:linear-gradient(135deg,#f8fafc 0,#f1f5f9 100%)}.nav-container{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 1rem}.nav-next,.nav-next-disabled,.nav-prev,.nav-prev-disabled{padding:.75rem 1.5rem;border-radius:.5rem;font-weight:500;min-width:120px;text-align:center}.nav-next,.nav-prev{background:#fff;border:1px solid #d1d5db;text-decoration:none;color:#374151;transition:all .2s ease;box-shadow:0 1px 3px rgba(0,0,0,.1)}.nav-next:hover,.nav-prev:hover{background:#f9fafb;border-color:#9ca3af;transform:translateY(-1px);box-shadow:0 4px 6px rgba(0,0,0,.1);text-decoration:none}.nav-next-disabled,.nav-prev-disabled{background:#f9fafb;border:1px solid #e5e7eb;color:#9ca3af}@media (max-width:640px){.nav-container{flex-direction:column;gap:1rem}.nav-next,.nav-next-disabled,.nav-prev,.nav-prev-disabled{width:100%;min-width:auto}}.nav-prev::before{content:"←";margin-right:.5rem}.nav-next::after{content:"→";margin-left:.5rem}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+    },
+
+    closeCsv(id) {
+        const container = document.getElementById(`csv-container-${id}`);
+        container.style.display = 'none';
+    },
+    async loadCsvData(id) {
+        const svgContainer = document.getElementById(id);
+        const svg = svgContainer.querySelector('svg');
+
+        if (!svg) {
+            console.error('No SVG found');
+            return;
+        }
+
+        try {
+            // Method 1: Standard metadata with type
+            let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                return;
+            }
+
+            // Method 2: Custom csv-data element
+            csvMetadata = svg.querySelector('metadata csv-data');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            // Method 3: Data attribute
+            const csvDataAttr = svg.getAttribute('data-csv');
+            if (csvDataAttr) {
+                const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            console.error('No CSV data found in SVG');
+        } catch (error) {
+            console.error('Failed to parse CSV data:', error);
+        }
+    },
+
+    renderCsvTable(container, csvData, tableId) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+            return;
+        }
+
+        // Generate a unique table ID if not provided or make existing ID unique
+        const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        const table = document.createElement('table');
+        table.className = 'csv-table';
+        table.id = uniqueTableId;
+        // Create header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        csvData.headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        // Add button cell to header
+        const buttonTh = document.createElement('th');
+        buttonTh.className = 'csv-header-button-cell';
+
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'csv-copy-button';
+        copyButton.textContent = 'Copy';
+        copyButton.title = 'Copy as Tab-Delimited';
+        copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+        buttonTh.appendChild(copyButton);
+        headerRow.appendChild(buttonTh);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create body
+        const tbody = document.createElement('tbody');
+
+        csvData.rows.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            // Add empty cell for button column
+            const emptyTd = document.createElement('td');
+            tr.appendChild(emptyTd);
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.innerHTML = '';
+        container.appendChild(table);
+        const tableElement = document.getElementById(uniqueTableId);
+        if (tableElement) {
+            tableElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+
+    },
+
+    copyCsvAsTabDelimited(csvData) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            console.error('Invalid CSV data for copying');
+            return;
+        }
+
+        // Create tab-delimited string
+        let tabDelimitedData = '';
+
+        // Add headers
+        tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+        // Add rows
+        csvData.rows.forEach(row => {
+            tabDelimitedData += row.join('\t') + '\n';
+        });
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(tabDelimitedData).then(() => {
+            // Provide visual feedback
+            const buttons = document.querySelectorAll('.csv-copy-button');
+            buttons.forEach(button => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#007acc';
+                }, 2000);
+            });
+        }).catch(err => {
+            console.error('Failed to copy to clipboard:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = tabDelimitedData;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            } catch (fallbackErr) {
+                console.error('Fallback copy failed:', fallbackErr);
+                alert('Copy failed. Please select and copy the data manually.');
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+<script>
+    // Collapsible TOC JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const toc = document.getElementById('toc');
+
+        if (!toc) return;
+
+        // Transform the existing TOC structure to be collapsible
+        function initializeCollapsibleTOC() {
+            const tocLinks = toc.querySelectorAll('a');
+            const processedItems = new Set();
+
+            tocLinks.forEach(link => {
+                const listItem = link.parentElement;
+
+                if (processedItems.has(listItem)) return;
+                processedItems.add(listItem);
+
+                // Check if this item has nested lists (children)
+                const nestedList = listItem.querySelector('ul');
+                if (nestedList) {
+                    listItem.classList.add('toc-item', 'has-children');
+                    nestedList.classList.add('toc-list');
+
+                    // Add click handler to the arrow area
+                    link.addEventListener('click', function(e) {
+                        // Only handle clicks on the arrow area (first 20px)
+                        const rect = link.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+
+                        if (clickX <= 20) {
+                            e.preventDefault();
+                            toggleTOCItem(listItem);
+                        }
+                    });
+
+                    // Make nested items collapsible too
+                    const nestedItems = nestedList.querySelectorAll('li');
+                    nestedItems.forEach(nestedItem => {
+                        nestedItem.classList.add('toc-item');
+                        const nestedNestedList = nestedItem.querySelector('ul');
+                        if (nestedNestedList) {
+                            nestedItem.classList.add('has-children');
+                            nestedNestedList.classList.add('toc-list');
+                        }
+                    });
+                } else {
+                    listItem.classList.add('toc-item');
+                }
+            });
+
+            // Initially collapse all items beyond level 1
+            const level2Items = toc.querySelectorAll('.toc-list .toc-item.has-children');
+            level2Items.forEach(item => {
+                // item.classList.remove('expanded'); // Start collapsed
+            });
+        }
+
+        // Toggle a TOC item's expanded/collapsed state
+        function toggleTOCItem(item) {
+            item.classList.toggle('expanded');
+
+            // Update aria attributes for accessibility
+            const link = item.querySelector('a');
+            const isExpanded = item.classList.contains('expanded');
+            link.setAttribute('aria-expanded', isExpanded.toString());
+        }
+
+        // Add control buttons (optional)
+        function addTOCControls() {
+            const tocTitle = toc.querySelector('#toctitle, .title');
+            if (!tocTitle) return;
+
+            const controls = document.createElement('div');
+            controls.className = 'toc-controls';
+
+            const expandAllBtn = document.createElement('button');
+            expandAllBtn.className = 'toc-control-btn';
+            expandAllBtn.textContent = 'Expand All';
+            expandAllBtn.onclick = () => expandAllTOCItems(true);
+
+            const collapseAllBtn = document.createElement('button');
+            collapseAllBtn.className = 'toc-control-btn';
+            collapseAllBtn.textContent = 'Collapse All';
+            collapseAllBtn.onclick = () => expandAllTOCItems(false);
+
+            controls.appendChild(expandAllBtn);
+            controls.appendChild(collapseAllBtn);
+
+            tocTitle.parentNode.insertBefore(controls, tocTitle.nextSibling);
+        }
+
+        // Expand or collapse all TOC items
+        function expandAllTOCItems(expand) {
+            const tocItems = toc.querySelectorAll('.toc-item.has-children');
+            tocItems.forEach(item => {
+                if (expand) {
+                    item.classList.add('expanded');
+                } else {
+                    item.classList.remove('expanded');
+                }
+
+                const link = item.querySelector('a');
+                link.setAttribute('aria-expanded', expand.toString());
+            });
+        }
+
+        // Highlight current section in TOC
+        function highlightCurrentSection() {
+            const sections = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            const tocLinks = toc.querySelectorAll('a[href^="#"]');
+
+            function updateActiveSection() {
+                let currentSection = null;
+                const scrollPos = window.scrollY + 100; // Offset for better UX
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollPos >= sectionTop) {
+                        currentSection = section;
+                    }
+                });
+
+                // Remove all active classes
+                tocLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active class to current section
+                if (currentSection && currentSection.id) {
+                    const activeLink = toc.querySelector(`a[href="#${currentSection.id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+
+                        // Expand parent items to show active link
+                        let parent = activeLink.parentElement;
+                        while (parent && parent !== toc) {
+                            if (parent.classList.contains('has-children')) {
+                                parent.classList.add('expanded');
+                            }
+                            parent = parent.parentElement;
+                        }
+                    }
+                }
+            }
+
+            // Update on scroll (throttled)
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(updateActiveSection, 100);
+            });
+
+            // Initial update
+            updateActiveSection();
+        }
+
+        // Initialize everything
+        initializeCollapsibleTOC();
+        addTOCControls(); // Optional: comment out if you don't want control buttons
+        highlightCurrentSection();
+    });
+
+    // TOC Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const body = document.body;
+        const toc = document.getElementById('toc');
+
+        // Only add toggle functionality if TOC exists and is in sidebar mode (toc2)
+        if (toc && toc.classList.contains('toc2')) {
+            // Create toggle button
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'toc-toggle';
+            toggleButton.innerHTML = '☰';
+            toggleButton.setAttribute('aria-label', 'Toggle Table of Contents');
+            toggleButton.setAttribute('title', 'Toggle Table of Contents');
+
+            // Create overlay for mobile
+            const overlay = document.createElement('div');
+            overlay.className = 'toc-overlay';
+
+            // Add elements to DOM
+            body.appendChild(toggleButton);
+            body.appendChild(overlay);
+
+            // Toggle function
+            function toggleTOC() {
+                const isCollapsed = toc.classList.contains('toc-collapsed');
+                const isMobile = window.innerWidth <= 768;
+
+                if (isCollapsed) {
+                    // Show TOC
+                    toc.classList.remove('toc-collapsed');
+                    body.classList.remove('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.add('toc-mobile-open');
+                        overlay.classList.add('active');
+                    }
+                    toggleButton.innerHTML = '✕';
+                    toggleButton.setAttribute('title', 'Hide Table of Contents');
+                } else {
+                    // Hide TOC
+                    toc.classList.add('toc-collapsed');
+                    body.classList.add('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                    }
+                    toggleButton.innerHTML = '☰';
+                    toggleButton.setAttribute('title', 'Show Table of Contents');
+                }
+            }
+
+            // Event listeners
+            toggleButton.addEventListener('click', toggleTOC);
+
+            // Close TOC when clicking overlay (mobile)
+            overlay.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toggleTOC();
+                    }
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // On mobile, always start with TOC hidden
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toc.classList.add('toc-collapsed');
+                        body.classList.add('toc-collapsed');
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                        toggleButton.innerHTML = '☰';
+                    }
+                } else {
+                    // On desktop, remove mobile classes
+                    toc.classList.remove('toc-mobile-open');
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                // Toggle TOC with Ctrl/Cmd + \
+                if ((e.ctrlKey || e.metaKey) && e.key === '\\') {
+                    e.preventDefault();
+                    toggleTOC();
+                }
+                // Close TOC with Escape key (when open)
+                else if (e.key === 'Escape' && !toc.classList.contains('toc-collapsed')) {
+                    toggleTOC();
+                }
+            });
+
+            // Auto-hide TOC on mobile by default
+            if (window.innerWidth <= 768) {
+                toc.classList.add('toc-collapsed');
+                body.classList.add('toc-collapsed');
+                toggleButton.innerHTML = '☰';
+            }
+        }
+    });
+</script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.9.0/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_metrics_card_showcase">DocOps Metrics Card Showcase</a>
+<ul class="sectlevel1">
+<li><a href="#_metrics_card">1. Metrics Card</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+</div>
+</div>
+<h1 id="_docops_metrics_card_showcase" class="sect0">DocOps Metrics Card Showcase</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="quoteblock abstract">
+<blockquote>
+This document showcases the various ways to use the <code>metricscard</code> macro.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_metrics_card">1. Metrics Card</h2>
+<div class="sectionbody">
+<div class="docops-showcase-gallery" id="docops-gallery-2dc9fa0b000b42df">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-0">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-0', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="{
+  &quot;title&quot;: &quot;Performance Improvements&quot;,
+  &quot;metrics&quot;: [
+    {
+      &quot;value&quot;: &quot;97%&quot;,
+      &quot;label&quot;: &quot;Query Cost Reduction&quot;,
+      &quot;sublabel&quot;: &quot;(12,000 → 405)&quot;
+    },
+    {
+      &quot;value&quot;: &quot;32%&quot;,
+      &quot;label&quot;: &quot;CPU Utilization Drop&quot;,
+      &quot;sublabel&quot;: &quot;(88% → 60%)&quot;
+    },
+    {
+      &quot;value&quot;: &quot;3&quot;,
+      &quot;label&quot;: &quot;Optimization Phases&quot;,
+      &quot;sublabel&quot;: &quot;Systematic Approach&quot;
+    }
+  ]
+}
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-0', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_4XQvYoCMRDA8X6fYggseLBF_Do_OtHGylWxOq6IccRAslmSWUHF1gfwEX2Sy4a7s1mxGcjkH36QSwLASJFGNgaWo9tbZ0QhEeamdPaIBgvyLKszg-SU9CH8CkeAS5zh4ih0Fd-PBmlM41aLLep6u6zQnWBqPcEKd5UkZYtn5qvtf9lqdzLOOTxud-jx_geL0TV7wXU7Tdw038CGlFZnUUswc7Z8wQ2HabQ-efrWapAWJSnzx-QH4dE3Q-uTJzShkzApw7cKefjlwvxOrskPD4WX6YcBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_4XQvYoCMRDA8X6fYggseLBF_Do_OtHGylWxOq6IccRAslmSWUHF1gfwEX2Sy4a7s1mxGcjkH36QSwLASJFGNgaWo9tbZ0QhEeamdPaIBgvyLKszg-SU9CH8CkeAS5zh4ih0Fd-PBmlM41aLLep6u6zQnWBqPcEKd5UkZYtn5qvtf9lqdzLOOTxud-jx_geL0TV7wXU7Tdw038CGlFZnUUswc7Z8wQ2HabQ-efrWapAWJSnzx-QH4dE3Q-uTJzShkzApw7cKefjlwvxOrskPD4WX6YcBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-1">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-1', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Q2 2024 Business Metrics
+---
+Metric | Value | Sublabel
+Revenue | $4.2M | 18% YoY Growth
+New Customers | 156 | 42 Enterprise
+Customer Retention | 94% | 2% Improvement
+NPS Score | 72 | Industry Leading
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-1', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_zWNywrCMBBF9_mKWdhlRUN8LdwoIgVbtAWhyz4GDaRJSSYtgh9vqrg5d5gzwyVJCvdw48AXXMDBO6nROUiRrGwci-OY_WZ4w71SHkMWvlZVjYrlOKD-rmZiztOQy20EpSnhbM1IT5bhCEfvyHRo3aRX60DB4aQJbW-lQ_b3kCOhJml0ONmJKJBHkHS9NQN2wbDsWkDRGDsVbnhAotvwbF9wwaqV-sE-YwSsKM8AAAA=&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_zWNywrCMBBF9_mKWdhlRUN8LdwoIgVbtAWhyz4GDaRJSSYtgh9vqrg5d5gzwyVJCvdw48AXXMDBO6nROUiRrGwci-OY_WZ4w71SHkMWvlZVjYrlOKD-rmZiztOQy20EpSnhbM1IT5bhCEfvyHRo3aRX60DB4aQJbW-lQ_b3kCOhJml0ONmJKJBHkHS9NQN2wbDsWkDRGDsVbnhAotvwbF9wwaqV-sE-YwSsKM8AAAA=&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-2">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-2', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Website Performance
+---
+Metric | Value | Sublabel
+Page Load Time | 1.2s | 40% Faster
+First Contentful Paint | 0.8s | 90th Percentile
+Time to Interactive | 2.1s | Mobile Devices
+Bounce Rate | 24% | -5% vs Last Month
+Conversion Rate | 3.8% | +0.7% vs Last Month
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-2', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_13OsY7CMAwG4D1P4aUTalQ4EDDccqBKJ4FUcQhmNxiwlCZS4na6hz8HieUWe_Bn_xYWT59wpT6zEHSU7jENGByZuq7NkSSxg1-4oB9J-8_Ye-zJmw4fBIeINzjzUCZzu8jalk0FLWahZFpOWWAXg1CQ--ihQw6iprGbQreNPEui0zF7Mq9DEuFbFxI64ancXdh5wcfYq4E9Tewom6846o9wQnmZZaW1XlUwZThouvIgT6PZE6XMMbzlh90UOmvs-j_-A_-GdLULAQAA&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_13OsY7CMAwG4D1P4aUTalQ4EDDccqBKJ4FUcQhmNxiwlCZS4na6hz8HieUWe_Bn_xYWT59wpT6zEHSU7jENGByZuq7NkSSxg1-4oB9J-8_Ye-zJmw4fBIeINzjzUCZzu8jalk0FLWahZFpOWWAXg1CQ--ihQw6iprGbQreNPEui0zF7Mq9DEuFbFxI64ancXdh5wcfYq4E9Tewom6846o9wQnmZZaW1XlUwZThouvIgT6PZE6XMMbzlh90UOmvs-j_-A_-GdLULAQAA&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-3">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-3', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Project Status Dashboard
+---
+Metric | Value | Sublabel
+Completion | 78% | On Schedule
+Budget Utilized | 65% | Under Budget
+Open Issues | 12 | 3 Critical
+Team Velocity | 42 | Story Points/Sprint
+Code Coverage | 92% | +5% This Month
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-3', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_yWOvW4CMRCEez_FNqmiUxQI-SloOJoUCCQDvc9ecYsW78leRwLl4bOnNDPSfCPNKCnjGg5FrhgVvAZtFbahjoOEklzXdW6HWijCL5wDNzT3beAwILtebhOjkmRLPz6fTPcZfBwxNUa3aemCCiclpgcmo--ruXPKCQv8U7efMMN3rQ2rodeFyRL6QkoxsDtiuMEZWSLp3dDbzL1KucNBKGt98VMxtysJoZcfLOEyf_xazEvPtnccqcJOso7uD3rR1WfuAAAA&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_yWOvW4CMRCEez_FNqmiUxQI-SloOJoUCCQDvc9ecYsW78leRwLl4bOnNDPSfCPNKCnjGg5FrhgVvAZtFbahjoOEklzXdW6HWijCL5wDNzT3beAwILtebhOjkmRLPz6fTPcZfBwxNUa3aemCCiclpgcmo--ruXPKCQv8U7efMMN3rQ2rodeFyRL6QkoxsDtiuMEZWSLp3dDbzL1KucNBKGt98VMxtysJoZcfLOEyf_xazEvPtnccqcJOso7uD3rR1WfuAAAA&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-4">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-4', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Fitness Progress
+---
+Metric | Value | Sublabel
+Weight Loss | 12 lbs | 8-Week Program
+Body Fat Reduction | 4.2% | From 22% to 17.8%
+Muscle Mass Increase | 2.8 lbs | Primarily Upper Body
+Resting Heart Rate | 62 bpm | -8 bpm Improvement
+VO2 Max | 42.3 | +5.3 ml/kg/min
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-4', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_y2Ou07DQBBF-_2KaVKhdZTl5YaGwiISFlEQST12RmaVfVizY0SkfDyzQHVOMffeES-BnqDzkqgU2HGeWMVYa01Pwn6EKxwwLKR8X4aAAwVzJD99CrxmjVxh4yAMVVp7JDr_lWA0z_l0gQ4F9nRaRvE56c1d41aKjnMEpyoZNo9NuzL9UsZA0KN2btPIhKVuuqb9b9-xj8g-XOBjnomh1ps9FfFpghdC1iGUmnlwMMxRxba_so0z5y-KlMQc3pxufNdPXHOruLlXxLA-T-vok_kB_pvquxEBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_y2Ou07DQBBF-_2KaVKhdZTl5YaGwiISFlEQST12RmaVfVizY0SkfDyzQHVOMffeES-BnqDzkqgU2HGeWMVYa01Pwn6EKxwwLKR8X4aAAwVzJD99CrxmjVxh4yAMVVp7JDr_lWA0z_l0gQ4F9nRaRvE56c1d41aKjnMEpyoZNo9NuzL9UsZA0KN2btPIhKVuuqb9b9-xj8g-XOBjnomh1ps9FfFpghdC1iGUmnlwMMxRxba_so0z5y-KlMQc3pxufNdPXHOruLlXxLA-T-vok_kB_pvquxEBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-5">
+<div class="gallery-item-header">
+<div class="gallery-item-title">Metricscard</div>
+<div class="gallery-item-actions">
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-5', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Sustainability Achievements
+---
+Metric | Value | Sublabel
+Carbon Reduction | 28% | vs. 2020 Baseline
+Renewable Energy | 72% | Of Total Consumption
+Water Conservation | 350K | Gallons Saved
+Waste Diverted | 94% | From Landfill
+Paper Reduction | 65% | Digital Transformation
+" title="View content">{ }</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-5', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_02OP08DMQzF93wKL4yHTkfLn4EBWmAABOpVMDt3vtaSL6kSJ6hSPzxJxcDiZ_k9_Z6VVege-hQV2aFlYT3Cw7BnyjST02iapjHvpIEHOMEXSqKifbKClsSsMFjvYENjGpTLdoLu9qLMHC-ha7sWHjGSsCOzIUc_aIXgyVHYHUvopqvRjwm2XlFg5V1M86FyzDcqhfOFQsY_9NWyfS3ygiLFgB4zjSUZlWDNmYLSWOy7RaU-Bz_DG7pxYhHziYeC-__m9bKm1rzjWr0N6OLkw3yuMr8YYLssGAEAAA==&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+</div>
+</div>
+<div class="gallery-item-image">
+<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_02OP08DMQzF93wKL4yHTkfLn4EBWmAABOpVMDt3vtaSL6kSJ6hSPzxJxcDiZ_k9_Z6VVege-hQV2aFlYT3Cw7BnyjST02iapjHvpIEHOMEXSqKifbKClsSsMFjvYENjGpTLdoLu9qLMHC-ha7sWHjGSsCOzIUc_aIXgyVHYHUvopqvRjwm2XlFg5V1M86FyzDcqhfOFQsY_9NWyfS3ygiLFgB4zjSUZlWDNmYLSWOy7RaU-Bz_DG7pxYhHziYeC-__m9bKm1rzjWr0N6OLkw3yuMr8YYLssGAEAAA==&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+</div>
+</div>
+</div>
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+  <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+  <div class="showcase-modal-content">
+    <div class="showcase-modal-header">
+      <span class="showcase-modal-title"></span>
+      <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+    </div>
+    <div class="showcase-modal-body">
+      <img src="" alt="" class="showcase-modal-image" />
+    </div>
+  </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+  <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+  <div class="showcase-modal-content showcase-content-modal-content">
+    <div class="showcase-modal-header">
+      <span class="showcase-modal-title"></span>
+      <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+    </div>
+    <div class="showcase-modal-body showcase-content-body">
+      <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+    </div>
+    <div class="showcase-content-footer">
+      <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .docops-showcase-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  .gallery-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .gallery-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+  }
+
+  .gallery-item-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    flex: 1;
+  }
+
+  .gallery-item-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .gallery-expand-btn,
+  .gallery-content-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    color: #3498db;
+    transition: color 0.2s, transform 0.2s;
+    line-height: 1;
+  }
+
+  .gallery-content-btn {
+    color: #9b59b6;
+    font-weight: bold;
+  }
+
+  .gallery-expand-btn:hover {
+    color: #2980b9;
+    transform: scale(1.2);
+  }
+
+  .gallery-content-btn:hover {
+    color: #8e44ad;
+    transform: scale(1.2);
+  }
+
+  .gallery-item-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+  }
+
+  .gallery-item-image img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+
+  .gallery-item-image img:hover {
+    opacity: 0.9;
+  }
+
+  /* Modal Styles */
+  .showcase-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .showcase-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .showcase-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+
+  .showcase-content-modal-content {
+    max-width: 90vw;
+    width: 1000px;
+  }
+
+  .showcase-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f8f9fa;
+  }
+
+  .showcase-modal-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #2c3e50;
+  }
+
+  .showcase-modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+
+  .showcase-modal-close:hover {
+    color: #e74c3c;
+  }
+
+  .showcase-modal-body {
+    padding: 2rem;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+
+  .showcase-content-body {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    background: #282c34;
+  }
+
+  .showcase-content-pre {
+    margin: 0;
+    width: 100%;
+    max-height: calc(95vh - 150px);
+    overflow: auto;
+  }
+
+  .showcase-content-code {
+    display: block;
+    padding: 1.5rem;
+    color: #abb2bf;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    white-space: pre;
+    tab-size: 4;
+  }
+
+  .showcase-content-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .showcase-copy-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+
+  .showcase-copy-btn:hover {
+    background: #2980b9;
+  }
+
+  .showcase-copy-btn.copied {
+    background: #27ae60;
+  }
+
+  .showcase-modal-image {
+    max-width: 100%;
+    max-height: calc(95vh - 100px);
+    width: auto;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    .docops-showcase-gallery {
+      grid-template-columns: 1fr;
+      padding: 1rem;
+    }
+
+    .showcase-modal-content {
+      max-width: 100vw;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    .showcase-modal-body {
+      padding: 1rem;
+    }
+
+    .showcase-content-modal-content {
+      width: 100vw;
+    }
+  }
+</style>
+
+<script>
+  window.showcaseGallery = window.showcaseGallery || (function() {
+    let currentContent = '';
+
+    return {
+      expandItem: function(itemId, imageUrl, title) {
+        const modal = document.getElementById('showcase-gallery-modal');
+        const modalTitle = modal.querySelector('.showcase-modal-title');
+        const modalImage = modal.querySelector('.showcase-modal-image');
+
+        modalTitle.textContent = title;
+        modalImage.src = imageUrl;
+        modalImage.alt = title;
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        document.addEventListener('keydown', this.handleEscKey);
+      },
+
+      closeModal: function() {
+        const modal = document.getElementById('showcase-gallery-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+
+        document.removeEventListener('keydown', this.handleEscKey);
+      },
+
+      showContent: function(itemId, title, kind, content) {
+        const modal = document.getElementById('showcase-content-modal');
+        const modalTitle = modal.querySelector('.showcase-modal-title');
+        const codeElement = modal.querySelector('.showcase-content-code');
+
+        // Decode HTML entities
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = content;
+        const decodedContent = textarea.value;
+
+        currentContent = decodedContent;
+
+        modalTitle.textContent = title + ' (' + kind + ')';
+        codeElement.textContent = decodedContent;
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        document.addEventListener('keydown', this.handleContentEscKey);
+      },
+
+      closeContentModal: function() {
+        const modal = document.getElementById('showcase-content-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        currentContent = '';
+
+        document.removeEventListener('keydown', this.handleContentEscKey);
+      },
+
+      copyContent: function() {
+        const btn = document.querySelector('.showcase-copy-btn');
+
+        navigator.clipboard.writeText(currentContent).then(function() {
+          btn.textContent = '✓ Copied!';
+          btn.classList.add('copied');
+
+          setTimeout(function() {
+            btn.textContent = '📋 Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('Failed to copy:', err);
+        });
+      },
+
+      handleEscKey: function(e) {
+        if (e.key === 'Escape') {
+          showcaseGallery.closeModal();
+        }
+      },
+
+      handleContentEscKey: function(e) {
+        if (e.key === 'Escape') {
+          showcaseGallery.closeContentModal();
+        }
+      }
+    };
+  })();
+</script>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #657786;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .reading-time {
+        background: rgba(32, 35, 42, 0.95);
+        border-color: #444;
+        color: #8899a6;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .reading-time {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .reading-time {
+        display: none;
+    }
+}
+</style>
+<div class="reading-time">
+    <p>📖 1 min read • 386 words</p>
+</div>
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<style>
+/* Universal diagram modal styles */
+.diagram-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+}
+
+.diagram-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.diagram-modal-content {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.diagram-container {
+    background: white;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.diagram-modal svg,
+.diagram-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    background: white;
+    display: block;
+}
+
+.diagram-modal-close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+.diagram-modal-close:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.diagram-modal-controls {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10001;
+}
+
+.diagram-modal-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    color: #333;
+}
+
+.diagram-modal-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Clickable diagram indicators */
+.mermaid,
+.popup-diagram,
+img.popup-diagram {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    position: relative;
+}
+
+.mermaid:hover,
+.popup-diagram:hover,
+img.popup-diagram:hover {
+    opacity: 0.8;
+}
+
+.mermaid::after,
+.popup-diagram::after,
+img.popup-diagram::after {
+    content: '🔍';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.mermaid:hover::after,
+.popup-diagram:hover::after,
+img.popup-diagram:hover::after {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .diagram-modal-content {
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+        padding: 15px;
+    }
+    
+    .diagram-modal-controls {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .diagram-modal-btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+}
+</style>
+
+<script>
+// Universal diagram modal functionality
+window.diagramModal = {
+    currentPanzoom: null,
+    currentElement: null,
+    
+    init() {
+        // Create modal if it doesn't exist
+        if (!document.getElementById('diagram-modal')) {
+            const modal = document.createElement('div');
+            modal.id = 'diagram-modal';
+            modal.className = 'diagram-modal';
+            modal.innerHTML = `
+                <div class="diagram-modal-content">
+                    <button class="diagram-modal-close" onclick="diagramModal.close()" title="Close">&times;</button>
+                    <div class="diagram-modal-controls">
+                        <button class="diagram-modal-btn" onclick="diagramModal.zoomIn()" title="Zoom In">🔍+</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.zoomOut()" title="Zoom Out">🔍-</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.resetZoom()" title="Reset Zoom">⚪</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.fitToScreen()" title="Fit to Screen">⛶</button>
+                    </div>
+                    <div class="diagram-container"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.close();
+                }
+            });
+            
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    this.close();
+                }
+            });
+        }
+    },
+    
+    openSvg(svg) {
+        this.init();
+        const modal = document.getElementById('diagram-modal');
+        const container = modal.querySelector('.diagram-container');
+        
+        // Clone the SVG and ensure it has a white background
+        const clonedSvg = svg.cloneNode(true);
+        
+        // Ensure the SVG has proper styling for visibility
+        clonedSvg.style.backgroundColor = 'white';
+        clonedSvg.style.display = 'block';
+        
+        // Clear and add the cloned SVG
+        container.innerHTML = '';
+        container.appendChild(clonedSvg);
+        
+        this.currentElement = clonedSvg;
+        
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // Initialize panzoom ONLY for the modal SVG
+        setTimeout(() => {
+            if (window.svgPanZoom && clonedSvg) {
+                try {
+                    this.currentPanzoom = svgPanZoom(clonedSvg, {
+                        controlIconsEnabled: true,
+                        center: true,
+                        fit: true,
+                        minZoom: 0.1,
+                        maxZoom: 10,
+                        zoomScaleSensitivity: 0.5,
+                        mouseWheelZoomEnabled: true,
+                        preventMouseEventsDefault: true
+                    });
+                } catch (error) {
+                    console.warn('Failed to initialize panzoom for SVG:', error);
+                }
+            }
+        }, 150);
+    },
+    
+    openImage(img) {
+        this.init();
+        const modal = document.getElementById('diagram-modal');
+        const container = modal.querySelector('.diagram-container');
+        
+        // Create a new image element
+        const clonedImg = document.createElement('img');
+        clonedImg.src = img.src;
+        clonedImg.alt = img.alt || 'Diagram';
+        clonedImg.style.maxWidth = '100%';
+        clonedImg.style.maxHeight = '100%';
+        clonedImg.style.display = 'block';
+        clonedImg.style.margin = '0 auto';
+        
+        // Clear and add the image
+        container.innerHTML = '';
+        container.appendChild(clonedImg);
+        
+        this.currentElement = clonedImg;
+        
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // For images, we'll use CSS transforms for zoom instead of svgPanZoom
+        this.setupImageZoom(clonedImg);
+    },
+    
+    setupImageZoom(img) {
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let startTranslateX = 0;
+        let startTranslateY = 0;
+        
+        const updateTransform = () => {
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        };
+        
+        // Store zoom functions for the modal controls
+        this.currentPanzoom = {
+            zoomIn: () => {
+                scale = Math.min(scale * 1.3, 10);
+                updateTransform();
+            },
+            zoomOut: () => {
+                scale = Math.max(scale / 1.3, 0.1);
+                updateTransform();
+            },
+            resetZoom: () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            },
+            fit: () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            }
+        };
+        
+        // Mouse wheel zoom
+        img.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            scale = Math.max(0.1, Math.min(10, scale * delta));
+            updateTransform();
+        });
+        
+        // Drag functionality
+        img.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startTranslateX = translateX;
+            startTranslateY = translateY;
+            img.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            translateX = startTranslateX + (e.clientX - startX);
+            translateY = startTranslateY + (e.clientY - startY);
+            updateTransform();
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            img.style.cursor = 'grab';
+        });
+        
+        img.style.cursor = 'grab';
+    },
+    
+    close() {
+        const modal = document.getElementById('diagram-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            
+            // Cleanup panzoom
+            if (this.currentPanzoom && this.currentPanzoom.destroy) {
+                try {
+                    this.currentPanzoom.destroy();
+                } catch (error) {
+                    console.warn('Failed to destroy panzoom:', error);
+                }
+            }
+            this.currentPanzoom = null;
+            this.currentElement = null;
+        }
+    },
+    
+    zoomIn() {
+        if (this.currentPanzoom && this.currentPanzoom.zoomIn) {
+            this.currentPanzoom.zoomIn();
+        }
+    },
+    
+    zoomOut() {
+        if (this.currentPanzoom && this.currentPanzoom.zoomOut) {
+            this.currentPanzoom.zoomOut();
+        }
+    },
+    
+    resetZoom() {
+        if (this.currentPanzoom) {
+            if (this.currentPanzoom.resetZoom) {
+                this.currentPanzoom.resetZoom();
+            }
+            if (this.currentPanzoom.center) {
+                this.currentPanzoom.center();
+            }
+        }
+    },
+    
+    fitToScreen() {
+        if (this.currentPanzoom) {
+            if (this.currentPanzoom.fit) {
+                this.currentPanzoom.fit();
+            }
+            if (this.currentPanzoom.center) {
+                this.currentPanzoom.center();
+            }
+        }
+    }
+};
+
+// Initialize popup functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup both direct img.popup-diagram and div.popup-diagram > img structures
+    function setupPopupElement(element) {
+        if (element.hasAttribute('data-popup-initialized')) return;
+        
+        let img = null;
+        let clickTarget = element;
+        
+        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
+            // Direct img with popup-diagram class
+            img = element;
+        } else if (element.classList.contains('popup-diagram')) {
+            // div with popup-diagram class - find img inside
+            img = element.querySelector('img');
+            if (!img) return; // No img found, skip
+        }
+        
+        if (!img) return;
+        
+        clickTarget.style.cursor = 'pointer';
+        clickTarget.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            diagramModal.openImage(img);
+        });
+        clickTarget.title = 'Click to open in fullscreen with zoom controls';
+        element.setAttribute('data-popup-initialized', 'true');
+    }
+    
+    // Setup existing popup diagrams
+    document.querySelectorAll('img.popup-diagram, .popup-diagram').forEach(setupPopupElement);
+});
+
+// Also check for dynamically added images
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) { // Element node
+                // Check the node itself
+                if ((node.tagName === 'IMG' && node.classList.contains('popup-diagram')) ||
+                    (node.classList && node.classList.contains('popup-diagram'))) {
+                    setupPopupElement(node);
+                }
+                
+                // Check descendants
+                if (node.querySelectorAll) {
+                    const elements = node.querySelectorAll('img.popup-diagram, .popup-diagram');
+                    elements.forEach(setupPopupElement);
+                }
+            }
+        });
+    });
+    
+    function setupPopupElement(element) {
+        if (element.hasAttribute('data-popup-initialized')) return;
+        
+        let img = null;
+        let clickTarget = element;
+        
+        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
+            // Direct img with popup-diagram class
+            img = element;
+        } else if (element.classList.contains('popup-diagram')) {
+            // div with popup-diagram class - find img inside
+            img = element.querySelector('img');
+            if (!img) return; // No img found, skip
+        }
+        
+        if (!img) return;
+        
+        clickTarget.style.cursor = 'pointer';
+        clickTarget.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            diagramModal.openImage(img);
+        });
+        clickTarget.title = 'Click to open in fullscreen with zoom controls';
+        element.setAttribute('data-popup-initialized', 'true');
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
+
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neo',
+    look: 'neo'
+});
+
+mermaid.run({
+    querySelector: '.mermaid',
+    postRenderCallback: (id) => {
+        console.log('Post-render callback for diagram:', id);
+        const svg = document.getElementById(id);
+        const container = svg.parentNode;
+
+        // NO PANZOOM for embedded diagrams - just basic sizing
+        const bbox = svg.getBBox ? svg.getBBox() : { width: 800, height: 600 };
+        
+        container.style.width = bbox.width + 'px';
+        container.style.height = bbox.height + 'px';
+        svg.setAttribute('width', bbox.width);
+        svg.setAttribute('height', bbox.height);
+        
+        // Add click handler for fullscreen
+        svg.style.cursor = 'pointer';
+        svg.addEventListener('click', () => {
+            diagramModal.openSvg(svg);
+        });
+        
+        // Add tooltip
+        svg.title = 'Click to open in fullscreen with zoom controls';
+    }
+});
+</script>
+</body>
+</html>
