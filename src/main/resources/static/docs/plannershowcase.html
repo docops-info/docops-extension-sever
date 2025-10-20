@@ -345,7 +345,259 @@
     }
 
 </style>
+<style>
+    .docops-showcase-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
 
+    .gallery-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .gallery-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+
+    .gallery-item-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .gallery-item-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .gallery-expand-btn,
+    .gallery-content-btn {
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        color: #3498db;
+        transition: color 0.2s, transform 0.2s;
+        line-height: 1;
+    }
+
+    .gallery-content-btn {
+        color: #9b59b6;
+        font-weight: bold;
+    }
+
+    .gallery-expand-btn:hover {
+        color: #2980b9;
+        transform: scale(1.2);
+    }
+
+    .gallery-content-btn:hover {
+        color: #8e44ad;
+        transform: scale(1.2);
+    }
+
+    .gallery-item-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .gallery-item-image img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    .gallery-item-image img:hover {
+        opacity: 0.9;
+    }
+
+    /* Modal Styles */
+    .showcase-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        max-width: 95vw;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .showcase-content-modal-content {
+        max-width: 90vw;
+        width: 1000px;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+    }
+
+    .showcase-modal-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+
+    .showcase-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        color: #e74c3c;
+    }
+
+    .showcase-modal-body {
+        padding: 2rem;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+
+    .showcase-content-body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+        background: #282c34;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        width: 100%;
+        max-height: calc(95vh - 150px);
+        overflow: auto;
+    }
+
+    .showcase-content-code {
+        display: block;
+        padding: 1.5rem;
+        color: #abb2bf;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        white-space: pre;
+        tab-size: 4;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-copy-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+
+    .showcase-copy-btn:hover {
+        background: #2980b9;
+    }
+
+    .showcase-copy-btn.copied {
+        background: #27ae60;
+    }
+
+    .showcase-modal-image {
+        max-width: 100%;
+        max-height: calc(95vh - 100px);
+        width: auto;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .docops-showcase-gallery {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .showcase-modal-content {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .showcase-modal-body {
+            padding: 1rem;
+        }
+
+        .showcase-content-modal-content {
+            width: 100vw;
+        }
+    }
+</style>
 <script>
     window.svgViewer = window.svgViewer || {
         toggleControls(id) {
@@ -1129,6 +1381,94 @@
         }
     });
 </script>
+<script>
+    window.showcaseGallery = window.showcaseGallery || (function() {
+        let currentContent = '';
+
+        return {
+            expandItem: function(itemId, imageUrl, title) {
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const modalImage = modal.querySelector('.showcase-modal-image');
+
+                modalTitle.textContent = title;
+                modalImage.src = imageUrl;
+                modalImage.alt = title;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleEscKey);
+            },
+
+            closeModal: function() {
+                const modal = document.getElementById('showcase-gallery-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+
+                document.removeEventListener('keydown', this.handleEscKey);
+            },
+
+            showContent: function(itemId, title, kind, content) {
+                const modal = document.getElementById('showcase-content-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const codeElement = modal.querySelector('.showcase-content-code');
+
+                // Decode HTML entities
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = content;
+                const decodedContent = textarea.value;
+
+                currentContent = decodedContent;
+
+                modalTitle.textContent = title + ' (' + kind + ')';
+                codeElement.textContent = decodedContent;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleContentEscKey);
+            },
+
+            closeContentModal: function() {
+                const modal = document.getElementById('showcase-content-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContent = '';
+
+                document.removeEventListener('keydown', this.handleContentEscKey);
+            },
+
+            copyContent: function() {
+                const btn = document.querySelector('.showcase-copy-btn');
+
+                navigator.clipboard.writeText(currentContent).then(function() {
+                    btn.textContent = '✓ Copied!';
+                    btn.classList.add('copied');
+
+                    setTimeout(function() {
+                        btn.textContent = '📋 Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            handleEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeModal();
+                }
+            },
+
+            handleContentEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeContentModal();
+                }
+            }
+        };
+    })();
+</script>
 <style>
 .hidden {
     display: none;
@@ -1527,12 +1867,12 @@ This document showcases the various ways to use the <code>planner</code> macro.
 <div class="sect1">
 <h2 id="_planner">1. Planner</h2>
 <div class="sectionbody">
-<div class="docops-showcase-gallery" id="docops-gallery-693862206ba6ae82">
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-0">
+<div class="docops-showcase-gallery" id="docops-gallery-4a26dae0e3962758">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-0">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Development Roadmap</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-0', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Authentication
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-0', 'Development Roadmap', 'planner', this.getAttribute('data-content'))" data-content="- now Authentication
 Implement user authentication system
 Set up CI/CD pipeline
 Create database schema
@@ -1549,18 +1889,18 @@ Project requirements gathering
 Architecture design
 Technology stack selection
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-0', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g_ANoGS7RIgBAAA=&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-0', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g_ANoGS7RIgBAAA=&scale=1.0&type=SVG&useDark=false&title=Development+Roadmap&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Development Roadmap')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g_ANoGS7RIgBAAA=&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g_ANoGS7RIgBAAA=&scale=1.0&type=SVG&useDark=false&title=Development+Roadmap&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Development Roadmap" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-1">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-1">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Product Launch Plan</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-1', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Market Research
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-1', 'Product Launch Plan', 'planner', this.getAttribute('data-content'))" data-content="- now Market Research
 Conduct competitor analysis
 Identify target audience
 Define unique selling points
@@ -1577,18 +1917,18 @@ Define business model
 Secure initial funding
 Assemble core team
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-1', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXBNfwAMgG914IBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-1', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXBNfwAMgG914IBAAA=&scale=1.0&type=SVG&useDark=true&title=Product+Launch+Plan&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Product Launch Plan')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXBNfwAMgG914IBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXBNfwAMgG914IBAAA=&scale=1.0&type=SVG&useDark=true&title=Product+Launch+Plan&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Product Launch Plan" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-2">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-2">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Website Redesign Project</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-2', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Content Audit
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-2', 'Website Redesign Project', 'planner', this.getAttribute('data-content'))" data-content="- now Content Audit
 Review existing content
 Identify gaps and outdated information
 Create content migration plan
@@ -1605,18 +1945,18 @@ Stakeholder interviews
 Requirements gathering
 Project scope definition
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-2', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z1QQXLCMAy8-xX6AI9o4cKNKS9wYyVRsSXXUhL4PXIoveiwWu2u9gAsGxyFDdngY0lk4QtXwg3wTmrEEwyvbTgnnzQ-YIpVIXICWSxFwwTEo7QSjYTDsaFj7ysoNLV9ATVHDgdgvBucUGliuMxR8X2xUcOxxYIaTrhilgor6RIzpBfbJQespuFzodxNDVscjFaE2sTEHtVvD5BdrcGfRunRr2iwVNf5hwB5pSa8r8-lZtzRse2xk3uVKuyQhrMj_Yee0Gb4jsOtM_ShhqX7JSfCxb9jrytcLd5wlpw8wx6xt6ne6u_iD3YX9QZtxtbZlyY_OBjoIBU94EhMe41PRbA4mJoBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-2', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z1QQXLCMAy8-xX6AI9o4cKNKS9wYyVRsSXXUhL4PXIoveiwWu2u9gAsGxyFDdngY0lk4QtXwg3wTmrEEwyvbTgnnzQ-YIpVIXICWSxFwwTEo7QSjYTDsaFj7ysoNLV9ATVHDgdgvBucUGliuMxR8X2xUcOxxYIaTrhilgor6RIzpBfbJQespuFzodxNDVscjFaE2sTEHtVvD5BdrcGfRunRr2iwVNf5hwB5pSa8r8-lZtzRse2xk3uVKuyQhrMj_Yee0Gb4jsOtM_ShhqX7JSfCxb9jrytcLd5wlpw8wx6xt6ne6u_iD3YX9QZtxtbZlyY_OBjoIBU94EhMe41PRbA4mJoBAAA=&scale=1.0&type=SVG&useDark=true&title=Website+Redesign+Project&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Website Redesign Project')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z1QQXLCMAy8-xX6AI9o4cKNKS9wYyVRsSXXUhL4PXIoveiwWu2u9gAsGxyFDdngY0lk4QtXwg3wTmrEEwyvbTgnnzQ-YIpVIXICWSxFwwTEo7QSjYTDsaFj7ysoNLV9ATVHDgdgvBucUGliuMxR8X2xUcOxxYIaTrhilgor6RIzpBfbJQespuFzodxNDVscjFaE2sTEHtVvD5BdrcGfRunRr2iwVNf5hwB5pSa8r8-lZtzRse2xk3uVKuyQhrMj_Yee0Gb4jsOtM_ShhqX7JSfCxb9jrytcLd5wlpw8wx6xt6ne6u_iD3YX9QZtxtbZlyY_OBjoIBU94EhMe41PRbA4mJoBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z1QQXLCMAy8-xX6AI9o4cKNKS9wYyVRsSXXUhL4PXIoveiwWu2u9gAsGxyFDdngY0lk4QtXwg3wTmrEEwyvbTgnnzQ-YIpVIXICWSxFwwTEo7QSjYTDsaFj7ysoNLV9ATVHDgdgvBucUGliuMxR8X2xUcOxxYIaTrhilgor6RIzpBfbJQespuFzodxNDVscjFaE2sTEHtVvD5BdrcGfRunRr2iwVNf5hwB5pSa8r8-lZtzRse2xk3uVKuyQhrMj_Yee0Gb4jsOtM_ShhqX7JSfCxb9jrytcLd5wlpw8wx6xt6ne6u_iD3YX9QZtxtbZlyY_OBjoIBU94EhMe41PRbA4mJoBAAA=&scale=1.0&type=SVG&useDark=true&title=Website+Redesign+Project&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Website Redesign Project" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-3">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-3">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Software Release Roadmap</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-3', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Version 2.0
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-3', 'Software Release Roadmap', 'planner', this.getAttribute('data-content'))" data-content="- now Version 2.0
 Implement new user interface
 Add advanced search capabilities
 Improve performance
@@ -1633,18 +1973,18 @@ Core functionality
 Basic user management
 Initial deployment
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-3', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_02QTW4DIQxG95zCF0jVtCdo0k0W2XbvwjcTKgYjA_m5fc1MFXUFAvs9f95Rlht9QWuUTG8vr-60lIQFuVHGjXqFUswNOrGH-wiBOFw5ewSqYPUX8lz4O6bYIuroVrmCijWILqPQ7Yx0b_8ke3foM03xjkqTyjK8pEjgCneOWZQmcOsKQr4Mxpinuk_xfdy4DU4vgZspd5Ts1Cf_3UKc-ccgY7zY4FeSIqDGObtjkh7WTLNupD9ZdWexICAuJUW__dVeimgzS5CMp2RvkqMYdurZj0K2BTzcgWv029IsO8_r4O6UbTmcKKAkeaxPvxA8Sep4AQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-3', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_02QTW4DIQxG95zCF0jVtCdo0k0W2XbvwjcTKgYjA_m5fc1MFXUFAvs9f95Rlht9QWuUTG8vr-60lIQFuVHGjXqFUswNOrGH-wiBOFw5ewSqYPUX8lz4O6bYIuroVrmCijWILqPQ7Yx0b_8ke3foM03xjkqTyjK8pEjgCneOWZQmcOsKQr4Mxpinuk_xfdy4DU4vgZspd5Ts1Cf_3UKc-ccgY7zY4FeSIqDGObtjkh7WTLNupD9ZdWexICAuJUW__dVeimgzS5CMp2RvkqMYdurZj0K2BTzcgWv029IsO8_r4O6UbTmcKKAkeaxPvxA8Sep4AQAA&scale=1.0&type=SVG&useDark=false&title=Software+Release+Roadmap&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Software Release Roadmap')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_02QTW4DIQxG95zCF0jVtCdo0k0W2XbvwjcTKgYjA_m5fc1MFXUFAvs9f95Rlht9QWuUTG8vr-60lIQFuVHGjXqFUswNOrGH-wiBOFw5ewSqYPUX8lz4O6bYIuroVrmCijWILqPQ7Yx0b_8ke3foM03xjkqTyjK8pEjgCneOWZQmcOsKQr4Mxpinuk_xfdy4DU4vgZspd5Ts1Cf_3UKc-ccgY7zY4FeSIqDGObtjkh7WTLNupD9ZdWexICAuJUW__dVeimgzS5CMp2RvkqMYdurZj0K2BTzcgWv029IsO8_r4O6UbTmcKKAkeaxPvxA8Sep4AQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_02QTW4DIQxG95zCF0jVtCdo0k0W2XbvwjcTKgYjA_m5fc1MFXUFAvs9f95Rlht9QWuUTG8vr-60lIQFuVHGjXqFUswNOrGH-wiBOFw5ewSqYPUX8lz4O6bYIuroVrmCijWILqPQ7Yx0b_8ke3foM03xjkqTyjK8pEjgCneOWZQmcOsKQr4Mxpinuk_xfdy4DU4vgZspd5Ts1Cf_3UKc-ccgY7zY4FeSIqDGObtjkh7WTLNupD9ZdWexICAuJUW__dVeimgzS5CMp2RvkqMYdurZj0K2BTzcgWv029IsO8_r4O6UbTmcKKAkeaxPvxA8Sep4AQAA&scale=1.0&type=SVG&useDark=false&title=Software+Release+Roadmap&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Software Release Roadmap" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-4">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-4">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Learning Path: Full Stack Developer</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-4', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Backend Development
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-4', 'Learning Path: Full Stack Developer', 'planner', this.getAttribute('data-content'))" data-content="- now Backend Development
 Learn Node.js and Express
 Master database design with MongoDB
 Implement authentication and authorization
@@ -1661,18 +2001,18 @@ HTML, CSS, JavaScript
 Git version control
 Basic algorithms and data structures
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-4', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z1QS04DMQzd5xRegtTSM7QzFIpaQB0Qa5OYaWgmiRJn-jk9zlRiZenZfr85-HCCFeojeQMtjeRCHMiz2hImD6_B0MNvBpTt4zkmylntMDMlMMj4jZnAULa9h5PlA-yC70O7UpshOqo8gIUPMq1GtsFPRBUKyV4nRM3B05lhnYLnamKdcKBTSMesOi7mAntCzfBTvMHKiC6rVbHOgJWHJDs7Enxu6jkywYAe-5v2ZGlPppxFxWF1LRHfYobuaJ3wtEGCJ9AijdbTv6dms2haiDaSExgycYmqcaEYSRtduEz0d8uvbrG8lkT3wm-CXL6n0Iv_wfpeWs1WZ_X8sdvOoOm6GbzgiJ1ONrJ6sgwjpVw7qfIpODU9ALpeyuHDcGu91gyZU9EsQln9AYxpq2KyAQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-4', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z1QS04DMQzd5xRegtTSM7QzFIpaQB0Qa5OYaWgmiRJn-jk9zlRiZenZfr85-HCCFeojeQMtjeRCHMiz2hImD6_B0MNvBpTt4zkmylntMDMlMMj4jZnAULa9h5PlA-yC70O7UpshOqo8gIUPMq1GtsFPRBUKyV4nRM3B05lhnYLnamKdcKBTSMesOi7mAntCzfBTvMHKiC6rVbHOgJWHJDs7Enxu6jkywYAe-5v2ZGlPppxFxWF1LRHfYobuaJ3wtEGCJ9AijdbTv6dms2haiDaSExgycYmqcaEYSRtduEz0d8uvbrG8lkT3wm-CXL6n0Iv_wfpeWs1WZ_X8sdvOoOm6GbzgiJ1ONrJ6sgwjpVw7qfIpODU9ALpeyuHDcGu91gyZU9EsQln9AYxpq2KyAQAA&scale=1.0&type=SVG&useDark=false&title=Learning+Path%3A+Full+Stack+Developer&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Learning Path: Full Stack Developer')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_z1QS04DMQzd5xRegtTSM7QzFIpaQB0Qa5OYaWgmiRJn-jk9zlRiZenZfr85-HCCFeojeQMtjeRCHMiz2hImD6_B0MNvBpTt4zkmylntMDMlMMj4jZnAULa9h5PlA-yC70O7UpshOqo8gIUPMq1GtsFPRBUKyV4nRM3B05lhnYLnamKdcKBTSMesOi7mAntCzfBTvMHKiC6rVbHOgJWHJDs7Enxu6jkywYAe-5v2ZGlPppxFxWF1LRHfYobuaJ3wtEGCJ9AijdbTv6dms2haiDaSExgycYmqcaEYSRtduEz0d8uvbrG8lkT3wm-CXL6n0Iv_wfpeWs1WZ_X8sdvOoOm6GbzgiJ1ONrJ6sgwjpVw7qfIpODU9ALpeyuHDcGu91gyZU9EsQln9AYxpq2KyAQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_z1QS04DMQzd5xRegtTSM7QzFIpaQB0Qa5OYaWgmiRJn-jk9zlRiZenZfr85-HCCFeojeQMtjeRCHMiz2hImD6_B0MNvBpTt4zkmylntMDMlMMj4jZnAULa9h5PlA-yC70O7UpshOqo8gIUPMq1GtsFPRBUKyV4nRM3B05lhnYLnamKdcKBTSMesOi7mAntCzfBTvMHKiC6rVbHOgJWHJDs7Enxu6jkywYAe-5v2ZGlPppxFxWF1LRHfYobuaJ3wtEGCJ9AijdbTv6dms2haiDaSExgycYmqcaEYSRtduEz0d8uvbrG8lkT3wm-CXL6n0Iv_wfpeWs1WZ_X8sdvOoOm6GbzgiJ1ONrJ6sgwjpVw7qfIpODU9ALpeyuHDcGu91gyZU9EsQln9AYxpq2KyAQAA&scale=1.0&type=SVG&useDark=false&title=Learning+Path%3A+Full+Stack+Developer&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Learning Path: Full Stack Developer" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-5">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-5">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Kanban</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-5', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- now Infrastructure Setup
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-5', 'Kanban', 'planner', this.getAttribute('data-content'))" data-content="- now Infrastructure Setup
  Provision cloud resources
  Configure networking
  Set up monitoring and logging
@@ -1689,18 +2029,18 @@ Requirements gathering
 Architecture design
 Technology selection
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-5', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_02QUU4DMQxE_3MKX6CHWBUh9a8CLuAm7m5EYgc72ba3xwFV8Bl73szEB2C5wYmvitZ1xD6U4J36aAHOKnu2LAyxyEigZDI0kgU4Cl_zOrVM_Sb6mXkNk4PRoArnLuojQE5QZF3n-uDae3fUqVfCmWThVFuhSuygkQKOvvkjR-yeG15opyINlvMJiFOTzN3CUZ0mSNjxgkZgcaOK7l98rLCkHTlS-gtZUvImWB5ubM7ZdhHU9C-8YtwyExRC5Vk8Sm3CNOOeJapcciHA1sqz3wGSi-BckCcV3uhrZP2xNFjR_zKvEBZ1906_x01keeXwQXFj8ds8wKj4bvp9A8GFG02OAQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-5', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_02QUU4DMQxE_3MKX6CHWBUh9a8CLuAm7m5EYgc72ba3xwFV8Bl73szEB2C5wYmvitZ1xD6U4J36aAHOKnu2LAyxyEigZDI0kgU4Cl_zOrVM_Sb6mXkNk4PRoArnLuojQE5QZF3n-uDae3fUqVfCmWThVFuhSuygkQKOvvkjR-yeG15opyINlvMJiFOTzN3CUZ0mSNjxgkZgcaOK7l98rLCkHTlS-gtZUvImWB5ubM7ZdhHU9C-8YtwyExRC5Vk8Sm3CNOOeJapcciHA1sqz3wGSi-BckCcV3uhrZP2xNFjR_zKvEBZ1906_x01keeXwQXFj8ds8wKj4bvp9A8GFG02OAQAA&scale=1.0&type=SVG&useDark=false&title=Kanban&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Kanban')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_02QUU4DMQxE_3MKX6CHWBUh9a8CLuAm7m5EYgc72ba3xwFV8Bl73szEB2C5wYmvitZ1xD6U4J36aAHOKnu2LAyxyEigZDI0kgU4Cl_zOrVM_Sb6mXkNk4PRoArnLuojQE5QZF3n-uDae3fUqVfCmWThVFuhSuygkQKOvvkjR-yeG15opyINlvMJiFOTzN3CUZ0mSNjxgkZgcaOK7l98rLCkHTlS-gtZUvImWB5ubM7ZdhHU9C-8YtwyExRC5Vk8Sm3CNOOeJapcciHA1sqz3wGSi-BckCcV3uhrZP2xNFjR_zKvEBZ1906_x01keeXwQXFj8ds8wKj4bvp9A8GFG02OAQAA&scale=1.0&type=SVG&useDark=false&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_02QUU4DMQxE_3MKX6CHWBUh9a8CLuAm7m5EYgc72ba3xwFV8Bl73szEB2C5wYmvitZ1xD6U4J36aAHOKnu2LAyxyEigZDI0kgU4Cl_zOrVM_Sb6mXkNk4PRoArnLuojQE5QZF3n-uDae3fUqVfCmWThVFuhSuygkQKOvvkjR-yeG15opyINlvMJiFOTzN3CUZ0mSNjxgkZgcaOK7l98rLCkHTlS-gtZUvImWB5ubM7ZdhHU9C-8YtwyExRC5Vk8Sm3CNOOeJapcciHA1sqz3wGSi-BckCcV3uhrZP2xNFjR_zKvEBZ1906_x01keeXwQXFj8ds8wKj4bvp9A8GFG02OAQAA&scale=1.0&type=SVG&useDark=false&title=Kanban&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Kanban" loading="lazy" />
 </div>
 </div>
-<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-693862206ba6ae82-6">
+<div class="gallery-item" data-kind="planner" id="gallery-item-docops-gallery-4a26dae0e3962758-6">
 <div class="gallery-item-header">
-<div class="gallery-item-title">Planner</div>
+<div class="gallery-item-title">Project Roadmap with Glass Design</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-693862206ba6ae82-6', 'Planner', 'planner', this.getAttribute('data-content'))" data-content="- Todo
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-4a26dae0e3962758-6', 'Project Roadmap with Glass Design', 'planner', this.getAttribute('data-content'))" data-content="- Todo
 * Create Documentation
 * Create Blog Post
 - Progressing
@@ -1717,11 +2057,11 @@ Cant reproduce
 Title of diagram is more than 100 chars when user duplicates diagram with 100 char
 Update db function [[https://www.apple.com WM123]]
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-693862206ba6ae82-6', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_12QvU4DMRCE-3uK6ZCQ8gcdJaFFilAQRZRiY2_OFj6vsdec8vb4EiWRKHdn5lt7ZtiKle4R68ykjDcxdeCopF7iff0apMdGinYzbLL0mUvxsW8GczEQEqnDUTLUMbKQHShBBY5-GZby9yCWUWpKkifMB5M9nQOWU5DTdLXx_q-bc8tFsab4oE1NWWw13LVZkW_jrL088jn_U33miVYuGFKaToeuqRQpnIq_KwcqDOd7B5PqlbL1GhhyhPXUZxrQAoNkbl-jiNVyCeMoF4yOI2rhhqopeNOKKLfM6FsfV2_3mexUkz3gWKOZysVu51RTeVksxnGcU0qB50YGfL2vnp73--4PJEcglZsBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Planner')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-4a26dae0e3962758-6', 'https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_12QvU4DMRCE-3uK6ZCQ8gcdJaFFilAQRZRiY2_OFj6vsdec8vb4EiWRKHdn5lt7ZtiKle4R68ykjDcxdeCopF7iff0apMdGinYzbLL0mUvxsW8GczEQEqnDUTLUMbKQHShBBY5-GZby9yCWUWpKkifMB5M9nQOWU5DTdLXx_q-bc8tFsab4oE1NWWw13LVZkW_jrL088jn_U33miVYuGFKaToeuqRQpnIq_KwcqDOd7B5PqlbL1GhhyhPXUZxrQAoNkbl-jiNVyCeMoF4yOI2rhhqopeNOKKLfM6FsfV2_3mexUkz3gWKOZysVu51RTeVksxnGcU0qB50YGfL2vnp73--4PJEcglZsBAAA=&scale=1.0&type=SVG&useDark=true&title=Project+Roadmap+with+Glass+Design&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg', 'Project Roadmap with Glass Design')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAF6v9WgA_12QvU4DMRCE-3uK6ZCQ8gcdJaFFilAQRZRiY2_OFj6vsdec8vb4EiWRKHdn5lt7ZtiKle4R68ykjDcxdeCopF7iff0apMdGinYzbLL0mUvxsW8GczEQEqnDUTLUMbKQHShBBY5-GZby9yCWUWpKkifMB5M9nQOWU5DTdLXx_q-bc8tFsab4oE1NWWw13LVZkW_jrL088jn_U33miVYuGFKaToeuqRQpnIq_KwcqDOd7B5PqlbL1GhhyhPXUZxrQAoNkbl-jiNVyCeMoF4yOI2rhhqopeNOKKLfM6FsfV2_3mexUkz3gWKOZysVu51RTeVksxnGcU0qB50YGfL2vnp73--4PJEcglZsBAAA=&scale=1.0&type=SVG&useDark=true&title=Planner&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Planner" loading="lazy" />
+<img src="https://roach.gy/extension/api/docops/svg?kind=planner&payload=H4sIAAsZ9mgA_12QvU4DMRCE-3uK6ZCQ8gcdJaFFilAQRZRiY2_OFj6vsdec8vb4EiWRKHdn5lt7ZtiKle4R68ykjDcxdeCopF7iff0apMdGinYzbLL0mUvxsW8GczEQEqnDUTLUMbKQHShBBY5-GZby9yCWUWpKkifMB5M9nQOWU5DTdLXx_q-bc8tFsab4oE1NWWw13LVZkW_jrL088jn_U33miVYuGFKaToeuqRQpnIq_KwcqDOd7B5PqlbL1GhhyhPXUZxrQAoNkbl-jiNVyCeMoF4yOI2rhhqopeNOKKLfM6FsfV2_3mexUkz3gWKOZysVu51RTeVksxnGcU0qB50YGfL2vnp73--4PJEcglZsBAAA=&scale=1.0&type=SVG&useDark=true&title=Project+Roadmap+with+Glass+Design&useGlass=false&backend=html5&docname=plannershowcase&filename=planner.svg" alt="Project Roadmap with Glass Design" loading="lazy" />
 </div>
 </div>
 </div>
@@ -1753,349 +2093,6 @@ Update db function [[https://www.apple.com WM123]]
     </div>
   </div>
 </div>
-
-<style>
-  .docops-showcase-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin: 2rem 0;
-  }
-
-  .gallery-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-
-  .gallery-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #3498db;
-  }
-
-  .gallery-item-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #2c3e50;
-    flex: 1;
-  }
-
-  .gallery-item-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .gallery-expand-btn,
-  .gallery-content-btn {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: #3498db;
-    transition: color 0.2s, transform 0.2s;
-    line-height: 1;
-  }
-
-  .gallery-content-btn {
-    color: #9b59b6;
-    font-weight: bold;
-  }
-
-  .gallery-expand-btn:hover {
-    color: #2980b9;
-    transform: scale(1.2);
-  }
-
-  .gallery-content-btn:hover {
-    color: #8e44ad;
-    transform: scale(1.2);
-  }
-
-  .gallery-item-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-  }
-
-  .gallery-item-image img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-  }
-
-  .gallery-item-image img:hover {
-    opacity: 0.9;
-  }
-
-  /* Modal Styles */
-  .showcase-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .showcase-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .showcase-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 12px;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-
-  .showcase-content-modal-content {
-    max-width: 90vw;
-    width: 1000px;
-  }
-
-  .showcase-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f8f9fa;
-  }
-
-  .showcase-modal-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #2c3e50;
-  }
-
-  .showcase-modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7f8c8d;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-
-  .showcase-modal-close:hover {
-    color: #e74c3c;
-  }
-
-  .showcase-modal-body {
-    padding: 2rem;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-  }
-
-  .showcase-content-body {
-    padding: 0;
-    align-items: stretch;
-    justify-content: stretch;
-    background: #282c34;
-  }
-
-  .showcase-content-pre {
-    margin: 0;
-    width: 100%;
-    max-height: calc(95vh - 150px);
-    overflow: auto;
-  }
-
-  .showcase-content-code {
-    display: block;
-    padding: 1.5rem;
-    color: #abb2bf;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    white-space: pre;
-    tab-size: 4;
-  }
-
-  .showcase-content-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .showcase-copy-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-
-  .showcase-copy-btn:hover {
-    background: #2980b9;
-  }
-
-  .showcase-copy-btn.copied {
-    background: #27ae60;
-  }
-
-  .showcase-modal-image {
-    max-width: 100%;
-    max-height: calc(95vh - 100px);
-    width: auto;
-    height: auto;
-  }
-
-  @media (max-width: 768px) {
-    .docops-showcase-gallery {
-      grid-template-columns: 1fr;
-      padding: 1rem;
-    }
-
-    .showcase-modal-content {
-      max-width: 100vw;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
-    .showcase-modal-body {
-      padding: 1rem;
-    }
-
-    .showcase-content-modal-content {
-      width: 100vw;
-    }
-  }
-</style>
-
-<script>
-  window.showcaseGallery = window.showcaseGallery || (function() {
-    let currentContent = '';
-
-    return {
-      expandItem: function(itemId, imageUrl, title) {
-        const modal = document.getElementById('showcase-gallery-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const modalImage = modal.querySelector('.showcase-modal-image');
-
-        modalTitle.textContent = title;
-        modalImage.src = imageUrl;
-        modalImage.alt = title;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleEscKey);
-      },
-
-      closeModal: function() {
-        const modal = document.getElementById('showcase-gallery-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-
-        document.removeEventListener('keydown', this.handleEscKey);
-      },
-
-      showContent: function(itemId, title, kind, content) {
-        const modal = document.getElementById('showcase-content-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const codeElement = modal.querySelector('.showcase-content-code');
-
-        // Decode HTML entities
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = content;
-        const decodedContent = textarea.value;
-
-        currentContent = decodedContent;
-
-        modalTitle.textContent = title + ' (' + kind + ')';
-        codeElement.textContent = decodedContent;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleContentEscKey);
-      },
-
-      closeContentModal: function() {
-        const modal = document.getElementById('showcase-content-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        currentContent = '';
-
-        document.removeEventListener('keydown', this.handleContentEscKey);
-      },
-
-      copyContent: function() {
-        const btn = document.querySelector('.showcase-copy-btn');
-
-        navigator.clipboard.writeText(currentContent).then(function() {
-          btn.textContent = '✓ Copied!';
-          btn.classList.add('copied');
-
-          setTimeout(function() {
-            btn.textContent = '📋 Copy';
-            btn.classList.remove('copied');
-          }, 2000);
-        }).catch(function(err) {
-          console.error('Failed to copy:', err);
-        });
-      },
-
-      handleEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeModal();
-        }
-      },
-
-      handleContentEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeContentModal();
-        }
-      }
-    };
-  })();
-</script>
 </div>
 </div>
 </div>
@@ -2156,7 +2153,7 @@ if (!hljs.initHighlighting.called) {
 }
 </style>
 <div class="reading-time">
-    <p>📖 1 min read • 568 words</p>
+    <p>📖 1 min read • 583 words</p>
 </div>
 <style>
 .listingblock {
