@@ -345,7 +345,255 @@
     }
 
 </style>
+<style>
+    /* DocOps Showcase Gallery Styles */
+    .docops-showcase-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
 
+    .gallery-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .gallery-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+
+    .gallery-item-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .gallery-item-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .gallery-expand-btn,
+    .gallery-content-btn {
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        color: #3498db;
+        transition: color 0.2s, transform 0.2s;
+        line-height: 1;
+    }
+
+    .gallery-content-btn {
+        color: #9b59b6;
+        font-weight: bold;
+    }
+
+    .gallery-expand-btn:hover {
+        color: #2980b9;
+        transform: scale(1.2);
+    }
+
+    .gallery-content-btn:hover {
+        color: #8e44ad;
+        transform: scale(1.2);
+    }
+
+    .gallery-item-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .gallery-item-image svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Modal Styles */
+    .showcase-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        max-width: 95vw;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .showcase-content-modal-content {
+        max-width: 90vw;
+        width: 1000px;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+    }
+
+    .showcase-modal-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+
+    .showcase-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        color: #e74c3c;
+    }
+
+    .showcase-modal-body {
+        padding: 2rem;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+
+    .showcase-content-body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+        background: #282c34;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        width: 100%;
+        max-height: calc(95vh - 150px);
+        overflow: auto;
+    }
+
+    .showcase-content-code {
+        display: block;
+        padding: 1.5rem;
+        color: #abb2bf;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        white-space: pre;
+        tab-size: 4;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-copy-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+
+    .showcase-copy-btn:hover {
+        background: #2980b9;
+    }
+
+    .showcase-copy-btn.copied {
+        background: #27ae60;
+    }
+
+    .showcase-modal-body svg {
+        max-width: 100%;
+        max-height: calc(95vh - 100px);
+        width: auto;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .docops-showcase-gallery {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .showcase-modal-content {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .showcase-modal-body {
+            padding: 1rem;
+        }
+
+        .showcase-content-modal-content {
+            width: 100vw;
+        }
+    }
+</style>
 <script>
     window.svgViewer = window.svgViewer || {
         toggleControls(id) {
@@ -1129,6 +1377,106 @@
         }
     });
 </script>
+<script>
+    window.showcaseGallery = window.showcaseGallery || (function() {
+        let currentContent = '';
+        let currentSvg = null;
+
+        return {
+            expandItem: function(itemId, title) {
+                const galleryItem = document.getElementById(itemId);
+                const svgElement = galleryItem.querySelector('.gallery-item-image svg');
+
+                if (!svgElement) return;
+
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                // Clone the SVG for the modal
+                const clonedSvg = svgElement.cloneNode(true);
+
+                modalTitle.textContent = title;
+                modalBody.innerHTML = '';
+                modalBody.appendChild(clonedSvg);
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleEscKey);
+            },
+
+            closeModal: function() {
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                modal.style.display = 'none';
+                modalBody.innerHTML = '';
+                document.body.style.overflow = '';
+
+                document.removeEventListener('keydown', this.handleEscKey);
+            },
+
+            showContent: function(itemId, title, kind, content) {
+                const modal = document.getElementById('showcase-content-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const codeElement = modal.querySelector('.showcase-content-code');
+
+                // Decode HTML entities
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = content;
+                const decodedContent = textarea.value;
+
+                currentContent = decodedContent;
+
+                modalTitle.textContent = title + ' (' + kind + ')';
+                codeElement.textContent = decodedContent;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleContentEscKey);
+            },
+
+            closeContentModal: function() {
+                const modal = document.getElementById('showcase-content-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContent = '';
+
+                document.removeEventListener('keydown', this.handleContentEscKey);
+            },
+
+            copyContent: function() {
+                const btn = document.querySelector('.showcase-copy-btn');
+
+                navigator.clipboard.writeText(currentContent).then(function() {
+                    btn.textContent = '✓ Copied!';
+                    btn.classList.add('copied');
+
+                    setTimeout(function() {
+                        btn.textContent = '📋 Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            handleEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeModal();
+                }
+            },
+
+            handleContentEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeContentModal();
+                }
+            }
+        };
+    })();
+</script>
 <style>
 .hidden {
     display: none;
@@ -1527,12 +1875,12 @@ This document showcases the various ways to use the <code>metricscard</code> mac
 <div class="sect1">
 <h2 id="_metrics_card">1. Metrics Card</h2>
 <div class="sectionbody">
-<div class="docops-showcase-gallery" id="docops-gallery-2dc9fa0b000b42df">
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-0">
+<div class="docops-showcase-gallery" id="docops-gallery-5c272361cf7c2c27">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-0">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-0', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-0', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="{
   &quot;title&quot;: &quot;Performance Improvements&quot;,
   &quot;metrics&quot;: [
     {
@@ -1553,18 +1901,18 @@ This document showcases the various ways to use the <code>metricscard</code> mac
   ]
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-0', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_4XQvYoCMRDA8X6fYggseLBF_Do_OtHGylWxOq6IccRAslmSWUHF1gfwEX2Sy4a7s1mxGcjkH36QSwLASJFGNgaWo9tbZ0QhEeamdPaIBgvyLKszg-SU9CH8CkeAS5zh4ih0Fd-PBmlM41aLLep6u6zQnWBqPcEKd5UkZYtn5qvtf9lqdzLOOTxud-jx_geL0TV7wXU7Tdw038CGlFZnUUswc7Z8wQ2HabQ-efrWapAWJSnzx-QH4dE3Q-uTJzShkzApw7cKefjlwvxOrskPD4WX6YcBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-0', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_4XQvYoCMRDA8X6fYggseLBF_Do_OtHGylWxOq6IccRAslmSWUHF1gfwEX2Sy4a7s1mxGcjkH36QSwLASJFGNgaWo9tbZ0QhEeamdPaIBgvyLKszg-SU9CH8CkeAS5zh4ih0Fd-PBmlM41aLLep6u6zQnWBqPcEKd5UkZYtn5qvtf9lqdzLOOTxud-jx_geL0TV7wXU7Tdw038CGlFZnUUswc7Z8wQ2HabQ-efrWapAWJSnzx-QH4dE3Q-uTJzShkzApw7cKefjlwvxOrskPD4WX6YcBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_63db85641ac14914a35ea921a56e77d7" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>            <!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><linearGradient id="glassBorder_63db85641ac14914a35ea921a56e77d7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_63db85641ac14914a35ea921a56e77d7" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_63db85641ac14914a35ea921a56e77d7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_63db85641ac14914a35ea921a56e77d7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_63db85641ac14914a35ea921a56e77d7)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_63db85641ac14914a35ea921a56e77d7)" stroke-width="1.5" filter="url(#glassDropShadow_63db85641ac14914a35ea921a56e77d7)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_63db85641ac14914a35ea921a56e77d7)" opacity="0.7"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(110, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">97%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Query Cost Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">(12,000 → 405)</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(310, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">32%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">CPU Utilization Drop</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">(88% → 60%)</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(510, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Optimization Phases</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Systematic Approach</text></g>    </g></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-1">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-1">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-1', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Q2 2024 Business Metrics
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-1', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Q2 2024 Business Metrics
 ---
 Metric | Value | Sublabel
 Revenue | $4.2M | 18% YoY Growth
@@ -1572,18 +1920,18 @@ New Customers | 156 | 42 Enterprise
 Customer Retention | 94% | 2% Improvement
 NPS Score | 72 | Industry Leading
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-1', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_zWNywrCMBBF9_mKWdhlRUN8LdwoIgVbtAWhyz4GDaRJSSYtgh9vqrg5d5gzwyVJCvdw48AXXMDBO6nROUiRrGwci-OY_WZ4w71SHkMWvlZVjYrlOKD-rmZiztOQy20EpSnhbM1IT5bhCEfvyHRo3aRX60DB4aQJbW-lQ_b3kCOhJml0ONmJKJBHkHS9NQN2wbDsWkDRGDsVbnhAotvwbF9wwaqV-sE-YwSsKM8AAAA=&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-1', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_zWNywrCMBBF9_mKWdhlRUN8LdwoIgVbtAWhyz4GDaRJSSYtgh9vqrg5d5gzwyVJCvdw48AXXMDBO6nROUiRrGwci-OY_WZ4w71SHkMWvlZVjYrlOKD-rmZiztOQy20EpSnhbM1IT5bhCEfvyHRo3aRX60DB4aQJbW-lQ_b3kCOhJml0ONmJKJBHkHS9NQN2wbDsWkDRGDsVbnhAotvwbF9wwaqV-sE-YwSsKM8AAAA=&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_14772ff3e0114b468e53453bac37500b" width="820" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>            <!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><linearGradient id="glassBorder_14772ff3e0114b468e53453bac37500b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_14772ff3e0114b468e53453bac37500b" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_14772ff3e0114b468e53453bac37500b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_14772ff3e0114b468e53453bac37500b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_14772ff3e0114b468e53453bac37500b)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_14772ff3e0114b468e53453bac37500b)" stroke-width="1.5" filter="url(#glassDropShadow_14772ff3e0114b468e53453bac37500b)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_14772ff3e0114b468e53453bac37500b)" opacity="0.7"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(20, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">$4.2M</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Revenue</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">18% YoY Growth</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(220, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">156</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">New Customers</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">42 Enterprise</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(420, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Customer Retention</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">2% Improvement</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(620, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">72</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">NPS Score</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Industry Leading</text></g>    </g></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-2">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-2">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-2', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Website Performance
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-2', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Website Performance
 ---
 Metric | Value | Sublabel
 Page Load Time | 1.2s | 40% Faster
@@ -1592,18 +1940,18 @@ Time to Interactive | 2.1s | Mobile Devices
 Bounce Rate | 24% | -5% vs Last Month
 Conversion Rate | 3.8% | +0.7% vs Last Month
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-2', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_13OsY7CMAwG4D1P4aUTalQ4EDDccqBKJ4FUcQhmNxiwlCZS4na6hz8HieUWe_Bn_xYWT59wpT6zEHSU7jENGByZuq7NkSSxg1-4oB9J-8_Ye-zJmw4fBIeINzjzUCZzu8jalk0FLWahZFpOWWAXg1CQ--ihQw6iprGbQreNPEui0zF7Mq9DEuFbFxI64ancXdh5wcfYq4E9Tewom6846o9wQnmZZaW1XlUwZThouvIgT6PZE6XMMbzlh90UOmvs-j_-A_-GdLULAQAA&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-2', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_13OsY7CMAwG4D1P4aUTalQ4EDDccqBKJ4FUcQhmNxiwlCZS4na6hz8HieUWe_Bn_xYWT59wpT6zEHSU7jENGByZuq7NkSSxg1-4oB9J-8_Ye-zJmw4fBIeINzjzUCZzu8jalk0FLWahZFpOWWAXg1CQ--ihQw6iprGbQreNPEui0zF7Mq9DEuFbFxI64ancXdh5wcfYq4E9Tewom6846o9wQnmZZaW1XlUwZThouvIgT6PZE6XMMbzlh90UOmvs-j_-A_-GdLULAQAA&scale=1.0&type=SVG&useDark=true&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_12f0fedc2f0847abae67755b69e81d33" width="1020" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>            <!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><linearGradient id="glassBorder_12f0fedc2f0847abae67755b69e81d33" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_12f0fedc2f0847abae67755b69e81d33" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_12f0fedc2f0847abae67755b69e81d33" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_12f0fedc2f0847abae67755b69e81d33" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_12f0fedc2f0847abae67755b69e81d33)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_12f0fedc2f0847abae67755b69e81d33)" stroke-width="1.5" filter="url(#glassDropShadow_12f0fedc2f0847abae67755b69e81d33)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_12f0fedc2f0847abae67755b69e81d33)" opacity="0.7"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(20, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">1.2s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Page Load Time</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">40% Faster</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(220, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">0.8s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">First Contentful Paint</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">90th Percentile</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(420, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">2.1s</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Time to Interactive</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">Mobile Devices</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(620, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">24%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Bounce Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">-5% vs Last Month</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(820, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="white">3.8%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)">Conversion Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="rgba(255,255,255,0.7)">+0.7% vs Last Month</text></g>    </g></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-3">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-3">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-3', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Project Status Dashboard
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-3', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Project Status Dashboard
 ---
 Metric | Value | Sublabel
 Completion | 78% | On Schedule
@@ -1612,18 +1960,18 @@ Open Issues | 12 | 3 Critical
 Team Velocity | 42 | Story Points/Sprint
 Code Coverage | 92% | +5% This Month
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-3', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_yWOvW4CMRCEez_FNqmiUxQI-SloOJoUCCQDvc9ecYsW78leRwLl4bOnNDPSfCPNKCnjGg5FrhgVvAZtFbahjoOEklzXdW6HWijCL5wDNzT3beAwILtebhOjkmRLPz6fTPcZfBwxNUa3aemCCiclpgcmo--ruXPKCQv8U7efMMN3rQ2rodeFyRL6QkoxsDtiuMEZWSLp3dDbzL1KucNBKGt98VMxtysJoZcfLOEyf_xazEvPtnccqcJOso7uD3rR1WfuAAAA&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-3', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_yWOvW4CMRCEez_FNqmiUxQI-SloOJoUCCQDvc9ecYsW78leRwLl4bOnNDPSfCPNKCnjGg5FrhgVvAZtFbahjoOEklzXdW6HWijCL5wDNzT3beAwILtebhOjkmRLPz6fTPcZfBwxNUa3aemCCiclpgcmo--ruXPKCQv8U7efMMN3rQ2rodeFyRL6QkoxsDtiuMEZWSLp3dDbzL1KucNBKGt98VMxtysJoZcfLOEyf_xazEvPtnccqcJOso7uD3rR1WfuAAAA&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_3d32ee5cf60b4ab09bb37a19af96edd6" width="1020" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="1020" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(20, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">78%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Completion</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">On Schedule</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(220, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Budget Utilized</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Under Budget</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(420, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">12</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Open Issues</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">3 Critical</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(620, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">42</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Team Velocity</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Story Points/Sprint</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(820, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">92%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Code Coverage</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">+5% This Month</text></g>    </g></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-4">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-4">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-4', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Fitness Progress
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-4', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Fitness Progress
 ---
 Metric | Value | Sublabel
 Weight Loss | 12 lbs | 8-Week Program
@@ -1632,18 +1980,18 @@ Muscle Mass Increase | 2.8 lbs | Primarily Upper Body
 Resting Heart Rate | 62 bpm | -8 bpm Improvement
 VO2 Max | 42.3 | +5.3 ml/kg/min
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-4', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_y2Ou07DQBBF-_2KaVKhdZTl5YaGwiISFlEQST12RmaVfVizY0SkfDyzQHVOMffeES-BnqDzkqgU2HGeWMVYa01Pwn6EKxwwLKR8X4aAAwVzJD99CrxmjVxh4yAMVVp7JDr_lWA0z_l0gQ4F9nRaRvE56c1d41aKjnMEpyoZNo9NuzL9UsZA0KN2btPIhKVuuqb9b9-xj8g-XOBjnomh1ps9FfFpghdC1iGUmnlwMMxRxba_so0z5y-KlMQc3pxufNdPXHOruLlXxLA-T-vok_kB_pvquxEBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-4', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_y2Ou07DQBBF-_2KaVKhdZTl5YaGwiISFlEQST12RmaVfVizY0SkfDyzQHVOMffeES-BnqDzkqgU2HGeWMVYa01Pwn6EKxwwLKR8X4aAAwVzJD99CrxmjVxh4yAMVVp7JDr_lWA0z_l0gQ4F9nRaRvE56c1d41aKjnMEpyoZNo9NuzL9UsZA0KN2btPIhKVuuqb9b9-xj8g-XOBjnomh1ps9FfFpghdC1iGUmnlwMMxRxba_so0z5y-KlMQc3pxufNdPXHOruLlXxLA-T-vok_kB_pvquxEBAAA=&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_23f63cc2fd814f538bab7ec5d73de2c2" width="1020" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="1020" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(20, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">12 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Weight Loss</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">8-Week Program</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(220, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">4.2%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Body Fat Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">From 22% to 17.8%</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(420, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">2.8 lbs</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Muscle Mass Increase</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Primarily Upper Body</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(620, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">62 bpm</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Resting Heart Rate</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">-8 bpm Improvement</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(820, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">42.3</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">VO2 Max</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">+5.3 ml/kg/min</text></g>    </g></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-2dc9fa0b000b42df-5">
+<div class="gallery-item" data-kind="metricscard" id="gallery-item-docops-gallery-5c272361cf7c2c27-5">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Metricscard</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-2dc9fa0b000b42df-5', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Sustainability Achievements
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-5c272361cf7c2c27-5', 'Metricscard', 'metricscard', this.getAttribute('data-content'))" data-content="title= Sustainability Achievements
 ---
 Metric | Value | Sublabel
 Carbon Reduction | 28% | vs. 2020 Baseline
@@ -1652,11 +2000,11 @@ Water Conservation | 350K | Gallons Saved
 Waste Diverted | 94% | From Landfill
 Paper Reduction | 65% | Digital Transformation
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-2dc9fa0b000b42df-5', 'https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_02OP08DMQzF93wKL4yHTkfLn4EBWmAABOpVMDt3vtaSL6kSJ6hSPzxJxcDiZ_k9_Z6VVege-hQV2aFlYT3Cw7BnyjST02iapjHvpIEHOMEXSqKifbKClsSsMFjvYENjGpTLdoLu9qLMHC-ha7sWHjGSsCOzIUc_aIXgyVHYHUvopqvRjwm2XlFg5V1M86FyzDcqhfOFQsY_9NWyfS3ygiLFgB4zjSUZlWDNmYLSWOy7RaU-Bz_DG7pxYhHziYeC-__m9bKm1rzjWr0N6OLkw3yuMr8YYLssGAEAAA==&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg', 'Metricscard')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-5c272361cf7c2c27-5', 'Metricscard')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=metricscard&payload=H4sIAA6s9WgA_02OP08DMQzF93wKL4yHTkfLn4EBWmAABOpVMDt3vtaSL6kSJ6hSPzxJxcDiZ_k9_Z6VVege-hQV2aFlYT3Cw7BnyjST02iapjHvpIEHOMEXSqKifbKClsSsMFjvYENjGpTLdoLu9qLMHC-ha7sWHjGSsCOzIUc_aIXgyVHYHUvopqvRjwm2XlFg5V1M86FyzDcqhfOFQsY_9NWyfS3ygiLFgB4zjSUZlWDNmYLSWOy7RaU-Bz_DG7pxYhHziYeC-__m9bKm1rzjWr0N6OLkw3yuMr8YYLssGAEAAA==&scale=1.0&type=SVG&useDark=false&title=Metricscard&useGlass=false&backend=html5&docname=metricscardshowcase&filename=metricscard.svg" alt="Metricscard" loading="lazy" />
+<svg id="ID_fe28c20be6494c6385474f1cbcc0487b" width="1020" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter><linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#34C759;stop-opacity:1" /><stop offset="100%" style="stop-color:#30D158;stop-opacity:1" /></linearGradient></defs><!-- Background --><rect width="1020" height="400" fill="#F2F2F7" rx="0" ry="0"/><!-- Metrics Container --><g class="metrics"><!-- Metric Card 1 --><g class="metric-card" transform="translate(20, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">28%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Carbon Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">vs. 2020 Baseline</text></g><!-- Metric Card 2 --><g class="metric-card" transform="translate(220, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">72%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Renewable Energy</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Of Total Consumption</text></g><!-- Metric Card 3 --><g class="metric-card" transform="translate(420, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">350K</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Water Conservation</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Gallons Saved</text></g><!-- Metric Card 4 --><g class="metric-card" transform="translate(620, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">94%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Waste Diverted</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">From Landfill</text></g><!-- Metric Card 5 --><g class="metric-card" transform="translate(820, 100)"><!-- Card Background --><rect width="180" height="200" rx="16" ry="16" fill="white" stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/><!-- Metric Value --><text x="90" y="80" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="36" font-weight="700" text-anchor="middle" fill="#007AFF">65%</text><!-- Metric Label --><text x="90" y="120" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#1C1C1E">Paper Reduction</text><!-- Metric Sublabel --><text x="90" y="145" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="400" text-anchor="middle" fill="#8E8E93">Digital Transformation</text></g>    </g></svg>
 </div>
 </div>
 </div>
@@ -1668,7 +2016,6 @@ Paper Reduction | 65% | Digital Transformation
       <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
     </div>
     <div class="showcase-modal-body">
-      <img src="" alt="" class="showcase-modal-image" />
     </div>
   </div>
 </div>
@@ -1688,349 +2035,6 @@ Paper Reduction | 65% | Digital Transformation
     </div>
   </div>
 </div>
-
-<style>
-  .docops-showcase-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin: 2rem 0;
-  }
-
-  .gallery-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-
-  .gallery-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #3498db;
-  }
-
-  .gallery-item-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #2c3e50;
-    flex: 1;
-  }
-
-  .gallery-item-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .gallery-expand-btn,
-  .gallery-content-btn {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: #3498db;
-    transition: color 0.2s, transform 0.2s;
-    line-height: 1;
-  }
-
-  .gallery-content-btn {
-    color: #9b59b6;
-    font-weight: bold;
-  }
-
-  .gallery-expand-btn:hover {
-    color: #2980b9;
-    transform: scale(1.2);
-  }
-
-  .gallery-content-btn:hover {
-    color: #8e44ad;
-    transform: scale(1.2);
-  }
-
-  .gallery-item-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-  }
-
-  .gallery-item-image img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-  }
-
-  .gallery-item-image img:hover {
-    opacity: 0.9;
-  }
-
-  /* Modal Styles */
-  .showcase-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .showcase-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .showcase-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 12px;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-
-  .showcase-content-modal-content {
-    max-width: 90vw;
-    width: 1000px;
-  }
-
-  .showcase-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f8f9fa;
-  }
-
-  .showcase-modal-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #2c3e50;
-  }
-
-  .showcase-modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7f8c8d;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-
-  .showcase-modal-close:hover {
-    color: #e74c3c;
-  }
-
-  .showcase-modal-body {
-    padding: 2rem;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-  }
-
-  .showcase-content-body {
-    padding: 0;
-    align-items: stretch;
-    justify-content: stretch;
-    background: #282c34;
-  }
-
-  .showcase-content-pre {
-    margin: 0;
-    width: 100%;
-    max-height: calc(95vh - 150px);
-    overflow: auto;
-  }
-
-  .showcase-content-code {
-    display: block;
-    padding: 1.5rem;
-    color: #abb2bf;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    white-space: pre;
-    tab-size: 4;
-  }
-
-  .showcase-content-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .showcase-copy-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-
-  .showcase-copy-btn:hover {
-    background: #2980b9;
-  }
-
-  .showcase-copy-btn.copied {
-    background: #27ae60;
-  }
-
-  .showcase-modal-image {
-    max-width: 100%;
-    max-height: calc(95vh - 100px);
-    width: auto;
-    height: auto;
-  }
-
-  @media (max-width: 768px) {
-    .docops-showcase-gallery {
-      grid-template-columns: 1fr;
-      padding: 1rem;
-    }
-
-    .showcase-modal-content {
-      max-width: 100vw;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
-    .showcase-modal-body {
-      padding: 1rem;
-    }
-
-    .showcase-content-modal-content {
-      width: 100vw;
-    }
-  }
-</style>
-
-<script>
-  window.showcaseGallery = window.showcaseGallery || (function() {
-    let currentContent = '';
-
-    return {
-      expandItem: function(itemId, imageUrl, title) {
-        const modal = document.getElementById('showcase-gallery-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const modalImage = modal.querySelector('.showcase-modal-image');
-
-        modalTitle.textContent = title;
-        modalImage.src = imageUrl;
-        modalImage.alt = title;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleEscKey);
-      },
-
-      closeModal: function() {
-        const modal = document.getElementById('showcase-gallery-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-
-        document.removeEventListener('keydown', this.handleEscKey);
-      },
-
-      showContent: function(itemId, title, kind, content) {
-        const modal = document.getElementById('showcase-content-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const codeElement = modal.querySelector('.showcase-content-code');
-
-        // Decode HTML entities
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = content;
-        const decodedContent = textarea.value;
-
-        currentContent = decodedContent;
-
-        modalTitle.textContent = title + ' (' + kind + ')';
-        codeElement.textContent = decodedContent;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleContentEscKey);
-      },
-
-      closeContentModal: function() {
-        const modal = document.getElementById('showcase-content-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        currentContent = '';
-
-        document.removeEventListener('keydown', this.handleContentEscKey);
-      },
-
-      copyContent: function() {
-        const btn = document.querySelector('.showcase-copy-btn');
-
-        navigator.clipboard.writeText(currentContent).then(function() {
-          btn.textContent = '✓ Copied!';
-          btn.classList.add('copied');
-
-          setTimeout(function() {
-            btn.textContent = '📋 Copy';
-            btn.classList.remove('copied');
-          }, 2000);
-        }).catch(function(err) {
-          console.error('Failed to copy:', err);
-        });
-      },
-
-      handleEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeModal();
-        }
-      },
-
-      handleContentEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeContentModal();
-        }
-      }
-    };
-  })();
-</script>
 </div>
 </div>
 </div>

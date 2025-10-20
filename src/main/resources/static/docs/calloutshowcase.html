@@ -345,7 +345,255 @@
     }
 
 </style>
+<style>
+    /* DocOps Showcase Gallery Styles */
+    .docops-showcase-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
 
+    .gallery-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1rem;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .gallery-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+
+    .gallery-item-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .gallery-item-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .gallery-expand-btn,
+    .gallery-content-btn {
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        color: #3498db;
+        transition: color 0.2s, transform 0.2s;
+        line-height: 1;
+    }
+
+    .gallery-content-btn {
+        color: #9b59b6;
+        font-weight: bold;
+    }
+
+    .gallery-expand-btn:hover {
+        color: #2980b9;
+        transform: scale(1.2);
+    }
+
+    .gallery-content-btn:hover {
+        color: #8e44ad;
+        transform: scale(1.2);
+    }
+
+    .gallery-item-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .gallery-item-image svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Modal Styles */
+    .showcase-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        max-width: 95vw;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .showcase-content-modal-content {
+        max-width: 90vw;
+        width: 1000px;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+    }
+
+    .showcase-modal-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+
+    .showcase-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        color: #e74c3c;
+    }
+
+    .showcase-modal-body {
+        padding: 2rem;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+
+    .showcase-content-body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+        background: #282c34;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        width: 100%;
+        max-height: calc(95vh - 150px);
+        overflow: auto;
+    }
+
+    .showcase-content-code {
+        display: block;
+        padding: 1.5rem;
+        color: #abb2bf;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        white-space: pre;
+        tab-size: 4;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-copy-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+
+    .showcase-copy-btn:hover {
+        background: #2980b9;
+    }
+
+    .showcase-copy-btn.copied {
+        background: #27ae60;
+    }
+
+    .showcase-modal-body svg {
+        max-width: 100%;
+        max-height: calc(95vh - 100px);
+        width: auto;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .docops-showcase-gallery {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .showcase-modal-content {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .showcase-modal-body {
+            padding: 1rem;
+        }
+
+        .showcase-content-modal-content {
+            width: 100vw;
+        }
+    }
+</style>
 <script>
     window.svgViewer = window.svgViewer || {
         toggleControls(id) {
@@ -1129,6 +1377,106 @@
         }
     });
 </script>
+<script>
+    window.showcaseGallery = window.showcaseGallery || (function() {
+        let currentContent = '';
+        let currentSvg = null;
+
+        return {
+            expandItem: function(itemId, title) {
+                const galleryItem = document.getElementById(itemId);
+                const svgElement = galleryItem.querySelector('.gallery-item-image svg');
+
+                if (!svgElement) return;
+
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                // Clone the SVG for the modal
+                const clonedSvg = svgElement.cloneNode(true);
+
+                modalTitle.textContent = title;
+                modalBody.innerHTML = '';
+                modalBody.appendChild(clonedSvg);
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleEscKey);
+            },
+
+            closeModal: function() {
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                modal.style.display = 'none';
+                modalBody.innerHTML = '';
+                document.body.style.overflow = '';
+
+                document.removeEventListener('keydown', this.handleEscKey);
+            },
+
+            showContent: function(itemId, title, kind, content) {
+                const modal = document.getElementById('showcase-content-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const codeElement = modal.querySelector('.showcase-content-code');
+
+                // Decode HTML entities
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = content;
+                const decodedContent = textarea.value;
+
+                currentContent = decodedContent;
+
+                modalTitle.textContent = title + ' (' + kind + ')';
+                codeElement.textContent = decodedContent;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleContentEscKey);
+            },
+
+            closeContentModal: function() {
+                const modal = document.getElementById('showcase-content-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContent = '';
+
+                document.removeEventListener('keydown', this.handleContentEscKey);
+            },
+
+            copyContent: function() {
+                const btn = document.querySelector('.showcase-copy-btn');
+
+                navigator.clipboard.writeText(currentContent).then(function() {
+                    btn.textContent = '✓ Copied!';
+                    btn.classList.add('copied');
+
+                    setTimeout(function() {
+                        btn.textContent = '📋 Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            handleEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeModal();
+                }
+            },
+
+            handleContentEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeContentModal();
+                }
+            }
+        };
+    })();
+</script>
 <style>
 .hidden {
     display: none;
@@ -1518,12 +1866,12 @@ if (document.readyState === 'loading') {
 <div class="sect1">
 <h2 id="_callouts">1. Callouts</h2>
 <div class="sectionbody">
-<div class="docops-showcase-gallery" id="docops-gallery-b315a27c5a192d30">
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-0">
+<div class="docops-showcase-gallery" id="docops-gallery-3ffb8153d337baaf">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-0">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-0', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Software Development Process
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-0', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Software Development Process
 type=systematic
 ---
 Phase | Action | Result | Improvement
@@ -1534,18 +1882,18 @@ Testing | Perform QA and user acceptance testing | Bug reports and validation re
 Deployment | Release to production environment | Live application | Implement more robust CI/CD pipeline
 Maintenance | Monitor performance and fix issues | Stable system with ongoing improvements | Establish better feedback loops
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-0', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_12SQY7bMAxF9z4FLxDMvkAX06QoAnSATGaCdqvIdExEFlWJchoghy8ppx2kG4OQqc_3PyUkAT_BGw9ycRlhgzMGThNGgV1mj6V0ck34uVyL4OSEfLdarbrd6ArCDZ69EEct9lhqEC22U8o8oyl0e_xVKbe66K9vTkbMUIt-ImJfwMUeFmXIj70bFEcB-8fznn1tbDonzhxmBIz9yhQLoMuBVJoi6BxId_wNFjoZ4jqjE_w7z2U_kqCXqraN47B9OvyEvnUbwTv6MZJ3AUpCT4OW5nWBvijSkN2E1nnQKCZWmeWyTqd4pniCC-dzGTkZxEeuLaPQHMGgSAqgot5z7u2S8P8Db_BDheyf5x51toxQIwkIlhbWNnr1phTJUTbjJ0Wb7ELRBEyje9dWO7jBDvPAeYLX5-akbUOnYxIXPTbNpfFLPWn6ibMsnmcXqG9IemzbttHPVXiyWFsAdhm8kpjjFPh6N7zH0PjUm9L1dXk1GGfKHO8930m36VIKd98POTX1zMeq-uvt03oDiRIGiti9OIqCscHf4IU1GNYQFpft1OAH-g1USm0LexN3DP9eQsuT44nNNn08X-v8WqyVyghHFNGkBn23R-fPENj2-geoGQf5QAMAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-0', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_12SQY7bMAxF9z4FLxDMvkAX06QoAnSATGaCdqvIdExEFlWJchoghy8ppx2kG4OQqc_3PyUkAT_BGw9ycRlhgzMGThNGgV1mj6V0ck34uVyL4OSEfLdarbrd6ArCDZ69EEct9lhqEC22U8o8oyl0e_xVKbe66K9vTkbMUIt-ImJfwMUeFmXIj70bFEcB-8fznn1tbDonzhxmBIz9yhQLoMuBVJoi6BxId_wNFjoZ4jqjE_w7z2U_kqCXqraN47B9OvyEvnUbwTv6MZJ3AUpCT4OW5nWBvijSkN2E1nnQKCZWmeWyTqd4pniCC-dzGTkZxEeuLaPQHMGgSAqgot5z7u2S8P8Db_BDheyf5x51toxQIwkIlhbWNnr1phTJUTbjJ0Wb7ELRBEyje9dWO7jBDvPAeYLX5-akbUOnYxIXPTbNpfFLPWn6ibMsnmcXqG9IemzbttHPVXiyWFsAdhm8kpjjFPh6N7zH0PjUm9L1dXk1GGfKHO8930m36VIKd98POTX1zMeq-uvt03oDiRIGiti9OIqCscHf4IU1GNYQFpft1OAH-g1USm0LexN3DP9eQsuT44nNNn08X-v8WqyVyghHFNGkBn23R-fPENj2-geoGQf5QAMAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg id="ID_2168f42dc7f6468e9d25f4ba376a8a1e" width="800" height="652" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 652" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0A84FF;stop-opacity:1" /><stop offset="100%" style="stop-color:#007AFF;stop-opacity:1" /></linearGradient><linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#F2F2F7;stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter><linearGradient id="glassBorder_39e7814964a245f58288c6d1b699fda6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_39e7814964a245f58288c6d1b699fda6" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_39e7814964a245f58288c6d1b699fda6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_39e7814964a245f58288c6d1b699fda6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient></defs><!-- Background --><rect width="800" height="652" fill="#F2F2F7" rx="0" ry="0"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">Software Development Process</text><g><!-- Step 1 Background --><rect x="16" y="92" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="132" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="137" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">1</text><!-- Phase Label --><text x="80" y="122" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Requirements</text><!-- Action --><text x="80" y="142" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Gather user needs and system requirements</text><!-- Result --><text x="80" y="162" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Detailed requirements document</text></g><rect x="380" y="107" width="400" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="580" y="122" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Involve end-users earlier in the process</text><g><!-- Step 2 Background --><rect x="16" y="182" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="222" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="227" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">2</text><!-- Phase Label --><text x="80" y="212" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Design</text><!-- Action --><text x="80" y="232" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Create system architecture and UI/UX designs</text><!-- Result --><text x="80" y="252" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Technical specifications and wireframes</text></g><rect x="440" y="197" width="340" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="610" y="212" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Use more design thinking workshops</text><g><!-- Step 3 Background --><rect x="16" y="272" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="312" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="317" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">3</text><!-- Phase Label --><text x="80" y="302" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Development</text><!-- Action --><text x="80" y="322" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Implement features according to specifications</text><!-- Result --><text x="80" y="342" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Working code with unit tests</text></g><rect x="440" y="287" width="340" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="610" y="302" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Increase pair programming sessions</text><g><!-- Step 4 Background --><rect x="16" y="362" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="402" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">4</text><!-- Phase Label --><text x="80" y="392" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Testing</text><!-- Action --><text x="80" y="412" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Perform QA and user acceptance testing</text><!-- Result --><text x="80" y="432" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Bug reports and validation results</text></g><rect x="540" y="377" width="240" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="660" y="392" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Automate more test cases</text><g><!-- Step 5 Background --><rect x="16" y="452" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="492" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="497" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">5</text><!-- Phase Label --><text x="80" y="482" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Deployment</text><!-- Action --><text x="80" y="502" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Release to production environment</text><!-- Result --><text x="80" y="522" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Live application</text></g><rect x="420" y="467" width="360" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="600" y="482" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Implement more robust CI/CD pipeline</text><g><!-- Step 6 Background --><rect x="16" y="542" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="582" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="587" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">6</text><!-- Phase Label --><text x="80" y="572" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Maintenance</text><!-- Action --><text x="80" y="592" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Monitor performance and fix issues</text><!-- Result --><text x="80" y="612" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Stable system with ongoing improvements</text></g><rect x="470" y="557" width="310" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="625" y="572" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Establish better feedback loops</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-1">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-1">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-1', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Q2 2024 Business Performance
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-1', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Q2 2024 Business Performance
 type=metrics
 ---
 Metric | Value
@@ -1558,18 +1906,18 @@ Average Deal Size | $15,400
 Sales Cycle | 32 days
 Marketing ROI | 3.2x
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-1', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP1Q38hn3I45AAAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-1', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP1Q38hn3I45AAAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg width="800" height="672" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:1" /><stop offset="100%" style="stop-color:#AF52DE;stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter></defs><!-- Background --><rect width="800" height="672" fill="#F2F2F7" rx="0" ry="0"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">Q2 2024 Business Performance</text><rect x="16" y="92" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="122" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="127" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="117" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Revenue</text><!-- Metric Value --><text x="80" y="137" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">$2.4M</text><rect x="16" y="162" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="192" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="197" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="187" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Growth</text><!-- Metric Value --><text x="80" y="207" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">18%</text><rect x="16" y="232" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="262" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="267" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="257" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">New Customers</text><!-- Metric Value --><text x="80" y="277" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">156</text><rect x="16" y="302" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="332" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="337" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="327" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Customer Retention</text><!-- Metric Value --><text x="80" y="347" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">94%</text><rect x="16" y="372" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="402" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="397" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">NPS Score</text><!-- Metric Value --><text x="80" y="417" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">72</text><rect x="16" y="442" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="472" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="477" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="467" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Average Deal Size</text><!-- Metric Value --><text x="80" y="487" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">$15,400</text><rect x="16" y="512" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="542" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="547" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="537" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Sales Cycle</text><!-- Metric Value --><text x="80" y="557" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">32 days</text><rect x="16" y="582" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="612" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="617" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="607" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Marketing ROI</text><!-- Metric Value --><text x="80" y="627" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">3.2x</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-2">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-2">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-2', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Cloud Migration Project Retrospective
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-2', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Cloud Migration Project Retrospective
 type=systematic
 ---
 Phase | Action | Result | Improvement
@@ -1580,18 +1928,18 @@ Full Migration | Migrated production workloads in planned waves | Successfully t
 Optimization | Refined resource allocation and implemented auto-scaling | 30% cost reduction and improved performance | Earlier implementation of cost management tools
 Knowledge Transfer | Trained operations team on new cloud infrastructure | Team capable of managing cloud environment | More hands-on workshops and documentation
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-2', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_21TwYoUMRC991fUZY8NgnhQ8KCLgsji4C7ey6S6O26SCkllhpb5eCvpnnFwhTmEqapX79V7LU48vYN7z9XCg5sziuMIh8y_yAh8J8lckj7dkQZZE70vaxEK2maGcRyHw4KF4AwfTB8860ipXvTxJaTMRwoUZTh4jNHFuTWWQvqzYGrOWgMXp4xFcjVSMwFGC5YmF7UlXAlpHYXmVQHuWYFpoViU001L0h1wcrJAduUZsO9p23XmgRXZkqDz1OATRUvRrBAwJeU1HDIl3IHO8EgCNYHpV6F4dJljR2rkhIo0Kf_wbsrRrsoU51a-HeusAkcnnFtNmH3RiY8kQhksm9r6tvU8geE4ublufIaD8yw35pz3tyqJHEeTnZqBHlSK10fraeA_0Dvbu7SQGc2y83DRBW23ruSaLojtQFiFQ5-4aFQu4bLrFn74XL3_PyVdZesWhhPnZ89oi96q29M8PeGRGr3HaowaNCnQCupuLBNpICy8fXPX9v4dvkZJM8Mh1LizAFv7NY3SPuoZE2XHtgzfVFRwv_EayC1MmQrXbFSm97wjND9dSL6ntGlUqLHoMbesvn51pyuL6OxF0z6x0dGNE-eA0TT_P2H2TnlcAW_8VAxtw7n_v_k_fI180jjOBE-7fAXRZ2fLir1bKYQBFCjSaY_ki-g9tRaDCX966qa1Xf02LyK8e72okDLuJpWFU9m-vNsoDn8AJE63RR4EAAA=&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-2', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_21TwYoUMRC991fUZY8NgnhQ8KCLgsji4C7ey6S6O26SCkllhpb5eCvpnnFwhTmEqapX79V7LU48vYN7z9XCg5sziuMIh8y_yAh8J8lckj7dkQZZE70vaxEK2maGcRyHw4KF4AwfTB8860ipXvTxJaTMRwoUZTh4jNHFuTWWQvqzYGrOWgMXp4xFcjVSMwFGC5YmF7UlXAlpHYXmVQHuWYFpoViU001L0h1wcrJAduUZsO9p23XmgRXZkqDz1OATRUvRrBAwJeU1HDIl3IHO8EgCNYHpV6F4dJljR2rkhIo0Kf_wbsrRrsoU51a-HeusAkcnnFtNmH3RiY8kQhksm9r6tvU8geE4ublufIaD8yw35pz3tyqJHEeTnZqBHlSK10fraeA_0Dvbu7SQGc2y83DRBW23ruSaLojtQFiFQ5-4aFQu4bLrFn74XL3_PyVdZesWhhPnZ89oi96q29M8PeGRGr3HaowaNCnQCupuLBNpICy8fXPX9v4dvkZJM8Mh1LizAFv7NY3SPuoZE2XHtgzfVFRwv_EayC1MmQrXbFSm97wjND9dSL6ntGlUqLHoMbesvn51pyuL6OxF0z6x0dGNE-eA0TT_P2H2TnlcAW_8VAxtw7n_v_k_fI180jjOBE-7fAXRZ2fLir1bKYQBFCjSaY_ki-g9tRaDCX966qa1Xf02LyK8e72okDLuJpWFU9m-vNsoDn8AJE63RR4EAAA=&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg id="ID_1a7fd29b28ef4fe9a35e17a793c18c1e" width="800" height="652" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 652" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0A84FF;stop-opacity:1" /><stop offset="100%" style="stop-color:#007AFF;stop-opacity:1" /></linearGradient><linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#F2F2F7;stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter><linearGradient id="glassBorder_e184a61572a04d4aa45591e694134a63" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_e184a61572a04d4aa45591e694134a63" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_e184a61572a04d4aa45591e694134a63" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_e184a61572a04d4aa45591e694134a63" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient></defs><!-- Background --><rect width="800" height="652" fill="#F2F2F7" rx="0" ry="0"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">Cloud Migration Project Retrospective</text><g><!-- Step 1 Background --><rect x="16" y="92" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="132" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="137" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">1</text><!-- Phase Label --><text x="80" y="122" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Planning</text><!-- Action --><text x="80" y="142" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Assessed current infrastructure and defined migration strategy</text><!-- Result --><text x="80" y="162" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Comprehensive migration plan with risk assessment</text></g><rect x="460" y="107" width="320" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="620" y="122" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More detailed dependency mapping</text><g><!-- Step 2 Background --><rect x="16" y="182" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="222" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="227" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">2</text><!-- Phase Label --><text x="80" y="212" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Preparation</text><!-- Action --><text x="80" y="232" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Set up cloud environment and testing infrastructure</text><!-- Result --><text x="80" y="252" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Ready staging environment with monitoring tools</text></g><rect x="410" y="197" width="370" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="595" y="212" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Better documentation of configuration</text><g><!-- Step 3 Background --><rect x="16" y="272" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="312" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="317" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">3</text><!-- Phase Label --><text x="80" y="302" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Pilot Migration</text><!-- Action --><text x="80" y="322" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Migrated non-critical applications</text><!-- Result --><text x="80" y="342" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Validated approach with minimal disruption</text></g><rect x="310" y="287" width="470" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="545" y="302" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More automated testing of migrated applications</text><g><!-- Step 4 Background --><rect x="16" y="362" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="402" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">4</text><!-- Phase Label --><text x="80" y="392" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Full Migration</text><!-- Action --><text x="80" y="412" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Migrated production workloads in planned waves</text><!-- Result --><text x="80" y="432" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Successfully transferred 95% of workloads</text></g><rect x="330" y="377" width="450" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="555" y="392" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Improved communication during cutover periods</text><g><!-- Step 5 Background --><rect x="16" y="452" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="492" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="497" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">5</text><!-- Phase Label --><text x="80" y="482" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Optimization</text><!-- Action --><text x="80" y="502" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Refined resource allocation and implemented auto-scaling</text><!-- Result --><text x="80" y="522" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">30% cost reduction and improved performance</text></g><rect x="310" y="467" width="470" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="545" y="482" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Earlier implementation of cost management tools</text><g><!-- Step 6 Background --><rect x="16" y="542" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="582" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="587" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">6</text><!-- Phase Label --><text x="80" y="572" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Knowledge Transfer</text><!-- Action --><text x="80" y="592" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Trained operations team on new cloud infrastructure</text><!-- Result --><text x="80" y="612" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Team capable of managing cloud environment</text></g><rect x="370" y="557" width="410" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="575" y="572" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More hands-on workshops and documentation</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-3">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-3">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-3', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: 90-Day Fitness Challenge Results
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-3', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: 90-Day Fitness Challenge Results
 type=metrics
 ---
 Metric | Value
@@ -1604,18 +1952,18 @@ Workout Consistency | 87%
 Daily Step Average | 11,245
 Sleep Quality Score | +18%
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-3', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_x2NQWvCQBCF7_sr5pKTTWxSpbHQQ6uUCg2lFfS8rkNcnN0Nu7PSgD--E2_D-973hi0TvsDqsdzoET4se0wJ1mdNhL5H-MWUiZPiccBXhxytSaosS9Xdb7jBXlNGdUDbnxm-gtg3qBugY1Lv4SSbmmXllA3b4IUtqqZQXU6GEDot9a03EXVCYU3V3kX5ytb38Ik6iq15gmULx8Gp_Xcj3h9s3RDDFR16FjhbVk_gaH7p5856dQjxEjLDOvhkE6M3o5Ta50JttKURdowDvF0x6n6aruuHZrFUO0KJf7Imy9IxIU5wVreF-ge85CFsKAEAAA==&scale=1.0&type=SVG&useDark=true&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-3', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_x2NQWvCQBCF7_sr5pKTTWxSpbHQQ6uUCg2lFfS8rkNcnN0Nu7PSgD--E2_D-973hi0TvsDqsdzoET4se0wJ1mdNhL5H-MWUiZPiccBXhxytSaosS9Xdb7jBXlNGdUDbnxm-gtg3qBugY1Lv4SSbmmXllA3b4IUtqqZQXU6GEDot9a03EXVCYU3V3kX5ytb38Ik6iq15gmULx8Gp_Xcj3h9s3RDDFR16FjhbVk_gaH7p5856dQjxEjLDOvhkE6M3o5Ta50JttKURdowDvF0x6n6aruuHZrFUO0KJf7Imy9IxIU5wVreF-ge85CFsKAEAAA==&scale=1.0&type=SVG&useDark=true&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg width="800" height="672" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><linearGradient id="glassBorder_82572b2216ab480aa24aa86518d4951f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_82572b2216ab480aa24aa86518d4951f" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_82572b2216ab480aa24aa86518d4951f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_82572b2216ab480aa24aa86518d4951f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#AF52DE;stop-opacity:0.8" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_82572b2216ab480aa24aa86518d4951f)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_82572b2216ab480aa24aa86518d4951f)" stroke-width="1.5" filter="url(#glassDropShadow_82572b2216ab480aa24aa86518d4951f)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_82572b2216ab480aa24aa86518d4951f)" opacity="0.7"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">90-Day Fitness Challenge Results</text><rect x="16" y="92" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="122" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="127" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="117" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Weight Loss</text><!-- Metric Value --><text x="80" y="137" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">12 lbs</text><rect x="16" y="162" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="192" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="197" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="187" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Body Fat Reduction</text><!-- Metric Value --><text x="80" y="207" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">4.2%</text><rect x="16" y="232" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="262" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="267" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="257" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Muscle Mass Increase</text><!-- Metric Value --><text x="80" y="277" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">2.8 lbs</text><rect x="16" y="302" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="332" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="337" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="327" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Resting Heart Rate</text><!-- Metric Value --><text x="80" y="347" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">-8 bpm</text><rect x="16" y="372" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="402" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="397" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">VO2 Max Improvement</text><!-- Metric Value --><text x="80" y="417" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">+5.3 ml/kg/min</text><rect x="16" y="442" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="472" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="477" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="467" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Workout Consistency</text><!-- Metric Value --><text x="80" y="487" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">87%</text><rect x="16" y="512" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="542" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="547" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="537" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Daily Step Average</text><!-- Metric Value --><text x="80" y="557" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">11,245</text><rect x="16" y="582" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="612" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="617" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="607" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Sleep Quality Score</text><!-- Metric Value --><text x="80" y="627" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">+18%</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-4">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-4">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-4', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: E-Commerce Customer Journey
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-4', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: E-Commerce Customer Journey
 type=systematic
 ---
 Phase | Action | Result | Improvement
@@ -1627,18 +1975,18 @@ First Use | Customer unboxes and begins using the product | Initial experience w
 Support | Customer contacts support with questions | Resolution of customer issues | More proactive support with better documentation
 Loyalty | Customer makes repeat purchases and recommends to others | Increased customer lifetime value | Enhanced loyalty program and personalized offers
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-4', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_2VTQW7bMBC86xX8gD9QoIc0TYEULRA06ANociUtTJEKd2lHhR_foSQrcnsRSHE5OzszVNZAn8zT4TENA2VH5rGIJizN91RypKnRaaTPMonSYJVdczgcmpfeCpmreXDKKWLxi6QExeJ5GHM600BRm4eLzRRJBP83WM_iUJDFoNAXp0b7nErXG0mObTADebbG-goWlTKJGo4mkM2RY2eGlMnYYyr1Jm0oV_OzHqjNHSn5CuDsMFruopgj6HoDpkVAgVdYaR5TFPaU7TrGxhLH6Od6-qDZktWC_8ZGj3PrBd8z02UeL6FVZgHKhbU3DnvSSne9XoueYm-jA5Eb5Gg74G0XVgBNKUjzlRzLP6ys9zvZEgbMOtOptwPGFgPK7lS1uZrX4hzEb0swY8Esi2WvCu5D4AgeWzEwa-lCpaULesHvsbIIDLMmXHxZ-7IY6Xkcq8Zo7ZcK7CqhG9M7KR2hQnZOfSGFA0azdaeq0Q5nMsoDGbjDiBtJ840zAvB75r5hlnhM76sVR-oYFhepSPeJeI6sNVL0PlJmgvbLhP9ZuuXWL9AVaneptnkr7E4H0Sp5VxAaaV7LOKase2IuRbXVbVnP5n5vpc6DrC0vJYUy5y21H4KxSJmJzCkGF6BAj3uc46KbT67UBzantvmRJht02rMY7IlqOkfMt3l_C66rLz0iSPArQa88jx8dYlEfycYocEuzF2cbCu3jG9aOYNllO8y40ArZtYH_1IfWttg2fwEXV0ZWXQQAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-4', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_2VTQW7bMBC86xX8gD9QoIc0TYEULRA06ANociUtTJEKd2lHhR_foSQrcnsRSHE5OzszVNZAn8zT4TENA2VH5rGIJizN91RypKnRaaTPMonSYJVdczgcmpfeCpmreXDKKWLxi6QExeJ5GHM600BRm4eLzRRJBP83WM_iUJDFoNAXp0b7nErXG0mObTADebbG-goWlTKJGo4mkM2RY2eGlMnYYyr1Jm0oV_OzHqjNHSn5CuDsMFruopgj6HoDpkVAgVdYaR5TFPaU7TrGxhLH6Od6-qDZktWC_8ZGj3PrBd8z02UeL6FVZgHKhbU3DnvSSne9XoueYm-jA5Eb5Gg74G0XVgBNKUjzlRzLP6ys9zvZEgbMOtOptwPGFgPK7lS1uZrX4hzEb0swY8Esi2WvCu5D4AgeWzEwa-lCpaULesHvsbIIDLMmXHxZ-7IY6Xkcq8Zo7ZcK7CqhG9M7KR2hQnZOfSGFA0azdaeq0Q5nMsoDGbjDiBtJ840zAvB75r5hlnhM76sVR-oYFhepSPeJeI6sNVL0PlJmgvbLhP9ZuuXWL9AVaneptnkr7E4H0Sp5VxAaaV7LOKase2IuRbXVbVnP5n5vpc6DrC0vJYUy5y21H4KxSJmJzCkGF6BAj3uc46KbT67UBzantvmRJht02rMY7IlqOkfMt3l_C66rLz0iSPArQa88jx8dYlEfycYocEuzF2cbCu3jG9aOYNllO8y40ArZtYH_1IfWttg2fwEXV0ZWXQQAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg id="ID_27598f6f8a4f4826924b359d1860032d" width="800" height="742" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 742" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0A84FF;stop-opacity:1" /><stop offset="100%" style="stop-color:#007AFF;stop-opacity:1" /></linearGradient><linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#F2F2F7;stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter><linearGradient id="glassBorder_d7f3263bcf9842c4a47209336c91fcfa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_d7f3263bcf9842c4a47209336c91fcfa" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_d7f3263bcf9842c4a47209336c91fcfa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_d7f3263bcf9842c4a47209336c91fcfa" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient></defs><!-- Background --><rect width="800" height="742" fill="#F2F2F7" rx="0" ry="0"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">E-Commerce Customer Journey</text><g><!-- Step 1 Background --><rect x="16" y="92" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="132" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="137" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">1</text><!-- Phase Label --><text x="80" y="122" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Awareness</text><!-- Action --><text x="80" y="142" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer discovers product through social media ad</text><!-- Result --><text x="80" y="162" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Interest in learning more about the product</text></g><rect x="280" y="107" width="500" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="530" y="122" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More targeted ad campaigns based on user interests</text><g><!-- Step 2 Background --><rect x="16" y="182" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="222" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="227" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">2</text><!-- Phase Label --><text x="80" y="212" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Consideration</text><!-- Action --><text x="80" y="232" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer researches product features and reads reviews</text><!-- Result --><text x="80" y="252" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Comparison with competing products</text></g><rect x="340" y="197" width="440" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="560" y="212" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Enhanced product pages with comparison tools</text><g><!-- Step 3 Background --><rect x="16" y="272" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="312" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="317" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">3</text><!-- Phase Label --><text x="80" y="302" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Decision</text><!-- Action --><text x="80" y="322" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer adds product to cart and completes checkout</text><!-- Result --><text x="80" y="342" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Successful purchase</text></g><rect x="330" y="287" width="450" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="555" y="302" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Streamlined checkout process with fewer steps</text><g><!-- Step 4 Background --><rect x="16" y="362" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="402" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">4</text><!-- Phase Label --><text x="80" y="392" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Delivery</text><!-- Action --><text x="80" y="412" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Product is shipped and delivered to customer</text><!-- Result --><text x="80" y="432" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Customer receives product</text></g><rect x="350" y="377" width="430" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="565" y="392" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Better tracking and delivery time estimates</text><g><!-- Step 5 Background --><rect x="16" y="452" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="492" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="497" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">5</text><!-- Phase Label --><text x="80" y="482" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">First Use</text><!-- Action --><text x="80" y="502" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer unboxes and begins using the product</text><!-- Result --><text x="80" y="522" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Initial experience with product features</text></g><rect x="270" y="467" width="510" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="525" y="482" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Improved unboxing experience and quick-start guides</text><g><!-- Step 6 Background --><rect x="16" y="542" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="582" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="587" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">6</text><!-- Phase Label --><text x="80" y="572" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Support</text><!-- Action --><text x="80" y="592" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer contacts support with questions</text><!-- Result --><text x="80" y="612" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Resolution of customer issues</text></g><rect x="300" y="557" width="480" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="540" y="572" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More proactive support with better documentation</text><g><!-- Step 7 Background --><rect x="16" y="632" width="768" height="80" fill="url(#stepGrad)" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Step Number --><circle cx="48" cy="672" r="16" fill="#007AFF" filter="url(#iosShadow)"/><text x="48" y="677" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">7</text><!-- Phase Label --><text x="80" y="662" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Loyalty</text><!-- Action --><text x="80" y="682" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Customer makes repeat purchases and recommends to others</text><!-- Result --><text x="80" y="702" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Increased customer lifetime value</text></g><rect x="300" y="647" width="480" height="24" fill="#F2F9F6" stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/><text x="540" y="662" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Enhanced loyalty program and personalized offers</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-5">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-5">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-5', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Corporate Sustainability Achievements 2024
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-5', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="title: Corporate Sustainability Achievements 2024
 type=metrics
 ---
 Metric | Value
@@ -1651,18 +1999,18 @@ Sustainable Suppliers | 83%
 Employee Sustainability Training | 97%
 Community Environmental Projects | 12
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-5', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_2VQy07DQAy871f4sjcihbSlBYkDCuEEUlVe503iBqN9yesERerHswGEkLjZnvFoZoTE4hXUgWNgIwiPYxJD3rRkSWa46d4IJ3ToJUFVVmslc8Rrh8LUJVUUhXr4muEEL8aOqGrDbfBwF4JEJi9wwH7shPLtBNVOqwN6_DCtRWg88jDDczIDZnBbafWaPXC24xPyZH6-VpvyrCxLGIy1GcmklJ3e0oQs2MORg4N74_sjWZvpl2ut9iZmnW_lvwYuNlr9RrRL3BgtIaeM7VZaNS7aMOO_Hp44L-SHRX6rVR2cG_0CNH4iDn4pyFjYc3jHTha180p9AlsgzQBdAQAA&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-5', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_2VQy07DQAy871f4sjcihbSlBYkDCuEEUlVe503iBqN9yesERerHswGEkLjZnvFoZoTE4hXUgWNgIwiPYxJD3rRkSWa46d4IJ3ToJUFVVmslc8Rrh8LUJVUUhXr4muEEL8aOqGrDbfBwF4JEJi9wwH7shPLtBNVOqwN6_DCtRWg88jDDczIDZnBbafWaPXC24xPyZH6-VpvyrCxLGIy1GcmklJ3e0oQs2MORg4N74_sjWZvpl2ut9iZmnW_lvwYuNlr9RrRL3BgtIaeM7VZaNS7aMOO_Hp44L-SHRX6rVR2cG_0CNH4iDn4pyFjYc3jHTha180p9AlsgzQBdAQAA&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg width="800" height="672" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:1" /><stop offset="100%" style="stop-color:#AF52DE;stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter></defs><!-- Background --><rect width="800" height="672" fill="#F2F2F7" rx="0" ry="0"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">Corporate Sustainability Achievements 2024</text><rect x="16" y="92" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="122" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="127" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="117" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Carbon Footprint Reduction</text><!-- Metric Value --><text x="80" y="137" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">28%</text><rect x="16" y="162" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="192" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="197" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="187" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Renewable Energy Usage</text><!-- Metric Value --><text x="80" y="207" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">72%</text><rect x="16" y="232" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="262" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="267" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="257" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Water Conservation</text><!-- Metric Value --><text x="80" y="277" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">350,000 gallons</text><rect x="16" y="302" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="332" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="337" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="327" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Waste Diverted from Landfill</text><!-- Metric Value --><text x="80" y="347" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">94%</text><rect x="16" y="372" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="402" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="397" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Paper Usage Reduction</text><!-- Metric Value --><text x="80" y="417" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">65%</text><rect x="16" y="442" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="472" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="477" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="467" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Sustainable Suppliers</text><!-- Metric Value --><text x="80" y="487" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">83%</text><rect x="16" y="512" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="542" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="547" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="537" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Employee Sustainability Training</text><!-- Metric Value --><text x="80" y="557" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">97%</text><rect x="16" y="582" width="768" height="60" fill="white" stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/><!-- Metric Icon --><circle cx="48" cy="612" r="16" fill="#5856D6" filter="url(#iosShadow)"/><text x="48" y="617" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="607" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Community Environmental Projects</text><!-- Metric Value --><text x="80" y="627" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">12</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-6">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-6">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-6', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-6', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="{
   &quot;type&quot;: &quot;systematic&quot;,
   &quot;title&quot;: &quot;DevOps Implementation Strategy&quot;,
   &quot;steps&quot;: [
@@ -1705,18 +2053,18 @@ Community Environmental Projects | 12
   ]
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-6', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_41UPW8bMQzd8ysIzym6d0udFvAQJGjHooOso202OlEVqTOuQf57KZ3rj9aOu5xhiXzke3ziyw3ATMeEsw8wk1EUe6fkZ7ftnDS0i3scHpPAok8Be4xqIRzhq2anuB6nYEtNYsHf7A_AS_vacdo4aRh3IihSs1t8u3S-AtXbT4MLxdDAl5wtBjocMHCq8eBiB5wwt7ICKbPHinYAyiglaAVadJZBK8IOlqzWf0T_LA2CesscGgGDS5y1RFI6xjkKqWAPnK0jtkPcYBQaEETdM244dJiBomIeCLcyawCvtxe4PwUXI8X1Oeb3uKKIsJM4s-t6l1q_ggG9gjKHs1R3-pOvzI4Hk6wcbEk3LXeHU8td4vkR1ZiAC7SOTZ6WvCxinYkAL39UgAGv8VzEVXaiuXgtGc-x3VvIxDuOBScmdIeN-Hzxfn4PiRKG2sA57ndF2ZxqU_4Lp_IisWomdwPrMAUeT313fcyKohWB4lEfb5OfW2sXWH9mqfp6DsEtefIxLFG3iPEtpyu6_rzLJwJd7bo3F_sJsrlm47JdWGwyCFpSIB2vUM8s8m5VYmvYBTBj0V7ALedn2XC6xv_BNFfOF2x-GPyp0P0-qxVzAbOeQBxIP9njaDYEEilowunk65ZpcRzK_9jcs62YcDqEHjWTn_bE3veWbgWv0H5MSj39cqeVD8TnbPsoFi4Sxj8r6LDCJtKTmU8ADrS_YFe8TTSg68BqTW-Eos9oLRwbHFYZfxaM_sq8M65LcNl-1Safdm_7nx3pRx_2rrfv95vXm99h8YX4MAYAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-6', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_41UPW8bMQzd8ysIzym6d0udFvAQJGjHooOso202OlEVqTOuQf57KZ3rj9aOu5xhiXzke3ziyw3ATMeEsw8wk1EUe6fkZ7ftnDS0i3scHpPAok8Be4xqIRzhq2anuB6nYEtNYsHf7A_AS_vacdo4aRh3IihSs1t8u3S-AtXbT4MLxdDAl5wtBjocMHCq8eBiB5wwt7ICKbPHinYAyiglaAVadJZBK8IOlqzWf0T_LA2CesscGgGDS5y1RFI6xjkKqWAPnK0jtkPcYBQaEETdM244dJiBomIeCLcyawCvtxe4PwUXI8X1Oeb3uKKIsJM4s-t6l1q_ggG9gjKHs1R3-pOvzI4Hk6wcbEk3LXeHU8td4vkR1ZiAC7SOTZ6WvCxinYkAL39UgAGv8VzEVXaiuXgtGc-x3VvIxDuOBScmdIeN-Hzxfn4PiRKG2sA57ndF2ZxqU_4Lp_IisWomdwPrMAUeT313fcyKohWB4lEfb5OfW2sXWH9mqfp6DsEtefIxLFG3iPEtpyu6_rzLJwJd7bo3F_sJsrlm47JdWGwyCFpSIB2vUM8s8m5VYmvYBTBj0V7ALedn2XC6xv_BNFfOF2x-GPyp0P0-qxVzAbOeQBxIP9njaDYEEilowunk65ZpcRzK_9jcs62YcDqEHjWTn_bE3veWbgWv0H5MSj39cqeVD8TnbPsoFi4Sxj8r6LDCJtKTmU8ADrS_YFe8TTSg68BqTW-Eos9oLRwbHFYZfxaM_sq8M65LcNl-1Safdm_7nx3pRx_2rrfv95vXm99h8YX4MAYAAA==&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg id="ID_0f56ac42d8de44048712393a8222b325" width="800" height="652" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 652" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>        <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0A84FF;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#007AFF;stop-opacity:0.8" /></linearGradient><linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(242,242,247,0.1);stop-opacity:1" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter><linearGradient id="glassBorder_ee96d88b31bb4bc0b1e22392c7dda37f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_ee96d88b31bb4bc0b1e22392c7dda37f" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_ee96d88b31bb4bc0b1e22392c7dda37f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_ee96d88b31bb4bc0b1e22392c7dda37f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_ee96d88b31bb4bc0b1e22392c7dda37f)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_ee96d88b31bb4bc0b1e22392c7dda37f)" stroke-width="1.5" filter="url(#glassDropShadow_ee96d88b31bb4bc0b1e22392c7dda37f)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_ee96d88b31bb4bc0b1e22392c7dda37f)" opacity="0.7"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">DevOps Implementation Strategy</text><g><!-- Step 1 Background --><rect x="16" y="92" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="132" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="137" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">1</text><!-- Phase Label --><text x="80" y="122" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Assessment</text><!-- Action --><text x="80" y="142" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Evaluate current development and operations processes</text><!-- Result --><text x="80" y="162" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Identified bottlenecks and improvement opportunities</text></g><rect x="370" y="107" width="410" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="575" y="122" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More comprehensive stakeholder interviews</text><g><!-- Step 2 Background --><rect x="16" y="182" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="222" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="227" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">2</text><!-- Phase Label --><text x="80" y="212" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Planning</text><!-- Action --><text x="80" y="232" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Define DevOps roadmap and select tools</text><!-- Result --><text x="80" y="252" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Strategic implementation plan with tool selection</text></g><rect x="370" y="197" width="410" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="575" y="212" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Better alignment with business objectives</text><g><!-- Step 3 Background --><rect x="16" y="272" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="312" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="317" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">3</text><!-- Phase Label --><text x="80" y="302" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Infrastructure</text><!-- Action --><text x="80" y="322" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Implement infrastructure as code and CI/CD pipelines</text><!-- Result --><text x="80" y="342" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Automated infrastructure provisioning and deployment</text></g><rect x="390" y="287" width="390" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="585" y="302" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More comprehensive testing in pipelines</text><g><!-- Step 4 Background --><rect x="16" y="362" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="402" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">4</text><!-- Phase Label --><text x="80" y="392" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Culture</text><!-- Action --><text x="80" y="412" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Foster collaboration between development and operations teams</text><!-- Result --><text x="80" y="432" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Improved communication and shared responsibility</text></g><rect x="340" y="377" width="440" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="560" y="392" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More cross-functional training and workshops</text><g><!-- Step 5 Background --><rect x="16" y="452" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="492" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="497" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">5</text><!-- Phase Label --><text x="80" y="482" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Monitoring</text><!-- Action --><text x="80" y="502" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Implement comprehensive monitoring and alerting</text><!-- Result --><text x="80" y="522" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Proactive issue detection and resolution</text></g><rect x="240" y="467" width="540" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="510" y="482" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">Better correlation between metrics and business impact</text><g><!-- Step 6 Background --><rect x="16" y="542" width="768" height="80" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Step Number --><circle cx="48" cy="582" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="587" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">6</text><!-- Phase Label --><text x="80" y="572" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Optimization</text><!-- Action --><text x="80" y="592" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">Continuously improve processes and automation</text><!-- Result --><text x="80" y="612" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">Reduced lead time and increased deployment frequency</text></g><rect x="280" y="557" width="500" height="24" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/><text x="530" y="572" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="12" font-weight="600" text-anchor="middle">More regular retrospectives and improvement cycles</text></svg>
 </div>
 </div>
-<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-b315a27c5a192d30-7">
+<div class="gallery-item" data-kind="callout" id="gallery-item-docops-gallery-3ffb8153d337baaf-7">
 <div class="gallery-item-header">
 <div class="gallery-item-title">Callout</div>
 <div class="gallery-item-actions">
-<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-b315a27c5a192d30-7', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="{
+<button class="gallery-content-btn" onclick="showcaseGallery.showContent('gallery-item-docops-gallery-3ffb8153d337baaf-7', 'Callout', 'callout', this.getAttribute('data-content'))" data-content="{
   &quot;type&quot;: &quot;metrics&quot;,
   &quot;title&quot;: &quot;Website Performance Metrics&quot;,
   &quot;metrics&quot;: {
@@ -1731,11 +2079,11 @@ Community Environmental Projects | 12
   }
 }
 " title="View content">{ }</button>
-<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-b315a27c5a192d30-7', 'https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_02OywrCMBBF9_2KoeBOalvF105FQVAsKriOcSoDbSLJWJDiv5tGWl3OPedepg4AQn49MJxDWCIbkjbs-5C48OkFr5YYIUOTa1MKJRH2_2Zbm0PtThdk4o6w0-IGZyr9RhKlX9nRDRnLsNKKUXH-LCATpLix4mjaWU0TWMPWaUZIpsoPpVHSKUv9bH45Cv6iUa8lbrxCY0mrjg6jaYf3-koFwtmIPCfZ0PEPntYHOEltfGuWDpI4btFCSrSWXJn49SdNvOScd_AOPkXUY3NSAQAA&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg', 'Callout')" title="Expand to fullscreen">⛶</button>
+<button class="gallery-expand-btn" onclick="showcaseGallery.expandItem('gallery-item-docops-gallery-3ffb8153d337baaf-7', 'Callout')" title="Expand to fullscreen">⛶</button>
 </div>
 </div>
 <div class="gallery-item-image">
-<img src="https://roach.gy/extension/api/docops/svg?kind=callout&payload=H4sIAPiU9WgA_02OywrCMBBF9_2KoeBOalvF105FQVAsKriOcSoDbSLJWJDiv5tGWl3OPedepg4AQn49MJxDWCIbkjbs-5C48OkFr5YYIUOTa1MKJRH2_2Zbm0PtThdk4o6w0-IGZyr9RhKlX9nRDRnLsNKKUXH-LCATpLix4mjaWU0TWMPWaUZIpsoPpVHSKUv9bH45Cv6iUa8lbrxCY0mrjg6jaYf3-koFwtmIPCfZ0PEPntYHOEltfGuWDpI4btFCSrSWXJn49SdNvOScd_AOPkXUY3NSAQAA&scale=1.0&type=SVG&useDark=false&title=Callout&useGlass=false&backend=html5&docname=calloutshowcase&filename=callout.svg" alt="Callout" loading="lazy" />
+<svg width="800" height="672" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-20</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><!-- Glass gradients --><linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></radialGradient><linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Glass filters --><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="3" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="3" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.3)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><linearGradient id="glassBorder_59ab2e522f67409fb05473a1e389a702" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/></linearGradient><filter id="glassDropShadow_59ab2e522f67409fb05473a1e389a702" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/><feOffset in="blur" dx="0" dy="8" result="offsetBlur"/><feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/><feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="glassOverlay_59ab2e522f67409fb05473a1e389a702" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/></linearGradient><linearGradient id="backgroundGradient_59ab2e522f67409fb05473a1e389a702" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/><stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/></linearGradient>    <!-- Original gradients --><linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#AF52DE;stop-opacity:0.8" /></linearGradient><filter id="iosShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter></defs><!-- Background --><rect width="100%" height="100%" fill="url(#backgroundGradient_59ab2e522f67409fb05473a1e389a702)" rx="12" ry="12"/><rect width="100%" height="100%" rx="12" ry="12" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_59ab2e522f67409fb05473a1e389a702)" stroke-width="1.5" filter="url(#glassDropShadow_59ab2e522f67409fb05473a1e389a702)"/><rect width="100%" height="100%" rx="12" ry="12" fill="url(#glassOverlay_59ab2e522f67409fb05473a1e389a702)" opacity="0.7"/><!-- Header --><rect x="16" y="16" width="768" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/><text x="400" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">Website Performance Metrics</text><rect x="16" y="92" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="122" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="127" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="117" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Page Load Time</text><!-- Metric Value --><text x="80" y="137" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">1.2s</text><rect x="16" y="162" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="192" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="197" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="187" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">First Contentful Paint</text><!-- Metric Value --><text x="80" y="207" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">0.8s</text><rect x="16" y="232" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="262" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="267" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="257" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Time to Interactive</text><!-- Metric Value --><text x="80" y="277" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">2.1s</text><rect x="16" y="302" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="332" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="337" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="327" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Bounce Rate</text><!-- Metric Value --><text x="80" y="347" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">24%</text><rect x="16" y="372" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="402" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="407" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="397" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Conversion Rate</text><!-- Metric Value --><text x="80" y="417" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">3.8%</text><rect x="16" y="442" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="472" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="477" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="467" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Mobile Traffic</text><!-- Metric Value --><text x="80" y="487" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">68%</text><rect x="16" y="512" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="542" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="547" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="537" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">SEO Score</text><!-- Metric Value --><text x="80" y="557" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">92/100</text><rect x="16" y="582" width="768" height="60" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/><!-- Metric Icon --><circle cx="48" cy="612" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/><text x="48" y="617" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600" text-anchor="middle">📊</text><!-- Metric Label --><text x="80" y="607" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="16" font-weight="600">Accessibility Score</text><!-- Metric Value --><text x="80" y="627" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14" font-weight="600">97/100</text></svg>
 </div>
 </div>
 </div>
@@ -1747,7 +2095,6 @@ Community Environmental Projects | 12
       <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
     </div>
     <div class="showcase-modal-body">
-      <img src="" alt="" class="showcase-modal-image" />
     </div>
   </div>
 </div>
@@ -1767,349 +2114,6 @@ Community Environmental Projects | 12
     </div>
   </div>
 </div>
-
-<style>
-  .docops-showcase-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin: 2rem 0;
-  }
-
-  .gallery-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
-
-  .gallery-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #3498db;
-  }
-
-  .gallery-item-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #2c3e50;
-    flex: 1;
-  }
-
-  .gallery-item-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .gallery-expand-btn,
-  .gallery-content-btn {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: #3498db;
-    transition: color 0.2s, transform 0.2s;
-    line-height: 1;
-  }
-
-  .gallery-content-btn {
-    color: #9b59b6;
-    font-weight: bold;
-  }
-
-  .gallery-expand-btn:hover {
-    color: #2980b9;
-    transform: scale(1.2);
-  }
-
-  .gallery-content-btn:hover {
-    color: #8e44ad;
-    transform: scale(1.2);
-  }
-
-  .gallery-item-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-  }
-
-  .gallery-item-image img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-  }
-
-  .gallery-item-image img:hover {
-    opacity: 0.9;
-  }
-
-  /* Modal Styles */
-  .showcase-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .showcase-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .showcase-modal-content {
-    position: relative;
-    background: white;
-    border-radius: 12px;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
-  }
-
-  .showcase-content-modal-content {
-    max-width: 90vw;
-    width: 1000px;
-  }
-
-  .showcase-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f8f9fa;
-  }
-
-  .showcase-modal-title {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #2c3e50;
-  }
-
-  .showcase-modal-close {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #7f8c8d;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-
-  .showcase-modal-close:hover {
-    color: #e74c3c;
-  }
-
-  .showcase-modal-body {
-    padding: 2rem;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: white;
-  }
-
-  .showcase-content-body {
-    padding: 0;
-    align-items: stretch;
-    justify-content: stretch;
-    background: #282c34;
-  }
-
-  .showcase-content-pre {
-    margin: 0;
-    width: 100%;
-    max-height: calc(95vh - 150px);
-    overflow: auto;
-  }
-
-  .showcase-content-code {
-    display: block;
-    padding: 1.5rem;
-    color: #abb2bf;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    white-space: pre;
-    tab-size: 4;
-  }
-
-  .showcase-content-footer {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .showcase-copy-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-
-  .showcase-copy-btn:hover {
-    background: #2980b9;
-  }
-
-  .showcase-copy-btn.copied {
-    background: #27ae60;
-  }
-
-  .showcase-modal-image {
-    max-width: 100%;
-    max-height: calc(95vh - 100px);
-    width: auto;
-    height: auto;
-  }
-
-  @media (max-width: 768px) {
-    .docops-showcase-gallery {
-      grid-template-columns: 1fr;
-      padding: 1rem;
-    }
-
-    .showcase-modal-content {
-      max-width: 100vw;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
-    .showcase-modal-body {
-      padding: 1rem;
-    }
-
-    .showcase-content-modal-content {
-      width: 100vw;
-    }
-  }
-</style>
-
-<script>
-  window.showcaseGallery = window.showcaseGallery || (function() {
-    let currentContent = '';
-
-    return {
-      expandItem: function(itemId, imageUrl, title) {
-        const modal = document.getElementById('showcase-gallery-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const modalImage = modal.querySelector('.showcase-modal-image');
-
-        modalTitle.textContent = title;
-        modalImage.src = imageUrl;
-        modalImage.alt = title;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleEscKey);
-      },
-
-      closeModal: function() {
-        const modal = document.getElementById('showcase-gallery-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-
-        document.removeEventListener('keydown', this.handleEscKey);
-      },
-
-      showContent: function(itemId, title, kind, content) {
-        const modal = document.getElementById('showcase-content-modal');
-        const modalTitle = modal.querySelector('.showcase-modal-title');
-        const codeElement = modal.querySelector('.showcase-content-code');
-
-        // Decode HTML entities
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = content;
-        const decodedContent = textarea.value;
-
-        currentContent = decodedContent;
-
-        modalTitle.textContent = title + ' (' + kind + ')';
-        codeElement.textContent = decodedContent;
-
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        document.addEventListener('keydown', this.handleContentEscKey);
-      },
-
-      closeContentModal: function() {
-        const modal = document.getElementById('showcase-content-modal');
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        currentContent = '';
-
-        document.removeEventListener('keydown', this.handleContentEscKey);
-      },
-
-      copyContent: function() {
-        const btn = document.querySelector('.showcase-copy-btn');
-
-        navigator.clipboard.writeText(currentContent).then(function() {
-          btn.textContent = '✓ Copied!';
-          btn.classList.add('copied');
-
-          setTimeout(function() {
-            btn.textContent = '📋 Copy';
-            btn.classList.remove('copied');
-          }, 2000);
-        }).catch(function(err) {
-          console.error('Failed to copy:', err);
-        });
-      },
-
-      handleEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeModal();
-        }
-      },
-
-      handleContentEscKey: function(e) {
-        if (e.key === 'Escape') {
-          showcaseGallery.closeContentModal();
-        }
-      }
-    };
-  })();
-</script>
 </div>
 </div>
 </div>
@@ -2170,7 +2174,7 @@ if (!hljs.initHighlighting.called) {
 }
 </style>
 <div class="reading-time">
-    <p>📖 2 min read • 820 words</p>
+    <p>📖 2 min read • 819 words</p>
 </div>
 <style>
 .listingblock {
