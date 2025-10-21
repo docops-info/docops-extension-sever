@@ -30,50 +30,7 @@ Insert a block using the docops extension and the scorecard type:
 
 [docops,scorecard]
 ----
-title=Software Release v2.4.0 - Feature & Bug Summary
-subtitle=Migration from Legacy System to Modern Architecture
----
-
-[before]
-title=BEFORE v2.4.0
----
-[before.items]
-=== Feature Status
-Dark Mode Theme | Missing feature affecting user experience
-Multi-language Support | Not available, limiting global reach
-Advanced Search Filters | Basic search only, slow performance
-Export to PDF | Feature not implemented
-Two-Factor Authentication | Security vulnerability exists
-API Rate Limiting | No protection against abuse
-=== Known Issues
-Login timeout issues | Users frequently logged out
-Memory leaks in dashboard | System becomes slow over time
-File upload corruption | Files sometimes corrupted during upload
-Mobile UI overlapping | Interface broken on mobile devices
-Database connection drops | Intermittent connection failures
-Email notifications failing | Users not receiving important updates
-Report generation errors | Reports fail to generate properly
----
-
-[after]
-title=AFTER v2.4.0
----
-[after.items]
-=== New Features Added
-Dark Mode Theme | Implemented with user preference saving
-Multi-language Support | Added 12 languages with automatic detection
-Advanced Search Filters | Fast indexing with multiple filter options
-Export to PDF | High-quality PDF export with custom templates
-Two-Factor Authentication | TOTP and SMS-based 2FA implemented
-API Rate Limiting | Intelligent rate limiting with user tiers
-=== Bugs Resolved
-Login timeout issues | Session management completely rewritten
-Memory leaks in dashboard | React components optimized, memory usage -67%
-File upload corruption | New chunked upload system with integrity checks
-Mobile UI overlapping | Responsive design overhaul completed
-Database connection drops | Connection pooling and retry logic implemented
-Email notifications failing | New email service with 99.9% delivery rate
-Report generation errors | Async report generation with progress tracking
+include::data/scorecard/scorecard1.txt[]
 ----
 
 
@@ -86,50 +43,7 @@ NOTE: Within [before.items] and [after.items], use === to create section sub-hea
 
 [docops,scorecard, useDark=true, scale=0.75]
 ----
-title=Software Release v2.4.0 - Feature & Bug Summary
-subtitle=Migration from Legacy System to Modern Architecture
----
-
-[before]
-title=BEFORE v2.4.0
----
-[before.items]
-=== Feature Status
-Dark Mode Theme | Missing feature affecting user experience
-Multi-language Support | Not available, limiting global reach
-Advanced Search Filters | Basic search only, slow performance
-Export to PDF | Feature not implemented
-Two-Factor Authentication | Security vulnerability exists
-API Rate Limiting | No protection against abuse
-=== Known Issues
-Login timeout issues | Users frequently logged out
-Memory leaks in dashboard | System becomes slow over time
-File upload corruption | Files sometimes corrupted during upload
-Mobile UI overlapping | Interface broken on mobile devices
-Database connection drops | Intermittent connection failures
-Email notifications failing | Users not receiving important updates
-Report generation errors | Reports fail to generate properly
----
-
-[after]
-title=AFTER v2.4.0
----
-[after.items]
-=== New Features Added
-Dark Mode Theme | Implemented with user preference saving
-Multi-language Support | Added 12 languages with automatic detection
-Advanced Search Filters | Fast indexing with multiple filter options
-Export to PDF | High-quality PDF export with custom templates
-Two-Factor Authentication | TOTP and SMS-based 2FA implemented
-API Rate Limiting | Intelligent rate limiting with user tiers
-=== Bugs Resolved
-Login timeout issues | Session management completely rewritten
-Memory leaks in dashboard | React components optimized, memory usage -67%
-File upload corruption | New chunked upload system with integrity checks
-Mobile UI overlapping | Responsive design overhaul completed
-Database connection drops | Connection pooling and retry logic implemented
-Email notifications failing | New email service with 99.9% delivery rate
-Report generation errors | Async report generation with progress tracking
+include::data/scorecard/scorecard2.txt[]
 ----
 
 
@@ -145,64 +59,14 @@ Report generation errors | Async report generation with progress tracking
 ....
 [docops,scorecard]
 ----
-title=Security Hardening Q3 Zero-Trust Rollout
-subtitle=From legacy auth to modern controls
----
-[before]
-title=BEFORE (Legacy Security)
----
-[before.items]
-=== Identity & Access
-Password reuse | No rotation policy
-MFA coverage | Optional for admins only
-Service accounts | Shared credentials
-=== Observability
-Audit trails | Partial coverage, siloed
-Secrets handling | In-repo .env files
----
-[after]
-title=AFTER (Zero-Trust)
----
-[after.items]
-=== Identity & Access
-Password reuse | Enforced rotation + history
-MFA coverage | Mandatory for all users
-Service accounts | Federated + scoped
-=== Observability
-Audit trails | Centralized, immutable logs
-Secrets handling | Vault-based, dynamic secrets
+include::data/scorecard/scorecard3.txt[]
 ----
 ....
 
 
 [docops,scorecard,controls=true]
 ----
-title=Security Hardening Q3 Zero Trust Rollout
-subtitle=From legacy auth to modern controls
----
-[before]
-title=BEFORE (Legacy Security)
----
-[before.items]
-=== Identity  Access
-Password reuse | No rotation policy
-MFA coverage | Optional for admins only
-Service accounts | Shared credentials
-=== Observability
-Audit trails | Partial coverage, siloed
-Secrets handling | In-repo .env files
----
-[after]
-title=AFTER (Zero Trust)
----
-[after.items]
-=== Identity & Access
-Password reuse | Enforced rotation + history
-MFA coverage | Mandatory for all users
-Service accounts | Federated + scoped
-=== Observability
-Audit trails | Centralized, immutable logs
-Secrets handling | Vault-based, dynamic secrets
+include::data/scorecard/scorecard3.txt[]
 ----
 
 
@@ -217,65 +81,20 @@ Secrets handling | Vault-based, dynamic secrets
 ....
 [docops,scorecard]
 ----
-title=Cloud Cost Optimization — From Lift-and-Shift to Right-Sized
-subtitle=Reducing spend while improving reliability
----
-[before]
-title=BEFORE (Lift-and-Shift)
----
-[before.items]
-=== Compute
-E2 instances | Over-provisioned by 60
-Auto-scaling | Disabled, manual interventions
-=== Storage
-Backups | Hourly snapshots retained 180 days
-Logs | Never expired
----
-[after]
-title=AFTER (Right-Sized)
----
-[after.items]
-=== Compute
-E2 instances | Rightsized + spot for batch
-Auto-scaling | Predictive + SLO-based
-=== Storage
-Backups | Tiered: 7/30/90 retention
-Logs | 30-day hot + glacier archive
+include::data/scorecard/scorecard4.txt[]
 ----
 ....
 
 [docops,scorecard,controls=true]
 ----
-title=Cloud Cost Optimization From Lift and Shift to Right Sized
-subtitle=Reducing spend while improving reliability
----
-[before]
-title=BEFORE (Lift-and-Shift)
----
-[before.items]
-=== Compute
-E2 instances | Over-provisioned by 60
-Auto-scaling | Disabled, manual interventions
-=== Storage
-Backups | Hourly snapshots retained 180 days
-Logs | Never expired
----
-[after]
-title=AFTER (Right-Sized)
----
-[after.items]
-=== Compute
-E2 instances | Rightsized + spot for batch
-Auto-scaling | Predictive + SLO-based
-=== Storage
-Backups | Tiered: 7/30/90 retention
-Logs | 30-day hot + glacier archive
+include::data/scorecard/scorecard4.txt[]
 ----
 
 [.back-to-top]
 <<top, 🔝>> 
 
 == Live Preview
+
 - Quick preview endpoint (static design): GET /api/scorecard/view-mode
 - Interactive editor: GET /api/scorecard/edit-mode
   - Toggle Dark Mode in the editor; the UI will update the content and re-render.
@@ -313,43 +132,13 @@ Example:
 ....
 [docops,scorecard,useDark=true,scale=1.5]
 ----
-title=Software Release v2.4.0 - Feature & Bug Summary
-subtitle=Migration from Legacy System to Modern Architecture
----
-[before]
-title=BEFORE v2.4.0
----
-[before.items]
-=== Feature Status
-Dark Mode Theme | Missing feature affecting user experience
----
-[after]
-title=AFTER v2.4.0
----
-[after.items]
-=== New Features Added
-Dark Mode Theme | Implemented with user preference saving
+include::data/scorecard/scorecard5.txt[]
 ----
 ....
 
 [docops,scorecard,useDark=true,scale=1.5]
 ----
-title=Software Release v2.4.0 - Feature & Bug Summary
-subtitle=Migration from Legacy System to Modern Architecture
----
-[before]
-title=BEFORE v2.4.0
----
-[before.items]
-=== Feature Status
-Dark Mode Theme | Missing feature affecting user experience
----
-[after]
-title=AFTER v2.4.0
----
-[after.items]
-=== New Features Added
-Dark Mode Theme | Implemented with user preference saving
+include::data/scorecard/scorecard5.txt[]
 ----
 
 
