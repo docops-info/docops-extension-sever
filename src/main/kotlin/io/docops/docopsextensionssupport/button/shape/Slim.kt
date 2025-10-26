@@ -20,6 +20,8 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.util.BackgroundHelper
 import kotlin.compareTo
 import kotlin.times
 
@@ -56,8 +58,8 @@ class Slim(buttons: Buttons) : Regular(buttons) {
 
             var lines = ""
             button.description?.let {
-                lines += "<text x=\"0\" y=\"38\" >"
-                lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 4)
+                lines += """<text class="card-text title-text" x="75" y="75" text-anchor="middle">"""
+                lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 75)
                 lines+= "</text>"
             }
             var linesOrImage = lines
@@ -67,7 +69,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             <image x="0" y="35" width="150" height="90" href="${it.ref}"/>"""
                 }
             }
-            val title = linesToMultiLineText(button.buttonStyle?.labelStyle,wrapText(button.label.escapeXml(), 15f), 12, 75)
+            val title = linesToMultiLineText(button.buttonStyle?.labelStyle,wrapText(button.label.escapeXml(), 30f), 12, 75)
             var btnDate = ""
             button.date?.let {
                 btnDate = it
@@ -85,42 +87,32 @@ class Slim(buttons: Buttons) : Regular(buttons) {
                 clz = ""
             }
             var href = """window.open('${button.link}', '$win')"""
-            var endAnchor = "</a>"
             if(!button.enabled) {
                 href = ""
-                endAnchor = ""
+
             }
+
             btns.append("""
-         <g transform="translate($startX,$startY)" class="slim-card" cursor="pointer" onclick="$href">
-
-               
-        <!-- Faint thin border -->
-        <rect x="0" y="0" width="150" height="150" rx="17.5" ry="17.5"
-              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"
-              $fill/>
-
-        <!-- Inner shadow to add depth -->
-        <rect x="0" y="0" width="150" height="150" rx="18" ry="18"
-              fill="transparent" filter="url(#inner-shadow)"/>
-
-
-        <!-- Subtle noise overlay for organic texture -->
-        <rect x="0" y="0" width="150" height="150" rx="18" ry="18" fill="url(#noise)" opacity="0.04" clip-path="url(#rect-clip)"/>
-
-        <!-- Slight colored tint (like iOS accent) -->
-        <rect x="0" y="0" width="150" height="150" rx="18" ry="18"
-              fill="rgba(100,140,255,0.06)" style="mix-blend-mode:overlay">
-            <title>Netflix</title>
-        </rect>
-        
-        <text text-anchor="middle" x="75" y="8" class="$clz">
-            $title
-        </text>
-        $linesOrImage
-        <text x="145" y="135" text-anchor="end">${authors}</text>
-        <text x="145" y="145" style="${button.buttonStyle?.dateStyle}" text-anchor="end">${btnDate}</text>
+        <g transform="translate($startX,$startY)" class="card-group" onclick="$href" style="cursor: pointer;">
+            <!-- Shadow -->
+            <rect x="2" y="2" width="150" height="150" rx="20" fill="rgba(0,0,0,0.3)" filter="url(#cardShadow)"/>
+            <!-- Card background -->
+            <rect class="card-bg" x="0" y="0" width="150" height="150" rx="20" fill="url(#btn_${button.id})"/>
+            <!-- Glass overlay -->
+            <rect class="card-shine" x="0" y="0" width="150" height="150" rx="20" fill="url(#glassOverlay)" opacity="0.3"/>
+            <!-- Border highlight -->
+            <rect x="0" y="0" width="150" height="150" rx="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+    
+            <!-- Status badge -->
+            <circle class="status-badge" cx="20" cy="20" r="5" fill="rgba(255,255,255,0.9)"/>
+    
+            <!-- Content -->
+            <text class="card-text title-text" x="75" y="55" text-anchor="middle">$title</text>
+            $lines
+            <text class="card-text date-text" x="75" y="130" text-anchor="middle">${btnDate}</text>
         </g>
             """.trimIndent())
+
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
         return btns.toString()
@@ -170,17 +162,17 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         // Dark mode styles
         val darkModeStyles = if (buttons.useDark) {
             """
-            #${buttons.id} .dark-mode {
+            #btn_${buttons.id} .dark-mode {
                 filter: brightness(0.8) contrast(1.2);
             }
-            #${buttons.id} .dark-text {
+            #btn_${buttons.id} .dark-text {
                 fill: #e5e7eb !important;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
             }
-            #${buttons.id} .dark-shadow {
+            #btn_${buttons.id} .dark-shadow {
                 text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
             }
-            #${buttons.id} .slim-card.dark-mode:hover {
+            #btn_${buttons.id} .slim-card.dark-mode:hover {
                 filter: brightness(1.2) sepia(30%);
             }
             """
@@ -188,75 +180,73 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             ""
         }
 
-        val darkModeDefs = if (buttons.useDark) {
-            """
-                <linearGradient id="glassBorder_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-        </linearGradient>
-        <filter id="glassDropShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
-            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
-            <feMerge>
-                <feMergeNode in="shadow"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-        <linearGradient id="glassOverlay_${buttons.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
-            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
-            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
-        </linearGradient>
-        <linearGradient id="backgroundGradient_${buttons.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
-        </linearGradient>
-            """.trimIndent()
-        } else {""}
+        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
 
         var style = """
              <style>
-            ${glass()}
-            ${lightShadow()}
-            ${raise(strokeColor = strokeColor)}
-            ${baseCard()}
-            ${gradientStyle()}
-            ${myBox()}
-            ${keyFrame()}
-            ${linkText()}
-            ${modernText()}
-            ${modernCard()}
             $darkModeStyles
             
-            /* Slim-specific hover effects */
-            #${buttons.id} .slim-card {
-                transition: all 0.3s ease;
+            #btn_${buttons.id} .card-group {
                 cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            
-            #${buttons.id} .slim-card:hover {
-                filter: brightness(1.1) saturate(1.2);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+            #btn_${buttons.id} .card-group:hover .card-bg {
+                filter: brightness(1.15) url(#hoverGlow);
             }
-            
-            #${buttons.id} .slim-card:hover rect {
-                stroke-width: 2;
-                stroke: rgba(255, 255, 255, 0.3);
+
+            #btn_${buttons.id} .card-group:hover .card-shine {
+                opacity: 0.6;
             }
-            
-            #${buttons.id} .slim-card:hover text {
-                filter: brightness(1.2);
+
+            #btn_${buttons.id} .card-group:active {
+                transform: translateY(-4px);
             }
-            
-            /* Enhanced glass effect on hover */
-            #${buttons.id} .glass:hover {
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+
+            #btn_${buttons.id} .card-bg {
+                transition: filter 0.3s ease;
             }
-            
+
+            #btn_${buttons.id} .card-shine {
+                opacity: 0.3;
+                transition: opacity 0.3s ease;
+            }
+
+            #btn_${buttons.id} .card-text {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            }
+
+            #btn_${buttons.id} .title-text {
+                font-weight: 700;
+                font-size: 16px;
+                fill: #ffffff;
+                letter-spacing: 0.02em;
+            }
+
+            #btn_${buttons.id} .desc-text {
+                font-weight: 400;
+                font-size: 11px;
+                fill: rgba(255,255,255,0.85);
+            }
+
+            #btn_${buttons.id} .date-text {
+                font-weight: 600;
+                font-size: 13px;
+                fill: rgba(255,255,255,0.95);
+            }
+
+            #btn_${buttons.id} .status-badge {
+                transition: all 0.3s ease;
+            }
+
+            @keyframes pulse {
+                0%, 100% { opacity: 0.6; }
+                50% { opacity: 1; }
+            }
+
+            #btn_${buttons.id} .card-group:hover .status-badge {
+                animation: pulse 2s infinite;
+            }
             </style>
         """.trimIndent()
 
@@ -265,15 +255,32 @@ class Slim(buttons: Buttons) : Regular(buttons) {
 
             """.trimIndent()
         }
-
+        val sb = StringBuilder()
+        buttons.buttons.forEach {
+            val svgColor = SVGColor(it.color!!, "btn_${it.id}")
+            sb.append("""
+                <linearGradient id="btn_${it.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="${svgColor.darker()}"/>
+                    <stop offset="100%" stop-color="${svgColor.lighter()}"/>
+                </linearGradient>""")
+        }
         return """
             <defs>
             $darkModeDefs
-            ${filters()}
-            ${naturalShadow()}
-            ${gradient()}
-            ${modernGradients()}
-            ${uses()}
+          
+            <!-- Modern shadow filter -->
+            <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+                <feOffset dx="0" dy="8" result="offsetblur"/>
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.3"/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            $sb
            $style
             </defs>
         """.trimIndent()

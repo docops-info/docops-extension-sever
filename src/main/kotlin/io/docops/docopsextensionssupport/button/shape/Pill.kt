@@ -82,23 +82,20 @@ class Pill(buttons: Buttons) : Regular(buttons) {
                 fill = "fill='${button.color}'"
                 overlay = "${button.color}"
             }
-            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">"""
-            var endAnchor = "</a>"
+            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
                 href = ""
-                endAnchor = ""
             }
+
             btns.append(
                 """
-                $href
-                <g role="button" cursor="pointer" transform="translate($startX, $startY)">
+                <g role="button" transform="translate($startX, $startY)" $href>
                     <rect id="button" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" $fill filter="url(#buttonBlur)" />
                     <rect id="buttongrad" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="$overlay"/>
                     <rect id="buttontop" x="15" y="10.5" width="280" height="25" ry="24" rx="24" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
                     <rect id="buttonbottom" x="25" y="50" width="260" height="7" fill="#ffffff" ry="24" rx="24" fill-opacity="0.3" filter="url(#bottomshine)"/>
                     <text id="label" x="150" y="43" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
                 </g>
-                $endAnchor
                 """
             )
 

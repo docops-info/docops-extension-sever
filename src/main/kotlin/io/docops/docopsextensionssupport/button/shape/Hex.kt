@@ -135,11 +135,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         }
         // Simplified endY calculation: startTextY + (number of spans * fontSize)
         val endY = startTextY + (textSpans.size * fontSize)
-        var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
-        var endAnchor = "</a>"
+        var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
         if(!button.enabled) {
             href = ""
-            endAnchor = ""
         }
         var typeText = ""
         button.type?.let {typeText = it.uppercase()}
@@ -159,9 +157,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         } else ""
 
         return """
-    <g transform="translate($x,$y)" cursor="pointer" class="$additionalClass">
+    <g transform="translate($x,$y)" class="$additionalClass" $href>
     <title>$title</title>
-    $href
+    <g>
     <polygon stroke="$strokeColor" stroke-width="$strokeWidth" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994" rx="5" ry="5" filter="drop-shadow(3px 3px 3px rgba(0,0,0,0.2))">
         $activeAnimation
     </polygon>
@@ -169,7 +167,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
      $img 
     </g>
     <text x="149" y="$startTextY" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">$spans</text>
-    $endAnchor
+    </g>
     $l1
     $l2
     <text x="149" y="${endY+24}" text-anchor="middle" style="${button.buttonStyle?.descriptionStyle};">$typeText</text>

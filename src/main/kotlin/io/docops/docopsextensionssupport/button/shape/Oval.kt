@@ -110,16 +110,12 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 overlay = "${button.color}"
             }
 
-            var href = """<a xlink:href="${button.link}" href="${button.link}" target="$win" style='text-decoration: none; font-family:Arial; fill: #fcfcfc;'>"""
-            var endAnchor = "</a>"
+            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
                 href = ""
-                endAnchor = ""
             }
-
             btns.append("""
-                <g role="button" cursor="pointer" transform="translate($startX,$startY)">
-                    $href
+                <g role="button" transform="translate($startX,$startY)" $href>
                     <rect id="button" x="0" y="0" width="250" height="90" rx="36" ry="36" $fill filter="url(#buttonBlur)" />
                     <rect id="buttongrad" x="0" y="0" width="250" height="90" rx="36" ry="36" fill="$overlay" />
                     <rect id="buttontop" x="10" y="5" width="230" height="40" rx="30" ry="30" fill="url(#topshineGrad)" filter="url(#topshineBlur)" />
@@ -127,7 +123,6 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                     <text id="label" x="125" y="0" text-anchor="middle" class="glass" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold;">
                         $tspan
                     </text>
-                    $endAnchor
                 </g>
             """.trimIndent())
 
