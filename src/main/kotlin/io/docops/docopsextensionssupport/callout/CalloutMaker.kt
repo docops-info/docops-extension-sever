@@ -386,7 +386,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
 
         return buildString {
             append("""
-            <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg">
+            <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
                 <defs>
             """.trimIndent())
 
@@ -560,7 +560,7 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
 
         return buildString {
             append("""
-                <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg">
+                <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
                     <defs>
             """.trimIndent())
 

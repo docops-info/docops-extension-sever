@@ -140,7 +140,7 @@ class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class) constructor(
         }
 
         svg.append("""
-            <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth+20} $totalHeight" preserveAspectRatio="xMidYMid meet">
                 <defs>
                 <!-- Enhanced filters for glass effect -->
                 <filter id="glassDropShadow_$id" x="-20%" y="-20%" width="140%" height="140%">

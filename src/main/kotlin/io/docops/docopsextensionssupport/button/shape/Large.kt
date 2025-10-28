@@ -22,12 +22,8 @@ import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.EmbeddedImage
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.svgsupport.addLinebreaks
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import io.docops.docopsextensionssupport.util.BackgroundHelper
-import kotlin.text.toFloat
-import kotlin.times
+import io.nayuki.qrcodegen.QrCode
 
 /**
  * Represents a class that extends the Regular class and implements additional functionality for drawing large buttons.
@@ -127,7 +123,11 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         // Icon area (centered in top section)
         button.embeddedImage?.let {
-            sb.append(createImageIcon(it))
+            if(it.qrEnabled) {
+                sb.append(createDefaultIcon(button))
+            } else {
+                sb.append(createImageIcon(it))
+            }
         }
 
 
@@ -167,23 +167,52 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     private fun createDefaultIcon(button: Button): String {
+
+        val qrCode = QrCode.encodeText("${button.link}", QrCode.Ecc.HIGH)
+        val svg = toSvgString(qrCode, 4, "#FFFFFF", "#640D5F")
         val sb = StringBuilder()
-        sb.append("""<g transform="translate(150, 95)">""")
-        sb.append("""<circle cx="0" cy="0" r="50" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/>""")
-        sb.append("""<circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/>""")
-
-        // Default document icon
-        sb.append("""<g opacity="0.8">""")
-        sb.append("""<rect x="-20" y="-25" width="40" height="50" rx="4" fill="currentColor" opacity="0.3"/>""")
-        sb.append("""<rect x="-18" y="-23" width="36" height="46" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/>""")
-        sb.append("""<line x1="-12" y1="-13" x2="12" y2="-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>""")
-        sb.append("""<line x1="-12" y1="-3" x2="12" y2="-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>""")
-        sb.append("""<line x1="-12" y1="7" x2="6" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>""")
-        sb.append("</g>")
-
+        sb.append("""<g transform="translate(75, 10)">""")
+        sb.append(svg)
         sb.append("</g>")
         return sb.toString()
     }
+    /**
+	 * Returns a string of SVG code for an image depicting the specified QR Code, with the specified
+	 * number of border modules. The string always uses Unix newlines (\n), regardless of the platform.
+	 * @param qr the QR Code to render (not {@code null})
+	 * @param border the number of border modules to add, which must be non-negative
+	 * @param lightColor the color to use for light modules, in any format supported by CSS, not {@code null}
+	 * @param darkColor the color to use for dark modules, in any format supported by CSS, not {@code null}
+	 * @return a string representing the QR Code as an SVG XML document
+	 * @throws NullPointerException if any object is {@code null}
+	 * @throws IllegalArgumentException if the border is negative
+	 */
+	private fun toSvgString(qr: QrCode, border: Int, lightColor: String, darkColor: String ) : String {
+
+		if (border < 0)
+			throw  IllegalArgumentException("Border must be non-negative");
+		val brd = border
+		val sb =  StringBuilder()
+			.append(
+                """<?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${qr.size + brd * 2} ${qr.size + brd * 2}" height="150" width="150" stroke="none">
+			    <rect width="100%" height="100%" fill="none"/>""")
+			.append("""<path d=" """)
+            for (y in 0 until qr.size) {
+                for (x in 0 until qr.size) {
+                    if (qr.getModule(x, y)) {
+                        if (x != 0 || y != 0)
+                            sb.append(" ")
+                        sb.append("""M${x + brd},${y + brd}h1v1h-1z""")
+                    }
+                }
+            }
+		return sb
+			.append("""" fill="$darkColor"/>""")
+			.append("</svg>")
+			.toString();
+	}
 
     private fun createTextContent(button: Button): String {
         val sb = StringBuilder()

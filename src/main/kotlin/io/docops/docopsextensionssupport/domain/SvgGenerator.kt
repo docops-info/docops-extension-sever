@@ -61,7 +61,7 @@ class SvgGenerator {
 
         // Generate SVG
         val svg = StringBuilder()
-        svg.append("<svg width=\"$totalWidth\" height=\"$totalHeight\" xmlns=\"http://www.w3.org/2000/svg\">")
+        svg.append("""<svg width="$totalWidth" height="$totalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $totalWidth $totalHeight" preserveAspectRatio="xMidYMid meet">""")
 
         // Add definitions
         svg.append("<defs>")

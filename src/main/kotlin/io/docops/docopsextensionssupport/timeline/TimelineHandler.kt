@@ -4,7 +4,6 @@ import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.update
-import io.docops.extension.wasm.timeline.TimelineMaker
 
 class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     fun handleSVG(
@@ -18,8 +17,8 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
     ): String {
         val parser = TimelineParser()
         val config = parser.parse(payload)
-        val maker = TimelineMaker()
-        val svg = maker.makeSvg(config, useDark, scale = scale )
+        val maker = TimelineSvgGenerator()
+        val svg = maker.generateTimeline(config, useDark, scale = scale )
         csvResponse.update(config.timelineEventsToCsv())
         return svg
     }
