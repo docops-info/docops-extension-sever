@@ -5,6 +5,32 @@ All notable changes to the DocOps Extension Server project will be documented in
 The format is based on https://keepachangelog.com/en/1.0.0/[Keep a Changelog],
 and this project adheres to a year-based versioning scheme (YYYY.XX).
 
+== [2025.10] - 2025-10-28
+
+=== Timeline
+* Added horizontal timeline rendering alongside existing vertical layout.
+* Config-based layout switching via optional front-matter separated by a line with exactly `---`; supports `type=H|V` (case-insensitive). Defaults to vertical when omitted or invalid.
+* Horizontal rendering follows the provided design at `designs/timeline-h.svg`; vertical rendering path preserved unchanged.
+
+=== Documentation
+* Updated `src/docs/asciidoc/timelineshowcase.adoc` with examples for `type=H`, `type=V`, default behavior, and the `---` separator.
+
+=== Tests
+* Added unit tests covering config parsing, horizontal vs vertical selection, structural SVG differences, and text wrapping in the horizontal layout.
+
+=== Migration Guidance / Backward Compatibility
+* No breaking changes: existing timelines without a config block or with `type=V` continue to render vertically.
+* To opt into horizontal layout, add a config block before your timeline payload:
++
++```
++type=H
++---
++date: 1891
++text: Mailbox, invented by Phillip Downing
++```
++
+* Unknown config keys are ignored; invalid `type` values default to vertical with a warning in logs.
+
 == [2025.06] - 2025-06-30
 
 === New Visualizations
