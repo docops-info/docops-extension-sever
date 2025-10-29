@@ -46,16 +46,22 @@ class TimelineSvgGenerator {
 
     @OptIn(ExperimentalUuidApi::class)
     fun generateTimeline(config: TimelineConfig, isDarkMode: Boolean = false, scale: String): String {
+        if (config.orientation == Orientation.HORIZONTAL) {
+            return generateTimelineHorizontal(config, isDarkMode, scale)
+        }
         val svgId = "id_${Uuid.random().toHexString()}"
         val colors = if (isDarkMode) darkModeColors else lightModeColors
+
+        // Parse scale parameter
+        val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
         // Calculate dimensions
         val maxTextWidth = 380
         val itemSpacing = 150
         val topMargin = 80
         val bottomMargin = 80
-        val width = 1000
-        val centerX = width / 2
+        val baseWidth = 1000
+        val centerX = baseWidth / 2
 
         // Calculate heights for each item
         val itemHeights = config.events.map { item ->
@@ -63,13 +69,18 @@ class TimelineSvgGenerator {
         }
 
         val totalHeight = topMargin + itemHeights.sum() + (config.events.size - 1) * itemSpacing + bottomMargin
-        val height = totalHeight.coerceAtLeast(400)
+        val baseHeight = totalHeight.coerceAtLeast(400)
+
+        // Apply scale factor to dimensions
+        val width = (baseWidth * scaleFactor).toInt()
+        val height = (baseHeight * scaleFactor).toInt()
 
         val sb = StringBuilder()
 
-        // SVG header
+        // SVG header with scaled dimensions but original viewBox
         sb.append("""<?xml version="1.0" encoding="UTF-8"?>""")
-        sb.append("""<svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
+        sb.append("""<svg width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
+        sb.append("<!-- orientation: vertical -->")
 
         // Add metadata
        // appendMetadata(sb, items)
@@ -111,6 +122,90 @@ class TimelineSvgGenerator {
         sb.append("</svg>")
 
         return sb.toString()
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    private fun generateTimelineHorizontal(config: TimelineConfig, isDarkMode: Boolean, scale: String): String {
+        val svgId = "id_${Uuid.random().toHexString()}"
+        val colors = if (isDarkMode) darkModeColors else lightModeColors
+        val scaleFactor = scale.toDoubleOrNull() ?: 1.0
+
+        // Layout parameters for horizontal design
+        val leftMargin = 80
+        val rightMargin = 80
+        val topMargin = 80
+        val bottomMargin = 80
+        val laneGap = 120 // distance above/below axis for labels
+        val markerRadius = 6
+        val spacing = 220 // distance between events along x-axis
+        val maxTextWidth = 260
+
+        val n = config.events.size.coerceAtLeast(1)
+        val baseWidth = (leftMargin + rightMargin + (n - 1) * spacing + 200).coerceAtLeast(1000)
+        val baseHeight = (topMargin + bottomMargin + laneGap * 2 + 160).coerceAtLeast(400)
+
+        val width = (baseWidth * scaleFactor).toInt()
+        val height = (baseHeight * scaleFactor).toInt()
+
+        val sb = StringBuilder()
+        sb.append("""<?xml version=\"1.0\" encoding=\"UTF-8\"?>""")
+        sb.append("""<svg width=\"$width\" height=\"$height\" viewBox=\"0 0 $baseWidth $baseHeight\" xmlns=\"http://www.w3.org/2000/svg\" id=\"$svgId\">""")
+        sb.append("<!-- orientation: horizontal -->")
+
+        appendDefs(sb, svgId, isDarkMode, colors)
+        sb.append("""<rect width=\"100%\" height=\"100%\" fill=\"url(#bgGradient_$svgId)\"/>""")
+
+        // Axis line centered vertically
+        val axisY = baseHeight / 2
+        sb.append("""<line x1=\"$leftMargin\" y1=\"$axisY\" x2=\"${baseWidth - rightMargin}\" y2=\"$axisY\" stroke=\"url(#lineGradient_$svgId)\" stroke-width=\"3\" stroke-linecap=\"round\" opacity=\"0.7\"/>""")
+
+        // Place events along axis
+        var x = leftMargin + 100
+        config.events.forEachIndexed { index, item ->
+            val color = colors[index % colors.size]
+            val above = index % 2 == 0
+            val connectorY = if (above) axisY - 12 else axisY + 12
+            val labelY = if (above) (axisY - laneGap) else (axisY + laneGap)
+
+            // Connector from axis to label anchor
+            sb.append("""<line x1=\"$x\" y1=\"$axisY\" x2=\"$x\" y2=\"$connectorY\" stroke=\"${color.stroke}\" stroke-width=\"2\" opacity=\"0.8\"/>""")
+
+            // Marker on axis
+            sb.append("""<circle cx=\"$x\" cy=\"$axisY\" r=\"$markerRadius\" fill=\"${color.stroke}\"/>""")
+
+            // Date pill
+            val dateText = escapeXml(item.date)
+            val dateWidth = estimateTextWidth(dateText, 13) + 20
+            val dateX = (x - dateWidth / 2).coerceAtLeast(10)
+            val dateY = if (above) (labelY - 26) else (labelY + 6)
+            sb.append("""<rect x=\"$dateX\" y=\"${dateY - 16}\" rx=\"8\" ry=\"8\" width=\"$dateWidth\" height=\"24\" fill=\"#ffffff\" opacity=\"0.85\" stroke=\"${color.stroke}\" stroke-width=\"1\"/>""")
+            sb.append("""<text x=\"${dateX + dateWidth / 2}\" y=\"${dateY}\" text-anchor=\"middle\" font-family=\"Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans,\" font-size=\"13\" fill=\"${color.text}\">$dateText</text>""")
+
+            // Description box
+            val lines = wrapText(item.text, maxTextWidth)
+            val textHeight = lines.size * 18
+            val boxWidth = maxTextWidth + 24
+            val boxHeight = textHeight + 24
+            val boxX = x - boxWidth / 2
+            val boxY = if (above) (labelY - boxHeight - 8) else (labelY + 8)
+
+            sb.append("""<rect x=\"$boxX\" y=\"$boxY\" rx=\"12\" ry=\"12\" width=\"$boxWidth\" height=\"$boxHeight\" fill=\"url(#cardGradient_$svgId)\" filter=\"url(#shadow_$svgId)\"/>""")
+            // Multi-line text inside box
+            var ty = boxY + 20
+            lines.forEach { line ->
+                sb.append("""<text x=\"${boxX + 12}\" y=\"$ty\" font-family=\"Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans,\" font-size=\"14\" fill=\"#111827\">""")
+                appendTextWithLinks(sb, escapeXml(line), boxX + 12, ty, "#111827", "#2563eb", isDarkMode)
+                sb.append("""</text>""")
+                ty += 18
+            }
+
+            x += spacing
+        }
+
+        sb.append("</svg>")
+        // Sanitize accidental escaped quotes in triple-quoted strings
+        val output = sb.toString().replace("\\\"", "\"")
+        return output
     }
 
     private fun appendDefs(sb: StringBuilder, svgId: String, isDarkMode: Boolean, colors: List<TimelineColor>) {

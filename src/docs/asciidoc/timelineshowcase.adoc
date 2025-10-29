@@ -52,19 +52,61 @@ include::data/timeline/timeline7.txt[]
 include::data/timeline/timeline8.txt[]
 ....
 
-[docops,timeline,scale="1",role="center",controls=true]
+[docops,timeline,scale="1",role="center",controls=true,scale=0.5]
 ....
 include::data/timeline/timeline9.txt[]
 ....
 
-[docops,timeline,title="Modern Glass Timeline",scale="1",role="center",useDark="true",useGlass="true",controls=true]
+[docops,timeline,title="Modern Glass Timeline",scale="1",role="center",useDark="true",useGlass="true",controls=true,scale=0.5]
 ....
 include::data/timeline/timeline10.txt[]
 ....
 
-[docops,timeline,controls=true]
+[docops,timeline,controls=true,scale=0.5]
 ....
 include::data/timeline/timeline11.txt[]
 ....
 
 ====
+
+=== Horizontal vs Vertical configuration
+
+You can select the orientation via a simple config block above a line with three dashes `---`.
+When omitted or invalid, the layout defaults to vertical.
+
+Horizontal example (`type=H`):
+
+[docops,timeline,title="Horizontal Example",scale="1",role="center",controls=true]
+....
+ type=H
+ ---
+ date: 1891
+ text: Mailbox, invented by Phillip Downing
+ 
+ date: 1923
+ text: The Three-Light Traffic Signal, invented by Garrett Morgan
+
+ date: 1932
+ text: Automatic Gear Shift, invented by Richard Spikes
+....
+
+Vertical example (`type=V` or default):
+
+[docops,timeline,title="Vertical Example (default)",scale="1",role="center",controls=true]
+....
+ type=V
+ ---
+ date: July 23rd, 2023
+ text: DocOps extension Server releases a new feature, Timeline Maker for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can create very powerful timeline images. Enjoy!
+....
+
+Default behavior (no config block):
+
+[docops,timeline,title="Default Vertical (no config)",scale="1",role="center",controls=true]
+....
+ date: 2000
+ text: Y2K remediation completed
+
+ date: 2004
+ text: Project Phoenix kickoff
+....

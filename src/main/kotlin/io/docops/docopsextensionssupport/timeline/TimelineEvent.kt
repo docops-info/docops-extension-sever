@@ -9,11 +9,16 @@ data class TimelineEvent(
     val text: String
 )
 
+enum class Orientation {
+    HORIZONTAL, VERTICAL
+}
+
 data class TimelineConfig(
     val width: Int = 980,
     val events: List<TimelineEvent>,
     val lightColor: String? = null,
-    val lightColorIndex: Int? = null
+    val lightColorIndex: Int? = null,
+    val orientation: Orientation = Orientation.VERTICAL
 ) {
     fun timelineEventsToCsv(): CsvResponse {
         val headers = listOf("Date", "Text")
