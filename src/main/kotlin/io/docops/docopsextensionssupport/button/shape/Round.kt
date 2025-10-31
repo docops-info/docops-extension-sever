@@ -67,12 +67,10 @@ class Round(buttons: Buttons) : Regular(buttons) {
      fun drawButtons(index: Int, buttonList: MutableList<Button>, itemNumber: ItemCount): String {
         val btns = StringBuilder()
         var win = "_top"
-        var strokeColor = "gold"
         buttons.theme?.let {
             if (it.newWin) {
                 win = "_blank"
             }
-            strokeColor = it.strokeColor
         }
         var startX = 70
 
@@ -86,20 +84,17 @@ class Round(buttons: Buttons) : Regular(buttons) {
         }
 
         buttonList.forEach {button: Button ->
-            val lines = wrapText(button.label.escapeXml(), 15f)
+            val lines = wrapText(button.label, 15f)
             var lineY = 0
             if(lines.size > 0) {
                 lineY = lines.size * - 6
             }
             val title = linesToMultiLineText(button.buttonStyle?.labelStyle,
                 lines, 12, 0)
-            var filter = "filter=\"url(#Bevel2)\""
-            var fill = "${button.color}"
+
             var stroke = "url(#nnneon-grad${itemNumber.counter}-${buttons.id})"
             if(isPdf) {
-                filter = ""
                 stroke = "${button.color}"
-                fill = "url(#btn_${button.id})"
             }
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {

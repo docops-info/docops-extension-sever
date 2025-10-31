@@ -65,15 +65,9 @@ class Circle(buttons: Buttons): Regular(buttons) {
         }
 
         buttonList.forEachIndexed { idx, button: Button ->
-            var fill = "class=\"btn_${button.id}_cls\""
             val baseColor = button.color ?: "#3498db"
-            val svgColor = SVGColor(baseColor, "btn_${button.id}")
 
-            if(isPdf) {
-                fill = "fill='${baseColor}'"
-            }
-
-            val lines = wrapText(button.label.escapeXml(), 15f)
+            val lines = wrapText(button.label, 15f)
             var lineY = 0
             if(lines.size > 0) {
                 lineY = lines.size * -6
