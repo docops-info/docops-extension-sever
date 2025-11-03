@@ -116,7 +116,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                 """
         <g transform="translate($startX,$startY)" $href>
             <rect x="0" y="0" $btnLook width="300" height="30" rx="10" ry="10"/>
-            <text x="150" y="20" text-anchor="middle" class="$textClass" style="${button.buttonStyle?.labelStyle}; fill:$textFillColor">${button.label.escapeXml()}</text>
+            <text x="150" y="20" text-anchor="middle" style="${button.buttonStyle?.labelStyle};">${button.label.escapeXml()}</text>
         </g>
         """.trimIndent()
             )
