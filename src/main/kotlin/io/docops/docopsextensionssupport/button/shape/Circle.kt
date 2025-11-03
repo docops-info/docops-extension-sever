@@ -65,13 +65,8 @@ class Circle(buttons: Buttons): Regular(buttons) {
         }
 
         buttonList.forEachIndexed { idx, button: Button ->
-            val baseColor = button.color ?: "#3498db"
-
             val lines = wrapText(button.label, 15f)
-            var lineY = 0
-            if(lines.size > 0) {
-                lineY = lines.size * -6
-            }
+
             val title = linesToMultiLineTextInternal(button.buttonStyle?.labelStyle,
                 lines, 12, 60)
 
@@ -184,18 +179,12 @@ class Circle(buttons: Buttons): Regular(buttons) {
         if (!isPdf) {
             styleDefs.append("""
                 <style>
-                   
-                    
-                    .circle-button:hover #button-base {
+                    #btn_${buttons.id} .circle-button:hover {
                         stroke-width: 3px;
                         filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));
-                    }
-                    
-                    .circle-button:hover #button-highlight {
                         opacity: 0.8;
                     }
-                    
-                    .circle-button:active #button-base {
+                    #btn_${buttons.id} .circle-button:active {
                         filter: brightness(0.9);
                     }
                 </style>
