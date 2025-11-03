@@ -120,7 +120,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                     <rect id="buttongrad" x="0" y="0" width="250" height="90" rx="36" ry="36" fill="$overlay" />
                     <rect id="buttontop" x="10" y="5" width="230" height="40" rx="30" ry="30" fill="url(#topshineGrad)" filter="url(#topshineBlur)" />
                     <rect id="buttonbottom" x="20" y="70" width="210" height="15" rx="30" ry="7" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)" />
-                    <text id="label" x="125" y="0" text-anchor="middle" class="glass" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: bold;">
+                    <text id="label" x="125" y="0" text-anchor="middle" class="glass" style="${button.buttonStyle?.labelStyle}">
                         $tspan
                     </text>
                 </g>
