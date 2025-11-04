@@ -1,9 +1,11 @@
 package io.docops.docopsextensionssupport.diagram
 
+
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlin.math.max
 import kotlin.math.min
+
 
 class MagicQuadrantSvgGenerator {
 
@@ -261,32 +263,27 @@ class MagicQuadrantSvgGenerator {
         // Determine quadrant color and gradient
         val bubbleGradient = getQuadrantGradient(company.x, company.y, svgId)
         val radius = max(8, min(25, company.size))
-
+        var href =""
+        if (company.url.isNotEmpty()) {
+            href = """onclick="window.open('${escapeXml(company.url)}', '_blank')" style="cursor:pointer""""
+        }
+        // Wrap in group for potential linking
+        sb.append("""<g aria-label="${escapeXml(company.name)}" $href>""")
         // Company bubble with glow effect
         sb.append("""<circle cx="$x" cy="$y" r="$radius" fill="url(#$bubbleGradient)" filter="url(#glow_$svgId)"/>""")
-        sb.append("""<circle cx="$x" cy="$y" r="${radius - 4}" fill="#ffffff" opacity="0.3"/>""")
-
-        // Company name label
-        val textY = y + radius + 20
-        val textColor = colors.text
-
-        // Wrap in group for potential linking
-        sb.append("""<g>""")
-
-        if (company.url.isNotEmpty()) {
-            sb.append("""<a href="${escapeXml(company.url)}" target="_blank">""")
-        }
-
-        sb.append("""<text x="$x" y="$textY" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="$textColor">${escapeXml(company.name)}</text>""")
-
-        if (company.url.isNotEmpty()) {
-            sb.append("""</a>""")
-        }
-
+        sb.append("""<circle cx="$x" cy="$y" r="${radius - 4}" fill="#ffffff" opacity="0.9">""")
+        sb.append("""<animate attributeName="r" begin="0s" dur="0.5s" values="$radius; ${radius + 4}; $radius" calcMode="linear"/>""")
         // Optional description as title element for tooltip
         if (company.description.isNotEmpty()) {
             sb.append("""<title>${escapeXml(company.description)}</title>""")
         }
+        sb.append("""</circle>""")
+        // Company name label
+        val textY = y + radius + 20
+        val textColor = colors.text
+        sb.append("""<text x="$x" y="$textY" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="$textColor">${escapeXml(company.name)}</text>""")
+
+
 
         sb.append("""</g>""")
     }
