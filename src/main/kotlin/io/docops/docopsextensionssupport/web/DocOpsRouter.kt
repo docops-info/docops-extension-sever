@@ -87,7 +87,7 @@ class DocOpsRouter(
             "callout" -> CalloutHandler(csvResponse)
             "metricscard" -> MetricsCardHandler(csvResponse)
             "wordcloud" -> WordCloudHandler(csvResponse)
-            "quadrant" -> QuadrantHandler(csvResponse)
+            "quadrant" -> MagicQuadrantHandler(csvResponse)
             "swim" -> SwimLaneHandler(csvResponse)
             "feature" -> FeatureCardHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)

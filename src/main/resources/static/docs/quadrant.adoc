@@ -66,14 +66,16 @@ To include quadrant charts in your AsciiDoctor document, you use a special macro
 ....
 [docops,quadrant,controls=true]
 ----
-title: Strategic Priority Matrix
-subtitle: Impact vs. Effort Analysis
+#title: Technology Magic Quadrant 2024
+#xAxis: Ability to Execute
+#yAxis: Completeness of Vision
 xAxisLabel: EFFORT REQUIRED
 yAxisLabel: IMPACT LEVEL
-q1Label: HIGH IMPACT
-q2Label: STRATEGIC
-q3Label: FILL-INS
-q4Label: THANKLESS
+#leaders: HIGH IMPACT
+#challengers: STRATEGIC
+#visionaries: FILL-INS
+#niche: THANKLESS
+
 ---
 Feature A | 75 | 85 | Core
 Feature B | 30 | 70 | Enhancement
@@ -95,10 +97,10 @@ The following configuration parameters are available:
 * `subtitle` (optional): The subtitle of the chart (default: "Impact vs. Effort Analysis")
 * `xAxisLabel` (optional): The label for the X-axis (default: "EFFORT REQUIRED")
 * `yAxisLabel` (optional): The label for the Y-axis (default: "IMPACT LEVEL")
-* `q1Label` (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")
-* `q2Label` (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")
-* `q3Label` (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")
-* `q4Label` (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")
+* `leaders` (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")
+* `challengers` (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")
+* `visionaries` (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")
+* `niche` (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")
 
 === Data Format
 
@@ -127,29 +129,13 @@ Here's a simple example of a quadrant chart:
 ....
 [docops,quadrant,controls=true]
 ----
-title: Strategic Priority Matrix
-subtitle: Impact vs. Effort Analysis
-xAxisLabel: EFFORT REQUIRED
-yAxisLabel: IMPACT LEVEL
----
-Feature A | 75 | 85 | Core
-Feature B | 30 | 70 | Enhancement
-Feature C | 60 | 40 | Nice-to-have
-Feature D | 20 | 30 | Optional
+include::data/quadrant/quad1.txt[]
 ----
 ....
 
 [docops,quadrant,controls=true]
 ----
-title: Strategic Priority Matrix
-subtitle: Impact vs. Effort Analysis
-xAxisLabel: EFFORT REQUIRED
-yAxisLabel: IMPACT LEVEL
----
-Feature A | 75 | 85 | Core
-Feature B | 30 | 70 | Enhancement
-Feature C | 60 | 40 | Nice-to-have
-Feature D | 20 | 30 | Optional
+include::data/quadrant/quad1.txt[]
 ----
 
 [.back-to-top]
@@ -163,39 +149,13 @@ You can customize the labels for each quadrant:
 ....
 [docops,quadrant,controls=true]
 ----
-title: Product Feature Prioritization
-subtitle: Value vs. Complexity
-xAxisLabel: COMPLEXITY
-yAxisLabel: BUSINESS VALUE
-q1Label: QUICK WINS
-q2Label: BIG BETS
-q3Label: MONEY PITS
-q4Label: INCREMENTAL
----
-Feature A | 25 | 85 | Core
-Feature B | 70 | 80 | Enhancement
-Feature C | 80 | 30 | Nice-to-have
-Feature D | 30 | 20 | Optional
-Feature E | 50 | 50 | Maintenance
+include::data/quadrant/quad2.txt[]
 ----
 ....
 
 [docops,quadrant,controls=true]
 ----
-title: Product Feature Prioritization
-subtitle: Value vs. Complexity
-xAxisLabel: COMPLEXITY
-yAxisLabel: BUSINESS VALUE
-q1Label: QUICK WINS
-q2Label: BIG BETS
-q3Label: MONEY PITS
-q4Label: INCREMENTAL
----
-Feature A | 25 | 85 | Core
-Feature B | 70 | 80 | Enhancement
-Feature C | 80 | 30 | Nice-to-have
-Feature D | 30 | 20 | Optional
-Feature E | 50 | 50 | Maintenance
+include::data/quadrant/quad2.txt[]
 ----
 
 [.back-to-top]
@@ -209,74 +169,13 @@ Quadrant charts can also be used for risk assessment:
 ....
 [docops,quadrant,controls=true]
 ----
-title: Project Risk Assessment
-subtitle: Probability vs. Impact
-xAxisLabel: PROBABILITY
-yAxisLabel: IMPACT
-q1Label: HIGH PRIORITY
-q2Label: CRITICAL
-q3Label: LOW PRIORITY
-q4Label: MEDIUM PRIORITY
----
-Security Breach | 30 | 95 | Security
-Budget Overrun | 70 | 75 | Financial
-Schedule Delay | 80 | 60 | Timeline
-Scope Creep | 85 | 50 | Management
-Resource Shortage | 60 | 70 | Staffing
-Technical Failure | 40 | 85 | Technical
+include::data/quadrant/quad3.txt[]
 ----
 ....
 
 [docops,quadrant,controls=true]
 ----
-title: Project Risk Assessment
-subtitle: Probability vs. Impact
-xAxisLabel: PROBABILITY
-yAxisLabel: IMPACT
-q1label: HIGH PRIORITY
-q2label: CRITICAL
-q3label: LOW PRIORITY
-q4label: MEDIUM PRIORITY
----
-| Label | X | Y | Category |
-|-------|---|---|----------|
-| Security Breach | 30 | 95 | Security |
-| Budget Overrun | 70 | 75 | Financial |
-| Schedule Delay | 80 | 60 | Timeline |
-| Scope Creep | 85 | 50 | Management |
-| Resource Shortage | 60 | 70 | Staffing |
-| Technical Failure | 40 | 85 | Technical |
-
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-[docops,quadrant,controls=true]
-----
-{
-  "title": "Project Risk Assessment",
-  "subtitle": "Probability vs. Impact",
-  "xAxisLabel": "PROBABILITY",
-  "yAxisLabel": "IMPACT",
-  "q1Label": "HIGH PRIORITY",
-  "q2Label": "CRITICAL",
-  "q3Label": "LOW PRIORITY",
-  "q4Label": "MEDIUM PRIORITY",
-  "q1Description": "",
-  "q2Description": "",
-  "q3Description": "",
-  "q4Description": "",
-  "points": [
-    {"x": 30, "y": 95, "label": "Security Breach"},
-    {"x": 70, "y": 75, "label": "Budget Overrun"},
-    {"x": 80, "y": 60, "label": "Schedule Delay"},
-    {"x": 85, "y": 50, "label": "Scope Creep"},
-    {"x": 60, "y": 70, "label": "Resource Shortage"},
-    {"x": 40, "y": 85, "label": "Technical Failure"}
-  ]
-}
-
+include::data/quadrant/quad3.txt[]
 ----
 
 [.back-to-top]
