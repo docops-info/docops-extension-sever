@@ -72,15 +72,116 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <style>
+        /* Professional Holiday Season Styling */
+        body.winter-season {
+            position: relative;
+        }
+
+        /* Subtle background with overlay for readability */
+        body.winter-season::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/forest.svg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            opacity: 0.15;
+            z-index: -2;
+        }
+
+        /* Soft gradient overlay for better text contrast */
+        body.winter-season::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+            rgba(224, 242, 254, 0.3) 0%,
+            rgba(239, 246, 255, 0.4) 50%,
+            rgba(224, 231, 255, 0.3) 100%);
+            z-index: -1;
+        }
+
+        /* Subtle snowflake animation */
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-10px) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1em;
+            pointer-events: none;
+            z-index: 1000;
+            animation: snowfall linear infinite;
+        }
+
+        /* Holiday accent colors for header */
+        body.winter-season header {
+            background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.95),
+            rgba(248, 250, 252, 0.95));
+            backdrop-filter: blur(10px);
+        }
+
+        /* Subtle festive border for cards during holiday season */
+        body.winter-season .bg-gray-50 {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Toggle button styling */
+        .holiday-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e5e7eb;
+            border-radius: 9999px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .holiday-toggle:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .holiday-toggle.disabled {
+            opacity: 0.6;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900"
-      hx-boost="true"
-      hx-target="#content"
-      hx-select="#content"
-      hx-push-url="true"
-      hx-ext="head-support"
-      hx-history-cache-size="20"
->
+<body class="bg-gray-50 text-gray-900">
 <!-- Header -->
 <header class="bg-white shadow-sm border-b">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,15 +206,6 @@
                     <a href="https://github.com/docops-info/docops-extension-sever">GitHub</a>
                 </button>
                 <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="template/customize">Customize Template</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="more-capabilities.html">More Capabilities</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="statsview.html">Event Dashboard</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
                     <a href="docs/arch.html">Architecture</a>
                 </button>
             </div>
@@ -127,22 +219,20 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-6">Beautiful Data Visualizations Made For AsciiDoctorJ</h2>
+        <h2 class="text-4xl font-bold mb-6">Beautiful Data Visualizations Made For AsciiDoctor</h2>
         <p class="text-xl mb-8 max-w-3xl mx-auto">
             Create stunning charts, buttons, planners, timelines, roadmap, and other visualizations with just a few lines of code.
             Lightweight, flexible, and powerful.
         </p>
         <div class="flex justify-center flex-wrap gap-2">
-            <a href="#adr-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
-            <a href="#bar-chart-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
-            <a href="#badges-shields-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
-            <a href="#buttons-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔘 Buttons</a>
-            <a href="#connectors-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔄 Connectors</a>
-            <a href="#placemat-planner-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📋 Placemat & Planner</a>
-            <a href="#release-strategy-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🚀 Release Strategy</a>
-            <a href="#scorecard-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
-            <a href="#timeline-example" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
-            <a href="more-capabilities.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔍 More Capabilities</a>
+            <a href="docs/adrshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
+            <a href="docs/barchartshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
+            <a href="docs/shieldshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
+            <a href="docs/buttonsshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔘 Buttons</a>
+            <a href="docs/connectorsshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔄 Connectors</a>
+            <a href="docs/plannershowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📋 Placemat & Planner</a>
+            <a href="docs/scorecardshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
+            <a href="docs/timelineshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
         </div>
 
     </div>
@@ -213,10 +303,10 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">📝</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#adr-example" class="hover:text-indigo-600">ADR</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/adr.html" class="hover:text-indigo-600">ADR</a></h4>
                 <p class="text-gray-600 mb-4">Architecture Decision Records with visual representation and tracking.</p>
                 <div class="text-sm text-indigo-600 font-medium">
-                    • <a href="#adr-example" class="hover:underline">Decision Documentation</a> • <a href="#adr-example" class="hover:underline">Architecture Records</a> • <a href="#adr-example" class="hover:underline">Visual Status</a>
+                    • <a href="docs/adr.html" class="hover:underline">Decision Documentation</a> • <a href="docs/adrshowcase.html" class="hover:underline">Architecture Records</a>
                 </div>
             </div>
 
@@ -224,10 +314,10 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">📊</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#bar-chart-example" class="hover:text-blue-600">Charts</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/" class="hover:text-blue-600">Charts</a></h4>
                 <p class="text-gray-600 mb-4">Create various chart types with responsive design and smooth animations.</p>
                 <div class="text-sm text-blue-600 font-medium">
-                    • Pie Charts • <a href="#bar-chart-example" class="hover:underline">Bar Charts</a> • <a href="#line-chart-example" class="hover:underline">Line Charts</a>
+                    • <a href="docs/piechartsshowcase.html" class="hover:underline">Pie Charts</a> • <a href="docs/barchartshowcase.html" class="hover:underline">Bar Charts</a> • <a href="docs/linechartsshowcase.html" class="hover:underline">Line Charts</a> • <a href="docs/combinationchartsshowcase.html" class="hover:underline">Combination Charts</a>
                 </div>
             </div>
 
@@ -235,10 +325,10 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">🛡️</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#badges-shields-example" class="hover:text-green-600">Shields & Badges</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/shield.html" class="hover:text-green-600">Shields & Badges</a></h4>
                 <p class="text-gray-600 mb-4">Create customizable status badges and shields for AsciiDoctor documentation.</p>
                 <div class="text-sm text-green-600 font-medium">
-                    • <a href="#badges-shields-example" class="hover:underline">Status Badges</a> • <a href="#badges-shields-example" class="hover:underline">Version Shields</a> • <a href="#badges-shields-example" class="hover:underline">Custom Badges</a>
+                    • <a href="docs/shieldshowcase.html" class="hover:underline">Showcase</a>
                 </div>
             </div>
 
@@ -246,10 +336,10 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">🔘</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#buttons-example" class="hover:text-purple-600">Buttons</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/buttons.html" class="hover:text-purple-600">Buttons</a></h4>
                 <p class="text-gray-600 mb-4">Interactive and stylish buttons for enhanced document navigation and actions.</p>
                 <div class="text-sm text-purple-600 font-medium">
-                    • <a href="#buttons-example" class="hover:underline">Action Buttons</a> • <a href="#buttons-example" class="hover:underline">Navigation</a> • <a href="#buttons-example" class="hover:underline">Custom Styling</a>
+                    • <a href="docs/buttonsshowcase.html" class="hover:underline">Showcase</a>
                 </div>
             </div>
 
@@ -257,32 +347,22 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">🔄</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#connectors-example" class="hover:text-orange-600">Connectors</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/connectors.html" class="hover:text-orange-600">Connectors</a></h4>
                 <p class="text-gray-600 mb-4">Create flow diagrams and relationship visualizations between components.</p>
                 <div class="text-sm text-orange-600 font-medium">
-                    • <a href="#connectors-example" class="hover:underline">Flow Diagrams</a> • <a href="#connectors-example" class="hover:underline">Process Maps</a> • <a href="#connectors-example" class="hover:underline">Relationship Graphs</a>
+                    • <a href="docs/connectorsshowcase.html" class="hover:underline">Showcase</a>
                 </div>
             </div>
 
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">📋</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#placemat-planner-example" class="hover:text-red-600">Placemat & Planner</a></h4>
-                <p class="text-gray-600 mb-4">Organize content with placemats and create visual project planners.</p>
-                <div class="text-sm text-red-600 font-medium">
-                    • <a href="#placemat-planner-example" class="hover:underline">Content Organization</a> • <a href="#placemat-planner-example" class="hover:underline">Project Planning</a> • <a href="#placemat-planner-example" class="hover:underline">Visual Layouts</a>
-                </div>
-            </div>
 
             <div class="bg-gray-50 p-6 rounded-lg">
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
                     <span class="text-2xl">🚀</span>
                 </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#release-strategy-example" class="hover:text-yellow-600">Release Strategy</a></h4>
+                <h4 class="text-xl font-semibold mb-3"><a href="docs/releasestrategy.html" class="hover:text-yellow-600">Release Strategy</a></h4>
                 <p class="text-gray-600 mb-4">Visualize release plans, roadmaps, and deployment strategies.</p>
                 <div class="text-sm text-yellow-600 font-medium">
-                    • <a href="#release-strategy-example" class="hover:underline">Release Planning</a> • <a href="#release-strategy-example" class="hover:underline">Roadmaps</a> • <a href="#release-strategy-example" class="hover:underline">Deployment Visualization</a>
+                    • <a href="docs/releasestrategy.html" class="hover:underline">Release Planning</a> • <a href="docs/roadmap.html" class="hover:underline">Roadmaps</a>
                 </div>
             </div>
 
@@ -308,775 +388,21 @@ String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
                 </div>
             </div>
 
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">🔍</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="more-capabilities.html" class="hover:text-purple-600">More Capabilities</a></h4>
-                <p class="text-gray-600 mb-4">Explore additional visualizations including callouts, metrics cards, color gradients, and tree charts.</p>
-                <div class="text-sm text-purple-600 font-medium">
-                    • <a href="more-capabilities.html#callout-example" class="hover:underline">Callouts</a> • <a href="more-capabilities.html#metrics-card-example" class="hover:underline">Metrics Cards</a> • <a href="more-capabilities.html#color-gradient-example" class="hover:underline">Color Gradients</a> • <a href="more-capabilities.html#tree-chart-example" class="hover:underline">Tree Charts</a>
-                </div>
-            </div>
         </div>
     </div>
 </section>
 
-<!-- Usage Examples -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 class="text-3xl font-bold text-center mb-12">Usage Examples</h3>
 
-
-        <div class="mb-16" id="adr-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-indigo-500 rounded mr-3"></span>
-                        Architecture Decision Records (ADR)
-                    </h4>
-                    <p class="text-gray-600 mt-1">
-                        ADRs capture significant design choices made during software development, providing a structured way to record context, rationale, and consequences. 
-                        They help teams understand why a system is designed the way it is, improve communication, provide traceability, reduce re-work, and facilitate onboarding. 
-                        ADRs are typically concise, immutable documents that focus on the "why" behind decisions.
-                        (See <a href="docs/adr.html" class="text-blue-600 hover:underline">adr.html</a> for more examples)
-                    </p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,adr,useDark=false,role=center]
-----
-title: Use Elasticsearch for Search Functionality
-status: Accepted
-date: 2024-05-15
-context:
-- Our application needs robust search capabilities across multiple data types
-- We need to support full-text search with relevance ranking
-- The search functionality must scale with growing data volumes
-- We need to support faceted search and filtering
-decision:
-- We will use Elasticsearch as our search engine
-- We will integrate it with our existing PostgreSQL database
-- We will implement a synchronization mechanism to keep data in sync
-consequences:
-- Improved search performance and capabilities
-- Additional infrastructure to maintain
-- Need for expertise in Elasticsearch configuration and optimization
-- Potential complexity in keeping data synchronized
-participants:
-Jane Smith (Architect), John Doe (Developer),Alice Johnson (Product Manager)
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryAdrButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/adr/edit-mode"
-                                        hx-target="#adrContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="adrContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/adr.svg" type="image/svg+xml"  class="max-h-full max-w-full">
-                                <img src="images/adr.svg"
-                                     alt="Architecture Decision Record visualization showing decision context, rationale and consequences"
-                                     class="rounded-t-lg"
-                                     loading="lazy"
-                                     width="400"
-                                     height="300" />
-
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="bar-chart-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-blue-500 rounded mr-3"></span>
-                        Bar Chart Example
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create a responsive bar chart with custom styling (See <a href="docs/charts.html" class="text-blue-600 hover:underline">charts.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,bar]
-----
-{
-  "title": "Berry Picking by Month 2024",
-  "yLabel": "Number of Sales",
-  "xLabel": "Month",
-  "series": [
-    {"label": "Jan","value": 120.0},
-    {"label": "Feb","value": 334.0},
-    {"label": "Mar","value": 455.0},
-    {"label": "Apr","value": 244.0},
-    {"label": "May","value": 256.0},
-    {"label": "Jun","value": 223.0}
-  ],
-  "display": {"baseColor": "#4361ee","vBar": true}
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryItButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/bar/edit-mode"
-                                        hx-target="#barChartContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="barChartContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/bar.svg" type="image/svg+xml" height="99%" width="99%">
-                            <img src="images/bar.svg" alt="Bar Chart" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="mb-16" id="line-chart-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-green-500 rounded mr-3"></span>
-                        Line Chart
-                    </h4>
-                    <p class="text-gray-600 mt-1">Live data updates with smooth animations</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,line]
-----
-title=Department Performance
-width=800
-smooth=true
-darkMode=false
----
-Sales | Jan | 40
-Sales | Feb | 70
-Sales | Mar | 90
-Sales | Apr | 70
-Sales | May | 40
-Sales | Jun | 30
-Sales | Jul | 60
-Sales | Aug | 90
-Sales | Sept | 70
-Marketing | Jan | 22
-Marketing | Feb | 33
-Marketing | Mar | 44
-Marketing | Apr | 55
-Marketing | May | 66
-Marketing | Jun | 77
-Marketing | Jul | 88
-Marketing | Aug | 109
-Marketing | Sept | 110
-Development | Jan | 56
-Development | Feb | 65
-Development | Mar | 78
-Development | Apr | 72
-Development | May | 56
-Development | Jun | 94
-Development | Jul | 86
-Development | Aug | 73
-Development | Sept | 70
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryLineButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/linechart/edit-mode"
-                                        hx-target="#lineChartContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="lineChartContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/line.svg" type="image/svg+xml" class="max-h-full max-w-full">
-                            <img src="images/line.svg" alt="Line Chart" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="badges-shields-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-blue-500 rounded mr-3"></span>
-                        Badges & Shields
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create customizable status badges and shields for AsciiDoctor documentation. (See <a href="docs/shield.html" class="text-blue-600 hover:underline">shield.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,badge]
-----
-Made With|Kotlin||#06133b|#6fc441|&lt;Kotlin&gt;|#fcfcfc
-JVM|Runtime||#acacac|#3B1E54|&lt;Java&gt;|#fcfcfc
-AsciiDoctor|Documentation||#acacac|#4CC9FE|&lt;asciidoctor&gt;|#fcfcfc
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryBadgeButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/badge/edit-mode"
-                                        hx-target="#badgeContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="badgeContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/badge.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/badge.svg" alt="Badges & Shields" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="buttons-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-purple-500 rounded mr-3"></span>
-                        Hexagonal Buttons
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create interactive hexagonal buttons with connecting lines (See <a href="docs/buttons.html" class="text-purple-600 hover:underline">buttons.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,buttons]
-----
-{
-  "buttons": [
-    {
-      "label": "Amazon",
-      "link": "https://www.amazon.com",
-      "description": "E-commerce, cloud computing, digital streaming",
-      "embeddedImage": {"ref": "&lt;Amazon&gt;"}
-    },
-    {
-      "label": "Apple",
-      "link": "https://www.apple.com",
-      "description": "Consumer electronics, software and services",
-      "embeddedImage": {"ref": "&lt;Apple&gt;"}
-    },
-    {
-      "label": "DocOps.io",
-      "link": "https://docops.io",
-      "description": "Documentation experience for developers",
-      "embeddedImage": {"ref": "images/docops.svg"}
-    }
-  ],
-  "buttonType": "HEX",
-  "theme": {"hexLinesEnabled": true,"strokeColor": "#7695FF","colors": ["#353d4b"],"scale": 1,"columns": 3}
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryButtonsButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/buttons/edit-mode"
-                                        hx-target="#buttonsContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="buttonsContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/buttons.svg" type="image/svg+xml" height="100%" width="100%" class="max-h-full max-w-full">
-                            <img src="images/buttons.svg" alt="Hexagonal Buttons" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="connectors-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-orange-500 rounded mr-3"></span>
-                        Flow Connectors
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create flow diagrams and process maps to visualize relationships between components. (See <a href="docs/connectors.html" class="text-blue-600 hover:underline">connectors.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,connector,useDark=false]
-----
-{
-  "connectors": [
-    {"text": "Engineer","description": "Creates tests"},
-    {"text": "Unit Tests","description": "Run Unit Tests"},
-    {"text": "GitHub","description": "Upload to Github"},
-    {"text": "Test Engine","description": "GitHub webhook plugged into engine"},
-    {"text": "GitHub","description": "Results stored in Github"},
-    {"text": "API Documentation","description": "API documentation ready for consumption"}
-  ]
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryConnectorButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/connector/edit-mode"
-                                        hx-target="#connectorContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="connectorContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/connector.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/connector.svg" alt="Flow Connectors" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="placemat-planner-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-red-500 rounded mr-3"></span>
-                        Placemat & Planner
-                    </h4>
-                    <p class="text-gray-600 mt-1">Organize content with placemats and create visual project planners. (See <a href="docs/placemat.html" class="text-blue-600 hover:underline">placemat.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,placemat,useDark=false]
-----
-{
-  "title": "System Architecture Overview",
-  "placeMats": [
-    {"name": "Frontend","legend": "UI"},
-    {"name": "Backend","legend": "API"},
-    {"name": "Database","legend": "DATA"}
-  ],
-  "config": {
-  "legend": [
-    {"legend": "UI","color": "#4361ee"},
-    {"legend": "API","color": "#3a0ca3"},
-    {"legend": "DATA","color": "#7209b7"}
-  ]}
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryPlacematButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/placemat/edit-mode"
-                                        hx-target="#placematContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="placematContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/placemat.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/placemat.svg" alt="Placemat" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-red-500 rounded mr-3"></span>
-                        Project Planner
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create visual project planners with NOW/NEXT/LATER and DONE categories or custom. (See <a href="docs/planner.html" class="text-blue-600 hover:underline">planner.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,roadmap,useDark=false, title="Q3 Development Roadmap", scale="2.2"]
-----
-- now Authentication
-* Implement user authentication system
-* Set up CI/CD pipeline
-* Create database schema
-- next REST
-* Develop REST API endpoints
-* Build frontend components
-* Implement search functionality
-- later Analytics
-* Add analytics dashboard
-* Optimize performance
-* Implement advanced features
-- done Requirements
-* Project requirements gathering
-* Architecture design
-* Technology stack selection
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryRoadmapButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/roadmap/edit-mode"
-                                        hx-target="#roadmapContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="roadmapContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/planner.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/planner.svg" alt="Project Planner" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="release-strategy-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-yellow-500 rounded mr-3"></span>
-                        Release Strategy
-                    </h4>
-                    <p class="text-gray-600 mt-1">Visualize release plans, roadmaps, and deployment strategies for successful product releases. (See <a href="docs/releasestrategy.html" class="text-blue-600 hover:underline">releasestrategy.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,release]
-----
-{
-  "title": "Product Release Strategy",
-  "style": "TLS", "scale": 0.5,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-01-15",
-      "goal": "Initial Planning",
-      "lines": [
-        "Define release scope and objectives",
-        "Identify key features and enhancements",
-        "Create detailed project timeline",
-        "Allocate resources and responsibilities"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-02-15",
-      "goal": "Development Phase",
-      "lines": [
-        "Code development and unit testing",
-        "Integration of components",
-        "Documentation updates",
-        "Internal code reviews"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-03-15",
-      "goal": "Testing Phase",
-      "lines": [
-        "Functional testing",
-        "Performance testing",
-        "Security testing",
-        "User acceptance testing"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-04-15",
-      "goal": "Deployment Phase",
-      "lines": [
-        "Final approval and sign-off",
-        "Production deployment",
-        "Post-deployment verification",
-        "Monitoring and support"
-      ]
-    }
-  ]
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryReleaseButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/release/edit-mode"
-                                        hx-target="#releaseContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="releaseContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/release.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/release.svg" alt="Release Strategy" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="scorecard-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-blue-500 rounded mr-3"></span>
-                        Scorecard
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create visual scorecards and metrics dashboards for project tracking and comparison. (See <a href="docs/scorecard.html" class="text-blue-600 hover:underline">scorecard.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,scorecard]
-----
-{
-  "title": "Technology Comparison",
-  "initiativeTitle": "Current Solution",
-  "outcomeTitle": "Proposed Solution",
-  "initiativeItems": [
-    {"displayText":"Limited scalability"},
-    {"displayText":"High maintenance costs"},
-    {"displayText":"Manual deployment process"},
-    {"displayText":"Minimal monitoring capabilities"},
-    {"displayText":"Difficult to extend"}
-  ],
-  "outcomeItems": [
-    {"displayText":"Highly scalable architecture"},
-    {"displayText":"Reduced operational costs"},
-    {"displayText":"Automated CI/CD pipeline"},
-    {"displayText":"Comprehensive monitoring"},
-    {"displayText":"Modular and extensible design"}
-  ]
-}
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryScorecardButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/scorecard/edit-mode"
-                                        hx-target="#scorecardContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="scorecardContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/score.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/score.svg" alt="Scorecard" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-16" id="timeline-example">
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h4 class="text-xl font-semibold flex items-center">
-                        <span class="w-6 h-6 bg-green-500 rounded mr-3"></span>
-                        Timeline
-                    </h4>
-                    <p class="text-gray-600 mt-1">Create interactive timelines for project history, roadmaps, and milestone tracking. (See <a href="docs/timeline.html" class="text-blue-600 hover:underline">timeline.html</a> for more examples)</p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-0">
-                    <!-- Code -->
-                    <div class="p-6 bg-gray-900">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-400 text-sm font-medium">AsciiDoctor</span>
-                            <button class="text-gray-400 hover:text-white text-sm">Copy</button>
-                        </div>
-                        <pre class="text-sm"><code class="language-javascript">[docops,timeline,title="Project Timeline",scale="1",role="center"]
-----
--
-date: 1891
-text: Mailbox, invented by Phillip Downing
--
-date: 1923
-text: The Three-Light Traffic Signal, invented by Garrett Morgan
--
-date: 1932
-text: Automatic Gear Shift, invented by Richard Spikes
-date: July 23rd, 2023
-text: DocOps extension Server releases a new feature, Timeline Maker
-for [[https://github.com/asciidoctor/asciidoctorj asciidoctorj]]. With a simple text markup block you can
-create very powerful timeline images. Enjoy!
--
-date: August 15th, 2023
-text: DocOps.io revamping website with updated documentation. All
-our work will be updated with latest documentation for Panels,
-for extension server are the various plug-ing for asciidoctorj.
--
-date: September 1st, 2023
-text: DocOps.io will begin work on revamping the asciidoctorj converter.
-With the asciidoctorj 3.0.0 release coming we will need to migrate
-custom plug-ins to the new version.
--
-date: October 18th, 2023
-text: Time to reimagine the future. Is it possible
-to write a lexer parser for custom language?
--
-date: December 11th, 2023
-text: Annual start of vacation, time to relax
-and plugin the controller.
--
-date: 01/01/2024
-text: First entry where we show text is wrapping or not and the [[https://roach.gy roach.gy]] aligning properly
-----</code></pre>
-                    </div>
-
-                    <!-- Output -->
-                    <div class="p-6 bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-gray-600 text-sm font-medium">Output</span>
-                            <div>
-                                <button id="tryTimelineButton" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 text-center"
-                                        hx-get="api/timeline/edit-mode"
-                                        hx-target="#timelineContainer"
-                                        hx-swap="outerHTML">
-                                    Try It
-                                </button>
-                            </div>
-                        </div>
-                        <div id="timelineContainer" class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                            <object data="images/timeline.svg" type="image/svg+xml" height="100%" width="100%">
-                            <img src="images/timeline.svg" alt="Timeline" class="max-h-full max-w-full" />
-                            </object>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</section>
 </main>
 
 <!-- Optional loading indicator -->
 <div id="loading" class="htmx-indicator fixed top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow">Loading…</div>
+
+<!-- Holiday theme toggle button -->
+<button id="holidayToggle" class="holiday-toggle" style="display: none;">
+    <span id="toggleIcon">❄️</span>
+    <span id="toggleText">Holiday Theme</span>
+</button>
 
 <!-- Footer -->
 <footer class="bg-gray-900 text-white py-12">
@@ -1095,7 +421,7 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
                 <h5 class="font-semibold mb-3">Documentation</h5>
                 <ul class="space-y-2 text-sm text-gray-400">
                     <li><a href="#get-started" class="hover:text-white">Getting Started</a></li>
-                    <li><a href="docs/docops.html" class="hover:text-white">AsciiDoctor Reference</a></li>
+                    <li><a href="docs/index.html" class="hover:text-white">AsciiDoctor Reference</a></li>
                     <li><a href="docs/examples.html" class="hover:text-white">Examples</a></li>
                     <li><a href="docs/tutorial.html" class="hover:text-white">Tutorials</a></li>
                 </ul>
@@ -1116,7 +442,6 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
                     <li><a href="#" class="hover:text-white">Roadmap</a></li>
                     <li><a href="#" class="hover:text-white">Support</a></li>
                     <li><a href="#" class="hover:text-white">License</a></li>
-                    <li><a href="template/customize" class="hover:text-white">Customize Template</a></li>
                 </ul>
             </div>
         </div>
@@ -1206,6 +531,89 @@ text: First entry where we show text is wrapping or not and the [[https://roach.
     document.addEventListener('htmx:historyRestore', (e) => {
         if (window.Prism) { Prism.highlightAll(); }
     });
+    // Professional Holiday Season Theme Manager
+    (function() {
+        const currentMonth = new Date().getMonth(); // 0-indexed: 0=Jan, 10=Nov, 11=Dec
+        const isHolidaySeason = currentMonth === 10 || currentMonth === 11; // November or December
+
+        if (!isHolidaySeason) return; // Exit if not holiday season
+
+        // Show toggle button
+        const toggleButton = document.getElementById('holidayToggle');
+        toggleButton.style.display = 'flex';
+
+        // Check localStorage for user preference
+        const holidayThemeEnabled = localStorage.getItem('holidayTheme') !== 'disabled';
+
+        // Function to create subtle snowflakes
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 15 + 15) + 's'; // 15-30s
+            snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px'; // 10-20px
+            snowflake.style.opacity = Math.random() * 0.6 + 0.2; // 0.2-0.8
+            document.body.appendChild(snowflake);
+
+            // Remove snowflake after animation
+            setTimeout(() => {
+                snowflake.remove();
+            }, parseFloat(snowflake.style.animationDuration) * 1000);
+        }
+
+        // Snowflake generation interval
+        let snowflakeInterval;
+
+        function enableHolidayTheme() {
+            document.body.classList.add('winter-season');
+            localStorage.setItem('holidayTheme', 'enabled');
+            document.getElementById('toggleIcon').textContent = '❄️';
+            toggleButton.classList.remove('disabled');
+
+            // Create initial snowflakes
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createSnowflake(), i * 2000);
+            }
+
+            // Generate new snowflakes periodically (every 3-5 seconds)
+            snowflakeInterval = setInterval(() => {
+                if (Math.random() > 0.5) {
+                    createSnowflake();
+                }
+            }, 3000);
+        }
+
+        function disableHolidayTheme() {
+            document.body.classList.remove('winter-season');
+            localStorage.setItem('holidayTheme', 'disabled');
+            document.getElementById('toggleIcon').textContent = '🔕';
+            toggleButton.classList.add('disabled');
+
+            // Clear snowflake interval
+            if (snowflakeInterval) {
+                clearInterval(snowflakeInterval);
+            }
+
+            // Remove existing snowflakes
+            document.querySelectorAll('.snowflake').forEach(flake => flake.remove());
+        }
+
+        // Initialize theme based on preference
+        if (holidayThemeEnabled) {
+            enableHolidayTheme();
+        }
+
+        // Toggle button click handler
+        toggleButton.addEventListener('click', function() {
+            if (document.body.classList.contains('winter-season')) {
+                disableHolidayTheme();
+            } else {
+                enableHolidayTheme();
+            }
+        });
+
+    })();
 </script>
 
 </body>
