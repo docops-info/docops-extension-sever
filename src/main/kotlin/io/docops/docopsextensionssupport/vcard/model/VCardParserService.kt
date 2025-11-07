@@ -136,6 +136,20 @@ class VCardParserService {
         val phone = phones.entries.find {
             it.key.contains("VOICE") || it.key.contains("WORK") || (!it.key.contains("CELL") && !it.key.contains("FAX"))
         }?.value?.firstOrNull()
+        val phoneList = phones.flatMap { (key, values) ->
+            values.map { number ->
+                val types = extractTypes(key)
+                val phoneType = when {
+                    types.contains("CELL") -> PhoneType.CELL
+                    types.contains("WORK") -> PhoneType.WORK
+                    types.contains("HOME") -> PhoneType.HOME
+                    types.contains("FAX") -> PhoneType.FAX
+                    types.contains("VOICE") -> PhoneType.VOICE
+                    else -> PhoneType.OTHER
+                }
+                ContactPhone(number, phoneType, types)
+            }
+        }
         val mobile = phones.entries.find { it.key.contains("CELL") }?.value?.firstOrNull()
         val fax = phones.entries.find { it.key.contains("FAX") }?.value?.firstOrNull()
 
@@ -188,6 +202,15 @@ class VCardParserService {
             }
         }
 
+        // Parse ALL emails
+        val emailEntries = properties.filter { it.key.startsWith("EMAIL") }
+        val emailList = emailEntries.flatMap { (key, values) ->
+            values.map { address ->
+                val types = extractTypes(key)
+                ContactEmail(address, types)
+            }
+        }
+
         // Parse categories
         val categories = properties["CATEGORIES"]?.firstOrNull()?.split(",")?.map { it.trim() } ?: emptyList()
 
@@ -219,8 +242,15 @@ class VCardParserService {
             categories = categories,
             birthday = properties["BDAY"]?.firstOrNull(),
             uid = properties["UID"]?.firstOrNull() ?: UUID.randomUUID().toString(),
-            revision = parseRevision(properties["REV"]?.firstOrNull())
+            revision = parseRevision(properties["REV"]?.firstOrNull()),
+            emails = emailList,
+            phones = phoneList,
         )
+    }
+
+    private fun extractTypes(propertyKey: String): List<String> {
+        val typeMatch = Regex("TYPE=([^:;]+)").find(propertyKey)
+        return typeMatch?.groupValues?.get(1)?.split(",")?.map { it.trim().uppercase() } ?: emptyList()
     }
 
     private fun parseRevision(revString: String?): LocalDateTime {

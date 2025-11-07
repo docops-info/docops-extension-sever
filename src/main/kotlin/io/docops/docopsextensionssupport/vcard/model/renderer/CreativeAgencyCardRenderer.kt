@@ -1,7 +1,9 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -77,27 +79,35 @@ class CreativeAgencyCardRenderer : VCardRenderer {
                 yPosition += 25
             }
 
-            // Contact information with creative icons
-            vcard.email?.let {
-                // Email icon (@ symbol with creative styling)
+            // PRIMARY Email only
+            val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
+            primaryEmail?.let {
                 appendLine("""  <circle cx="45" cy="${yPosition - 4}" r="6" fill="$shapeColor2" opacity="0.3"/>""")
                 appendLine("""  <text x="42" y="$yPosition" font-family="'Poppins', sans-serif" font-size="10" font-weight="600" fill="$accentColor">@</text>""")
-
-                appendLine("""  <text x="60" y="$yPosition" font-family="'Poppins', sans-serif" font-size="11" fill="$secondaryText">""")
-                appendLine("""    ${vcard.email}""")
-                appendLine("""  </text>""")
+                appendLine("""  <text x="60" y="$yPosition" font-family="'Poppins', sans-serif" font-size="11" fill="$secondaryText">$it</text>""")
                 yPosition += 20
             }
 
-            vcard.mobile?.let {
-                // Phone icon (creative phone symbol)
+            // PRIMARY Phone only
+            val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
+            primaryPhone?.let {
                 appendLine("""  <rect x="42" y="${yPosition - 8}" width="6" height="10" rx="2" fill="$shapeColor1" opacity="0.6"/>""")
-
-                appendLine("""  <text x="60" y="$yPosition" font-family="'Poppins', sans-serif" font-size="11" fill="$secondaryText">""")
-                appendLine("""    ${vcard.mobile}""")
-                appendLine("""  </text>""")
+                appendLine("""  <text x="60" y="$yPosition" font-family="'Poppins', sans-serif" font-size="11" fill="$secondaryText">$it</text>""")
                 yPosition += 20
             }
+
+            // Generate and add QR code
+            val vCardGeneratorService = VCardGeneratorService()
+            val qrCodeService = QRCodeService()
+            val vCardData = vCardGeneratorService.generateVCard30(vcard)
+            val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 85, 85)
+
+            // QR Code with creative frame
+            appendLine("""  <rect x="245" y="105" width="90" height="75" rx="8" fill="rgba(255,255,255,0.95)"/>""")
+            appendLine("""  <rect x="250" y="110" width="80" height="60" rx="4" fill="white"/>""")
+            appendLine("""  <image x="279" y="115" width="55" height="55" href="$qrCodeBase64"/>""")
+            appendLine("""  <text x="305" y="178" font-family="'Poppins', sans-serif" font-size="8" fill="$secondaryText" text-anchor="middle">Scan me!</text>""")
+
 
             if (vcard.socialMedia.isNotEmpty()) {
                 val url = vcard.socialMedia.first().url

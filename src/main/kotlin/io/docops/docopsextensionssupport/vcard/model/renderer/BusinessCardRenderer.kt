@@ -1,12 +1,15 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class BusinessCardRenderer : VCardRenderer {
     override val designKey: String = "business_card_design"
+
 
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
@@ -15,6 +18,12 @@ class BusinessCardRenderer : VCardRenderer {
             "dark" -> arrayOf("#1a1a1a", "#ffffff", "#00d4aa", "#a0a0a0")
             else -> arrayOf("#ffffff", "#1a202c", "#667eea", "#4a5568")
         }
+
+        // Generate QR code for full vCard
+        val vCardGeneratorService = VCardGeneratorService()
+        val qrCodeService = QRCodeService()
+        val vCardData = vCardGeneratorService.generateVCard30(vcard)
+        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 120, 120)
 
         val id: String = Uuid.random().toHexString()
         return buildString {
@@ -45,22 +54,32 @@ class BusinessCardRenderer : VCardRenderer {
                 appendLine("""  </text>""")
             }
 
-            // Contact details
+            // Contact details - PRIMARY ONLY
             var yPos = 125
-            vcard.email?.let{
+
+            // Display FIRST/PRIMARY email only
+            val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
+            primaryEmail?.let {
                 appendLine("""  <circle cx="40" cy="${yPos - 5}" r="2" fill="$accentColor"/>""")
                 appendLine("""  <text x="55" y="$yPos" font-family="'Roboto', sans-serif" font-size="11" fill="$textColor">""")
-                appendLine("""    ${vcard.email}""")
+                appendLine("""    $it""")
                 appendLine("""  </text>""")
                 yPos += 20
             }
 
-            vcard.mobile?.let {
+            // Display FIRST/PRIMARY phone only
+            val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
+            primaryPhone?.let {
                 appendLine("""  <circle cx="40" cy="${yPos - 5}" r="2" fill="$accentColor"/>""")
                 appendLine("""  <text x="55" y="$yPos" font-family="'Roboto', sans-serif" font-size="11" fill="$textColor">""")
-                appendLine("""    ${vcard.mobile}""")
+                appendLine("""    $it""")
                 appendLine("""  </text>""")
             }
+
+            // QR Code in bottom right corner
+            appendLine("""  <rect x="225" y="120" width="110" height="70" rx="8" fill="rgba(255,255,255,0.9)"/>""")
+            appendLine("""  <image x="235" y="125" width="60" height="60" href="$qrCodeBase64"/>""")
+            appendLine("""  <text x="267" y="194" font-family="'Roboto', sans-serif" font-size="8" fill="$secondaryColor" text-anchor="middle">Scan for full contact</text>""")
 
             appendLine("""</svg>""")
         }

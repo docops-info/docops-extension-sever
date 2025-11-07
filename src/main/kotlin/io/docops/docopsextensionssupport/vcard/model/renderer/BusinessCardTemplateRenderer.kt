@@ -1,7 +1,9 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -25,8 +27,10 @@ class BusinessCardTemplateRenderer : VCardRenderer {
         val highlightColor = colors[6]
         val id: String = Uuid.random().toHexString()
 
+        val cardHeight = 200
+
         return buildString {
-            appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg">""")
+            appendLine("""<svg width="350" height="$cardHeight" viewBox="0 0 350 $cardHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg">""")
             appendLine("""  <defs>""")
             appendLine("""    <linearGradient id="templateGrad" x1="0%" y1="0%" x2="100%" y2="100%">""")
             appendLine("""      <stop offset="0%" style="stop-color:$accentColor;stop-opacity:0.1" />""")
@@ -41,8 +45,8 @@ class BusinessCardTemplateRenderer : VCardRenderer {
             appendLine("""  </defs>""")
 
             // Background with subtle pattern
-            appendLine("""  <rect width="350" height="200" rx="16" fill="$bgColor"/>""")
-            appendLine("""  <rect width="350" height="200" rx="16" fill="url(#dotPattern)" opacity="0.4"/>""")
+            appendLine("""  <rect width="350" height="$cardHeight" rx="16" fill="$bgColor"/>""")
+            appendLine("""  <rect width="350" height="$cardHeight" rx="16" fill="url(#dotPattern)" opacity="0.4"/>""")
 
             // Main template card
             appendLine("""  <rect x="15" y="15" width="320" height="170" rx="12" fill="$templateBg" stroke="$borderColor" stroke-width="1" filter="url(#templateShadow)"/>""")
@@ -95,8 +99,9 @@ class BusinessCardTemplateRenderer : VCardRenderer {
             appendLine("""  <rect x="110" y="$yPos" width="210" height="2" rx="1" fill="$borderColor"/>""")
             yPos += 20
 
-            // Email with template-style icon
-            vcard.email?.let {
+            // PRIMARY Email only with template-style icon
+            val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
+            primaryEmail?.let {
                 appendLine("""  <rect x="120" y="${yPos - 8}" width="16" height="12" rx="2" fill="none" stroke="$accentColor" stroke-width="1"/>""")
                 appendLine("""  <path d="M120 ${yPos - 6} L128 ${yPos - 2} L136 ${yPos - 6}" fill="none" stroke="$accentColor" stroke-width="1"/>""")
                 appendLine("""  <text x="145" y="$yPos" font-family="'Roboto', sans-serif" font-size="10" font-weight="400" fill="$secondaryText">EMAIL</text>""")
@@ -104,15 +109,35 @@ class BusinessCardTemplateRenderer : VCardRenderer {
                 yPos += 30
             }
 
-            // Phone with template-style icon
-            vcard.mobile?.let {
+            // PRIMARY Phone only with template-style icon
+            val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
+            primaryPhone?.let {
+                val label = vcard.phones.firstOrNull()?.type?.let { type ->
+                    when (type) {
+                        io.docops.docopsextensionssupport.vcard.model.PhoneType.CELL -> "MOBILE"
+                        io.docops.docopsextensionssupport.vcard.model.PhoneType.WORK -> "WORK"
+                        io.docops.docopsextensionssupport.vcard.model.PhoneType.HOME -> "HOME"
+                        else -> "PHONE"
+                    }
+                } ?: "PHONE"
                 appendLine("""  <rect x="122" y="${yPos - 10}" width="12" height="16" rx="2" fill="none" stroke="$accentColor" stroke-width="1"/>""")
                 appendLine("""  <rect x="124" y="${yPos - 8}" width="8" height="1" rx="0.5" fill="$accentColor"/>""")
                 appendLine("""  <rect x="125" y="${yPos - 2}" width="6" height="1" rx="0.5" fill="$accentColor"/>""")
-                appendLine("""  <text x="145" y="$yPos" font-family="'Roboto', sans-serif" font-size="10" font-weight="400" fill="$secondaryText">PHONE</text>""")
+                appendLine("""  <text x="145" y="$yPos" font-family="'Roboto', sans-serif" font-size="10" font-weight="400" fill="$secondaryText">$label</text>""")
                 appendLine("""  <text x="145" y="${yPos + 12}" font-family="'Roboto', sans-serif" font-size="11" font-weight="500" fill="$primaryText">$it</text>""")
                 yPos += 30
             }
+
+            // Generate and add QR code
+            val vCardGeneratorService = VCardGeneratorService()
+            val qrCodeService = QRCodeService()
+            val vCardData = vCardGeneratorService.generateVCard30(vcard)
+            val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 90, 90)
+
+            // QR Code section
+            appendLine("""  <rect x="235" y="110" width="80" height="65" rx="6" fill="white" stroke="$borderColor" stroke-width="1"/>""")
+            appendLine("""  <image x="247" y="115" width="55" height="55" href="$qrCodeBase64"/>""")
+            appendLine("""  <text x="275" y="180" font-family="'Roboto', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Full Contact</text>""")
 
             // Website/Social with template-style icon
             val webUrl = vcard.website ?: vcard.socialMedia.firstOrNull()?.url

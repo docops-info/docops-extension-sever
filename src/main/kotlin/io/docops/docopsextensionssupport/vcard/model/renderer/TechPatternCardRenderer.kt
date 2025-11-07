@@ -1,7 +1,10 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.PhoneType
+import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -29,8 +32,8 @@ class TechPatternCardRenderer : VCardRenderer {
             appendLine("""  <rect width="350" height="200" rx="12" fill="url(#grid)"/>""")
 
             // Accent elements
-            appendLine("""  <rect x="0" y="160" width="350" height="4" fill="$accentColor"/>""")
-            appendLine("""  <rect x="20" y="20" width="4" height="140" fill="$accentColor" opacity="0.3"/>""")
+            appendLine("""  <rect x="0" y="176" width="350" height="4" fill="$accentColor"/>""")
+            appendLine("""  <rect x="20" y="36" width="4" height="140" fill="$accentColor" opacity="0.3"/>""")
 
             // Name
             appendLine("""  <text x="40" y="60" font-family="'JetBrains Mono', monospace" font-size="20" font-weight="600" fill="$textColor">""")
@@ -51,24 +54,52 @@ class TechPatternCardRenderer : VCardRenderer {
                 appendLine("""  </text>""")
             }
 
-            // Contact info with terminal-style
-            vcard.email?.let {
-                appendLine("""  <text x="40" y="125" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
+            var yPos = 125
+
+            // PRIMARY Email with terminal-style
+            val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
+            primaryEmail?.let {
+                appendLine("""  <text x="40" y="$yPos" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
                 appendLine("""    $ contact --email""")
                 appendLine("""  </text>""")
-                appendLine("""  <text x="40" y="140" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
-                appendLine("""    ${vcard.email}""")
+                appendLine("""  <text x="40" y="${yPos + 15}" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
+                appendLine("""    $it""")
+                appendLine("""  </text>""")
+                yPos += 35
+            }
+
+            // PRIMARY Phone with terminal-style
+            val primaryPhone = vcard.phones.firstOrNull()
+            val phoneFlag = primaryPhone?.let { phone ->
+                when (phone.type) {
+                    io.docops.docopsextensionssupport.vcard.model.PhoneType.CELL -> "--phone-cell"
+                    io.docops.docopsextensionssupport.vcard.model.PhoneType.WORK -> "--phone-work"
+                    else -> "--phone"
+                }
+            } ?: "--phone"
+
+            val phoneNumber = primaryPhone?.number ?: vcard.mobile
+            phoneNumber?.let {
+                appendLine("""  <text x="40" y="$yPos" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
+                appendLine("""    $ contact $phoneFlag""")
+                appendLine("""  </text>""")
+                appendLine("""  <text x="40" y="${yPos + 15}" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
+                appendLine("""    $it""")
                 appendLine("""  </text>""")
             }
 
-            vcard.mobile?.let {
-                appendLine("""  <text x="40" y="160" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
-                appendLine("""    $ contact --phone""")
-                appendLine("""  </text>""")
-                appendLine("""  <text x="40" y="175" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
-                appendLine("""    ${vcard.mobile}""")
-                appendLine("""  </text>""")
-            }
+            // Generate and add QR code
+            val vCardGeneratorService = VCardGeneratorService()
+            val qrCodeService = QRCodeService()
+            val vCardData = vCardGeneratorService.generateVCard30(vcard)
+            val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
+
+            // QR Code terminal-style
+            appendLine("""  <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
+            appendLine("""  <rect x="263" y="95" width="60" height="60" rx="2" fill="white"/>""")
+            appendLine("""  <image x="268" y="100" width="50" height="50" href="$qrCodeBase64"/>""")
+            appendLine("""  <text x="288" y="187" font-family="'JetBrains Mono', monospace" font-size="7" fill="$accentColor" text-anchor="middle">$ scan</text>""")
+
 
             appendLine("""</svg>""")
         }

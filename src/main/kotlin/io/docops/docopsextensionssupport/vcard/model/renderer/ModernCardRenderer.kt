@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.PhoneType
 import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
@@ -130,24 +131,57 @@ class ModernCardRenderer(
 
         var yOffset = 0
 
-        // Phone
-        vCard.phone?.let { phone ->
+        // Display PRIMARY Phone only
+        val primaryPhone = vCard.phones.firstOrNull()
+        if (primaryPhone != null) {
+            val label = when (primaryPhone.type) {
+                io.docops.docopsextensionssupport.vcard.model.PhoneType.CELL -> "Mobile"
+                io.docops.docopsextensionssupport.vcard.model.PhoneType.WORK -> "Work Phone"
+                io.docops.docopsextensionssupport.vcard.model.PhoneType.HOME -> "Home Phone"
+                io.docops.docopsextensionssupport.vcard.model.PhoneType.FAX -> "Fax"
+                io.docops.docopsextensionssupport.vcard.model.PhoneType.VOICE -> "Phone"
+                else -> "Phone"
+            }
             appendLine("""<g transform="translate(0,$yOffset)">""")
-            appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">Phone</text>""")
-            appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(phone)}</text>""")
+            appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">$label</text>""")
+            appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(primaryPhone.number)}</text>""")
             appendLine("</g>")
             yOffset += 50
+        } else {
+            // Fallback to deprecated single phone field for backward compatibility
+            vCard.phone?.let { phone ->
+                appendLine("""<g transform="translate(0,$yOffset)">""")
+                appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">Phone</text>""")
+                appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(phone)}</text>""")
+                appendLine("</g>")
+                yOffset += 50
+            }
         }
 
-        // Email
-        vCard.email?.let { email ->
+        // Display PRIMARY Email only
+        val primaryEmail = vCard.emails.firstOrNull()
+        if (primaryEmail != null) {
+            val label = primaryEmail.types.firstOrNull()?.lowercase()?.replaceFirstChar { it.uppercase() }
+                ?.let { if (it.lowercase() != "internet") "Email ($it)" else "Email" } ?: "Email"
+
             appendLine("""<g transform="translate(0,$yOffset)">""")
-            appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">Email</text>""")
-            appendLine("""<a xlink:href="mailto:$email">""")
-            appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(email)}</text>""")
+            appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">$label</text>""")
+            appendLine("""<a xlink:href="mailto:${primaryEmail.address}">""")
+            appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(primaryEmail.address)}</text>""")
             appendLine("</a>")
             appendLine("</g>")
             yOffset += 50
+        } else {
+            // Fallback to deprecated single email field for backward compatibility
+            vCard.email?.let { email ->
+                appendLine("""<g transform="translate(0,$yOffset)">""")
+                appendLine("""<text x="0" y="0" dy="0.35em" font-weight="600">Email</text>""")
+                appendLine("""<a xlink:href="mailto:$email">""")
+                appendLine("""<text x="0" y="20" fill="rgba(255,255,255,0.85)" font-weight="400">${escapeXml(email)}</text>""")
+                appendLine("</a>")
+                appendLine("</g>")
+                yOffset += 50
+            }
         }
 
         // Website
@@ -166,11 +200,19 @@ class ModernCardRenderer(
     private fun StringBuilder.appendRightColumn(vCard: VCard, qrCodeBase64: String?) {
         appendLine("""<g transform="translate(450,56)">""")
 
-        // QR Code section
+        // QR Code section - centered in right column
         if (qrCodeBase64 != null) {
-            appendLine("""<rect x="0" y="0" width="160" height="160" rx="8" ry="8" fill="#ffffff"/>""")
-            appendLine("""<image x="0" y="0" width="160" height="160" href="$qrCodeBase64"/>""")
-            appendLine("""<text x="170" y="20" font-family="Inter, Arial, sans-serif" fill="#ffffff" font-size="12" font-weight="600">Scan to save</text>""")
+            val qrSize = 160
+            val columnWidth = 280
+            val qrX = (columnWidth - qrSize) / 2 // Center horizontally
+
+            appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="#ffffff"/>""")
+            appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
+
+            // "Scan to save" text centered below QR code
+            val textY = qrSize + 20
+            val textX = columnWidth / 2
+            appendLine("""<text x="$textX" y="$textY" font-family="Inter, Arial, sans-serif" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Scan to save</text>""")
         }
 
         // Social media section

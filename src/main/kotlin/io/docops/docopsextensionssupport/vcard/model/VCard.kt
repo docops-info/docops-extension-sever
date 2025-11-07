@@ -11,12 +11,19 @@ data class VCard(
     val prefix: String? = null,
     val suffix: String? = null,
     val nickname: String? = null,
-    
-    val email: String? = null,
-    
-    val phone: String? = null,
-    
-    val mobile: String? = null,
+
+    // Changed to support multiple emails
+    val emails: List<ContactEmail> = emptyList(),
+    @Deprecated("Use emails list instead")
+    val email: String? = emails.firstOrNull()?.address,
+
+    // Changed to support multiple phones
+    val phones: List<ContactPhone> = emptyList(),
+    @Deprecated("Use phones list instead")
+    val phone: String? = phones.find { it.type == PhoneType.WORK || it.type == PhoneType.VOICE }?.number,
+    @Deprecated("Use phones list instead")
+    val mobile: String? = phones.find { it.type == PhoneType.CELL }?.number,
+
     val fax: String? = null,
     val organization: String? = null,
     val title: String? = null,
@@ -61,3 +68,18 @@ data class ParsedVCard(
     val config: VCardConfig,
     val vcardContent: String
 )
+
+data class ContactEmail(
+    val address: String,
+    val types: List<String> = listOf("internet")
+)
+
+data class ContactPhone(
+    val number: String,
+    val type: PhoneType,
+    val subtypes: List<String> = emptyList()
+)
+
+enum class PhoneType {
+    CELL, WORK, HOME, VOICE, FAX, OTHER
+}

@@ -1,7 +1,11 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
+import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
+import java.util.Locale
+import java.util.Locale.getDefault
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -21,6 +25,13 @@ class BusinessCard2Renderer : VCardRenderer {
         val accentColor = colors[3]
         val cardBg = colors[4]
         val borderColor = colors[5]
+
+        // Generate QR code
+        val vCardGeneratorService = VCardGeneratorService()
+        val qrCodeService = QRCodeService()
+        val vCardData = vCardGeneratorService.generateVCard30(vcard)
+        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 100, 100)
+
         val id: String = Uuid.random().toHexString()
         return buildString {
             appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg">""")
@@ -74,42 +85,31 @@ class BusinessCard2Renderer : VCardRenderer {
             appendLine("""  <line x1="25" y1="$yPos" x2="325" y2="$yPos" stroke="$borderColor" stroke-width="1" opacity="0.5"/>""")
             yPos += 20
 
-            // Email with modern icon
-            vcard.email?.let {
+            // PRIMARY Email only
+            val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
+            primaryEmail?.let {
                 appendLine("""  <rect x="25" y="${yPos - 8}" width="14" height="10" rx="2" fill="none" stroke="$accentColor" stroke-width="1.5"/>""")
                 appendLine("""  <path d="M25 ${yPos - 6} L32 ${yPos - 1} L39 ${yPos - 6}" fill="none" stroke="$accentColor" stroke-width="1.5"/>""")
                 appendLine("""  <text x="50" y="$yPos" font-family="'Inter', sans-serif" font-size="11" font-weight="400" fill="$secondaryText">$it</text>""")
                 yPos += 20
             }
 
-            // Phone with modern icon
-            vcard.mobile?.let {
+            // PRIMARY Phone only
+            val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
+            primaryPhone?.let {
                 appendLine("""  <rect x="27" y="${yPos - 10}" width="10" height="14" rx="2" fill="none" stroke="$accentColor" stroke-width="1.5"/>""")
                 appendLine("""  <rect x="29" y="${yPos - 8}" width="6" height="1" rx="0.5" fill="$accentColor"/>""")
                 appendLine("""  <rect x="30" y="${yPos - 2}" width="4" height="1" rx="0.5" fill="$accentColor"/>""")
                 appendLine("""  <text x="50" y="$yPos" font-family="'Inter', sans-serif" font-size="11" font-weight="400" fill="$secondaryText">$it</text>""")
-                yPos += 20
             }
 
-            // Website/Social media
-            if (vcard.website != null || vcard.socialMedia.isNotEmpty()) {
-                val url = vcard.website ?: vcard.socialMedia.firstOrNull()?.url
-                url?.let {
-                    appendLine("""  <circle cx="32" cy="${yPos - 4}" r="7" fill="none" stroke="$accentColor" stroke-width="1.5"/>""")
-                    appendLine("""  <circle cx="32" cy="${yPos - 4}" r="3" fill="none" stroke="$accentColor" stroke-width="1"/>""")
-                    appendLine("""  <circle cx="32" cy="${yPos - 4}" r="1" fill="$accentColor"/>""")
-                    val displayUrl = it.removePrefix("https://").removePrefix("http://").removePrefix("www.")
-                    appendLine("""  <text x="50" y="$yPos" font-family="'Inter', sans-serif" font-size="11" font-weight="400" fill="$secondaryText">$displayUrl</text>""")
-                    yPos += 20
-                }
-            }
+            // QR Code in bottom right
+            appendLine("""  <rect x="240" y="110" width="90" height="70" rx="6" fill="white"/>""")
+            appendLine("""  <image x="250" y="115" width="60" height="60" href="$qrCodeBase64"/>""")
+            appendLine("""  <text x="280" y="184" font-family="'Inter', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Scan for all info</text>""")
 
             // Bottom accent line
-            appendLine("""  <rect x="25" y="175" width="300" height="3" rx="1.5" fill="url(#headerGrad)" opacity="0.6"/>""")
-
-            // Corner decoration
-            appendLine("""  <circle cx="315" cy="135" r="25" fill="$accentColor" opacity="0.05"/>""")
-            appendLine("""  <circle cx="315" cy="135" r="15" fill="$accentColor" opacity="0.1"/>""")
+            appendLine("""  <rect x="25" y="175" width="200" height="3" rx="1.5" fill="url(#headerGrad)" opacity="0.6"/>""")
 
             appendLine("""</svg>""")
         }
