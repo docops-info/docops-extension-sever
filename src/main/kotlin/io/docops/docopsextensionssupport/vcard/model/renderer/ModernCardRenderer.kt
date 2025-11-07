@@ -180,11 +180,54 @@ class ModernCardRenderer(
 
         // Organization note or tagline
         val tagline = vCard.note ?: vCard.organization?.let { "$it - ${vCard.department ?: "Professional Services"}" } ?: "Designing simple products for complex problems"
-        appendLine("""<text x="0" y="300" font-family="Inter, Arial, sans-serif" fill="rgba(255,255,255,0.75)" font-size="14" font-weight="500">${escapeXml(tagline)}</text>""")
+        appendWrappedText(tagline, x = 0, y = 300, maxWidth = 280, fontSize = 14, lineHeight = 20)
 
         appendLine("</g>")
     }
 
+    private fun StringBuilder.appendWrappedText(
+        text: String,
+        x: Int,
+        y: Int,
+        maxWidth: Int,
+        fontSize: Int,
+        lineHeight: Int
+    ) {
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = ""
+
+        // Approximate character width (adjust based on font)
+        val approxCharWidth = fontSize * 0.5
+        val maxCharsPerLine = (maxWidth / approxCharWidth).toInt()
+
+        for (word in words) {
+            val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
+            if (testLine.length * approxCharWidth <= maxWidth) {
+                currentLine = testLine
+            } else {
+                if (currentLine.isNotEmpty()) {
+                    lines.add(currentLine)
+                }
+                currentLine = word
+            }
+        }
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine)
+        }
+
+        // Render each line
+        lines.forEachIndexed { index, line ->
+            val lineY = y + (index * lineHeight)
+            appendLine(
+                """<text x="$x" y="$lineY" font-family="Inter, Arial, sans-serif" fill="rgba(255,255,255,0.75)" font-size="$fontSize" font-weight="500">${
+                    escapeXml(
+                        line
+                    )
+                }</text>"""
+            )
+        }
+    }
     private fun StringBuilder.appendSocialMediaSection(vCard: VCard) {
         appendLine("""<g transform="translate(0,190)">""")
         appendLine("""<rect x="0" y="0" width="260" height="80" rx="10" ry="10" fill="rgba(255,255,255,0.06)"/>""")
