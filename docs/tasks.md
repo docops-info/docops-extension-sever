@@ -25,6 +25,7 @@ Use `[ ]` to mark open and `[x]` when completed. Keep links to Plan and Requirem
 
 9. [x] Add orientation selection flow: handler delegates to generator for H vs V (Plan: P5; Reqs: R1, R5, R8)
 10. [x] Keep external API unchanged (Plan: P5; Reqs: R8)
+29. [x] Extract VCard SVG generators into Strategy pattern with per-design renderer classes; delegate selection via registry with fallback (Plan: P3; Reqs: R4, R11)
 
 ## Phase 4 — Horizontal Rendering Path
 
