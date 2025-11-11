@@ -95,11 +95,61 @@ class TechPatternCardRenderer : VCardRenderer {
             val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
 
             // QR Code terminal-style
-            appendLine("""  <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
+            // QR Code in bottom right corner with clickable group
+            appendLine("""  <g id="qr-trigger-$id" style="cursor: pointer;">""")
+            appendLine("""    <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
+            appendLine("""  <rect x="263" y="95" width="60" height="60" rx="2" fill="white"/>""")
+            appendLine("""    <image x="268" y="100" width="50" height="50" href="$qrCodeBase64"/>""")
+            appendLine("""    <text x="288" y="187" font-family="'JetBrains Mono', monospace" font-size="7" fill="$accentColor" text-anchor="middle">$ scan</text>""")
+            appendLine("""  </g>""")
+
+           /* appendLine("""  <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
             appendLine("""  <rect x="263" y="95" width="60" height="60" rx="2" fill="white"/>""")
             appendLine("""  <image x="268" y="100" width="50" height="50" href="$qrCodeBase64"/>""")
             appendLine("""  <text x="288" y="187" font-family="'JetBrains Mono', monospace" font-size="7" fill="$accentColor" text-anchor="middle">$ scan</text>""")
+*/
+            // Add modal BEFORE closing SVG tag
+            appendLine("""
+  <!-- QR Code Modal -->
+  <g id="qr-modal-$id" style="display: none;">
+      <rect width="350" height="220" fill="rgba(0,0,0,0.9)" id="modal-bg-$id" style="cursor: pointer;"/>
+      <g transform="translate(75,5)">
+          <rect width="200" height="185" rx="8" fill="white"/>
+          <image x="20" y="5" width="160" height="160" href="${qrCodeService.generateQRCodeBase64(vCardData, 320, 320)}"/>
+          <text x="100" y="180" font-family="'Roboto', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">(click to close)</text>
+      </g>
+  </g>
 
+  <script type="text/javascript">
+  <![CDATA[
+      (function() {
+          var svg = document.getElementById('id_$id');
+          if (!svg) return;
+          
+          var qrTrigger = svg.getElementById('qr-trigger-$id');
+          var modal = svg.getElementById('qr-modal-$id');
+          var modalBg = svg.getElementById('modal-bg-$id');
+          
+          if (qrTrigger && modal && modalBg) {
+              qrTrigger.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                  modal.style.display = 'block';
+              });
+              
+              modalBg.addEventListener('click', function() {
+                  modal.style.display = 'none';
+              });
+              
+              document.addEventListener('keydown', function(e) {
+                  if (e.key === 'Escape' && modal.style.display === 'block') {
+                      modal.style.display = 'none';
+                  }
+              });
+          }
+      })();
+  ]]>
+  </script>
+""".trimIndent())
 
             appendLine("""</svg>""")
         }

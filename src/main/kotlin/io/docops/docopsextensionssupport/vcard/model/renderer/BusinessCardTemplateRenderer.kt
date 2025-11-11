@@ -135,9 +135,15 @@ class BusinessCardTemplateRenderer : VCardRenderer {
             val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 90, 90)
 
             // QR Code section
-            appendLine("""  <rect x="235" y="110" width="80" height="65" rx="6" fill="white" stroke="$borderColor" stroke-width="1"/>""")
-            appendLine("""  <image x="247" y="115" width="55" height="55" href="$qrCodeBase64"/>""")
-            appendLine("""  <text x="275" y="180" font-family="'Roboto', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Full Contact</text>""")
+            // QR Code in bottom right corner with clickable group
+            appendLine("""  <g id="qr-trigger-$id" style="cursor: pointer;">""")
+            appendLine("""    <rect x="255" y="110" width="70" height="65" rx="6" fill="white" stroke="$borderColor" stroke-width="1"/>""")
+            appendLine("""    <image x="263" y="115" width="55" height="55" href="$qrCodeBase64"/>""")
+            appendLine("""    <text x="267" y="194" font-family="'Roboto', sans-serif" font-size="8" fill="$secondaryText" text-anchor="middle">Scan for full contact</text>""")
+            appendLine("""  </g>""")
+            //appendLine("""  <rect x="235" y="110" width="80" height="65" rx="6" fill="white" stroke="$borderColor" stroke-width="1"/>""")
+            //appendLine("""  <image x="247" y="115" width="55" height="55" href="$qrCodeBase64"/>""")
+            //appendLine("""  <text x="275" y="180" font-family="'Roboto', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Full Contact</text>""")
 
             // Website/Social with template-style icon
             val webUrl = vcard.website ?: vcard.socialMedia.firstOrNull()?.url
@@ -165,6 +171,54 @@ class BusinessCardTemplateRenderer : VCardRenderer {
             appendLine("""  <rect x="315" y="32" width="10" height="2" rx="1" fill="$accentColor" opacity="0.4"/>""")
             appendLine("""  <rect x="320" y="37" width="5" height="2" rx="1" fill="$highlightColor" opacity="0.8"/>""")
 
+            appendLine("""
+  <!-- QR Code Modal -->
+  <g id="qr-modal-$id" style="display: none;">
+      <rect width="350" height="220" fill="rgba(0,0,0,0.9)" id="modal-bg-$id" style="cursor: pointer;"/>
+      <g transform="translate(75,5)">
+          <rect width="200" height="185" rx="8" fill="white"/>
+          <image x="20" y="5" width="160" height="160" href="${qrCodeService.generateQRCodeBase64(vCardData, 320, 320)}"/>
+          <text x="100" y="180" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">(click to close)</text>
+      </g>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+      (function() {
+          var svg = document.getElementById('id_$id');
+          if (!svg) {
+              console.error('SVG not found: id_$id');
+              return;
+          }
+          
+          var qrTrigger = svg.getElementById('qr-trigger-$id');
+          var modal = svg.getElementById('qr-modal-$id');
+          var modalBg = svg.getElementById('modal-bg-$id');
+          
+          if (!qrTrigger) console.error('QR trigger not found: qr-trigger-$id');
+          if (!modal) console.error('Modal not found: qr-modal-$id');
+          if (!modalBg) console.error('Modal background not found: modal-bg-$id');
+          
+          if (qrTrigger && modal && modalBg) {
+              qrTrigger.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                  modal.style.display = 'block';
+              });
+              
+              modalBg.addEventListener('click', function() {
+                  modal.style.display = 'none';
+              });
+              
+              document.addEventListener('keydown', function(e) {
+                  if (e.key === 'Escape' && modal.style.display === 'block') {
+                      modal.style.display = 'none';
+                  }
+              });
+          }
+      })();
+  ]]>
+  </script>
+""".trimIndent())
             appendLine("""</svg>""")
         }
     }

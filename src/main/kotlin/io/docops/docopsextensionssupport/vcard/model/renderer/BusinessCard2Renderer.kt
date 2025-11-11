@@ -104,12 +104,64 @@ class BusinessCard2Renderer : VCardRenderer {
             }
 
             // QR Code in bottom right
-            appendLine("""  <rect x="240" y="110" width="90" height="70" rx="6" fill="white"/>""")
-            appendLine("""  <image x="250" y="115" width="60" height="60" href="$qrCodeBase64"/>""")
-            appendLine("""  <text x="280" y="184" font-family="'Inter', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Scan for all info</text>""")
+            appendLine("""  <g id="qr-trigger-$id" style="cursor: pointer;">""")
+            appendLine("""    <rect x="240" y="110" width="90" height="70" rx="6" fill="white"/>""")
+            appendLine("""    <image x="250" y="115" width="60" height="60" href="$qrCodeBase64"/>""")
+            appendLine("""    <text x="280" y="184" font-family="'Inter', sans-serif" font-size="7" fill="$secondaryText" text-anchor="middle">Scan for all info</text>""")
+            appendLine("""  </g>""")
 
             // Bottom accent line
             appendLine("""  <rect x="25" y="175" width="200" height="3" rx="1.5" fill="url(#headerGrad)" opacity="0.6"/>""")
+
+            // Add modal BEFORE closing the SVG
+            appendLine("""
+  <!-- QR Code Modal -->
+  <g id="qr-modal-$id" style="display: none;">
+      <rect width="350" height="220" fill="rgba(0,0,0,0.9)" id="modal-bg-$id" style="cursor: pointer;"/>
+      <g transform="translate(75,5)">
+          <rect width="200" height="185" rx="8" fill="white"/>
+          <image x="20" y="5" width="160" height="160" href="${qrCodeService.generateQRCodeBase64(vCardData, 320, 320)}"/>
+          <text x="100" y="180" font-family="'Inter', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">(click to close)</text>
+      </g>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+      (function() {
+          var svg = document.getElementById('id_$id');
+          if (!svg) {
+              console.error('SVG not found: id_$id');
+              return;
+          }
+          
+          var qrTrigger = svg.getElementById('qr-trigger-$id');
+          var modal = svg.getElementById('qr-modal-$id');
+          var modalBg = svg.getElementById('modal-bg-$id');
+          
+          if (!qrTrigger) console.error('QR trigger not found: qr-trigger-$id');
+          if (!modal) console.error('Modal not found: qr-modal-$id');
+          if (!modalBg) console.error('Modal background not found: modal-bg-$id');
+          
+          if (qrTrigger && modal && modalBg) {
+              qrTrigger.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                  modal.style.display = 'block';
+              });
+              
+              modalBg.addEventListener('click', function() {
+                  modal.style.display = 'none';
+              });
+              
+              document.addEventListener('keydown', function(e) {
+                  if (e.key === 'Escape' && modal.style.display === 'block') {
+                      modal.style.display = 'none';
+                  }
+              });
+          }
+      })();
+  ]]>
+  </script>
+""".trimIndent())
 
             appendLine("""</svg>""")
         }

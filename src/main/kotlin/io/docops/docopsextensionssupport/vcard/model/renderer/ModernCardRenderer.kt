@@ -19,7 +19,8 @@ class ModernCardRenderer(
         val qrCodeService = QRCodeService()
         val qrCodeBase64 = if (includeQR) {
             val vCardData = vCardGeneratorService.generateVCard30(vcard)
-            qrCodeService.generateQRCodeBase64(vCardData, 160, 160)
+            //qrCodeService.generateQRCodeBase64(vCardData, 160, 160)
+            qrCodeService.generateQRCode(vCardData, 150, 150)
         } else null
 
         val id: String = Uuid.random().toHexString()
@@ -34,6 +35,10 @@ class ModernCardRenderer(
             appendBackground()
             appendCard(vcard, qrCodeBase64)
 
+            // Add interactive script and styles
+            if (includeQR && qrCodeBase64 != null) {
+                appendInteractiveScript()
+            }
             appendLine("</svg>")
         }
     }
@@ -55,6 +60,63 @@ class ModernCardRenderer(
         """.trimIndent())
     }
 
+    private fun StringBuilder.appendInteractiveScript() {
+        appendLine("""
+        <style>
+            .qr-hover {
+                transition: fill 0.3s ease;
+            }
+            #qr-code-trigger:hover .qr-hover {
+                fill: rgba(255,255,255,0.15);
+            }
+            #qr-code-trigger:active .qr-hover {
+                fill: rgba(255,255,255,0.25);
+            }
+            #close-button:hover circle {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        </style>
+        
+        <script type="text/javascript">
+        <![CDATA[
+            (function() {
+                const modal = document.getElementById('qr-modal');
+                const trigger = document.getElementById('qr-code-trigger');
+                const backdrop = document.getElementById('modal-backdrop');
+                const closeBtn = document.getElementById('close-button');
+                
+                if (trigger && modal) {
+                    trigger.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        modal.style.display = 'block';
+                    });
+                    
+                    if (backdrop) {
+                        backdrop.addEventListener('click', function() {
+                            modal.style.display = 'none';
+                        });
+                    }
+                    
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            modal.style.display = 'none';
+                        });
+                    }
+                    
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape' && modal.style.display === 'block') {
+                            modal.style.display = 'none';
+                        }
+                    });
+                }
+            })();
+        ]]>
+        </script>
+    """.trimIndent())
+    }
+
     private fun StringBuilder.appendBackground() {
         appendLine("""<rect width="100%" height="100%" fill="#f4f6fb" rx="18" ry="18"/>""")
     }
@@ -68,6 +130,11 @@ class ModernCardRenderer(
         appendRightColumn(vCard, qrCodeBase64)
 
         appendLine("</g>")
+
+        // Add modal OUTSIDE the card group for proper positioning
+        if (includeQR && qrCodeBase64 != null) {
+            appendQRModal(vCard)
+        }
     }
 
     private fun StringBuilder.appendLeftColumn(vCard: VCard) {
@@ -196,37 +263,85 @@ class ModernCardRenderer(
 
         appendLine("</g>")
     }
-
     private fun StringBuilder.appendRightColumn(vCard: VCard, qrCodeBase64: String?) {
-        appendLine("""<g transform="translate(450,56)">""")
+    appendLine("""<g transform="translate(450,56)">""")
 
-        // QR Code section - centered in right column
-        if (qrCodeBase64 != null) {
-            val qrSize = 160
-            val columnWidth = 280
-            val qrX = (columnWidth - qrSize) / 2 // Center horizontally
+    // QR Code section - centered in right column with click interaction
+    if (qrCodeBase64 != null) {
+        val qrSize = 160
+        val columnWidth = 280
+        val qrX = (columnWidth - qrSize) / 2 // Center horizontally
 
-            appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="#ffffff"/>""")
-            appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
+        // Generate larger QR code for modal
+        val vCardGeneratorService = VCardGeneratorService()
+        val qrCodeService = QRCodeService()
+        val vCardData = vCardGeneratorService.generateVCard30(vCard)
+        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400)
 
-            // "Scan to save" text centered below QR code
-            val textY = qrSize + 20
-            val textX = columnWidth / 2
-            appendLine("""<text x="$textX" y="$textY" font-family="Inter, Arial, sans-serif" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Scan to save</text>""")
-        }
+        // Clickable QR code group with cursor pointer
+        appendLine("""<g id="qr-code-trigger" style="cursor: pointer;">""")
+        appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="#ffffff"/>""")
+        appendLine("""<g transform="translate(${qrX+5}, 5)">$qrCodeBase64</g>""")
 
-        // Social media section
-        if (vCard.socialMedia.isNotEmpty()) {
-            appendSocialMediaSection(vCard)
-        }
+        //appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
 
-        // Organization note or tagline
-        val tagline = vCard.note ?: vCard.organization?.let { "$it - ${vCard.department ?: "Professional Services"}" } ?: "Designing simple products for complex problems"
-        appendWrappedText(tagline, x = 0, y = 300, maxWidth = 280, fontSize = 14, lineHeight = 20)
+        // Hover effect overlay
+        appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="rgba(255,255,255,0)" class="qr-hover"/>""")
+        appendLine("""</g>""")
 
-        appendLine("</g>")
+        // "Scan to save" text centered below QR code
+        val textY = qrSize + 20
+        val textX = columnWidth / 2
+        appendLine("""<text x="$textX" y="$textY" font-family="Inter, Arial, sans-serif" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Scan to save</text>""")
+        appendLine("""<text x="$textX" y="${textY + 15}" font-family="Inter, Arial, sans-serif" fill="rgba(255,255,255,0.6)" font-size="9" font-weight="400" text-anchor="middle" font-style="italic">(click to enlarge)</text>""")
+
+
+
     }
 
+    // Social media section
+    if (vCard.socialMedia.isNotEmpty()) {
+        appendSocialMediaSection(vCard)
+    }
+
+    // Organization note or tagline
+    val tagline = vCard.note ?: vCard.organization?.let { "$it - ${vCard.department ?: "Professional Services"}" } ?: "Designing simple products for complex problems"
+    appendWrappedText(tagline, x = 0, y = 300, maxWidth = 280, fontSize = 14, lineHeight = 20)
+
+    appendLine("</g>")
+    }
+
+    private fun StringBuilder.appendQRModal(vCard: VCard) {
+        // Generate larger QR code for modal
+        val vCardGeneratorService = VCardGeneratorService()
+        val qrCodeService = QRCodeService()
+        val vCardData = vCardGeneratorService.generateVCard30(vCard)
+        val largeQrCodeBase64 = qrCodeService.generateQRCode(vCardData, 400, 400)
+
+        // Modal positioned relative to entire SVG (900x540)
+        appendLine("""
+        <!-- QR Code Modal -->
+        <g id="qr-modal" style="display: none;">
+            <!-- Full screen backdrop -->
+            <rect x="0" y="0" width="900" height="540" fill="rgba(0,0,0,0.85)" id="modal-backdrop"/>
+            
+            <!-- Modal content centered in viewport -->
+            <g transform="translate(230,30)">
+                <!-- White background for QR -->
+                <rect x="0" y="0" width="440" height="480" rx="16" ry="16" fill="#ffffff"/>
+                <g transform="translate(20,10)">
+                <!-- Large QR code -->
+                $largeQrCodeBase64
+                </g>
+                <!-- Instructions -->
+                <text x="220" y="445" font-family="Inter, Arial, sans-serif" fill="#0f172a" font-size="16" font-weight="600" text-anchor="middle">Scan to import contact</text>
+                <text x="220" y="465" font-family="Inter, Arial, sans-serif" fill="#64748b" font-size="12" font-weight="400" text-anchor="middle">(click anywhere to close)</text>
+                
+               
+            </g>
+        </g>
+    """.trimIndent())
+    }
     private fun StringBuilder.appendWrappedText(
         text: String,
         x: Int,
