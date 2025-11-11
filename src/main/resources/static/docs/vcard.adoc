@@ -197,28 +197,17 @@ include::data/vcard/vcard4-international.txt[]
 [.back-to-top]
 <<top, 🔝>>
 
-== Render via API
-Use the generic DocOps render endpoint with kind=vcard. Pass your vCard text as the payload (URL-encoded and optionally compressed by your tooling):
-
-- Endpoint: GET /api/docops/svg
-- Required query params:
-  - kind=vcard
-  - payload=<your vcard text>
-- Optional query params:
-  - scale=1.0 (numeric; scales the output SVG)
-  - docname=MyDoc (label used for analytics)
-
-Example (conceptual):
-[source,bash]
-----
-curl "http://localhost:8080/api/docops/svg?kind=vcard&payload=BEGIN%3AVCARD%0AVERSION%3A3.0%0AFN%3AJane%20Smith%0A...%0AEND%3AVCARD"
-----
-
-[.back-to-top]
-<<top, 🔝>>
 
 == Attributes
-- design: Optional; selects the visual template. One of: tech_pattern_background, business_card_design, business_card_design2, business_card_template, creative_agency_pro_contact_card, modern_card. Defaults to business_card_design when omitted or invalid.
+
+- design: Optional; selects the visual template. One of:
+* tech_pattern_background,
+* business_card_design,
+* business_card_design2,
+* business_card_template,
+* creative_agency_pro_contact_card,
+* modern_card.
+Defaults to business_card_design when omitted or invalid.
 - theme: Optional; light or dark. Defaults to light.
 - scale: Optional numeric factor to scale the rendered SVG. Defaults to 1.0.
 
@@ -240,8 +229,6 @@ Notes on styling:
 == Notes
 [NOTE]
 ====
-- Input format is vCard 3.0 lines inside the block body. The maker supports FN, N, ORG, TITLE, TEL, EMAIL, URL, NOTE and gracefully ignores unknown properties.
-- For maintainability, keep vCard blocks in src/docs/asciidoc/data/vcard and include them, so the same card can be reused across pages.
-- The server accepts URL-encoded payload and may be used with the generic /api/docops/svg endpoint used across DocOps makers.
+- The input format is vCard 3.0 lines inside the block body. The maker supports FN, N, ORG, TITLE, TEL, EMAIL, URL, NOTE and gracefully ignores unknown properties.
+- For maintainability, keep vCard blocks in data files and include them, so the same card can be reused across adoc pages.
 ====
-
