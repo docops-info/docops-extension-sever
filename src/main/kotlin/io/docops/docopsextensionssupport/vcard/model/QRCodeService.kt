@@ -3,15 +3,23 @@ package io.docops.docopsextensionssupport.vcard.model
 import io.nayuki.qrcodegen.QrCode
 import qrcode.QRCode
 import qrcode.color.Colors
+import qrcode.color.Colors.css
+import qrcode.raw.ErrorCorrectionLevel
+import java.awt.Color
+import java.awt.MultipleGradientPaint
+import java.awt.RadialGradientPaint
+import java.awt.geom.Point2D
 import java.util.*
 
 
 class QRCodeService {
 
     fun generateQRCodeBase64(data: String, width: Int, height: Int): String {
-        val qrCode = QRCode.ofCircles()
-            .withColor( Colors.BLACK)
-            .withSize(12) // Default is 25
+
+        val qrCode = QRCode.ofSquares()
+
+            .withErrorCorrectionLevel(ErrorCorrectionLevel.VERY_HIGH) // <- See Here
+            .withInformationDensity(0) // <- Setting this to >= 1 will make the code NOT compute a value
             .build(data)
         val bytes = qrCode.renderToBytes()
         val qrBase64 = Base64.getEncoder().encodeToString(bytes)

@@ -31,6 +31,8 @@ import java.net.http.HttpResponse
 import java.time.Duration
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 private const val BadgePerRow = 5
@@ -130,60 +132,78 @@ private const val BadgePerRow = 5
 class DocOpsBadgeGenerator {
 
 
-    @Traceable
+    companion object {
+        private const val BadgePerRow = 5
+        val widths = arrayOf<Number>(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1316650390625,0.42833404541015624,0.5066665649414063,0.7066665649414062,0.7066665649414062,1.0383331298828125,0.8183334350585938,0.34499969482421877,0.4850006103515625,0.4850006103515625,0.5383331298828125,0.7350006103515625,0.42833404541015624,0.4850006103515625,0.42833404541015624,0.42833404541015624,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.42833404541015624,0.42833404541015624,0.7350006103515625,0.7350006103515625,0.7350006103515625,0.7066665649414062,1.1649993896484374,0.8199996948242188,0.8183334350585938,0.8716659545898438,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.9316665649414062,0.8716659545898438,0.42833404541015624,0.65,0.8183334350585938,0.7066665649414062,0.9833328247070312,0.8716659545898438,0.9316665649414062,0.8183334350585938,0.9316665649414062,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.8716659545898438,0.8183334350585938,1.0949996948242187,0.8183334350585938,0.8183334350585938,0.7633331298828125,0.42833404541015624,0.42833404541015624,0.42833404541015624,0.6199996948242188,0.7349990844726563,0.4850006103515625,0.7066665649414062,0.7066665649414062,0.65,0.7066665649414062,0.7066665649414062,0.4633331298828125,0.7066665649414062,0.7066665649414062,0.375,0.42166748046875,0.65,0.375,0.9833328247070312,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.498333740234375,0.65,0.42833404541015624,0.7066665649414062,0.65,0.8716659545898438,0.65,0.65,0.65,0.4850006103515625,0.4100006103515625,0.4850006103515625,0.7350006103515625)
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
     fun createBadgeFromList(badges: MutableList<Badge>): Pair<String, Float> {
 
-        val sb= StringBuilder()
-        var x = 0f
+        val allDefs = StringBuilder()
+        val badgeElements = StringBuilder()
+
         var xPos = 0f
         var rowCount = 0
         var rowNum = 0
         var width= 1f
-        badges.forEachIndexed { i, badge ->
+
+        badges.forEachIndexed { _, badge ->
             val label = badge.label.escapeXml()
             val message = badge.message.escapeXml()
-            val maskId = UUID.randomUUID().toString()
+            val maskId = Uuid.random().toHexString()
 
-            val labelColor = SVGColor(badge.labelColor!!, "label_${maskId}")
-            val messageColor = SVGColor(badge.messageColor!!, "message_${maskId}")
-            //val clrMap = gradientFromColor(badge.labelColor!!)
-            //val mMap = gradientFromColor(badge.messageColor!!)
-            val grad = labelColor.linearGradient + messageColor.linearGradient
-            var labelWidth = measureText(badge.label) * 100.0F
-            val messageWidth = measureText(badge.message) * 100.0F
+            // Use default colors if not provided
+            val labelColorValue = badge.labelColor ?: "#555555"
+            val messageColorValue = badge.messageColor ?: "#007ec6"
+
+            val labelColor = SVGColor(labelColorValue, "label_${maskId}")
+            val messageColor = SVGColor(messageColorValue, "message_${maskId}")
+
+            // Collect gradients in defs
+            allDefs.append(labelColor.linearGradient)
+            allDefs.append(messageColor.linearGradient)
+
+            // Calculate natural text widths with padding
+            val labelPadding = 10f
+            val messagePadding = 10f
+            val dividerWidth = 1f
+
+            var labelTextWidth = measureText(badge.label, 11) // 11pt font
+            var messageTextWidth = measureText(badge.message, 11)
+
+            // Add padding to create natural spacing
+            var labelSectionWidth = labelTextWidth + (labelPadding * 2)
+            var messageSectionWidth = messageTextWidth + (messagePadding * 2)
+
             var labelLink = label
             var messageLink = message
             badge.url?.let {
                 if(it.isNotEmpty() && !badge.isPdf) {
-                    labelLink = """<a href='${badge.url}' target='_blank'>$label</a>"""
-                    messageLink = """<a href='${badge.url}' target='_blank'>$message</a>"""
+                    labelLink = """<a href='${it}' target='_blank'>$label</a>"""
+                    messageLink = """<a href='${it}' target='_blank'>$message</a>"""
                 }
             }
 
-
-            var startX = 50
-            var textWidth = 0
+            var logoWidth = 0f
             var img = ""
             badge.logo?.let {
-                // Use enhanced logo handling with effects
-                val logoSize = 100
-                val logo = getBadgeLogo(it, logoSize, true)
+                val logoSize = 14f // Logo size in the same units as text
+                val logo = getBadgeLogo(it, logoSize.toInt(), true)
+                logoWidth = logoSize + 4f // Logo + spacing
+                labelSectionWidth += logoWidth
 
-                // Adjust positioning and spacing
-                startX += 127
-                labelWidth += 100
-                textWidth = 49
-
-                // Create enhanced image element with better positioning and aria-label
-                img = """<image x='30' y='49' width='$logoSize' height='$logoSize' 
-                       xlink:href='$logo' preserveAspectRatio='xMidYMid meet'
-                       aria-label='${badge.label} logo'/>"""
+                img = """<image x='${labelPadding}' y='3' width='$logoSize' height='$logoSize' xlink:href='$logo' preserveAspectRatio='xMidYMid meet' aria-label='${badge.label} logo'/>"""
             }
+
+            val totalBadgeWidth = labelSectionWidth + messageSectionWidth + dividerWidth
+
             val labelFill = "url(#label_${maskId})"
             val messageFill = "url(#message_${maskId})"
-            val filterText = ""
-            val maskText = "url(#a)"
-            val mask = createMask(maskId, labelWidth, messageWidth, labelFill, filterText, messageFill, maskText)
+
+            // Generate mask definition (add to defs)
+            allDefs.append(createMaskDef(maskId, labelSectionWidth, messageSectionWidth, dividerWidth))
+
             if(rowCount > BadgePerRow) {
                 rowCount = 0
                 rowNum++
@@ -191,40 +211,214 @@ class DocOpsBadgeGenerator {
             } else {
                 rowCount++
             }
-            sb.append("<g transform='translate($xPos,${rowNum*21})'>")
-            if(badge.isPdf) {
-                val b = makeSVGForPDF(labelColor, messageColor, labelWidth, messageWidth, textWidth, startX, badge.fontColor, badge.message, messageLink, labelLink, img, label)
-                sb.append(b)
-            }
-            else {
-                val b = makeSvg(
-                    labelColor, 
-                    messageColor, 
-                    labelWidth, 
-                    messageWidth, 
-                    textWidth, 
-                    startX, 
-                    badge.fontColor, 
-                    badge.message, 
-                    messageLink, 
-                    labelLink, 
-                    grad, 
-                    mask, 
-                    filterText, 
-                    img, 
-                    label,
-                    useShadow = true,
-                    useTopHighlight = true
-                )
-                sb.append(b)
-            }
-            sb.append("</g>")
-            val position = (labelWidth + messageWidth + 200) / 10 + 1f
-            x += position
-            xPos += position
+
+            badgeElements.append("<g transform='translate($xPos,${rowNum*21})'>")
+
+            val b = makeBadgeElement(
+                maskId,
+                labelSectionWidth,
+                messageSectionWidth,
+                dividerWidth,
+                labelPadding + logoWidth,
+                messagePadding,
+                badge.fontColor,
+                messageLink,
+                labelLink,
+                img,
+                label,
+                message,
+                labelFill,
+                messageFill
+            )
+            badgeElements.append(b)
+            badgeElements.append("</g>")
+
+            xPos += totalBadgeWidth + 2f // Add small gap between badges
             width = maxOf(width, xPos)
         }
-        return Pair(sb.toString(), width)
+
+        // Build final SVG with all defs and styles at the top
+        val finalSvg = buildFinalSvg(allDefs.toString(), badgeElements.toString())
+        return Pair(finalSvg, width)
+    }
+    /**
+     * Creates mask definition to be placed in defs section
+     */
+    private fun createMaskDef(
+        maskId: String,
+        labelWidth: Float,
+        messageWidth: Float,
+        dividerWidth: Float,
+        cornerRadius: Float = 3f
+    ): String {
+        val totalWidth = labelWidth + messageWidth + dividerWidth
+
+        return """
+                <mask id='mask_$maskId'>
+                    <rect width='$totalWidth' height='20' rx='$cornerRadius' fill='#FFF'/>
+                </mask>
+            """.trimIndent()
+    }
+
+    /**
+     * Creates the badge visual element (without defs/styles)
+     */
+    private fun makeBadgeElement(
+        maskId: String,
+        labelWidth: Float,
+        messageWidth: Float,
+        dividerWidth: Float,
+        labelTextX: Float,
+        messageTextX: Float,
+        fontColor: String,
+        messageLink: String,
+        labelLink: String,
+        img: String,
+        label: String,
+        message: String,
+        labelFill: String,
+        messageFill: String
+    ): String {
+        val totalWidth = labelWidth + messageWidth + dividerWidth
+        val hasLink = labelLink.contains("<a") || messageLink.contains("<a")
+
+        return """
+                <svg width='$totalWidth' height='20' viewBox='0 0 $totalWidth 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="$label: $message" class="${if (hasLink) "badge-link" else ""}">
+                 <title>$label: $message</title>
+                 <desc>Badge showing $label with value $message</desc>
+
+                 <!-- Badge shape with mask -->
+                 <g mask='url(#mask_$maskId)' ${if (hasLink) "class='badge-shape'" else ""}>
+                    <!-- Label background -->
+                    <rect x='0' y='0' width='$labelWidth' height='20' fill='$labelFill'/>
+                    
+                    <!-- Message background -->
+                    <rect x='${labelWidth + dividerWidth}' y='0' width='$messageWidth' height='20' fill='$messageFill'/>
+                    
+                    <!-- Subtle gradient overlay for depth -->
+                    <rect x='0' y='0' width='$totalWidth' height='20' fill='url(#a)' opacity='0.1'/>
+                 </g>
+
+                 <!-- Text elements with natural sizing -->
+                 <g aria-hidden='true' fill='$fontColor' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
+                    font-size='11' ${if (hasLink) "class='badge-text'" else ""}>
+                    <!-- Label text -->
+                    <text x='$labelTextX' y='14' fill='$fontColor' style='font-weight: 500;'>$labelLink</text>
+                    
+                    <!-- Message text -->
+                    <text x='${labelWidth + dividerWidth + messageTextX}' y='14' fill='$fontColor' style='font-weight: 400;'>$messageLink</text>
+                 </g>
+
+                 <!-- Logo/icon -->
+                 ${if (img.isNotEmpty()) """
+                 <g ${if (hasLink) "class='badge-logo'" else ""}>
+                    $img
+                 </g>
+                 """ else ""}
+                </svg>
+            """.trimIndent()
+    }
+
+    /**
+     * Builds the final SVG with all defs and styles at the top
+     */
+    private fun buildFinalSvg(defs: String, badgeElements: String): String {
+        return """
+                <defs>
+                    ${createFilterDefinitions(useShadow = false, useTopHighlight = false)}
+                    <linearGradient id='a' x2='0' y2='100%'>
+                        <stop offset='0' stop-opacity='.1' stop-color='#EEE'/>
+                        <stop offset='1' stop-opacity='.1'/>
+                    </linearGradient>
+                    $defs
+                </defs>
+                <style>
+                    ${createGlobalStyles()}
+                </style>
+                $badgeElements
+            """.trimIndent()
+    }
+
+    /**
+     * Creates global styles that apply to all badges
+     */
+    private fun createGlobalStyles(): String {
+        return """
+                /* Base badge styles */
+                svg {
+                    shape-rendering: crispEdges;
+                }
+                
+                text {
+                    text-rendering: optimizeLegibility;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+
+                /* Theme-aware styles */
+                @media (prefers-color-scheme: dark) {
+                    .badge-shape rect {
+                        filter: brightness(0.9);
+                    }
+                }
+
+                @media (prefers-color-scheme: light) {
+                    .badge-shape rect {
+                        filter: brightness(1);
+                    }
+                }
+
+                /* Hover effect for linked badges */
+                a {
+                    text-decoration: none;
+                }
+                
+                a:hover {
+                    text-decoration: underline;
+                }
+
+                .badge-link:hover {
+                    opacity: 0.9;
+                    transition: opacity 0.2s ease;
+                }
+
+                /* Ensure animations degrade gracefully */
+                @media (prefers-reduced-motion: reduce) {
+                    a:hover, .badge-link:hover {
+                        transition: none;
+                    }
+                }
+            """.trimIndent()
+    }
+
+    fun measureText(str: String, fontSize: Int = 11): Float {
+        var total = 0f
+        var i = 0
+        while (i < str.length) {
+            val char = str[i]
+            val code = char.code
+
+            // Handle surrogate pairs for proper Unicode support
+            if (char.isHighSurrogate() && i + 1 < str.length) {
+                val nextChar = str[i + 1]
+                if (nextChar.isLowSurrogate()) {
+                    // This is a surrogate pair, skip to next character
+                    i += 2
+                    // Use default width for emoji/extended Unicode
+                    total += widths[64].toFloat() * fontSize
+                    continue
+                }
+            }
+
+            val charWidth = when {
+                code >= widths.size -> widths[64].toFloat()
+                else -> widths[code].toFloat()
+            }
+
+            total += charWidth * fontSize
+            i++
+        }
+        return total
     }
 
     private fun makeGradient(
@@ -233,521 +427,20 @@ class DocOpsBadgeGenerator {
         mMap: Map<String, String>
     ): String {
         val grad = """
-                <linearGradient id="label_${maskId}" x2="0%" y2="100%">
-                    <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
-                    <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
-                    <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
-                </linearGradient> 
-                <linearGradient id="message_${maskId}" x2="0%" y2="100%">
-                    <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
-                    <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
-                    <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
-                </linearGradient> 
-            """.trimIndent()
+                    <linearGradient id="label_${maskId}" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
+                        <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
+                        <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
+                    </linearGradient> 
+                    <linearGradient id="message_${maskId}" x2="0%" y2="100%">
+                        <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
+                        <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
+                        <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
+                    </linearGradient> 
+                """.trimIndent()
         return grad
     }
 
-    private fun makeSVGForPDF(
-        clrMap: SVGColor,
-        mMap: SVGColor,
-        labelWidth: Float,
-        messageWidth: Float,
-        textWidth: Int,
-        startX: Int,
-        fontColor: String,
-        message: String,
-        messageLink: String,
-        labelLink: String,
-        img: String,
-        label : String
-    ): String {
-        val labelFill = clrMap.darker()
-        val messageFill = mMap.darker()
-        val filterText = ""
-        val maskText = ""
-        val mask = """
-            <rect fill='$labelFill' width='${labelWidth + 100}' height='200' filter='$filterText'/>
-            <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
-            """
-        //language=svg
-        return """<svg xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message' width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200'  >
-             <title>$label: $message</title>
-            $mask
-            <g text-anchor='start' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='110'>
-                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 500;'>$labelLink</text>
-                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 400;'>$messageLink</text>
-            </g>
-               $img
-             </svg>
-        """.trimIndent()
-    }
-    private fun makeSvg(
-        clrMap: SVGColor,
-        mMap: SVGColor,
-        labelWidth: Float,
-        messageWidth: Float,
-        textWidth: Int,
-        startX: Int,
-        fontColor: String,
-        message: String,
-        messageLink: String,
-        labelLink: String,
-        grad: String,
-        mask: String,
-        filterText: String,
-        img: String,
-        label: String,
-        useShadow: Boolean = true,
-        useTopHighlight: Boolean = true
-    ): String {
-        // Create combined filter for badge elements
-        val combinedFilter = if (useShadow) "filter='url(#DropShadow) $filterText'" else "filter='$filterText'"
-        val highlightFilter = if (useTopHighlight) "filter='url(#TopHighlight)'" else ""
-
-        // Check if badge has a link (for interactive elements)
-        val hasLink = labelLink.contains("<a") || messageLink.contains("<a")
-
-        //language=SVG
-        // Generate enhanced accessibility attributes
-        val accessibilityAttrs = createAccessibilityAttributes(label, message, hasLink)
-
-        val svgContent = """
-            <svg width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200'  
-                 xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" 
-                 $accessibilityAttrs
-                 class="${if (hasLink) "badge-link" else ""}">
-             <title>$label: $message</title>
-             <desc>Badge showing $label with value $message</desc>
-             <defs>
-                ${createFilterDefinitions(useShadow, useTopHighlight)}
-                <linearGradient id='a' x2='0' y2='100%'>
-                    <stop offset='0' stop-opacity='.1' stop-color='#EEE'/>
-                    <stop offset='1' stop-opacity='.1'/>
-                </linearGradient>
-                $grad
-             </defs>
-
-             <!-- Theme and interactive styles -->
-             ${createThemeStyles(clrMap.original(), mMap.original(), fontColor)}
-             ${createInteractiveStyles(hasLink)}
-
-            <!-- Badge shape with shadow effect -->
-            <g ${if (hasLink) "class='badge-shape'" else ""} ${combinedFilter.replace("'", "\"")}>
-                $mask
-            </g>
-
-            <!-- Text elements -->
-            <g aria-hidden='true' text-anchor='start' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
-               font-size='110' filter='url(#Bevel2)' ${if (hasLink) "class='badge-text'" else ""}>
-                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 500;'>$labelLink</text>
-                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 400;'>$messageLink</text>
-            </g>
-
-            <!-- Logo/icon with highlight effect -->
-            <g ${highlightFilter.replace("'", "\"")} ${if (hasLink) "class='badge-logo'" else ""}>
-                $img
-            </g>
-             </svg>
-        """.trimIndent()
-
-        // Apply SVG optimization (basic cleanup for all SVGs, more aggressive minification for production)
-        // For development, use minimal optimization to keep readability
-        return optimizeSvg(svgContent, minify = false)
-    }
-    /**
-     * Creates an SVG badge with the specified label and message.
-     *
-     * @param iLabel The label text for the badge.
-     * @param iMessage The message text for the badge.
-     * @param labelColor The color of the label background. Default is #999999.
-     * @param messageColor The color of the message background. Default is #ececec.
-     * @param href The URL to link the label and message to. Default is empty string.
-     * @param icon The icon image URL to display on the badge. Default is empty string.
-     * @param fontColor The color of the label and message text. Default is #000000.
-     *
-     * @return The SVG representation of the badge.
-     */
-    @Traceable
-    fun createBadge(
-        iLabel: String,
-        iMessage: String,
-        labelColor: String = "#999999",
-        messageColor: String = "#ececec",
-        href: String = "",
-        icon: String = "",
-        fontColor: String = "#000000",
-        backend: String = ""
-    ): String {
-        val isPdf = backend == "pdf"
-
-        val label = iLabel.escapeXml()
-        val message = iMessage.escapeXml()
-        val clrMap = gradientFromColor(labelColor)
-        val mMap = gradientFromColor(messageColor)
-        val maskId = UUID.randomUUID().toString()
-        val grad = """
-            <linearGradient id="label_${maskId}" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="${clrMap["color1"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${clrMap["color2"]}"/>
-                <stop class="stop3"  stop-color="${clrMap["color3"]}" stop-opacity="1" offset="100%"/>
-            </linearGradient> 
-            <linearGradient id="message_${maskId}" x2="0%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="${mMap["color1"]}"/>
-                <stop class="stop2" offset="50%" stop-color="${mMap["color2"]}"/>
-                <stop class="stop3"  stop-color="${mMap["color3"]}" stop-opacity="1" offset="100%"/>
-            </linearGradient> 
-        """.trimIndent()
-        var labelWidth = measureText(iLabel) * 100.0F
-        val messageWidth = measureText(iMessage) * 100.0F
-        var labelLink = label
-        var messageLink = message
-        if (href.isNotEmpty() && !isPdf) {
-            labelLink = """<a href='$href' target='_blank'>$label</a>"""
-            messageLink = """<a href='$href' target='_blank'>$message</a>"""
-        }
-        var startX = 50
-        var textWidth = 0
-        var img = ""
-        if (icon.isNotEmpty()) {
-            // Use enhanced logo handling with effects
-            val logoSize = 100
-            val logo = getBadgeLogo(icon, logoSize, true, backgroundColor = labelColor)
-
-            // Adjust positioning and spacing
-            startX += 127
-            labelWidth += 100
-            textWidth = 49
-
-            // Create enhanced image element with better positioning and aria-label
-            img = """<image x='30' y='49' width='$logoSize' height='$logoSize' 
-                   xlink:href='$logo' preserveAspectRatio='xMidYMid meet'
-                   aria-label='$label logo'/>"""
-        }
-        var labelFill = "url(#label_${maskId})"
-        var messageFill = "url(#message_${maskId})"
-        var filterText = "url(#Bevel2)"
-        var maskText = "url(#a)"
-        var mask = createMask(maskId, labelWidth, messageWidth, labelFill, filterText, messageFill, maskText)
-        if(isPdf) {
-            labelFill = clrMap["color3"]!!
-            messageFill = mMap["color3"]!!
-            filterText = ""
-            maskText = ""
-            mask = """
-            <rect fill='$labelFill' width='${labelWidth + 100}' height='200' filter='$filterText'/>
-            <rect fill='$messageFill' x='${labelWidth + 100}' width='${messageWidth + 100}' height='200' filter='$filterText'/>
-            """
-            //language=svg
-            return """
-            <svg width='${(labelWidth + messageWidth + 200) / 10}' height='20' viewBox='0 0 ${labelWidth + messageWidth + 200} 200' 
-            xmlns='http://www.w3.org/2000/svg' role='img' xmlns:xlink="http://www.w3.org/1999/xlink" aria-label='$label: $message'>
-             <title>$label: $message</title>
-            $mask
-            <g text-anchor='start' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='110'>
-                <text x='$startX' y='138' textLength='${(labelWidth - 60) - textWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 500;'>$labelLink</text>
-                <text x='${labelWidth + 155}' y='138' textLength='${messageWidth}' fill="$fontColor" 
-                     style='font-variant: small-caps; letter-spacing: 0.5px; font-weight: 400;'>$messageLink</text>
-            </g>
-             </svg>
-        """.trimIndent()
-        }
-
-        // Use the makeSvg method to create the badge
-        return makeSvg(
-            clrMap = SVGColor(labelColor),
-            mMap = SVGColor(messageColor),
-            labelWidth = labelWidth,
-            messageWidth = messageWidth,
-            textWidth = textWidth,
-            startX = startX,
-            fontColor = fontColor,
-            message = message,
-            messageLink = messageLink,
-            labelLink = labelLink,
-            grad = grad,
-            mask = mask,
-            filterText = filterText,
-            img = img,
-            label = label,
-            useShadow = true,
-            useTopHighlight = true
-        )
-    }
-
-    private fun createMask(
-        maskId: String,
-        labelWidth: Float,
-        messageWidth: Float,
-        labelFill: String,
-        filterText: String,
-        messageFill: String,
-        maskText: String,
-        cornerRadius: Int = 30,
-        addDivider: Boolean = true,
-        dividerColor: String = "#ffffff20" // Semi-transparent white
-    ): String {
-        // Calculate total width
-        val totalWidth = labelWidth + messageWidth + 200
-
-        // Create mask with consistent rounded corners
-        var mask = """
-                <mask id='$maskId'>
-                    <rect width='$totalWidth' height='200' rx='$cornerRadius' fill='#FFF'/>
-                </mask>
-                <g mask='url(#$maskId)'>
-                    <!-- Label section with rounded left corners -->
-                    <path class="badge-label" d="M0,0 h${labelWidth + 100} v200 h-${labelWidth + 100} v-200 z" 
-                          fill='$labelFill' filter='$filterText'/>
-
-                    <!-- Message section with rounded right corners -->
-                    <path class="badge-message" d="M${labelWidth + 100},0 h${messageWidth + 100} v200 h-${messageWidth + 100} v-200 z" 
-                          fill='$messageFill' filter='$filterText'/>
-
-                    <!-- Overlay for consistent lighting -->
-                    <rect width='$totalWidth' height='200' fill='$maskText' filter='$filterText'/>
-
-                    ${if (addDivider) """
-                    <!-- Subtle divider between sections -->
-                    <line x1='${labelWidth + 100}' y1='40' x2='${labelWidth + 100}' y2='160' 
-                          stroke='$dividerColor' stroke-width='2' stroke-opacity='0.7'/>
-                    """ else ""}
-                </g>
-            """.trimIndent()
-        return mask
-    }
-
-    fun measureText(str: String, fontSize : Int = 10): Float {
-        var total = 0f
-        str.codePoints().forEach {
-                code ->
-            total += when {
-                code >= widths.size -> {
-                    widths[64].toFloat()
-                }
-                else -> {
-                    widths[code].toFloat()
-                }
-            }
-        }
-        return total
-    }
-
-
-    /**
-     * Enhanced logo handling for badges
-     * @param input The logo input string
-     * @param size The desired size of the logo (default: 100)
-     * @param addEffects Whether to add visual effects to the logo
-     * @param backgroundColor The background color for contrast calculation
-     * @return The processed logo as a data URL or URL string
-     */
-    private fun getBadgeLogo(
-        input: String?,
-        size: Int = 100,
-        addEffects: Boolean = true,
-        backgroundColor: String? = null
-    ): String {
-        if (input == null || input.isEmpty()) {
-            return ""
-        }
-
-        var logo = input
-
-        // Handle SimpleIcons format: <iconname>
-        if (logo.startsWith("<") && logo.endsWith(">")) {
-            val iconName = logo.substring(1, logo.length - 1)
-            val simpleIcon = SimpleIcons.get(iconName)
-
-            if (simpleIcon != null) {
-                val ico = simpleIcon.svg
-                if (ico.isNotBlank()) {
-                    try {
-                        val xml = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                            .parse(ByteArrayInputStream(ico.toByteArray()))
-
-                        // Pass background color for better contrast
-                        val src = manipulateSVG(xml, simpleIcon.hex, addEffects, backgroundColor)
-
-                        return "data:image/svg+xml;base64," + Base64.getEncoder()
-                            .encodeToString(src.toByteArray())
-                    } catch (e: Exception) {
-                        // Log the error and return empty string instead of falling through
-                        println("Error processing SimpleIcon '$iconName': ${e.message}")
-                        return ""
-                    }
-                }
-            } else {
-                // SimpleIcon not found - return empty string instead of the input
-                println("SimpleIcon '$iconName' not found")
-                return ""
-            }
-        }
-        // Handle URL format
-        else if (logo.startsWith("http://") || logo.startsWith("https://")) {
-            return getLogoFromUrl(logo)
-        }
-        // Handle data URLs or other formats
-        else if (logo.startsWith("data:")) {
-            return logo
-        }
-
-        // If none of the above formats match, return empty string
-        // This prevents href URLs from being used as logos
-        return ""
-    }
-
-    /**
-     * Enhanced SVG manipulation for better icon appearance
-     * @param doc The XML document containing the SVG
-     * @param hexColor The hex color to use for the icon
-     * @param addEffects Whether to add visual effects to the icon
-     * @return The processed SVG as a string
-     */
-    /**
-     * Enhanced SVG manipulation for better icon appearance
-     * @param doc The XML document containing the SVG
-     * @param hexColor The hex color to use for the icon
-     * @param addEffects Whether to add visual effects to the icon
-     * @param backgroundColor The background color to determine contrast (optional)
-     * @return The processed SVG as a string
-     */
-    private fun manipulateSVG(
-        doc: org.w3c.dom.Document,
-        hexColor: String,
-        addEffects: Boolean = true,
-        backgroundColor: String? = null
-    ): String {
-        val paths = doc.getElementsByTagName("path")
-        val circles = doc.getElementsByTagName("circle")
-        val rects = doc.getElementsByTagName("rect")
-        val polygons = doc.getElementsByTagName("polygon")
-        val ellipses = doc.getElementsByTagName("ellipse")
-
-        // Determine the best color for the icon based on background
-        val iconColor = determineIconColor(hexColor, backgroundColor)
-
-        // Apply color to all SVG elements
-        for (i in 0 until paths.length) {
-            val path = paths.item(i) as org.w3c.dom.Element
-            path.setAttribute("fill", "#$iconColor")
-
-            if (addEffects) {
-                // Add subtle stroke for better definition on any background
-                path.setAttribute("stroke", getContrastStroke(iconColor))
-                path.setAttribute("stroke-width", "0.5")
-            }
-        }
-
-        for (i in 0 until circles.length) {
-            val circle = circles.item(i) as org.w3c.dom.Element
-            circle.setAttribute("fill", "#$iconColor")
-
-            if (addEffects) {
-                circle.setAttribute("stroke", getContrastStroke(iconColor))
-                circle.setAttribute("stroke-width", "0.5")
-            }
-        }
-
-        for (i in 0 until rects.length) {
-            val rect = rects.item(i) as org.w3c.dom.Element
-            rect.setAttribute("fill", "#$iconColor")
-
-            if (addEffects) {
-                rect.setAttribute("stroke", getContrastStroke(iconColor))
-                rect.setAttribute("stroke-width", "0.5")
-            }
-        }
-
-        for (i in 0 until polygons.length) {
-            val polygon = polygons.item(i) as org.w3c.dom.Element
-            polygon.setAttribute("fill", "#$iconColor")
-
-            if (addEffects) {
-                polygon.setAttribute("stroke", getContrastStroke(iconColor))
-                polygon.setAttribute("stroke-width", "0.5")
-            }
-        }
-
-        for (i in 0 until ellipses.length) {
-            val ellipse = ellipses.item(i) as org.w3c.dom.Element
-            ellipse.setAttribute("fill", "#$iconColor")
-
-            if (addEffects) {
-                ellipse.setAttribute("stroke", getContrastStroke(iconColor))
-                ellipse.setAttribute("stroke-width", "0.5")
-            }
-        }
-
-        val transformer = javax.xml.transform.TransformerFactory.newInstance().newTransformer()
-        val result = javax.xml.transform.stream.StreamResult(java.io.StringWriter())
-        val source = javax.xml.transform.dom.DOMSource(doc)
-        transformer.transform(source, result)
-
-        return result.writer.toString()
-    }
-
-    /**
-     * Determines the best icon color based on the original color and background
-     */
-    private fun determineIconColor(originalHex: String, backgroundColor: String?): String {
-        if (backgroundColor == null) {
-            return originalHex
-        }
-
-        val backgroundIsDark = isColorDark(backgroundColor)
-        val originalIsDark = isColorDark(originalHex)
-
-        return when {
-            // If background is dark and original icon is also dark, make icon light
-            backgroundIsDark && originalIsDark -> "ffffff"
-            // If background is light and original icon is light, make icon dark
-            !backgroundIsDark && !originalIsDark -> "000000"
-            // Otherwise, use original color as it should have good contrast
-            else -> originalHex
-        }
-    }
-
-    /**
-     * Determines if a color is considered dark
-     */
-    private fun isColorDark(hexColor: String): Boolean {
-        val color = hexColor.removePrefix("#")
-        val r = color.substring(0, 2).toInt(16)
-        val g = color.substring(2, 4).toInt(16)
-        val b = color.substring(4, 6).toInt(16)
-
-        // Calculate luminance using the standard formula
-        val luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-        return luminance < 0.5
-    }
-
-    /**
-     * Gets a contrasting stroke color for better icon definition
-     */
-    private fun getContrastStroke(iconColor: String): String {
-        return if (isColorDark(iconColor)) "#ffffff40" else "#00000040"
-    }
-    private fun getLogoFromUrl(url: String): String {
-        val client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
-            .connectTimeout(Duration.ofSeconds(20))
-            .build()
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .timeout(Duration.ofSeconds(10))
-            .build()
-        return try {
-            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-            response.body()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
-    }
 
     /**
      * Creates enhanced filter definitions for badges with improved lighting effects and shadows
@@ -777,91 +470,7 @@ class DocOpsBadgeGenerator {
         """.trimIndent()
     }
 
-    /**
-     * Creates theme-aware styles that adapt to dark/light mode
-     * @param labelColor The label color
-     * @param messageColor The message color
-     * @param fontColor The font color
-     * @return Theme-aware styles as a string
-     */
-    private fun createThemeStyles(labelColor: String, messageColor: String, fontColor: String): String {
-        return """
-            <style>
-                /* Theme-aware styles */
-                @media (prefers-color-scheme: dark) {
-                    .badge-shape .badge-label {
-                        filter: brightness(0.85);
-                    }
-                    .badge-shape .badge-message {
-                        filter: brightness(0.85);
-                    }
-                    .badge-text {
-                        filter: contrast(1.1);
-                    }
-                }
 
-                @media (prefers-color-scheme: light) {
-                    .badge-shape .badge-label {
-                        filter: brightness(1.05);
-                    }
-                    .badge-shape .badge-message {
-                        filter: brightness(1.05);
-                    }
-                }
-
-                /* High contrast mode support */
-                @media (forced-colors: active) {
-                    .badge-shape .badge-label, 
-                    .badge-shape .badge-message {
-                        forced-color-adjust: none;
-                    }
-                    .badge-text {
-                        forced-color-adjust: auto;
-                    }
-                }
-            </style>
-        """.trimIndent()
-    }
-
-    /**
-     * Creates CSS styles for interactive elements like hover effects and animations
-     * @param hasLink Whether the badge has a link
-     * @return CSS styles as a string
-     */
-    private fun createInteractiveStyles(hasLink: Boolean = false): String {
-        if (!hasLink) return "" // Only add styles if there's a link
-
-        return """
-            <style>
-                /* Hover effect for linked badges */
-                a:hover {
-                    opacity: 0.9;
-                    transition: opacity 0.3s ease;
-                }
-
-                /* Scale effect on hover */
-                .badge-link:hover {
-                    transform: scale(1.02);
-                    transition: transform 0.2s ease-in-out;
-                }
-
-                /* Text highlight effect */
-                .badge-text:hover {
-                    filter: brightness(1.1);
-                    transition: filter 0.3s ease;
-                }
-
-                /* Ensure animations degrade gracefully */
-                @media (prefers-reduced-motion: reduce) {
-                    a:hover, .badge-link:hover, .badge-text:hover {
-                        transition: none;
-                        transform: none;
-                        filter: none;
-                    }
-                }
-            </style>
-        """.trimIndent()
-    }
 
     /**
      * Creates enhanced filter definitions for badges with improved lighting effects and shadows
@@ -871,57 +480,27 @@ class DocOpsBadgeGenerator {
      */
     private fun createFilterDefinitions(useShadow: Boolean = true, useTopHighlight: Boolean = true): String {
         return """
-            <!-- Improved bevel effect for subtle 3D appearance -->
-            <filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-                <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.6" specularExponent="12" result="specOut" lighting-color="white">
-                    <fePointLight x="-5000" y="-10000" z="15000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
-            </filter>
-
-            <!-- Subtle bevel effect for text and small elements -->
-            <filter id="Bevel2" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="0.4" result="blur"/>
-                <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.6" specularExponent="12" result="specOut" lighting-color="white">
-                    <fePointLight x="-5000" y="-10000" z="10000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
-            </filter>
-
-            <!-- Enhanced bevel with stronger highlight -->
-            <filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="0.3" result="blur"/>
-                <feSpecularLighting in="blur" surfaceScale="8" specularConstant="2.5" specularExponent="12" result="specOut" lighting-color="#ffffff">
-                  <fePointLight x="-5000" y="-10000" z="8000"/>
-                </feSpecularLighting>
-                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint" />
-            </filter>
-            ${if (useShadow) """
-            <!-- Subtle drop shadow for depth -->
-            <filter id="DropShadow" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur"/>
-                <feOffset in="blur" dx="1" dy="1" result="offsetBlur"/>
-                <feFlood flood-color="#000000" flood-opacity="0.2" result="shadowColor"/>
-                <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadowBlur"/>
-                <feComposite in="SourceGraphic" in2="shadowBlur" operator="over"/>
-            </filter>
-            """ else ""}
-            ${if (useTopHighlight) """
-            <!-- Top edge highlight for a polished look -->
-            <filter id="TopHighlight" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
-                <feOffset in="blur" dx="0" dy="-1" result="offsetBlur"/>
-                <feFlood flood-color="#FFFFFF" flood-opacity="0.3" result="highlightColor"/>
-                <feComposite in="highlightColor" in2="offsetBlur" operator="in" result="highlightBlur"/>
-                <feComposite in="SourceGraphic" in2="highlightBlur" operator="over"/>
-            </filter>
-            """ else ""}
-        """.trimIndent()
+                ${if (useShadow) """
+                <filter id="DropShadow" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur"/>
+                    <feOffset in="blur" dx="1" dy="1" result="offsetBlur"/>
+                    <feFlood flood-color="#000000" flood-opacity="0.2" result="shadowColor"/>
+                    <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadowBlur"/>
+                    <feComposite in="SourceGraphic" in2="shadowBlur" operator="over"/>
+                </filter>
+                """ else ""}
+                ${if (useTopHighlight) """
+                <filter id="TopHighlight" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>
+                    <feOffset in="blur" dx="0" dy="-1" result="offsetBlur"/>
+                    <feFlood flood-color="#FFFFFF" flood-opacity="0.3" result="highlightColor"/>
+                    <feComposite in="highlightColor" in2="offsetBlur" operator="in" result="highlightBlur"/>
+                    <feComposite in="SourceGraphic" in2="highlightBlur" operator="over"/>
+                </filter>
+                """ else ""}
+            """.trimIndent()
     }
+
     /**
      * Optimizes SVG content by removing unnecessary whitespace and elements
      * @param svg The SVG content to optimize
@@ -933,33 +512,25 @@ class DocOpsBadgeGenerator {
 
         // Basic whitespace cleanup
         result = result.replace(Regex("\\s+"), " ")
-                       .replace(Regex("> +<"), "><")
-                       .replace(Regex("\\n"), "")
+            .replace(Regex("> +<"), "><")
+            .replace(Regex("\\n"), "")
 
         if (minify) {
             // More aggressive optimizations for production
-
-            // Remove comments
             result = result.replace(Regex("<!--.*?-->"), "")
-
-            // Remove unnecessary attributes
             result = result.replace(Regex("version=\"1\\.1\""), "")
-                           .replace(Regex("xmlns:xlink=\"http://www\\.w3\\.org/1999/xlink\"\\s+"), "")
-
-            // Shorten color values where possible
+                .replace(Regex("xmlns:xlink=\"http://www\\.w3\\.org/1999/xlink\"\\s+"), "")
             result = result.replace(Regex("#([0-9a-f])\\1([0-9a-f])\\2([0-9a-f])\\3"), "#$1$2$3")
-
-            // Remove leading zeros in values
             result = result.replace(Regex("([\\s:])0\\.([0-9])"), "$1.$2")
-
-            // Optimize path data
             result = result.replace(Regex("([\\d])\\.0([\\D])"), "$1$2")
         }
 
         return result
     }
 
-    companion object {
-        val widths = arrayOf<Number>(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1316650390625,0.42833404541015624,0.5066665649414063,0.7066665649414062,0.7066665649414062,1.0383331298828125,0.8183334350585938,0.34499969482421877,0.4850006103515625,0.4850006103515625,0.5383331298828125,0.7350006103515625,0.42833404541015624,0.4850006103515625,0.42833404541015624,0.42833404541015624,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.42833404541015624,0.42833404541015624,0.7350006103515625,0.7350006103515625,0.7350006103515625,0.7066665649414062,1.1649993896484374,0.8199996948242188,0.8183334350585938,0.8716659545898438,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.9316665649414062,0.8716659545898438,0.42833404541015624,0.65,0.8183334350585938,0.7066665649414062,0.9833328247070312,0.8716659545898438,0.9316665649414062,0.8183334350585938,0.9316665649414062,0.8716659545898438,0.8183334350585938,0.7633331298828125,0.8716659545898438,0.8183334350585938,1.0949996948242187,0.8183334350585938,0.8183334350585938,0.7633331298828125,0.42833404541015624,0.42833404541015624,0.42833404541015624,0.6199996948242188,0.7349990844726563,0.4850006103515625,0.7066665649414062,0.7066665649414062,0.65,0.7066665649414062,0.7066665649414062,0.4633331298828125,0.7066665649414062,0.7066665649414062,0.375,0.42166748046875,0.65,0.375,0.9833328247070312,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.7066665649414062,0.498333740234375,0.65,0.42833404541015624,0.7066665649414062,0.65,0.8716659545898438,0.65,0.65,0.65,0.4850006103515625,0.4100006103515625,0.4850006103515625,0.7350006103515625)
-    }
+
+}
+
+private fun getBadgeLogo(it: Any, logoSize: Any, bool: Any) : String {
+    return ""
 }

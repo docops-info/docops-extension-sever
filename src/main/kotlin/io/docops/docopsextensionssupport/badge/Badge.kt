@@ -20,7 +20,16 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Badge(val  label:String, val message: String, val  url: String? = "", val labelColor: String?, val messageColor: String?, val logo: String?, val fontColor: String = "#fcfcfc", val isPdf: Boolean = false)
+class Badge(
+    val label: String,
+    val message: String,
+    val url: String? = null,
+    val labelColor: String? = "#555555",
+    val messageColor: String? = "#007ec6",
+    val logo: String? = null,
+    val fontColor: String = "#ffffff",
+    val isPdf: Boolean = false
+)
 
 @Serializable
 class FormBadge(val label:String, val message: String, val  url: String, val labelColor: String?, val messageColor: String?, val logo: String?, val fontColor: String = "#fcfcfc")
