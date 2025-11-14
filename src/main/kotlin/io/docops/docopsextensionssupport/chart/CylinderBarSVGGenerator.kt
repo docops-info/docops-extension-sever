@@ -3,16 +3,13 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.util.BackgroundHelper
-import kotlin.math.abs
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
-
 
 
 class CylinderBarMaker {
 
     @OptIn(ExperimentalUuidApi::class)
-    fun makeVerticalCylinderBar(bar: Bar): String {
+    fun makeVerticalCylinderBar(bar: Bar, isPDf: Boolean): String {
         val width = 800.0
         val height = 600.0
         val leftMargin = 80.0
@@ -128,7 +125,7 @@ class CylinderBarMaker {
                 yAxisBottom = yAxisBottom,
                 textColor = textColor,
                 useDark = bar.display.useDark,
-                id = bar.display.id
+                id = bar.display.id, isPDf
             ))
         }
 
@@ -231,7 +228,8 @@ class CylinderBarMaker {
         value: String,
         yAxisBottom: Double,
         textColor: String,
-        useDark: Boolean, id: String
+        useDark: Boolean, id: String,
+        isPDf: Boolean
     ): String {
         val sb = StringBuilder()
         val cx = x + width / 2
@@ -285,9 +283,13 @@ class CylinderBarMaker {
         sb.append("""<text x="$cx" y="${yAxisBottom + 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="12" font-weight="bold" fill="$textColor">$label</text>""")
         sb.append("\n")
 
+        var opacity = 0.0
+        if (isPDf) {
+            opacity = 1.0
+        }
         // Value above the bar
         val valueColor = if (useDark) "#ffffff" else "#111111"
-        sb.append("""<text x="$cx" y="${y - 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="0">${value}""")
+        sb.append("""<text x="$cx" y="${y - 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="$opacity">${value}""")
         sb.append("""<animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.5s" fill="freeze"/>""")
         sb.append("""</text>""")
         sb.append("\n")

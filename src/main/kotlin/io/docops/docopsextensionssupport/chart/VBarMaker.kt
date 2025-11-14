@@ -1,15 +1,10 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.util.BackgroundHelper
-import kotlin.compareTo
-import kotlin.div
 import kotlin.math.min
-import kotlin.text.toInt
-import kotlin.times
 
 class VBarMaker {
     private var fontColor = ""
@@ -22,7 +17,7 @@ class VBarMaker {
     private val barWidth = 60
     private val barSpacing = 100 // Center-to-center spacing between bars
 
-    fun makeVerticalBar(bar: Bar): String {
+    fun makeVerticalBar(bar: Bar, isPDf: Boolean): String {
         bar.sorted()
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
@@ -32,14 +27,14 @@ class VBarMaker {
         sb.append(addGrid(bar))
         sb.append(addAxes(bar))
         sb.append(addAxisLabels(bar))
-        sb.append(addBars(bar))
+        sb.append(addBars(bar, isPDf))
         sb.append(addTitle(bar))
         sb.append(addLegend(bar))
         sb.append(tail())
         return sb.toString()
     }
 
-    private fun addBars(bar: Bar): String {
+    private fun addBars(bar: Bar, isPDf: Boolean): String {
         val sb = StringBuilder()
 
         // Calculate the maximum value for scaling
@@ -82,7 +77,9 @@ class VBarMaker {
             """.trimIndent())
 
             // Add the bar with glass effect
-            sb.append("""
+            if(!isPDf) {
+                sb.append(
+                    """
                 <g class="glass-bar">
                     <!-- Base rectangle with gradient -->
                     <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
@@ -101,18 +98,43 @@ class VBarMaker {
                         <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
                     </rect>
                     <!-- Top highlight for shine -->
-                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${min(barHeight/4, 20.0)}" rx="4" ry="4"
+                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${
+                        min(
+                            barHeight / 4,
+                            20.0
+                        )
+                    }" rx="4" ry="4"
                           fill="url(#glassHighlight)">
                         <animate attributeName="y" from="${yAxisEnd - 3}" to="${barY + 3}" dur="1s" fill="freeze"/>
                     </rect>
                 </g>
 
                 <!-- Create wrapped label text -->
-                <text x="${barX + barWidth/2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
+                <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
                     ${createWrappedLabel(series.label, barWidth)}
                 </text>
-                <text x="${barX + barWidth/2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
-            """.trimIndent())
+                <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
+            """.trimIndent()
+                )
+            } else {
+                sb.append("""
+                    <g class="glass-bar">
+                    <!-- Base rectangle with gradient -->
+                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
+                          fill="${svgColor.lighter()}"
+                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+                    </g>
+                    <!-- Create wrapped label text -->
+                <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
+                    ${createWrappedLabel(series.label, barWidth)}
+                </text>
+                <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
+                """.trimIndent())
+            }
+
         }
 
         // Add X-axis label
@@ -368,7 +390,7 @@ fun main() {
     )
 
     // Generate the vertical bar chart
-    val svg = VBarMaker().makeVerticalBar(bar)
+    val svg = VBarMaker().makeVerticalBar(bar, false)
 
     // Save the chart to a file
     val outfile = java.io.File("gen/vertical_bar_chart.svg")
@@ -399,7 +421,7 @@ fun main() {
     )
 
     // Generate the vertical bar chart with more bars
-    val svgWithMoreBars = VBarMaker().makeVerticalBar(barWithMoreSeries)
+    val svgWithMoreBars = VBarMaker().makeVerticalBar(barWithMoreSeries, false)
 
     // Save the chart to a file
     val outfileWithMoreBars = java.io.File("gen/vertical_bar_chart_more_bars.svg")

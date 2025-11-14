@@ -10,7 +10,7 @@ import java.io.File
 class BarGroupMaker {
 
     private var fontColor = "#fcfcfc"
-    fun makeBar(barGroup: BarGroup): String {
+    fun makeBar(barGroup: BarGroup, isPdf: Boolean): String {
         fontColor = determineTextColor(barGroup.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
@@ -24,7 +24,7 @@ class BarGroupMaker {
         var startX = 110.0
         val elements = StringBuilder()
         barGroup.groups.forEach { group ->
-            val added = addGroup(barGroup, group, startX)
+            val added = addGroup(barGroup, group, startX, isPdf)
             startX += group.series.size * 45.0 + 2
             elements.append(added)
         }
@@ -91,19 +91,42 @@ class BarGroupMaker {
         return sb.toString()
     }
 
-    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double): String {
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, isPdf: Boolean): String {
         val sb = StringBuilder()
         var counter = startX
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
-            val color = "url(#svgGradientColor_$index)"
+            var color = "url(#svgGradientColor_$index)"
             val barX = counter
             val barY = 500 - per
             val barWidth = 40.0
             val barHeight = per
 
             // Create glass effect bar with layered structure
-            sb.append("""
+            if(isPdf) {
+                val svgColor = ChartColors.getColorForIndex(index)
+                color = svgColor.color
+                sb.append("""
+                    <g class="glass-bar">
+                    <!-- Base rectangle with gradient -->
+                    <rect x="$barX" 
+                          y="$barY" 
+                          width="$barWidth" 
+                          height="$barHeight" 
+                          rx="6" 
+                          ry="6" 
+                          fill="$color"
+                          filter="url(#glassDropShadow)"
+                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                        <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
+                    </rect>
+                    </g>
+                """.trimIndent())
+            }
+            else {
+                sb.append(
+                    """
                 <g class="glass-bar">
                     <!-- Base rectangle with gradient -->
                     <rect x="$barX" 
@@ -133,27 +156,29 @@ class BarGroupMaker {
                     </rect>
 
                     <!-- Radial highlight for realistic light effect -->
-                    <ellipse cx="${barX + barWidth/4}" 
-                             cy="${barY + barHeight/5}" 
-                             rx="${barWidth/3}" 
-                             ry="${Math.min(barHeight/6, 15.0)}"
+                    <ellipse cx="${barX + barWidth / 4}" 
+                             cy="${barY + barHeight / 5}" 
+                             rx="${barWidth / 3}" 
+                             ry="${Math.min(barHeight / 6, 15.0)}"
                              fill="url(#glassRadial)"
                              opacity="0.7">
-                        <animate attributeName="cy" from="510" to="${barY + barHeight/5}" dur="1s" fill="freeze"/>
+                        <animate attributeName="cy" from="510" to="${barY + barHeight / 5}" dur="1s" fill="freeze"/>
                     </ellipse>
 
                     <!-- Top highlight for shine -->
                     <rect x="${barX + 3}" 
                           y="${barY + 3}" 
                           width="${barWidth - 6}" 
-                          height="${Math.min(barHeight/4, 20.0)}" 
+                          height="${Math.min(barHeight / 4, 20.0)}" 
                           rx="4" 
                           ry="4"
                           fill="url(#glassHighlight)">
                         <animate attributeName="y" from="497" to="${barY + 3}" dur="1s" fill="freeze"/>
                     </rect>
                 </g>
-            """.trimIndent())
+            """.trimIndent()
+                )
+            }
 
             if(series.value > 0) {
                 // Value label on top of bar with color based on dark mode
@@ -517,9 +542,9 @@ class BarGroupMaker {
         """.trimMargin()
     }
 
-    fun makeVGroupBar(group: BarGroup): String {
+    fun makeVGroupBar(group: BarGroup, isPdf: Boolean): String {
         val vGroupBar = VGroupBar()
-        return vGroupBar.makeVerticalBar(group)
+        return vGroupBar.makeVerticalBar(group, isPdf)
     }
     fun makeCondensed(group: BarGroup): String {
         val vGroupBar = BarGroupCondensedMaker()
@@ -591,7 +616,7 @@ fun main() {
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
-    val svg = BarGroupMaker().makeBar(barGroupTestData)
+    val svg = BarGroupMaker().makeBar(barGroupTestData, false)
     val outfile2 = File("gen/groupbar.svg")
     outfile2.writeBytes(svg.toByteArray())
 }

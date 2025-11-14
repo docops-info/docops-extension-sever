@@ -21,7 +21,8 @@ class BarChartImproved {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeBarSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
+    fun makeBarSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean, backend: String): String {
+        val isPDf = "pdf" == backend
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
@@ -32,14 +33,14 @@ class BarChartImproved {
 
         if(bar.display.type == "C") {
             val cylinderBarMaker = CylinderBarMaker()
-            return cylinderBarMaker.makeVerticalCylinderBar(bar)
+            return cylinderBarMaker.makeVerticalCylinderBar(bar, isPDf)
         }
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
-        return barMaker.makeVerticalBar(bar)
+        return barMaker.makeVerticalBar(bar, isPDf)
     }
 
-    fun makeGroupBarSvg(payload: String, csvResponse: CsvResponse): String {
+    fun makeGroupBarSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
@@ -50,11 +51,11 @@ class BarChartImproved {
         // Use existing BarGroupMaker to generate SVG
         val barGroupMaker = BarGroupMaker()
         return if (barGroup.display.vBar) {
-            barGroupMaker.makeVGroupBar(barGroup)
+            barGroupMaker.makeVGroupBar(barGroup, isPdf)
         } else if (barGroup.display.condensed) {
             barGroupMaker.makeCondensed(barGroup)
         } else {
-            barGroupMaker.makeBar(barGroup)
+            barGroupMaker.makeBar(barGroup, isPdf)
         }
     }
 

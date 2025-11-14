@@ -310,9 +310,9 @@ class BarMaker {
         return String.format("#%02x%02x%02x", newR, newG, newB)
     }
 
-    fun makeVerticalBar(bar: Bar): String {
+    fun makeVerticalBar(bar: Bar, isPDf: Boolean): String {
         val vBarMaker = VBarMaker()
-        return vBarMaker.makeVerticalBar(bar)
+        return vBarMaker.makeVerticalBar(bar, isPDf)
     }
 
     // This method is used to test the implementation
@@ -327,7 +327,7 @@ class BarMaker {
             display = BarDisplay(baseColor = "#4361ee", useDark = false))
 
         // Test vertical bar chart using the original implementation
-        val verticalSvg = makeVerticalBar(bar)
+        val verticalSvg = makeVerticalBar(bar, true)
         val verticalOutfile = File("gen/vertical_bars.svg")
         verticalOutfile.writeBytes(verticalSvg.toByteArray())
         println("Vertical bar chart saved to ${verticalOutfile.absolutePath}")
@@ -353,7 +353,7 @@ class BarMaker {
             display = BarDisplay(baseColor = "#f72585", useDark = false, type = "C"))
 
         val cylinderBarMaker = CylinderBarMaker()
-        val cylinderSvg = cylinderBarMaker.makeVerticalCylinderBar(cylinderBar)
+        val cylinderSvg = cylinderBarMaker.makeVerticalCylinderBar(cylinderBar, false)
         val cylinderOutfile = File("gen/cylinder_bars.svg")
         cylinderOutfile.writeBytes(cylinderSvg.toByteArray())
         println("Cylinder bar chart saved to ${cylinderOutfile.absolutePath}")
@@ -375,7 +375,7 @@ class BarMaker {
         )
 
         // Use the VBarMaker directly to generate the chart
-        val barSvgStyleSvg = VBarMaker().makeVerticalBar(barSvgStyle)
+        val barSvgStyleSvg = VBarMaker().makeVerticalBar(barSvgStyle, false)
         val barSvgStyleOutfile = File("gen/bar_svg_style.svg")
         barSvgStyleOutfile.writeBytes(barSvgStyleSvg.toByteArray())
         println("Bar.svg style chart saved to ${barSvgStyleOutfile.absolutePath}")
@@ -396,7 +396,7 @@ class BarMaker {
             display = BarDisplay(baseColor = "#4361ee", useDark = true)
         )
 
-        val darkModeVerticalSvg = VBarMaker().makeVerticalBar(darkModeVerticalBar)
+        val darkModeVerticalSvg = VBarMaker().makeVerticalBar(darkModeVerticalBar, false)
         val darkModeVerticalOutfile = File("gen/dark_mode_vertical_bars.svg")
         darkModeVerticalOutfile.writeBytes(darkModeVerticalSvg.toByteArray())
         println("Dark mode vertical bar chart saved to ${darkModeVerticalOutfile.absolutePath}")

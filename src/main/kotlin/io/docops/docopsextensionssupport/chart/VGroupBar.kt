@@ -2,8 +2,6 @@ package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
-import io.docops.docopsextensionssupport.support.determineTextColor
-import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.awt.Font
@@ -12,7 +10,7 @@ class VGroupBar {
     private var height  = 600
     private var fontDisplayColor = "#111111"
     private val width = 900 // Increased from 800 to provide more space for labels
-    fun makeVerticalBar(barGroup: BarGroup): String {
+    fun makeVerticalBar(barGroup: BarGroup, isPdf: Boolean): String {
         if(barGroup.display.useDark) {
             fontDisplayColor = "#fcfcfc"
         }
@@ -25,7 +23,7 @@ class VGroupBar {
         sb.append(makeColumnHeader(barGroup))
         var startY = 90 // Increased from 80 to align with the new line separator position
         barGroup.groups.forEach { t ->
-            startY = makeGroup(startY, t, barGroup, sb)
+            startY = makeGroup(startY, t, barGroup, sb, isPdf)
         }
         val lastBar = startY
         sb.append(addLegend(lastBar.toDouble(), barGroup))
@@ -33,7 +31,7 @@ class VGroupBar {
         return sb.toString()
     }
 
-    private fun makeGroup(startY: Int, group: Group, barGroup: BarGroup, builder: StringBuilder): Int {
+    private fun makeGroup(startY: Int, group: Group, barGroup: BarGroup, builder: StringBuilder, isPdf: Boolean): Int {
         val sb = StringBuilder()
         sb.append("""<g aria-label="${group.label}" transform="translate(203,$startY)">""")
         var currentY = 0
@@ -53,10 +51,14 @@ class VGroupBar {
             val valueColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
 
             // Add bar with rounded corners, animation, and hover effect
+            var fill = "url(#defColor_$idx)"
+            if(isPdf) {
+                fill = ChartColors.modernColors[idx].color
+            }
             sb.append("""
             <g class="bar-group">
                 <rect class="bar" y="$currentY" x="0.0" height="24" width="$per" rx="6" ry="6" 
-                      fill="url(#defColor_$idx)" filter="url(#dropShadow)">
+                      fill="$fill" filter="url(#dropShadow)">
                     <animate attributeName="width" from="0" to="$per" dur="1s" fill="freeze"/>
                 </rect>
                 <text x="${per+5}" y="${currentY + 16}" 

@@ -94,7 +94,7 @@ class BarController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val barChartImproved = BarChartImproved()
-            val svg = barChartImproved.makeBarSvg(contents, DefaultCsvResponse, false)
+            val svg = barChartImproved.makeBarSvg(contents, DefaultCsvResponse, false, "HTML")
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -157,7 +157,7 @@ class BarController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val barChartImproved = BarChartImproved()
-            val svg = barChartImproved.makeGroupBarSvg(contents, DefaultCsvResponse)
+            val svg = barChartImproved.makeGroupBarSvg(contents, DefaultCsvResponse, false)
 
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
@@ -213,7 +213,7 @@ class BarController {
     @PostMapping("", produces = ["image/svg+xml"])
     fun barFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val barChartImproved = BarChartImproved()
-        val svg = barChartImproved.makeBarSvg(payload, DefaultCsvResponse, false)
+        val svg = barChartImproved.makeBarSvg(payload, DefaultCsvResponse, false, "PDF")
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)
