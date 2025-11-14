@@ -25,7 +25,7 @@ class VBarMakerTest {
         )
 
         // Generate the vertical bar chart
-        val svg = VBarMaker().makeVerticalBar(bar, isPDf)
+        val svg = VBarMaker().makeVerticalBar(bar, false)
 
         // Save the chart to a file
         val outfile = File("gen/test_vertical_bar_chart.svg")
