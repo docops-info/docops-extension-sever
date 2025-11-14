@@ -20,5 +20,5 @@ data class MetricsCardData(
     val title: String = "Metrics",
     val metrics: List<MetricCard> = emptyList(),
     val theme: String = "ios", // Default theme is iOS style
-    val useGlass: Boolean = true // Default is to use glass styling
+    var useGlass: Boolean = true // Default is to use glass styling
 )

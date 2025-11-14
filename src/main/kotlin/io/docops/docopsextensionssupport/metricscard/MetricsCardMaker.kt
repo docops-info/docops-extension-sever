@@ -2,12 +2,7 @@ package io.docops.docopsextensionssupport.metricscard
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.web.CsvResponse
-import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
-import java.util.*
-import kotlin.div
-import kotlin.times
-import kotlin.toString
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -30,7 +25,7 @@ import kotlin.uuid.Uuid
  *    Label1 | Value1
  *    Label2 | Value2
  */
-class MetricsCardMaker(val csvResponse: CsvResponse) {
+class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
     private val json = Json { ignoreUnknownKeys = true }
 
     /**
@@ -53,6 +48,9 @@ class MetricsCardMaker(val csvResponse: CsvResponse) {
                 // If parsing fails, create a default data object
                 createDefaultMetricsCardData()
             }
+        }
+        if(isPdf) {
+            metricsCardData.useGlass = false
         }
         val svg = generateMetricsCardSvg(metricsCardData, width, height, useDark)
         return Pair(svg, metricsCardData.toCsv())

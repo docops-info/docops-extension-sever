@@ -24,8 +24,6 @@ import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Counted
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.json.Json
-import org.apache.commons.logging.LogFactory
 import org.springframework.http.*
 import org.springframework.stereotype.Controller
 import org.springframework.util.StreamUtils
@@ -229,7 +227,7 @@ class BoxyController {
 
     fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean): String {
         val handler = ConnectorHandler(DefaultCsvResponse)
-        val response = handler.fromRequestToConnector(contents, scale = scale, useDark, type = "SVG")
+        val response = handler.fromRequestToConnector(contents, scale = scale, useDark, backend = "HTML")
         return response.shapeSvg
     }
 

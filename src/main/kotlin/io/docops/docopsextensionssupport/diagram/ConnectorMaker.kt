@@ -18,7 +18,7 @@ import java.util.*
  * @property bgColor The background color of the image.
  * @property baseColors A list of base colors for the connectors.
  */
-class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String, val useGlassEffect: Boolean = true) {
+class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String, var useGlassEffect: Boolean = true, val isPdf : Boolean = false) {
     private val alphabets = ('A'..'Z') + ('a'..'z') + ('0'..'9').toMutableList()
     private val colors = mutableListOf<String>()
     private var useGrad = true
@@ -29,6 +29,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
         if(useDark) {
             bgColor = "#17242b"
+        }
+        if(isPdf) {
+            useGlassEffect = false
         }
         val sb = StringBuilder()
         val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
@@ -262,10 +265,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 fill = "none"
                 strokeWidth = 5
                 grad = colors[i]
-                style = """style="font-size: 24px; font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps; font-weight: bold;""""
+                style = """font-size: 24px; font-family: 'Inter var', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-variant: small-caps; font-weight: bold;"""
             }
             val lines= conn.textToLines()
-            val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" fill="#1F2937" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.02em;" $style> """)
+            val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" fill="#1F2937" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.02em;$style" > """)
             var newLine = false
 
             lines.forEachIndexed {
@@ -279,6 +282,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             str.append("</text>")
 
             if(i == connectors.lastIndex) {
+
                 // Last connector - no connections
                 if (useGlassEffect) {
                     // Glass effect version
