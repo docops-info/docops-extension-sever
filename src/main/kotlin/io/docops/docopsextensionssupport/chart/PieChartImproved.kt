@@ -5,8 +5,6 @@ import io.docops.docopsextensionssupport.svgsupport.formatDecimal
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
-import io.docops.docopsextensionssupport.web.update
-import java.util.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -16,7 +14,7 @@ import kotlin.uuid.Uuid
 
 class PieChartImproved {
 
-    fun makePieSvg(payload: String, csvResponse: CsvResponse): String {
+    fun makePieSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
         // Parse colors from config or attributes
@@ -52,7 +50,7 @@ class PieChartImproved {
             showPercentages,
             colors.map { it.color },
             enableHoverEffects,
-            isDonut, darkMode
+            isDonut, darkMode, isPdf = isPdf
         )
         return svg.trimIndent()
     }
@@ -101,7 +99,8 @@ class PieChartImproved {
         colors: List<String>,
         enableHoverEffects: Boolean,
         isDonut: Boolean,
-        darkMode: Boolean = false
+        darkMode: Boolean = false,
+        isPdf: Boolean
     ): String {
         val svgBuilder = StringBuilder()
         val id = Uuid.random().toHexString()
@@ -257,14 +256,21 @@ class PieChartImproved {
             val labelX = centerX + labelRadius * cos(midAngle * PI / 180.0)
             val labelY = centerY + labelRadius * sin(midAngle * PI / 180.0)
 
-            svgBuilder.append("""
+            if(!isPdf) {
+                svgBuilder.append(
+                    """
             <g>
                 <path id="segment-$index" class="pie-segment" 
                       d="$pathData" 
                       fill="${segmentData.color}" 
                       stroke="rgba(255,255,255,${if (darkMode) "0.15" else "0.2"})" 
                       stroke-width="1">
-                    <title>${segmentData.segment.label}: ${segmentData.segment.value} (${formatDecimal( segmentData.percentage, 1)}%)</title>
+                    <title>${segmentData.segment.label}: ${segmentData.segment.value} (${
+                        formatDecimal(
+                            segmentData.percentage,
+                            1
+                        )
+                    }%)</title>
                 </path>
 
                 <!-- Improved glass overlay -->
@@ -279,7 +285,26 @@ class PieChartImproved {
                       d="$pathData" 
                       fill="url(#glassRadial_$id)"/>
             </g>
-        """.trimIndent())
+        """.trimIndent()
+                )
+            }else {
+                svgBuilder.append("""
+                    <g>
+                <path id="segment-$index" class="pie-segment" 
+                      d="$pathData" 
+                      fill="${segmentData.color}" 
+                      stroke="rgba(255,255,255,${if (darkMode) "0.15" else "0.2"})" 
+                      stroke-width="1">
+                    <title>${segmentData.segment.label}: ${segmentData.segment.value} (${
+                    formatDecimal(
+                        segmentData.percentage,
+                        1
+                    )
+                }%)</title>
+                </path>
+                </g>
+                """.trimIndent())
+            }
 
             // Add percentage labels if enabled
             if (showPercentages) {
@@ -327,7 +352,7 @@ class PieChartImproved {
             val legendX = chartWidth + 20  // 20px padding from chart area
             val legendY = 80  // Start below title
             svgBuilder.append("<g transform='translate(-10,0)'>")
-            svgBuilder.append(generateLegend(segmentsWithAngles, legendX, legendY, darkMode, id))
+            svgBuilder.append(generateLegend(segmentsWithAngles, legendX, legendY, darkMode, id, isPdf = isPdf))
             svgBuilder.append("</g>")
         }
 
@@ -340,7 +365,8 @@ class PieChartImproved {
         x: Int,
         y: Int,
         darkMode: Boolean,
-        id: String
+        id: String,
+        isPdf: Boolean
     ): String {
         val legendBuilder = StringBuilder()
 
@@ -386,16 +412,7 @@ class PieChartImproved {
             val cardWidth = 180
             val cardHeight = 36
 
-            legendBuilder.append("""
-            <g class="ios-legend-card" data-segment="segment-$index">
-                <!-- iOS Card Background -->
-                <rect x="$x" y="$cardY" width="$cardWidth" height="$cardHeight" 
-                      fill="url(#iosCardBg_$id)" 
-                      stroke="url(#iosCardBorder_$id)" 
-                      stroke-width="0.5"
-                      rx="8" ry="8"
-                      filter="url(#iosCardShadow_$id)"/>
-
+            var colorIndicator = """
                 <!-- Color Indicator with iOS styling -->
                 <rect x="${x + 8}" y="${cardY + 8}" width="20" height="20" 
                       fill="${segment.color}" 
@@ -403,6 +420,32 @@ class PieChartImproved {
                 <rect x="${x + 8}" y="${cardY + 8}" width="20" height="20" 
                       fill="url(#iosColorIndicator_$id)" 
                       rx="4" ry="4"/>
+            """.trimIndent()
+            var fill = "url(#iosCardBg_$id)"
+            if(isPdf) {
+                if(darkMode) {
+                    fill = "#374151"
+                } else {
+                    fill = "#fcfcfc"
+                }
+                colorIndicator = """
+                    <rect x="${x + 8}" y="${cardY + 8}" width="20" height="20" 
+                      fill="${segment.color}" 
+                      rx="4" ry="4"/>
+                """.trimIndent()
+            }
+
+            legendBuilder.append("""
+            <g class="ios-legend-card" data-segment="segment-$index">
+                <!-- iOS Card Background -->
+                <rect x="$x" y="$cardY" width="$cardWidth" height="$cardHeight" 
+                      fill="$fill" 
+                      stroke="url(#iosCardBorder_$id)" 
+                      stroke-width="0.5"
+                      rx="8" ry="8"
+                      filter="url(#iosCardShadow_$id)"/>
+
+                $colorIndicator
 
                 <!-- Label Text -->
                 <text x="${x + 36}" y="${cardY + 14}" 
