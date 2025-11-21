@@ -167,7 +167,7 @@ class DocOpsBadgeGenerator {
             // Calculate natural text widths with padding
             val labelPadding = 10f
             val messagePadding = 10f
-            val dividerWidth = 1f
+            val dividerWidth = 0f
 
             var labelTextWidth = measureText(badge.label, 11) // 11pt font
             var messageTextWidth = measureText(badge.message, 11)
