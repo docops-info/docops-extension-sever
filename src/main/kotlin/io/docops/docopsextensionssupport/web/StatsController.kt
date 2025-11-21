@@ -56,8 +56,8 @@ class StatsController @Autowired constructor(
 
         // Determine color based on reading time
         val readTimeColor = when {
-            mins.toIntOrNull() ?: 0 < 5 -> "#50C878" // Green for short reads
-            mins.toIntOrNull() ?: 0 < 15 -> "#F4C430" // Yellow for medium reads
+            (mins.toIntOrNull() ?: 0) < 5 -> "#50C878" // Green for short reads
+            (mins.toIntOrNull() ?: 0) < 15 -> "#F4C430" // Yellow for medium reads
             else -> "#C70039" // Red for long reads
         }
 
