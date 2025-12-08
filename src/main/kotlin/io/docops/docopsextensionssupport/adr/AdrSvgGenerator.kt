@@ -582,7 +582,7 @@ class AdrSvgGenerator {
             createLightModeStyles(id, color)
         }
 
-        return  """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        return  """
         |<svg xmlns="http://www.w3.org/2000/svg" id="id_$id" width="$width" height="$height" viewBox="0 0 $width $height" preserveAspectRatio='xMidYMid meet'>
         |<defs>
         |   ${BackgroundHelper.getBackgroundGradient(darkMode, id)}
