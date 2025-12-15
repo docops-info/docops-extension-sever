@@ -26,5 +26,5 @@ create_dir_if_not_exists() {
 # Usage
 create_dir_if_not_exists "out"
 
-#curl -X POST --location "http://127.0.0.1:7202/converter/api/pdf/convert?sourceDir=$SOURCE_DIR&outputDir=$OUTPUT_DIR" -o out/results.html
+curl -X POST --location "http://127.0.0.1:7202/converter/api/pdf/convert?sourceDir=$SOURCE_DIR&outputDir=$OUTPUT_DIR" -o out/results.html
 curl -X POST --location "http://127.0.0.1:7202/converter/api/convert?sourceDir=$SOURCE_DIR&outputDir=$OUTPUT_DIR" -o out/results.html

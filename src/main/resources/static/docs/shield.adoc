@@ -125,6 +125,467 @@ The JSON format allows you to specify multiple badges with all available propert
 
 NOTE: The Badge Generator now only requires `Label` and `Message`. All other fields are optional and will use sensible defaults when omitted. This makes the simplest shield syntax just two fields: `Label|Message`.
 
+
+=== Shield Configuration
+
+You can customize the appearance and behavior of your shields by including configuration options in your shield data. The configuration is specified as a JSON object at the beginning of your shield data.
+
+==== Configuration Properties
+
+* `type`: The visual style of the badges (default: "classic")
+** Options: "classic", "glassmorphic", "neon", "brutalist", "gradient", "minimal", "neumorphic"
+* `theme`: The theme to apply (default: "auto")
+** Options: "auto", "light", "dark", "both"
+** "auto" adapts to user's system preferences
+** "both" displays badges in both light and dark variants
+* `spacing`: The spacing between shields in pixels (default: 8)
+* `fontFamily`: Custom font family for badge text (default: system font)
+* `direction`: The arrangement of shields (default: "vertical")
+** Options: "vertical" or "horizontal"
+* `perRow`: Number of badges per row when using grid layouts (default: 5)
+* `style`: The style of the shields (legacy: "ios" or "material")
+* `arrangement`: The arrangement of shields - "HORIZONTAL", "VERTICAL", or "GRID" (legacy configuration)
+* `backgroundStyle`: The style of the container background
+* `animationEnabled`: Whether to enable animations (default: true)
+
+==== Badge Style Options
+
+The `type` configuration allows you to choose from six distinct visual styles:
+
+* **GLASSMORPHIC**: Modern frosted glass effect with blur and transparency
+* **NEON**: Vibrant glowing effect with bold colors and shadows
+* **BRUTALIST**: Raw, minimalist design with stark contrasts and geometric shapes
+* **GRADIENT**: Smooth color transitions with depth and dimension
+* **MINIMAL**: Clean, simple design focusing on typography and whitespace
+* **NEUMORPHIC**: Soft 3D effect with subtle shadows and highlights
+
+==== Configuration Example
+
+Here's an example of how to include the new configuration in your shield data:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=glassmorphic
+theme=dark
+direction=horizontal
+spacing=12
+---
+Status|Stable
+Version|1.0.0
+Build|Passing
+----
+....
+
+For a neon style with custom font:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=neon
+theme=dark
+fontFamily="Courier New"
+direction=vertical
+---
+CI/CD|Active|#00ff00
+Coverage|95%|#ff00ff
+Performance|A+|#00ffff
+----
+....
+
+
+For a brutalist style with grid layout:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=brutalist
+theme=light
+perRow=3
+direction=horizontal
+spacing=16
+---
+Docs|Complete
+Tests|Passing
+Deploy|Ready
+Secure|Yes
+Speed|Fast
+Quality|High
+----
+....
+
+== Modern Badge Styles
+
+The DocOps Shield Extension now supports six modern badge styles, each with unique visual characteristics to match your documentation aesthetic.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Glassmorphic Style Badges
+
+The glassmorphic style features a modern frosted glass effect with blur, transparency, and subtle depth. Perfect for contemporary documentation with a clean, premium feel.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=glassmorphic
+theme=dark
+direction=horizontal
+spacing=10
+---
+Status|Production
+Security|Verified
+Performance|Optimized
+----
+....
+
+[docops,badge]
+----
+type=glassmorphic
+theme=dark
+direction=horizontal
+spacing=10
+---
+Status|Production
+Security|Verified
+Performance|Optimized
+----
+
+=== Neon Style Badges
+
+The neon style delivers vibrant, glowing badges with bold colors and eye-catching shadows. Ideal for tech-forward projects and modern development documentation.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=neon
+theme=dark
+direction=horizontal
+spacing=2
+---
+API|Live
+Speed|Fast
+Uptime|99.9%
+----
+....
+
+[docops,badge]
+----
+type=neon
+theme=dark
+direction=horizontal
+spacing=2
+---
+API|Live
+Speed|Fast
+Uptime|99.9%
+----
+=== Brutalist Style Badges
+
+The brutalist style embraces raw minimalism with stark contrasts, geometric shapes, and bold typography. Perfect for projects emphasizing functionality and directness.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=brutalist
+theme=auto
+direction=horizontal
+spacing=8
+---
+Build|Success
+Tests|Passed
+Coverage|High
+----
+....
+
+
+[docops,badge]
+----
+type=brutalist
+theme=auto
+direction=horizontal
+spacing=8
+---
+Build|Success
+Tests|Passed
+Coverage|High
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Gradient Style Badges
+
+The gradient style features smooth color transitions creating depth and visual interest. Excellent for modern applications and creative projects.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=gradient
+theme=auto
+direction=horizontal
+---
+Frontend|React
+Backend|Spring
+Database|PostgreSQL
+----
+....
+
+[docops,badge]
+----
+type=gradient
+theme=auto
+direction=horizontal
+---
+Frontend|React
+Backend|Spring
+Database|PostgreSQL
+----
+
+=== Minimal Style Badges
+
+The minimal style focuses on clean typography and generous whitespace for maximum clarity. Ideal for professional documentation and enterprise projects.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=minimal
+theme=auto
+spacing=12
+direction=horizontal
+---
+Version|2.0.0
+License|MIT
+Status|Stable
+----
+....
+
+[docops,badge]
+----
+type=minimal
+theme=auto
+spacing=12
+direction=horizontal
+---
+Version|2.0.0
+License|MIT
+Status|Stable
+----
+
+=== Neumorphic Style Badges
+
+The neumorphic style creates a soft 3D effect with subtle shadows and highlights, giving badges a tactile, physical appearance. Great for modern UI-focused documentation.
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=neumorphic
+theme=light
+direction=horizontal
+---
+Quality|A+
+Maintained|Active
+Community|Growing
+----
+....
+
+[docops,badge]
+----
+type=neumorphic
+theme=light
+direction=horizontal
+---
+Quality|A+
+Maintained|Active
+Community|Growing
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Theme Variations
+
+All badge styles support multiple theme options:
+
+==== Auto Theme
+
+Automatically adapts to the user's system preferences:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=glassmorphic
+theme=auto
+---
+Adaptive|Theme
+----
+....
+
+[docops,badge]
+----
+type=glassmorphic
+theme=auto
+---
+Adaptive|Theme
+----
+
+==== Light Theme
+
+Optimized for light backgrounds:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=gradient
+theme=light
+---
+Light|Mode
+----
+....
+
+[docops,badge]
+----
+type=gradient
+theme=light
+---
+Light|Mode
+----
+
+==== Dark Theme
+
+Optimized for dark backgrounds:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=neon
+theme=dark
+---
+Dark|Mode
+----
+....
+
+[docops,badge]
+----
+type=neon
+theme=dark
+---
+Dark|Mode
+----
+
+==== Both Themes
+
+Displays badges in both light and dark variants side-by-side:
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=minimal
+theme=both
+---
+Dual|Display
+----
+....
+
+[docops,badge]
+----
+type=minimal
+theme=both
+---
+Dual|Display
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Combining Styles with Layout Options
+
+You can combine any badge style with different layout configurations:
+
+==== Vertical Layout with Custom Spacing
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=glassmorphic
+theme=both
+direction=vertical
+spacing=20
+---
+Primary|Feature
+Secondary|Feature
+Tertiary|Feature
+----
+....
+
+[docops,badge]
+----
+type=glassmorphic
+theme=both
+direction=vertical
+spacing=20
+---
+Primary|Feature
+Secondary|Feature
+Tertiary|Feature
+----
+
+==== Grid Layout with Rows
+
+[source,asciidoc]
+....
+[docops,badge]
+----
+type=brutalist
+direction=horizontal
+perRow=4
+spacing=15
+---
+Java|21
+Kotlin|2.2
+Spring|MVC
+Jakarta|EE
+Tailwind|4.1
+PostCSS|Latest
+npm|Active
+macOS|ARM64
+----
+....
+
+[docops,badge]
+----
+type=brutalist
+direction=horizontal
+perRow=4
+spacing=15
+---
+Java|21
+Kotlin|2.2
+Spring|MVC
+Jakarta|EE
+Tailwind|4.1
+PostCSS|Latest
+npm|Active
+macOS|ARM64
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
 == Examples
 
 === Basic Shield Example
@@ -804,11 +1265,21 @@ The DocOps Shield Extension provides a powerful way to enhance your AsciiDoctor 
 
 The pipe-delimited format offers a simple, concise syntax for basic shield configurations, while the JSON format provides a more structured approach for complex configurations with multiple badges.
 
-The extension supports various customization options, including custom colors, logos, links, and dark mode, allowing you to create shields that effectively communicate status information and metadata in your documentation.
+The extension supports extensive customization through the `BadgeConfig` options:
 
-With the examples provided in this guide, you can create badges and shields for various use cases, including CI/CD status, version information, security and compliance, technology stack, documentation status, and social media links.
+* **Six modern badge styles**: Choose from glassmorphic, neon, brutalist, gradient, minimal, or neumorphic designs
+* **Flexible theming**: Auto, light, dark, or both theme options to match any documentation style
+* **Layout control**: Vertical or horizontal arrangements with customizable spacing and rows
+* **Typography**: Custom font families for brand consistency
+* **Legacy compatibility**: Continued support for iOS and Material Design styles
 
-The extension now supports both iOS and Material Design style shields:
+Each style offers unique visual characteristics:
 
-* iOS-style shields provide a modern and visually appealing option with features like gradient backgrounds, glassmorphism effects, and interactive hover animations.
-* Material Design-style shields offer a clean, structured appearance following Google's Material Design guidelines with flat colors, subtle shadows, and consistent spacing.
+* **Glassmorphic** for modern, premium aesthetics with frosted glass effects
+* **Neon** for bold, tech-forward projects with glowing accents
+* **Brutalist** for raw, functional designs emphasizing clarity
+* **Gradient** for smooth transitions and visual depth
+* **Minimal** for clean, professional documentation
+* **Neumorphic** for soft 3D effects and tactile interfaces
+
+With the examples provided in this guide, you can create badges and shields for various use cases, including CI/CD status, version information, security and compliance, technology stack, documentation status, and social media links—all with the visual style that best represents your project's identity.
