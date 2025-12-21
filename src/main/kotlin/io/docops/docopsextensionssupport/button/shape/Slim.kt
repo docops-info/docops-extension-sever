@@ -57,6 +57,8 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         buttonList.forEach { button ->
 
             var lines = ""
+            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
+
             button.description?.let {
                 lines += """<text class="card-text title-text" x="75" y="75" text-anchor="middle">"""
                 lines += linesToMultiLineText(button.buttonStyle?.descriptionStyle, wrapText(it.escapeXml(), 30f), 10, 75)
@@ -93,25 +95,34 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             }
 
             btns.append("""
-        <g transform="translate($startX,$startY)" class="card-group" onclick="$href" style="cursor: pointer;">
-            <!-- Shadow -->
-            <rect x="2" y="2" width="150" height="150" rx="20" fill="rgba(0,0,0,0.3)" filter="url(#cardShadow)"/>
-            <!-- Card background -->
-            <rect class="card-bg" x="0" y="0" width="150" height="150" rx="20" fill="url(#btn_${button.id})"/>
-            <!-- Glass overlay -->
-            <rect class="card-shine" x="0" y="0" width="150" height="150" rx="20" fill="url(#glassOverlay)" opacity="0.3"/>
-            <!-- Border highlight -->
-            <rect x="0" y="0" width="150" height="150" rx="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-    
-            <!-- Status badge -->
-            <circle class="status-badge" cx="20" cy="20" r="5" fill="rgba(255,255,255,0.9)"/>
-    
-            <!-- Content -->
-            <text class="card-text title-text" x="75" y="55" text-anchor="middle">$title</text>
-            $lines
-            <text class="card-text date-text" x="75" y="130" text-anchor="middle">${btnDate}</text>
-        </g>
-            """.trimIndent())
+            <g transform="translate($startX,$startY)" class="card-group" onclick="$href" style="cursor: pointer;">
+                <!-- Fixed Shadow Layer -->
+                <rect x="2" y="2" width="150" height="150" rx="4" fill="rgba(0,0,0,0.4)" filter="url(#cardShadow)"/>
+                
+                <!-- Shifting Body Group -->
+                <g class="moving-group">
+                    <!-- Card background -->
+                    <rect class="card-bg" x="0" y="0" width="150" height="150" rx="4" fill="url(#btn_${button.id})"/>
+                    
+                    <!-- Sharp Accent Border (The dash-offset border you liked) -->
+                    <rect class="accent-border" x="0" y="0" width="150" height="150" rx="4" 
+                          fill="none" 
+                          stroke="${accentColor}" 
+                          stroke-width="2.5" 
+                          stroke-linecap="square"/>
+                    
+                    <!-- Sharp Corner Accent -->
+                    <path class="corner-accent" d="M 0 25 L 0 0 L 25 0" fill="none" 
+                          stroke="$accentColor" 
+                          stroke-width="3"/>
+        
+                    <!-- Content -->
+                    <text class="card-text title-text" x="75" y="55" text-anchor="middle">$title</text>
+                    $lines
+                    <text class="card-text date-text" x="75" y="135" text-anchor="middle" fill="$accentColor">${btnDate}</text>
+                </g>
+            </g>
+                """.trimIndent())
 
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
@@ -183,72 +194,59 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
 
         var style = """
-             <style>
-            $darkModeStyles
+                 <style>
+                $darkModeStyles
             
-            #btn_${buttons.id} .card-group {
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
+                #btn_${buttons.id} .card-group {
+                    cursor: pointer;
+                }
 
-            #btn_${buttons.id} .card-group:hover .card-bg {
-                filter: brightness(1.15) url(#hoverGlow);
-            }
+                #btn_${buttons.id} .moving-group {
+                    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+                }
 
-            #btn_${buttons.id} .card-group:hover .card-shine {
-                opacity: 0.6;
-            }
+                #btn_${buttons.id} .card-group:hover .moving-group {
+                    transform: translate(-1px, -1px);
+                }
 
-            #btn_${buttons.id} .card-group:active {
-                transform: translateY(-4px);
-            }
+                #btn_${buttons.id} .accent-border {
+                    stroke-dasharray: 600;
+                    stroke-dashoffset: ${if(isPdf) "0" else "600"};
+                    transition: stroke-dashoffset 0.6s ease;
+                }
 
-            #btn_${buttons.id} .card-bg {
-                transition: filter 0.3s ease;
-            }
+                #btn_${buttons.id} .card-group:hover .accent-border {
+                    stroke-dashoffset: 0;
+                }
 
-            #btn_${buttons.id} .card-shine {
-                opacity: 0.3;
-                transition: opacity 0.3s ease;
-            }
+                #btn_${buttons.id} .card-text {
+                    font-family: 'Inter', 'JetBrains Mono', monospace, sans-serif;
+                }
 
-            #btn_${buttons.id} .card-text {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            }
+               
+                #btn_${buttons.id} .title-text {
+                    font-weight: 900;
+                    font-size: 13px;
+                    fill: #ffffff;
+                    text-transform: uppercase;
+                    letter-spacing: 0.15em;
+                }
 
-            #btn_${buttons.id} .title-text {
-                font-weight: 700;
-                font-size: 16px;
-                fill: #ffffff;
-                letter-spacing: 0.02em;
-            }
+                #btn_${buttons.id} .desc-text {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-weight: 400;
+                    font-size: 10px;
+                    fill: rgba(255,255,255,0.7);
+                }
 
-            #btn_${buttons.id} .desc-text {
-                font-weight: 400;
-                font-size: 11px;
-                fill: rgba(255,255,255,0.85);
-            }
-
-            #btn_${buttons.id} .date-text {
-                font-weight: 600;
-                font-size: 13px;
-                fill: rgba(255,255,255,0.95);
-            }
-
-            #btn_${buttons.id} .status-badge {
-                transition: all 0.3s ease;
-            }
-
-            @keyframes pulse {
-                0%, 100% { opacity: 0.6; }
-                50% { opacity: 1; }
-            }
-
-            #btn_${buttons.id} .card-group:hover .status-badge {
-                animation: pulse 2s infinite;
-            }
-            </style>
-        """.trimIndent()
+                #btn_${buttons.id} .date-text {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-weight: 700;
+                    font-size: 11px;
+                    fill: ${if (buttons.useDark) "#60a5fa" else "#ffffff"};
+                }
+                </style>
+            """.trimIndent()
 
         if(isPdf) {
             style = """
@@ -268,6 +266,11 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             <defs>
             $darkModeDefs
           
+                <!-- Atmospheric Pattern -->
+                <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${if(buttons.useDark) "#ffffff" else "#000000"}" fill-opacity="0.05" />
+                </pattern>
+                
             <!-- Modern shadow filter -->
             <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>

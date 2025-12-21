@@ -55,13 +55,13 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 20
-        var startY = 20 // Start with some top padding
+        var startX = 30
+        var startY = 30 // Start with some top padding
 
         // Calculate Y position based on row index
         // Each circle needs 120px height (diameter 100px + 20px padding)
         if (index > 0) {
-            startY = 20 + (index * 120) // 20px top padding + 120px per row
+            startY = 30 + (index * 130) // 20px top padding + 120px per row
         }
 
         buttonList.forEachIndexed { idx, button: Button ->
@@ -75,51 +75,43 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 href = ""
             }
 
-            // Define colors and styles based on dark/light mode
-            val (circleBackground, circleBorder, textColor, shadowColor) = if (buttons.useDark) {
-                arrayOf(
-                    "rgba(255,255,255,0.2)",
-                    "url(#borderGradientDark_${buttons.id})",
-                    "rgba(255,255,255,0.95)",
-                    "rgba(0,0,0,0.5)"
-                )
-            } else {
-                arrayOf(
-                    "rgba(0,0,0,0.1)",
-                    "url(#borderGradientLight_${buttons.id})",
-                    "#2d3748",
-                    "rgba(255,255,255,0.8)"
-                )
-            }
+            // Aesthetic logic based on ui.md
+            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
+            val textColor = if (buttons.useDark) "#ffffff" else "#1e293b"
+            val labelColor = if (buttons.useDark) "#60a5fa" else "#475569"
 
-            val glassGradientId = if (buttons.useDark) "glassGradientDark_${buttons.id}" else "circleGradient_${button.id}"
-            val path = circleToPath(60f, 60f, 50f)
             btns.append(
                 """
-        <g role="button" transform="translate($startX,$startY)" class="circle-button" $href>
-            <title class="description">${button.description?.escapeXml() ?: ""}</title>
+            <g role="button" transform="translate($startX,$startY)" class="circle-group" $href>
+                <title class="description">${button.description?.escapeXml() ?: ""}</title>
             
-            <path d="$path" fill="$circleBackground"
-                    stroke="$circleBorder"
-                    stroke-width="2"
-                    filter="url(#dropShadow)"
-                    style="backdrop-filter: blur(20px);"/>
-            <!-- Glass overlay -->
-            <path d="$path" fill="url(#$glassGradientId)" opacity="0.8"/>
-            <text id="label_$idx" 
-                  x="60" y="60"
-                  text-anchor="middle"
-                  dominant-baseline="central"
-                  fill="$textColor"
-                  style="${button.buttonStyle?.labelStyle ?: ""}">
-                $title
-            </text>
-        </g>
-       
-        """.trimIndent()
+                <!-- FIXED Shadow Layer (Aligned to center 60,60) -->
+                <circle r="50" cx="60" cy="60" fill="black" opacity="0.2" filter="url(#dropShadow)"/>
+
+                <!-- SHIFTING Technical Ring (Aligned to center 60,60) -->
+                <circle class="moving-orb tech-ring" r="58" cx="60" cy="60" fill="none" stroke="$accentColor" stroke-width="2" filter="url(#ringGlow)"/>
+
+                <!-- SHIFTING Body (Aligned to center 60,60) -->
+                <circle class="moving-orb" r="50" cx="60" cy="60" fill="url(#circleGradient_${button.id})" stroke="${button.color}" stroke-width="1.5"/>
+                
+                <!-- SHIFTING Glass Layer (Aligned to center 60,60) -->
+                ${if(!isPdf) """<circle class="moving-orb" r="46" cx="60" cy="60" fill="url(#glassReflection)" pointer-events="none"/>""" else ""}
+
+                <!-- SHIFTING Content Group -->
+                <g class="moving-text">
+                    <!-- Technical Corner Accent - Adjusted to frame the center -->
+                    <path d="M 25 35 L 25 25 L 35 25" fill="none" stroke="$accentColor" stroke-width="2.5" opacity="0.8"/>
+                    
+                    <text x="60" y="60" text-anchor="middle" dominant-baseline="central" class="label-text" fill="$textColor">
+                        $title
+                    </text>
+                    <text x="60" y="78" text-anchor="middle" class="label-text technical-id" fill="$labelColor">ID: 0x${idx + 100}</text>
+                </g>
+            </g>
+            """.trimIndent()
             )
 
-            startX += 120 // Increase horizontal spacing to accommodate 100px diameter + padding
+            startX += 130
         }
         return btns.toString()
     }
@@ -149,7 +141,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
         val size = toRows().size
         // Each row needs 120px (100px circle diameter + 20px padding)
         // Add extra 40px for top and bottom margins
-        return ((size * 120) + 40) * scale
+        return ((size * 130) + 60) * scale
     }
 
     override fun width(): Float {
@@ -161,7 +153,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
         }
         // Each circle needs 120px width (100px diameter + 20px padding)
         // Add 40px for left and right margins
-        return ((cols * 120) + 40) * scale
+        return ((cols * 130) + 60) * scale
     }
 
     override fun defs(): String {
@@ -175,72 +167,89 @@ class Circle(buttons: Buttons): Regular(buttons) {
             gradientDefs.append(createCircleHighlight(button))
         }
         val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
-        // Enhanced styles for interactive states - WITHOUT transform changes
-        if (!isPdf) {
-            styleDefs.append("""
+
+        val style = """
                 <style>
-                    #btn_${buttons.id} .circle-button:hover {
-                        stroke-width: 3px;
-                        filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3));
-                        opacity: 0.8;
+                    #btn_${buttons.id} .circle-group { cursor: pointer; }
+                    
+                    /* MOTION: All moving parts share the same base transition logic */
+                    #btn_${buttons.id} .moving-orb {
+                        transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-                    #btn_${buttons.id} .circle-button:active {
-                        filter: brightness(0.9);
+                    
+                    /* Shift X/Y coordinates directly for top-left movement */
+                    #btn_${buttons.id} .circle-group:hover .moving-orb {
+                        cx: 52;
+                        cy: 52;
+                    }
+
+                    #btn_${buttons.id} .tech-ring {
+                        transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease;
+                        stroke-dasharray: 314;
+                        stroke-dashoffset: ${if(isPdf) "0" else "314"};
+                        opacity: ${if(isPdf) "1" else "0.2"};
+                    }
+                    #btn_${buttons.id} .circle-group:hover .tech-ring {
+                        stroke-dashoffset: 0;
+                        opacity: 1;
+                    }
+
+                    #btn_${buttons.id} .moving-text {
+                        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+                    }
+                    #btn_${buttons.id} .circle-group:hover .moving-text {
+                        transform: translate(-8px, -8px);
+                    }
+
+                    #btn_${buttons.id} .label-text {
+                        font-family: 'JetBrains Mono', monospace;
+                        font-weight: 800;
+                        font-size: 11px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        pointer-events: none;
+                    }
+                    #btn_${buttons.id} .technical-id {
+                        font-size: 7px;
+                        font-weight: 400;
                     }
                 </style>
-            """.trimIndent())
-        }
+            """.trimIndent()
 
         return """
-            <defs>
-                <!-- Enhanced shadow filter -->
-                <filter id="circleShadowBlur" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
-                </filter>
-                
-                <!-- Button blur filter (keeping original) -->
-                <filter id="buttonBlur" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
-                </filter>
-                
-                <!-- Gradient for the glass effect -->
-            <radialGradient id="glassGradient" cx="0.3" cy="0.3" r="0.8">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                <stop offset="70%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-            </radialGradient>
+                <defs>
+                    <!-- Atmosphere Grid Pattern -->
+                    <pattern id="techGrid_${buttons.id}" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" fill="${if(buttons.useDark) "#3b82f6" else "#cbd5e1"}" fill-opacity="0.1" />
+                    </pattern>
 
-            <!-- Border gradient -->
-            <radialGradient id="borderGradient" cx="0.3" cy="0.3" r="0.9">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-            </radialGradient>
+                    <filter id="ringGlow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
 
-            <!-- Shadow filter -->
-            <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                <feOffset dx="0" dy="2" result="offset" />
-                <feFlood flood-color="rgba(0,0,0,0.15)"/>
-                <feComposite in2="offset" operator="in"/>
-                <feMerge>
-                    <feMergeNode/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
+                    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="white" stop-opacity="0.2"/>
+                        <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                    </linearGradient>
 
-            <!-- Inner glow -->
-            <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-                $darkModeDefs
-                $gradientDefs
-                $styleDefs
-            </defs>
-        """.trimIndent()
+                    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                        <feOffset dx="0" dy="2" result="offset" />
+                        <feFlood flood-color="rgba(0,0,0,0.3)"/>
+                        <feComposite in2="offset" operator="in"/>
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    $darkModeDefs
+                    $gradientDefs
+                    ${if(!isPdf) style else ""}
+                </defs>
+                <!-- Background Pattern -->
+                <rect width="${width()}" height="${height()}" fill="url(#techGrid_${buttons.id})" rx="12" pointer-events="none"/>
+            """.trimIndent()
     }
 
     /**

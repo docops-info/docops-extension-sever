@@ -86,36 +86,47 @@ class Round(buttons: Buttons) : Regular(buttons) {
         buttonList.forEach {button: Button ->
             val lines = wrapText(button.label, 15f)
             var lineY = 0
-            if(lines.size > 0) {
+            if(lines.isNotEmpty()) {
                 lineY = lines.size * - 6
             }
             val title = linesToMultiLineText(button.buttonStyle?.labelStyle,
                 lines, 12, 0)
 
-            var stroke = "url(#nnneon-grad${itemNumber.counter}-${buttons.id})"
-            if(isPdf) {
-                stroke = "${button.color}"
-            }
+            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
+
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
                 href = ""
             }
             btns.append("""
-            <g transform="translate($startX,$startY)" $href>
-            <g stroke-width="16" stroke="$stroke" fill="#fcfcfc" cursor="pointer" class="raise bar">
-                <title class="description">${button.description?.escapeXml()}</title>
-                <circle r="55" cx="0" cy="0" filter="url(#nnneon-filter2)" opacity="0.25"/>
-                <circle r="55" cx="0" cy="0" fill="url(#raisedButton_${button.id})" 
-                        filter="url(#buttonShadow)"
-                        stroke="${darkenColor(button.color!!, 0.4)}" 
-                        stroke-width="1"
-                />
-            </g>
-            <text  x="0" y="$lineY" text-anchor="middle" style="fill: ${button.color}">
-                $title
-            </text>
-            </g>
-            """.trimIndent())
+                <g transform="translate($startX,$startY)" $href class="orb-group">
+                    <!-- STATIC LAYER: The Glow Ring stays behind -->
+                    <circle r="62" cx="0" cy="0" fill="none" stroke="${button.color}" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/>
+                    
+                    <g class="moving-group">
+                        <!-- SHIFTING LAYER: The Shadow -->
+                        <circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/>
+                        
+                        <!-- SHIFTING LAYER: The Orb -->
+                        <circle r="55" cx="0" cy="0" fill="url(#raisedButton_${button.id})" 
+                                stroke="${button.color}" 
+                                stroke-width="1.5"
+                        />
+                        <!-- Glass Shine Reflection (Hidden for PDF) -->
+                        ${if(!isPdf) """<circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/>""" else ""}
+                        
+                        <!-- Top-Left Specular Highlight Dot -->
+                        <circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/>
+                    </g>
+                    
+                    <!-- Content -->
+                    <g class="moving-group">
+                        <text x="0" y="$lineY" text-anchor="middle" class="orb-text" style="fill: ${if(buttons.useDark) "#ffffff" else "#1e293b"}">
+                            $title
+                        </text>
+                    </g>
+                </g>
+                """.trimIndent())
 
             startX += BUTTON_WIDTH + BUTTON_PADDING + 5
             itemNumber.inc()
@@ -161,70 +172,84 @@ class Round(buttons: Buttons) : Regular(buttons) {
             linGrad.append(grad.linearGradient)
         }
         var style = """
-             <style>
-            .raise {
-                pointer-events: bounding-box;
-                opacity: 1;
-                filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
-            }
+                 <style>
+                .orb-group { cursor: pointer; }
+                
+                .orb-group .moving-group {
+                    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+                }
+                
+                
 
-            .raise:hover {
-                stroke: gold;
-                stroke-width: 3px;
-                opacity: 0.9;
-            }
-            .bar:hover {
-                filter: grayscale(100%) sepia(100%);
-            }
-            </style>
-        """.trimIndent()
+                .glow-ring {
+                    transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease;
+                    stroke-dasharray: 400;
+                    stroke-dashoffset: ${if(isPdf) "0" else "400"};
+                    opacity: ${if(isPdf) "1" else "0.2"};
+                }
+                
+                .orb-group:hover .glow-ring {
+                    stroke-dashoffset: 0;
+                    opacity: 1;
+                }
+
+                .orb-text {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-weight: 800;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    pointer-events: none;
+                }
+                
+                </style>
+            """.trimIndent()
+
         if(isPdf) {
-            style = ""
+            style = ".orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; }"
         }
+
         return """
-            <defs>
-                <filter id="nnneon-filter" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                <feGaussianBlur stdDeviation="17 8" x="0%" y="0%" width="100%" height="100%" in="SourceGraphic" result="blur"/>
-                </filter>
-                <filter id="nnneon-filter2" x="-100%" y="-100%" width="400%" height="400%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                   
-                </filter>
-                <filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-                    <feOffset dx="1" dy="3" result="offset"/>
-                    <feFlood flood-color="#000000" flood-opacity="0.2"/>
-                    <feComposite in2="offset" operator="in" result="shadow"/>
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
-                    <feOffset dx="0" dy="1" result="innerOffset"/>
-                    <feFlood flood-color="#000000" flood-opacity="0.1"/>
-                    <feComposite in2="innerOffset" operator="in" result="innerShadow"/>
+                <defs>
+                    <!-- Background Atmosphere Pattern -->
+                    <pattern id="dotPattern_${buttons.id}" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" fill="${if(buttons.useDark) "#3b82f6" else "#cbd5e1"}" fill-opacity="0.15" />
+                    </pattern>
+
+                    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="4" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+
+                    <!-- Glass Reflection Gradient -->
+                    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="white" stop-opacity="0.4"/>
+                        <stop offset="50%" stop-color="white" stop-opacity="0.05"/>
+                        <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                    </linearGradient>
+
+                    <filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+                    </filter>
         
-                    <feMerge>
-                        <feMergeNode in="shadow"/>
-                        <feMergeNode in="SourceGraphic"/>
-                        <feMergeNode in="innerShadow"/>
-                    </feMerge>
-                </filter>
-        
-           
-                $linGrad
-           $style
-            </defs>
-        """.trimIndent()
+                    $linGrad
+                    $style
+                </defs>
+                <!-- Apply atmospheric pattern background -->
+                <rect width="${width()}" height="${height()}" fill="url(#dotPattern_${buttons.id})" rx="12" pointer-events="none"/>
+            """.trimIndent()
     }
     // In the Round class, modify the gradient definition method
     private fun createRaisedButtonGradient(button: Button): String {
         val baseColor = button.color
-        val darkerColor = darkenColor(baseColor!!, 0.3) // Create a darker shade
-        val lighterColor = lightenColor(baseColor, 0.2) // Create a lighter shade
+        val darkerColor = darkenColor(baseColor!!, 0.4)
 
         return """
-    <radialGradient id="raisedButton_${button.id}" cx="30%" cy="25%" r="80%">
-        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
-        <stop offset="40%" style="stop-color:${baseColor};stop-opacity:1" />
-        <stop offset="100%" style="stop-color:${darkerColor};stop-opacity:1" />
-    </radialGradient>
-    """
+        <radialGradient id="raisedButton_${button.id}" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" style="stop-color:${baseColor};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:${darkerColor};stop-opacity:1" />
+        </radialGradient>
+        """
     }
 
     // Helper functions to create color variations
