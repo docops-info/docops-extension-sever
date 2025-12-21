@@ -7,9 +7,11 @@ import java.util.*
 class CombinationChartMaker {
 
     private val defaultColors = listOf(
-        "#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6",
-        "#1abc9c", "#34495e", "#e67e22", "#27ae60", "#d35400"
+        "#4361ee", "#4cc9f0", "#4895ef", "#560bad", "#7209b7",
+        "#b5179e", "#f72585", "#3f37c9", "#3a0ca3", "#480ca8"
     )
+
+    private val fontFamily = "'JetBrains Mono', monospace"
 
     fun makeChart(chart: CombinationChart): String {
         val sb = StringBuilder()
@@ -49,14 +51,17 @@ class CombinationChartMaker {
         val sb = StringBuilder()
         sb.append("<defs>")
 
+        val id = chart.id
+
         // Create gradients for bars
         chart.series.filter { it.type == ChartType.BAR }.forEachIndexed { index, series ->
             val colorIndex = index % defaultColors.size
-            val color = series.color ?: ChartColors.modernColors[colorIndex].color
+            val color = series.color ?: defaultColors[colorIndex]
             val darkerColor = darkenColor(color, 0.3)
+            val seriesId = series.name.replace(" ", "_")
 
             sb.append("""
-                <linearGradient id="barGradient_${series.name.replace(" ", "_")}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient id="barGradient_${seriesId}_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color"/>
                     <stop offset="100%" stop-color="$darkerColor"/>
                 </linearGradient>
@@ -66,10 +71,11 @@ class CombinationChartMaker {
         // Create gradients for line areas
         chart.series.filter { it.type == ChartType.LINE }.forEachIndexed { index, series ->
             val colorIndex = index % defaultColors.size
-            val color = series.color ?: ChartColors.modernColors[colorIndex]
+            val color = series.color ?: defaultColors[colorIndex]
+            val seriesId = series.name.replace(" ", "_")
 
             sb.append("""
-                <linearGradient id="lineGradient_${series.name.replace(" ", "_")}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient id="lineGradient_${seriesId}_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color" stop-opacity="0.3"/>
                     <stop offset="100%" stop-color="$color" stop-opacity="0.1"/>
                 </linearGradient>
@@ -78,23 +84,41 @@ class CombinationChartMaker {
 
         // Add filters
         sb.append("""
-            <filter id="dropShadow">
+            <filter id="dropShadow_$id">
                 <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
             </filter>
-            <filter id="glow">
+            <filter id="glow_$id">
                 <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
                 <feMerge>
                     <feMergeNode in="coloredBlur"/>
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
+            <filter id="legendGlass_$id" x="0" y="0" width="100%" height="100%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+            </filter>
         """.trimIndent())
+
+        if (chart.display.useDark) {
+            sb.append("""
+                    <radialGradient id="bgGlow_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#020617;stop-opacity:1" />
+                    </radialGradient>
+                """.trimIndent())
+        }
+
+        sb.append("""
+                <pattern id="dotPattern_$id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${if (chart.display.useDark) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                </pattern>
+            """.trimIndent())
 
         // Add glass effect gradients and filters if enabled
         if (chart.display.useGlass) {
             sb.append("""
                 <!-- Glass effect gradients -->
-                <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
                     <stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
                     <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
@@ -102,31 +126,31 @@ class CombinationChartMaker {
                 </linearGradient>
 
                 <!-- Highlight gradient -->
-                <linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient id="glassHighlight_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
                     <stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
                     <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
                 </linearGradient>
 
                 <!-- Radial gradient for realistic light reflections -->
-                <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
+                <radialGradient id="glassRadial_$id" cx="30%" cy="30%" r="70%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
                     <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
                     <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
                 </radialGradient>
 
                 <!-- Enhanced drop shadow filter for glass bars -->
-                <filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <filter id="glassDropShadow_$id" x="-30%" y="-30%" width="160%" height="160%">
                     <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/>
                 </filter>
 
                 <!-- Frosted glass blur filter -->
-                <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
+                <filter id="glassBlur_$id" x="-10%" y="-10%" width="120%" height="120%">
                     <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
                 </filter>
 
                 <!-- Glow filter for hover effect -->
-                <filter id="glassGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="glassGlow_$id" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
                     <feColorMatrix in="blur" type="matrix" values="
                         1 0 0 0 0
@@ -139,38 +163,80 @@ class CombinationChartMaker {
                         <feMergeNode in="SourceGraphic"/>
                     </feMerge>
                 </filter>
+            """.trimIndent())
+        }
 
+        val textColor = if (chart.display.useDark) "#f8fafc" else "#0f172a"
+        val gridColor = if (chart.display.useDark) "#1e293b" else "#e2e8f0"
+        val axisColor = if (chart.display.useDark) "#334155" else "#475569"
+
+        sb.append("""
                 <style>
+                    #combo_chart_${chart.id} .chart-text { fill: $textColor; font-family: $fontFamily; letter-spacing: -0.5px; }
+                    #combo_chart_${chart.id} .chart-grid { stroke: $gridColor; stroke-dasharray: 3,3; }
+                    #combo_chart_${chart.id} .chart-axis { stroke: $axisColor; stroke-width: 1.5; }
+                    
+                    @keyframes revealBar {
+                        from { transform: scaleY(0); opacity: 0; }
+                        to { transform: scaleY(1); opacity: 1; }
+                    }
+                    @keyframes revealPoint {
+                        from { r: 0; opacity: 0; }
+                        to { r: 5; opacity: 1; }
+                    }
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    
+                    .bar-reveal {
+                        animation: revealBar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                        transform-origin: bottom;
+                    }
+                    .point-reveal {
+                        animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                    }
+                    .fade-in {
+                        animation: fadeIn 0.8s ease-out forwards;
+                    }
+                    
                     #combo_chart_${chart.id} .glass-bar {
                         transition: all 0.3s ease;
                     }
                     #combo_chart_${chart.id} .glass-bar:hover {
-                        filter: url(#glassGlow);
+                        filter: url(#glassGlow_$id);
                         transform: scale(1.02);
                         cursor: pointer;
                     }
                 </style>
             """.trimIndent())
-        }
 
         sb.append("</defs>")
         return sb.toString()
     }
 
     private fun makeBackground(chart: CombinationChart): String {
-        val bgColor = if (chart.display.useDark) "#1f2937" else chart.display.backgroundColor
-        return """<rect width="100%" height="100%" fill="$bgColor" rx="10" ry="10"/>"""
+        val id = chart.id
+        val sb = StringBuilder()
+        if (chart.display.useDark) {
+            sb.append("""<rect width="100%" height="100%" fill="url(#bgGlow_$id)" rx="10" ry="10"/>""")
+        } else {
+            sb.append("""<rect width="100%" height="100%" fill="${chart.display.backgroundColor}" rx="10" ry="10"/>""")
+        }
+        sb.append("""<rect width="100%" height="100%" fill="url(#dotPattern_$id)" rx="10" ry="10" opacity="0.5"/>""")
+        return sb.toString()
     }
 
     private fun makeTitle(chart: CombinationChart): String {
-        val titleColor = if (chart.display.useDark) "#f9fafb" else "#333"
-        val titleBgColor = if (chart.display.useDark) "#374151" else "#f0f0f0"
+        val titleColor = if (chart.display.useDark) "#f8fafc" else "#0f172a"
+        val titleBgColor = if (chart.display.useDark) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
+        val id = chart.id
 
         return """
-            <g>
-                <rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.8"/>
+            <g class="fade-in">
+                <rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="$titleBgColor" filter="url(#legendGlass_$id)"/>
                 <text x="400" y="35" text-anchor="middle" font-size="20" font-weight="bold" 
-                      fill="$titleColor" font-family="Arial, sans-serif">
+                      fill="$titleColor" font-family="$fontFamily">
                     ${chart.title}
                 </text>
             </g>
@@ -180,21 +246,20 @@ class CombinationChartMaker {
     private fun makeGrid(chart: CombinationChart): String {
         if (!chart.display.showGrid) return ""
 
-        val gridColor = if (chart.display.useDark) "#374151" else "#e5e7eb"
         val sb = StringBuilder()
 
-        sb.append("""<g class="grid" stroke="$gridColor" stroke-width="1" opacity="0.7">""")
+        sb.append("""<g class="chart-grid fade-in">""")
 
         // Horizontal grid lines
         for (i in 1..8) {
             val y = 100 + i * 50
-            sb.append("""<line x1="80" y1="$y" x2="720" y2="$y" stroke-dasharray="3,3"/>""")
+            sb.append("""<line x1="80" y1="$y" x2="720" y2="$y"/>""")
         }
 
         // Vertical grid lines
         for (i in 1..6) {
             val x = 80 + i * 100
-            sb.append("""<line x1="$x" y1="100" x2="$x" y2="500" stroke-dasharray="3,3"/>""")
+            sb.append("""<line x1="$x" y1="100" x2="$x" y2="500"/>""")
         }
 
         sb.append("</g>")
@@ -202,32 +267,30 @@ class CombinationChartMaker {
     }
 
     private fun makeAxes(chart: CombinationChart): String {
-        val axisColor = if (chart.display.useDark) "#9ca3af" else "#374151"
         val sb = StringBuilder()
-
+        sb.append("""<g class="chart-axis fade-in">""")
         // Primary Y-axis (left)
-        sb.append("""<line x1="80" y1="100" x2="80" y2="500" stroke="$axisColor" stroke-width="2"/>""")
+        sb.append("""<line x1="80" y1="100" x2="80" y2="500"/>""")
 
         // X-axis
-        sb.append("""<line x1="80" y1="500" x2="720" y2="500" stroke="$axisColor" stroke-width="2"/>""")
+        sb.append("""<line x1="80" y1="500" x2="720" y2="500"/>""")
 
         // Secondary Y-axis (right) if dual axis is enabled
         if (chart.display.dualYAxis) {
-            sb.append("""<line x1="720" y1="100" x2="720" y2="500" stroke="$axisColor" stroke-width="2"/>""")
+            sb.append("""<line x1="720" y1="100" x2="720" y2="500"/>""")
         }
-
+        sb.append("""</g>""")
         return sb.toString()
     }
 
     private fun makeAxisLabels(chart: CombinationChart): String {
-        val labelColor = if (chart.display.useDark) "#d1d5db" else "#6b7280"
         val sb = StringBuilder()
 
+        sb.append("""<g class="chart-text fade-in">""")
         // X-axis label
         if (chart.xLabel.isNotEmpty()) {
             sb.append("""
-                <text x="400" y="550" text-anchor="middle" font-size="14" font-weight="bold" 
-                      fill="$labelColor" font-family="Arial, sans-serif">
+                <text x="400" y="550" text-anchor="middle" font-size="14" font-weight="bold">
                     ${chart.xLabel}
                 </text>
             """.trimIndent())
@@ -237,7 +300,6 @@ class CombinationChartMaker {
         if (chart.yLabel.isNotEmpty()) {
             sb.append("""
                 <text x="30" y="300" text-anchor="middle" font-size="14" font-weight="bold" 
-                      fill="$labelColor" font-family="Arial, sans-serif" 
                       transform="rotate(-90, 30, 300)">
                     ${chart.yLabel}
                 </text>
@@ -248,19 +310,19 @@ class CombinationChartMaker {
         if (chart.display.dualYAxis && chart.yLabelSecondary.isNotEmpty()) {
             sb.append("""
                 <text x="770" y="300" text-anchor="middle" font-size="14" font-weight="bold" 
-                      fill="$labelColor" font-family="Arial, sans-serif" 
                       transform="rotate(90, 770, 300)">
                     ${chart.yLabelSecondary}
                 </text>
             """.trimIndent())
         }
-
+        sb.append("""</g>""")
         return sb.toString()
     }
 
     private fun makeAxisTicks(chart: CombinationChart): String {
-        val tickColor = if (chart.display.useDark) "#d1d5db" else "#6b7280"
         val sb = StringBuilder()
+        sb.append("""<g class="chart-text fade-in">""")
+        val tickColor = if (chart.display.useDark) "#d1d5db" else "#6b7280"
 
         // Get unique X values for ticks
         val xValues = chart.series.flatMap { it.data }.map { it.x }.distinct().sorted()
@@ -269,10 +331,9 @@ class CombinationChartMaker {
         // X-axis ticks
         xValues.forEachIndexed { index, xValue ->
             val x = 80 + index * xStep
-            sb.append("""<line x1="$x" y1="500" x2="$x" y2="510" stroke="$tickColor" stroke-width="2"/>""")
+            sb.append("""<line x1="$x" y1="500" x2="$x" y2="510" stroke="$tickColor" stroke-width="2" class="chart-axis"/>""")
             sb.append("""
-                <text x="$x" y="525" text-anchor="middle" font-size="12" fill="$tickColor" 
-                      font-family="Arial, sans-serif">$xValue</text>
+                <text x="$x" y="525" text-anchor="middle" font-size="12">$xValue</text>
             """.trimIndent())
         }
 
@@ -287,10 +348,9 @@ class CombinationChartMaker {
             for (i in 0..8) {
                 val yValue = minY + i * yStep
                 val y = 500 - (i * 50)
-                sb.append("""<line x1="75" y1="$y" x2="80" y2="$y" stroke="$tickColor" stroke-width="2"/>""")
+                sb.append("""<line x1="75" y1="$y" x2="80" y2="$y" stroke="$tickColor" stroke-width="2" class="chart-axis"/>""")
                 sb.append("""
-                    <text x="70" y="$y" text-anchor="end" font-size="12" fill="$tickColor" 
-                          font-family="Arial, sans-serif" dominant-baseline="middle">
+                    <text x="70" y="$y" text-anchor="end" font-size="12" dominant-baseline="middle">
                         ${formatNumber(yValue)}
                     </text>
                 """.trimIndent())
@@ -309,17 +369,16 @@ class CombinationChartMaker {
                 for (i in 0..8) {
                     val yValue = minY + i * yStep
                     val y = 500 - (i * 50)
-                    sb.append("""<line x1="720" y1="$y" x2="725" y2="$y" stroke="$tickColor" stroke-width="2"/>""")
+                    sb.append("""<line x1="720" y1="$y" x2="725" y2="$y" stroke="$tickColor" stroke-width="2" class="chart-axis"/>""")
                     sb.append("""
-                        <text x="730" y="$y" text-anchor="start" font-size="12" fill="$tickColor" 
-                              font-family="Arial, sans-serif" dominant-baseline="middle">
+                        <text x="730" y="$y" text-anchor="start" font-size="12" dominant-baseline="middle">
                             ${formatNumber(yValue)}
                         </text>
                     """.trimIndent())
                 }
             }
         }
-
+        sb.append("""</g>""")
         return sb.toString()
     }
 
@@ -352,11 +411,13 @@ class CombinationChartMaker {
         }.toMap()
 
         // Draw bars first (so lines appear on top)
+        val id = chart.id
         val barSeries = chart.series.filter { it.type == ChartType.BAR }
         barSeries.forEachIndexed { seriesIndex, series ->
             val colorIndex = seriesIndex % defaultColors.size
             val color = series.color ?: defaultColors[colorIndex]
-            val gradientId = "barGradient_${series.name.replace(" ", "_")}"
+            val seriesId = series.name.replace(" ", "_")
+            val gradientId = "barGradient_${seriesId}_$id"
 
             // Calculate Y scaling for this series
             val yData = if (series.yAxis == YAxisType.PRIMARY) {
@@ -379,7 +440,7 @@ class CombinationChartMaker {
                     if (chart.display.useGlass) {
                         // Create glass effect bar with layered structure
                         sb.append("""
-                            <g class="glass-bar">
+                            <g class="glass-bar bar-reveal">
                                 <!-- Base rectangle with gradient -->
                                 <rect x="$x" 
                                       y="$y" 
@@ -388,7 +449,7 @@ class CombinationChartMaker {
                                       rx="6" 
                                       ry="6" 
                                       fill="url(#$gradientId)"
-                                      filter="url(#glassDropShadow)"
+                                      filter="url(#glassDropShadow_$id)"
                                       stroke="rgba(255,255,255,0.3)" stroke-width="1">
                                     <title>${series.name}: ${dataPoint.x} = ${formatNumber(dataPoint.y)}</title>
                                 </rect>
@@ -400,8 +461,8 @@ class CombinationChartMaker {
                                       height="$barHeight" 
                                       rx="6" 
                                       ry="6"
-                                      fill="url(#glassOverlay)"
-                                      filter="url(#glassBlur)">
+                                      fill="url(#glassOverlay_$id)"
+                                      filter="url(#glassBlur_$id)">
                                 </rect>
 
                                 <!-- Radial highlight for realistic light effect -->
@@ -409,7 +470,7 @@ class CombinationChartMaker {
                                          cy="${y + barHeight/5}" 
                                          rx="${barWidth/3}" 
                                          ry="${Math.min(barHeight/6, 15.0)}"
-                                         fill="url(#glassRadial)"
+                                         fill="url(#glassRadial_$id)"
                                          opacity="0.7">
                                 </ellipse>
 
@@ -420,7 +481,7 @@ class CombinationChartMaker {
                                       height="${Math.min(barHeight/4, 20.0)}" 
                                       rx="4" 
                                       ry="4"
-                                      fill="url(#glassHighlight)">
+                                      fill="url(#glassHighlight_$id)">
                                 </rect>
                             </g>
                         """.trimIndent())
@@ -428,18 +489,17 @@ class CombinationChartMaker {
                         // Standard bar rendering
                         sb.append("""
                             <rect x="$x" y="$y" width="$barWidth" height="$barHeight" 
-                                  fill="url(#$gradientId)" filter="url(#dropShadow)" rx="3" ry="3">
+                                  fill="url(#$gradientId)" filter="url(#dropShadow_$id)" rx="3" ry="3" class="bar-reveal">
                                 <title>${series.name}: ${dataPoint.x} = ${formatNumber(dataPoint.y)}</title>
                             </rect>
                         """.trimIndent())
                     }
 
                     // Add value label on top of bar
-                    val labelColor = if (chart.display.useDark) "#f9fafb" else "#333"
                     if (barHeight > 20) {
                         sb.append("""
                             <text x="${x + barWidth / 2}" y="${y - 5}" text-anchor="middle" 
-                                  font-size="10" fill="$labelColor" font-family="Arial, sans-serif">
+                                  font-size="10" class="chart-text fade-in">
                                 ${formatNumber(dataPoint.y)}
                             </text>
                         """.trimIndent())
@@ -453,7 +513,8 @@ class CombinationChartMaker {
         lineSeries.forEachIndexed { seriesIndex, series ->
             val colorIndex = seriesIndex % defaultColors.size
             val color = series.color ?: defaultColors[colorIndex]
-            val gradientId = "lineGradient_${series.name.replace(" ", "_")}"
+            val seriesId = series.name.replace(" ", "_")
+            val gradientId = "lineGradient_${seriesId}_$id"
 
             // Calculate Y scaling for this series
             val yData = if (series.yAxis == YAxisType.PRIMARY) {
@@ -507,18 +568,18 @@ class CombinationChartMaker {
 
                 // Draw area fill
                 sb.append("""
-                    <path d="$areaData" fill="url(#$gradientId)" opacity="0.3"/>
+                    <path d="$areaData" fill="url(#$gradientId)" opacity="0.3" class="fade-in"/>
                 """.trimIndent())
 
                 // Draw line
                 sb.append("""
                     <path d="$pathData" fill="none" stroke="$color" stroke-width="3" 
-                          stroke-linejoin="round" stroke-linecap="round"/>
+                          stroke-linejoin="round" stroke-linecap="round" class="fade-in"/>
                 """.trimIndent())
 
                 // Draw points if enabled
                 if (chart.display.showPoints) {
-                    sortedData.forEach { dataPoint ->
+                    sortedData.forEachIndexed { pointIndex, dataPoint ->
                         val x = xPositions[dataPoint.x]!!
                         val yNormalized = if (yRange > 0) (dataPoint.y - minY) / yRange else 0.5
                         val y = 500 - (yNormalized * 400)
@@ -526,16 +587,15 @@ class CombinationChartMaker {
                         val pointStroke = if (chart.display.useDark) "#1f2937" else "#ffffff"
                         sb.append("""
                             <circle cx="$x" cy="$y" r="5" fill="$color" stroke="$pointStroke" 
-                                    stroke-width="2" filter="url(#dropShadow)">
+                                    stroke-width="2" filter="url(#dropShadow_$id)" class="point-reveal" style="animation-delay: ${pointIndex * 0.05}s">
                                 <title>${series.name}: ${dataPoint.x} = ${formatNumber(dataPoint.y)}</title>
                             </circle>
                         """.trimIndent())
 
                         // Add value label
-                        val labelColor = if (chart.display.useDark) "#f9fafb" else "#333"
                         sb.append("""
                             <text x="$x" y="${y - 10}" text-anchor="middle" font-size="10" 
-                                  fill="$labelColor" font-family="Arial, sans-serif">
+                                  class="chart-text fade-in">
                                 ${formatNumber(dataPoint.y)}
                             </text>
                         """.trimIndent())
@@ -549,9 +609,9 @@ class CombinationChartMaker {
 
     private fun makeLegend(chart: CombinationChart): String {
         val sb = StringBuilder()
-        val legendBgColor = if (chart.display.useDark) "#374151" else "#ffffff"
+        val id = chart.id
+        val legendBgColor = if (chart.display.useDark) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
         val legendBorderColor = if (chart.display.useDark) "#4b5563" else "#d1d5db"
-        val legendTextColor = if (chart.display.useDark) "#f9fafb" else "#374151"
 
         // Position legend on the right side, after secondary axis label
         val legendX = 820
@@ -560,9 +620,10 @@ class CombinationChartMaker {
         val legendHeight = 20 + (chart.series.size * 25)
 
         sb.append("""
+            <g class="fade-in">
             <rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" 
                   fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1" 
-                  rx="8" ry="8" opacity="0.95"/>
+                  rx="8" ry="8" filter="url(#legendGlass_$id)"/>
         """.trimIndent())
 
         chart.series.forEachIndexed { index, series ->
@@ -585,11 +646,10 @@ class CombinationChartMaker {
 
             val axisLabel = if (chart.display.dualYAxis && series.yAxis == YAxisType.SECONDARY) " (R)" else ""
             sb.append("""
-                <text x="${legendX + 35}" y="${yPos + 4}" font-size="12" fill="$legendTextColor" 
-                      font-family="Arial, sans-serif">${series.name}$axisLabel</text>
+                <text x="${legendX + 35}" y="${yPos + 4}" font-size="12" class="chart-text">${series.name}$axisLabel</text>
             """.trimIndent())
         }
-
+        sb.append("</g>")
         return sb.toString()
     }
 

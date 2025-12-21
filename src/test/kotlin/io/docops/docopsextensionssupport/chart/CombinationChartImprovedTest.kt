@@ -132,11 +132,11 @@ class CombinationChartImprovedTest {
         assert(outfile.length() > 0)
 
         // Verify glass effect elements are present
-        assert(svg.contains("glassOverlay"))
-        assert(svg.contains("glassHighlight"))
-        assert(svg.contains("glassRadial"))
-        assert(svg.contains("glassDropShadow"))
-        assert(svg.contains("class=\"glass-bar\""))
+        assert(svg.contains("glassOverlay_"))
+        assert(svg.contains("glassHighlight_"))
+        assert(svg.contains("glassRadial_"))
+        assert(svg.contains("glassDropShadow_"))
+        assert(svg.contains("class=\"glass-bar bar-reveal\""))
     }
 
     @Test
@@ -181,15 +181,15 @@ class CombinationChartImprovedTest {
         assert(outfile.length() > 0)
 
         // Verify glass effect elements are present
-        assert(svg.contains("glassOverlay"))
-        assert(svg.contains("glassHighlight"))
-        assert(svg.contains("glassRadial"))
-        assert(svg.contains("glassDropShadow"))
-        assert(svg.contains("class=\"glass-bar\""))
+        assert(svg.contains("glassOverlay_"))
+        assert(svg.contains("glassHighlight_"))
+        assert(svg.contains("glassRadial_"))
+        assert(svg.contains("glassDropShadow_"))
+        assert(svg.contains("class=\"glass-bar bar-reveal\""))
 
         // Verify dark mode styling
-        assert(svg.contains("fill=\"#1f2937\"")) // Dark background
-        assert(svg.contains("fill=\"#f9fafb\"")) // Light text for dark mode
+        assert(svg.contains("fill=\"url(#bgGlow_")) // Dark background glow
+        assert(svg.contains(".chart-text { fill: #f8fafc")) // Light text for dark mode in CSS
     }
 
     @Test

@@ -20,9 +20,10 @@ class PieMaker {
 
     fun makePies(pies: Pies) : String {
         val pieCount = pies.pies.size
-        val pieWidth = 36 // Width of each pie
+        val pieWidth = 60 // Increased from 36 to prevent horizontal overlap
         val totalPieWidth = pieCount * pieWidth
-        val width = totalPieWidth + 20 // Add some padding
+        val width = totalPieWidth + 40 // More padding
+
 
         // Calculate left margin to center the pies in the container
         val leftMargin = (width - totalPieWidth) / 2
@@ -32,14 +33,26 @@ class PieMaker {
         sb.append("<defs>")
         sb.append(filters(pies))
         sb.append(gradients(pies))
+        // Atmospheric Dot Pattern
+        sb.append("""
+                <pattern id="dotPattern_${pies.pieDisplay.id}" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="0.8" fill="${if (pies.pieDisplay.useDark) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                </pattern>
+            """.trimIndent())
         sb.append(BackgroundHelper.getBackgroundGradient(pies.pieDisplay.useDark, pies.pieDisplay.id))
         sb.append("</defs>")
+        // Apply Background Pattern overlay
+        sb.append("<rect width='100%' height='100%' fill='url(#dotPattern_${pies.pieDisplay.id})' rx='12' pointer-events='none'/>")
+
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
-            sb.append("""<g transform="translate($x,5)" class="pie-container">""")
+            val delay = index * 0.12
+            // Outer group handles position, inner group handles reveal animation
+            sb.append("""<g transform="translate($x,5)">""")
+            sb.append("""<g class="pie-reveal-container" style="animation: revealScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s forwards; opacity: 0;">""")
             sb.append(makePieSvg(pie, pies.pieDisplay, index))
             sb.append(makeLabel(pie, pies.pieDisplay))
-            sb.append("</g>")
+            sb.append("</g></g>")
         }
         sb.append(tail())
 
@@ -68,46 +81,45 @@ class PieMaker {
     private fun tail() = """</svg></svg>"""
 
     private fun makePieSvg(pie: Pie, display: PieDisplay, index: Int) : String {
-        val fill = if(display.useDark) "#2d3748" else "rgba(255,255,255,0.1)"
+        val fill = if(display.useDark) "#0f172a" else "rgba(255,255,255,0.1)"
         val gradientId = "pieGradient_$index"
-        // Use a dark color for text on light background and vice versa
-        val textColor = if(display.useDark) "#FCFCFC" else "#333333"
+        val textColor = if(display.useDark) "#f8fafc" else "#0f172a"
+
 
         //language=svg
         return """
-        <svg class="pie" width="36" height="36" style="display: block;margin: 10px auto; max-width: 80%; max-height: 250px;">
-            <!-- Background circle with glass effect -->
-            <circle cx="18" cy="18" r="16" fill="${fill}" filter="url(#glassDropShadow)"/>
+            <svg class="pie" width="36" height="36" x="12" y="5" viewBox="0 0 36 36">
+                <!-- Background circle -->
+                <circle cx="18" cy="18" r="16" fill="${fill}" filter="url(#glassDropShadow)"/>
 
-            <!-- Glass overlay for background -->
-            <circle cx="18" cy="18" r="16" fill="url(#glassOverlay)" class="glass-overlay"/>
+                <!-- Glass overlay -->
+                <circle cx="18" cy="18" r="16" fill="url(#glassOverlay)" class="glass-overlay"/>
 
-            <!-- Base circle with glass effect -->
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
-                  style="fill: ${fill}; stroke: url(#glassBorder); stroke-width: 1;"/>
+                <!-- Base border -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
+                      style="fill: none; stroke: url(#glassBorder); stroke-width: 0.5;"/>
 
-            <!-- Progress circle with gradient fill and glass effect -->
-            <path stroke-dasharray="${pie.percent}, 100" 
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
-                  stroke="url(#${gradientId})" 
-                  style="fill: none; stroke-width: 3; stroke-linecap: round;">
-                <animate attributeName="stroke-dashoffset" values="${pie.percent};0" dur="1.5s" repeatCount="1"/>
-            </path>
+                <!-- High-Impact Progress stroke -->
+                <path stroke-dasharray="${pie.percent}, 100" 
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
+                      stroke="url(#${gradientId})" 
+                      style="fill: none; stroke-width: 3.5; stroke-linecap: round; filter: url(#glow);">
+                    <animate attributeName="stroke-dashoffset" values="${pie.percent};0" dur="1.2s" repeatCount="1" cubic-bezier="0.4, 0, 0.2, 1"/>
+                </path>
 
-
-            <!-- Percentage text with animation and improved styling -->
-            <text x="18" y="18" dy="0.35em" style="font-family: Arial, Helvetica, sans-serif; font-size: 8px; font-weight: bold; text-anchor: middle; fill: ${textColor}; opacity: 0; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
-                ${pie.percent}%
-                <animate attributeName="opacity" values="0;1" dur="2s" fill="freeze"/>
-            </text>
-        </svg>
-        """.trimIndent()
+                <!-- Distinctive Percentage Text -->
+                <text x="18" y="18" dy="0.35em" style="font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 800; text-anchor: middle; fill: ${textColor}; opacity: 0;">
+                    ${pie.percent}%
+                    <animate attributeName="opacity" values="0;1" dur="1s" delay="0.5s" fill="freeze"/>
+                </text>
+            </svg>
+            """.trimIndent()
     }
-
     private fun makeLabel(pie: Pie, display: PieDisplay): String {
-        val textColor = if(display.useDark) "#f9fafb" else "#333333"
+        val textColor = if(display.useDark) "#94a3b8" else "#475569"
         val sb = StringBuilder()
-        sb.append("""<text x="18" y="48" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif; font-size: 6px; font-weight: 600; text-anchor: middle; letter-spacing: -0.02em; text-shadow: 0 1px 1px rgba(0,0,0,0.1);">""")
+        // Adjusted x to 30 (center of 60px pieWidth)
+        sb.append("""<text x="30" y="48" style="font-family: 'JetBrains Mono', monospace; font-size: 5px; font-weight: 700; text-anchor: middle; text-transform: uppercase; letter-spacing: 0.5px;">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { idx, s ->
             var dy = 6
@@ -115,8 +127,8 @@ class PieMaker {
                 dy = 0
             }
             sb.append("""
-            <tspan x="18" dy="$dy" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif; fill: ${textColor};">${s.escapeXml()}</tspan>
-            """.trimIndent())
+                <tspan x="30" dy="$dy" style="fill: ${textColor};">${s.escapeXml()}</tspan>
+                """.trimIndent())
         }
         sb.append("</text>")
         return sb.toString()
@@ -125,6 +137,14 @@ class PieMaker {
     private fun filters(pies: Pies) =
         """
              <style>
+                @keyframes revealScale {
+                    from { transform: scale(0.8); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
+                }
+                /* Set transform origin to center of individual pie groups */
+                .pie-reveal-container {
+                    transform-origin: center;
+                }
                #id_${pies.pieDisplay.id} .pie {
                     transition: transform 0.3s ease;
                     cursor: pointer;

@@ -136,15 +136,28 @@ class PieChartImproved {
 
         // Set background based on dark mode
 
-        val backgroundColor = if (darkMode) "#1e293b" else "#ffffff"
+        // Set background based on dark mode (Midnight IDE aesthetic)
+        val backgroundColor = if (darkMode) "#020617" else "#ffffff"
+        val textColorPrimary = if (darkMode) "#f8fafc" else "#0f172a"
+        val textColorSecondary = if (darkMode) "#94a3b8" else "#475569"
 
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
         val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = darkMode, id)
         //svgBuilder.append(BackgroundHelper.getBackgroundGradient(darkMode, id))
-        // Enhanced glass effect definitions
+        // Enhanced atmospheric definitions
         svgBuilder.append("""
         <defs>
+        <!-- Geometric Atmosphere Pattern -->
+                <pattern id="dotPattern_${'$'}id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${'$'}{if (darkMode) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                </pattern>
+                
+                <!-- High-Impact Glow Filter -->
+                <filter id="glow_${'$'}id" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
             <!-- Dark mode compatible glass overlay gradient -->
             <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" style="stop-color:rgba(255,255,255,${if (darkMode) "0.2" else "0.3"});stop-opacity:1"/>
@@ -195,16 +208,30 @@ class PieChartImproved {
         // Enhanced CSS with better glass effects
         svgBuilder.append("""
         <style>
+            @keyframes revealPie {
+                    from { transform: scale(0.85); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
+            }
             .pie-segment { 
-                transition: transform 0.3s ease, filter 0.3s ease; 
-                transform-origin: ${centerX}px ${centerY}px; 
-                filter: url(#glassDropShadow_$id);
-            }
-            .pie-segment:hover { 
-                transform: scale(1.03); 
-                filter: url(#glassDropShadow_$id) brightness(1.1);
-                cursor: pointer; 
-            }
+                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease; 
+                    transform-origin: ${'$'}{centerX}px ${'$'}{centerY}px; 
+                    filter: url(#glassDropShadow_${'$'}id);
+                    opacity: 0;
+                    animation: revealPie 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+                .pie-segment:hover { 
+                    transform: scale(1.05); 
+                    filter: url(#glassDropShadow_${'$'}id) url(#glow_${'$'}id) brightness(1.1);
+                    cursor: pointer; 
+                }
+                .chart-title {
+                    font-family: 'JetBrains Mono', monospace;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                .legend-text {
+                    font-family: 'JetBrains Mono', monospace;
+                }
             .pie-segment-overlay { 
                 pointer-events: none; 
                 mix-blend-mode: ${if (darkMode) "soft-light" else "screen"};
@@ -242,6 +269,8 @@ class PieChartImproved {
     """.trimIndent())
 
         svgBuilder.append(BackgroundHelper.getBackGroundPath(darkMode, id, width = width.toFloat(), height = height.toFloat()))
+// Apply atmospheric pattern overlay
+        svgBuilder.append("<rect width='$width' height='$height' fill='url(#dotPattern_$id)' rx='12' pointer-events='none'/>")
 
         // Generate pie segments with improved glass effects
         segmentsWithAngles.forEachIndexed { index, segmentData ->
@@ -249,6 +278,7 @@ class PieChartImproved {
                 centerX, centerY, radius, innerRadius,
                 segmentData.startAngle, segmentData.endAngle
             )
+            val delay = 0.4 + (index * 0.1) // Staggered reveal delay
 
             // Calculate label position for percentage display
             val midAngle = (segmentData.startAngle + segmentData.endAngle) / 2.0
@@ -259,10 +289,10 @@ class PieChartImproved {
             if(!isPdf) {
                 svgBuilder.append(
                     """
-            <g>
-                <path id="segment-$index" class="pie-segment" 
-                      d="$pathData" 
-                      fill="${segmentData.color}" 
+                <g style="animation-delay: ${delay}s" class="pie-segment">
+                    <path id="segment-$index" 
+                          d="$pathData" 
+                          fill="${segmentData.color}" 
                       stroke="rgba(255,255,255,${if (darkMode) "0.15" else "0.2"})" 
                       stroke-width="1">
                     <title>${segmentData.segment.label}: ${segmentData.segment.value} (${
@@ -309,17 +339,17 @@ class PieChartImproved {
             // Add percentage labels if enabled
             if (showPercentages) {
                 svgBuilder.append("""
-                <text x="$labelX" y="$labelY" 
-                      font-family="Arial, sans-serif" 
-                      font-size="12" 
-                      font-weight="bold"
-                      text-anchor="middle" 
-                      dominant-baseline="middle"
-                      fill="white" 
-                      style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-                    ${formatDecimal(segmentData.percentage, 1)}%
-                </text>
-            """.trimIndent())
+                    <text x="$labelX" y="$labelY" 
+                          font-family="'JetBrains Mono', monospace" 
+                          font-size="12" 
+                          font-weight="800"
+                          text-anchor="middle" 
+                          dominant-baseline="middle"
+                          fill="white" 
+                          style="text-shadow: 0 1px 2px rgba(0,0,0,0.8); pointer-events: none;">
+                        ${formatDecimal(segmentData.percentage, 1)}%
+                    </text>
+                """.trimIndent())
             }
         }
 
@@ -336,16 +366,15 @@ class PieChartImproved {
         """.trimIndent())
         }
 
-        // Enhanced title with glass effect
+        // Enhanced title with glass effect and typography
         svgBuilder.append("""
-        <text x="$centerX" y="30" 
-              font-family="Arial, sans-serif" 
-              font-size="20" 
-              font-weight="600"
-              text-anchor="middle" 
-              fill="${if (darkMode) "#f8fafc" else "#1a1a1a"}"
-              class="glass-title">$title</text>
-    """.trimIndent())
+            <text x="$centerX" y="35" 
+                  font-size="22" 
+                  font-weight="800"
+                  text-anchor="middle" 
+                  fill="$textColorPrimary"
+                  class="glass-title chart-title">$title</text>
+        """.trimIndent())
 
         // Add legend if enabled - positioned properly on the right
         if (showLegend) {

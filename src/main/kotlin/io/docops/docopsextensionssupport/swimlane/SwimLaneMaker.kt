@@ -26,71 +26,88 @@ class SwimLaneMaker {
 
         // Start SVG
         sb.append("""
-            <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <defs>
-                    <style>
-                    <![CDATA[
-                        /* Light theme (default) */
-                        :root {
-                            --bg-color: #f2f2f7;
-                            --card-bg-start: #ffffff;
-                            --card-bg-end: #fafafa;
-                            --card-border: #e5e5e5;
-                            --header-bg-start: #f8f8f8;
-                            --header-bg-end: #f0f0f0;
-                            --header-separator: #e5e5e5;
-                            --text-primary: #1d1d1f;
-                            --text-secondary: #333333;
-                            --shadow-color: rgba(0, 0, 0, 0.08);
-                        }
+            <svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <defs>
+                        <style>
+                        <![CDATA[
+                            @keyframes reveal {
+                                from { opacity: 0; transform: translateY(15px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
 
-                        /* Dark theme */
-                        ${if (data.useDarkTheme) """
-                        :root {
-                            --bg-color: #000000;
-                            --card-bg-start: #1c1c1e;
-                            --card-bg-end: #2c2c2e;
-                            --card-border: #38383a;
-                            --header-bg-start: #2c2c2e;
-                            --header-bg-end: #3a3a3c;
-                            --header-separator: #48484a;
-                            --text-primary: #ffffff;
-                            --text-secondary: #f2f2f7;
-                            --shadow-color: rgba(0, 0, 0, 0.3);
-                        }
-                        """ else ""}
+                            /* Light theme */
+                            :root {
+                                --bg-color: #f8fafc;
+                                --pattern-color: #cbd5e1;
+                                --card-bg-start: #ffffff;
+                                --card-bg-end: #f1f5f9;
+                                --card-border: #e2e8f0;
+                                --header-accent: #3b82f6;
+                                --text-primary: #0f172a;
+                                --text-secondary: #475569;
+                                --shadow-color: rgba(15, 23, 42, 0.08);
+                            }
 
-                        .background {
-                            fill: var(--bg-color);
-                        }
+                            /* Dark theme (Commit to Deep Navy/Slate) */
+                            ${if (data.useDarkTheme) """
+            :root {
+                --bg - color: #020617;
+                --pattern - color: #1e293b;
+                --card - bg - start: #0f172a;
+                --card - bg - end: #1e293b;
+                --card - border: #334155;
+                --header - accent: #60a5fa;
+                --text - primary: #f8fafc;
+                --text - secondary: #94a3b8;
+                --shadow - color: rgba(0, 0, 0, 0.4);
+            }
+            """ else ""}
 
-                        .card-bg {
-                            fill: var(--card-bg-start);
-                            stroke: var(--card-border);
-                        }
+                            .background {
+                                fill: var(--bg-color);
+                            }
 
-                        .header-bg {
-                            fill: var(--header-bg-start);
-                        }
+                            .card-bg {
+                                fill: var(--card-bg-start);
+                                stroke: var(--card-border);
+                                transition: all 0.3s ease;
+                            }
+                            
+                            .swimlane-card:hover .card-bg {
+                                stroke: var(--header-accent);
+                                filter: brightness(1.1);
+                            }
 
-                        .separator-line {
-                            stroke: var(--header-separator);
-                        }
+                            .header-accent-bar {
+                                fill: var(--header-accent);
+                            }
 
-                        .header-text {
-                            fill: var(--text-primary);
-                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-                            font-size: 18px;
-                            font-weight: 600;
-                        }
+                            .header-text {
+                                fill: var(--text-primary);
+                                font-family: 'Outfit', 'Lexend', 'Segoe UI Bold', sans-serif;
+                                font-size: 20px;
+                                font-weight: 800;
+                                text-transform: uppercase;
+                                letter-spacing: -0.5px;
+                            }
 
-                        .body-text {
-                            fill: var(--text-secondary);
-                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-                            font-size: 15px;
-                        }
-                    ]]>
-                    </style>
+                            .body-text {
+                                fill: var(--text-secondary);
+                                font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                                font-size: 14px;
+                            }
+                            
+                            .swimlane-card {
+                                animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                                opacity: 0;
+                            }
+                        ]]>
+                        </style>
+
+                        <!-- Geometric Background Pattern -->
+                        <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--pattern-color)" stroke-width="1" stroke-opacity="0.2"/>
+                        </pattern>
 
                     <!-- Light theme gradients -->
                     <linearGradient id="cardGradientLight" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -121,45 +138,39 @@ class SwimLaneMaker {
 
                     <!-- Dark theme shadow -->
                     <filter id="cardShadowDark" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.3"/>
+                            <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
                     </filter>
                 </defs>
 
-                <!-- Background -->
-                <rect width="100%" height="100%" class="background"/>
+                <!-- Background with Atmosphere -->
+                    <rect width="100%" height="100%" class="background"/>
+                    <rect width="100%" height="100%" fill="url(#gridPattern)"/>
         """.trimIndent())
 
         // Draw each swimlane
         data.lanes.forEachIndexed { index, lane ->
             // Calculate x position with even spacing
             val x = 30 + (index * (laneWidth + spacing))
+            val animationDelay = index * 0.15
+
 
             sb.append("""
-                <!-- Swim Lane ${index + 1}: ${lane.title} -->
-                <g class="swimlane-card">
-                    <!-- Card background -->
-                    <rect x="$x" y="30" width="$laneWidth" height="${height - 60}" rx="16" ry="16"
-                          fill="url(#${if (data.useDarkTheme) "cardGradientDark" else "cardGradientLight"})" 
-                          stroke="${if (data.useDarkTheme) "#38383a" else "#e5e5e5"}" 
-                          stroke-width="1" 
-                          class="card-bg"
-                          filter="url(#${if (data.useDarkTheme) "cardShadowDark" else "cardShadowLight"})"/>
+                    <!-- Swim Lane ${index + 1}: ${lane.title} -->
+                    <g class="swimlane-card" style="animation-delay: ${animationDelay}s">
+                        <!-- Card background -->
+                        <rect x="$x" y="30" width="$laneWidth" height="${height - 60}" rx="12" ry="12"
+                              fill="url(#${if (data.useDarkTheme) "cardGradientDark" else "cardGradientLight"})" 
+                              class="card-bg"
+                              filter="url(#${if (data.useDarkTheme) "cardShadowDark" else "cardShadowLight"})"/>
 
-                    <!-- Header background -->
-                    <rect x="$x" y="30" width="$laneWidth" height="50" rx="16" ry="16"
-                          fill="url(#${if (data.useDarkTheme) "headerGradientDark" else "headerGradientLight"})" class="header-bg"/>
-                    <rect x="$x" y="65" width="$laneWidth" height="15"
-                          fill="url(#${if (data.useDarkTheme) "headerGradientDark" else "headerGradientLight"})" class="header-bg"/>
+                        <!-- Sharp Accent Header -->
+                        <path d="M $x ${30 + 12} Q $x 30 ${x + 12} 30 L ${x + laneWidth - 12} 30 Q ${x + laneWidth} 30 ${x + laneWidth} ${30 + 12} L ${x + laneWidth} 35 L $x 35 Z" 
+                              class="header-accent-bar" />
 
-                    <!-- Header separator line -->
-                    <line x1="$x" y1="80" x2="${x + laneWidth}" y2="80" 
-                          stroke="${if (data.useDarkTheme) "#48484a" else "#e5e5e5"}" 
-                          stroke-width="1" class="separator-line"/>
+                        <!-- Header label -->
+                        <text x="${x + 20}" y="65" class="header-text">${lane.title}</text>
 
-                    <!-- Header label -->
-                    <text x="${x + 20}" y="60" class="header-text">${lane.title}</text>
-
-                    <!-- Body text -->
+                        <!-- Body text -->
                     <text x="${x + 20}" y="110" class="body-text">
             """.trimIndent())
 

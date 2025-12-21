@@ -127,7 +127,7 @@ class LineChartImproved {
 
         // Calculate chart dimensions and margins
         val margin = 50
-        val legendWidth = if (showLegend) 150 else 0
+        val legendWidth = if (showLegend) 220 else 0
         val chartWidth = width - margin * 2 - legendWidth
         val chartHeight = height - margin * 2
 
@@ -148,41 +148,76 @@ class LineChartImproved {
 
         val svgBuilder = StringBuilder()
 
-        // Define colors based on dark mode
-        val backgroundColor = if (darkMode) "#1e293b" else "transparent"
-        val textColor = if (darkMode) "#f8fafc" else "#000000"
-        val gridColor = if (darkMode) "#334155" else "#e0e0e0"
-        val axisColor = if (darkMode) "#cbd5e1" else "#000000"
-        val pointStrokeColor = if (darkMode) "#1e293b" else "white"
+        // Define colors based on dark mode (Midnight IDE aesthetic)
+        val backgroundColor = if (darkMode) "#020617" else "#ffffff"
+        val textColor = if (darkMode) "#f8fafc" else "#0f172a"
+        val gridColor = if (darkMode) "#1e293b" else "#e2e8f0"
+        val axisColor = if (darkMode) "#334155" else "#475569"
+        val pointStrokeColor = if (darkMode) "#020617" else "white"
+        // Use a clearly defined glass color for the legend
+        val legendBg = if (darkMode) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
+
+
 
         val id = UUID.randomUUID().toString()
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
 
         svgBuilder.append("<defs>")
-        svgBuilder.append(BackgroundHelper.getBackgroundGradient(darkMode, id))
+        svgBuilder.append("""
+                <filter id="legendGlass_$id" x="0" y="0" width="100%" height="100%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+                </filter>
+            """.trimIndent())
+
+        // Layered Gradient for Atmosphere
+        if (darkMode) {
+            svgBuilder.append("""
+                    <radialGradient id="bgGlow_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#020617;stop-opacity:1" />
+                    </radialGradient>
+                """.trimIndent())
+        }
+        // Atmospheric Patterns and Glow Filter
+        svgBuilder.append("""
+                <pattern id="dotPattern_$id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${if (darkMode) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                </pattern>
+                <filter id="glow_$id" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            """.trimIndent())
         // Add responsive CSS that adapts to system color scheme
         var chartStyle = """
-            #ID_$id .chart-text { fill: #000000; }
-            #ID_$id .chart-grid { stroke: #e0e0e0; }
-            #ID_$id .chart-axis { stroke: #000000; }
-            #ID_$id .chart-background { fill: transparent; }
-            #ID_$id .chart-point-stroke { stroke: white; } 
-        """.trimIndent()
+                #ID_$id .chart-text { fill: #0f172a; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.5px; }
+                #ID_$id .chart-grid { stroke: #e2e8f0; stroke-dasharray: 3,3; }
+                #ID_$id .chart-axis { stroke: #475569; stroke-width: 1.5; }
+                #ID_$id .chart-background { fill: transparent; }
+            """.trimIndent()
         if(darkMode) {
             chartStyle = """
-               #ID_$id  .chart-text { fill: #f8fafc !important; }
-               #ID_$id  .chart-grid { stroke: #334155 !important; }
-               #ID_$id  .chart-axis { stroke: #cbd5e1 !important; }
-               #ID_$id  .chart-background { fill: #1e293b !important; }
-               #ID_$id  .chart-point-stroke { stroke: #1e293b !important; }
-            """.trimIndent()
+                   #ID_$id .chart-text { fill: #f8fafc !important; font-family: 'JetBrains Mono', monospace; }
+                   #ID_$id .chart-grid { stroke: #1e293b !important; stroke-dasharray: 3,3; }
+                   #ID_$id .chart-axis { stroke: #334155 !important; }
+                   #ID_$id .chart-background { fill: #020617 !important; }
+                   #ID_$id .legend-box { fill: $legendBg !important; stroke: #475569; stroke-width: 1; }
+                """.trimIndent()
         }
         svgBuilder.append("""
         <style>
             <![CDATA[
             $chartStyle
+             @keyframes revealPoint {
+                from { r: 0; opacity: 0; }
+                to { r: 5; opacity: 1; }
+            }
             
+            .data-point-reveal {
+                opacity: 0;
+                animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
             /* Hover effects */
             ${if (enableHoverEffects) """
                 .line-path {
@@ -213,12 +248,14 @@ class LineChartImproved {
     """.trimIndent())
 
         svgBuilder.append("</defs>")
-// Add background using CSS class
-        svgBuilder.append(BackgroundHelper.getBackGroundPath(useDark = darkMode, id= id, width = width.toFloat(), height = height.toFloat()))
-        //svgBuilder.append("<rect width='$width' height='$height' class='chart-background' />")
 
-        // Add title using CSS class
-        svgBuilder.append("<text x='${width/2}' y='25' font-family='Arial' font-size='20' text-anchor='middle' font-weight='bold' class='chart-text'>$title</text>")
+        // ENFORCE BACKGROUND: Full coverage rect ensures no blending into page
+        svgBuilder.append("<rect width='$width' height='$height' class='chart-background' rx='12'/>")
+        svgBuilder.append("<rect width='$width' height='$height' fill='url(#dotPattern_$id)' rx='12' pointer-events='none'/>")
+
+        // Add title with distinct typography
+        svgBuilder.append("<text x='${width/2}' y='30' font-size='22' text-anchor='middle' font-weight='800' class='chart-text' style='text-transform: uppercase; letter-spacing: 1px;'>$title</text>")
+
 
         // Define chart area
         val chartX = margin
@@ -274,8 +311,8 @@ class LineChartImproved {
             // Draw ticks and labels for each unique x-value
             uniqueXPoints.forEach { point ->
                 val xPos = xToSvg(point.x)
-                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' stroke='$axisColor' stroke-width='1'/>")
-                svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-family='Arial' font-size='12' text-anchor='middle' fill='$textColor'>${point.xLabel ?: formatNumber(point.x)}</text>")
+                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' class='chart-axis' />")
+                svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-size='11' text-anchor='middle' class='chart-text'>${point.xLabel ?: formatNumber(point.x)}</text>")
             }
         } else {
             // Use the original numeric approach
@@ -283,28 +320,27 @@ class LineChartImproved {
             var x = Math.ceil(paddedMinX / xStep) * xStep
             while (x <= paddedMaxX) {
                 val xPos = xToSvg(x)
-                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' stroke='$axisColor' stroke-width='1'/>")
-                svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-family='Arial' font-size='12' text-anchor='middle' fill='$textColor'>${formatNumber(x)}</text>")
+                svgBuilder.append("<line x1='$xPos' y1='${chartY + chartHeight}' x2='$xPos' y2='${chartY + chartHeight + 5}' class='chart-axis' />")
+                svgBuilder.append("<text x='$xPos' y='${chartY + chartHeight + 20}' font-size='11' text-anchor='middle' class='chart-text'>${formatNumber(x)}</text>")
                 x += xStep
             }
         }
 
-        // Y-axis ticks and labels
         val yStep = calculateAxisStep(paddedMinY, paddedMaxY)
         var y = Math.ceil(paddedMinY / yStep) * yStep
         while (y <= paddedMaxY) {
             val yPos = yToSvg(y)
-            svgBuilder.append("<line x1='$chartX' y1='$yPos' x2='${chartX - 5}' y2='$yPos' stroke='$axisColor' stroke-width='1'/>")
-            svgBuilder.append("<text x='${chartX - 10}' y='$yPos' font-family='Arial' font-size='12' text-anchor='end' dominant-baseline='middle' fill='$textColor'>${formatNumber(y)}</text>")
+            svgBuilder.append("<line x1='$chartX' y1='$yPos' x2='${chartX - 5}' y2='$yPos' class='chart-axis' />")
+            svgBuilder.append("<text x='${chartX - 10}' y='$yPos' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>${formatNumber(y)}</text>")
             y += yStep
         }
 
         // Add axis labels if provided
         if (xAxisLabel.isNotEmpty()) {
-            svgBuilder.append("<text x='${chartX + chartWidth / 2}' y='${chartY + chartHeight + 40}' font-family='Arial' font-size='14' text-anchor='middle' fill='$textColor'>$xAxisLabel</text>")
+            svgBuilder.append("<text x='${chartX + chartWidth / 2}' y='${chartY + chartHeight + 45}' font-size='13' text-anchor='middle' font-weight='600' class='chart-text'>$xAxisLabel</text>")
         }
         if (yAxisLabel.isNotEmpty()) {
-            svgBuilder.append("<text x='${chartX - 40}' y='${chartY + chartHeight / 2}' font-family='Arial' font-size='14' text-anchor='middle' transform='rotate(-90, ${chartX - 40}, ${chartY + chartHeight / 2})' fill='$textColor'>$yAxisLabel</text>")
+            svgBuilder.append("<text x='${chartX - 45}' y='${chartY + chartHeight / 2}' font-size='13' text-anchor='middle' font-weight='600' transform='rotate(-90, ${chartX - 45}, ${chartY + chartHeight / 2})' class='chart-text'>$yAxisLabel</text>")
         }
 
         svgBuilder.append("</g>")
@@ -317,10 +353,10 @@ class LineChartImproved {
             val colorIndex = index % colors.size
             val color = series.color ?: colors[colorIndex].color
 
-            // Create a group for this series
-            svgBuilder.append("<g class='data-series' id='series-$index'>")
+            // Create a group for this series with a high-impact glow
+            svgBuilder.append("<g class='data-series' id='series-$index' filter='url(#glow_$id)'>")
 
-            // Draw the line
+            // Draw the line with sharp, vibrant stroke
             svgBuilder.append("<path class='line-path' ")
             if (enableHoverEffects) {
                 svgBuilder.append("id='line-$index' ")
@@ -360,14 +396,16 @@ class LineChartImproved {
                 }
             }
 
-            svgBuilder.append("' fill='none' stroke='$color' stroke-width='2' />")
+            svgBuilder.append("' fill='none' stroke='$color' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' />")
+
 
             // Draw data points if enabled
             if (showPoints) {
                 sortedPoints.forEachIndexed { pointIndex, point ->
                     val cx = xToSvg(point.x)
                     val cy = yToSvg(point.y)
-                    svgBuilder.append("<circle class='data-point' cx='$cx' cy='$cy' r='5' fill='$color' stroke='$pointStrokeColor' stroke-width='1'>")
+                    val delay = 0.6 + (pointIndex * 0.08)
+                    svgBuilder.append("<circle class='data-point data-point-reveal' cx='$cx' cy='$cy' r='6' fill='$color' stroke='$pointStrokeColor' stroke-width='2' style='animation-delay: ${delay}s'>")
                     val xDisplay = point.xLabel ?: formatNumber(point.x)
                     svgBuilder.append("<title>${series.name}: ($xDisplay, ${formatNumber(point.y)})</title>")
                     svgBuilder.append("</circle>")
@@ -382,7 +420,12 @@ class LineChartImproved {
             val legendX = chartX + chartWidth + 20
             val legendY = chartY + 20
 
+            // Legend Backdrop Card (Atmosphere & Depth)
             svgBuilder.append("<g class='legend'>")
+            // Dynamic height for legend box
+            //val legBoxHeight = seriesList.size * 25 + 20
+            //svgBuilder.append("<rect x='${legendX - 10}' y='${legendY - 15}' width='${legendWidth - 20}' height='$legBoxHeight' rx='10' class='legend-box' filter='url(#glassDropShadow_$id)' />")
+
 
             seriesList.forEachIndexed { index, series ->
                 val yPos = legendY + index * 25
@@ -404,8 +447,8 @@ class LineChartImproved {
                     svgBuilder.append("<circle cx='${legendX - 7}' cy='$yPos' r='4' fill='$color' stroke='$pointStrokeColor' stroke-width='1' />")
                 }
 
-                // Legend text
-                svgBuilder.append("<text x='${legendX + 10}' y='$yPos' font-family='Arial' font-size='12' dominant-baseline='middle' fill='$textColor'>${series.name}</text>")
+                // Legend text - Forced contrast and monospace
+                svgBuilder.append("<text x='${legendX + 15}' y='$yPos' font-size='11' font-weight='600' dominant-baseline='middle' fill='$color' style='pointer-events: none;'>${series.name}</text>")
 
                 svgBuilder.append("</g>")
             }
