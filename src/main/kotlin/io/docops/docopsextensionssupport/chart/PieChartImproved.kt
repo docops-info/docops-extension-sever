@@ -149,12 +149,12 @@ class PieChartImproved {
         svgBuilder.append("""
         <defs>
         <!-- Geometric Atmosphere Pattern -->
-                <pattern id="dotPattern_${'$'}id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="${'$'}{if (darkMode) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                <pattern id="dotPattern_$id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${if (darkMode) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
                 </pattern>
                 
                 <!-- High-Impact Glow Filter -->
-                <filter id="glow_${'$'}id" x="-20%" y="-20%" width="140%" height="140%">
+                <filter id="glow_$id" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur stdDeviation="3" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
@@ -213,15 +213,15 @@ class PieChartImproved {
                     to { transform: scale(1); opacity: 1; }
             }
             .pie-segment { 
-                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease; 
-                    transform-origin: ${'$'}{centerX}px ${'$'}{centerY}px; 
-                    filter: url(#glassDropShadow_${'$'}id);
-                    opacity: 0;
-                    animation: revealPie 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-                }
+                        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease; 
+                        transform-origin: ${centerX}px ${centerY}px; 
+                        filter: url(#glassDropShadow_$id);
+                        opacity: ${if (isPdf) "1" else "0"};
+                        animation: ${if (isPdf) "none" else "revealPie 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards"};
+                    }
                 .pie-segment:hover { 
                     transform: scale(1.05); 
-                    filter: url(#glassDropShadow_${'$'}id) url(#glow_${'$'}id) brightness(1.1);
+                    filter: url(#glassDropShadow_$id) url(#glow_$id) brightness(1.1);
                     cursor: pointer; 
                 }
                 .chart-title {

@@ -6,6 +6,27 @@ import org.springframework.stereotype.Service
 @Service
 class GherkinMaker {
 
+    private fun wrapText(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
+        val avgCharWidth = fontSizePx * 0.55 // Heuristic for sans-serif
+        val maxChars = (maxWidthPx / avgCharWidth).toInt().coerceAtLeast(1)
+        val words = text.split(" ")
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        for (word in words) {
+            if (currentLine.isEmpty()) {
+                currentLine.append(word)
+            } else if (currentLine.length + 1 + word.length <= maxChars) {
+                currentLine.append(" ").append(word)
+            } else {
+                lines.add(currentLine.toString())
+                currentLine = StringBuilder(word)
+            }
+        }
+        if (currentLine.isNotEmpty()) lines.add(currentLine.toString())
+        return lines
+    }
+
     // Approximate text wrapping based on available width and font size.
     private fun wrapByWidth(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
         if (text.isBlank() || maxWidthPx <= 0) return listOf(text)
@@ -82,164 +103,165 @@ class GherkinMaker {
     }
 
     fun makeGherkin(spec: GherkinSpec, useDark: Boolean = false): String {
-        val theme = if (useDark) spec.theme.copy(
-            colors = spec.theme.colors.copy(
-                scenario = "#2d3748",
-                feature = "#63b3ed"
-            )
-        ) else spec.theme
+        val totalHeight = calculateTotalHeight(spec, spec.theme)
+        val width = spec.theme.layout.width
 
-        val totalHeight = calculateTotalHeight(spec, theme)
-        
         return buildString {
-            append(createSvgHeader(theme.layout.width, totalHeight))
-            append(createDefinitions(theme))
-            append(createBackground(theme.layout.width, totalHeight, useDark))
-            val featureHeader = createFeatureHeader(spec.feature, theme)
-            append(featureHeader.first)
-            
-            var yOffset = 20 + featureHeader.second + 20
+            append(createSvgHeader(width, totalHeight))
+            append(createDefinitions(useDark))
+            append(createBackground(width, totalHeight, useDark))
+
+            // Feature Header
+            val (headerSvg, headerHeight) = createFeatureHeader(spec.feature, spec.theme, useDark)
+            append(headerSvg)
+
+            var yOffset = 40 + headerHeight + 30
             spec.scenarios.forEachIndexed { index, scenario ->
-                append(createScenario(scenario, theme, yOffset, index))
-                yOffset += calculateScenarioHeight(scenario, theme) + theme.layout.scenarioSpacing
+                append(createScenario(scenario, spec.theme, yOffset, useDark))
+                yOffset += calculateScenarioHeight(scenario, spec.theme) + 40
             }
-            
+
             append("</svg>")
         }
     }
 
     private fun createSvgHeader(width: Int, height: Int): String {
-        return """
-            <svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height">
-        """.trimIndent()
+        return """<svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height">"""
     }
 
-    private fun createDefinitions(theme: GherkinTheme): String {
+    private fun createDefinitions(useDark: Boolean): String {
+        val accentStart = if (useDark) "#8b5cf6" else "#6366f1"
+        val accentEnd = if (useDark) "#3b82f6" else "#a855f7"
+        val stopColor = if (useDark) "#000000" else "#cbd5e1"
+
         return """
-            <defs>
-                <linearGradient id="featureGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:${theme.colors.feature};stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#7209b7;stop-opacity:1" />
-                </linearGradient>
-                
-                <linearGradient id="scenarioGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:${theme.colors.scenario};stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
-                </linearGradient>
-                
-                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.1"/>
-                </filter>
-                
-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge> 
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/> 
-                    </feMerge>
-                </filter>
-            </defs>
-        """.trimIndent()
+                <defs>
+                    <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" fill="${if (useDark) "#4a5568" else "#cbd5e1"}" opacity="0.3"/>
+                    </pattern>
+                    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:$accentStart;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:$accentEnd;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%">
+                        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="$stopColor" flood-opacity="${if (useDark) "0.5" else "0.2"}"/>
+                    </filter>
+                </defs>
+            """.trimIndent()
     }
+
+
 
     private fun createBackground(width: Int, height: Int, useDark: Boolean): String {
-        val bgColor = if (useDark) "#1a202c" else "#ffffff"
-        return """<rect width="$width" height="$height" fill="$bgColor" rx="8"/>"""
+        val bgColor = if (useDark) "#0f172a" else "#f8fafc"
+        return """
+                <rect width="$width" height="$height" fill="$bgColor" rx="16"/>
+                <rect width="$width" height="$height" fill="url(#dotPattern)" rx="16"/>
+            """.trimIndent()
     }
 
-    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme): Pair<String, Int> {
-        val width = theme.layout.width - (theme.layout.padding * 2)
-        val lines = featureLines(featureTitle, theme)
-        val lineHeight = theme.typography.featureSize + 6
-        val bgHeight = kotlin.math.max(50, lines.size * lineHeight + 16)
-        val centerY = 20 + (bgHeight / 2)
-        val firstBaseline = centerY - ((lines.size - 1) * lineHeight) / 2
+    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme, useDark: Boolean): Pair<String, Int> {
+        val width = theme.layout.width - 80
+        val lines = wrapText(featureTitle, width - 60, 24)
+        val lineHeight = 30
+        val bgHeight = (lines.size * lineHeight) + 60
+
+        val bgColor = if (useDark) "#1e293b" else "#ffffff"
+        val strokeColor = if (useDark) "#334155" else "#e2e8f0"
+        val textColor = if (useDark) "#f8fafc" else "#1e293b"
+        val labelColor = if (useDark) "#8b5cf6" else "#6366f1"
+
         val sb = StringBuilder()
-        sb.append(
-            """
-            <rect x="${theme.layout.padding}" y="20" width="$width" height="$bgHeight" 
-                  fill="url(#featureGradient)" rx="8" filter="url(#dropShadow)"/>
-            
-            <circle cx="${theme.layout.padding + 25}" cy="$centerY" r="12" fill="#ffffff" opacity="0.3"/>
-            <text x="${theme.layout.padding + 25}" y="$centerY" 
-                  font-family="${theme.typography.fontFamily}" font-size="16" 
-                  fill="#ffffff" text-anchor="middle" dominant-baseline="middle">🎯</text>
-        """.trimIndent()
-        )
+        sb.append("""
+                <g transform="translate(40, 40)">
+                    <rect width="$width" height="$bgHeight" fill="$bgColor" opacity="0.9" rx="12" stroke="$strokeColor" stroke-width="1"/>
+                    <rect width="6" height="${bgHeight - 40}" x="0" y="20" fill="url(#accentGradient)" rx="3" filter="url(#softGlow)"/>
+                    <text x="30" y="35" font-family="Monaco, monospace" font-size="11" font-weight="bold" fill="$labelColor" letter-spacing="2">FEATURE</text>
+            """)
+
         lines.forEachIndexed { idx, line ->
-            val y = firstBaseline + (idx * lineHeight)
-            sb.append(
-                """
-            <text x="${theme.layout.padding + 50}" y="$y" 
-                  font-family="${theme.typography.fontFamily}" font-size="${theme.typography.featureSize}" 
-                  font-weight="bold" fill="#ffffff">$line</text>
-                """.trimIndent()
-            )
+            sb.append("""<text x="30" y="${65 + (idx * lineHeight)}" font-family="sans-serif" font-size="24" font-weight="800" fill="$textColor">$line</text>""")
         }
+        sb.append("</g>")
         return Pair(sb.toString(), bgHeight)
     }
 
-    private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int, index: Int): String {
-        val scenarioHeight = calculateScenarioHeight(scenario, theme)
-        val width = theme.layout.width - (theme.layout.padding * 2) - 20
-        val headerHeight = scenarioHeaderHeight(scenario.title, theme)
-        val headerCenterY = yOffset + headerHeight / 2
-        val headerLines = scenarioHeaderLines(scenario.title, theme)
-        val lineHeightHeader = theme.typography.scenarioSize + 6
-        val headerFirstBaseline = headerCenterY - ((headerLines.size - 1) * lineHeightHeader) / 2
-        
+    private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int, useDark: Boolean): String {
+        val width = theme.layout.width - 80
+        val textColor = if (useDark) "#94a3b8" else "#64748b"
+        val highlightColor = if (useDark) "#f8fafc" else "#1e293b"
+        val metaColor = if (useDark) "#3b82f6" else "#2563eb"
+        val bgColor = if (useDark) "#1e293b" else "#ffffff"
+        val strokeColor = if (useDark) "#475569" else "#cbd5e1"
+
+        // 1. Wrap Scenario Title
+        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, 10)
+        val titleHeight = titleLines.size * 15
+
+        // 2. Pre-calculate steps with better padding
+        val stepData = scenario.steps.map { step ->
+            val lines = wrapText(step.text, width - 120, 14)
+            val h = lines.size * 22 // Increased line height slightly
+            Triple(step, lines, h)
+        }
+
+        // 3. Dynamic Height Calculation with extra padding (40px bottom buffer)
+        val scenarioHeight = 40 + titleHeight + 20 + stepData.sumOf { it.third + 18 } + 30
+
         return buildString {
-            // Scenario background
-            append("""
-                <rect x="${theme.layout.padding + 20}" y="$yOffset" width="$width" height="$scenarioHeight" 
-                      fill="url(#scenarioGradient)" rx="6" stroke="#dee2e6" stroke-width="1" filter="url(#dropShadow)"/>
-            """.trimIndent())
-            
-            // Scenario header
-            append("""
-                <rect x="${theme.layout.padding + 20}" y="$yOffset" width="$width" height="$headerHeight" 
-                      fill="#ffffff" rx="6"/>
-                
-                <circle cx="${theme.layout.padding + 45}" cy="$headerCenterY" r="10" fill="#6c757d" opacity="0.2"/>
-                <text x="${theme.layout.padding + 45}" y="$headerCenterY" 
-                      font-family="${theme.typography.fontFamily}" font-size="14" 
-                      fill="#6c757d" text-anchor="middle" dominant-baseline="middle">📋</text>
-            """.trimIndent())
-            headerLines.forEachIndexed { idx, line ->
-                val y = headerFirstBaseline + (idx * lineHeightHeader)
-                append(
-                    """
-                <text x="${theme.layout.padding + 65}" y="$y" 
-                      font-family="${theme.typography.fontFamily}" font-size="${theme.typography.scenarioSize}" 
-                      font-weight="600" fill="#495057">$line</text>
-                    """.trimIndent()
-                )
+            append("""<g transform="translate(40, $yOffset)" filter="url(#cardShadow)">""")
+            append("""<rect width="$width" height="$scenarioHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="0.5"/>""")
+
+            // Render Wrapped Scenario Title
+            titleLines.forEachIndexed { idx, line ->
+                append("""<text x="30" y="${35 + (idx * 15)}" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="$metaColor" letter-spacing="1.5">$line</text>""")
             }
-            
-            // Connecting line
-            val lineStartY = yOffset + headerHeight + 10
-            val lineEndY = yOffset + scenarioHeight - 20
+
+            // Status Badge (stays at the top right)
+            val statusColors = getStatusTheme(scenario.status, useDark)
             append("""
-                <line x1="${theme.layout.padding + 60}" y1="$lineStartY" x2="${theme.layout.padding + 60}" y2="$lineEndY" stroke="#dee2e6" stroke-width="2"/>
-            """.trimIndent())
-            
-            // Steps
-            var stepY = lineStartY + 15
-            val interStepGap = 8
-            scenario.steps.forEach { step ->
-                append(createStep(step, theme, stepY))
-                stepY += calculateStepHeight(step, theme) + interStepGap
+                    <g transform="translate(${width - 100}, 25)">
+                        <rect width="80" height="24" rx="12" fill="${statusColors.bg}" stroke="${statusColors.stroke}" stroke-width="1"/>
+                        <text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="${statusColors.text}" text-anchor="middle">${scenario.status.name}</text>
+                    </g>
+                """)
+
+            // Start steps after the wrapped title
+            var currentY = 40 + titleHeight + 20
+            stepData.forEachIndexed { idx, (step, lines, h) ->
+                val stepColor = getStepColorVibrant(step.type)
+                append("""<g transform="translate(35, $currentY)">""")
+                append("""<circle cx="0" cy="0" r="4" fill="$stepColor" filter="url(#softGlow)"/>""")
+
+                lines.forEachIndexed { lIdx, line ->
+                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${step.type.name.lowercase().capitalize()}</tspan> $line""" else line
+                    append("""<text x="25" y="${5 + (lIdx * 22)}" font-family="sans-serif" font-size="14" fill="$textColor">$content</text>""")
+                }
+
+                if (idx < stepData.size - 1) {
+                    val connectionHeight = h + 18
+                    append("""<path d="M 0 10 L 0 $connectionHeight" stroke="$strokeColor" stroke-width="1" stroke-dasharray="2 2"/>""")
+                }
+                append("</g>")
+                currentY += h + 18
             }
-            
-            // Scenario status indicator
-            val statusColor = getStatusColor(scenario.status, theme)
-            val statusIcon = getStatusIcon(scenario.status)
-            append("""
-                <circle cx="${theme.layout.width - 40}" cy="$headerCenterY" r="8" fill="$statusColor"/>
-                <text x="${theme.layout.width - 40}" y="$headerCenterY" 
-                      font-family="${theme.typography.fontFamily}" font-size="10" 
-                      fill="#ffffff" text-anchor="middle" dominant-baseline="middle">$statusIcon</text>
-            """.trimIndent())
+            append("</g>")
+        }
+    }
+
+
+
+    private data class StatusColors(val bg: String, val stroke: String, val text: String)
+
+    private fun getStatusTheme(status: GherkinScenarioStatus, useDark: Boolean): StatusColors {
+        return when (status) {
+            GherkinScenarioStatus.PASSING -> if (useDark) StatusColors("#064e3b", "#059669", "#34d399") else StatusColors("#dcfce7", "#16a34a", "#15803d")
+            GherkinScenarioStatus.FAILING -> if (useDark) StatusColors("#450a0a", "#dc2626", "#f87171") else StatusColors("#fee2e2", "#dc2626", "#b91c1c")
+            else -> if (useDark) StatusColors("#1e293b", "#475569", "#94a3b8") else StatusColors("#f1f5f9", "#94a3b8", "#475569")
         }
     }
 
@@ -356,20 +378,46 @@ class GherkinMaker {
         }
     }
 
+    private fun getStepColorVibrant(type: GherkinStepType): String {
+        return when (type) {
+            GherkinStepType.GIVEN -> "#22c55e"
+            GherkinStepType.WHEN -> "#3b82f6"
+            GherkinStepType.THEN -> "#8b5cf6"
+            else -> "#64748b"
+        }
+    }
+
     private fun calculateScenarioHeight(scenario: GherkinScenario, theme: GherkinTheme): Int {
-        val headerHeight = scenarioHeaderHeight(scenario.title, theme)
-        if (scenario.steps.isEmpty()) return headerHeight + 20
-        val interStepGap = 8
-        val stepsHeight = scenario.steps.sumOf { calculateStepHeight(it, theme) } + interStepGap * (scenario.steps.size - 1)
-        return headerHeight + stepsHeight + 20
+        val width = theme.layout.width - 80
+        // 1. Title height
+        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, 10)
+        val titleHeight = titleLines.size * 15
+
+        // 2. Steps height
+        val stepsHeight = scenario.steps.sumOf { step ->
+            val lines = wrapText(step.text, width - 120, 14)
+            (lines.size * 22) + 18 // Line height + gap
+        }
+
+        // 3. Header (40) + Title Space (20) + Steps + Bottom Padding (30)
+        return 40 + titleHeight + 20 + stepsHeight + 30
     }
 
     private fun calculateTotalHeight(spec: GherkinSpec, theme: GherkinTheme): Int {
-        val featureHeight = featureHeaderHeight(spec.feature, theme)
-        var height = 20 + featureHeight + 20
+        val width = theme.layout.width - 80
+        // Feature Header height
+        val featureLines = wrapText(spec.feature, width - 60, 24)
+        val featureHeaderHeight = (featureLines.size * 30) + 60
+
+        // Start with top padding + feature header + gap
+        var total = 40 + featureHeaderHeight + 30
+
+        // Add each scenario height + gap between scenarios
         spec.scenarios.forEach { scenario ->
-            height += calculateScenarioHeight(scenario, theme) + theme.layout.scenarioSpacing
+            total += calculateScenarioHeight(scenario, theme) + 40
         }
-        return height + theme.layout.padding
+
+        // Extra bottom buffer
+        return total + 20
     }
 }
