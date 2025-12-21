@@ -82,8 +82,8 @@ open class ReleaseTimelineGroupedMaker {
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="12px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- $s</tspan>
+                <tspan x="$lineStart" dy="10" class="entry" font-size="12px" font-weight="500"
+                   font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" text-anchor="start">- $s</tspan>
             """.trimIndent()
             )
             if (index <= 7) {
@@ -105,12 +105,12 @@ open class ReleaseTimelineGroupedMaker {
         //language=svg
         return """
          <g transform="translate($startX,$startY)" class="${shadeColor(release)}">
-             <text text-anchor="middle" x="200" y="-12" class="milestoneTLG">${release.date}</text>
+             <text text-anchor="middle" x="200" y="-12" class="milestone">${release.date}</text>
              <path d="m 0,0 h 400 v 200 h -400 l 0,0 l 100,-100 z" stroke="${strokeColor(release)}" fill="#fcfcfc"/>
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
-            <text x="410" y="110" class="milestoneTLG" font-size="36px" fill="#fcfcfc">${release.type}</text>
+            <text x="410" y="110" class="milestone" font-size="36px" fill="#fcfcfc">${release.type}</text>
             $completed
-            <text $anchor x="$x" y="12" class="milestoneTLG lines" font-size="12px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal}
+            <text $anchor x="$x" y="12" class="milestone lines" font-size="12px" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" font-weight="700">${release.goal}
                 $lineText
             </text>
         </g>
@@ -154,7 +154,7 @@ open class ReleaseTimelineGroupedMaker {
         """.trimIndent()
     }
     protected fun title(title: String, width: Int, titleFill: String) = """
-        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle"  font-size="18px" font-family="Arial, Helvetica, sans-serif">$title</text>
+        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle" font-size="18px" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" font-weight="800">$title</text>
     """.trimIndent()
     protected fun tail() = "</svg>"
 
@@ -181,11 +181,13 @@ open class ReleaseTimelineGroupedMaker {
                 filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
             }
             #ID${id} .milestone {
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                font-weight: bold;
+                font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 800;
             }
             #ID${id} .lines {
+                font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 font-size: 10px;
+                font-weight: 500;
             }
 
             #ID${id} .milestone > .entry {

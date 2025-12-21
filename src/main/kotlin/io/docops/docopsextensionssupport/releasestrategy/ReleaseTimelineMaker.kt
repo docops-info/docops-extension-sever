@@ -65,8 +65,8 @@ open class ReleaseTimelineMaker {
         release.lines.forEachIndexed { index, s ->
             lineText.append(
                 """
-                <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="normal"
-                   font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
+                <tspan x="$lineStart" dy="10" class="entry" font-size="10px" font-weight="500"
+                   font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" text-anchor="start">- ${s.escapeXml()}</tspan>
             """.trimIndent()
             )
             if (index <= 7) {
@@ -93,7 +93,7 @@ open class ReleaseTimelineMaker {
              <path d="m 400,0 v 200 l 100,-100 z" fill="${strokeColor(release)}" stroke="${strokeColor(release)}" />
             <text x="410" y="110" class="milestoneTL" font-size="36px" fill="#fcfcfc">${release.type}</text>
             $completed
-            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family='Arial, "Helvetica Neue", Helvetica, sans-serif' font-weight="bold">${release.goal.escapeXml()}
+            <text $anchor x="$x" y="12" class="milestoneTL lines" font-size="10px" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" font-weight="700">${release.goal.escapeXml()}
                 $lineText
             </text>
         </g>
@@ -130,7 +130,7 @@ open class ReleaseTimelineMaker {
         """.trimIndent()
     }
     protected fun title(title: String, width: Float, titleFill: String) = """
-        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle"  font-size="20px" font-family="Arial, Helvetica, sans-serif">${title.escapeXml()}</text>
+        <text x="${width/2}" y="18" fill="$titleFill" text-anchor="middle" font-size="20px" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" font-weight="800">${title.escapeXml()}</text>
     """.trimIndent()
     protected fun tail() = "</svg>"
 
@@ -143,8 +143,8 @@ open class ReleaseTimelineMaker {
             #ID${id} .shadM { fill: ${releaseStrategy.displayConfig.colors[0]}; -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); }
             #ID${id} .shadR { fill: ${releaseStrategy.displayConfig.colors[1]}; -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); }
             #ID${id} .shadG { fill: ${releaseStrategy.displayConfig.colors[2]}; -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); }
-            #ID${id} .milestoneTL { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-weight: bold; }
-            #ID${id} .lines { font-size: 10px; }
+            #ID${id} .milestoneTL { font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; }
+            #ID${id} .lines { font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 500; }
             #ID${id} .milestoneTL > .entry { text-anchor: start; font-weight: normal; }
             .raise { pointer-events: bounding-box; opacity: 1; filter: drop-shadow(3px 1px 2px rgb(0 0 0 / 0.4)); }
             .raise:hover { stroke: gold; stroke-width: 1px; opacity: 0.9; }

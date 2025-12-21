@@ -71,12 +71,13 @@ class ReleaseRoadMapMaker {
                  <g transform="scale(${releaseStrategy.scale})">
                  <!-- iOS-style background -->
                  <rect width="1200" height="$height" fill="$iosBgColor" class="ios-bg"/>
+                 <rect width="1200" height="$height" fill="url(#dotPattern_Roadmap)" opacity="0.1"/>
 
 
                  <!-- Title -->
                  <text x="600" text-anchor="middle" y="40" font-size="28px"
-                       font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                       font-weight="600" fill="$iosTextColor" class="ios-text">${releaseStrategy.title.escapeXml()}</text>
+                       font-family="'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+                       font-weight="800" fill="$iosTextColor" class="ios-text">${releaseStrategy.title.escapeXml()}</text>
                  $cardsStr
                  
                  <!-- Detail panels collected at this location -->
@@ -153,17 +154,17 @@ class ReleaseRoadMapMaker {
                     <circle cx="200" cy="90" r="35" fill="$milestoneColor" opacity="0.1"/>
                     <circle cx="200" cy="90" r="30" fill="$milestoneColor" stroke="#ffffff" stroke-width="3"/>
                     <text x="200" y="96" dominant-baseline="middle" text-anchor="middle"
-                          font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                          font-weight="600" font-size="12px" fill="white">${release.type}</text>
+                          font-family="'Plus Jakarta Sans', 'Outfit', sans-serif"
+                          font-weight="800" font-size="12px" fill="white">${release.type}</text>
                 </g>
 
                 <text x="200" y="140" text-anchor="middle"
-                      font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                      font-size="12px" font-weight="500" fill="$iosSecondaryText" class="ios-secondary-text">${release.date}</text>
+                      font-family="'Plus Jakarta Sans', 'Outfit', sans-serif"
+                      font-size="12px" font-weight="700" fill="$iosSecondaryText" class="ios-secondary-text">${release.date}</text>
 
                 <g class="goal-content">
-                    <text x="280" y="75" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                          font-size="18px" font-weight="500" fill="$iosTextColor" class="ios-text">
+                    <text x="280" y="75" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif"
+                          font-size="18px" font-weight="700" fill="$iosTextColor" class="ios-text">
                         <tspan x="280" dy="0">${lines.firstOrNull() ?: ""}</tspan>
                         ${if (lines.size > 1) "<tspan x=\"280\" dy=\"22\">${lines.getOrNull(1) ?: ""}</tspan>" else ""}
                     </text>
@@ -187,11 +188,11 @@ class ReleaseRoadMapMaker {
                 <rect x="100" y="0" width="1000" height="50" fill="#333333" rx="16" ry="16" class="detail-panel-header"/>
                 <rect x="100" y="30" width="1000" height="20" fill="#333333" class="detail-panel-header-bottom"/>
 
-                <text x="120" y="30" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-                      font-size="20px" font-weight="600" fill="#ffffff" class="detail-panel-title">${lines.firstOrNull() ?: ""}</text>
+                <text x="120" y="30" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif"
+                      font-size="20px" font-weight="800" fill="#ffffff" class="detail-panel-title">${lines.firstOrNull() ?: ""}</text>
 
                 <g class="detail-panel-content" transform="translate(120, 60)">
-                    <text class="detail-text" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+                    <text class="detail-text" fill="#ffffff" font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" font-weight="500">
                         $detailContent
                     </text>
                 </g>
@@ -223,6 +224,13 @@ class ReleaseRoadMapMaker {
         //language=html
         var style = """
             <style>
+                    :root {
+                        --ios-bg: $iosBgColor;
+                        --ios-card-bg: $iosCardBg;
+                        --ios-text: $iosTextColor;
+                        --ios-secondary-text: $iosSecondaryText;
+                        --accent-color: #007AFF;
+                    }
                     /* iOS-style card styling */
                     .ios-card {
                         transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -302,8 +310,8 @@ class ReleaseRoadMapMaker {
 
                     /* Legacy styling with improved readability */
                     .milestone:hover { cursor: pointer; stroke-width: 16; stroke-opacity: 1; fill: $hoverFill; }
-                    .milestone { font-size: 60px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-                    .milestoneDate { font-size: 18px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+                    .milestone { font-size: 60px; font-weight: 800; font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+                    .milestoneDate { font-size: 18px; font-weight: 700; font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
                     .bev:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[0]}; } 
                     .bev2:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[1]}; } 
                     .bev3:hover { $ani stroke: ${releaseStrategy.displayConfig.circleColors[2]}; }
@@ -427,9 +435,13 @@ class ReleaseRoadMapMaker {
         releaseStrategy.displayConfig.colors.forEachIndexed { index, s ->
             colors.append(SVGColor(s, "release${shades[index]}").linearGradient)
         }
+        val dotColor = if(releaseStrategy.useDark) "#ffffff" else "#000000"
         //language=svg
         return """
             <defs>
+                    <pattern id="dotPattern_Roadmap" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="1" fill="$dotColor" opacity="0.3"/>
+                    </pattern>
                     <filter xmlns="http://www.w3.org/2000/svg" id="filter1">
                         <feGaussianBlur stdDeviation="1.75"/>
                     </filter>

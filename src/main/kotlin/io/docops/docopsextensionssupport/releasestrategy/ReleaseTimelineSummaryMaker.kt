@@ -98,6 +98,16 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val str = StringBuilder()
         str.append("<defs>")
 
+        // Add a patterns for the background
+        str.append("""
+            <pattern id="gridPattern_$id" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.1"/>
+            </pattern>
+            <pattern id="dotPattern_$id" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="currentColor" opacity="0.1"/>
+            </pattern>
+        """.trimIndent())
+
         // Add gradients for each release type
         releaseStrategy.displayConfig.colors.forEachIndexed { index, color ->
             val gradientId = when (index) {
@@ -131,9 +141,24 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         return """
             <linearGradient id="$id" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style="stop-color:$color;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:$color;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:${darkenColor(color)};stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="glass_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" />
+                <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" />
             </linearGradient>
         """.trimIndent()
+    }
+
+    private fun darkenColor(color: String): String {
+        return try {
+            val r = color.substring(1, 3).toInt(16)
+            val g = color.substring(3, 5).toInt(16)
+            val b = color.substring(5, 7).toInt(16)
+            String.format("#%02x%02x%02x", (r * 0.8).toInt(), (g * 0.8).toInt(), (b * 0.8).toInt())
+        } catch (e: Exception) {
+            color
+        }
     }
 
 
@@ -173,27 +198,27 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                     filter: url(#glowEffect);
                 }
                 #ID$id .milestone-text {
-                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                    font-weight: bold;
+                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+                    font-weight: 800;
                     text-rendering: optimizeLegibility;
                     pointer-events: none;
                 }
                 #ID$id .detail-text {
-                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
                     font-size: 10px;
                     line-height: 1.4;
                     pointer-events: none;
                 }
                 #ID$id .date-text {
-                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
                     font-size: 11px;
-                    font-weight: normal;
+                    font-weight: 600;
                     pointer-events: none;
                 }
                 #ID$id .goal-text {
-                    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
                     font-size: 12px;
-                    font-weight: bold;
+                    font-weight: 700;
                     line-height: 1.3;
                     pointer-events: none;
                 }
@@ -213,7 +238,11 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
     private fun createBackground(dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
         val backgroundColor = if (releaseStrategy.useDark) "#21252B" else "#f8f9fa"
-        return """<rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="$backgroundColor"/>"""
+        val patternColor = if (releaseStrategy.useDark) "#ffffff" else "#000000"
+        return """
+            <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="$backgroundColor"/>
+            <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="url(#dotPattern_${releaseStrategy.id})" text-color="$patternColor" color="$patternColor"/>
+        """.trimIndent()
     }
 
 
@@ -225,7 +254,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                   fill="$titleFill" 
                   text-anchor="middle" 
                   font-size="18px" 
-                  font-family="Arial, Helvetica, sans-serif" 
+                  font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" 
+                  font-weight="800"
                   class="milestone-text">
                 ${title.escapeXml()}
             </text>
@@ -257,15 +287,25 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                 <!-- Card background -->
                 <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
                       fill="url(#$gradientId)" 
-                      stroke="rgba(0,0,0,0.1)" 
-                      stroke-width="1" 
+                      stroke="rgba(255,255,255,0.1)" 
+                      stroke-width="1.5" 
                       filter="url(#dropShadow)"/>
                 
+                <!-- Glass overlay -->
+                <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
+                      fill="url(#glass_$gradientId)" 
+                      pointer-events="none"/>
+
                 <!-- Arrow triangle -->
                 <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
                       fill="url(#$gradientId)" 
-                      stroke="rgba(0,0,0,0.1)" 
-                      stroke-width="1"/>
+                      stroke="rgba(255,255,255,0.1)" 
+                      stroke-width="1.5"/>
+                
+                <!-- Glass overlay for triangle -->
+                <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
+                      fill="url(#glass_$gradientId)" 
+                      pointer-events="none"/>
                 
                 <!-- Date text -->
                 <text x="${CARD_WIDTH/2}" y="-10" 
