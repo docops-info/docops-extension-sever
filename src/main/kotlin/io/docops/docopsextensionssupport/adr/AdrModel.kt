@@ -76,7 +76,8 @@ data class Adr(
     val consequences: List<String>,
     val participants: List<Participant> = emptyList(),
     val references: List<WikiLink> = emptyList(),
-    val links: List<WikiLink> = emptyList()
+    val links: List<WikiLink> = emptyList(),
+    val template: String = "classic"
 )
 
 
@@ -162,10 +163,15 @@ class AdrParser {
 
         var currentSection: String? = null
 
+        var template = "classic"
         for (line in lines) {
             val trimmedLine = line.trim()
 
             when {
+                trimmedLine.startsWith("template:", true) -> {
+                    template = trimmedLine.substringAfter(trimmedLine.substring(0, 9))
+                    currentSection = null
+                }
                 trimmedLine.startsWith("title:", true) -> {
                     title = trimmedLine.substringAfter(trimmedLine.substring(0, 6), "").trim()
                     currentSection = null
@@ -303,7 +309,9 @@ class AdrParser {
         for (line in referencesLines) {
             extractWikiLinks(line, references)
         }
-
+        if(template != "brutalist") {
+            template = "classic"
+        }
         return Adr(
             title = title,
             status = status,
@@ -313,7 +321,8 @@ class AdrParser {
             consequences = consequencesLines,
             participants = participants,
             references = references,
-            links = links
+            links = links,
+            template = template
         )
     }
 }

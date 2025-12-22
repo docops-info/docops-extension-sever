@@ -56,9 +56,12 @@ Use `[ ]` to mark open and `[x]` when completed. Keep links to Plan and Requirem
 
 24. [x] Sanity-check performance/memory on typical timelines (Plan: P10; Reqs: R11)
 25. [x] Validate text readability, wrapping/truncation, and non-overlap in horizontal layout (Plan: P11; Reqs: R12)
+30. [x] Improve connector text visibility on dark backgrounds using luminance-based adaptive coloring (Plan: P3; Reqs: R4, R12)
 
 ## Phase 9 — Release Readiness
 
 26. [x] Update CHANGELOG with feature entry "Horizontal timeline" (Plan: P9; Reqs: R10)
 27. [x] Ensure backward compatibility note and migration guidance (defaults to vertical) (Plan: P4, P9; Reqs: R3, R5, R10)
 28. [x] Final review and merge feature branch (Plan: P4, P5; Reqs: R5)
+31. [x] Update Release Strategy visual style: replace generic fonts (Arial) with distinctive ones ('Plus Jakarta Sans', 'Outfit'), add background patterns, and enhance card aesthetics with glassmorphism and better gradients to match high-impact visual strategy (Plan: P3; Reqs: R4, R11)
+32. [x] Improve Combination Chart aesthetics: switch to 'JetBrains Mono', implement Midnight IDE theme for dark mode, add dot background patterns, and staggered entry animations (Plan: P3; Reqs: R4, R11)

@@ -8,11 +8,19 @@ import io.docops.docopsextensionssupport.web.update
 class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     fun handleSVG(payload: String, scale: String, useDark: Boolean, backEnd: String): String {
-        val generator = AdrSvgGenerator()
         val adr = AdrParser().parseContent(payload)
-        val svg = generator.generate(adr, width = 700, darkMode = useDark)
-        csvResponse.update(adr.toCsv())
-        return svg
+        if(adr.template != "brutalist") {
+            AdrSvgGenerator().generate(adr, width = 700, darkMode = useDark)
+            val generator = AdrSvgGenerator()
+            val svg = generator.generate(adr, width = 700, darkMode = useDark)
+            csvResponse.update(adr.toCsv())
+            return svg
+        } else {
+            val generator = CyberBrutalistAdrSvgGenerator()
+            val svg = generator.generate(adr)
+            csvResponse.update(adr.toCsv())
+            return svg
+        }
     }
 
     override fun handleSVG(
