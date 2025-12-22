@@ -14,12 +14,11 @@ class BusinessCardRenderer : VCardRenderer {
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
         val theme = config.theme
-        val (bgColor, textColor, accentColor, secondaryColor) = when (theme) {
-            "dark" -> arrayOf("#1a1a1a", "#ffffff", "#00d4aa", "#a0a0a0")
-            else -> arrayOf("#ffffff", "#1a202c", "#667eea", "#4a5568")
+        val (bgColor, textColor, accentColor, secondaryColor, metaColor) = when (theme) {
+            "dark" -> arrayOf("#0F0F0F", "#FFFFFF", "#00d4aa", "#CBD5E1", "#262626")
+            else -> arrayOf("#F8F8F8", "#1A1A1A", "#667eea", "#475569", "#E5E7EB")
         }
 
-        // Generate QR code for full vCard
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
         val vCardData = vCardGeneratorService.generateVCard30(vcard)
@@ -29,58 +28,52 @@ class BusinessCardRenderer : VCardRenderer {
         return buildString {
             appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg">""")
 
-            // Background
-            appendLine("""  <rect width="350" height="200" rx="16" fill="$bgColor"/>""")
+            appendLine("""
+                <defs>
+                    <style>
+                        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                        .reveal { animation: fadeIn 0.8s ease-out both; }
+                        /* Removed fill from CSS to handle it directly on elements for better reliability */
+                        #id_$id .name-txt { font-family: 'Georgia', serif; font-weight: bold; font-size: 22px; }
+                        #id_$id .title-txt { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; }
+                        #id_$id .contact-txt { font-family: sans-serif; font-size: 10px; }
+                        #id_$id .qr-lbl { font-family: 'Courier New', monospace; font-size: 7px; text-transform: uppercase; letter-spacing: 0.1em; }
+                    </style>
+                </defs>
+            """.trimIndent())
 
-            // Accent bar
-            appendLine("""  <rect x="0" y="0" width="6" height="200" rx="3" fill="$accentColor"/>""")
+            // Background & Top Accent
+            appendLine("""  <rect width="350" height="200" rx="4" fill="$bgColor"/>""")
+            appendLine("""  <rect width="350" height="2" fill="$accentColor" opacity="0.8"/>""")
 
-            // Name
-            appendLine("""  <text x="30" y="50" font-family="'Roboto', sans-serif" font-size="22" font-weight="600" fill="$textColor">""")
-            appendLine("""    ${vcard.firstName}  ${vcard.lastName} """)
-            appendLine("""  </text>""")
-
-            // Title
+            // Name & Title - Explicitly setting fill here
+            appendLine("""  <text x="30" y="55" fill="$textColor" class="name-txt reveal" style="animation-delay: 0.1s;">${vcard.firstName} ${vcard.lastName}</text>""")
             vcard.title?.let {
-                appendLine("""  <text x="30" y="75" font-family="'Roboto', sans-serif" font-size="14" font-weight="400" fill="$secondaryColor">""")
-                appendLine("""    ${vcard.title}""")
-                appendLine("""  </text>""")
+                appendLine("""  <text x="30" y="75" fill="$accentColor" class="title-txt reveal" style="animation-delay: 0.2s;">$it</text>""")
             }
 
-            // Company
-            vcard.organization?.let {
-                appendLine("""  <text x="30" y="95" font-family="'Roboto', sans-serif" font-size="12" font-weight="500" fill="$accentColor">""")
-                appendLine("""    ${vcard.organization}""")
-                appendLine("""  </text>""")
-            }
+            // Decorative Splitter
+            appendLine("""  <rect x="30" y="95" width="120" height="1" fill="$metaColor" class="reveal" style="animation-delay: 0.3s;"/>""")
 
-            // Contact details - PRIMARY ONLY
-            var yPos = 125
-
-            // Display FIRST/PRIMARY email only
+            // Contact details
+            var yPos = 120
             val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
             primaryEmail?.let {
-                appendLine("""  <circle cx="40" cy="${yPos - 5}" r="2" fill="$accentColor"/>""")
-                appendLine("""  <text x="55" y="$yPos" font-family="'Roboto', sans-serif" font-size="11" fill="$textColor">""")
-                appendLine("""    $it""")
-                appendLine("""  </text>""")
-                yPos += 20
+                appendLine("""  <text x="30" y="$yPos" fill="$secondaryColor" class="contact-txt reveal" style="animation-delay: 0.4s;">$it</text>""")
+                yPos += 18
             }
-
-            // Display FIRST/PRIMARY phone only
             val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
             primaryPhone?.let {
-                appendLine("""  <circle cx="40" cy="${yPos - 5}" r="2" fill="$accentColor"/>""")
-                appendLine("""  <text x="55" y="$yPos" font-family="'Roboto', sans-serif" font-size="11" fill="$textColor">""")
-                appendLine("""    $it""")
-                appendLine("""  </text>""")
+                appendLine("""  <text x="30" y="$yPos" fill="$secondaryColor" class="contact-txt reveal" style="animation-delay: 0.5s;">$it</text>""")
             }
 
-            // QR Code in bottom right with ID for clickability
-            appendLine("""  <g id="qr-trigger-$id" style="cursor: pointer;">""")
-            appendLine("""    <rect x="240" y="110" width="90" height="70" rx="6" fill="white"/>""")
-            appendLine("""    <image x="250" y="115" width="60" height="60" href="$qrCodeBase64"/>""")
-            appendLine("""    <text x="280" y="184" font-family="'Inter', sans-serif" font-size="7" fill="$secondaryColor" text-anchor="middle">Scan for all info</text>""")
+            appendLine("""  <g id="qr-trigger-$id" class="reveal" style="cursor: pointer; animation-delay: 0.6s;">""")
+            // Fix: In dark mode, we need a light background for the QR code to be visible/scannable
+            val qrFrameFill = if (theme == "dark") "#FFFFFF" else metaColor
+            val qrOpacity = if (theme == "dark") "0.95" else "1.0"
+            appendLine("""    <rect x="250" y="45" width="70" height="70" rx="2" fill="$qrFrameFill" opacity="$qrOpacity"/>""")
+            appendLine("""    <image x="255" y="50" width="60" height="60" href="$qrCodeBase64"/>""")
+            appendLine("""    <text x="285" y="130" text-anchor="middle" class="qr-lbl" fill="$secondaryColor">vCard Access</text>""")
             appendLine("""  </g>""")
 // Add modal BEFORE closing the SVG
             appendLine("""

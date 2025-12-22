@@ -14,93 +14,78 @@ class TechPatternCardRenderer : VCardRenderer {
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
         val theme = config.theme
-        val (bgColor, textColor, accentColor, gridColor) = when (theme) {
-            "dark" -> arrayOf("#0a0e27", "#ffffff", "#00ff88", "#00ff88")
-            else -> arrayOf("#f8fafc", "#1a202c", "#2563eb", "#2563eb")
+        val (bgColor, textColor, accentColor, secondaryColor) = when (theme) {
+            "dark" -> arrayOf("#0A0E17", "#FFFFFF", "#00ff88", "#475569")
+            else -> arrayOf("#F8FAFC", "#0F172A", "#2563EB", "#64748B")
         }
         val id: String = Uuid.random().toHexString()
+
+        val vCardGeneratorService = VCardGeneratorService()
+        val qrCodeService = QRCodeService()
+        val vCardData = vCardGeneratorService.generateVCard30(vcard)
+        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
+
         return buildString {
             appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">""")
-            appendLine("""  <defs>""")
-            appendLine("""    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">""")
-            appendLine("""      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="$gridColor" stroke-width="0.5" opacity="0.1"/>""")
-            appendLine("""    </pattern>""")
-            appendLine("""  </defs>""")
+            appendLine("""
+                <defs>
+                    <style>
+                        #id_$id @keyframes scanline { 0% { transform: translateY(-100px); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: translateY(200px); opacity: 0; } }
+                        #id_$id @keyframes reveal { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
+                        #id_$id .tech-reveal { animation: reveal 0.8s ease-out both; }
+                        #id_$id .name-txt { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; fill: $textColor; }
+                        #id_$id .code-txt { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: $accentColor; opacity: 0.8; }
+                        #id_$id .terminal-txt { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: $textColor; }
+                    </style>
+                    <linearGradient id="scan-grad-$id" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="$accentColor" stop-opacity="0"/>
+                        <stop offset="50%" stop-color="$accentColor" stop-opacity="0.2"/>
+                        <stop offset="100%" stop-color="$accentColor" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+            """.trimIndent())
 
-            // Background
-            appendLine("""  <rect width="350" height="200" rx="12" fill="$bgColor"/>""")
-            appendLine("""  <rect width="350" height="200" rx="12" fill="url(#grid)"/>""")
+            // Background & Atmospheric Scan Line
+            appendLine("""  <rect width="350" height="200" rx="2" fill="$bgColor"/>""")
+            appendLine("""  <rect width="350" height="80" fill="url(#scan-grad-$id)" style="animation: scanline 4s linear infinite;"/>""")
 
-            // Accent elements
-            appendLine("""  <rect x="0" y="176" width="350" height="4" fill="$accentColor"/>""")
-            appendLine("""  <rect x="20" y="36" width="4" height="140" fill="$accentColor" opacity="0.3"/>""")
-
-            // Name
-            appendLine("""  <text x="40" y="60" font-family="'JetBrains Mono', monospace" font-size="20" font-weight="600" fill="$textColor">""")
-            appendLine("""    ${vcard.firstName}  ${vcard.lastName}""")
-            appendLine("""  </text>""")
-
-            // Title with code-like styling
+            // Identity Block
+            appendLine("""  <g transform="translate(35, 45)" class="tech-reveal" style="animation-delay: 0.1s;">""")
+            appendLine("""    <text class="name-txt">${vcard.firstName} ${vcard.lastName}</text>""")
             vcard.title?.let {
-                appendLine("""  <text x="40" y="80" font-family="'JetBrains Mono', monospace" font-size="12" fill="$accentColor">""")
-                appendLine("""    &lt;${vcard.title}/&gt;""")
-                appendLine("""  </text>""")
+                appendLine("""    <text y="20" class="code-txt">// ROLE: ${it.uppercase()}</text>""")
             }
+            appendLine("""  </g>""")
 
-            // Company
-            vcard.organization?.let {
-                appendLine("""  <text x="40" y="100" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">""")
-                appendLine("""    ${vcard.organization}""")
-                appendLine("""  </text>""")
-            }
+            // Terminal Content
+            var yPos = 100
+            appendLine("""  <g transform="translate(35, $yPos)" class="tech-reveal" style="animation-delay: 0.3s;">""")
+            appendLine("""    <rect x="-10" y="0" width="3" height="12" fill="$accentColor"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" /></rect>""")
+            appendLine("""    <text class="code-txt">$ contact --fetch-identity</text>""")
 
-            var yPos = 125
-
-            // PRIMARY Email with terminal-style
             val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
             primaryEmail?.let {
-                appendLine("""  <text x="40" y="$yPos" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
-                appendLine("""    $ contact --email""")
-                appendLine("""  </text>""")
-                appendLine("""  <text x="40" y="${yPos + 15}" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
-                appendLine("""    $it""")
-                appendLine("""  </text>""")
-                yPos += 35
+                appendLine("""    <text y="18" class="terminal-txt">$it</text>""")
             }
-
-            // PRIMARY Phone with terminal-style
-            val primaryPhone = vcard.phones.firstOrNull()
-            val phoneFlag = primaryPhone?.let { phone ->
-                when (phone.type) {
-                    io.docops.docopsextensionssupport.vcard.model.PhoneType.CELL -> "--phone-cell"
-                    io.docops.docopsextensionssupport.vcard.model.PhoneType.WORK -> "--phone-work"
-                    else -> "--phone"
-                }
-            } ?: "--phone"
-
-            val phoneNumber = primaryPhone?.number ?: vcard.mobile
-            phoneNumber?.let {
-                appendLine("""  <text x="40" y="$yPos" font-family="'JetBrains Mono', monospace" font-size="10" fill="$accentColor">""")
-                appendLine("""    $ contact $phoneFlag""")
-                appendLine("""  </text>""")
-                appendLine("""  <text x="40" y="${yPos + 15}" font-family="'JetBrains Mono', monospace" font-size="10" fill="$textColor">""")
-                appendLine("""    $it""")
-                appendLine("""  </text>""")
+            val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
+            primaryPhone?.let {
+                appendLine("""    <text y="34" class="terminal-txt">$it</text>""")
             }
+            appendLine("""  </g>""")
 
-            // Generate and add QR code
-            val vCardGeneratorService = VCardGeneratorService()
-            val qrCodeService = QRCodeService()
-            val vCardData = vCardGeneratorService.generateVCard30(vcard)
-            val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
+            // Bottom Detail: Segmented Progress Detail
+            appendLine("""  <g transform="translate(35, 175)" opacity="0.3" class="tech-reveal" style="animation-delay: 0.5s;">""")
+            appendLine("""    <rect width="20" height="3" fill="$accentColor" rx="1"/>""")
+            appendLine("""    <rect x="25" width="20" height="3" fill="$accentColor" rx="1"/>""")
+            appendLine("""    <rect x="50" width="10" height="3" fill="$accentColor" rx="1"/>""")
+            appendLine("""  </g>""")
 
-            // QR Code terminal-style
-            // QR Code in bottom right corner with clickable group
-            appendLine("""  <g id="qr-trigger-$id" style="cursor: pointer;">""")
-            appendLine("""    <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
-            appendLine("""  <rect x="263" y="95" width="60" height="60" rx="2" fill="white"/>""")
-            appendLine("""    <image x="268" y="100" width="50" height="50" href="$qrCodeBase64"/>""")
-            appendLine("""    <text x="288" y="187" font-family="'JetBrains Mono', monospace" font-size="7" fill="$accentColor" text-anchor="middle">$ scan</text>""")
+            // QR Access Block
+            appendLine("""  <g id="qr-trigger-$id" transform="translate(245, 65)" class="tech-reveal" style="cursor: pointer; animation-delay: 0.6s;">""")
+            appendLine("""    <rect width="75" height="75" rx="1" fill="none" stroke="$accentColor" stroke-width="0.5" stroke-dasharray="8 4"/>""")
+            appendLine("""    <rect x="4" y="4" width="67" height="67" rx="1" fill="white" opacity="0.95"/>""")
+            appendLine("""    <image x="7" y="7" width="61" height="61" href="$qrCodeBase64"/>""")
+            appendLine("""    <text x="37.5" y="90" text-anchor="middle" class="code-txt" style="font-size: 7px;">AUTH_SCAN_v2</text>""")
             appendLine("""  </g>""")
 
            /* appendLine("""  <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
