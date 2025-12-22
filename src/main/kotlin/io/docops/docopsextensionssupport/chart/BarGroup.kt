@@ -29,6 +29,7 @@ class BarGroupDisplay(
     val vBar: Boolean = false,
     val condensed: Boolean = false,
     val useDark: Boolean = false,
+    val theme: String = "classic",
     val scale: Double = 1.0
 )
 

@@ -86,6 +86,7 @@ class BarChartImproved {
         val useDark = config["darkMode"]?.toBoolean() ?: false
         val sorted = config["sorted"]?.toBoolean() ?: false
         val scale = config["scale"]?.toFloatOrNull() ?: 1.0f
+        val theme = config["theme"] ?: "classic"
         val type = config.getOrDefault("type", "R")
 
         // Parse series data
@@ -123,6 +124,7 @@ class BarChartImproved {
             vBar = vBar,
             useDark = useDark,
             sorted = sorted,
+            theme = theme,
             scale = scale
         )
 
@@ -144,6 +146,7 @@ class BarChartImproved {
         val vBar = config["vBar"]?.toBoolean() ?: false
         val useDark = config["darkMode"]?.toBoolean() ?: false
         val condensed = config["condensed"]?.toBoolean() ?: false
+        val theme = config["theme"] ?: "classic"
         val scale = config["scale"]?.toDoubleOrNull() ?: 1.0
 
         // Parse group data
@@ -188,6 +191,7 @@ class BarChartImproved {
             vBar = vBar,
             condensed = condensed,
             useDark = useDark,
+            theme = theme,
             scale = scale
         )
 

@@ -11,6 +11,10 @@ class BarGroupMaker {
 
     private var fontColor = "#fcfcfc"
     fun makeBar(barGroup: BarGroup, isPdf: Boolean): String {
+        if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
+            val brutalistMaker = CyberBrutalistBarGroupMaker()
+            return brutalistMaker.makeBar(barGroup).first
+        }
         fontColor = determineTextColor(barGroup.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))

@@ -1,0 +1,227 @@
+package io.docops.docopsextensionssupport.chart
+
+import io.docops.docopsextensionssupport.web.CsvResponse
+import kotlin.math.*
+
+class CyberBrutalistBarGroupMaker {
+
+    private val titleFont = "Syne, sans-serif"
+    private val monoFont = "JetBrains Mono, monospace"
+    private val bgColorStart = "#1e1b4b"
+    private val bgColorEnd = "#0f172a"
+    private val textColor = "#f8fafc"
+    private val subTextColor = "#94a3b8"
+    private val accentColor = "#818cf8"
+    private val secondaryColor = "#fbbf24"
+
+    fun makeBar(barGroup: BarGroup): Pair<String, CsvResponse> {
+        val sb = StringBuilder()
+        sb.append(makeHead(barGroup))
+        sb.append(makeDefs(barGroup))
+        
+        // Background - rounded and gradient
+        sb.append("""<rect id="bg_${barGroup.id}" x="0" y="0" width="${barGroup.calcWidth()}" height="800" fill="url(#group_bg)" rx="16" />""")
+        
+        sb.append(makeTitle(barGroup))
+        sb.append(makeXLabel(barGroup))
+        sb.append(makeYLabel(barGroup))
+        
+        // Grid lines
+        sb.append(addGrid(barGroup))
+        
+        var startX = 110.0
+        val elements = StringBuilder()
+        barGroup.groups.forEachIndexed { index, group ->
+            val added = addGroup(barGroup, group, startX, index)
+            startX += group.series.size * 50.0 + 30.0 // Adjusted for plate padding
+            elements.append(added)
+        }
+
+        sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
+        sb.append(elements.toString())
+        sb.append("</g>")
+        
+        sb.append(addTicks(barGroup))
+        sb.append(addLegend(barGroup))
+        sb.append("</svg>")
+        
+        return Pair(sb.toString(), barGroup.toCsv())
+    }
+
+    private fun makeHead(barGroup: BarGroup): String {
+        return """<svg xmlns="http://www.w3.org/2000/svg" width="${barGroup.calcWidth()}" height="800" viewBox="0 0 ${barGroup.calcWidth()} 800">
+            <style>
+                .title-text { font-family: $titleFont; font-weight: 800; text-transform: uppercase; }
+                .mono-text { font-family: $monoFont; }
+                .group-plate { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
+                .bar-anim { transform-origin: bottom; animation: growBar 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                @keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+            </style>
+        """.trimIndent()
+    }
+
+    private fun makeDefs(barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        sb.append("<defs>")
+        sb.append("""
+            <radialGradient id="group_bg" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop offset="0%" style="stop-color:$bgColorStart;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:$bgColorEnd;stop-opacity:1" />
+            </radialGradient>
+            <linearGradient id="plate_grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.05" />
+                <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.01" />
+            </linearGradient>
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+        """)
+        
+        // Group gradients based on ChartColors
+        barGroup.legendLabel().distinct().forEachIndexed { index, _ ->
+            val color = ChartColors.getColorForIndex(index).color
+            sb.append("""
+                <linearGradient id="brut_grad_$index" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:$color;" />
+                    <stop offset="100%" style="stop-color:${darkenColor(color, 0.3)};" />
+                </linearGradient>
+            """)
+        }
+        sb.append("</defs>")
+        return sb.toString()
+    }
+
+    private fun makeTitle(barGroup: BarGroup): String {
+        return """
+            <text x="40" y="60" class="title-text" font-size="24" fill="$textColor">${barGroup.title}</text>
+            <text x="40" y="90" class="mono-text" font-size="12" fill="$subTextColor" opacity="0.8">Comparative Resource Metrics // v2.4</text>
+        """.trimIndent()
+    }
+
+    private fun makeXLabel(barGroup: BarGroup): String {
+        val x = barGroup.calcWidth() / 2
+        val y = 780
+        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="$subTextColor">${barGroup.xLabel ?: ""}</text>"""
+    }
+
+    private fun makeYLabel(barGroup: BarGroup): String {
+        val x = 20
+        val y = 415
+        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="$subTextColor" transform="rotate(-90, $x, $y)">${barGroup.yLabel ?: ""}</text>"""
+    }
+
+    private fun addGrid(barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        val ticks = barGroup.ticks()
+        var current = ticks.getNiceMin()
+        while (current <= ticks.getNiceMax()) {
+            val y = 650 - barGroup.scaleUp(current)
+            sb.append("""<line x1="80" y1="$y" x2="${barGroup.calcWidth() - 40}" y2="$y" stroke="$subTextColor" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.2" />""")
+            current += ticks.getTickSpacing()
+        }
+        return sb.toString()
+    }
+
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, groupIndex: Int): String {
+        val sb = StringBuilder()
+        val groupWidth = added.series.size * 50.0 + 20.0
+        val plateHeight = 500.0
+        val plateY = 180.0
+        
+        sb.append("""<g class="group-plate" style="animation-delay: ${0.1 * groupIndex}s">""")
+        // Glass plate
+        sb.append("""<rect x="$startX" y="$plateY" width="$groupWidth" height="$plateHeight" fill="url(#plate_grad)" rx="8" />""")
+        
+        // Group label rotated
+        sb.append("""<text x="${startX + 15}" y="${plateY + plateHeight - 20}" class="title-text" font-size="14" font-weight="700" fill="$accentColor" transform="rotate(-90, ${startX + 15}, ${plateY + plateHeight - 20})">${added.label}</text>""")
+
+        var counter = startX + 40.0
+        added.series.forEachIndexed { index, series ->
+            val per = barGroup.scaleUp(series.value)
+            val barX = counter
+            val barY = 650 - per
+            val barWidth = 30.0
+            val barHeight = per
+            val color = "url(#brut_grad_$index)"
+
+            sb.append("""
+                <g class="bar-hover">
+                    <rect class="bar-anim" x="$barX" y="$barY" width="$barWidth" height="$barHeight" fill="$color" rx="4" filter="url(#glow)" style="animation-delay: ${0.4 + 0.1 * index}s" />
+                    <text x="${barX + barWidth / 2}" y="${barY - 10}" class="mono-text" font-size="10" text-anchor="middle" fill="$textColor">${barGroup.valueFmt(series.value)}</text>
+                </g>
+            """.trimIndent())
+            counter += 50.0
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun addTicks(barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        val ticks = barGroup.ticks()
+        var current = ticks.getNiceMin()
+        sb.append("""<g class="mono-text" font-size="10" fill="$subTextColor">""")
+        while (current <= ticks.getNiceMax()) {
+            val y = 650 - barGroup.scaleUp(current)
+            sb.append("""<text x="75" y="${y + 4}" text-anchor="end">${barGroup.valueFmt(current)}</text>""")
+            current += ticks.getTickSpacing()
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun addLegend(group: BarGroup): String {
+        val sb = StringBuilder()
+        val distinctLabels = group.legendLabel().distinct()
+        if (distinctLabels.isEmpty()) return ""
+
+        val itemWidth = 110.0
+        val chartWidth = group.calcWidth()
+        val maxAvailableWidth = chartWidth - 100.0
+        
+        // Calculate how many items can fit in one row
+        var itemsPerRow = floor(maxAvailableWidth / itemWidth).toInt()
+        if (itemsPerRow <= 0) itemsPerRow = 1
+        
+        val rows = ceil(distinctLabels.size.toDouble() / itemsPerRow).toInt()
+        
+        // Calculate actual legend width based on items or available space
+        val actualItemsInFirstRow = min(distinctLabels.size, itemsPerRow)
+        val legendWidth = actualItemsInFirstRow * itemWidth
+        
+        val legendX = (chartWidth - legendWidth) / 2.0
+        val legendY = 725.0
+        
+        sb.append("""<g transform="translate($legendX, $legendY)">""")
+        
+        // Legend background plate (glassmorphism style)
+        sb.append("""<rect x="-15" y="-12" width="${legendWidth + 20}" height="${rows * 25 + 10}" fill="url(#plate_grad)" rx="12" stroke="$subTextColor" stroke-opacity="0.1" />""")
+
+        distinctLabels.forEachIndexed { index, label ->
+            val row = index / itemsPerRow
+            val col = index % itemsPerRow
+            val x = col * itemWidth
+            val y = row * 25.0
+            val color = "url(#brut_grad_$index)"
+            
+            sb.append("""
+                <g class="legend-item" transform="translate($x, $y)">
+                    <rect width="14" height="14" fill="$color" rx="3" filter="url(#glow)" />
+                    <text x="22" y="11" class="mono-text" font-size="11" fill="$textColor" style="font-weight: 500;">$label</text>
+                </g>
+            """.trimIndent())
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun darkenColor(hexColor: String, factor: Double): String {
+        val color = hexColor.removePrefix("#")
+        val r = (color.substring(0, 2).toInt(16) * (1 - factor)).toInt()
+        val g = (color.substring(2, 4).toInt(16) * (1 - factor)).toInt()
+        val b = (color.substring(4, 6).toInt(16) * (1 - factor)).toInt()
+        return "#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}"
+    }
+}
