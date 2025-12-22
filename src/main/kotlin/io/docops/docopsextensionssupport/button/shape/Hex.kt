@@ -11,6 +11,7 @@ import org.silentsoft.simpleicons.SimpleIcons
 
 class Hex(buttons: Buttons) : Regular(buttons) {
 
+    private var isDark = buttons.theme?.useDark == true
     companion object Companion {
         const val BUTTON_HEIGHT: Int = 255
         const val BUTTON_WIDTH = 295
@@ -27,13 +28,24 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         buttons.theme?.let {
             scale = it.scale
         }
-        return (rows.size * BUTTON_HEIGHT + (rows.size * BUTTON_PADDING) + 100.0f) * scale
+        // Use 255 for the internal step calculation
+        val rowStep = 255
+        val internalHeight = (rows.size * rowStep + 100.0f)
+
+        // Return a smaller physical height to match the original "shrink" behavior (approx 56% of internal)
+        return (internalHeight * 0.56f) * scale
     }
     override fun draw() : String {
         val sb = StringBuilder()
-        if(buttons.theme?.useDark == true) {
-            sb.append("""<rect width="100%" height="100%" fill="#111111" />""")
-        }
+        //isDark = buttons.theme?.useDark == true
+        val bgColor = if (isDark) "#020617" else "#f1f5f9"
+
+        sb.append("""<rect width="100%" height="100%" fill="$bgColor" />""")
+
+        // Add atmospheric background element
+        val atmosphereColor = if (isDark) "#38bdf8" else "#818cf8"
+        sb.append("""<circle cx="90%" cy="10%" r="250" fill="$atmosphereColor" fill-opacity="0.05" />""")
+
         sb.append("""<g transform="scale(${buttons.theme?.scale})">""")
 
         var startX: Int
@@ -50,24 +62,63 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                 sb.append(createSingleHoneyComb(button, x, y, buttons.theme!!))
                 startX += BUTTON_WIDTH
             }
-            startY += BUTTON_HEIGHT
+            // Vertical step for perfect honeycomb tessellation
+            startY += 255
         }
         sb.append("</g>")
         return sb.toString()
     }
 
-    fun head(): String {
-        val w = width()
-        val h = height()
+    override fun defs(): String {
         return """
-        <svg xmlns="http://www.w3.org/2000/svg" width="$w" height="$h" viewBox="0 0 $w $h" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
-        <defs>
+            <defs>
             <style>
-                .active-button {
-                    filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+                .hex-container {
+                    cursor: pointer;
+                    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transform-box: fill-box;
+                    transform-origin: center;
                 }
+               
+                .hex-label {
+                    font-family: 'Syne', sans-serif;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                }
+                
+                /* Neon Pulse Animation for Active State */
+                @keyframes neonPulse {
+                    0% { filter: drop-shadow(0 0 2px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 0.9; }
+                    50% { filter: drop-shadow(0 0 12px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 1; }
+                    100% { filter: drop-shadow(0 0 2px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 0.9; }
+                }
+                
+                
             </style>
+            ${
+            if (!isPdf) """
+            <filter id="hexShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="${if (isDark) "rgba(0,0,0,0.5)" else "rgba(99,102,241,0.12)"}"/>
+            </filter>
+            """.trimIndent() else ""
+            }
         </defs>
+        """.trimIndent()
+    }
+
+    override fun start(): String {
+        // We keep the VIEWBOX at the large coordinate size, but the WIDTH/HEIGHT at the smaller physical size
+        val physicalWidth = width()
+        val physicalHeight = height()
+
+        // Calculate the internal coordinate bounds (viewbox)
+        val columns = buttons.theme?.columns ?: 3
+        val internalW = (columns * BUTTON_WIDTH + columns * BUTTON_PADDING)
+        val internalH = (rows.size * 255 + 100.0f)
+
+        return """
+        <svg xmlns="http://www.w3.org/2000/svg" width="$physicalWidth" height="$physicalHeight" viewBox="0 0 $internalW $internalH" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
     """.trimIndent()
     }
 
@@ -79,101 +130,110 @@ class Hex(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING ) * scale
+        val internalWidth = (columns * BUTTON_WIDTH + columns * BUTTON_PADDING)
+
+        // Return a smaller physical width to match original behavior (approx 56% of internal)
+        return (internalWidth * 0.56f) * scale
     }
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
+        val isDark = theme.useDark
+        val primaryTextColor = if (isDark) "#f8fafc" else "#1e1b4b"
+        val secondaryTextColor = if (isDark) "#38bdf8" else "#6366f1"
+        // Design Decision: In light mode, use a subtle tint of the user color for the fill
+        // instead of the raw saturated color. This keeps it professional and "designed".
+        val cardFill = if (isDark) {
+            "rgba(30, 41, 59, 0.9)"
+        } else {
+            // Apply a very light tint of the user color (10% opacity) or stay white
+            "#ffffff"
+        }
+        val isActive = button.enabled
+        val actualColor = button.color!!
+
+        val cardStroke = actualColor
+        val cardStrokeWidth = if (isDark) "1" else "2"
+
+
+        // Strip conflicting fill from user style
+        val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
+
         val spans = StringBuilder()
         val fontSize = button.buttonStyle?.labelStyle?.let { style ->
-            parseStyleForFontSize(style, button.buttonStyle?.fontSize ?: 24)
-        } ?: button.buttonStyle?.fontSize ?: 24
+            parseStyleForFontSize(style, button.buttonStyle?.fontSize ?: 16)
+        } ?: button.buttonStyle?.fontSize ?: 16 // Defaulting to 16px
 
-        val textSpans = itemTextWidth(itemText = button.label, maxWidth = 245F, fontSize = fontSize)
-        // Calculate startTextY based on font size and number of text spans
-        val startTextY = 187 - (textSpans.size * fontSize / 2)
+
+        // Syne is wide, so we treat our 295px wide button as if it only has 170px
+        // worth of "Helvetica space" to force the wrap early enough.
+        val adjustedMaxWidth = 140F
+        val textSpans = itemTextWidth(itemText = button.label, maxWidth = adjustedMaxWidth, fontSize = fontSize)
+
+        // Centering logic remains the same
+        val lineSpacing = 4
+        val totalTextHeight = (textSpans.size * fontSize) + ((textSpans.size - 1) * lineSpacing)
+        val startTextY = 185 - (totalTextHeight / 2)
 
         textSpans.forEachIndexed { index, s ->
-            var dy = 0
-            if(index > 0) {
-                dy = fontSize
-            }
-            val fontColor = determineTextColor(button.color!!)
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$dy" style="${button.buttonStyle?.labelStyle}">${s.escapeXml()}</tspan>""")
+            val calculatedDy = if (index > 0) fontSize + lineSpacing else 0
+            // Added letter-spacing for that "Designed" look
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: 'Syne', sans-serif !important; letter-spacing: 0.5px; $cleanUserStyle">${s.escapeXml()}</tspan>""")
         }
 
         var win = "_top"
-        buttons.theme?.let {
-            if (it.newWin) {
-                win = "_blank"
-            }
-        }
+        buttons.theme?.let { if (it.newWin) { win = "_blank" } }
 
-        // Determine the actual color to use (active color takes precedence)
-        val actualColor = if (button.active && theme.useActiveColor) {
-            theme.activeColor
-        } else {
-            button.color!!
-        }
+        // Determine active status: Force check if useActiveColor is on
+        
+        val additionalClass = if (isActive) "active-neon" else ""
 
-        var filter = ""
-        var fill = actualColor
-        if(!isPdf) {
-            filter = "url(#Bevel2)"
-            fill = "url(#btn_${button.id})"
-        }
-
-        // Keep stroke properties consistent
-        val strokeWidth = "3"
-        val strokeColor = theme.strokeColor
-        val additionalClass = if (button.active) "active-button" else ""
-
-        val btnLook = """fill="$fill""""
-        val title = descriptionOrLabel(button)
-        val textColor = determineTextColor(actualColor)
         var img = ""
-        button.embeddedImage?.let {
-            img = getIcon(it.ref)
-        }
-        // Simplified endY calculation: startTextY + (number of spans * fontSize)
+        button.embeddedImage?.let { img = getIcon(it.ref) }
+
         val endY = startTextY + (textSpans.size * fontSize)
         var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
-        if(!button.enabled) {
-            href = ""
-        }
-        var typeText = ""
-        button.type?.let {typeText = it.uppercase()}
-        var l1 = ""
-        var l2 = ""
-        if(theme.hexLinesEnabled) {
-            val lineColor = determineTextColor(actualColor)
-            // Position top line above text based on font size
-            l1="""<line x1="40" y1="${startTextY - fontSize}" x2="265" y2="${startTextY - fontSize}" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
-            // Position bottom line below text
-            l2 = """<line x1="40" y1="$endY" x2="265" y2="$endY" style="stroke:$lineColor;stroke-width:1;stroke-opacity:0.7"/>"""
-        }
+        if(!button.enabled) { href = "" }
 
-        // Optional pulsing animation for active buttons (affects opacity)
-        val activeAnimation = if (button.active) {
-            """<animate attributeName="opacity" values="1;0.8;1" dur="2s" repeatCount="indefinite"/>"""
-        } else ""
+        var typeText = ""
+        button.type?.let { typeText = it.uppercase() }
 
         return """
-    <g transform="translate($x,$y)" class="$additionalClass" $href>
-    <title>$title</title>
-    <g>
-    <polygon stroke="$strokeColor" stroke-width="$strokeWidth" class="bar shadowed raise btn_${button.id}_cls" $btnLook points="291.73148258233545,254.80624999999998 149.60588850376178,336.86249999999995 7.480294425188106,254.80624999999998 7.480294425188077,90.69375000000005 149.60588850376175,8.637500000000017 291.7314825823354,90.69374999999994" rx="5" ry="5" filter="drop-shadow(3px 3px 3px rgba(0,0,0,0.2))">
-        $activeAnimation
-    </polygon>
-    <g transform="translate(125,50) scale(1.0)">
-     $img 
-    </g>
-    <text x="149" y="$startTextY" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">$spans</text>
-    </g>
-    $l1
-    $l2
-    <text x="149" y="${endY+24}" text-anchor="middle" style="${button.buttonStyle?.descriptionStyle};">$typeText</text>
+    <g transform="translate($x,$y)" class="hex-container $additionalClass" $href>
+        <title>${descriptionOrLabel(button)}</title>
+        
+        <!-- Hexagon Base: Light Mode uses the user color for the stroke -->
+        <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
+                 fill="$cardFill" 
+                 stroke="$cardStroke" 
+                 stroke-width="${if(button.active) "4" else cardStrokeWidth}"
+                 ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
+
+        <!-- Icon Wrapper: Optionally tint with user color in light mode -->
+        <g transform="translate(120,50) scale(0.8)">
+         $img 
+        </g>
+        
+        <!-- Main Label with Syne and override protection -->
+        <text x="149" y="$startTextY" text-anchor="middle" 
+              fill="$primaryTextColor" 
+              class="hex-label" 
+              font-size="$fontSize"
+              style="fill: $primaryTextColor !important;">$spans</text>
+        
+        <!-- Sharp Accent Line -->
+        <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
+              stroke="$actualColor" stroke-width="3" stroke-linecap="round" stroke-opacity="0.8"/>
+        
+        <!-- Type Text -->
+        <text x="149" y="${endY + 28}" text-anchor="middle" 
+              fill="$secondaryTextColor" 
+              font-family="'Syne', sans-serif" 
+              font-size="10" 
+              font-weight="800"
+              style="letter-spacing: 2px;">$typeText</text>
     </g>
     """.trimIndent()
     }
+
 
     private fun descriptionOrLabel(button: Button): String {
         return when {

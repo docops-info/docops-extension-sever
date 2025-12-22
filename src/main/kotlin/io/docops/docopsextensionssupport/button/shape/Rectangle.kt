@@ -97,57 +97,48 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             val cardColors = getCardColors(isDark)
             val textColors = getTextColors(isDark)
 
+            // Strip any hardcoded fill from user style to prevent dark mode invisibility
+            val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
+
             // Truncate main label if needed
-            val maxLabelWidth = CARD_WIDTH - CIRCLE_SIZE - 40 // Leave space for circle and padding
-            val truncatedLabel = truncateText(button.label, maxLabelWidth.toFloat(), 16)
+            val maxLabelWidth = CARD_WIDTH - 40
+            val truncatedLabel = truncateText(button.label, maxLabelWidth.toFloat(), 18)
             val showTooltip = truncatedLabel != button.label
 
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if (!button.enabled) {
                 href = ""
             }
-
             btns.append(
                 """
-        <g transform="translate($startX,$startY)" class="card-button" $href>
-            ${if (showTooltip) """<title>${button.label.escapeXml()}</title>""" else ""}
-            
-            <!-- Card Background -->
-            <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
-                  rx="$CARD_RADIUS" ry="$CARD_RADIUS"
-                  fill="${cardColors.background}"
-                  stroke="${cardColors.border}"
-                  stroke-width="1"
-                  filter="url(#cardShadow_${buttons.id})"/>
-            
-            <!-- Circle for number -->
-            <circle cx="$CIRCLE_CENTER_X" cy="$CIRCLE_CENTER_Y" r="${CIRCLE_SIZE / 2}"
-                    fill="${button.color ?: "#3498db"}"
-                    stroke="${cardColors.circleBorder}"
-                    stroke-width="1"/>
-            
-            <!-- Number in circle -->
-            <text x="$CIRCLE_CENTER_X" y="$CIRCLE_CENTER_Y" 
-                  text-anchor="middle" 
-                  dominant-baseline="central"
-                  fill="white"
-                  font-family="Arial, Helvetica, sans-serif"
-                  font-size="14"
-                  font-weight="bold">$localCount</text>
-            
-            <!-- Main label -->
-            <text x="$LABEL_START_X" y="$MAIN_LABEL_Y"
-                  fill="${textColors.primary}"
-                  font-family="Arial, Helvetica, sans-serif"
-                  font-size="16"
-                  font-weight="600"
-                  style="${button.buttonStyle?.labelStyle ?: ""}">${truncatedLabel.escapeXml()}</text>
-            
-            <!-- Additional links -->
-            ${renderAdditionalLinks(button.links, textColors, win)}
-            
-        </g>
-        """.trimIndent()
+    <g transform="translate($startX,$startY)" class="card-button" $href>
+        ${if (showTooltip) """<title>${button.label.escapeXml()}</title>""" else ""}
+    
+        <!-- Card Background -->
+        <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
+              rx="$CARD_RADIUS" ry="$CARD_RADIUS"
+              fill="${cardColors.background}"
+              stroke="${cardColors.border}"
+              stroke-width="1"
+              ${if (!isPdf) "filter=\"url(#cardShadow_${buttons.id})\"" else ""}/>
+    
+        <!-- Vertical Accent Bar instead of Circle -->
+        <rect x="0" y="20" width="4" height="60" 
+              fill="${button.color ?: "#3498db"}" rx="2"/>
+    
+        <!-- Main label with Syne-like fallback -->
+        <text x="20" y="$MAIN_LABEL_Y"
+                fill="${textColors.primary}"
+              font-family="'Syne', 'Inter', sans-serif"
+              font-size="18"
+              font-weight="800"
+              style="$cleanUserStyle">${truncatedLabel.escapeXml()}</text>
+    
+        <!-- Additional links as Chips -->
+        ${renderAdditionalLinks(button.links, textColors, win)}
+    
+    </g>
+    """.trimIndent()
             )
 
             startX += CARD_WIDTH + CARD_PADDING
@@ -159,41 +150,55 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         if (links.isNullOrEmpty()) return ""
 
         val sb = StringBuilder()
-        val maxLinkWidth = CARD_WIDTH - LABEL_START_X - 10 // Available width for links
+        var currentX = 20
+        val linkY = LINKS_START_Y
 
         links.forEachIndexed { index, link ->
-            val linkY = LINKS_START_Y + (index * LINK_LINE_HEIGHT)
-            if (linkY > CARD_HEIGHT - 10) return@forEachIndexed // Don't overflow card
+            if (index > 2) return@forEachIndexed // Limit chips to prevent overflow
 
-            val truncatedLinkLabel = truncateText(link.label, maxLinkWidth.toFloat(), 12)
-            val showLinkTooltip = truncatedLinkLabel != link.label
+            val fontSize = 10
+            val label = link.label.uppercase().escapeXml()
+            val textWidth = label.textWidth("Arial", fontSize) + 20
 
-            var linkElement = if (isPdf) {
-                truncatedLinkLabel.escapeXml()
+            if (currentX + textWidth > CARD_WIDTH - 10) return@forEachIndexed
+
+            val chipHtml = if (isPdf) {
+                """
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${textColors.link}" fill-opacity="${if(buttons.useDark) "0.15" else "0.1"}"/>
+                <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
+
+                  fill="${textColors.link}"
+                  font-family="'Inter', 'Segoe UI', sans-serif"
+                  font-size="$fontSize"
+                  font-weight="600"
+                  text-anchor="middle"
+                  dominant-baseline="middle">
+                $label
+            </text>
+            """.trimIndent()
             } else {
-                """<a xlink:href="${link.href}" href="${link.href}" 
-                      target="$win" 
-                      fill="${textColors.link}" 
-                      style="text-decoration: underline; cursor: pointer;">
-                   ${truncatedLinkLabel.escapeXml()}
-                   </a>"""
-            }
-
-            sb.append("""
-                <text x="$LABEL_START_X" y="$linkY"
+                """
+             <a xlink:href="${link.href}" href="${link.href}" target="$win">
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${textColors.link}" fill-opacity="${if(buttons.useDark) "0.15" else "0.1"}" class="link-chip"/>
+                <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
                       fill="${textColors.link}"
-                      font-family="Arial, Helvetica, sans-serif"
-                      font-size="12"
-                      style="text-decoration: underline;">
-                    ${if (showLinkTooltip) """<title>${link.label.escapeXml()}</title>""" else ""}
-                    $linkElement
+                      font-family="'Inter', 'Segoe UI', sans-serif"
+                      font-size="$fontSize"
+                      font-weight="600"
+                      text-anchor="middle"
+                      dominant-baseline="middle"
+                      style="cursor: pointer;">
+                    $label
                 </text>
-            """.trimIndent())
+            </a>
+            """.trimIndent()
+            }
+            sb.append(chipHtml)
+            currentX += (textWidth + 8).toInt()
         }
 
         return sb.toString()
     }
-
     private fun truncateText(text: String, maxWidth: Float, fontSize: Int): String {
         val textWidthPx = text.textWidth("Arial", fontSize)
         return if (textWidthPx > maxWidth) {
@@ -223,15 +228,15 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
     private fun getCardColors(isDark: Boolean): CardColors {
         return if (isDark) {
             CardColors(
-                background = "#2d3748",
-                border = "rgba(255,255,255,0.2)",
-                circleBorder = "rgba(255,255,255,0.3)"
+                background = "#111827", // Deeper slate/black
+                border = "rgba(255,255,255,0.08)",
+                circleBorder = "rgba(255,255,255,0.08)"
             )
         } else {
             CardColors(
-                background = "#ffffff",
-                border = "rgba(0,0,0,0.1)",
-                circleBorder = "rgba(0,0,0,0.2)"
+                background = "#f8fafc",
+                border = "rgba(0,0,0,0.05)",
+                circleBorder = "rgba(0,0,0,0.05)"
             )
         }
     }
@@ -239,52 +244,44 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
     private fun getTextColors(isDark: Boolean): TextColors {
         return if (isDark) {
             TextColors(
-                primary = "#f7fafc",
-                secondary = "#a0aec0",
-                link = "#63b3ed"
+                primary = "#ffffff",   // Pure white for maximum contrast
+                secondary = "#94a3b8",
+                link = "#38bdf8"       // Vibrant sky blue
             )
         } else {
             TextColors(
-                primary = "#2d3748",
-                secondary = "#718096",
-                link = "#3182ce"
+                primary = "#0f172a",
+                secondary = "#64748b",
+                link = "#0284c7"
             )
         }
     }
 
     override fun defs(): String {
+        val isDark = buttons.useDark
         return """
-            <defs>
-                <!-- Card shadow filter -->
-                <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="4" 
-                                  flood-color="${if (buttons.useDark) "rgba(0,0,0,0.5)" else "rgba(0,0,0,0.1)"}"/>
-                </filter>
+        <defs>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+                .card-button {
+                    transition: transform 0.2s ease-in-out;
+                    transform-box: fill-box;
+                    transform-origin: center;
+                }
                 
-                <!-- Hover effects for interactivity -->
-                <style>
-                    .card-button {
-                        cursor: pointer;
-                        transition: all 0.2s ease;
-                    }
-                    
-                    .card-button:hover rect {
-                        stroke-width: 2;
-                        filter: url(#cardShadowHover_${buttons.id});
-                    }
-                    
-                    .card-button:hover text {
-                        opacity: 0.8;
-                    }
-                </style>
-                
-                <!-- Enhanced shadow for hover state -->
-                <filter id="cardShadowHover_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="4" stdDeviation="8" 
-                                  flood-color="${if (buttons.useDark) "rgba(0,0,0,0.7)" else "rgba(0,0,0,0.15)"}"/>
-                </filter>
-            </defs>
-        """.trimIndent()
+                .link-chip {
+                    transition: fill-opacity 0.2s;
+                }
+                .link-chip:hover {
+                    fill-opacity: 0.2;
+                }
+            </style>
+            <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" 
+                              flood-color="${if (isDark) "rgba(0,0,0,0.4)" else "rgba(0,0,0,0.08)"}"/>
+            </filter>
+        </defs>
+    """.trimIndent()
     }
 
     override fun height(): Float {
@@ -326,17 +323,17 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         const val CARD_WIDTH = 300
         const val CARD_PADDING = 15
         const val CARD_SPACING = 15
-        const val CARD_RADIUS = 8
+        const val CARD_RADIUS = 12
 
-        // Circle positioning
+        // Circle positioning (Not used in new design, but kept for compatibility)
         const val CIRCLE_SIZE = 32
         const val CIRCLE_CENTER_X = 25
         const val CIRCLE_CENTER_Y = 50
 
         // Text positioning
-        const val LABEL_START_X = 50
-        const val MAIN_LABEL_Y = 35
-        const val LINKS_START_Y = 55
-        const val LINK_LINE_HEIGHT = 16
+        const val LABEL_START_X = 20
+        const val MAIN_LABEL_Y = 38
+        const val LINKS_START_Y = 82
+        const val LINK_LINE_HEIGHT = 20
     }
 }

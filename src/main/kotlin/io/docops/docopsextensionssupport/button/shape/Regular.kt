@@ -69,7 +69,6 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             scale = it.scale
         }
         val sb = StringBuilder("<g transform=\"scale($scale)\">")
-        sb.append(BackgroundHelper.getBackGroundPath(useDark = buttons.useDark, buttons.id, vbWidth, vbHeight))
         val rows = toRows()
         rows.forEachIndexed { index, buttons ->
             sb.append(drawButton(index, buttons))
@@ -91,41 +90,57 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         if (index > 0) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
-        buttonList.forEach { button: Button ->
-            var filter = "filter=\"url(#Bevel2)\""
-            var fill = "url(#btn_${button.id})"
-            if(isPdf) {
-                filter = ""
-                fill = "${button.color}"
+        buttonList.forEachIndexed { btnIdx, button ->
+            val accentColor = button.color ?: "#6366F1"
+            val bodyFill = if (buttons.useDark) "#1A1A1A" else "#F8F8F8"
+
+            // Fix: Ensure high contrast for text
+            val textFillColor = if (buttons.useDark) {
+                accentColor // Neon glow on dark
+            } else {
+                // On light background, use the accent color directly for the label
+                // but ensure it's not too light.
+                accentColor
             }
-            var btnLook = """fill="$fill" class="raise btn_${button.id}_cls bar" $filter"""
-            var textFillColor = determineTextColor(button.color!!)
-            var textClass = "glass"
-            buttons.theme?.raise?.let {
-                if(!it) {
-                    btnLook = """fill="#fcfcfc" stroke="$fill" stroke-width="2" class='bar'"""
-                    textFillColor = button.color!!
-                    textClass = "light-shadow"
-                }
-            }
+
+            val animDelay = (index * 0.1) + (btnIdx * 0.05)
+
+            val isPdfMode = isPdf
+
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
                 href = ""
             }
-            btns.append(
-                """
-        <g transform="translate($startX,$startY)" $href>
-            <rect x="0" y="0" $btnLook width="300" height="30" rx="10" ry="10"/>
-            <text x="150" y="20" text-anchor="middle" style="${button.buttonStyle?.labelStyle};">${button.label.escapeXml()}</text>
-        </g>
-        """.trimIndent()
-            )
+
+            // PDF and Print don't support CSS animations or complex hover interactions
+            val groupStyle = if (isPdfMode) "" else """style="animation: slideIn 0.5s ease-out ${animDelay}s both;""""
+            val groupClass = if (isPdfMode) "" else """class="btn-group""""
+            // Strip conflicting fill from user style
+            val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
+
+            btns.append("""
+            <g transform="translate($startX,$startY)">
+                <g $groupClass $groupStyle $href>
+                    <!-- Shadow/Accent Layer -->
+                    <rect x="4" y="4" width="300" height="32" rx="2" fill="$accentColor" opacity="0.3"/>
+                    <!-- Main Button Body -->
+                    <rect x="0" y="0" width="300" height="32" rx="2" fill="$bodyFill" stroke="$accentColor" stroke-width="1.5" class="btn-main"/>
+                    ${if (!isPdfMode) """<rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/>""" else ""}
+                    
+                    <text x="150" y="21" text-anchor="middle" fill="$textFillColor" 
+                        style="!important;$cleanUserStyle}">
+                        ${button.label.escapeXml()}
+                    </text>
+                </g>
+            </g>
+            """.trimIndent())
 
             startX += BUTTON_WIDTH + BUTTON_PADDING
-
         }
         return btns.toString()
     }
+
+
     protected open fun start() : String {
         val height= height()
         val width = width()
@@ -138,9 +153,21 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         buttons.theme?.let {
             strokeColor = it.strokeColor
         }
-        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
+
+        val customStyle = if (isPdf) "" else """
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateY(15px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .btn-group { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+            .btn-group:hover { transform: translate(2px, 2px) !important; }
+            .btn-main { transition: fill 0.2s ease; }
+            .btn-group:hover .btn-main { fill: ${if (buttons.useDark) "#252525" else "#FFFFFF"} !important; }
+        """.trimIndent()
+
         var style = """
              <style>
+            $customStyle
             ${glass()}
             ${lightShadow()}
             ${raise(strokeColor = strokeColor)}
@@ -168,7 +195,6 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         return """
             <defs>
-            $darkModeDefs
             ${filters()}
             ${naturalShadow()}
             ${gradient()}
