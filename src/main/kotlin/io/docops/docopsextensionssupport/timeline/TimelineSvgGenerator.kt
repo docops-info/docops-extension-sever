@@ -1,47 +1,28 @@
 package io.docops.docopsextensionssupport.timeline
 
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class TimelineSvgGenerator {
 
-    // Define 15 colors that cycle for timeline items
-    private val lightModeColors = listOf(
-        TimelineColor("#3b82f6", "#2563eb"), // Blue
-        TimelineColor("#8b5cf6", "#7c3aed"), // Purple
-        TimelineColor("#a855f7", "#9333ea"), // Violet
-        TimelineColor("#ec4899", "#db2777"), // Pink
-        TimelineColor("#f59e0b", "#d97706"), // Amber
-        TimelineColor("#10b981", "#059669"), // Emerald
-        TimelineColor("#06b6d4", "#0891b2"), // Cyan
-        TimelineColor("#6366f1", "#4f46e5"), // Indigo
-        TimelineColor("#ef4444", "#dc2626"), // Red
-        TimelineColor("#14b8a6", "#0d9488"), // Teal
-        TimelineColor("#f97316", "#ea580c"), // Orange
-        TimelineColor("#84cc16", "#65a30d"), // Lime
-        TimelineColor("#8b5cf6", "#7c3aed"), // Purple (variant)
-        TimelineColor("#ec4899", "#db2777"), // Pink (variant)
-        TimelineColor("#3b82f6", "#2563eb")  // Blue (variant)
-    )
+
 
     private val darkModeColors = listOf(
-        TimelineColor("#60a5fa", "#3b82f6"), // Light Blue
-        TimelineColor("#a78bfa", "#8b5cf6"), // Light Purple
-        TimelineColor("#c084fc", "#a855f7"), // Light Violet
-        TimelineColor("#f472b6", "#ec4899"), // Light Pink
-        TimelineColor("#fbbf24", "#f59e0b"), // Light Amber
-        TimelineColor("#34d399", "#10b981"), // Light Emerald
-        TimelineColor("#22d3ee", "#06b6d4"), // Light Cyan
-        TimelineColor("#818cf8", "#6366f1"), // Light Indigo
-        TimelineColor("#f87171", "#ef4444"), // Light Red
-        TimelineColor("#2dd4bf", "#14b8a6"), // Light Teal
-        TimelineColor("#fb923c", "#f97316"), // Light Orange
-        TimelineColor("#a3e635", "#84cc16"), // Light Lime
-        TimelineColor("#a78bfa", "#8b5cf6"), // Light Purple (variant)
-        TimelineColor("#f472b6", "#ec4899"), // Light Pink (variant)
-        TimelineColor("#60a5fa", "#3b82f6")  // Light Blue (variant)
+        TimelineColor("#22d3ee", "#22d3ee"), // Electric Cyan
+        TimelineColor("#f472b6", "#f472b6"), // Neon Pink
+        TimelineColor("#fbbf24", "#fbbf24"), // Cyber Gold
+        TimelineColor("#818cf8", "#818cf8"), // Indigo Glow
+        TimelineColor("#34d399", "#34d399")  // Mint Blade
     )
 
+    private val lightModeColors = listOf(
+        TimelineColor("#0891b2", "#0891b2"), // Deep Cyan
+        TimelineColor("#db2777", "#db2777"), // Deep Pink
+        TimelineColor("#d97706", "#d97706"), // Amber
+        TimelineColor("#4f46e5", "#4f46e5"), // Indigo
+        TimelineColor("#059669", "#059669")  // Emerald
+    )
     data class TimelineColor(val stroke: String, val text: String)
 
     @OptIn(ExperimentalUuidApi::class)
@@ -72,8 +53,8 @@ class TimelineSvgGenerator {
         val baseHeight = totalHeight.coerceAtLeast(400)
 
         // Apply scale factor to dimensions
-        val width = (baseWidth * scaleFactor).toInt()
-        val height = (baseHeight * scaleFactor).toInt()
+        val width = (baseWidth * scaleFactor).toInt() / DISPLAY_RATIO_16_9
+        val height = (baseHeight * scaleFactor).toInt() / DISPLAY_RATIO_16_9
 
         val sb = StringBuilder()
 
@@ -83,13 +64,16 @@ class TimelineSvgGenerator {
         sb.append("<!-- orientation: vertical -->")
 
         // Add metadata
-       // appendMetadata(sb, items)
+        // appendMetadata(sb, items)
 
         // Add defs with gradients and filters
         appendDefs(sb, svgId, isDarkMode, colors)
 
         // Background
+        // Background Atmosphere
         sb.append("""<rect width="100%" height="100%" fill="url(#bgGradient_$svgId)"/>""")
+        sb.append("""<rect width="100%" height="100%" fill="url(#dotPattern_$svgId)" opacity="${if (isDarkMode) "0.3" else "0.5"}"/>""")
+
 
         // Decorative circles
         if (isDarkMode) {
@@ -104,8 +88,8 @@ class TimelineSvgGenerator {
         val lineStartY = topMargin
         val lineEndY = height - bottomMargin
 
-        // Main timeline line
-        sb.append("""<line x1="$centerX" y1="$lineStartY" x2="$centerX" y2="$lineEndY" stroke="url(#lineGradient_$svgId)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>""")
+        // Main timeline line - Precise and technical
+        sb.append("""<line x1="$centerX" y1="$lineStartY" x2="$centerX" y2="$lineEndY" stroke="${if (isDarkMode) "#334155" else "#cbd5e1"}" stroke-width="2" stroke-dasharray="8 4"/>""")
 
         // Generate timeline items
         var currentY = topMargin + 40
@@ -204,8 +188,8 @@ class TimelineSvgGenerator {
             val datePillX = x - dateWidth / 2
             val datePillY = if (above) axisY - 38 else axisY + 14
 
-            sb.append("""<rect x="$datePillX" y="$datePillY" rx="8" ry="8" width="$dateWidth" height="24" fill="#ffffff" opacity="0.85" stroke="${color.stroke}" stroke-width="1"/>""")
-            sb.append("""<text x="$x" y="${datePillY + 16}" text-anchor="middle" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans," font-size="13" fill="${color.text}">$dateText</text>""")
+            sb.append("""<rect x="$datePillX" y="$datePillY" rx="4" ry="4" width="$dateWidth" height="24" fill="${if (isDarkMode) "#0f172a" else "#ffffff"}" opacity="0.9" stroke="${color.stroke}" stroke-width="1.5"/>""")
+            sb.append("""<text x="$x" y="${datePillY + 17}" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="${color.text}">$dateText</text>""")
 
             // Description card
             val maxTextWidth = 260
@@ -218,7 +202,7 @@ class TimelineSvgGenerator {
 
             val cardGradient = "cardGradient${(index % 2) + 1}_$svgId"
 
-            sb.append("""<rect x="$cardX" y="$cardY" rx="12" ry="12" width="$cardWidth" height="$cardHeight" fill="url(#$cardGradient)" filter="url(#cardShadow_$svgId)"/>""")
+            sb.append("""<rect x="$cardX" y="$cardY" rx="4" ry="4" width="$cardWidth" height="$cardHeight" fill="url(#$cardGradient)" stroke="${color.stroke}" stroke-width="1" filter="url(#cardShadow_$svgId)"/>""")
 
             // Text inside card
             val textColor = if (isDarkMode) "#e2e8f0" else "#1f2937"
@@ -239,19 +223,26 @@ class TimelineSvgGenerator {
     private fun appendDefs(sb: StringBuilder, svgId: String, isDarkMode: Boolean, colors: List<TimelineColor>) {
         sb.append("<defs>")
 
-        // Background gradient
+        // Dot Pattern for Atmosphere
+        sb.append("""
+            <pattern id="dotPattern_$svgId" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="${if (isDarkMode) "#475569" else "#94a3b8"}" />
+            </pattern>
+        """.trimIndent())
+
+        // Background: Deep Midnight vs Clean Studio
         if (isDarkMode) {
             sb.append("""
                 <linearGradient id="bgGradient_$svgId" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#020617;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
                 </linearGradient>
             """.trimIndent())
         } else {
             sb.append("""
                 <linearGradient id="bgGradient_$svgId" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#f0f9ff;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#e0f2fe;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
                 </linearGradient>
             """.trimIndent())
         }
