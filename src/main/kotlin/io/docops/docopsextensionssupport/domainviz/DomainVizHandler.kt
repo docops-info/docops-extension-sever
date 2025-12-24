@@ -12,8 +12,16 @@ class DomainVizHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse)
     ): String {
         val parser = DiagramParser()
         val data = parser.parseCSV(payload)
-        val diagramGenerator = SVGDiagramGenerator(useDark = context.useDark)
-        val svg = diagramGenerator.generateSVG(data)
+
+        // Switch based on the flag detected in the CSV
+        val svg = if (data.useNeural) {
+            val diagramGenerator = NeuralDomainVisualizer(useDark = context.useDark)
+            diagramGenerator.generateSVG(data)
+        } else {
+            val diagramGenerator = SVGDiagramGenerator(useDark = context.useDark)
+            diagramGenerator.generateSVG(data)
+        }
+
         csvResponse.update(data.toCsv())
         return svg
     }

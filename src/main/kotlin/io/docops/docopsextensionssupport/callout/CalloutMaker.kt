@@ -20,6 +20,36 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
+    private interface ThemeColors {
+        val bgStart: String
+        val bgEnd: String
+        val cardBg: String
+        val textPrimary: String
+        val textSecondary: String
+        val accentPrimary: String
+        val accentSuccess: String
+    }
+
+    private class DarkTheme : ThemeColors {
+        override val bgStart = "#020617"
+        override val bgEnd = "#0F172A"
+        override val cardBg = "#1E293B"
+        override val textPrimary = "#F8FAFC"
+        override val textSecondary = "#94A3B8"
+        override val accentPrimary = "#A855F7"
+        override val accentSuccess = "#2DD4BF"
+    }
+
+    private class LightTheme : ThemeColors {
+        override val bgStart = "#F8FAFC"
+        override val bgEnd = "#F1F5F9"
+        override val cardBg = "#FFFFFF"
+        override val textPrimary = "#0F172A"
+        override val textSecondary = "#475569"
+        override val accentPrimary = "#7C3AED"
+        override val accentSuccess = "#059669"
+    }
+
     // Table format parsing methods
     fun createSystematicApproachFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "systematic", useDark)
@@ -150,391 +180,153 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
 
     @OptIn(ExperimentalUuidApi::class)
     private fun generateSystematicSvg(calloutData: CalloutData, width: Int, height: Int): String {
-        // Calculate dynamic height based on number of steps
-        // Header height (92) + (steps count * stepHeight) + bottom padding (20)
-        val stepHeight = 90
+        val stepHeight = 110
         val stepsCount = calloutData.steps.size
         val calculatedHeight = if (stepsCount > 0) {
-            92 + (stepsCount * stepHeight) + 20
+            140 + (stepsCount * stepHeight) + 40
         } else {
-            height // Use provided height if no steps
+            height
         }
-
-        // Use the larger of calculated height or provided height
         val finalHeight = calculatedHeight.coerceAtLeast(height)
 
         return buildString {
             val id = Uuid.random().toHexString()
+            val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
+
             append("""
-                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
+                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
                     <defs>
-            """.trimIndent())
-
-            var back = """<rect width="$width" height="$finalHeight" fill="#F2F2F7" rx="0" ry="0"/>"""
-
-            // Add glass-specific definitions if useGlass is true
-            if (calloutData.useDark) {
-                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_${calloutData.id})" rx="12" ry="12"/>
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="rgba(0,122,255,0.1)"
-                      stroke="url(#glassBorder_${calloutData.id})" stroke-width="1.5"
-                      filter="url(#glassDropShadow_${calloutData.id})"
-                />
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="url(#glassOverlay_${calloutData.id})" opacity="0.7"
-                />"""
-                append("""
-                        <!-- Glass gradients -->
-                        <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap');
+                            .title_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: ${theme.textPrimary}; letter-spacing: -0.5px; }
+                            .phase_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: ${theme.textPrimary}; }
+                            .action_$id { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: ${theme.textSecondary}; }
+                            .result_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: ${theme.accentSuccess}; }
+                            .step-num_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: ${theme.accentPrimary}; }
+                        </style>
+                        <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="${theme.bgStart}" />
+                            <stop offset="100%" stop-color="${theme.bgEnd}" />
                         </linearGradient>
-                        <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                            <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                        </radialGradient>
-                        <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                        <linearGradient id="spineGrad_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="${theme.accentPrimary}" />
+                            <stop offset="100%" stop-color="${theme.accentSuccess}" />
                         </linearGradient>
-
-                        <!-- Glass filters -->
-                        <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-                        </filter>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
-                        </filter>
-                        <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feOffset dx="0" dy="2"/>
-                            <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-                            <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                            <feComposite in2="offset-blur" operator="in"/>
-                            <feComposite in2="SourceGraphic" operator="over"/>
-                        </filter>
-                """.trimIndent())
-            }
-
-            // Always include original gradients and iOS shadow
-            append("""
-                        <!-- Original gradients -->
-                        <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0A84FF;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                            <stop offset="100%" style="stop-color:#007AFF;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                        </linearGradient>
-                        <linearGradient id="stepGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:${if (calloutData.useDark) "rgba(255,255,255,0.2)" else "#FFFFFF"};stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:${if (calloutData.useDark) "rgba(242,242,247,0.1)" else "#F2F2F7"};stop-opacity:1" />
-                        </linearGradient>
-                        <filter id="iosShadow">
-                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
-                        </filter>
-                        <linearGradient id="glassBorder_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
-                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-                    </linearGradient>
-                    <filter id="glassDropShadow_${calloutData.id}" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-                        <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-                        <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
-                        <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
-                        <feMerge>
-                            <feMergeNode in="shadow"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                    <linearGradient id="glassOverlay_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
-                        <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
-                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
-                    </linearGradient>
-                    <linearGradient id="backgroundGradient_${calloutData.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
-                    </linearGradient>
                     </defs>
 
                     <!-- Background -->
-                    $back
+                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
+                    
+                    <!-- Decorative Grid -->
+                    <g opacity="0.05" stroke="${theme.textPrimary}" stroke-width="1">
+                        <path d="M40 0 L40 $finalHeight M${width - 40} 0 L${width - 40} $finalHeight" stroke-dasharray="4 4"/>
+                    </g>
 
                     <!-- Header -->
+                    <text x="50" y="70" class="title_$id">${calloutData.title}</text>
+                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentPrimary}" rx="2"/>
+
+                    <!-- Vertical Spine -->
+                    <rect x="68" y="130" width="2" height="${stepsCount * stepHeight}" fill="url(#spineGrad_$id)" opacity="0.3"/>
+
+                    <!-- Steps -->
             """.trimIndent())
-
-            // Conditionally apply glass or original styling to header
-            if (calloutData.useDark) {
-                append("""
-                    <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                """.trimIndent())
-            } else {
-                append("""
-                    <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/>
-                """.trimIndent())
-            }
-
-            append("""
-                    <text x="${width/2}" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="20" font-weight="600" text-anchor="middle">
-                        ${calloutData.title}
-                    </text>
-            """.trimIndent())
-
-            // Draw steps
-            val stepHeight = 90
-            val startY = 92
 
             calloutData.steps.forEachIndexed { index, step ->
-                val y = startY + (index * stepHeight)
+                val y = 140 + (index * stepHeight)
+                // Calculate dynamic width for the result pill based on text length
+                // Approx 8.5px per character + 32px padding
+                val resultPillWidth = (step.result.length * 8.5) + 32
 
-                // Conditionally apply glass or original styling to steps
-                if (calloutData.useDark) {
-                    append("""
-                        <g>
-                        <!-- Step ${index + 1} Background -->
-                        <rect x="16" y="$y" width="${width - 32}" height="80" fill="url(#glassGradient)" 
-                              stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/>
+                append("""
+                    <g transform="translate(50, $y)">
+                        <circle cx="18" cy="18" r="18" fill="${theme.cardBg}" stroke="${theme.accentPrimary}" stroke-width="2"/>
+                        <text x="18" y="23" text-anchor="middle" class="step-num_$id">${index + 1}</text>
                         
-                        <!-- Step Number -->
-                        <circle cx="48" cy="${y + 40}" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                        <text x="48" y="${y + 45}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="600" text-anchor="middle">${index + 1}</text>
+                        <text x="55" y="15" class="phase_$id">${step.phase}</text>
+                        <text x="55" y="38" class="action_$id">${step.action}</text>
+                        
+                        <g transform="translate(55, 52)">
+                            <rect width="$resultPillWidth" height="28" rx="14" fill="${theme.accentSuccess}" fill-opacity="0.1"/>
+                            <text x="16" y="19" class="result_$id">${step.result}</text>
+                        </g>
+                """.trimIndent())
 
-                        <!-- Phase Label -->
-                        <text x="80" y="${y + 30}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="16" font-weight="600">${step.phase}</text>
-
-                        <!-- Action -->
-                        <text x="80" y="${y + 50}" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">
-                            ${step.action}
-                        </text>
-
-                        <!-- Result -->
-                        <text x="80" y="${y + 70}" fill="rgba(255,255,255,0.9)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="600">${step.result}</text>
-                              </g>
-                    """.trimIndent())
-                } else {
+                step.improvement?.let { imp ->
+                    // Dynamic width for improvement badge
+                    val impWidth = (imp.length * 7.5) + 24
                     append("""
-                        <g>
-                        <!-- Step ${index + 1} Background -->
-                        <rect x="16" y="$y" width="${width - 32}" height="80" fill="url(#stepGrad)" 
-                              stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/>
-
-                        <!-- Step Number -->
-                        <circle cx="48" cy="${y + 40}" r="16" fill="#007AFF" filter="url(#iosShadow)"/>
-                        <text x="48" y="${y + 45}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="600" text-anchor="middle">${index + 1}</text>
-
-                        <!-- Phase Label -->
-                        <text x="80" y="${y + 30}" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="16" font-weight="600">${step.phase}</text>
-
-                        <!-- Action -->
-                        <text x="80" y="${y + 50}" fill="#8E8E93" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" font-size="14">
-                            ${step.action}
-                        </text>
-
-                        <!-- Result -->
-                        <text x="80" y="${y + 70}" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="600">${step.result}</text>
-                              </g>
+                        <rect x="${width - impWidth - 50}" y="10" width="$impWidth" height="22" rx="11" fill="${theme.accentPrimary}" fill-opacity="0.1"/>
+                        <text x="${width - (impWidth/2) - 50}" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="${theme.accentPrimary}" style="text-transform:uppercase; letter-spacing: 0.5px;">${imp}</text>
                     """.trimIndent())
                 }
-
-                // Add improvement indicator if present
-                step.improvement?.let { improvement ->
-                    // Calculate width based on text length (minimum 110px, 10px per character)
-                    val textWidth = maxOf(110, improvement.length * 10)
-                    val rectX = width - textWidth - 20 // 20px padding from right edge
-                    val textX = rectX + (textWidth / 2) // Center text in rectangle
-
-                    if (calloutData.useDark) {
-                        append("""
-                            <rect x="$rectX" y="${y + 15}" width="$textWidth" height="24" fill="url(#glassGradient)" 
-                                  stroke="rgba(255,255,255,0.4)" stroke-width="1" rx="12" filter="url(#shadow)"/>
-                              <text x="$textX" y="${y + 30}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                  font-size="12" font-weight="600" text-anchor="middle">$improvement</text>
-                        """.trimIndent())
-                    } else {
-                        append("""
-                            <rect x="$rectX" y="${y + 15}" width="$textWidth" height="24" fill="#F2F9F6" 
-                                  stroke="#34C759" stroke-width="1" rx="12" filter="url(#iosShadow)"/>
-                            <text x="$textX" y="${y + 30}" fill="#34C759" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                  font-size="12" font-weight="600" text-anchor="middle">$improvement</text>
-                        """.trimIndent())
-                    }
-                }
+                append("</g>")
             }
-
             append("</svg>")
         }
     }
+
+    @OptIn(ExperimentalUuidApi::class)
     private fun generateMetricsSvg(calloutData: CalloutData, width: Int, height: Int): String {
-        // Calculate dynamic height based on number of metrics
-        // Header height (92) + (metrics count * 70) + bottom padding (20)
+        val metricHeight = 90
         val metricsCount = calloutData.metrics.size
         val calculatedHeight = if (metricsCount > 0) {
-            92 + (metricsCount * 70) + 20
+            140 + (metricsCount * metricHeight) + 40
         } else {
-            height // Use provided height if no metrics
+            height
         }
-
-        // Use the larger of calculated height or provided height
         val finalHeight = calculatedHeight.coerceAtLeast(height)
 
         return buildString {
-            append("""
-            <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
-                <defs>
-            """.trimIndent())
-
-            var back = """<rect width="$width" height="$finalHeight" fill="#F2F2F7" rx="0" ry="0"/>"""
-
-            // Add glass-specific definitions if useGlass is true
-            if (calloutData.useDark) {
-                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_${calloutData.id})" rx="12" ry="12"/>
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="rgba(0,122,255,0.1)"
-                      stroke="url(#glassBorder_${calloutData.id})" stroke-width="1.5"
-                      filter="url(#glassDropShadow_${calloutData.id})"
-                />
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="url(#glassOverlay_${calloutData.id})" opacity="0.7"
-                />"""
-
-                append("""
-                    <!-- Glass gradients -->
-                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    </linearGradient>
-                    <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    </radialGradient>
-                    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-                    </linearGradient>
-
-                    <!-- Glass filters -->
-                    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-                    </filter>
-                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
-                    </filter>
-                    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feOffset dx="0" dy="2"/>
-                        <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-                        <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                        <feComposite in2="offset-blur" operator="in"/>
-                        <feComposite in2="SourceGraphic" operator="over"/>
-                    </filter>
-                    <linearGradient id="glassBorder_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
-                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-                    </linearGradient>
-                    <filter id="glassDropShadow_${calloutData.id}" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-                        <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-                        <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
-                        <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
-                        <feMerge>
-                            <feMergeNode in="shadow"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                    <linearGradient id="glassOverlay_${calloutData.id}" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
-                        <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
-                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
-                    </linearGradient>
-                    <linearGradient id="backgroundGradient_${calloutData.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
-                        <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
-                    </linearGradient>
-                """.trimIndent())
-            }
-
-            // Always include original gradients and iOS shadow
-            append("""
-                    <!-- Original gradients -->
-                    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#5856D6;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                        <stop offset="100%" style="stop-color:#AF52DE;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                    </linearGradient>
-                    <filter id="iosShadow">
-                        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
-                    </filter>
-                </defs>
-
-                <!-- Background -->
-                $back
-                <!-- Header -->
-            """.trimIndent())
-
-            // Conditionally apply glass or original styling to header
-            if (calloutData.useDark) {
-                append("""
-                <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                """.trimIndent())
-            } else {
-                append("""
-                <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/>
-                """.trimIndent())
-            }
+            val id = Uuid.random().toHexString()
+            val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
 
             append("""
-                <text x="${width/2}" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                      font-size="20" font-weight="600" text-anchor="middle">${calloutData.title}</text>
+                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
+                    <defs>
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap');
+                            .title_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: ${theme.textPrimary}; letter-spacing: -0.5px; }
+                            .metric-key_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: ${theme.textSecondary}; text-transform: uppercase; letter-spacing: 1px; }
+                            .metric-val_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: ${theme.textPrimary}; }
+                        </style>
+                        <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="${theme.bgStart}" />
+                            <stop offset="100%" stop-color="${theme.bgEnd}" />
+                        </linearGradient>
+                    </defs>
+
+                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
+                    
+                    <g opacity="0.05" stroke="${theme.textPrimary}" stroke-width="1">
+                        <path d="M0 110 L$width 110" />
+                    </g>
+
+                    <text x="50" y="70" class="title_$id">${calloutData.title}</text>
+                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentPrimary}" rx="2"/>
+
             """.trimIndent())
 
-            var y = 92
+            var currentY = 140
             calloutData.metrics.forEach { (key, value) ->
-                if (calloutData.useDark) {
-                    append("""
-                    <rect x="16" y="$y" width="${width - 32}" height="60" fill="url(#glassGradient)" 
-                          stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="16" filter="url(#shadow)"/>                
-                    <!-- Metric Icon -->
-                    <circle cx="48" cy="${y + 30}" r="16" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                    <text x="48" y="${y + 35}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="14" font-weight="600" text-anchor="middle">📊</text>
+                // Calculate dynamic width for the value pill
+                val valPillWidth = (value.length * 9.5) + 40
 
-                    <!-- Metric Label -->
-                    <text x="80" y="${y + 25}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="16" font-weight="600">$key</text>
-
-                    <!-- Metric Value -->
-                    <text x="80" y="${y + 45}" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="14" font-weight="600">$value</text>
-                    """.trimIndent())
-                } else {
-                    append("""
-                    <rect x="16" y="$y" width="${width - 32}" height="60" fill="white" 
-                          stroke="#E5E5EA" stroke-width="1" rx="16" filter="url(#iosShadow)"/>
-
-                    <!-- Metric Icon -->
-                    <circle cx="48" cy="${y + 30}" r="16" fill="#5856D6" filter="url(#iosShadow)"/>
-                    <text x="48" y="${y + 35}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="14" font-weight="600" text-anchor="middle">📊</text>
-
-                    <!-- Metric Label -->
-                    <text x="80" y="${y + 25}" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="16" font-weight="600">$key</text>
-
-                    <!-- Metric Value -->
-                    <text x="80" y="${y + 45}" fill="#5856D6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="14" font-weight="600">$value</text>
-                    """.trimIndent())
-                }
-                y += 70
+                append("""
+                    <g transform="translate(50, $currentY)">
+                        <!-- Decorative indicator -->
+                        <rect width="4" height="60" fill="${theme.accentPrimary}" rx="2" opacity="0.6"/>
+                        
+                        <!-- Metric Info -->
+                        <text x="20" y="20" class="metric-key_$id">$key</text>
+                        
+                        <g transform="translate(20, 30)">
+                            <rect width="$valPillWidth" height="34" rx="17" fill="${theme.accentPrimary}" fill-opacity="0.08" stroke="${theme.accentPrimary}" stroke-opacity="0.2"/>
+                            <text x="20" y="23" class="metric-val_$id">$value</text>
+                        </g>
+                    </g>
+                """.trimIndent())
+                currentY += metricHeight
             }
 
             append("</svg>")

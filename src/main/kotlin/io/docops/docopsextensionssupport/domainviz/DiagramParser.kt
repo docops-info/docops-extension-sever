@@ -20,9 +20,14 @@ class DiagramParser {
         var mainLinks = emptyList<WikiLink>()
         var dataStartIndex = 1 // skip header by default
 
+        var useNeural = false
+
         // Check if first line is the old format "main,QUOTE"
         if (lines[0].lowercase().startsWith("main,")) {
             val parts = lines[0].split(",")
+            // Check for useNeural=true in any part of the main line
+            useNeural = parts.any { it.trim().lowercase() == "useneural=true" }
+
             if (parts.size >= 2) {
                 mainNode = parts[1].trim()
                 // Check for links in main node definition
@@ -100,7 +105,9 @@ class DiagramParser {
             SpecializedGroupInputWithLinks(title, emoji, rows)
         }
 
-        return convertToDiagramDataWithLinks(DiagramJsonInputWithLinks(mainNode, mainLinks, commonRows, specializedGroups))
+        val data =  convertToDiagramDataWithLinks(DiagramJsonInputWithLinks(mainNode, mainLinks, commonRows, specializedGroups))
+        data.useNeural = useNeural
+        return data
     }
 
     /**

@@ -41,8 +41,9 @@ enum class ConnectionType {
 
 data class DiagramData(
     val mainNode: DiagramNode,
-    val commonRows: List<List<DiagramNode>>, // Changed to rows instead of flat list
-    val specializedGroups: List<SpecializedGroup>
+    val commonRows: List<List<DiagramNode>>,
+    val specializedGroups: List<SpecializedGroup>,
+    var useNeural: Boolean = false // Add this flag
 ) {
     fun toCsv(): CsvResponse {
         val headers = listOf("Type", "Emoji", "Row", "Nodes", "Links")
