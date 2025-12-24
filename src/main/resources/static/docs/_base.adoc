@@ -10,8 +10,8 @@
 :sectids:
 :sectnums:
 :stylesdir: styles
-:stylesheet: modern-style.min.css
-:favicon: ../images/favicon.svg?v=2025.0.0
+:stylesheet: brutalist-style.css
+:favicon: ../images/favicon.svg?v=2025.03
 
 // Page navigation (conditional)
 ifdef::enable-navigation[]
@@ -145,6 +145,70 @@ if (document.readyState === 'loading') {
 } else {
     new ThemeToggleTop();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toc = document.querySelector('#toc.toc2');
+    const body = document.body;
+    const themeToggle = document.querySelector('.theme-toggle');
+
+    // 1. Theme Toggle Logic
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('docs-theme', isDark ? 'dark' : 'light');
+        });
+
+        // Load saved preference
+        if (localStorage.getItem('docs-theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    }
+
+    // 2. TOC Interaction Logic
+    // If user clicks the TOC title, keep it pinned/active
+    const tocTitle = document.querySelector('#toctitle');
+    if (tocTitle && toc) {
+        tocTitle.addEventListener('click', () => {
+            toc.classList.toggle('active');
+        });
+    }
+
+    // 3. Active Section Tracking (Scrollspy)
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -80% 0px', // Trigger when section is near top
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                if (!id) return;
+
+                // Remove active class from all TOC links
+                document.querySelectorAll('#toc a').forEach(link => {
+                    link.classList.remove('active-section');
+                    // In our brutalist theme, active section gets a Rose accent
+                    link.style.color = '';
+                });
+
+                // Add to current
+                const activeLink = document.querySelector(`#toc a[href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-section');
+                    activeLink.style.color = 'var(--brand-accent)';
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Track all headers
+    document.querySelectorAll('h2, h3, h4').forEach(header => {
+        observer.observe(header);
+    });
+});
 </script>
 ++++
 endif::[]
