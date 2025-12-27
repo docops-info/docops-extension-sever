@@ -98,13 +98,11 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val str = StringBuilder()
         str.append("<defs>")
 
-        // Add a patterns for the background
+        // Enhanced geometric pattern for atmosphere
         str.append("""
-            <pattern id="gridPattern_$id" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.1"/>
-            </pattern>
-            <pattern id="dotPattern_$id" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="currentColor" opacity="0.1"/>
+            <pattern id="meshPattern_$id" width="100" height="100" patternUnits="userSpaceOnUse">
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="0.2" opacity="0.05"/>
+                <circle cx="50" cy="50" r="1" fill="currentColor" opacity="0.1"/>
             </pattern>
         """.trimIndent())
 
@@ -190,58 +188,57 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     private fun createStyles(id: String, releaseStrategy: ReleaseStrategy): String {
         return """
             <style>
-                #ID$id .release-card {
-                    transition: filter 0.3s ease;
-                    cursor: pointer;
+                @keyframes fadeInCustom {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
-                #ID$id .release-card:hover {
-                    filter: url(#glowEffect);
+                #ID$id .release-card {
+                    animation: fadeInCustom 0.8s ease-out forwards;
+                    opacity: 0;
+                }
+                /* Use a separate class for the motion to avoid coordinate conflicts */
+                #ID$id .animated-content {
+                    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+                #ID$id .release-card:hover .animated-content {
+                    transform: translateY(-8px);
                 }
                 #ID$id .milestone-text {
-                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+                    font-family: 'Outfit', sans-serif;
                     font-weight: 800;
-                    text-rendering: optimizeLegibility;
-                    pointer-events: none;
-                }
-                #ID$id .detail-text {
-                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-                    font-size: 10px;
-                    line-height: 1.4;
-                    pointer-events: none;
                 }
                 #ID$id .date-text {
-                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+                    font-family: 'Outfit', sans-serif;
                     font-size: 11px;
-                    font-weight: 600;
-                    pointer-events: none;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
                 }
                 #ID$id .goal-text {
-                    font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-                    font-size: 12px;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 13px;
                     font-weight: 700;
-                    line-height: 1.3;
-                    pointer-events: none;
                 }
-                /* Prevent text selection and ensure stable positioning */
+                /* Remove transform-box: fill-box; as it breaks relative translation in many SVG renderers */
                 #ID$id text {
                     user-select: none;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                }
-                /* Maintain stable positioning */
-                #ID$id g {
-                    transform-box: fill-box;
                 }
             </style>
         """.trimIndent()
     }
+
+
     private fun createBackground(dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
-        val backgroundColor = if (releaseStrategy.useDark) "#21252B" else "#f8f9fa"
-        val patternColor = if (releaseStrategy.useDark) "#ffffff" else "#000000"
+        val backgroundColor = if (releaseStrategy.useDark) "#0f172a" else "#f8fafc"
+        val patternColor = if (releaseStrategy.useDark) "#38bdf8" else "#020617"
+        val id = releaseStrategy.id
         return """
             <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="$backgroundColor"/>
-            <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="url(#dotPattern_${releaseStrategy.id})" text-color="$patternColor" color="$patternColor"/>
+            <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="url(#meshPattern_${releaseStrategy.id})" color="$patternColor"/>
+            <linearGradient id="bg_gradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="$backgroundColor" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="$backgroundColor" stop-opacity="0.95"/>
+            </linearGradient>
+            <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="url(#bg_gradient_$id)"/>
         """.trimIndent()
     }
 
@@ -268,71 +265,65 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         releaseStrategy.releases.forEachIndexed { index, release ->
             val x = MARGIN + (index * (CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING))
             val y = TITLE_HEIGHT
-            str.append(createReleaseCard(release, x, y, isPdf, id, releaseStrategy))
+            val delay = index * 0.15
+
+            // The outer group handles the SVG layout coordinates (Stable)
+            str.append("""<g transform="translate($x,$y)" style="animation-delay: ${delay}s" class="release-card">""")
+            // An inner group can safely handle CSS transforms for hover effects
+            str.append("""<g class="animated-content">""")
+            str.append(createReleaseCard(release, isPdf, id, releaseStrategy))
+            str.append("</g>")
+            str.append("</g>")
         }
 
         return str.toString()
     }
 
-    private fun createReleaseCard(release: Release, x: Float, y: Float, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
+
+    private fun createReleaseCard(release: Release, isPdf: Boolean, id: String, releaseStrategy: ReleaseStrategy): String {
         val gradientId = getGradientId(release, id)
         val fontColor = releaseStrategy.displayConfig.fontColor
-        val dateColor = if (releaseStrategy.useDark) "#fcfcfc" else "#111111"
+        val dateColor = if (releaseStrategy.useDark) "#94a3b8" else "#475569"
 
-        // Calculate goal text area - extend closer to completed icon
-        val goalMaxWidth = if (release.completed) CARD_WIDTH - 60f else CARD_WIDTH - 40f
+        val goalMaxWidth = if (release.completed) CARD_WIDTH - 80f else CARD_WIDTH - 50f
+        val goalLines = wrapText(release.goal, GOAL_MAX_CHARS)
+        val actualGoalHeight = (goalLines.size * 20f) + 10f
 
+        // IMPORTANT: No translate() inside here. Everything starts from 0,0 relative to the parent <g>
         return """
-            <g transform="translate($x,$y)" class="release-card">
-                <!-- Card background -->
-                <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
-                      fill="url(#$gradientId)" 
-                      stroke="rgba(255,255,255,0.1)" 
-                      stroke-width="1.5" 
-                      filter="url(#dropShadow)"/>
-                
-                <!-- Glass overlay -->
-                <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
-                      fill="url(#glass_$gradientId)" 
-                      pointer-events="none"/>
+            <!-- Main Card Body -->
+            <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
+                  fill="url(#$gradientId)" 
+                  stroke="rgba(255,255,255,0.2)" 
+                  stroke-width="1" 
+                  filter="url(#dropShadow)"/>
+            
+            <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
+                  fill="url(#glass_$gradientId)" 
+                  pointer-events="none"/>
 
-                <!-- Arrow triangle -->
-                <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
-                      fill="url(#$gradientId)" 
-                      stroke="rgba(255,255,255,0.1)" 
-                      stroke-width="1.5"/>
-                
-                <!-- Glass overlay for triangle -->
-                <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
-                      fill="url(#glass_$gradientId)" 
-                      pointer-events="none"/>
-                
-                <!-- Date text -->
-                <text x="${CARD_WIDTH/2}" y="-10" 
-                      fill="$dateColor" 
-                      text-anchor="middle" 
-                      class="date-text">
-                    ${release.date}
-                </text>
-                
-                <!-- Release type -->
-                <text x="${CARD_WIDTH + TRIANGLE_WIDTH/2}" y="${CARD_HEIGHT/2 + 8}" 
-                      fill="white" 
-                      text-anchor="middle" 
-                      font-size="24px" 
-                      class="milestone-text">
-                    ${release.type}
-                </text>
-                
-                <!-- Completed check -->
-                ${if (release.completed) """<use href="#completedCheck" x="${CARD_WIDTH - 30}" y="10"/>""" else ""}
-                
-                <!-- Goal text (wrapped, extends closer to completed icon) -->
-                ${createWrappedGoalText(release.goal, TEXT_MARGIN, 25.0f, goalMaxWidth, fontColor)}
-                
-                <!-- Detail lines (wrapped, positioned below goal) -->
-                ${createDetailLines(release.lines, TEXT_MARGIN + GOAL_HEIGHT, CARD_WIDTH - (2 * TEXT_MARGIN), fontColor)}
-            </g>
+            <!-- Arrow Triangle (Relative to 0,0 of this card) -->
+            <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
+                  fill="url(#$gradientId)" 
+                  stroke="rgba(255,255,255,0.2)" 
+                  stroke-width="1"/>
+            
+            <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
+                  fill="url(#glass_$gradientId)" 
+                  pointer-events="none"/>
+            
+            <text x="${CARD_WIDTH/2}" y="-15" fill="${if (releaseStrategy.useDark) "#94a3b8" else "#475569"}" text-anchor="middle" class="date-text">
+                ${release.date}
+            </text>
+            
+            <text x="${CARD_WIDTH + TRIANGLE_WIDTH/2}" y="${CARD_HEIGHT/2 + 10}" 
+                  fill="white" text-anchor="middle" font-size="28px" class="milestone-text">
+                ${release.type}
+            </text>
+            
+            ${createWrappedGoalText(release.goal, TEXT_MARGIN, 35.0f, goalMaxWidth, fontColor)}
+            
+            ${createDetailLines(release.lines, 35f + actualGoalHeight + 15f, CARD_WIDTH - (2 * TEXT_MARGIN), fontColor)}
         """.trimIndent()
     }
 
@@ -344,7 +335,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         str.append("""<text x="$x" y="$y" class="goal-text" fill="$fontColor">""")
 
         wrappedLines.forEachIndexed { index, line ->
-            val dyValue = if (index == 0) "0" else "16"
+            // Increased dy from 16 to 20 for better line height
+            val dyValue = if (index == 0) "0" else "20"
             str.append("""<tspan x="$x" dy="$dyValue">${line.escapeXml()}</tspan>""")
         }
 
@@ -359,11 +351,11 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         var lineCount = 0
 
         // Start with text element
-        str.append("""<text x="${TEXT_MARGIN}" y="$startY" class="detail-text" fill="$fontColor">""")
+        str.append("""<text x="$TEXT_MARGIN" y="$startY" class="detail-text" fill="$fontColor">""")
 
         for (line in lines) {
             if (lineCount >= MAX_BULLET_LINES) {
-                str.append("""<tspan x="${TEXT_MARGIN}" dy="12">...</tspan>""")
+                str.append("""<tspan x="$TEXT_MARGIN" dy="16">...</tspan>""")
                 break
             }
 
@@ -375,9 +367,10 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
                 // Only add chevron on the first line of each original line
                 val bulletText = if (index == 0) "» $wrappedLine" else "  $wrappedLine"
-                val dyValue = if (lineCount == 0) "0" else "12"
+                // Increased dy from 12 to 16 for cleaner vertical rhythm
+                val dyValue = if (lineCount == 0) "0" else "16"
 
-                str.append("""<tspan x="${TEXT_MARGIN}" dy="$dyValue">${bulletText.escapeXml()}</tspan>""")
+                str.append("""<tspan x="$TEXT_MARGIN" dy="$dyValue">${bulletText.escapeXml()}</tspan>""")
                 lineCount++
             }
         }

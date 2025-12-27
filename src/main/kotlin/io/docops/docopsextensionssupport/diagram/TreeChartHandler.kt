@@ -8,8 +8,8 @@ import io.docops.docopsextensionssupport.web.DocOpsHandler
 class TreeChartHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     fun handleSVG(payload: String, isPdf: Boolean = false) : String {
-        val treeMaker = TreeMaker()
-        val svg = treeMaker.makeTree(payload, isPdf, csvResponse)
+        val treeMaker = CyberTreeMaker()
+        val svg = treeMaker.makeTree(payload,  csvResponse)
         return svg
     }
 
