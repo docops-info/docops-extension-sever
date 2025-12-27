@@ -10,11 +10,19 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 class PlannerHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     val log = KotlinLogging.logger { }
-    fun handleSVG(payload: String, useDark: Boolean, type: String, scale: String, title: String): String {
-        val rmm = PlannerMaker()
+    fun handleSVG(payload: String, useDark: Boolean, type: String, scale: String, title: String, theme: String = "DEFAULT"): String {
         val parser = PlannerParser()
         val planItems = parser.parse(payload)
+        val rmm = ModernPlannerMaker()
         val svg = rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
+        /*val svg = if (theme.uppercase() == "MODERN") {
+            val rmm = ModernPlannerMaker()
+            rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
+        } else {
+            val rmm = PlannerMaker()
+            rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
+        }*/
+
         csvResponse.update(planItems.toCsv())
         return svg
     }
