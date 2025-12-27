@@ -27,11 +27,42 @@ import kotlin.uuid.Uuid
  */
 class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
     private val json = Json { ignoreUnknownKeys = true }
+    private interface MetricsTheme {
+        val bg: String
+        val cardBgStart: String
+        val cardBgEnd: String
+        val gridColor: String
+        val titleColor: String
+        val valueColor: String
+        val labelColor: String
+        val cardStroke: String
+    }
 
+    private class DarkTheme : MetricsTheme {
+        override val bg = "#020617"
+        override val cardBgStart = "#0F172A"
+        override val cardBgEnd = "#1E293B"
+        override val gridColor = "#334155"
+        override val titleColor = "#FFFFFF"
+        override val valueColor = "#F8FAFC"
+        override val labelColor = "#94A3B8"
+        override val cardStroke = "#334155"
+    }
+
+    private class LightTheme : MetricsTheme {
+        override val bg = "#F8FAFC"
+        override val cardBgStart = "#FFFFFF"
+        override val cardBgEnd = "#F1F5F9"
+        override val gridColor = "#CBD5E1"
+        override val titleColor = "#0F172A"
+        override val valueColor = "#1E293B"
+        override val labelColor = "#64748B"
+        override val cardStroke = "#E2E8F0"
+    }
     /**
      * Creates an SVG for metrics cards from JSON or table-like data
      */
-    fun createMetricsCardSvg(payload: String, width: Int = 800, height: Int = 400, useDark: Boolean): Pair<String, CsvResponse> {
+    fun createMetricsCardSvg(payload:String, width: Int = 800, height: Int = 400, useDark: Boolean = false): Pair<String, CsvResponse> {
         return createCards(payload, width, height, useDark)
     }
 
@@ -48,9 +79,6 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
                 // If parsing fails, create a default data object
                 createDefaultMetricsCardData()
             }
-        }
-        if(isPdf) {
-            metricsCardData.useGlass = false
         }
         val svg = generateMetricsCardSvg(metricsCardData, width, height, useDark)
         return Pair(svg, metricsCardData.toCsv())
@@ -115,201 +143,107 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
      * Generates the SVG for metrics cards
      */
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int, useGlass: Boolean): String {
+    private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int, useDark: Boolean): String {
         // Calculate dynamic width based on number of metrics
-        // Each metric card takes 180px width + 20px margin
         val metricsCount = metricsCardData.metrics.size
-        val cardWidth = 180
-        val cardMargin = 20
+        val cardWidth = 200
+        val cardMargin = 30
 
-        val horizontalPadding = 40 // Add 20px padding on each side
-        val totalCardWidth = metricsCount * (cardWidth + cardMargin) - cardMargin // Subtract last margin
+        val horizontalPadding = 80
+        val totalCardWidth = metricsCount * (cardWidth + cardMargin) - cardMargin
 
-        // Use the larger of calculated width or provided width, adding padding
         val finalWidth = (totalCardWidth + horizontalPadding).coerceAtLeast(width)
-
 
         return buildString {
             val id = Uuid.random().toHexString()
+            val theme = if (useDark) DarkTheme() else LightTheme()
+
             append("""
-            <svg id="ID_$id" width="$finalWidth" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
-                <defs>
-            """.trimIndent())
+                    <svg id="ID_$id" width="$finalWidth" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
+                        <defs>
+                            <style>
+                                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;family=JetBrains+Mono&amp;display=swap');
+                                .metric-value_$id { font-family: 'Outfit', sans-serif; font-weight: 700; fill: ${theme.valueColor}; }
+                                .metric-label_$id { font-family: 'Outfit', sans-serif; font-weight: 400; fill: ${theme.labelColor}; letter-spacing: 0.05em; text-transform: uppercase; }
+                                .metric-sub_$id { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #A855F7; }
+                                .title-text_$id { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; fill: ${theme.titleColor}; }
+                            </style>
+                        
+                            <pattern id="grid_$id" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="${theme.gridColor}" stroke-width="0.5"/>
+                            </pattern>
 
-            var back = """<rect width="$finalWidth" height="$height" fill="#F2F2F7" rx="0" ry="0"/>"""
-            // Add glass-specific definitions if useGlass is true
-            if (metricsCardData.useGlass) {
-                back = """<rect width="100%" height="100%" fill="url(#backgroundGradient_$id)" rx="12" ry="12"/>
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="rgba(0,122,255,0.1)"
-                      stroke="url(#glassBorder_$id)" stroke-width="1.5"
-                      filter="url(#glassDropShadow_$id)"
-                />
-                <rect width="100%" height="100%" rx="12" ry="12"
-                      fill="url(#glassOverlay_$id)" opacity="0.7"
-                />"""
-                append("""
-                    <!-- Glass gradients -->
-                    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    </linearGradient>
-                    <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                        <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    </radialGradient>
-                    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-                    </linearGradient>
+                            <filter id="glow_$id">
+                                <feGaussianBlur stdDeviation="2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                            
+                            <filter id="shadow_$id" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,${if (useDark) "0.4" else "0.08"})"/>
+                            </filter>
 
-                    <!-- Glass filters -->
-                    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-                    </filter>
-                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
-                    </filter>
-                    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feOffset dx="0" dy="2"/>
-                        <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-                        <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                        <feComposite in2="offset-blur" operator="in"/>
-                        <feComposite in2="SourceGraphic" operator="over"/>
-                    </filter>
-                    <linearGradient id="glassBorder_${id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-        </linearGradient>
-        <filter id="glassDropShadow_${id}" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-            <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-            <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
-            <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
-            <feMerge>
-                <feMergeNode in="shadow"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-        <linearGradient id="glassOverlay_${id}" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1"/>
-            <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1"/>
-            <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1"/>
-        </linearGradient>
-        <linearGradient id="backgroundGradient_${id}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#16213e;stop-opacity:1"/>
-        </linearGradient>
-                """.trimIndent())
-            }
+                            <linearGradient id="cardGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="${theme.cardBgStart}" />
+                                <stop offset="100%" stop-color="${theme.cardBgEnd}" />
+                            </linearGradient>
+                        </defs>
 
-            // Always include original iOS shadow and gradient
-            append("""
-                    <filter id="iosShadow">
-                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
-                    </filter>
-                    <linearGradient id="iosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#30D158;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
+                        <!-- Background Layering -->
+                        <rect width="100%" height="100%" fill="${theme.bg}" rx="12"/>
+                        <rect width="100%" height="100%" fill="url(#grid_$id)" opacity="0.5"/>
+                    
+                        <!-- Title Section -->
+                        <g transform="translate(40, 50)">
+                            <text x="0" y="0" class="title-text_$id">${metricsCardData.title.escapeXml()}</text>
+                            <rect x="0" y="15" width="60" height="4" fill="#A855F7" rx="2" filter="url(#glow_$id)"/>
+                        </g>
 
-                <!-- Background -->
-                $back
+                        <g class="metrics">
+                    """.trimIndent())
 
-                <!-- Metrics Container -->
-                <g class="metrics">
-            """.trimIndent())
-
-            // Calculate starting position for centering the cards
             val totalWidth = metricsCount * (cardWidth + cardMargin) - cardMargin
             val startX = (finalWidth - totalWidth) / 2
+            val accentColors = listOf("#A855F7", "#2DD4BF", "#F43F5E", "#3B82F6", "#EAB308")
 
-            // Generate each metric card
             metricsCardData.metrics.forEachIndexed { index, metric ->
                 val x = startX + index * (cardWidth + cardMargin)
-                val y = (height - 200) / 2 // Center vertically
-
-                // Conditionally apply glass or original styling to cards
-                if (metricsCardData.useGlass) {
-                    append("""
-                    <!-- Metric Card ${index + 1} -->
-                    <g class="metric-card" transform="translate($x, $y)">
-                        <!-- Card Background -->
-                        <rect width="$cardWidth" height="200" rx="16" ry="16" 
-                              fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" 
-                              filter="url(#shadow)"/>
-                        <!-- Metric Value -->
-                        <text x="${cardWidth/2}" y="80" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="36" font-weight="700" text-anchor="middle" 
-                              fill="white">${metric.value.escapeXml()}</text>
-
-                        <!-- Metric Label -->
-                        <text x="${cardWidth/2}" y="120" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="16" font-weight="600" text-anchor="middle" 
-                              fill="rgba(255,255,255,0.9)">${metric.label.escapeXml()}</text>
-                    """.trimIndent())
-                } else {
-                    append("""
-                    <!-- Metric Card ${index + 1} -->
-                    <g class="metric-card" transform="translate($x, $y)">
-                        <!-- Card Background -->
-                        <rect width="$cardWidth" height="200" rx="16" ry="16" 
-                              fill="white" stroke="#E5E5EA" stroke-width="1" 
-                              filter="url(#iosShadow)"/>
-
-                        <!-- Metric Value -->
-                        <text x="${cardWidth/2}" y="80" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="36" font-weight="700" text-anchor="middle" 
-                              fill="#007AFF">${metric.value.escapeXml()}</text>
-
-                        <!-- Metric Label -->
-                        <text x="${cardWidth/2}" y="120" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="16" font-weight="600" text-anchor="middle" 
-                              fill="#1C1C1E">${metric.label.escapeXml()}</text>
-                    """.trimIndent())
-                }
-
-                // Add sublabel if present
-                if (metric.sublabel != null) {
-                    if (metricsCardData.useGlass) {
-                        append("""
-
-                        <!-- Metric Sublabel -->
-                        <text x="${cardWidth/2}" y="145" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="400" text-anchor="middle" 
-                              fill="rgba(255,255,255,0.7)">${metric.sublabel.escapeXml()}</text>
-                        """.trimIndent())
-                    } else {
-                        append("""
-
-                        <!-- Metric Sublabel -->
-                        <text x="${cardWidth/2}" y="145" 
-                              font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                              font-size="14" font-weight="400" text-anchor="middle" 
-                              fill="#8E8E93">${metric.sublabel.escapeXml()}</text>
-                        """.trimIndent())
-                    }
-                }
+                val y = (height - 180) / 2 + 20
+                val accentColor = accentColors[index % accentColors.size]
 
                 append("""
-                    </g>
-                """.trimIndent())
+                            <g class="metric-card" transform="translate($x, $y)">
+                                <!-- Card Background -->
+                                <rect width="$cardWidth" height="180" rx="16" 
+                                      fill="url(#cardGrad_$id)" stroke="${theme.cardStroke}" stroke-width="1.5"
+                                      filter="url(#shadow_$id)"/>
+                            
+                                <!-- Cyber Accent Tab -->
+                                <path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>
+
+                                <!-- Metric Value -->
+                                <text x="${cardWidth/2}" y="85" text-anchor="middle" 
+                                      font-size="42" class="metric-value_$id">${metric.value.escapeXml()}</text>
+
+                                <!-- Metric Label -->
+                                <text x="${cardWidth/2}" y="115" text-anchor="middle" 
+                                      font-size="13" class="metric-label_$id">${metric.label.escapeXml()}</text>
+                        """.trimIndent())
+
+                if (metric.sublabel != null) {
+                    append("""
+                                <!-- Metric Sublabel -->
+                                <text x="${cardWidth/2}" y="145" text-anchor="middle" 
+                                      class="metric-sub_$id">> ${metric.sublabel.escapeXml()}</text>
+                            """.trimIndent())
+                }
+
+                append("</g>")
             }
 
             append("""
-                </g>
-            </svg>
-            """.trimIndent())
+                        </g>
+                    </svg>
+                    """.trimIndent())
         }
     }
 

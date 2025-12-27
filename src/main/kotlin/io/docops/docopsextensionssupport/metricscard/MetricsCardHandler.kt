@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.metricscard
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.update
 
 /**
  * Handler for metrics card visualizations
@@ -24,6 +25,7 @@ class MetricsCardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvRespon
         val isPdf = "pdf" == backend
         val maker = MetricsCardMaker(csvResponse, isPdf)
         val svg = maker.createMetricsCardSvg(payload = payload, width = width, height = height, useDark = useDark)
+        csvResponse.update(svg.second)
         return svg.first
     }
 
