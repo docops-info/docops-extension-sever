@@ -50,15 +50,17 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         buttons.theme?.let {
             scale = it.scale
         }
-        sb.append(createSvgHeader(width, height,scale, id))
+        sb.append(createSvgHeader(width, height, scale, id))
         sb.append(createDefs(id))
         sb.append(createStyles(id))
 
 
         // Background
         sb.append("""<g transform="scale($scale)">""")
-        sb.append(BackgroundHelper.getBackGroundPath(useDark = buttons.useDark, id = buttons.id, width = width.toFloat() * scale, height = height.toFloat()* scale))
-        //sb.append("""<path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L ${width - 12} 0 A 12.0 12.0 0 0 1 $width 12.0 L $width ${height - 12} A 12.0 12.0 0 0 1 ${width - 12} $height L 12.0 $height A 12.0 12.0 0 0 1 0 ${height - 12} Z" fill="#F2F2F7" />""")
+        // Distinctive Atmosphere Background
+        val bgStart = if (buttons.useDark) "#0F172A" else "#F8FAFC"
+        val bgEnd = if (buttons.useDark) "#020617" else "#F1F5F9"
+        sb.append("""<rect width="$width" height="$height" fill="url(#bg_grad_$id)" rx="12"/>""")
 
         var y = 10
         rows.forEach { row ->
@@ -102,6 +104,12 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
     private fun createButton(button: Button, x: Int, y: Int, id: String): String {
         val gradientId = "btn_${button.id}_gradient"
         val sb = StringBuilder()
+        val isDark = buttons.useDark
+
+        val cardBg = if (isDark) "#1E293B" else "#FFFFFF"
+        val textPrimary = if (isDark) "#F8FAFC" else "#0F172A"
+        val textSecondary = if (isDark) "#94A3B8" else "#475569"
+        val strokeColor = button.color ?: (if (isDark) "#38BDF8" else "#0284C7")
 
         // Wrap in link if href exists
         if (button.link.isNotEmpty()) {
@@ -110,39 +118,38 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         sb.append("""<g transform="translate($x,$y)" class="modern-card-button">""")
 
-        // Main card background
-        sb.append("""<rect x="0" y="0" width="300" height="400" rx="18" ry="18" fill="white" filter="url(#cardShadow_$id)"/>""")
+        // Main card background - High contrast border/glow for dark, subtle shadow for light
+        val filterAttr = if (!isPdf) "filter=\"url(#cardShadow_$id)\"" else ""
+        sb.append("""<rect x="0" y="0" width="300" height="400" rx="24" fill="$cardBg" stroke="$strokeColor" stroke-width="1.5" $filterAttr/>""")
 
-        // Top colored section (190px)
-        sb.append("""<rect x="0" y="0" width="300" height="190" rx="18" ry="18" fill="url(#$gradientId)" class="card-top"/>""")
-        sb.append("""<rect x="0" y="172" width="300" height="18" fill="url(#$gradientId)"/>""")
+        // Top Header Section (Gradient Area)
+        sb.append("""<path d="M0 24 A24 24 0 0 1 24 0 L276 0 A24 24 0 0 1 300 24 L300 190 L0 190 Z" fill="url(#$gradientId)"/>""")
 
-        // Shimmer overlay
-        sb.append("""<rect x="0" y="0" width="300" height="190" rx="18" ry="18" fill="url(#shimmer_$id)" opacity="0.6"/>""")
-        sb.append("""<rect x="0" y="172" width="300" height="18" fill="url(#shimmer_$id)" opacity="0.6"/>""")
+        // Geometric Pattern Overlay (Distinctive UI)
+        sb.append("""<g opacity="0.15">""")
+        sb.append("""<circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/>""")
+        sb.append("""<circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/>""")
+        sb.append("""</g>""")
 
-        // Icon area (centered in top section)
+        // Icon area
         button.embeddedImage?.let {
-            if(it.qrEnabled) {
+            if (it.qrEnabled) {
                 sb.append(createDefaultIcon(button))
             } else {
                 sb.append(createImageIcon(it))
             }
         }
 
-
-        // Bottom text section (210px)
-        sb.append("""<rect x="0" y="190" width="300" height="210" rx="0" ry="0" fill="#FAFAFA"/>""")
-        sb.append("""<rect x="0" y="382" width="300" height="18" rx="0" ry="0" fill="#FAFAFA"/>""")
-
-        // Divider line
-        sb.append("""<line x1="20" y1="190" x2="280" y2="190" stroke="url(#dividerGradient_$id)" stroke-width="1"/>""")
+        // Divider line (Subtle Glass effect)
+        sb.append("""<line x1="20" y1="190" x2="280" y2="190" stroke="$textSecondary" stroke-width="0.5" opacity="0.2"/>""")
 
         // Text content
-        sb.append(createTextContent(button))
+        sb.append(createTextContent(button, textPrimary, textSecondary, strokeColor))
 
-        // Hover border
-        sb.append("""<rect x="0" y="0" width="300" height="400" rx="18" ry="18" fill="none" stroke="#FFD700" stroke-width="3" opacity="0" class="hover-border"/>""")
+        // Hover Effect Layer
+        if (!isPdf) {
+            sb.append("""<rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/>""")
+        }
 
         sb.append("</g>")
 
@@ -169,7 +176,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
     private fun createDefaultIcon(button: Button): String {
 
         val qrCode = QrCode.encodeText("${button.link}", QrCode.Ecc.HIGH)
-        val svg = toSvgString(qrCode, 4, "#FFFFFF", "#640D5F")
+        val svg = toSvgString(qrCode, 4, "#FFFFFF", "#640D5F", buttons.useDark)
         val sb = StringBuilder()
         sb.append("""<g transform="translate(75, 10)">""")
         sb.append(svg)
@@ -187,8 +194,13 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 	 * @throws NullPointerException if any object is {@code null}
 	 * @throws IllegalArgumentException if the border is negative
 	 */
-	private fun toSvgString(qr: QrCode, border: Int, lightColor: String, darkColor: String ) : String {
+	private fun toSvgString(qr: QrCode, border: Int, lightColor: String, darkColor: String , useDark: Boolean = false) : String {
 
+        val fillColor = if(useDark) {
+            lightColor
+        } else {
+            darkColor
+        }
 		if (border < 0)
 			throw  IllegalArgumentException("Border must be non-negative");
 		val brd = border
@@ -209,158 +221,125 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
                 }
             }
 		return sb
-			.append("""" fill="$darkColor"/>""")
+			.append("""" fill="$fillColor"/>""")
 			.append("</svg>")
 			.toString();
 	}
 
-    private fun createTextContent(button: Button): String {
+    private fun createTextContent(button: Button, primary: String, secondary: String, accent: String): String {
         val sb = StringBuilder()
-        sb.append("""<g transform="translate(10, 190)">""")
+        // Use standard fonts for PDF compatibility, Google Fonts for Web via CSS
+        val fontMain = if (isPdf) "Helvetica" else "'Lexend', sans-serif"
+        val fontMono = if (isPdf) "Courier" else "'JetBrains Mono', monospace"
+
+        sb.append("""<g transform="translate(20, 210)">""")
+
+        // Type/Category (Monospaced style)
+        sb.append("""<text x="0" y="20" font-family="$fontMono" font-size="11" font-weight="600" fill="$accent" style="text-transform: uppercase; letter-spacing: 1px;">""")
+        sb.append(button.type?.let { escapeXml(it) } ?: "COMPONENT")
+        sb.append("</text>")
 
         // Title
-        sb.append("""<text x="0" y="30" font-family="'Inter var', system-ui, 'Helvetica Neue', sans-serif" font-size="18" font-weight="700" fill="#111827">""")
+        sb.append("""<text x="0" y="50" font-family="$fontMain" font-size="22" font-weight="700" fill="$primary">""")
         sb.append(escapeXml(button.label))
         sb.append("</text>")
 
-        // Type/Category with displayColor
-
-        val displayColor = button.color?.let { if (it.isNotEmpty()) button.color else button.color }
-        sb.append("""<text x="0" y="52" font-family="'Inter var', system-ui, 'Helvetica Neue', sans-serif" font-size="13" font-weight="600" fill="$displayColor">""")
-        sb.append(button.type?.let { escapeXml(it) })
-        sb.append("</text>")
-
-        // Description (wrapped)
+        // Description
         button.description?.let {
             if (it.isNotEmpty()) {
-                sb.append(wrapDescription(button.description, 280, 78))
+                sb.append(wrapDescription(it, 260, 75, secondary, fontMain))
             }
         }
 
-        // Authors/Metadata
-        button.author?.let {
-            if (it.isNotEmpty()) {
-                var authorsY = 150
-                button.author.take(2).forEach { author ->
-                    sb.append("""<text x="0" y="$authorsY" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="italic" font-weight="600" fill="#6B7280">""")
-                    sb.append(escapeXml(author))
-                    sb.append("</text>")
-                    authorsY += 14
-                }
-            }
-        }
+        // Footer Accent (Visual Marker)
+        sb.append("""<rect x="0" y="165" width="40" height="4" rx="2" fill="$accent"/>""")
 
-        // Date
+        // Date / Author
         button.date?.let {
-            if (it.isNotEmpty()) {
-                sb.append("""<text x="0" y="190" font-family="'Inter var', system-ui, 'Helvetica Neue', sans-serif" font-size="13" font-weight="700" fill="#111827">""")
-                sb.append(escapeXml(button.date))
-                sb.append("</text>")
-            }
+            sb.append("""<text x="260" y="170" text-anchor="end" font-family="$fontMain" font-size="11" font-weight="500" fill="$secondary" opacity="0.8">""")
+            sb.append(escapeXml(it))
+            sb.append("</text>")
         }
 
         sb.append("</g>")
         return sb.toString()
     }
 
-    private fun wrapDescription(text: String, maxWidth: Int, startY: Int): String {
+    private fun wrapDescription(text: String, maxWidth: Int, startY: Int, color: String, font: String): String {
         val sb = StringBuilder()
         val words = text.split(" ")
         val lines = mutableListOf<String>()
         var currentLine = ""
-
-        // Approximate character width (10px font, ~6px per char average)
-        val charWidth = 6
-        val maxChars = maxWidth / charWidth
+        val maxChars = maxWidth / 7
 
         words.forEach { word ->
             val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
             if (testLine.length <= maxChars) {
                 currentLine = testLine
             } else {
-                if (currentLine.isNotEmpty()) {
-                    lines.add(currentLine)
-                }
+                if (currentLine.isNotEmpty()) lines.add(currentLine)
                 currentLine = word
             }
         }
-        if (currentLine.isNotEmpty()) {
-            lines.add(currentLine)
-        }
+        if (currentLine.isNotEmpty()) lines.add(currentLine)
 
-        sb.append("""<text y="$startY" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#4B5563">""")
+        sb.append("""<text y="$startY" font-family="$font" font-size="13" fill="$color" line-height="1.5">""")
         lines.take(4).forEachIndexed { index, line ->
-            val dy = if (index == 0) startY else 14
-            val dyAttr = if (index == 0) "dy='0'" else """ dy="14""""
-            sb.append("""<tspan x="0" $dyAttr>""")
+            val dy = if (index == 0) 0 else 18
+            sb.append("""<tspan x="0" dy="$dy">""")
             sb.append(escapeXml(line))
             sb.append("</tspan>")
         }
         sb.append("</text>")
-
         return sb.toString()
     }
 
     private fun createDefs(id: String): String {
         val sb = StringBuilder()
+        val isDark = buttons.useDark
         sb.append("<defs>")
-        sb.append(BackgroundHelper.getBackgroundGradient(buttons.useDark, buttons.id))
-        // Card shadow
-        sb.append("""<filter id="cardShadow_$id" x="-20%" y="-20%" width="140%" height="140%">""")
-        sb.append("""<feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.15)" />""")
-        sb.append("""<feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.1)" />""")
-        sb.append("</filter>")
 
-        // Icon glow
-        sb.append("""<filter id="iconGlow">""")
-        sb.append("""<feGaussianBlur stdDeviation="3" result="coloredBlur"/>""")
-        sb.append("""<feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>""")
-        sb.append("</filter>")
+        // Atmosphere Gradient
+        val bgStart = if (isDark) "#0F172A" else "#F8FAFC"
+        val bgEnd = if (isDark) "#020617" else "#F1F5F9"
+        sb.append("""<radialGradient id="bg_grad_$id" cx="50%" cy="50%" r="70%">""")
+        sb.append("""<stop offset="0%" stop-color="$bgStart"/>""")
+        sb.append("""<stop offset="100%" stop-color="$bgEnd"/>""")
+        sb.append("""</radialGradient>""")
 
-        // Shimmer overlay
-        sb.append("""<linearGradient id="shimmer_$id" x1="0%" y1="0%" x2="0%" y2="100%">""")
-        sb.append("""<stop offset="0%" stop-color="rgba(255,255,255,0.4)" />""")
-        sb.append("""<stop offset="50%" stop-color="rgba(255,255,255,0.1)" />""")
-        sb.append("""<stop offset="100%" stop-color="rgba(255,255,255,0)" />""")
-        sb.append("</linearGradient>")
-
-        // Divider gradient
-        sb.append("""<linearGradient id="dividerGradient_$id" x1="0%" y1="0%" x2="100%" y2="0%">""")
-        sb.append("""<stop offset="0%" stop-color="rgba(0,0,0,0)" />""")
-        sb.append("""<stop offset="20%" stop-color="rgba(0,0,0,0.1)" />""")
-        sb.append("""<stop offset="80%" stop-color="rgba(0,0,0,0.1)" />""")
-        sb.append("""<stop offset="100%" stop-color="rgba(0,0,0,0)" />""")
-        sb.append("</linearGradient>")
-
-        // Button gradients for each button
-        buttons.buttons.forEach { button ->
-            val gradientId = "btn_${button.id}_gradient"
-            val svgColor = SVGColor(button.color!!, gradientId)
-            sb.append(svgColor.linearGradient)
-
+        if (!isPdf) {
+            sb.append("""<filter id="cardShadow_$id" x="-20%" y="-20%" width="140%" height="140%">""")
+            sb.append("""<feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.2"/>""")
+            sb.append("</filter>")
         }
 
+        // Button gradients
+        buttons.buttons.forEach { button ->
+            val gradientId = "btn_${button.id}_gradient"
+            val baseColor = button.color ?: "#38BDF8"
+            // Generate a deeper version for the gradient end
+            sb.append("""<linearGradient id="$gradientId" x1="0%" y1="0%" x2="100%" y2="100%">""")
+            sb.append("""<stop offset="0%" stop-color="$baseColor"/>""")
+            sb.append("""<stop offset="100%" stop-color="#0F172A" stop-opacity="0.8"/>""")
+            sb.append("</linearGradient>")
+        }
         sb.append("</defs>")
         return sb.toString()
     }
 
     private fun createStyles(id: String): String {
+        if (isPdf) return ""
         return """
             <style>
+                @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&amp;family=JetBrains+Mono:wght@600&amp;display=swap');
                 #$id .modern-card-button {
-                    transition: all 0.3s ease;
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }               
+                #$id .hover-overlay {
+                    transition: opacity 0.3s ease;
                 }
-                #$id .modern-card-button:hover {
-                    filter: grayscale(100%) sepia(100%);
-                }
-                #$id .modern-card-button:hover .hover-border {
-                    opacity: 1;
-                }
-                #$id .card-top {
-                    transition: filter 0.3s ease;
-                }
-                #$id .modern-card-button:hover .card-top {
-                    filter: brightness(1.1);
+                #$id .modern-card-button:hover .hover-overlay {
+                    opacity: 0.05;
                 }
             </style>
         """.trimIndent()
