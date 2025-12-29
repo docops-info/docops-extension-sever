@@ -39,6 +39,11 @@ include::data/buttons/buttons5.json[]
 include::data/buttons/buttons6.json[]
 ....
 
+[docops,buttons, title="LARGE Buttons - Dark",useDark=true]
+....
+include::data/buttons/buttons6.json[]
+....
+
 [docops,buttons, title="ROUND Buttons" ]
 ....
 include::data/buttons/buttons7.json[]
@@ -75,15 +80,15 @@ include::data/buttons/buttons11.json[]
 include::data/buttons/buttons12.json[]
 ....
 
-[docops,buttons, title="Large Buttons with QR Code"]
+[docops,buttons, title="Large Buttons with QR Code",useDark=true]
 ....
 {
   "buttons": [
     {
-      "label": "Twitter",
+      "label": "X",
       "link": "https://twitter.com",
       "description": "Follow us",
-      "type": "social",
+      "type": "formerly twitter",
       "embeddedImage": {
         "qrEnabled": true
       }
@@ -92,13 +97,13 @@ include::data/buttons/buttons12.json[]
       "label": "Facebook",
       "link": "https://facebook.com",
       "description": "Like our page",
-      "type": "social"
+      "type": "old people"
     },
     {
       "label": "Instagram",
       "link": "https://instagram.com",
       "description": "See our photos",
-      "type": "social",
+      "type": "doom scroll",
       "embeddedImage": {
         "qrEnabled": true
       }
@@ -107,13 +112,13 @@ include::data/buttons/buttons12.json[]
       "label": "LinkedIn",
       "link": "https://linkedin.com",
       "description": "Connect with us",
-      "type": "social"
+      "type": "business social"
     },
     {
       "label": "YouTube",
       "link": "https://youtube.com",
       "description": "Watch our videos",
-      "type": "social",
+      "type": "videos",
       "embeddedImage": {
         "qrEnabled": true
       }
@@ -122,11 +127,71 @@ include::data/buttons/buttons12.json[]
   "buttonType": "LARGE",
   "theme": {
     "colors": [
-      "#1DA1F2",
-      "#4267B2",
-      "#E1306C",
-      "#0077B5",
-      "#FF0000"
+      "#E11D48",
+      "#22D3EE",
+      "#8B5CF6",
+      "#10B981",
+      "#F59E0B"
+    ],
+    "colorTypeMap": {
+      "social": "#FF0000"
+    },
+    "columns": 5,
+    "scale": 1,
+    "sortBy" : {
+        "sort": "ORDER"
+    }
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Roboto', sans-serif; font-size: 16px; fill: #ffffff; font-weight: bold; text-anchor: middle;",
+      "descriptionStyle": "font-family: 'Roboto', sans-serif; font-size: 10px; fill: #ffffff; text-anchor: middle;"
+    }
+  }
+}
+....
+
+[docops,buttons, title="Large Buttons",useDark=true]
+....
+{
+  "buttons": [
+    {
+      "label": "X",
+      "link": "https://twitter.com",
+      "description": "Follow us",
+      "type": "formerly twitter"
+    },
+    {
+      "label": "Facebook",
+      "link": "https://facebook.com",
+      "description": "Like our page",
+      "type": "old people"
+    },
+    {
+      "label": "Instagram",
+      "link": "https://instagram.com",
+      "description": "See our photos",
+      "type": "doom scroll"
+    },
+    {
+      "label": "LinkedIn",
+      "link": "https://linkedin.com",
+      "description": "Connect with us",
+      "type": "business social"
+    },
+    {
+      "label": "YouTube",
+      "link": "https://youtube.com",
+      "description": "Watch our videos",
+      "type": "videos"
+    }
+  ],
+  "buttonType": "LARGE",
+  "theme": {
+    "colors": [
+      "#E11D48",
+      "#22D3EE",
+      "#8B5CF6",
+      "#10B981",
+      "#F59E0B"
     ],
     "colorTypeMap": {
       "social": "#FF0000"
