@@ -1,236 +1,199 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.math.max
+import kotlin.text.toInt
 
 /**
  * Maker to generate an iOS-style two-column ScoreCard SVG based on ScoreCard model.
  * This follows the general pattern of other Makers in the project: pure-SVG generation as a String.
  */
 class ScoreCardMaker {
-    private val log = KotlinLogging.logger {}
-
     fun make(scorecard: ScoreCard): String {
         val useDark = scorecard.theme.useDark
         val scale = scorecard.theme.scale
-        // Overall canvas settings adjusted for wider layout
         val baseWidth = 1024
         val margin = 40
-        val gutter = 40
-        // Two cards side by side within width
-        val cardWidth = ((baseWidth - (margin * 2) - gutter) / 2)
-        // Title wrapping configuration
-        val titleFontSize = 20
-        val titleLineHeight = 24
-        val titleMaxWidth = baseWidth - (margin * 2)
-        val titleLines = wrapByCharsForTitle(scorecard.title, titleMaxWidth, titleFontSize)
-        val titleBlockHeight = titleLines.size * titleLineHeight
-        val titleStartY = 28
-        val titleEndY = titleStartY + titleBlockHeight
+        val gutter = 44
+        val cardWidth = (baseWidth - (margin * 2) - gutter) / 2
 
-        val topY = titleEndY + 20 // start cards after title block
-        val leftX = margin
-        val rightX = margin + cardWidth + gutter
+        // Theme Configuration
+        val theme = if (useDark) DarkTheme() else LightTheme()
 
-        // Theme colors
-        val bg = if (useDark) "#0f172a" else "#f8f9fa"
-        val panelFill = if (useDark) "#111827" else "white"
-        val panelStroke = if (useDark) "#334155" else "#ddd"
-        val sectionHeaderTextFill = if (useDark) "#e5e7eb" else "#333"
-        val itemTextFill = if (useDark) "#cbd5e1" else "#666"
-        val titleFill = if (useDark) "#e5e7eb" else "#333"
+        val titleLines = wrapByCharsForTitle(scorecard.title, baseWidth - 80, 32)
+        val titleLineHeight = 38
+        val topY = 120.0 + (titleLines.size - 1) * titleLineHeight
 
-        // Compute dynamic card heights based on wrapped content
-        val beforeCard = buildCard(cardWidth, scorecard.beforeSections, "url(#redGrad)",
-            headerTitle = scorecard.beforeTitle.ifBlank { scorecard.beforeSections.firstOrNull()?.title ?: scorecard.beforeTitle },
-            bulletColor = "#ff4444", checkmark = false,
-            panelFill = panelFill, panelStroke = panelStroke, sectionHeaderTextFill = sectionHeaderTextFill, itemTextFill = itemTextFill)
-        val afterCard = buildCard(cardWidth, scorecard.afterSections, "url(#greenGrad)",
-            headerTitle = (scorecard.afterTitle.ifBlank { scorecard.afterSections.firstOrNull()?.title ?: scorecard.afterTitle }),
-            bulletColor = "#22cc44", checkmark = true,
-            panelFill = panelFill, panelStroke = panelStroke, sectionHeaderTextFill = sectionHeaderTextFill, itemTextFill = itemTextFill)
-        val cardHeightLeft = beforeCard.height
-        val cardHeightRight = afterCard.height
-        val cardHeightMax = maxOf(cardHeightLeft, cardHeightRight)
+        // Build Cards
+        val beforeCard = buildCard(cardWidth, scorecard.beforeSections, theme, scorecard.id,
+            headerTitle = scorecard.beforeTitle.ifBlank { "BEFORE" },
+            isBefore = true)
+
+        val afterCard = buildCard(cardWidth, scorecard.afterSections, theme, scorecard.id,
+            headerTitle = scorecard.afterTitle.ifBlank { "AFTER" },
+            isBefore = false)
+
+        val cardHeightMax = max(beforeCard.height, afterCard.height)
         val baseHeight = cardHeightMax + topY + margin
         val canvasWidth = (baseWidth * scale).toInt()
         val canvasHeight = (baseHeight * scale).toInt()
 
-        val sb = StringBuilder()
-        sb.append("""
-            <svg width="$canvasWidth" height="$canvasHeight" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ee5253;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#26a69a;stop-opacity:1" />
-                    </linearGradient>
-                    <filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
-                </defs>
-                <rect width="$baseWidth" height="$baseHeight" fill="$bg"/>
-        """.trimIndent())
-        // Render wrapped title lines centered
-        titleLines.forEachIndexed { idx: Int, line: String ->
-            val y = titleStartY + (idx * titleLineHeight)
-            sb.append("""
-                <text x="${baseWidth/2}" y="$y" text-anchor="middle" font-family="Arial, sans-serif" font-size="$titleFontSize" font-weight="bold" fill="$titleFill">${escape(line)}</text>
-            """.trimIndent())
-        }
+        return buildString {
+            append("""<svg width="$canvasWidth" height="$canvasHeight" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg">""")
+            append(generateDefs(theme, scorecard.id))
 
-        // BEFORE card
-        sb.append(beforeCard.svg.replaceFirst("<g", "<g transform=\"translate($leftX, $topY)\""))
+            // Background
+            append("""<rect width="100%" height="100%" fill="${theme.bg}"/>""")
+            append("""<rect width="100%" height="100%" fill="url(#grid_${scorecard.id})" opacity="0.4"/>""")
 
-        // AFTER card
-        sb.append(afterCard.svg.replaceFirst("<g", "<g transform=\"translate($rightX, $topY)\""))
+            // Header Title
+            append("""<g transform="translate($margin, 60)">""")
+            append("""<rect width="4" height="40" fill="${theme.accentPrimary}" rx="2"/>""")
+            titleLines.forEachIndexed { i, line ->
+                append("""<text x="20" y="${32 + i * titleLineHeight}" class="main-title_${scorecard.id}">${escape(line)}</text>""")
+            }
+            append("</g>")
 
-        // Transition arrow between cards (vertically centered to tallest card)
-        sb.append("""
-            <g transform="translate(${(leftX + cardWidth + rightX)/2 - 12}, ${topY + cardHeightMax/2})">
-                <path d="M0,0 L30,0 L25,-8 M30,0 L25,8" stroke="#4ecdc4" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </g>
-        """.trimIndent())
+            // BEFORE Card Layout
+            append("""<g transform="translate($margin, $topY)">""")
+            append("""<g class="anim-panel_${scorecard.id} delay-1_${scorecard.id}">${beforeCard.svg}</g>""")
+            append("</g>")
 
-        sb.append("</svg>")
-        return sb.toString()
-    }
-
-    // Helper structure for prebuilt card
-    private data class BuiltCard(val svg: String, val height: Int)
-
-    // Build a card group SVG with dynamic height and wrapped items, returned untranslated (caller sets translate)
-    private fun buildCard(
-        width: Int,
-        sections: List<Section>,
-        headerFill: String,
-        headerTitle: String,
-        bulletColor: String,
-        checkmark: Boolean,
-        panelFill: String,
-        panelStroke: String,
-        sectionHeaderTextFill: String,
-        itemTextFill: String
-    ): BuiltCard {
-        val headerHeight = 60
-        val innerPadding = 20
-        val contentX = innerPadding
-        val contentWidth = width - innerPadding * 2 - 20 // 20 for bullet area
-        val lineHeight = 16
-        val itemGap = 6
-
-        var currentY = headerHeight + innerPadding
-        val sb = StringBuilder()
-        sb.append("<g>")
-        // We will compute height; draw rect later with computed height via string replace
-        // Header visuals
-        // We'll append the rects after knowing height; for now collect body and track Y
-        val body = StringBuilder()
-        sections.forEach { section ->
-            if (section.items.isEmpty()) return@forEach
-            // Section header
-            body.append("""
-                <g transform="translate($contentX, $currentY)">
-                    <text x="0" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="$sectionHeaderTextFill">${escape(section.title)}</text>
+            // Transition Arrow
+            append("""
+                <g transform="translate(${(margin + cardWidth + gutter / 2 - 20)}, ${topY + cardHeightMax / 2})">
+                    <path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="${theme.panelStroke}" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/>
                 </g>
             """.trimIndent())
-            currentY += 35
-            // Items block under header
-            val itemsStartY = currentY
-            val itemsBuilt = buildItems(section.items, contentX, itemsStartY, bulletColor, checkmark, contentWidth, lineHeight, itemTextFill)
-            body.append(itemsBuilt.svg)
-            currentY = itemsBuilt.nextY + 10 // bottom spacing after items
+
+            // AFTER Card Layout
+            append("""<g transform="translate(${margin + cardWidth + gutter}, $topY)">""")
+            append("""<g class="anim-panel_${scorecard.id} delay-2_${scorecard.id}">${afterCard.svg}</g>""")
+            append("</g>")
+
+            append("""<text x="$margin" y="${baseHeight - 20}" class="meta-text_${scorecard.id}">SCORECARD_REF: ${scorecard.id.take(4).uppercase()} // SCALE: $scale // THEME: ${if (useDark) "NEURAL_DARK" else "NEURAL_LIGHT"}</text>""")
+            append("</svg>")
         }
-        val totalHeight = maxOf(currentY + innerPadding, headerHeight + innerPadding * 2)
-
-        // Now draw the card container and header, then inject body
-        sb.append("""
-            <rect x="0" y="0" width="$width" height="$totalHeight" rx="12" fill="$panelFill" stroke="$panelStroke" stroke-width="2" filter="url(#shadow)"/>
-            <rect x="0" y="0" width="$width" height="$headerHeight" rx="12" fill="$headerFill"/>
-            <rect x="0" y="${headerHeight - 12}" width="$width" height="12" fill="$panelFill"/>
-            <text x="${width/2}" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">${escape(headerTitle)}</text>
-        """.trimIndent())
-        sb.append(body.toString())
-        sb.append("</g>")
-        return BuiltCard(sb.toString(), totalHeight)
     }
 
-    private data class BuiltItems(val svg: String, val nextY: Int)
+    private fun generateDefs(theme: ScoreCardThemeColors, id: String) = """
+        <defs>
+            <pattern id="grid_$id" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridColor}" stroke-width="1"/>
+            </pattern>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
+                .main-title_$id { font-family: 'Syne', sans-serif; font-size: 32px; fill: ${theme.titleFill}; text-transform: uppercase; letter-spacing: -1px; }
+                .sec-header_$id { font-family: 'Syne', sans-serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; font-weight: 800; }
+                .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.itemTextFill}; }
+                .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.itemDescFill}; }
+                .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.itemDescFill}; opacity: 0.5; }
+                
+                @keyframes slideUp_$id { 
+                    from { opacity: 0; transform: translateY(30px); } 
+                    to { opacity: 1; transform: translateY(0); } 
+                }
+                .anim-panel_$id { animation: slideUp_$id 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+                .delay-1_$id { animation-delay: 0.1s; }
+                .delay-2_$id { animation-delay: 0.3s; }
+            </style>
+        </defs>
+    """.trimIndent()
 
-    private fun buildItems(
-        items: List<ScoreCardItem>,
-        xStart: Int,
-        yStart: Int,
-        bulletColor: String,
-        checkmark: Boolean,
-        maxTextWidth: Int,
-        lineHeight: Int,
-        itemTextFill: String
-    ): BuiltItems {
-        val sb = StringBuilder()
-        var y = yStart
-        val itemGap = 6
-        items.forEach { item ->
-            val text = listOfNotNull(item.displayText.takeIf { it.isNotBlank() }?.let { escape(it) },
-                item.description?.takeIf { it.isNotBlank() }?.let { escape(it) })
-                .joinToString(" — ")
-            val lines = wrapByChars(text, maxTextWidth)
-            // bullet or checkmark at first line baseline
-            if (checkmark) {
-                sb.append("""
-                    <path d="M${xStart + 5},${y + 8} L${xStart + 8},${y + 11} L${xStart + 13},${y + 6}" stroke="$bulletColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                """.trimIndent())
-            } else {
-                sb.append("""
-                    <circle cx="${xStart + 8}" cy="${y + 8}" r="4" fill="$bulletColor"/>
-                """.trimIndent())
+    private fun buildCard(width: Int, sections: List<Section>, theme: ScoreCardThemeColors, id: String, headerTitle: String, isBefore: Boolean): BuiltCard {
+        val accent = if (isBefore) theme.accentBefore else theme.accentAfter
+        var currentY = 60
+        val innerPadding = 24
+        val contentWidth = width - innerPadding * 2 - 30
+
+        val body = buildString {
+            sections.forEach { section ->
+                if (section.items.isEmpty()) return@forEach
+                append("""<text x="$innerPadding" y="${currentY + 20}" class="sec-header_$id" style="fill: $accent">${escape(section.title)}</text>""")
+                currentY += 45
+
+                section.items.forEach { item ->
+                    val lines = wrapByChars(item.displayText, contentWidth)
+                    val descLines = if (!item.description.isNullOrBlank()) wrapByChars("// ${item.description}", contentWidth) else emptyList()
+
+                    if (isBefore) {
+                        append("""<circle cx="${innerPadding + 8}" cy="${currentY + 10}" r="4" fill="$accent"/>""")
+                    } else {
+                        append("""<path d="M${innerPadding},${currentY + 10} L${innerPadding + 6},${currentY + 16} L${innerPadding + 16},${currentY + 6}" stroke="$accent" stroke-width="2.5" fill="none" stroke-linecap="round"/>""")
+                    }
+
+                    lines.forEachIndexed { i, line ->
+                        append("""<text x="${innerPadding + 28}" y="${currentY + 14 + i * 18}" class="item-text_$id">${escape(line)}</text>""")
+                    }
+                    currentY += lines.size * 18 + 4
+
+                    descLines.forEachIndexed { i, line ->
+                        append("""<text x="${innerPadding + 28}" y="${currentY + 10 + i * 14}" class="item-desc_$id">${escape(line)}</text>""")
+                    }
+                    currentY += descLines.size * 14 + 12
+                }
+                currentY += 20
             }
-            lines.forEachIndexed { idx, line ->
-                val yy = y + 12 + idx * lineHeight
-                sb.append("""
-                    <text x="${xStart + 20}" y="$yy" font-family="Arial, sans-serif" font-size="12" fill="$itemTextFill">$line</text>
-                """.trimIndent())
-            }
-            y += 12 + (lines.size * lineHeight) + itemGap
         }
-        return BuiltItems(sb.toString(), y)
+
+        val totalHeight = max(currentY + innerPadding, 200)
+        val svg = """
+            <rect width="$width" height="$totalHeight" fill="${theme.panelFill}" stroke="${accent}" stroke-width="1.5" rx="4"/>
+            <rect width="$width" height="40" fill="$accent" fill-opacity="0.1" rx="4"/>
+            <text x="$innerPadding" y="26" class="sec-header_$id" style="fill: $accent">0${if (isBefore) 1 else 2}_${escape(headerTitle)}</text>
+            $body
+        """.trimIndent()
+
+        return BuiltCard(svg, totalHeight)
     }
 
-    // Very simple character-based wrapper using approximate chars-per-line for 12px font
-    private fun wrapByChars(text: String, maxWidthPx: Int): List<String> {
-        // Approx width per character at 12px Arial ~6.5px
-        val pxPerChar = 6.5
-        val maxChars = maxOf(10, (maxWidthPx / pxPerChar).toInt())
-        return wrapByWords(text, maxChars)
-    }
-
-    // Title wrapper uses different font size; approximate px-per-char by size*0.6
-    private fun wrapByCharsForTitle(text: String, maxWidthPx: Int, fontSize: Int): List<String> {
-        val pxPerChar = fontSize * 0.6 // rough approximation for Arial
-        val maxChars = maxOf(8, (maxWidthPx / pxPerChar).toInt())
-        return wrapByWords(text, maxChars)
-    }
+    private data class BuiltCard(val svg: String, val height: Int)
 
     private fun wrapByWords(text: String, maxChars: Int): List<String> {
         val words = text.split(" ")
         val lines = mutableListOf<String>()
         var current = StringBuilder()
-        words.forEach { w ->
+        for (word in words) {
             if (current.isEmpty()) {
-                current.append(w)
-            } else if (current.length + 1 + w.length <= maxChars) {
-                current.append(' ').append(w)
+                current.append(word)
+            } else if (current.length + 1 + word.length <= maxChars) {
+                current.append(" ").append(word)
             } else {
                 lines.add(current.toString())
-                current = StringBuilder(w)
+                current = StringBuilder(word)
             }
         }
         if (current.isNotEmpty()) lines.add(current.toString())
         return lines
     }
 
-    private fun escape(text: String): String = text
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
+    private fun wrapByChars(text: String, maxWidthPx: Int): List<String> {
+        val pxPerChar = 7.8
+        return wrapByWords(text, (maxWidthPx / pxPerChar).toInt().coerceAtLeast(10))
+    }
+
+    private fun wrapByCharsForTitle(text: String, maxWidthPx: Int, fontSize: Int): List<String> {
+        val pxPerChar = fontSize * 0.65
+        return wrapByWords(text, (maxWidthPx / pxPerChar).toInt().coerceAtLeast(8))
+    }
+
+    private fun escape(text: String): String = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    private interface ScoreCardThemeColors {
+        val bg: String; val panelFill: String; val panelStroke: String; val gridColor: String
+        val titleFill: String; val itemTextFill: String; val itemDescFill: String
+        val accentPrimary: String; val accentBefore: String; val accentAfter: String
+    }
+
+    private class DarkTheme : ScoreCardThemeColors {
+        override val bg = "#020617"; override val panelFill = "#0f172a"; override val panelStroke = "#1e293b"; override val gridColor = "#1e293b"
+        override val titleFill = "#f8fafc"; override val itemTextFill = "#cbd5e1"; override val itemDescFill = "#64748b"
+        override val accentPrimary = "#38bdf8"; override val accentBefore = "#f43f5e"; override val accentAfter = "#10b981"
+    }
+
+    private class LightTheme : ScoreCardThemeColors {
+        override val bg = "#f8fafc"; override val panelFill = "#ffffff"; override val panelStroke = "#e2e8f0"; override val gridColor = "#e2e8f0"
+        override val titleFill = "#0f172a"; override val itemTextFill = "#1e293b"; override val itemDescFill = "#94a3b8"
+        override val accentPrimary = "#0284c7"; override val accentBefore = "#e11d48"; override val accentAfter = "#059669"
+    }
 }
