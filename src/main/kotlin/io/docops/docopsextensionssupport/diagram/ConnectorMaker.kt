@@ -35,11 +35,18 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             useGlassEffect = false
         }
         val sb = StringBuilder()
-        val width: Float = (connectors.chunked(5)[0].size * 250).toFloat() + (connectors.chunked(5)[0].size * 46).toFloat() + 200
-        val height = connectors.chunked(5).size * 120.0f
-        val descriptionHeight = (connectors.size * 36) + 160
+
+        // Brutalist specific dimensions: 340 horizontal step, 150 vertical step
+        val columns = 5
+        val maxCols = if (connectors.size < columns) connectors.size else columns
+        val width: Float = (maxCols * 340).toFloat() + 200
+        val bodyHeight = (Math.ceil(connectors.size / columns.toDouble()).toInt() * 150).toFloat()
+        val descriptionHeight = (connectors.size * 32) + 100
+
+        val totalHeight = bodyHeight + descriptionHeight
         val id = UUID.randomUUID().toString()
-        sb.append(head(height + descriptionHeight, width = width, scale, id))
+
+        sb.append(head(totalHeight, width = width, scale, id))
         initColors()
         if("PDF" != type) {
             sb.append(defs(id))
@@ -60,45 +67,49 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         if (!isPdf) {
             sb.append("<rect width=\"100%\" height=\"100%\" fill=\"url(#dotPattern)\" />")
         }
-        sb.append("<g transform=\"translate(100,20)\">")
+        sb.append("<g transform=\"translate(100,40)\">")
         sb.append(makeBody())
         sb.append("</g>")
-        sb.append(descriptions(height + 20))
+
+        // Start descriptions after the body height
+        sb.append(descriptions(bodyHeight + 60))
         sb.append(tail())
-        return ShapeResponse(shapeSvg = sb.toString(), height = height, width = width)
+        return ShapeResponse(shapeSvg = sb.toString(), height = totalHeight, width = width)
     }
 
 
     private fun descriptions(start: Float): String {
-        val sb = StringBuilder("<g transform='translate(100,${start + 20})'>")
+        val sb = StringBuilder("<g transform='translate(100,${start})'>")
         var y = 0
-        var textColor = "#374151"
+        var textColor = "#111827"
         if(useDark){
             textColor = "#F3F4F6"
         }
 
-        connectors.forEachIndexed {
-            i, item ->
-            var fill = "fill=\"url(#grad$i)\""
-            if("PDF" == type) {
-                fill = "fill=\"${colors[i]}\""
-            }
+        connectors.forEachIndexed { i, item ->
+            // Skip if the description is empty (e.g., the last element 'L' in your example)
+            if (item.description.trim().isEmpty()) return@forEachIndexed
+
+            val boxColor = colors[i]
             val animationDelay = (connectors.size + i) * 0.05
-            val labelColor = determineTextColor(colors[i])
+
+            sb.append("""<g transform="translate(0, $y)">""")
             sb.append("""
-                <g transform="translate(0, $y)">
-                    <g class="glass-card" style="animation-delay: ${animationDelay}s">
-                        <rect x="0" y="0" width="20" height="20" $fill rx="4" filter="url(#cardShadow)"/>
-                        <text x="10" y="14" fill="$labelColor" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 700;">${alphabets[i]}</text>
-                        <text x="35" y="15" fill="$textColor" style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500;">${item.description}</text>
+                    <g style="animation: slideIn 0.4s ease-out ${animationDelay}s both;">
+                        <rect x="0" y="0" width="24" height="24" fill="#000000" />
+                        <rect x="2" y="2" width="20" height="20" fill="$boxColor" />
+                        <text x="12" y="17" fill="white" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 800;">${alphabets[i]}</text>
+                        <text x="36" y="17" fill="$textColor" style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">${item.description}</text>
+                        <line x1="0" y1="28" x2="400" y2="28" stroke="$textColor" stroke-width="1" stroke-opacity="0.1" />
                     </g>
-                </g>
-            """.trimIndent())
+                """.trimIndent())
+            sb.append("</g>")
             y += 36
         }
         sb.append("</g>")
         return sb.toString()
     }
+
     private fun head(height: Float, width: Float, scale: Float = 1.0f, id: String)  = """
         <svg xmlns="http://www.w3.org/2000/svg" width="${(width*scale) / DISPLAY_RATIO_16_9}" height="${(height*scale) /DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_$id" preserveAspectRatio="xMidYMid meet">
     """.trimIndent()
@@ -124,8 +135,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val grad= StringBuilder()
 
         colors.forEachIndexed {
-            i, choiceColor ->
-           val res = gradientMapToHsl()[choiceColor]
+                i, choiceColor ->
+            val res = gradientMapToHsl()[choiceColor]
             if(null == res) {
                 val gradient = SVGColor(choiceColor, "grad${i}")
                 grad.append(gradient.linearGradient)
@@ -134,247 +145,141 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             }
         }
 
-        val glassEffectDefs = if (useGlassEffect) {
-            """
-            <!-- Glass effect gradients -->
-            <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                <stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
-                <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-            </linearGradient>
-
-            <!-- Highlight gradient -->
-            <linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" />
-                <stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-            </linearGradient>
-
-            <!-- Radial gradient for realistic light reflections -->
-            <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
-                <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-            </radialGradient>
-
-            <!-- Enhanced drop shadow filter for glass boxes -->
-            <filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.25)"/>
-            </filter>
-
-            <!-- Frosted glass blur filter -->
-            <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-            </filter>
-
-            <!-- Glass border gradient -->
-            <linearGradient id="glassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" />
-            </linearGradient>
-            """
-        } else {
-            ""
-        }
-
-        val shadowFilter = if (useGlassEffect) {
-            """
-            <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="rgba(0,0,0,0.15)"/>
-            </filter>
-            """
-        } else {
-            """
-            <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="rgba(0,0,0,0.1)"/>
-            </filter>
-            """
-        }
-
-        val styles = if (useGlassEffect) {
-            """
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;display=swap');
+        val brutalistDefs = """
+                <!-- Hard offset shadow for depth -->
+                <filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%">
+                    <feOffset dx="6" dy="6" in="SourceAlpha" result="offset" />
+                    <feFlood flood-color="#000000" flood-opacity="0.8" result="color" />
+                    <feComposite in="color" in2="offset" operator="in" result="shadow" />
+                    <feMerge>
+                        <feMergeNode in="shadow" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
                 
-                #diag_$id .shadowed {
-                    filter: url(#glassDropShadow);
-                }
+                <!-- Subtle noise/texture pattern -->
+                <filter id="noise">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" />
+                    <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1">
+                        <feDistantLight azimuth="45" elevation="60" />
+                    </feDiffuseLighting>
+                </filter>
+            """
 
-                #diag_$id .glass-card {
-                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                    transform-origin: center;
-                    animation: fadeInSlideUp 0.6s ease-out forwards;
-                    opacity: 0;
-                }
-
-                @keyframes fadeInSlideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
+        val styles = """
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&amp;display=swap');
+                
+                    #diag_$id .module-card {
+                        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                        cursor: pointer;
                     }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
+
+                    #diag_$id .module-card:hover {
+                        transform: translate(-2px, -2px);
                     }
-                }
+                    
+                    #diag_$id .accent-bar {
+                        transition: width 0.3s ease;
+                    }
 
-                #diag_$id .glass-card:hover {
-                    transform: scale(1.02) translateY(-5px);
-                    filter: brightness(1.05);
-                    cursor: pointer;
-                }
-
-                #diag_$id .glass-overlay {
-                    pointer-events: none;
-                }
-
-                #diag_$id .glass-highlight {
-                    pointer-events: none;
-                    opacity: 0.4;
-                    transition: opacity 0.3s ease;
-                }
-
-                #diag_$id .glass-card:hover .glass-highlight {
-                    opacity: 0.8;
-                }
-
-                #diag_$id .glass-border {
-                    stroke-width: 1.5;
-                    transition: all 0.3s ease;
-                }
-
-                #diag_$id .glass-card:hover .glass-border {
-                    stroke-width: 2.5;
-                    stroke: rgba(255, 255, 255, 0.6);
-                }
-                
-                #diag_$id .card-text {
-                    font-family: 'Outfit', sans-serif;
-                }
-                
-                #diag_$id .dark .card-text {
-                }
-            </style>
+                    @keyframes slideIn {
+                        from { transform: translateX(-30px); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                </style>
             """
-        } else {
-            """
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;display=swap');
-                #diag_$id .shadowed {
-                    filter: url(#cardShadow);
-                }
-                #diag_$id .card-text {
-                    font-family: 'Outfit', sans-serif;
-                }
-            </style>
-            """
-        }
 
         return """
-            <defs>
-            <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="${if(useDark) "#374151" else "#E5E7EB"}" />
-            </pattern>
-            $grad
-            $glassEffectDefs
-            $shadowFilter
-            $styles
-            <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" />
-            <rect id="bbox" class="shadowed"  width="250" height="90" ry="16" rx="16"  />
-            <path id="hconnector" d="M260,50.0 h34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path id="vconnector" d="M135,100 v34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </defs>
-        """.trimIndent()
+                <defs>
+                <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="${if(useDark) "#374151" else "#E5E7EB"}" />
+                </pattern>
+                $grad
+                $brutalistDefs
+                $styles
+                <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" />
+                </defs>
+            """.trimIndent()
     }
+
     private fun makeBody(): String {
         val sb = StringBuilder()
         var x = 0
         var y = 0
         connectors.forEachIndexed { i, conn ->
-            val grad = "url(#grad$i)"
-            var strokeWidth = 2
-            fill = "white"
-            var style = ""
             val boxColor = colors[i]
-            val textFill = determineTextColor(boxColor)
-            if (!useGrad) {
-                fill = "none"
-                strokeWidth = 5
-                style = "font-size: 24px; font-family: 'Outfit', sans-serif; font-variant: small-caps; font-weight: bold;"
-            }
+            val animationDelay = i * 0.08
+
             val lines = conn.textToLines()
-            val str = StringBuilder("""<text x="135" y="${conn.start}" text-anchor="middle" fill="$textFill" class="card-text" style="font-size: 18px; font-weight: 600; letter-spacing: -0.01em;$style" > """)
-
+            val textContent = StringBuilder("""<text x="25" y="48" fill="#111827" style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">""")
             lines.forEachIndexed { j, content ->
-                val dy = if (j > 0) "dy=\"22\"" else ""
-                str.append("""<tspan x="135" $dy>$content</tspan>""")
+                val dy = if (j > 0) "20" else "0"
+                textContent.append("""<tspan x="25" dy="$dy">$content</tspan>""")
             }
-            str.append("</text>")
+            textContent.append("</text>")
 
-            val animationDelay = i * 0.05
+            // Positional group (handles grid layout)
+            sb.append("""<g transform="translate($x,$y)">""")
+
+            // Animation group (handles entry effect separately to avoid coordinate overlap)
+            sb.append("""
+                <g class="module-card" style="animation: slideIn 0.5s ease-out ${animationDelay}s both;">
+                    <!-- The "Module" Base with hard shadow -->
+                    <rect x="0" y="0" width="260" height="100" fill="white" stroke="#000000" stroke-width="3" filter="url(#brutalistShadow)" />
             
-            sb.append("<g transform=\"translate($x,$y)\">")
-            if (useGlassEffect) {
-                sb.append("""
-                    <g class="glass-card" style="animation-delay: ${animationDelay}s">
-                        <!-- Base rectangle with gradient -->
-                        <rect x="10" y="10" width="250" height="90" ry="16" rx="16" fill="$grad" filter="url(#glassDropShadow)" stroke="url(#glassBorder)" stroke-width="1.5" class="glass-border" />
-                        <!-- Glass overlay with transparency -->
-                        <rect x="10" y="10" width="250" height="90" ry="16" rx="16" fill="url(#glassOverlay)" filter="url(#glassBlur)" class="glass-overlay" />
-                        <!-- Top highlight for shine -->
-                        <rect x="18" y="18" width="234" height="35" rx="12" ry="12" fill="url(#glassHighlight)" class="glass-highlight" />
-                        <!-- Radial highlight for realistic light effect -->
-                        <ellipse cx="40" cy="35" rx="15" ry="12" fill="url(#glassRadial)" class="glass-highlight" opacity="0.5" />
-                        $str
-                        <rect x="270" y="13" height="20" width="20" fill="$grad" rx="6" ry="6" filter="url(#cardShadow)"/>
-                        <text x="280" y="27" fill="$textFill" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.02em;">${alphabets[i]}</text>
+                    <!-- Color Header/Accent Area -->
+                    <rect x="0" y="0" width="260" height="12" fill="$boxColor" stroke="#000000" stroke-width="3" />
+            
+                    <!-- Decorative corner notch -->
+                    <path d="M 240 100 L 260 80 L 260 100 Z" fill="#000000" />
+            
+                    <!-- Identifier Tab -->
+                    <rect x="220" y="12" width="40" height="25" fill="#000000" />
+                    <text x="240" y="30" fill="white" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800;">${alphabets[i]}</text>
+            
+                    $textContent
+            
+                    <!-- Interactive Hover Accent Bar -->
+                    <rect x="0" y="94" width="0" height="6" fill="#000000" class="accent-bar" />
                 """.trimIndent())
-            } else {
-                sb.append("""
-                    <g>
-                        <use xlink:href="#bbox" x="10" y="10" fill="$fill" stroke="rgba(0,0,0,0.08)" stroke-width='1'/>
-                        $str
-                        <rect x="270" y="13" height="20" width="20" fill="$grad" rx="6" ry="6"/>
-                        <text x="280" y="27" fill="$textFill" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.02em;">${alphabets[i]}</text>
-                """.trimIndent())
-            }
 
             // Connection logic
             if (i < connectors.lastIndex) {
                 if ((i + 1) % 5 == 0) {
                     // Row-wrapping connector
                     sb.append("""
-                        <!-- Row-wrapping connector -->
-                        <g transform="translate(260,50)">
-                            <path d="M0,0 L60,0" stroke-width="2" stroke="rgba(107,114,128,0.4)" fill="none"/>
-                            <line x1="60" x2="60" y1="0" y2="70" stroke-width="2" stroke="rgba(107,114,128,0.4)" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="60" x2="-1480" y1="70" y2="70" stroke-width="2" stroke="rgba(107,114,128,0.4)" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="-1480" x2="-1480" y1="120" y2="70" stroke-width="2" stroke="rgba(107,114,128,0.4)" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="-1480" x2="-1460" y1="120" y2="120" stroke-width="2" stroke="rgba(107,114,128,0.4)" stroke-linecap="round" stroke-linejoin="round"/>
-                            <g transform="translate(-1460,117)">
-                                <use xlink:href="#ppoint" fill="url(#grad${i + 1})" stroke="url(#grad${i + 1})"/>
+                            <g transform="translate(260,50)">
+                                <path d="M0,0 L60,0" stroke-width="3" stroke="#000000" fill="none"/>
+                                <line x1="60" x2="60" y1="0" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
+                                <line x1="60" x2="-1540" y1="80" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
+                                <line x1="-1540" x2="-1540" y1="150" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
+                                <line x1="-1540" x2="-1535" y1="150" y2="150" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
+                                <g transform="translate(-1535,147.5)">
+                                    <use xlink:href="#ppoint" fill="#000000" stroke="#000000"/>
+                                </g>
                             </g>
-                        </g>
-                    """.trimIndent())
+                        """.trimIndent())
                 } else {
                     // Normal horizontal connector
+                    // Moved line end to 337 (closer to the 340 step) and arrow to 332
                     sb.append("""
-                        <use xlink:href="#hconnector" stroke="rgba(107,114,128,0.4)" fill="none"/>
-                        <g transform="translate(297,47)">
-                            <use xlink:href="#ppoint" fill="$grad" stroke="$grad"/>
-                        </g>
-                    """.trimIndent())
+                            <line x1="260" y1="50" x2="337" y2="50" stroke="#000000" stroke-width="3" />
+                            <g transform="translate(332,47.5)">
+                                <use xlink:href="#ppoint" fill="#000000" stroke="#000000"/>
+                            </g>
+                        """.trimIndent())
                 }
             }
+            // Close both groups
             sb.append("</g></g>")
 
-            // Update coordinates
+            // Updated grid spacing for the Brutalist style
             if ((i + 1) % 5 == 0) {
                 x = 0
-                y += 120
+                y += 150
             } else {
-                x += 300
+                x += 340
             }
         }
         return sb.toString()
