@@ -4,7 +4,7 @@ import java.io.File
 
 class QuadrantChartGenerator {
 
-    fun generateSVG(data: List<QuadrantPoint>, config: QuadrantConfig = QuadrantConfig()): String {
+    fun generateSVG(data: List<QuadrantPoint>, config: QuadrantConfig = QuadrantConfig(), useDark: Boolean = false): String {
         val xRange = calculateRange(data.map { it.x })
         val yRange = calculateRange(data.map { it.y })
         val normalizedData = normalizeData(data, xRange, yRange, config)
@@ -18,10 +18,24 @@ class QuadrantChartGenerator {
             appendLine("viewBox=\"0 0 ${config.width} ${config.height}\">")
 
             // Add styles
-            appendLine(generateStyles())
+            appendLine(generateStyles(useDark))
 
             // Create chart elements
             svg.apply {
+                // Background Layer
+                element("rect", mapOf(
+                    "width" to config.width,
+                    "height" to config.height,
+                    "class" to "chart-outer-bg",
+                    "rx" to 24
+                ))
+                element("rect", mapOf(
+                    "width" to config.width,
+                    "height" to config.height,
+                    "class" to "grid-pattern",
+                    "rx" to 24
+                ))
+
                 // Background quadrants
                 drawQuadrantBackgrounds(config)
 
@@ -72,66 +86,46 @@ class QuadrantChartGenerator {
         val quadrantWidth = (config.width - 2 * config.margin) / 2.0
         val quadrantHeight = (config.height - 2 * config.margin) / 2.0
 
-        // Add overall background with iOS-style rounded corners
-        element("rect", mapOf(
-            "x" to 30,
-            "y" to 30,
-            "width" to (config.width - 60),
-            "height" to (config.height - 60),
-            "class" to "chart-background",
-            "filter" to "url(#ios-shadow)"
-        ))
+
 
         group(mapOf("class" to "quadrant-backgrounds")) {
-            // Top-left quadrant (High Impact, Low Effort) - Light Green
+            // Top-left quadrant (Strategic)
             element("rect", mapOf(
                 "x" to config.margin,
                 "y" to config.margin,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
-                "stroke" to "rgba(255,255,255,0.5)",
-                "stroke-width" to 1,
-                "rx" to 16,
-                "ry" to 16,
+                "rx" to 12,
                 "class" to "quadrant-bg quadrant-top-left"
             ))
 
-            // Top-right quadrant (High Impact, High Effort) - Soft Blue
+            // Top-right quadrant (High Impact)
             element("rect", mapOf(
                 "x" to centerX,
                 "y" to config.margin,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
-                "stroke" to "rgba(255,255,255,0.5)",
-                "stroke-width" to 1,
-                "rx" to 16,
-                "ry" to 16,
+                "rx" to 12,
                 "class" to "quadrant-bg quadrant-top-right"
             ))
 
-            // Bottom-left quadrant (Low Impact, Low Effort) - Soft Yellow
+            // Bottom-left quadrant (Fill-ins)
             element("rect", mapOf(
                 "x" to config.margin,
                 "y" to centerY,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
-                "stroke" to "rgba(255,255,255,0.5)",
-                "stroke-width" to 1,
-                "rx" to 16,
-                "ry" to 16,
+                "rx" to 12,
                 "class" to "quadrant-bg quadrant-bottom-left"
             ))
 
-            // Bottom-right quadrant (Low Impact, High Effort) - Light Red
+            // Bottom-right quadrant (Thankless)
             element("rect", mapOf(
                 "x" to centerX,
                 "y" to centerY,
                 "width" to quadrantWidth,
                 "height" to quadrantHeight,
-                "stroke" to "rgba(255,255,255,0.5)",
-                "stroke-width" to 1,
-                "rx" to 16,
-                "ry" to 16,
+                "rx" to 12,
                 "class" to "quadrant-bg quadrant-bottom-right"
             ))
         }
@@ -284,225 +278,93 @@ class QuadrantChartGenerator {
         }
     }
 
-    private fun generateStyles(): String = """
-    <defs>
-        <!-- Modern iOS-style gradients with updated colors -->
-        <linearGradient id="quadrant-tl-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#FF2D55;stop-opacity:0.85"/>
-            <stop offset="100%" style="stop-color:#FF5E80;stop-opacity:0.7"/>
-        </linearGradient>
-        <linearGradient id="quadrant-tr-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#5856D6;stop-opacity:0.85"/>
-            <stop offset="100%" style="stop-color:#7A78E2;stop-opacity:0.7"/>
-        </linearGradient>
-        <linearGradient id="quadrant-bl-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#34C759;stop-opacity:0.85"/>
-            <stop offset="100%" style="stop-color:#5DDE7C;stop-opacity:0.7"/>
-        </linearGradient>
-        <linearGradient id="quadrant-br-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#007AFF;stop-opacity:0.85"/>
-            <stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:0.7"/>
-        </linearGradient>
+    private fun generateStyles(useDark: Boolean): String {
+        val bgColor = if (useDark) "#0B0E14" else "#FAFAFA"
+        val titleColor = if (useDark) "#FFFFFF" else "#1C1C1E"
+        val subtitleColor = if (useDark) "#8E9196" else "#636366"
+        val gridOpacity = if (useDark) "0.15" else "0.05"
+        val axisColor = if (useDark) "#2C2C2E" else "#E5E5EA"
 
-        <!-- Enhanced glassmorphism blur filter -->
-        <filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
-            <feColorMatrix type="matrix" values="1 0 0 0 1   0 1 0 0 1   0 0 1 0 1   0 0 0 0.3 0"/>
-        </filter>
+        return """
+        <defs>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700&amp;family=JetBrains+Mono:wght@500&amp;display=swap');
+                
+                .chart-outer-bg { fill: $bgColor; }
+                .grid-pattern { fill: url(#dotGrid); opacity: $gridOpacity; }
+                
+                .chart-title { 
+                    fill: $titleColor; 
+                    font-family: 'Outfit', sans-serif; 
+                    font-size: 32px; 
+                    letter-spacing: -0.5px;
+                }
+                .chart-subtitle { 
+                    fill: $subtitleColor; 
+                    font-family: 'JetBrains Mono', monospace; 
+                    font-size: 14px; 
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                }
+                
+                .quadrant-bg { stroke-width: 1.5; fill-opacity: 0.05; }
+                .quadrant-top-left { stroke: #BF5AF2; fill: #BF5AF2; }
+                .quadrant-top-right { stroke: #32D74B; fill: #32D74B; }
+                .quadrant-bottom-left { stroke: #5AC8FA; fill: #5AC8FA; }
+                .quadrant-bottom-right { stroke: #FF375F; fill: #FF375F; }
+                
+                .quadrant-label {
+                    font-family: 'Outfit', sans-serif;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                }
+                .top-left-text { fill: #BF5AF2; }
+                .top-right-text { fill: #32D74B; }
+                .bottom-left-text { fill: #5AC8FA; }
+                .bottom-right-text { fill: #FF375F; }
 
-        <!-- Modern iOS drop shadow for depth -->
-        <filter id="ios-shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.15)"/>
-        </filter>
+                .axis-line {
+                    stroke: $axisColor;
+                    stroke-width: 1;
+                    stroke-dasharray: 8, 4;
+                }
 
-        <!-- Enhanced glow effect for data points -->
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feFlood flood-color="rgba(255,255,255,0.7)" result="floodFill"/>
-            <feComposite in="floodFill" in2="coloredBlur" operator="in" result="coloredBlurAlpha"/>
-            <feMerge>
-                <feMergeNode in="coloredBlurAlpha"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
+                .axis-label {
+                    fill: $subtitleColor;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
 
-        <!-- Subtle inner shadow for depth -->
-        <filter id="inner-shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feOffset dx="0" dy="1"/>
-            <feGaussianBlur stdDeviation="1" result="offset-blur"/>
-            <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
-            <feFlood flood-color="rgba(0,0,0,0.05)" flood-opacity="1" result="color"/>
-            <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
-            <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
-        </filter>
-    </defs>
+                .data-point {
+                    stroke: #FFFFFF;
+                    stroke-width: 2;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                .data-point.quadrant-top-left { fill: #BF5AF2; }
+                .data-point.quadrant-top-right { fill: #32D74B; }
+                .data-point.quadrant-bottom-left { fill: #5AC8FA; }
+                .data-point.quadrant-bottom-right { fill: #FF375F; }
 
-    <style>
-    <![CDATA[
-        .chart-background {
-            fill: #F2F2F7;
-            rx: 20;
-            ry: 20;
-            filter: url(#ios-shadow);
-        }
+                .point-label {
+                    fill: $titleColor;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 11px;
+                }
+            </style>
 
-        .quadrant-bg {
-            stroke: rgba(255,255,255,0.5);
-            stroke-width: 1;
-            filter: url(#glass-blur);
-            rx: 16;
-            ry: 16;
-            transition: all 0.3s ease;
-        }
+            <pattern id="dotGrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="${if (useDark) "#FFFFFF" else "#000000"}" />
+            </pattern>
 
-        .quadrant-bg:hover {
-            filter: url(#glass-blur);
-            stroke: rgba(255,255,255,0.8);
-            stroke-width: 1.5;
-        }
-
-        .quadrant-top-right { 
-            fill: url(#quadrant-tr-gradient);
-        }
-        .quadrant-top-left { 
-            fill: url(#quadrant-tl-gradient);
-        }
-        .quadrant-bottom-left { 
-            fill: url(#quadrant-bl-gradient);
-        }
-        .quadrant-bottom-right { 
-            fill: url(#quadrant-br-gradient);
-        }
-
-        .axis-line {
-            stroke: rgba(142,142,147,0.5);
-            stroke-width: 1;
-            stroke-linecap: round;
-            stroke-dasharray: 4, 4;
-        }
-
-        .axis-label {
-            fill: #3A3A3C;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-        }
-
-        .chart-title {
-            fill: #1C1C1E;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            text-shadow: 0px 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .data-point {
-            stroke: rgba(255,255,255,0.95);
-            stroke-width: 2;
-            cursor: pointer;
-            filter: url(#ios-shadow);
-            transition: filter 0.3s ease, stroke-width 0.3s ease;
-        }
-
-        .data-point:hover {
-            filter: url(#glow);
-            stroke-width: 3;
-        }
-
-        .data-point.quadrant-top-right { 
-            fill: #5856D6;
-        }
-        .data-point.quadrant-top-left { 
-            fill: #FF2D55;
-        }
-        .data-point.quadrant-bottom-left { 
-            fill: #34C759;
-        }
-        .data-point.quadrant-bottom-right { 
-            fill: #007AFF;
-        }
-
-        .point-group .point-label,
-        .point-group .point-category,
-        .point-group .point-label-card {
-            opacity: 1;
-            transition: filter 0.3s ease;
-            pointer-events: none;
-        }
-
-        .point-group:hover .point-label,
-        .point-group:hover .point-category,
-        .point-group:hover .point-label-card {
-            filter: url(#ios-shadow);
-        }
-
-        .point-label {
-            fill: #1C1C1E;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-
-        .point-category {
-            fill: rgba(60,60,67,0.6);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-        }
-
-        .quadrant-label {
-            fill: rgba(28,28,30,0.8);
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .quadrant-card {
-            fill: rgba(255,255,255,0.35);
-            stroke: rgba(255,255,255,0.5);
-            stroke-width: 0.5;
-            rx: 10;
-            ry: 10;
-            filter: url(#glass-blur);
-        }
-
-        .point-label-card {
-            fill: rgba(255,255,255,0.7);
-            stroke: rgba(255,255,255,0.8);
-            stroke-width: 0.5;
-            rx: 12;
-            ry: 12;
-            filter: url(#ios-shadow);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .data-point, .quadrant-bg, .point-label, .point-category, .point-label-card, .point-group * {
-                transition: none !important;
-                animation: none !important;
-                transform: none !important;
-            }
-
-            .point-group:hover .point-label,
-            .point-group:hover .point-category,
-            .point-group:hover .point-label-card {
-                filter: none !important;
-            }
-
-            .data-point:hover {
-                filter: none !important;
-                stroke-width: 3;
-            }
-        }
-    ]]>
-    </style>
-""".trimIndent()
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+        </defs>
+        """.trimIndent()
+    }
 
 }
 

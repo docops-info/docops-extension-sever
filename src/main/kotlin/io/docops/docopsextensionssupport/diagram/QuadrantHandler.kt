@@ -63,7 +63,7 @@ class QuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         }
 
         val generator = QuadrantChartGenerator()
-        val svgContent = generator.generateSVG(points, config)
+        val svgContent = generator.generateSVG(points, config, useDark)
         csvResponse.update(points.toCsv())
         return ShapeResponse(svgContent, width=800f, height= 1000f)
     }

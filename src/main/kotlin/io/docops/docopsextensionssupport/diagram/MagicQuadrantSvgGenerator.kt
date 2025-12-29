@@ -9,27 +9,39 @@ import kotlin.math.min
 
 class MagicQuadrantSvgGenerator {
 
-    private val lightModeColors = QuadrantColors(
-        background = listOf("#f0f9ff", "#e0f2fe"),
-        leaders = "#10b981",
-        challengers = "#f59e0b",
-        visionaries = "#3b82f6",
-        nichePlayers = "#ef4444",
-        gridLines = "#475569",
-        text = "#374151",
-        lightText = "#e2e8f0"
-    )
+    private interface Theme {
+        val background: String
+        val textPrimary: String
+        val textSecondary: String
+        val gridLines: String
+        val leaders: String
+        val challengers: String
+        val visionaries: String
+        val nichePlayers: String
+    }
 
-    private val darkModeColors = QuadrantColors(
-        background = listOf("#0f172a", "#1e293b"),
-        leaders = "#10b981",
-        challengers = "#f59e0b",
-        visionaries = "#3b82f6",
-        nichePlayers = "#ef4444",
-        gridLines = "#475569",
-        text = "#e2e8f0",
-        lightText = "#94a3b8"
-    )
+    private object DarkTheme : Theme {
+        override val background = "#020617"
+        override val textPrimary = "#f8fafc"
+        override val textSecondary = "#94a3b8"
+        override val gridLines = "#1e293b"
+        override val leaders = "#10b981"
+        override val challengers = "#f59e0b"
+        override val visionaries = "#3b82f6"
+        override val nichePlayers = "#f43f5e"
+    }
+
+    private object LightTheme : Theme {
+        override val background = "#f8fafc"
+        override val textPrimary = "#0f172a"
+        override val textSecondary = "#64748b"
+        override val gridLines = "#e2e8f0"
+        override val leaders = "#059669"
+        override val challengers = "#d97706"
+        override val visionaries = "#2563eb"
+        override val nichePlayers = "#dc2626"
+    }
+
 
     data class QuadrantColors(
         val background: List<String>,
@@ -43,9 +55,9 @@ class MagicQuadrantSvgGenerator {
     )
 
     @OptIn(ExperimentalUuidApi::class)
-    fun generateMagicQuadrant(config: MagicQuadrantConfig, isDarkMode: Boolean = false, scale: String = "1.0"): String {
+    fun generateMagicQuadrant(config: MagicQuadrantConfig, isDarkMode: Boolean = false, scale: String = "1.0", isPdf: Boolean = false): String {
         val svgId = "mq_${Uuid.random().toHexString()}"
-        val colors = if (isDarkMode) darkModeColors else lightModeColors
+        val theme = if (isDarkMode) DarkTheme else LightTheme
         val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
         val baseWidth = 700
@@ -53,53 +65,51 @@ class MagicQuadrantSvgGenerator {
         val width = (baseWidth * scaleFactor).toInt()
         val height = (baseHeight * scaleFactor).toInt()
 
-        val margin = 50
+        val margin = 60
         val chartWidth = baseWidth - 2 * margin
-        val chartHeight = baseHeight - 2 * margin - 100 // Space for title and labels
-        val chartStartY = 100
+        val chartHeight = baseHeight - 2 * margin - 100
+        val chartStartY = 110
 
-        val sb = StringBuilder()
+        return buildString {
+            append("""<?xml version="1.0" encoding="UTF-8"?>""")
+            append("""<svg width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
 
-        // SVG header
-        sb.append("""<?xml version="1.0" encoding="UTF-8"?>""")
-        sb.append("""<svg width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
+            append(generateStyles(svgId, theme, isPdf))
+            append(appendDefs(svgId, theme))
 
+            // Background Layers
+            append("""<rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/>""")
+            append("""<rect width="100%" height="100%" fill="url(#gridPattern_$svgId)" rx="16" ry="16" opacity="0.4"/>""")
 
-        // Add defs with gradients and filters
-        appendDefs(sb, svgId, colors)
+            // Title
+            append("""<text x="${baseWidth / 2}" y="55" text-anchor="middle" class="title-text">${escapeXml(config.title)}</text>""")
 
-        // Background - simplified to avoid BackgroundHelper issues
-        sb.append("""<rect width="100%" height="100%" fill="url(#bgGradient_$svgId)" rx="12" ry="12"/>""")
+            // Quadrant backgrounds
+            val qw = chartWidth / 2
+            val qh = chartHeight / 2
+            val cx = margin + qw
+            val cy = chartStartY + qh
 
-        // Title
-        sb.append("""<text x="${baseWidth / 2}" y="40" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="bold" fill="${colors.text}">${escapeXml(config.title)}</text>""")
+            appendQuadrantBackgrounds(svgId, margin, chartStartY, qw, qh)
 
-        // Quadrant backgrounds with gradients
-        val quadrantWidth = chartWidth / 2
-        val quadrantHeight = chartHeight / 2
-        val centerX = margin + quadrantWidth
-        val centerY = chartStartY + quadrantHeight
+            // Grid lines
+            append("""<line x1="$cx" y1="$chartStartY" x2="$cx" y2="${chartStartY + chartHeight}" class="grid-line" stroke-dasharray="4,4"/>""")
+            append("""<line x1="$margin" y1="$cy" x2="${margin + chartWidth}" y2="$cy" class="grid-line" stroke-dasharray="4,4"/>""")
 
-        appendQuadrantBackground(sb, svgId, margin, chartStartY, quadrantWidth, quadrantHeight, colors)
+            // Quadrant labels
+            appendQuadrantLabels(config, margin, chartStartY, qw, qh, theme)
 
-        // Grid lines
-        sb.append("""<line x1="$centerX" y1="$chartStartY" x2="$centerX" y2="${chartStartY + chartHeight}" stroke="${colors.gridLines}" stroke-width="2" opacity="0.8"/>""")
-        sb.append("""<line x1="$margin" y1="$centerY" x2="${margin + chartWidth}" y2="$centerY" stroke="${colors.gridLines}" stroke-width="2" opacity="0.8"/>""")
+            // Axis labels
+            append("""<text x="${baseWidth / 2}" y="${baseHeight - 15}" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabel.uppercase())} —&gt;</text>""")
+            append("""<text x="20" y="${chartStartY + chartHeight / 2}" text-anchor="middle" class="axis-label" transform="rotate(-90 20 ${chartStartY + chartHeight / 2})">${escapeXml(config.yAxisLabel.uppercase())} —&gt;</text>""")
 
-        // Quadrant labels
-        appendQuadrantLabels(sb, svgId, margin, chartStartY, quadrantWidth, quadrantHeight, colors, isDarkMode, config)
+            // Plot companies
+            config.companies.forEach { company ->
+                appendPlotCompany(this, svgId, company, margin, chartStartY, chartWidth, chartHeight, isPdf)
+            }
 
-        // Axis labels
-        sb.append("""<text x="${baseWidth / 2}" y="${baseHeight - 20}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="bold" fill="${colors.text}">${escapeXml(config.xAxisLabel)}</text>""")
-        sb.append("""<text x="25" y="${chartStartY + chartHeight / 2}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="bold" fill="${colors.text}" transform="rotate(-90 25 ${chartStartY + chartHeight / 2})">${escapeXml(config.yAxisLabel)}</text>""")
-
-        // Plot companies
-        config.companies.forEach { company ->
-            plotCompany(sb, svgId, company, margin, chartStartY, chartWidth, chartHeight, colors, isDarkMode)
+            append("</svg>")
         }
-
-        sb.append("</svg>")
-        return sb.toString()
     }
 
 
@@ -288,6 +298,86 @@ class MagicQuadrantSvgGenerator {
         sb.append("""</g>""")
     }
 
+    private fun generateStyles(id: String, theme: Theme, isPdf: Boolean): String {
+        return """
+        <style>
+            #$id .bg-rect { fill: ${theme.background}; }
+            #$id .title-text { 
+                fill: ${theme.textPrimary}; 
+                font-family: 'Outfit', 'Segoe UI', sans-serif; 
+                font-size: 28px; 
+                font-weight: 800; 
+                letter-spacing: -0.5px;
+            }
+            #$id .grid-line { stroke: ${theme.gridLines}; stroke-width: 2; opacity: 0.6; }
+            #$id .axis-label { 
+                fill: ${theme.textSecondary}; 
+                font-family: 'JetBrains Mono', 'Courier New', monospace; 
+                font-size: 11px; 
+                font-weight: 800; 
+                letter-spacing: 2px;
+            }
+            #$id .quadrant-label { 
+                font-family: 'JetBrains Mono', monospace; 
+                font-size: 11px; 
+                font-weight: bold; 
+            }
+            #$id .company-name { 
+                fill: ${theme.textPrimary}; 
+                font-family: 'Outfit', sans-serif; 
+                font-size: 12px; 
+                font-weight: 600;
+            }
+            ${if(!isPdf) """
+            @keyframes sonar { 
+                0% { r: 10; opacity: 0.6; } 
+                100% { r: 25; opacity: 0; } 
+            }
+            .sonar-ring { animation: sonar 2.5s infinite; }
+            """ else ""}
+        </style>
+        """.trimIndent()
+    }
+
+    private fun appendDefs(svgId: String, theme: Theme): String {
+        return """
+        <defs>
+            <pattern id="gridPattern_$svgId" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridLines}" stroke-width="1" opacity="0.3"/>
+            </pattern>
+            <radialGradient id="gradLeaders_$svgId" cx="100%" cy="0%"><stop offset="0%" stop-color="${theme.leaders}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gradChallengers_$svgId" cx="0%" cy="0%"><stop offset="0%" stop-color="${theme.challengers}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gradVisionaries_$svgId" cx="100%" cy="100%"><stop offset="0%" stop-color="${theme.visionaries}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gradNiche_$svgId" cx="0%" cy="100%"><stop offset="0%" stop-color="${theme.nichePlayers}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
+            <filter id="glow_$svgId"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+        </defs>
+        """.trimIndent()
+    }
+
+    private fun appendPlotCompany(sb: StringBuilder, svgId: String, company: QuadrantCompany, margin: Int, startY: Int, w: Int, h: Int, isPdf: Boolean) {
+        val x = margin + (company.x / 100.0 * w).toInt()
+        val y = startY + h - (company.y / 100.0 * h).toInt()
+        val radius = 10
+        val color = getQuadrantColor(company.x, company.y)
+
+        sb.append("""<g class="company-node">""")
+        if(!isPdf) {
+            sb.append("""<circle cx="$x" cy="$y" r="$radius" class="sonar-ring" fill="none" stroke="$color" stroke-width="1.5"/>""")
+        }
+        sb.append("""<circle cx="$x" cy="$y" r="$radius" fill="$color" filter="url(#glow_$svgId)"/>""")
+        sb.append("""<circle cx="$x" cy="$y" r="3" fill="#ffffff" opacity="0.4"/>""")
+        sb.append("""<text x="$x" y="${y + 25}" text-anchor="middle" class="company-name">${escapeXml(company.name)}</text>""")
+        sb.append("""</g>""")
+    }
+
+    private fun getQuadrantColor(x: Double, y: Double): String {
+        return when {
+            x >= 50 && y >= 50 -> "#10b981" // Leaders
+            x < 50 && y >= 50 -> "#f59e0b"  // Challengers
+            x >= 50 && y < 50 -> "#3b82f6"  // Visionaries
+            else -> "#f43f5e"               // Niche
+        }
+    }
     private fun getQuadrantGradient(x: Double, y: Double, svgId: String): String {
         return when {
             x >= 50 && y >= 50 -> "bubbleleaders_$svgId"
@@ -295,6 +385,46 @@ class MagicQuadrantSvgGenerator {
             x >= 50 && y < 50 -> "bubblevisionaries_$svgId"
             else -> "bubblenichePlayers_$svgId"
         }
+    }
+
+    private fun appendQuadrantBackgrounds(
+        svgId: String,
+        margin: Int,
+        chartStartY: Int,
+        qw: Int,
+        qh: Int
+    ): String {
+        return buildString {
+            // Challengers (top-left)
+            append("""<rect x="$margin" y="$chartStartY" width="$qw" height="$qh" fill="url(#gradChallengers_$svgId)"/>""")
+            // Leaders (top-right)
+            append("""<rect x="${margin + qw}" y="$chartStartY" width="$qw" height="$qh" fill="url(#gradLeaders_$svgId)"/>""")
+            // Niche Players (bottom-left)
+            append("""<rect x="$margin" y="${chartStartY + qh}" width="$qw" height="$qh" fill="url(#gradNiche_$svgId)"/>""")
+            // Visionaries (bottom-right)
+            append("""<rect x="${margin + qw}" y="${chartStartY + qh}" width="$qw" height="$qh" fill="url(#gradVisionaries_$svgId)"/>""")
+        }
+    }
+
+    private fun StringBuilder.appendQuadrantLabels(
+        config: MagicQuadrantConfig,
+        margin: Int,
+        chartStartY: Int,
+        qw: Int,
+        qh: Int,
+        theme: Theme
+    ) {
+        val labelYTop = chartStartY + 25
+        val labelYBottom = chartStartY + qh + qh - 15
+
+        // Challengers
+        append("""<text x="${margin + 10}" y="$labelYTop" fill="${theme.challengers}" class="quadrant-label">${escapeXml(config.challengersLabel.uppercase())}</text>""")
+        // Leaders
+        append("""<text x="${margin + qw + 10}" y="$labelYTop" fill="${theme.leaders}" class="quadrant-label">${escapeXml(config.leadersLabel.uppercase())}</text>""")
+        // Niche
+        append("""<text x="${margin + 10}" y="$labelYBottom" fill="${theme.nichePlayers}" class="quadrant-label">${escapeXml(config.nichePlayersLabel.uppercase())}</text>""")
+        // Visionaries
+        append("""<text x="${margin + qw + 10}" y="$labelYBottom" fill="${theme.visionaries}" class="quadrant-label">${escapeXml(config.visionariesLabel.uppercase())}</text>""")
     }
 
     private fun escapeXml(text: String): String {
