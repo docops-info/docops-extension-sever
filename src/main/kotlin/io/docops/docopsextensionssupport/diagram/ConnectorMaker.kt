@@ -133,6 +133,9 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     }
     private fun defs(id: String) : String {
         val grad= StringBuilder()
+        val connectorColor = if(useDark) "#94A3B8" else "#000000"
+        val connectorOpacity = if(useDark) "0.6" else "1.0"
+
 
         colors.forEachIndexed {
                 i, choiceColor ->
@@ -207,6 +210,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val sb = StringBuilder()
         var x = 0
         var y = 0
+        val connectorColor = if(useDark) "#64748B" else "#000000"
+
         connectors.forEachIndexed { i, conn ->
             val boxColor = colors[i]
             val animationDelay = i * 0.08
@@ -249,24 +254,24 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                 if ((i + 1) % 5 == 0) {
                     // Row-wrapping connector
                     sb.append("""
-                            <g transform="translate(260,50)">
-                                <path d="M0,0 L60,0" stroke-width="3" stroke="#000000" fill="none"/>
-                                <line x1="60" x2="60" y1="0" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
-                                <line x1="60" x2="-1540" y1="80" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
-                                <line x1="-1540" x2="-1540" y1="150" y2="80" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
-                                <line x1="-1540" x2="-1535" y1="150" y2="150" stroke-width="3" stroke="#000000" stroke-linecap="square"/>
-                                <g transform="translate(-1535,147.5)">
-                                    <use xlink:href="#ppoint" fill="#000000" stroke="#000000"/>
+                             <g transform="translate(260,50)">
+                                    <path d="M0,0 L60,0" stroke-width="3" stroke="$connectorColor" fill="none"/>
+                                    <line x1="60" x2="60" y1="0" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="60" x2="-1540" y1="80" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="-1540" x2="-1540" y1="150" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="-1540" x2="-1535" y1="150" y2="150" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <g transform="translate(-1535,147.5)">
+                                        <use xlink:href="#ppoint" fill="$connectorColor" stroke="$connectorColor"/>
+                                    </g>
                                 </g>
-                            </g>
                         """.trimIndent())
                 } else {
                     // Normal horizontal connector
                     // Moved line end to 337 (closer to the 340 step) and arrow to 332
                     sb.append("""
-                            <line x1="260" y1="50" x2="337" y2="50" stroke="#000000" stroke-width="3" />
+                            <line x1="260" y1="50" x2="337" y2="50" stroke="$connectorColor" stroke-width="3" />
                             <g transform="translate(332,47.5)">
-                                <use xlink:href="#ppoint" fill="#000000" stroke="#000000"/>
+                                <use xlink:href="#ppoint" fill="$connectorColor" stroke="$connectorColor"/>
                             </g>
                         """.trimIndent())
                 }
@@ -301,7 +306,7 @@ fun main() {
     connectors.add(Connector("Test Engine", description ="Test Engine write documentation"))
     connectors.add(Connector("API Documentation Output", description ="Documentation is committed"))
     connectors.add(Connector("GitHub", ""))
-    val maker = ConnectorMaker(connectors, false, "SVG")
+    val maker = ConnectorMaker(connectors, true, "PDF")
     val svg = maker.makeConnectorImage()
     File("gen/connector.svg").writeText(svg.shapeSvg)
 }
