@@ -125,10 +125,27 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         // Top Header Section (Gradient Area)
         sb.append("""<path d="M0 24 A24 24 0 0 1 24 0 L276 0 A24 24 0 0 1 300 24 L300 190 L0 190 Z" fill="url(#$gradientId)"/>""")
 
-        // Geometric Pattern Overlay (Distinctive UI)
+        // Geometric Pattern Overlay (Grouped by Button Type)
+        val typeSeed = (button.type?.lowercase()?.hashCode() ?: 0)
+        val patternChoice = Math.abs(typeSeed % 3)
+
         sb.append("""<g opacity="0.15">""")
-        sb.append("""<circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/>""")
-        sb.append("""<circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/>""")
+        when (patternChoice) {
+            1 -> { // Square/Box Pattern for a specific group
+                sb.append("""<rect x="230" y="20" width="60" height="60" fill="none" stroke="white" stroke-width="0.5" transform="rotate(15, 260, 50)"/>""")
+                sb.append("""<rect x="250" y="70" width="40" height="40" fill="none" stroke="white" stroke-width="0.5" transform="rotate(-10, 270, 90)"/>""")
+            }
+            2 -> { // Technical Lines Pattern for another group
+                for (i in 0..4) {
+                    val offset = i * 15
+                    sb.append("""<line x1="${200 + offset}" y1="0" x2="${300}" y2="${100 - offset}" stroke="white" stroke-width="0.5"/>""")
+                }
+            }
+            else -> { // Circles Pattern (Default/Fallback group)
+                sb.append("""<circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/>""")
+                sb.append("""<circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/>""")
+            }
+        }
         sb.append("""</g>""")
 
         // Icon area
