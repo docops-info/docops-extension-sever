@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.flow
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
@@ -10,6 +11,7 @@ class FlowSvgGenerator {
     private val log = KotlinLogging.logger {}
 
     fun generate(flowDefinition: FlowDefinition): String {
+        val id = "flow_${System.currentTimeMillis()}"
         val positions = calculatePositions(flowDefinition.steps, flowDefinition.connections)
         val svgWidth = positions.values.maxOfOrNull { it.x + 150 } ?: 1200
 
@@ -20,14 +22,16 @@ class FlowSvgGenerator {
 
         return buildString {
             appendLine("""<svg width="$svgWidth" height="$svgHeight" viewBox="0 0 $svgWidth $svgHeight" xmlns="http://www.w3.org/2000/svg">""")
-            appendLine(generateDefs())
-            appendLine(generateBackground(svgWidth, svgHeight))
-            appendLine(generateTitle(flowDefinition.title, svgWidth))
+            appendLine(generateDefs(id))
+            appendLine(generateBackground(svgWidth, svgHeight, id))
+            appendLine(generateTitle(flowDefinition.title, svgWidth, id))
 
             // Generate steps
-            flowDefinition.steps.forEach { step ->
+            flowDefinition.steps.forEachIndexed { index, step ->
                 val pos = positions[step.id] ?: Position(100, 280)
-                appendLine(generateStep(step, pos))
+                appendLine("""<g class="anim-node" style="animation-delay: ${0.1 + index * 0.05}s">""")
+                appendLine(generateStep(step, pos, id))
+                appendLine("</g>")
             }
 
             // Generate connections
@@ -35,11 +39,11 @@ class FlowSvgGenerator {
                 val fromPos = positions[connection.from]
                 val toPos = positions[connection.to]
                 if (fromPos != null && toPos != null) {
-                    appendLine(generateConnection(connection, fromPos, toPos, flowDefinition.steps))
+                    appendLine(generateConnection(connection, fromPos, toPos, flowDefinition.steps, id =  id))
                 }
             }
 
-            appendLine(generateLegend())
+            appendLine(generateLegend(id))
             appendLine("</svg>")
         }
     }
@@ -230,73 +234,58 @@ class FlowSvgGenerator {
     }
 
 
-    private fun generateDefs(): String = """
-        <defs>
-            <!-- Background gradient -->
-            <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#f6f7fb"/>
-                <stop offset="100%" stop-color="#eef1f7"/>
-            </linearGradient>
-            
-            <!-- Card gradients -->
-            <linearGradient id="cardBlue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#4da3ff"/>
-                <stop offset="100%" stop-color="#1e7ae5"/>
-            </linearGradient>
-            <linearGradient id="cardGreen" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#5fd38a"/>
-                <stop offset="100%" stop-color="#2e9c5c"/>
-            </linearGradient>
-            <linearGradient id="cardPurple" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#b07cf7"/>
-                <stop offset="100%" stop-color="#7a49cf"/>
-            </linearGradient>
-            <linearGradient id="cardPink" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ff72a8"/>
-                <stop offset="100%" stop-color="#d33b78"/>
-            </linearGradient>
-            <linearGradient id="cardSlate" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#7f96a6"/>
-                <stop offset="100%" stop-color="#5a6d7a"/>
-            </linearGradient>
-            <linearGradient id="cardOrange" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ffb74d"/>
-                <stop offset="100%" stop-color="#fb8c00"/>
-            </linearGradient>
-            
-            <!-- Filters -->
-            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.2"/>
-            </filter>
-            
-            <!-- Arrow marker - smaller size and adjusted position -->
-            <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L8,4 L0,8 Q2,4 0,0" fill="#2f3a4a"/>
-            </marker>
-            
-            <!-- Styles -->
-            <style><![CDATA[
-                .label { font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #ffffff; font-size: 13px; font-weight: 600; }
-                .title { font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #2f3a4a; font-size: 22px; font-weight: 800; letter-spacing: 0.2px; }
-                .legendTitle { font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #2f3a4a; font-size: 14px; font-weight: 700; }
-                .legendText { font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #475569; font-size: 12px; }
-                .connector { stroke: #2f3a4a; stroke-width: 2.2; fill: none; opacity: 0.9; }
-            ]]></style>
-        </defs>
+    private fun generateDefs(id: String): String = """
+            <defs>
+                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+                </linearGradient>
+                <filter id="glassBlur_$id">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+                </filter>
+                <filter id="nodeShadow_$id" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.15"/>
+                </filter>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                    <path d="M0,0 L10,5 L0,10 L2,5 Z" fill="#475569"/>
+                </marker>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap');
+                    .label { font-family: 'JetBrains Mono', monospace; fill: #1e293b; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+                    .title { font-family: 'Syne', sans-serif; fill: #0f172a; font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+                    .connector { stroke: #94a3b8; stroke-width: 1.5; fill: none; }
+                    @keyframes slideUpFlow { 
+                        from { opacity: 0; transform: translateY(20px); } 
+                        to { opacity: 1; transform: translateY(0); } 
+                    }
+                    .anim-node { animation: slideUpFlow 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+                </style>
+            </defs>
+        """.trimIndent()
+
+    private fun generateBackground(width: Int, height: Int, id: String): String =
+        """<rect width="$width" height="$height" fill="url(#bgGrad_$id)"/>"""
+
+    private fun generateTitle(title: String, width: Int, id: String): String =
+        """<text x="50" y="50" class="title">${title.escapeXml()}</text>"""
+
+    private fun generateStep(step: FlowStep, position: Position, id: String): String {
+        val color = getColorForStep(step.color)
+        val width = if (step.type == StepType.PARALLEL) 85 else 110
+        val height = 55
+
+        return """
+        <g transform="translate(${position.x}, ${position.y})">
+            <rect width="$width" height="$height" rx="10" fill="white" fill-opacity="0.6" filter="url(#nodeShadow_$id)"/>
+            <rect width="$width" height="$height" rx="10" fill="url(#glassOverlay_$id)" stroke="url(#glassBorder_$id)" stroke-width="1"/>
+            <rect x="0" y="0" width="4" height="$height" rx="2" fill="$color"/>
+            <text x="${width / 2 + 4}" y="${height / 2 + 4}" text-anchor="middle" class="label" style="fill: #334155">${step.name.escapeXml()}</text>
+        </g>
     """.trimIndent()
-
-    private fun generateBackground(width: Int, height: Int): String =
-        """<rect width="$width" height="$height" fill="url(#bgGrad)"/>"""
-
-    private fun generateTitle(title: String, width: Int): String =
-        """<text x="${width/2}" y="36" text-anchor="middle" class="title">$title</text>"""
-
-    private fun generateStep(step: FlowStep, position: Position): String {
-        return when (step.type) {
-            StepType.DECISION -> generateDecisionStep(step, position)
-            StepType.CONVERGENCE -> generateConvergenceStep(step, position)
-            else -> generateRectangularStep(step, position)
-        }
     }
 
     private fun generateRectangularStep(step: FlowStep, position: Position): String {
@@ -320,31 +309,32 @@ class FlowSvgGenerator {
         }
     }
 
-    private fun generateDecisionStep(step: FlowStep, position: Position): String {
+    private fun generateDecisionStep(step: FlowStep, position: Position, id: String): String {
         val centerX = position.x + 50
         val centerY = position.y + 30
 
         return buildString {
-            appendLine("""<g filter="url(#softShadow)">""")
-            appendLine("""<polygon points="${centerX-50},${centerY} ${centerX},${centerY-35} ${centerX+50},${centerY} ${centerX},${centerY+35}" fill="url(#cardOrange)" stroke="#e07b00" stroke-width="0.8"/>""")
+            appendLine("""<g filter="url(#nodeShadow_$id)">""")
+            appendLine("""<polygon points="${centerX - 50},${centerY} ${centerX},${centerY - 35} ${centerX + 50},${centerY} ${centerX},${centerY + 35}" fill="white" fill-opacity="0.7" stroke="url(#glassBorder_$id)" stroke-width="1"/>""")
+            appendLine("""<rect x="${centerX - 50}" y="$centerY" width="4" height="2" fill="#fb8c00"/>""") // Accent dot
             appendLine("""</g>""")
-            appendLine("""<text x="$centerX" y="${centerY + 6}" text-anchor="middle" class="label" style="font-size:12px">${step.name}</text>""")
+            appendLine("""<text x="$centerX" y="${centerY + 6}" text-anchor="middle" class="label" style="font-size:10px; fill: #fb8c00">${step.name.escapeXml()}</text>""")
         }
     }
 
-    private fun generateConvergenceStep(step: FlowStep, position: Position): String {
+    private fun generateConvergenceStep(step: FlowStep, position: Position, id: String): String {
         val centerX = position.x + 20
         val centerY = position.y + 30
 
         return buildString {
-            appendLine("""<g filter="url(#softShadow)">""")
-            appendLine("""<circle cx="$centerX" cy="$centerY" r="20" fill="#8b5e3c"/>""")
+            appendLine("""<g filter="url(#nodeShadow_$id)">""")
+            appendLine("""<circle cx="$centerX" cy="$centerY" r="20" fill="white" fill-opacity="0.8" stroke="url(#glassBorder_$id)" stroke-width="1.5"/>""")
             appendLine("""</g>""")
-            appendLine("""<text x="$centerX" y="${centerY + 6}" text-anchor="middle" class="label" style="font-size:11px">${step.name}</text>""")
+            appendLine("""<text x="$centerX" y="${centerY + 5}" text-anchor="middle" class="label" style="font-size:9px; fill: #64748b">${step.name.escapeXml()}</text>""")
         }
     }
 
-    private fun generateConnection(connection: FlowConnection, fromPos: Position, toPos: Position, steps: List<FlowStep>): String {
+    private fun generateConnection(connection: FlowConnection, fromPos: Position, toPos: Position, steps: List<FlowStep>, id: String): String {
         // Find the step types to calculate proper connection points
         val fromStep = steps.find { it.id == connection.from }
         val toStep = steps.find { it.id == connection.to }
@@ -400,35 +390,42 @@ class FlowSvgGenerator {
 
         // Handle parallel connections from convergence point differently
         return if (connection.type == ConnectionType.PARALLEL && fromStep?.type == StepType.CONVERGENCE) {
-            // For parallel connections from convergence, create curved paths
             val midX = (startX + endX) / 2
-            """<path d="M$startX,$startY C$midX,$startY $midX,$endY $endX,$endY" class="connector" marker-end="url(#arrowhead)"/>"""
+            """<path d="M$startX,$startY C$midX,$startY $midX,$endY $endX,$endY" class="connector" marker-end="url(#arrowhead_$id)"/>"""
         } else {
             when (connection.type) {
                 ConnectionType.PARALLEL ->
-                    """<path d="M$startX,$startY C${startX+30},$startY ${endX-25},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead)"/>"""
+                    """<path d="M$startX,$startY C${startX + 30},$startY ${endX - 25},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead_$id)"/>"""
                 ConnectionType.DIVERGENT, ConnectionType.CONVERGENT ->
-                    """<path d="M$startX,$startY C${(startX+endX)/2},${(startY+endY)/2} ${endX-25},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead)"/>"""
+                    """<path d="M$startX,$startY C${(startX + endX) / 2},${(startY + endY) / 2} ${endX - 25},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead_$id)"/>"""
                 else ->
-                    """<path d="M$startX,$startY C${startX+15},$startY ${endX-15},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead)"/>"""
+                    """<path d="M$startX,$startY C${startX + 15},$startY ${endX - 15},$endY $endX,$endY" class="connector" marker-end="url(#arrowhead_$id)"/>"""
             }
         }
     }
 
-    private fun generateLegend(): String = """
-        <g filter="url(#softShadow)">
-            <rect x="50" y="450" width="220" height="120" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" rx="10"/>
-        </g>
-        <text x="60" y="472" class="legendTitle">Legend</text>
-        <rect x="60" y="482" width="15" height="15" rx="3" fill="url(#cardGreen)"/>
-        <text x="85" y="494" class="legendText">Start/End Process</text>
-        <rect x="60" y="504" width="15" height="15" rx="3" fill="url(#cardBlue)"/>
-        <text x="85" y="516" class="legendText">Common Steps</text>
-        <polygon points="60,522 67.5,527 75,522 67.5,532" fill="url(#cardOrange)"/>
-        <text x="85" y="530" class="legendText">Decision Point</text>
-        <rect x="60" y="538" width="15" height="15" rx="3" fill="url(#cardSlate)"/>
-        <text x="85" y="550" class="legendText">Parallel Process</text>
-    """.trimIndent()
+    private fun generateLegend(id: String): String = """
+    <g transform="translate(50, 450)">
+        <rect width="220" height="120" fill="white" fill-opacity="0.8" stroke="url(#glassBorder_$id)" stroke-width="1" rx="12" filter="url(#nodeShadow_$id)"/>
+        <text x="15" y="25" class="legendTitle">Legend</text>
+        <rect x="15" y="40" width="12" height="12" rx="3" fill="#2e9c5c"/>
+        <text x="35" y="50" class="legendText">Start/End Process</text>
+        <rect x="15" y="60" width="12" height="12" rx="3" fill="#1e7ae5"/>
+        <text x="35" y="70" class="legendText">Common Steps</text>
+        <rect x="15" y="80" width="12" height="12" rx="3" fill="#fb8c00"/>
+        <text x="35" y="90" class="legendText">Decision Point</text>
+    </g>
+""".trimIndent()
+
+    private fun getColorForStep(color: String): String = when (color.lowercase()) {
+        "green" -> "#10b981"
+        "blue" -> "#3b82f6"
+        "purple" -> "#8b5cf6"
+        "pink" -> "#ec4899"
+        "slate" -> "#64748b"
+        "orange" -> "#f59e0b"
+        else -> "#3b82f6"
+    }
 
     private fun getColorGradient(color: String): String = when (color.lowercase()) {
         "green" -> "cardGreen"
