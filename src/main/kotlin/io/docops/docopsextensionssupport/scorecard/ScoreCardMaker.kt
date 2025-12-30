@@ -20,9 +20,10 @@ class ScoreCardMaker {
         // Theme Configuration
         val theme = if (useDark) DarkTheme() else LightTheme()
 
-        val titleLines = wrapByCharsForTitle(scorecard.title, baseWidth - 80, 32)
-        val titleLineHeight = 38
-        val topY = 120.0 + (titleLines.size - 1) * titleLineHeight
+        val titleFontSize = 26
+        val titleLines = wrapByCharsForTitle(scorecard.title, baseWidth - 80, titleFontSize)
+        val titleLineHeight = 32
+        val topY = 110.0 + (titleLines.size - 1) * titleLineHeight
 
         // Build Cards
         val beforeCard = buildCard(cardWidth, scorecard.beforeSections, theme, scorecard.id,
@@ -50,9 +51,10 @@ class ScoreCardMaker {
             append("""<g transform="translate($margin, 60)">""")
             append("""<rect width="4" height="40" fill="${theme.accentPrimary}" rx="2"/>""")
             titleLines.forEachIndexed { i, line ->
-                append("""<text x="20" y="${32 + i * titleLineHeight}" class="main-title_${scorecard.id}">${escape(line)}</text>""")
+                append("""<text x="20" y="${28 + i * titleLineHeight}" class="main-title_${scorecard.id}">${escape(line)}</text>""")
             }
             append("</g>")
+
 
             // BEFORE Card Layout
             append("""<g transform="translate($margin, $topY)">""")
@@ -77,17 +79,17 @@ class ScoreCardMaker {
     }
 
     private fun generateDefs(theme: ScoreCardThemeColors, id: String) = """
-        <defs>
-            <pattern id="grid_$id" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridColor}" stroke-width="1"/>
-            </pattern>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
-                .main-title_$id { font-family: 'Syne', sans-serif; font-size: 32px; fill: ${theme.titleFill}; text-transform: uppercase; letter-spacing: -1px; }
-                .sec-header_$id { font-family: 'Syne', sans-serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; font-weight: 800; }
-                .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.itemTextFill}; }
-                .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.itemDescFill}; }
-                .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.itemDescFill}; opacity: 0.5; }
+            <defs>
+                <pattern id="grid_$id" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridColor}" stroke-width="1"/>
+                </pattern>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
+                    .main-title_$id { font-family: 'Syne', sans-serif; font-size: 16px; fill: ${theme.titleFill}; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; }
+                    .sec-header_$id { font-family: 'Syne', sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+                    .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.itemTextFill}; }
+                    .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.itemDescFill}; }
+                    .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.itemDescFill}; opacity: 0.5; }
                 
                 @keyframes slideUp_$id { 
                     from { opacity: 0; transform: translateY(30px); } 
