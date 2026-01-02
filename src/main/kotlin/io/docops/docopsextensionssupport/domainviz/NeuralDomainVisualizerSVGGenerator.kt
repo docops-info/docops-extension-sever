@@ -128,11 +128,17 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         val strokeColor = if (isLink) theme.accentSuccess else theme.textPrimary
         val opacity = if (isLink) "0.7" else theme.strokeOpacity
 
+        val pointerStyle = if (isLink) "style=\"cursor: pointer;\"" else ""
+        val clickHandler = if (isLink) {
+            val primaryLink = node.links.first()
+            "onclick=\"window.open('${primaryLink.url.escapeXml()}', '_blank')\""
+        } else ""
+
         sb.append("""
-            <g transform="translate($x, 0)">
-                <rect width="215" height="42" rx="21" 
-                      fill="${theme.cardBg}" 
-                      stroke="$strokeColor" 
+                <g transform="translate($x, 0)" $pointerStyle $clickHandler>
+                    <rect width="215" height="42" rx="21" 
+                          fill="${theme.cardBg}" 
+                          stroke="$strokeColor" 
                       stroke-opacity="$opacity" 
                       stroke-width="${if (isLink) 1.5 else 1}"/>
                 <text x="24" y="26" class="$textClass">

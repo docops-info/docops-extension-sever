@@ -5,6 +5,7 @@ import io.docops.docopsextensionssupport.svgsupport.formatDecimal
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
+import io.docops.docopsextensionssupport.web.update
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -32,7 +33,6 @@ class PieChartImproved {
         val darkMode = config["darkMode"]?.toBoolean() ?: false
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-        val csvResponse = payloadToSimpleCsv(pieData)
         var colors = ChartColors.modernColors
         if (customColors != null) {
             colors = mutableListOf<SVGColor>()
@@ -52,6 +52,7 @@ class PieChartImproved {
             enableHoverEffects,
             isDonut, darkMode, isPdf = isPdf
         )
+        csvResponse.update(payloadToSimpleCsv(pieData))
         return svg.trimIndent()
     }
 

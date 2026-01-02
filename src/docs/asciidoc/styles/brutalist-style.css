@@ -261,6 +261,86 @@ pre code {
     box-shadow: 3px 3px 0px var(--brand-deep);
 }
 
+
+
+
+
+
+
+/* Brutalist Table Styling - Refined for Cyberpunk Forest aesthetic */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin: 3rem 0;
+    border: 2px solid var(--brand-main);
+    /* Hard offset shadow creates the 'plate' look from the image */
+    box-shadow: 10px 10px 0px var(--brand-deep);
+    background: var(--bg-surface);
+    border-radius: var(--radius-none); /* Sharp edges for Brutalism */
+    overflow: hidden;
+    animation: tableReveal 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tableReveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+table thead {
+    background: var(--brand-deep); /* Dark background from image */
+    border-bottom: 3px solid var(--brand-main);
+}
+
+table th {
+    font-family: var(--body-font);
+    color: var(--brand-main); /* High contrast highlight color */
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.25em; /* Extreme tracking for Brutalist feel */
+    padding: 1.5rem 1rem;
+    text-align: left;
+    /* Subtle glow to the header text for readability */
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+table td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2); /* Faint brand-main lines */
+    border-right: 1px solid rgba(16, 185, 129, 0.1);
+    color: var(--text-main);
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+    transition: all 0.15s ease;
+}
+
+/* Zebra Striping using high-impact transparency */
+table tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Row Hover - Matches the 'glow' intent of the UI rules */
+table tr:hover td {
+    background: var(--brand-main);
+    color: var(--brand-deep);
+    border-color: var(--brand-deep);
+    cursor: crosshair;
+}
+
+/* Cell Hover - High Impact Moment */
+table td:hover {
+    background: var(--brand-accent) !important;
+    color: var(--bg-base) !important;
+    font-weight: 800;
+    box-shadow: inset 0 0 0 2px var(--brand-deep);
+}
+
+/* Footer/Last row adjustment */
+table tr:last-child td {
+    border-bottom: none;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 768px) {
     #toc.toc2 {
