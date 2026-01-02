@@ -193,33 +193,109 @@ pre code {
     background: transparent;
 }
 
-/* Admonitions */
+/* Admonition Blocks - Enhanced with DocOps.io styling */
 .admonitionblock {
-    margin: 2.5rem 0;
-    border: 3px solid var(--brand-main);
+    margin: 3rem 0;
+    border: 3px solid var(--text-main);
     background: var(--bg-surface);
-    display: flex;
+    box-shadow: var(--shadow-brutal) var(--brand-deep);
+    border-radius: var(--radius-none);
+    transition: transform 0.2s ease;
 }
 
+.admonitionblock:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 10px 10px 0px var(--brand-deep);
+}
+
+
+.admonitionblock > table {
+    border: none;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+    border-collapse: collapse;
+    height: 100%; /* Ensure table stretches */
+}
+
+
+
 .admonitionblock td.icon {
-    background: var(--brand-main);
-    color: var(--bg-base);
-    min-width: 100px;
-    padding: 1rem;
+    width: 80px;
+    min-width: 80px;
+    padding: 0;
+    border-right: 3px solid var(--text-main);
+    vertical-align: middle; /* Classic table centering backup */
+    position: relative;
+}
+
+/* Use a flex container INSIDE the td to ensure perfect centering and full height */
+.admonitionblock td.icon .title {
+    display: none; /* Hide default title if it exists */
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 2.2rem;
+    line-height: 1;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.admonitionblock td.content {
+    padding: 1.5rem 2.5rem; /* Increased left padding for consistent start */
+    color: var(--text-main);
+    font-family: var(--body-font);
+    font-weight: 400;
+    vertical-align: middle;
+    background: var(--bg-surface); /* Solid background for text area */
+}
+
+.admonitionblock td.content .title {
+    font-family: var(--body-font);
     font-weight: 800;
     text-transform: uppercase;
     font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    color: var(--brand-accent);
 }
 
-.admonitionblock.important { border-color: var(--brand-accent); }
-.admonitionblock.important td.icon { background: var(--brand-accent); }
-
-.admonitionblock td.content {
-    padding: 1.2rem 1.5rem;
+/* Warning Block Correction: Keep the pop of color but fix the gap */
+.admonitionblock.warning td.content {
+    background-color: var(--brand-accent);
+    color: var(--bg-base);
 }
+
+/* Specific Admonition Flavors */
+.admonitionblock.note td.icon { background-color: var(--brand-main); color: var(--bg-base); }
+.admonitionblock.note td.icon::before { content: "\f05a"; }
+
+.admonitionblock.tip td.icon { background-color: var(--brand-accent); color: var(--bg-base); }
+.admonitionblock.tip td.icon::before { content: "\f0eb"; }
+
+.admonitionblock.warning td.icon { background-color: #f59e0b; color: var(--brand-deep); }
+.admonitionblock.warning td.icon::before { content: "\f071"; }
+
+.admonitionblock.caution td.icon { background-color: #ef4444; color: white; }
+.admonitionblock.caution td.icon::before { content: "\f06d"; }
+
+.admonitionblock.important td.icon {
+    background-color: var(--brand-deep);
+    color: var(--brand-main);
+    text-shadow: 0 0 8px var(--brand-main);
+}
+.admonitionblock.important td.icon::before { content: "\f06a"; }
+
+
 
 /* Custom UI Elements */
 .theme-toggle {
