@@ -13,7 +13,7 @@ class ShieldHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
         val parser = ShieldTableParser()
         val (shields, config) = parser.parseShieldTable(payload)
         csvResponse.update(shields.toCsv())
-        val generator = ShieldSvgGenerator()
+        val generator = ShieldSvgGenerator(context.useDark)
         return generator.generateShieldsTable(
             shields = shields, 
             config = config ?: ShieldTableConfig()

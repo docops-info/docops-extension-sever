@@ -5,12 +5,12 @@ import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 /**
  * Maker class for generating swimlane SVG diagrams
  */
-class SwimLaneMaker {
+class SwimLaneMaker(val useDark: Boolean) {
 
     /**
      * Generate SVG for the swimlane diagram
      */
-    fun generateSvg(data: SwimLaneData): String {
+    fun generateSvg(data: SwimLaneData, useDark: Boolean): String {
         val sb = StringBuilder()
 
         // Calculate dimensions

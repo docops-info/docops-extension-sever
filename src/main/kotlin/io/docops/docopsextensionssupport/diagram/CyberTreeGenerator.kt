@@ -6,7 +6,7 @@ import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 import kotlin.math.max
 
-class CyberTreeMaker {
+class CyberTreeMaker(val useDark: Boolean = false) {
 
     private val neonPalette = listOf(
         "#00f2ff", // Cyan

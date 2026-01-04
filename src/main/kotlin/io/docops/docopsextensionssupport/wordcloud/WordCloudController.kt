@@ -100,7 +100,7 @@ class WordCloudController {
     fun renderWordCloud(httpServletRequest: HttpServletRequest): ResponseEntity<ByteArray> {
         val timings = measureTimedValue {
             val content = httpServletRequest.getParameter("content")
-            val wordCloudImproved = WordCloudImproved()
+            val wordCloudImproved = WordCloudImproved(false)
             val svg = wordCloudImproved.makeWordCloudSvg(content, DefaultCsvResponse)
 
             val headers = HttpHeaders()
@@ -122,7 +122,7 @@ class WordCloudController {
 
     @PostMapping("")
     fun editFormSubmission(@RequestParam("payload") payload: String) : ResponseEntity<ByteArray> {
-        val wordCloudImproved = WordCloudImproved()
+        val wordCloudImproved = WordCloudImproved(true)
         val svg = wordCloudImproved.makeWordCloudSvg(payload, DefaultCsvResponse)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue

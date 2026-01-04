@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.swimlane
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 
@@ -13,12 +12,12 @@ import kotlinx.serialization.json.Json
 class SwimLaneHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     private val json = Json { ignoreUnknownKeys = true }
-    private val maker = SwimLaneMaker()
 
     /**
      * Main handler method that processes the payload and generates SVG
      */
-    fun handleSVG(payload: String): String {
+    fun handleSVG(payload: String, useDark: Boolean = false): String {
+         val maker = SwimLaneMaker(useDark)
 
         // Determine if the data is in JSON or table format
         val swimLaneData = if (payload.trim().startsWith("{") && payload.trim().endsWith("}")) {
@@ -34,7 +33,8 @@ class SwimLaneHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         }
 
         csvResponse.update(swimLaneData.toCsv())
-        return maker.generateSvg(swimLaneData)
+        swimLaneData.useDarkTheme = useDark
+        return maker.generateSvg(swimLaneData, useDark)
     }
 
     /**
@@ -120,6 +120,6 @@ class SwimLaneHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
 
 
     override fun handleSVG(payload: String, context: DocOpsContext): String {
-        return handleSVG(payload)
+        return handleSVG(payload, context.useDark)
     }
 }

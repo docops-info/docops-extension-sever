@@ -23,8 +23,8 @@ class MetricsCardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvRespon
         height: Int = 400
     ): String {
         val isPdf = "pdf" == backend
-        val maker = MetricsCardMaker(csvResponse, isPdf)
-        val svg = maker.createMetricsCardSvg(payload = payload, width = width, height = height, useDark = useDark)
+        val maker = MetricsCardMaker(csvResponse, isPdf, useDark = useDark)
+        val svg = maker.createMetricsCardSvg(payload = payload, width = width, height = height)
         csvResponse.update(svg.second)
         return svg.first
     }

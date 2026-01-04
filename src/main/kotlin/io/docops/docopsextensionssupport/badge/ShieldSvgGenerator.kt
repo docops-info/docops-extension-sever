@@ -5,7 +5,7 @@ import kotlin.math.max
 /**
  * Generator for creating iOS-style SVG shields/badges
  */
-class ShieldSvgGenerator {
+class ShieldSvgGenerator(val useDark: Boolean) {
 
     companion object {
         // iOS style constants

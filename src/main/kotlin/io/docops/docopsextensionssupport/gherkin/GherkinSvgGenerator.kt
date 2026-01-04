@@ -1,10 +1,8 @@
 package io.docops.docopsextensionssupport.gherkin
 
-import kotlinx.serialization.Serializable
 import org.springframework.stereotype.Service
 
-@Service
-class GherkinMaker {
+class GherkinMaker(val useDark: Boolean) {
 
     private fun wrapText(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
         val avgCharWidth = fontSizePx * 0.55 // Heuristic for sans-serif
@@ -102,22 +100,22 @@ class GherkinMaker {
         return kotlin.math.max(20, lines.size * lineHeight)
     }
 
-    fun makeGherkin(spec: GherkinSpec, useDark: Boolean = false): String {
+    fun makeGherkin(spec: GherkinSpec): String {
         val totalHeight = calculateTotalHeight(spec, spec.theme)
         val width = spec.theme.layout.width
 
         return buildString {
             append(createSvgHeader(width, totalHeight))
-            append(createDefinitions(useDark))
-            append(createBackground(width, totalHeight, useDark))
+            append(createDefinitions())
+            append(createBackground(width, totalHeight))
 
             // Feature Header
-            val (headerSvg, headerHeight) = createFeatureHeader(spec.feature, spec.theme, useDark)
+            val (headerSvg, headerHeight) = createFeatureHeader(spec.feature, spec.theme)
             append(headerSvg)
 
             var yOffset = 40 + headerHeight + 30
             spec.scenarios.forEachIndexed { index, scenario ->
-                append(createScenario(scenario, spec.theme, yOffset, useDark))
+                append(createScenario(scenario, spec.theme, yOffset))
                 yOffset += calculateScenarioHeight(scenario, spec.theme) + 40
             }
 
@@ -129,7 +127,7 @@ class GherkinMaker {
         return """<svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height">"""
     }
 
-    private fun createDefinitions(useDark: Boolean): String {
+    private fun createDefinitions(): String {
         val accentStart = if (useDark) "#8b5cf6" else "#6366f1"
         val accentEnd = if (useDark) "#3b82f6" else "#a855f7"
         val stopColor = if (useDark) "#000000" else "#cbd5e1"
@@ -156,7 +154,7 @@ class GherkinMaker {
 
 
 
-    private fun createBackground(width: Int, height: Int, useDark: Boolean): String {
+    private fun createBackground(width: Int, height: Int): String {
         val bgColor = if (useDark) "#0f172a" else "#f8fafc"
         return """
                 <rect width="$width" height="$height" fill="$bgColor" rx="16"/>
@@ -164,7 +162,7 @@ class GherkinMaker {
             """.trimIndent()
     }
 
-    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme, useDark: Boolean): Pair<String, Int> {
+    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme): Pair<String, Int> {
         val width = theme.layout.width - 80
         val lines = wrapText(featureTitle, width - 60, 24)
         val lineHeight = 30
@@ -190,7 +188,7 @@ class GherkinMaker {
         return Pair(sb.toString(), bgHeight)
     }
 
-    private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int, useDark: Boolean): String {
+    private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int): String {
         val width = theme.layout.width - 80
         val textColor = if (useDark) "#94a3b8" else "#64748b"
         val highlightColor = if (useDark) "#f8fafc" else "#1e293b"
@@ -222,7 +220,7 @@ class GherkinMaker {
             }
 
             // Status Badge (stays at the top right)
-            val statusColors = getStatusTheme(scenario.status, useDark)
+            val statusColors = getStatusTheme(scenario.status)
             append("""
                     <g transform="translate(${width - 100}, 25)">
                         <rect width="80" height="24" rx="12" fill="${statusColors.bg}" stroke="${statusColors.stroke}" stroke-width="1"/>
@@ -257,7 +255,7 @@ class GherkinMaker {
 
     private data class StatusColors(val bg: String, val stroke: String, val text: String)
 
-    private fun getStatusTheme(status: GherkinScenarioStatus, useDark: Boolean): StatusColors {
+    private fun getStatusTheme(status: GherkinScenarioStatus): StatusColors {
         return when (status) {
             GherkinScenarioStatus.PASSING -> if (useDark) StatusColors("#064e3b", "#059669", "#34d399") else StatusColors("#dcfce7", "#16a34a", "#15803d")
             GherkinScenarioStatus.FAILING -> if (useDark) StatusColors("#450a0a", "#dc2626", "#f87171") else StatusColors("#fee2e2", "#dc2626", "#b91c1c")

@@ -28,7 +28,7 @@ data class SwimLane(
 data class SwimLaneData(
     val title: String = "Swimlanes",
     val lanes: List<SwimLane> = emptyList(),
-    val useDarkTheme: Boolean = false,
+    var useDarkTheme: Boolean = false,
     val width: Int = 900,
     val height: Int = 450
 )

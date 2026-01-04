@@ -12,7 +12,7 @@ class RoadmapHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
     ): String {
         val parser = RoadmapParser()
         val data = parser.parseRoadmapData(content = payload)
-        val maker = RoadmapMaker()
+        val maker = RoadmapMaker(context.useDark)
         csvResponse.update(data.toCsv())
         return maker.generateRoadmapSVG(data.first, data.second)
     }

@@ -3,8 +3,8 @@ package io.docops.docopsextensionssupport.scorecard
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 
-@Component
-class FeatureCardMaker {
+
+class FeatureCardMaker(val useDark: Boolean) {
 
     private val logger = KotlinLogging.logger {}
 
@@ -13,7 +13,11 @@ class FeatureCardMaker {
 
         val lines = input.trim().split("\n").map { it.trim() }
         val cards = mutableListOf<FeatureCard>()
-        var theme = CardTheme.LIGHT
+        val theme = if(useDark) {
+            CardTheme.DARK
+        } else {
+            CardTheme.LIGHT
+        }
         var layout = CardLayout.GRID
 
         var i = 0
@@ -29,9 +33,6 @@ class FeatureCardMaker {
             // Parse configuration directives
             if (line.startsWith("@")) {
                 when {
-                    line.startsWith("@theme:") -> {
-                        theme = CardTheme.valueOf(line.substringAfter("@theme:").trim().uppercase())
-                    }
                     line.startsWith("@layout:") -> {
                         layout = CardLayout.valueOf(line.substringAfter("@layout:").trim().uppercase())
                     }

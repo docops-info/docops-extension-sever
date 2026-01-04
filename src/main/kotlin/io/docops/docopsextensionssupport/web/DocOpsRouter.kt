@@ -16,13 +16,11 @@ import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
-import io.docops.docopsextensionssupport.scorecard.ComparisonChartHandler
 import io.docops.docopsextensionssupport.scorecard.FeatureCardHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
-import io.docops.docopsextensionssupport.svgtable.TableHandler
 import io.docops.docopsextensionssupport.swimlane.SwimLaneHandler
 import io.docops.docopsextensionssupport.timeline.TimelineHandler
 import io.docops.docopsextensionssupport.todo.TodoHandler
@@ -82,8 +80,6 @@ class DocOpsRouter(
             "bargroup" -> BarGroupHandler(csvResponse)
             "line" -> LineHandler(csvResponse)
             "combination" -> CombinationChartHandler(csvResponse)
-            "comp" -> ComparisonChartHandler(csvResponse)
-            "table" -> TableHandler(csvResponse)
             "treechart" -> TreeChartHandler(csvResponse)
             "callout" -> CalloutHandler(csvResponse)
             "metricscard" -> MetricsCardHandler(csvResponse)

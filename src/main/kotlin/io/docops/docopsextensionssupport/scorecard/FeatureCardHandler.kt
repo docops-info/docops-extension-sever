@@ -10,7 +10,7 @@ class FeatureCardHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvRespons
         payload: String,
         context: DocOpsContext
     ): String {
-        val featureCardMaker = FeatureCardMaker()
+        val featureCardMaker = FeatureCardMaker(context.useDark)
         val parsedCards = featureCardMaker.parseTabularInput(payload)
         csvResponse.update(parsedCards.toCsv())
         return featureCardMaker.createFeatureCardsSvg(parsedCards)

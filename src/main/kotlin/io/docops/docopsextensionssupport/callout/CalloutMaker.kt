@@ -1,22 +1,14 @@
 package io.docops.docopsextensionssupport.callout
 
 import io.docops.docopsextensionssupport.web.CsvResponse
-import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
-import java.lang.Boolean.parseBoolean
-import java.util.UUID
-import kotlin.compareTo
-import kotlin.div
-import kotlin.rem
-import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /**
  * Generic class for creating callout SVGs
  */
-open class CalloutMaker(val csvResponse: CsvResponse) {
+open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -51,19 +43,19 @@ open class CalloutMaker(val csvResponse: CsvResponse) {
     }
 
     // Table format parsing methods
-    fun createSystematicApproachFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+    fun createSystematicApproachFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "systematic", useDark)
         val svg = generateSystematicSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())
     }
 
-    fun createMetricsFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+    fun createMetricsFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "metrics", useDark)
         val svg = generateMetricsSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())
     }
 
-    fun createTimelineFromTable(payload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+    fun createTimelineFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "timeline", useDark)
         val svg = generateTimelineSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())

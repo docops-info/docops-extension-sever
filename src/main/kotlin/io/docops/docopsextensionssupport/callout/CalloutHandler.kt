@@ -60,7 +60,7 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
     }
 
     fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int, useDark: Boolean): String {
-        val maker = CalloutMaker(csvResponse)
+        val maker = CalloutMaker(csvResponse, useDark)
 
         // Parse the callout type from the uncompressed payload
         val calloutType = extractCalloutType(uncompressedPayload)
@@ -69,9 +69,9 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         val svg = if (uncompressedPayload.contains("---") || !uncompressedPayload.trim().startsWith("{")) {
             // Use table format parsing
             when (calloutType) {
-                "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height, useDark)
-                "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height, useDark)
-                else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height, useDark)
+                "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height)
+                "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height)
+                else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height)
             }
         } else {
             // Use traditional JSON format

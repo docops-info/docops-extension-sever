@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
  * RoadmapMaker generates SVG visualizations for feature-focused roadmaps
  * showing timeline, quarters, and feature cards with status indicators
  */
-class RoadmapMaker {
+class RoadmapMaker(val useDark: Boolean) {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
     private val displayDateFormat = SimpleDateFormat("MMM dd")

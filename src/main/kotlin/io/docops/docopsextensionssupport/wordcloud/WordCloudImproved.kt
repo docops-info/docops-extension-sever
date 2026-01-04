@@ -5,7 +5,7 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 
-class WordCloudImproved {
+class WordCloudImproved(val useDark: Boolean) {
 
     // Modern color palette for word cloud
     private val defaultColors = listOf(
@@ -55,7 +55,6 @@ class WordCloudImproved {
     private fun createWordCloudFromData(config: Map<String, String>, wordData: String): WordCloud {
         val title = config.getOrDefault("title", "Word Cloud")
         val baseColor = config.getOrDefault("baseColor", "#3498db")
-        val useDark = config["darkMode"]?.toBoolean() ?: false
         val width = config["width"]?.toIntOrNull() ?: 800
         val height = config["height"]?.toIntOrNull() ?: 600
         val minFontSize = config["minFontSize"]?.toIntOrNull() ?: 10

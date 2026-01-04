@@ -25,7 +25,7 @@ import kotlin.uuid.Uuid
  *    Label1 | Value1
  *    Label2 | Value2
  */
-class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
+class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val useDark: Boolean = false) {
     private val json = Json { ignoreUnknownKeys = true }
     private interface MetricsTheme {
         val bg: String
@@ -62,7 +62,7 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean) {
     /**
      * Creates an SVG for metrics cards from JSON or table-like data
      */
-    fun createMetricsCardSvg(payload:String, width: Int = 800, height: Int = 400, useDark: Boolean = false): Pair<String, CsvResponse> {
+    fun createMetricsCardSvg(payload:String, width: Int = 800, height: Int = 400): Pair<String, CsvResponse> {
         return createCards(payload, width, height, useDark)
     }
 
