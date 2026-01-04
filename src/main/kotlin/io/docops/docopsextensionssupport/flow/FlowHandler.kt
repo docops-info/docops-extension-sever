@@ -36,7 +36,7 @@ class FlowHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
         // Update CSV metadata for router embedding
         csvResponse.update(flowDefinition.toCsv())
 
-        val generator = FlowSvgGenerator()
+        val generator = FlowSvgGenerator(useDark)
         return generator.generate(flowDefinition)
     }
 

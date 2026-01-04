@@ -7,7 +7,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
  * Generates modern SVG diagrams from FlowDefinition objects.
  * Uses the established styling patterns from the existing car selection flow.
  */
-class FlowSvgGenerator {
+class FlowSvgGenerator(val useDark: Boolean = false) {
     private val log = KotlinLogging.logger {}
 
     fun generate(flowDefinition: FlowDefinition): String {

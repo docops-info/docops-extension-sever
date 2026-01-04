@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
-import io.docops.docopsextensionssupport.vcard.model.PhoneType
 import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
@@ -8,12 +7,12 @@ import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class TechPatternCardRenderer : VCardRenderer {
+class TechPatternCardRenderer(val useDark: Boolean) : VCardRenderer {
     override val designKey: String = "tech_pattern_background"
 
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
-        val theme = config.theme
+        val theme = if(useDark) "dark" else "light"
         val (bgColor, textColor, accentColor, secondaryColor) = when (theme) {
             "dark" -> arrayOf("#0A0E17", "#FFFFFF", "#00ff88", "#475569")
             else -> arrayOf("#F8FAFC", "#0F172A", "#2563EB", "#64748B")

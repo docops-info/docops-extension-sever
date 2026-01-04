@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.vcard.model.renderer
 
-import io.docops.docopsextensionssupport.vcard.model.PhoneType
 import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
@@ -9,7 +8,8 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ModernCardRenderer(
-    private val includeQR: Boolean = true
+    private val includeQR: Boolean = true,
+    val useDark: Boolean
 ) : VCardRenderer {
     override val designKey: String = "modern_card"
 

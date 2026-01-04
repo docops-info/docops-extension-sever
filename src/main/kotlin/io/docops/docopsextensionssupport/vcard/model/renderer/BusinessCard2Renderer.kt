@@ -4,17 +4,15 @@ import io.docops.docopsextensionssupport.vcard.model.QRCodeService
 import io.docops.docopsextensionssupport.vcard.model.VCard
 import io.docops.docopsextensionssupport.vcard.model.VCardConfig
 import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
-import java.util.Locale
-import java.util.Locale.getDefault
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class BusinessCard2Renderer : VCardRenderer {
+class BusinessCard2Renderer(val useDark: Boolean) : VCardRenderer {
     override val designKey: String = "business_card_design2"
 
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
-        val theme = config.theme
+        val theme = if (useDark) "dark" else "light"
         val colors = when (theme) {
             "dark" -> arrayOf("#0f172a", "#ffffff", "#94a3b8", "#3b82f6", "#1e293b", "#334155")
             else -> arrayOf("#f8fafc", "#1e293b", "#64748b", "#2563eb", "#ffffff", "#e2e8f0")

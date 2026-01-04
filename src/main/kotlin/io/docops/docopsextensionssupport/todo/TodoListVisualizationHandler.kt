@@ -17,7 +17,7 @@ class TodoHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
     }
 
     private fun makeTodoSvg(payload: String, context: DocOpsContext): String {
-        val maker = TodoMaker(csvResponse)
+        val maker = TodoMaker(csvResponse, context.useDark)
         
         return if (isTableFormat(payload)) {
             maker.createFromTable(payload, context)

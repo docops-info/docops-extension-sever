@@ -12,7 +12,7 @@ class DocOpsMermaid(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
         return """
             <div class="diagram-container">
                 <div class="mermaid">
-                    ${payload}
+                    $payload
                 </div>
             </div>
 

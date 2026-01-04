@@ -7,12 +7,12 @@ import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class BusinessCardTemplateRenderer : VCardRenderer {
+class BusinessCardTemplateRenderer(val useDark: Boolean) : VCardRenderer {
     override val designKey: String = "business_card_template"
 
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
-        val theme = config.theme
+        val theme = if(useDark) "dark" else "light"
         val (bgColor, textColor, accentColor, secondaryColor, metaColor) = when (theme) {
             "dark" -> arrayOf("#0A0A0A", "#FFFFFF", "#10b981", "#94a3b8", "#1A1A1A")
             else -> arrayOf("#F8FAFC", "#0F172A", "#059669", "#475569", "#E2E8F0")

@@ -3,18 +3,18 @@ package io.docops.docopsextensionssupport.vcard.model
 import io.docops.docopsextensionssupport.vcard.model.renderer.*
 import java.io.File
 
-class VCardSvgGeneratorService {
+class VCardSvgGeneratorService(val useDark: Boolean = false) {
     companion object {
         private const val DESIGNS_PATH = "designs"
     }
 
     private val renderers: Map<String, VCardRenderer> = listOf(
-        BusinessCardRenderer(),
-        BusinessCard2Renderer(),
-        BusinessCardTemplateRenderer(),
-        TechPatternCardRenderer(),
-        CreativeAgencyCardRenderer(),
-        ModernCardRenderer(includeQR = true)
+        BusinessCardRenderer(useDark),
+        BusinessCard2Renderer(useDark),
+        BusinessCardTemplateRenderer(useDark),
+        TechPatternCardRenderer(useDark),
+        CreativeAgencyCardRenderer(useDark),
+        ModernCardRenderer(includeQR = true, useDark)
     ).associateBy { it.designKey }
 
     fun generateSvg(vcard: VCard, config: VCardConfig): String {

@@ -9,7 +9,7 @@ import java.util.*
 /**
  * Creates SVG visualizations for todo lists
  */
-class TodoMaker(private val csvResponse: CsvResponse) {
+class TodoMaker(private val csvResponse: CsvResponse, val useDark: Boolean) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -184,7 +184,7 @@ class TodoMaker(private val csvResponse: CsvResponse) {
         val width = totalColumns * columnWidth + (totalColumns + 1) * margin
         val height = 800
 
-        val isDark = context.useDark
+        val isDark = useDark
         val bgColor = if (isDark) "#1a1a1a" else "#ffffff"
         val textColor = if (isDark) "#e0e0e0" else "#2d3748"
         val columnBg = if (isDark) "#2d2d2d" else "#f7fafc"
@@ -254,7 +254,7 @@ class TodoMaker(private val csvResponse: CsvResponse) {
         val height = 150 + todoList.items.size * itemHeight
         val margin = 20
 
-        val isDark = context.useDark
+        val isDark = useDark
         val bgColor = if (isDark) "#1a1a1a" else "#ffffff"
         val textColor = if (isDark) "#e0e0e0" else "#2d3748"
 
@@ -298,7 +298,7 @@ class TodoMaker(private val csvResponse: CsvResponse) {
         val width = cols * (cardWidth + margin) + margin
         val height = 100 + rows * (cardHeight + margin) + margin
 
-        val isDark = context.useDark
+        val isDark = useDark
         val bgColor = if (isDark) "#1a1a1a" else "#ffffff"
         val textColor = if (isDark) "#e0e0e0" else "#2d3748"
 

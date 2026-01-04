@@ -15,7 +15,7 @@ class VCardHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
         val parser = VCardParserService()
         val parsedVCard = parser.parseVCardInput(payload)
         val vCard = parser.parseVCard(parsedVCard.vcardContent)
-        val generator = VCardSvgGeneratorService()
+        val generator = VCardSvgGeneratorService(context.useDark)
         val svg = generator.generateSvg(vCard, parsedVCard.config)
         //csvResponse.update(card.toCsvResponse())
         return svg
