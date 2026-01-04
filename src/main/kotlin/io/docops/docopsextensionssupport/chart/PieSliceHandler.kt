@@ -6,10 +6,10 @@ import io.docops.docopsextensionssupport.web.DocOpsContext
 
 class PieSliceHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
-    fun handleSVGInternal(payload: String, backend: String) : String {
+    fun handleSVGInternal(payload: String, backend: String, useDark: Boolean) : String {
         val isPdf = backend == "pdf"
         val pieChartImproved = PieChartImproved()
-        val svg = pieChartImproved.makePieSvg(payload, csvResponse, isPdf)
+        val svg = pieChartImproved.makePieSvg(payload, csvResponse, isPdf, useDark)
         return svg
     }
 
@@ -17,7 +17,7 @@ class PieSliceHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVGInternal(payload, context.backend)
+        return handleSVGInternal(payload, context.backend, context.useDark)
     }
 
 }

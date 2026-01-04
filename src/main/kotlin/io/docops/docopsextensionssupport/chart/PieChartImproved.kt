@@ -15,7 +15,7 @@ import kotlin.uuid.Uuid
 
 class PieChartImproved {
 
-    fun makePieSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean): String {
+    fun makePieSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean, useDark: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
         // Parse colors from config or attributes
@@ -30,7 +30,10 @@ class PieChartImproved {
         val enableHoverEffects = config["hover"]?.toBoolean() ?: true
         val isDonut = config["donut"]?.toBoolean() ?: true
 
-        val darkMode = config["darkMode"]?.toBoolean() ?: false
+        var darkMode = config["darkMode"]?.toBoolean() ?: false
+        if(useDark) {
+            darkMode = useDark
+        }
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
         var colors = ChartColors.modernColors

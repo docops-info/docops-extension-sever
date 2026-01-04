@@ -49,6 +49,7 @@ class ButtonHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
      * @return A [ResponseEntity] containing the SVG representation as a byte array with appropriate HTTP headers
      */
     private fun createResponse(buttons: Buttons, useDark: Boolean, type: String, docname: String): String {
+        buttons.theme?.useDark = useDark
         buttons.useDark = useDark
         val buttonShape = buttons.createSVGShape()
         val imgSrc = buttonShape.drawShape(type)

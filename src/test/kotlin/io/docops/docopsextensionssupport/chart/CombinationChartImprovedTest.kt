@@ -36,7 +36,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file
         val outfile = File("gen/test_combination_chart_light.svg")
@@ -83,7 +87,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file
         val outfile = File("gen/test_combination_chart_dark.svg")
@@ -121,7 +129,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file
         val outfile = File("gen/test_combination_chart_glass_light.svg")
@@ -170,7 +182,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file
         val outfile = File("gen/test_combination_chart_glass_dark.svg")
@@ -210,7 +226,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file for inspection
         val outfile = File("gen/test_bar_overlap_issue.svg")
@@ -277,7 +297,11 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(combinationChartData, DefaultCsvResponse)
+        val svg = CombinationChartImproved().makeCombinationChartSvg(
+            combinationChartData,
+            DefaultCsvResponse,
+            context.useDark
+        )
 
         // Save the chart to a file for inspection
         val outfile = File("gen/test_right_bar_overlap_dual_axis.svg")

@@ -46,7 +46,7 @@ data class CombinationChartDisplay(
     val id: String = UUID.randomUUID().toString(),
     val baseColor: String = "#4361ee",
     val backgroundColor: String = "#f8f9fa",
-    val useDark: Boolean = false,
+    var useDark: Boolean = false,
     val scale: Double = 1.0,
     val showGrid: Boolean = true,
     val showLegend: Boolean = true,

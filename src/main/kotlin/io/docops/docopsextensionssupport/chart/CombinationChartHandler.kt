@@ -11,8 +11,8 @@ class CombinationChartHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvR
         payload: String,
         context: DocOpsContext
     ): String {
-        val maker = CombinationChartImproved()
-        return maker.makeCombinationChartSvg(payload, csvResponse)
+        val maker = CombinationChartImproved(context.useDark)
+        return maker.makeCombinationChartSvg(payload, csvResponse )
     }
 
 

@@ -5,9 +5,8 @@ import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import io.github.oshai.kotlinlogging.KotlinLogging
-import java.util.*
 
-class CombinationChartImproved {
+class CombinationChartImproved(val useDark: Boolean) {
 
     private val logger = KotlinLogging.logger {}
 
@@ -53,7 +52,7 @@ class CombinationChartImproved {
         val yLabelSecondary = config.getOrDefault("yLabelSecondary", "")
         val baseColor = config.getOrDefault("baseColor", "#3498db")
         val backgroundColor = config.getOrDefault("backgroundColor", "#f8f9fa")
-        val useDark = config["darkMode"]?.toBoolean() ?: false
+        val useDark = useDark
         val scale = config["scale"]?.toDoubleOrNull() ?: 1.0
         val showGrid = config["showGrid"]?.toBoolean() ?: true
         val showLegend = config["showLegend"]?.toBoolean() ?: true

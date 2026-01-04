@@ -31,7 +31,7 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
             payload,
             context.type,
             context.title,
-            context.useDark,
+            useDark = context.useDark,
             context.scale,
             context.backend,
             context.useGlass

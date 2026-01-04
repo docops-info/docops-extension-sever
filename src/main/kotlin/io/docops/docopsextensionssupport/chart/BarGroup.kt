@@ -28,7 +28,7 @@ class BarGroupDisplay(
     val lineColor: String = "#FFBB5C",
     val vBar: Boolean = false,
     val condensed: Boolean = false,
-    val useDark: Boolean = false,
+    var useDark: Boolean = false,
     val theme: String = "classic",
     val scale: Double = 1.0
 )

@@ -122,7 +122,7 @@ class LineController {
         val timings = measureTimedValue {
             val contents = httpServletRequest.getParameter("content")
             val lineChartImproved = LineChartImproved()
-            val svg = lineChartImproved.makeLineSvg(contents, DefaultCsvResponse)
+            val svg = lineChartImproved.makeLineSvg(contents, DefaultCsvResponse, false)
             val headers = HttpHeaders()
             headers.cacheControl = CacheControl.noCache().headerValue
             headers.contentType = MediaType.parseMediaType("text/html")
@@ -178,7 +178,7 @@ class LineController {
     @PostMapping("", produces = ["image/svg+xml"])
     fun lineFromContent(@RequestParam("payload") payload: String): ResponseEntity<ByteArray> {
         val lineChartImproved = LineChartImproved()
-        val svg = lineChartImproved.makeLineSvg(payload, DefaultCsvResponse)
+        val svg = lineChartImproved.makeLineSvg(payload, DefaultCsvResponse, true)
         val headers = HttpHeaders()
         headers.cacheControl = CacheControl.noCache().headerValue
         return ResponseEntity(svg.toByteArray(StandardCharsets.UTF_8), headers, HttpStatus.OK)

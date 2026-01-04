@@ -7,10 +7,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
-class BarGroupMaker {
+class BarGroupMaker(val useDark: Boolean) {
 
     private var fontColor = "#fcfcfc"
     fun makeBar(barGroup: BarGroup, isPdf: Boolean): String {
+        barGroup.display.useDark = useDark
         if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
             val brutalistMaker = CyberBrutalistBarGroupMaker()
             return brutalistMaker.makeBar(barGroup).first
@@ -620,7 +621,7 @@ fun main() {
 
     val str = Json.encodeToString(barGroupTestData)
     println(str)
-    val svg = BarGroupMaker().makeBar(barGroupTestData, false)
+    val svg = BarGroupMaker(true).makeBar(barGroupTestData, false)
     val outfile2 = File("gen/groupbar.svg")
     outfile2.writeBytes(svg.toByteArray())
 }

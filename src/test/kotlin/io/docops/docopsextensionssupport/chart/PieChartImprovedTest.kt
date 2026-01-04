@@ -26,7 +26,7 @@ class PieChartImprovedTest {
         """.trimIndent()
 
         // Generate the pie chart
-        val svg = PieChartImproved().makePieSvg(pieChartData, DefaultCsvResponse, false)
+        val svg = PieChartImproved().makePieSvg(pieChartData, DefaultCsvResponse, false, useDark)
 
         // Save the chart to a file
         val outfile = File("gen/test_pie_chart_glass.svg")
@@ -58,7 +58,7 @@ class PieChartImprovedTest {
         """.trimIndent()
 
         // Generate the pie chart
-        val svg = PieChartImproved().makePieSvg(pieChartData, DefaultCsvResponse, false)
+        val svg = PieChartImproved().makePieSvg(pieChartData, DefaultCsvResponse, false, useDark)
 
         // Save the chart to a file
         val outfile = File("gen/test_pie_chart_glass_dark.svg")

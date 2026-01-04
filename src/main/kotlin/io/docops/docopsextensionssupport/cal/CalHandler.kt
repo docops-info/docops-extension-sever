@@ -9,26 +9,24 @@ import java.util.*
 
 class CalHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
-    fun handleSVG(payload: String) : String {
-        val calMaker = CalMaker()
-        var svg = ""
-        val now = Calendar.getInstance()
-        val monthName = DateTime.now().withMonthOfYear(now.get(Calendar.MONTH)).toString("MMM")
-        var calEntry  = CalEntry(now.get(Calendar.YEAR),monthName)
-        if (payload.trim().isNotEmpty()) {
-            calEntry = Json.decodeFromString<CalEntry>(payload)
-        }
-        svg = calMaker.makeCalendar(calEntry)
-        val csv = calEntry.toCsv()
+    fun handleSVG(payload: String, useDark: Boolean) : String {
+
+        val cal = CalMaker()
+        val entry = Json.decodeFromString<CalEntry>(payload)
+        entry.darkMode = useDark
+        val svg = cal.makeCalendar(entry)
+        val csv = entry.toCsv()
         csvResponse.update(csv)
         return svg
+
     }
 
     override fun handleSVG(
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVG(payload)
+        return handleSVG(payload, context.useDark)
     }
 
 }
+

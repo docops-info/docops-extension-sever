@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
 import io.docops.docopsextensionssupport.support.SVGColor
-import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
@@ -10,7 +9,7 @@ import java.util.UUID
 class LineChartImproved {
 
 
-    fun makeLineSvg(payload: String, csvResponse: CsvResponse): String {
+    fun makeLineSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
 
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
@@ -28,7 +27,7 @@ class LineChartImproved {
         val showGrid = config["grid"]?.toBoolean() ?: true
         val xAxisLabel = config.getOrDefault("xAxisLabel", "")
         val yAxisLabel = config.getOrDefault("yAxisLabel", "")
-        val darkMode = config["darkMode"]?.toBoolean() ?: false
+        val darkMode = useDark
 
         val lineData = parseLineChartData(chartData)
 

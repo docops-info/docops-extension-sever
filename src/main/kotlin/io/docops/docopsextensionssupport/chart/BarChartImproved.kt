@@ -5,7 +5,7 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import java.util.UUID
 
-class BarChartImproved {
+class BarChartImproved(val useDark: Boolean) {
 
     // Modern color palette for bar chart
     private val defaultColors = listOf(
@@ -21,7 +21,7 @@ class BarChartImproved {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeBarSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean, backend: String): String {
+    fun makeBarSvg(payload: String, csvResponse: CsvResponse,  backend: String): String {
         val isPDf = "pdf" == backend
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
@@ -49,7 +49,7 @@ class BarChartImproved {
 
         csvResponse.update(barGroup.toCsv())
         // Use existing BarGroupMaker to generate SVG
-        val barGroupMaker = BarGroupMaker()
+        val barGroupMaker = BarGroupMaker(useDark)
         return if (barGroup.display.vBar) {
             barGroupMaker.makeVGroupBar(barGroup, isPdf)
         } else if (barGroup.display.condensed) {
@@ -83,7 +83,6 @@ class BarChartImproved {
         val xLabel = config.getOrDefault("xLabel", "")
         val baseColor = config.getOrDefault("baseColor", "#4361ee")
         val vBar = config["vBar"]?.toBoolean() ?: false
-        val useDark = config["darkMode"]?.toBoolean() ?: false
         val sorted = config["sorted"]?.toBoolean() ?: false
         val scale = config["scale"]?.toFloatOrNull() ?: 1.0f
         val theme = config["theme"] ?: "classic"
@@ -144,7 +143,6 @@ class BarChartImproved {
         val xLabel = config.getOrDefault("xLabel", "")
         val baseColor = config.getOrDefault("baseColor", "#D988B9")
         val vBar = config["vBar"]?.toBoolean() ?: false
-        val useDark = config["darkMode"]?.toBoolean() ?: false
         val condensed = config["condensed"]?.toBoolean() ?: false
         val theme = config["theme"] ?: "classic"
         val scale = config["scale"]?.toDoubleOrNull() ?: 1.0
