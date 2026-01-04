@@ -1,7 +1,9 @@
 package io.docops.docopsextensionssupport.roadmap
 
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
+import java.io.File
 import java.util.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -147,7 +149,7 @@ class ModernPlannerMaker {
                     val fullMatch = match.value
                     val url = urlMap["[[$label]]"]
                     if (url != null) {
-                        val anchor = """<a xlink:href="${url.escapeXml()}" target="_blank"><tspan fill="$linkColor" style="text-decoration: underline;">$label</tspan></a>"""
+                        val anchor = """<tspan fill="$linkColor" style="text-decoration: underline;"><a xlink:href="${url.escapeXml()}" target="_blank">$label</a></tspan>"""
                         processedLine = processedLine.replace(fullMatch, anchor)
                     }
                 }
@@ -185,7 +187,7 @@ class ModernPlannerMaker {
     private fun makeHead(width: Int, height: Int, useDark: Boolean): String {
         val id = Uuid.random().toHexString()
         return """
-        <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $width $height" id="id_$id">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width / DISPLAY_RATIO_16_9}" height="${height / DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" id="id_$id" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <style>
                     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap');
@@ -209,4 +211,36 @@ class ModernPlannerMaker {
             </defs>
         """.trimIndent()
     }
+}
+
+fun main() {
+    val str = """
+- now Current Tasks
+Learn Node.js and Express
+* Regular bullet point
+>> Chevron bullet point
+[[https://nodejs.org Node.js Documentation]]
+- next Upcoming Work
+Study React fundamentals
+>> Build interactive UIs
+* State management with Redux
+[[https://reactjs.org React Documentation]]
+- later Future Plans
+Docker containerization
+>> CI/CD pipeline setup
+* Cloud deployment (AWS/Azure)
+[[https://docker.com Docker Hub]]
+- done Completed Items
+HTML, CSS, JavaScript
+>> Git version control
+* Basic algorithms and data structures
+[[https://github.com GitHub]]
+    """.trimIndent()
+    val p = ModernPlannerMaker()
+    val parser = PlannerParser()
+    val planItems = parser.parse(str)
+    val svg =p.makePlannerImage(planItems, "Enhanced Development Roadmap", "1.0")
+    val f = File("gen/plannernew.svg")
+    f.writeBytes(svg.toByteArray())
+    println("Generated enhanced planner with larger size, chevron bullets, and wiki links")
 }
