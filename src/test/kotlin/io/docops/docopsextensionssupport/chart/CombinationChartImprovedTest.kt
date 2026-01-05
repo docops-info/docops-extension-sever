@@ -36,10 +36,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(true).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file
@@ -87,10 +86,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(false).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file
@@ -129,10 +127,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(true).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file
@@ -182,10 +179,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(false).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file
@@ -226,10 +222,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(false).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file for inspection
@@ -297,10 +292,9 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved().makeCombinationChartSvg(
+        val svg = CombinationChartImproved(false).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
-            context.useDark
         )
 
         // Save the chart to a file for inspection
