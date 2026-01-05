@@ -1,0 +1,1041 @@
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>index</title>
+                <style>
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+
+.markdown-body {
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
+}
+
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
+}
+
+@keyframes itemSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    border-bottom: none;
+}
+
+/* Code Blocks - IDE Aesthetic */
+.markdown-body pre {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
+}
+
+.markdown-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
+}
+
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+}
+
+.markdown-body td {
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    /* Force default cursor to remove the zoom/search icon */
+    cursor: default !important;
+    --max-content-width: 980px;
+    max-width: var(--max-content-width);
+}
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+    }
+}
+.docops-container {
+    display: inline-block;
+}
+.docops-media-card {
+    position: relative;
+    display: inline-block;
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+
+
+
+.docops-control-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid rgba(126, 87, 255, 0.4);
+    color: #b392ff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                      
+        .docops-data-panel {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+            border-top: 1px solid var(--accent-primary);
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .docops-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+        .docops-data-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .docops-action-btn {
+            background: rgba(126, 87, 255, 0.1);
+            border: 1px solid rgba(126, 87, 255, 0.3);
+            color: var(--accent-secondary);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .docops-action-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+            border-color: var(--accent-primary);
+        }
+
+        .docops-data-header span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ui.md: Distinctive Table Design */
+        .docops-data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .docops-data-table th {
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* ui.md: Motion - Staggered Row Entry */
+        .docops-data-table tr {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: rowSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes rowSlideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .docops-data-table td {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .docops-data-table tr:hover td {
+            background: rgba(126, 87, 255, 0.1);
+            color: #fff;
+        }
+        
+                    @media (prefers-color-scheme: dark) {
+                        body {
+                            background-color: #0d1117;
+                        }
+                    }
+                </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                <article class="markdown-body">
+                    <h1 id="docops-timeline-visualizer">DocOps Timeline Visualizer</h1>
+<ul>
+<li><a href="#default">Default</a></li>
+<li><a href="#horizontal-layout">Horizontal Layout</a></li>
+</ul>
+<h2 id="default">Default</h2>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_2WSQXLbMAxF9z4FTtCmTrrJTrW98EzaOPFM9xQJS5xQBAcg5TirnqVH60kKUXFrT3ai8MH_8EFnMt7D0xdY3izvFhlf8z08Y0AjCGuyj0lg85oxiqcIe-QRGcblp5vFn1-_YRN7Ey06yH7A4CPC6KWY4N9MVn3VbIfENKomIR-Ih6mhFn7gERzZMmDMVQ4ZhxSURxYLN2MtL7EeTIm2P1OtAhVXifz7hd-YjoLcKroDdD772NXCikIwLbG6jHjtWetNyTTo0YJONw06NZ4Rbi8RvlPrA0KT0jmkesFP_2EWirnHjmr58XCo4RhrUaT-2hXpIVL2B29rg4CGAyW5q_nvLs03MSMn9rqZrX52PDvti88zxsO62X1ubJ1y7RltJj6BlJSI8zypG-eFzShgFZMpzEyrIpoDtGyi0wSAUgWbG6MJJ01IwBnpWzLs_kHWt_P1HbLZ7uiIrBbrqzwaES_ZxHyZuKomAhUpZdeh_Dd8mp5RPoGyTJqpGaM9ge3RvsyS_WBYG9GwvgprktHd6NJR_gKeYQb71AIAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="svg-container">
+<?xml version="1.0" encoding="UTF-8"?><svg width="562.4999999929688" height="815.0624999898117" viewBox="0 0 1000 1449" xmlns="http://www.w3.org/2000/svg" id="id_a29bdfe88aae4211b12ae83645414497">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[["Q1 2024","Release DocOps Extension Server v2.0 • Enhanced timeline visualization • Improved performance • New documentation templates"],["Q2 2024","Launch DocOps Cloud Service • Browserbased editing • Collaborative documentation • Automatic versioning"],["Q3 2024","Mobile App Release • View documentation onthego • Offline access • Push notifications for updates"],["Q4 2024","Enterprise Integration Suite • LDAP/Active Directory support • Advanced access controls • Custom branding options • Analytics dashboard"],["Q1 2025","AIPowered Documentation Assistant • Automated content suggestions • Quality and consistency checks • Smart search capabilities"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: vertical --><defs><pattern id="dotPattern_id_a29bdfe88aae4211b12ae83645414497" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#475569" /></pattern><linearGradient id="bgGradient_id_a29bdfe88aae4211b12ae83645414497" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#020617;stop-opacity:1" /><stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_a29bdfe88aae4211b12ae83645414497" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_a29bdfe88aae4211b12ae83645414497" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#334155;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_a29bdfe88aae4211b12ae83645414497" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#2d1b4e;stop-opacity:0.95" /></linearGradient><filter id="glow_id_a29bdfe88aae4211b12ae83645414497"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_a29bdfe88aae4211b12ae83645414497"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_a29bdfe88aae4211b12ae83645414497)"/><rect width="100%" height="100%" fill="url(#dotPattern_id_a29bdfe88aae4211b12ae83645414497)" opacity="0.3"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.08"/><circle cx="462.4999999929688" cy="715.0624999898117" r="200" fill="#ec4899" opacity="0.08"/><line x1="500" y1="80" x2="500" y2="735.0624999898117" stroke="#334155" stroke-width="2" stroke-dasharray="8 4"/><g class="timeline-item"><line x1="500" y1="120" x2="580" y2="120" stroke="#22d3ee" stroke-width="2" opacity="0.4"/><circle cx="500" cy="120" r="12" fill="#1e293b" stroke="#22d3ee" stroke-width="3" filter="url(#glow_id_a29bdfe88aae4211b12ae83645414497)"/><circle cx="500" cy="120" r="6" fill="#22d3ee" opacity="0.9"/><circle cx="500" cy="120" r="12" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.2"><animate attributeName="r" from="12" to="24" dur="2s" begin="0.0s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.2" to="0" dur="2s" begin="0.0s" repeatCount="indefinite"/></circle><rect x="580" y="80" width="380" height="131" rx="12" fill="url(#cardGradient1_id_a29bdfe88aae4211b12ae83645414497)" stroke="#22d3ee" stroke-width="2" opacity="1" filter="url(#cardShadow_id_a29bdfe88aae4211b12ae83645414497)"/><text x="600" y="110" font-family="'Inter', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#22d3ee">Q1 2024</text><text x="600" y="135" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Release DocOps Extension Server v2.0 •</tspan></text><text x="600" y="152" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Enhanced timeline visualization • Improved</tspan></text><text x="600" y="169" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>performance • New documentation templates</tspan></text></g><g class="timeline-item"><line x1="500" y1="401" x2="420" y2="401" stroke="#f472b6" stroke-width="2" opacity="0.4"/><circle cx="500" cy="401" r="12" fill="#1e293b" stroke="#f472b6" stroke-width="3" filter="url(#glow_id_a29bdfe88aae4211b12ae83645414497)"/><circle cx="500" cy="401" r="6" fill="#f472b6" opacity="0.9"/><circle cx="500" cy="401" r="12" fill="none" stroke="#f472b6" stroke-width="2" opacity="0.2"><animate attributeName="r" from="12" to="24" dur="2s" begin="0.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.2" to="0" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle><rect x="40" y="361" width="380" height="131" rx="12" fill="url(#cardGradient1_id_a29bdfe88aae4211b12ae83645414497)" stroke="#f472b6" stroke-width="2" opacity="1" filter="url(#cardShadow_id_a29bdfe88aae4211b12ae83645414497)"/><text x="60" y="391" font-family="'Inter', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#f472b6">Q2 2024</text><text x="60" y="416" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Launch DocOps Cloud Service • Browserbased</tspan></text><text x="60" y="433" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>editing • Collaborative documentation •</tspan></text><text x="60" y="450" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Automatic versioning</tspan></text></g><g class="timeline-item"><line x1="500" y1="682" x2="580" y2="682" stroke="#fbbf24" stroke-width="2" opacity="0.4"/><circle cx="500" cy="682" r="12" fill="#1e293b" stroke="#fbbf24" stroke-width="3" filter="url(#glow_id_a29bdfe88aae4211b12ae83645414497)"/><circle cx="500" cy="682" r="6" fill="#fbbf24" opacity="0.9"/><circle cx="500" cy="682" r="12" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.2"><animate attributeName="r" from="12" to="24" dur="2s" begin="1.0s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.2" to="0" dur="2s" begin="1.0s" repeatCount="indefinite"/></circle><rect x="580" y="642" width="380" height="131" rx="12" fill="url(#cardGradient2_id_a29bdfe88aae4211b12ae83645414497)" stroke="#fbbf24" stroke-width="2" opacity="1" filter="url(#cardShadow_id_a29bdfe88aae4211b12ae83645414497)"/><text x="600" y="672" font-family="'Inter', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#fbbf24">Q3 2024</text><text x="600" y="697" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Mobile App Release • View documentation</tspan></text><text x="600" y="714" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>onthego • Offline access • Push</tspan></text><text x="600" y="731" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>notifications for updates</tspan></text></g><g class="timeline-item"><line x1="500" y1="963" x2="420" y2="963" stroke="#818cf8" stroke-width="2" opacity="0.4"/><circle cx="500" cy="963" r="12" fill="#1e293b" stroke="#818cf8" stroke-width="3" filter="url(#glow_id_a29bdfe88aae4211b12ae83645414497)"/><circle cx="500" cy="963" r="6" fill="#818cf8" opacity="0.9"/><circle cx="500" cy="963" r="12" fill="none" stroke="#818cf8" stroke-width="2" opacity="0.2"><animate attributeName="r" from="12" to="24" dur="2s" begin="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.2" to="0" dur="2s" begin="1.5s" repeatCount="indefinite"/></circle><rect x="40" y="923" width="380" height="148" rx="12" fill="url(#cardGradient2_id_a29bdfe88aae4211b12ae83645414497)" stroke="#818cf8" stroke-width="2" opacity="1" filter="url(#cardShadow_id_a29bdfe88aae4211b12ae83645414497)"/><text x="60" y="953" font-family="'Inter', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#818cf8">Q4 2024</text><text x="60" y="978" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Enterprise Integration Suite • LDAP/Active</tspan></text><text x="60" y="995" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Directory support • Advanced access</tspan></text><text x="60" y="1012" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>controls • Custom branding options •</tspan></text><text x="60" y="1029" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Analytics dashboard</tspan></text></g><g class="timeline-item"><line x1="500" y1="1261" x2="580" y2="1261" stroke="#34d399" stroke-width="2" opacity="0.4"/><circle cx="500" cy="1261" r="12" fill="#1e293b" stroke="#34d399" stroke-width="3" filter="url(#glow_id_a29bdfe88aae4211b12ae83645414497)"/><circle cx="500" cy="1261" r="6" fill="#34d399" opacity="0.9"/><circle cx="500" cy="1261" r="12" fill="none" stroke="#34d399" stroke-width="2" opacity="0.2"><animate attributeName="r" from="12" to="24" dur="2s" begin="2.0s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.2" to="0" dur="2s" begin="2.0s" repeatCount="indefinite"/></circle><rect x="580" y="1221" width="380" height="148" rx="12" fill="url(#cardGradient1_id_a29bdfe88aae4211b12ae83645414497)" stroke="#34d399" stroke-width="2" opacity="1" filter="url(#cardShadow_id_a29bdfe88aae4211b12ae83645414497)"/><text x="600" y="1251" font-family="'Inter', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#34d399">Q1 2025</text><text x="600" y="1276" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>AIPowered Documentation Assistant •</tspan></text><text x="600" y="1293" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Automated content suggestions • Quality and</tspan></text><text x="600" y="1310" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>consistency checks • Smart search</tspan></text><text x="600" y="1327" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>capabilities</tspan></text></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="horizontal-layout">Horizontal Layout</h2>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_5WUy27bMBBF9_qK-YD41bwDZNGH0SZNCiMNkkVgCDQ1kqamOAJJRXa_vkNJTt1Vnd1ciRryHt5R2NZ4_S2B0WiUaDbsbrLN9XHSUhbK67PpNIkvMhXwCmZnZ1MYwez88iIJuAlX8FgizK2hogxoK7Rh8gNZG-U9aWVggY44S-4ooFOhcQg568ZjBmzBofJsj8BwQfoIlM3Aa5IelJOGUHIjXcdwr36xg9bFHh7IatNkCC8vZQi1v5pM0I5bWlONGakxu2IS1eSjwY10RJcuuEZ4kxDlctnt9r8et2xVKJVNf7aUB9hJ6ORyOU52WIRHxHJx_GHA8sCVEh-afJXMq7pUnn6Laaw4ULRMNqNXyhplZEVvPQjJQuhH8yquAs7BdtDG8B23kFMh9eEEnskYUlX6zC7zLbtQwvAI_j46kMSdfJB-2jo5VSyhK_cJXByfRwKX09lA4Il0EDNCa-7UfgAc5gZ1wN6xZ03KHAFqtlztYqAbI2slP1pwF-JZUMTVNzZrfJCuBh7wlU0TOY3hBwe1MgiqkdC8IyOfS-UM-vQL6TVaD4OGQR_I5itKiencEAfoBXRin8_l7KTjc3I68LlnCaON-Yi7KgHiuoistqBgJaOxhpbkyoJTGUWb4jlnV_nuTKqfozhFuKnl0zh6qqdxU9VysxK_d8_MraqExi1vNUJXQ1cfyOGJXEGWlASOTQ47CZ38h8XJqbCoJcty6AHHgn2o9pEYg93Nx2vPyAfx0A3FCkOLaKGUX053LMPtkBfsNO7GzUPuVPEGpv-_rLHux7Kfqfcm5rGUwfbpYmt1KS17CYM8kNMjW0rv2TnysYUo2Cmh9AfgdlEFjgUAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="svg-container">
+<svg width="1240" height="560" viewBox="0 0 1240 560" xmlns="http://www.w3.org/2000/svg" id="id_8251178e6ba44bf1bec008d003fbe490">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[["1660 - 1798","The Enlightenment/Neoclassical Period Literature focused on reason, logic, and scientific thought. Major writers include [[https://en.wikipedia.org/wiki/Alexander_Pope Alexander Pope]] and [[https://en.wikipedia.org/wiki/Jonathan_Swift Jonathan Swift]]."],["1798 - 1832","Romanticism Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]]."],["1837 - 1901","Victorian Era Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]]."],["1914 - 1945","Modernism Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]]."],["1945 - present","Postmodernism Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]]."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><metadata><rdf:rdf xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2025-10-28</dc:date></cc:work></rdf:rdf></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: horizontal --><defs><pattern id="dotPattern_id_8251178e6ba44bf1bec008d003fbe490" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#475569" /></pattern><linearGradient id="bgGradient_id_8251178e6ba44bf1bec008d003fbe490" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#020617;stop-opacity:1" /><stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_8251178e6ba44bf1bec008d003fbe490" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_8251178e6ba44bf1bec008d003fbe490" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#334155;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_8251178e6ba44bf1bec008d003fbe490" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#2d1b4e;stop-opacity:0.95" /></linearGradient><filter id="glow_id_8251178e6ba44bf1bec008d003fbe490"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_8251178e6ba44bf1bec008d003fbe490"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_8251178e6ba44bf1bec008d003fbe490)"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.05"/><circle cx="1140" cy="460" r="200" fill="#ec4899" opacity="0.05"/><line x1="80" y1="280" x2="1160" y2="280" stroke="url(#lineGradient_id_8251178e6ba44bf1bec008d003fbe490)" stroke-width="3" stroke-linecap="round" opacity="0.7"/><line x1="180" y1="280" x2="180" y2="268" stroke="#22d3ee" stroke-width="2" opacity="0.8"/><circle cx="180" cy="280" r="6" fill="#22d3ee"/><circle cx="180" cy="280" r="6" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.6"><animate attributeName="r" from="6" to="20" dur="2s" begin="0.0s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="0.0s" repeatCount="indefinite"/></circle><rect x="128" y="242" rx="4" ry="4" width="105" height="24" fill="#0f172a" opacity="0.9" stroke="#22d3ee" stroke-width="1.5"/><text x="180" y="259" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="#22d3ee">1660 - 1798</text><rect x="38" y="118" rx="4" ry="4" width="284" height="114" fill="url(#cardGradient1_id_8251178e6ba44bf1bec008d003fbe490)" stroke="#22d3ee" stroke-width="1" filter="url(#cardShadow_id_8251178e6ba44bf1bec008d003fbe490)"/><text x="50" y="138" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>The Enlightenment/Neoclassical</tspan></text><text x="50" y="156" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Period Literature focused on</tspan></text><text x="50" y="174" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>reason, logic, and scientific</tspan></text><text x="50" y="192" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>thought. Major writers include</tspan></text><text x="50" y="210" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan fill="#22d3ee" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Alexander_Pope" target="_blank">Alexander Pope</a></tspan><tspan> and </tspan><tspan fill="#22d3ee" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Jonathan_Swift" target="_blank">Jonathan Swift</a></tspan><tspan>.</tspan></text><line x1="400" y1="280" x2="400" y2="292" stroke="#f472b6" stroke-width="2" opacity="0.8"/><circle cx="400" cy="280" r="6" fill="#f472b6"/><circle cx="400" cy="280" r="6" fill="none" stroke="#f472b6" stroke-width="2" opacity="0.6"><animate attributeName="r" from="6" to="20" dur="2s" begin="0.3s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="0.3s" repeatCount="indefinite"/></circle><rect x="348" y="294" rx="4" ry="4" width="105" height="24" fill="#0f172a" opacity="0.9" stroke="#f472b6" stroke-width="1.5"/><text x="400" y="311" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="#f472b6">1798 - 1832</text><rect x="258" y="328" rx="4" ry="4" width="284" height="114" fill="url(#cardGradient2_id_8251178e6ba44bf1bec008d003fbe490)" stroke="#f472b6" stroke-width="1" filter="url(#cardShadow_id_8251178e6ba44bf1bec008d003fbe490)"/><text x="270" y="348" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Romanticism Emphasized emotion,</tspan></text><text x="270" y="366" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>individualism, and the</tspan></text><text x="270" y="384" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>glorification of nature. Key</tspan></text><text x="270" y="402" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>figures include </tspan><tspan fill="#f472b6" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/William_Wordsworth" target="_blank">William Wordsworth</a></tspan><tspan> and</tspan></text><text x="270" y="420" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan fill="#f472b6" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Lord_Byron" target="_blank">Lord Byron</a></tspan><tspan>.</tspan></text><line x1="620" y1="280" x2="620" y2="268" stroke="#fbbf24" stroke-width="2" opacity="0.8"/><circle cx="620" cy="280" r="6" fill="#fbbf24"/><circle cx="620" cy="280" r="6" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.6"><animate attributeName="r" from="6" to="20" dur="2s" begin="0.6s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="0.6s" repeatCount="indefinite"/></circle><rect x="568" y="242" rx="4" ry="4" width="105" height="24" fill="#0f172a" opacity="0.9" stroke="#fbbf24" stroke-width="1.5"/><text x="620" y="259" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="#fbbf24">1837 - 1901</text><rect x="478" y="100" rx="4" ry="4" width="284" height="132" fill="url(#cardGradient1_id_8251178e6ba44bf1bec008d003fbe490)" stroke="#fbbf24" stroke-width="1" filter="url(#cardShadow_id_8251178e6ba44bf1bec008d003fbe490)"/><text x="490" y="120" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Victorian Era Literature</tspan></text><text x="490" y="138" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>reflected the social, economic,</tspan></text><text x="490" y="156" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>and cultural changes of the</tspan></text><text x="490" y="174" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Industrial Revolution. Notable</tspan></text><text x="490" y="192" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>authors include </tspan><tspan fill="#fbbf24" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Charles_Dickens" target="_blank">Charles Dickens</a></tspan><tspan> and</tspan></text><text x="490" y="210" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan fill="#fbbf24" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/George_Eliot" target="_blank">George Eliot</a></tspan><tspan>.</tspan></text><line x1="840" y1="280" x2="840" y2="292" stroke="#818cf8" stroke-width="2" opacity="0.8"/><circle cx="840" cy="280" r="6" fill="#818cf8"/><circle cx="840" cy="280" r="6" fill="none" stroke="#818cf8" stroke-width="2" opacity="0.6"><animate attributeName="r" from="6" to="20" dur="2s" begin="0.8999999999999999s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="0.8999999999999999s" repeatCount="indefinite"/></circle><rect x="788" y="294" rx="4" ry="4" width="105" height="24" fill="#0f172a" opacity="0.9" stroke="#818cf8" stroke-width="1.5"/><text x="840" y="311" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="#818cf8">1914 - 1945</text><rect x="698" y="328" rx="4" ry="4" width="284" height="114" fill="url(#cardGradient2_id_8251178e6ba44bf1bec008d003fbe490)" stroke="#818cf8" stroke-width="1" filter="url(#cardShadow_id_8251178e6ba44bf1bec008d003fbe490)"/><text x="710" y="348" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Modernism Characterized by a</tspan></text><text x="710" y="366" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>break with traditional forms and</tspan></text><text x="710" y="384" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>a focus on experimentation.</tspan></text><text x="710" y="402" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Important writers include</tspan></text><text x="710" y="420" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan fill="#818cf8" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/James_Joyce" target="_blank">James Joyce</a></tspan><tspan> and </tspan><tspan fill="#818cf8" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Virginia_Woolf" target="_blank">Virginia Woolf</a></tspan><tspan>.</tspan></text><line x1="1060" y1="280" x2="1060" y2="268" stroke="#34d399" stroke-width="2" opacity="0.8"/><circle cx="1060" cy="280" r="6" fill="#34d399"/><circle cx="1060" cy="280" r="6" fill="none" stroke="#34d399" stroke-width="2" opacity="0.6"><animate attributeName="r" from="6" to="20" dur="2s" begin="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="1.2s" repeatCount="indefinite"/></circle><rect x="996" y="242" rx="4" ry="4" width="129" height="24" fill="#0f172a" opacity="0.9" stroke="#34d399" stroke-width="1.5"/><text x="1060" y="259" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800" fill="#34d399">1945 - present</text><rect x="918" y="100" rx="4" ry="4" width="284" height="132" fill="url(#cardGradient1_id_8251178e6ba44bf1bec008d003fbe490)" stroke="#34d399" stroke-width="1" filter="url(#cardShadow_id_8251178e6ba44bf1bec008d003fbe490)"/><text x="930" y="120" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>Postmodernism Challenges the</tspan></text><text x="930" y="138" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>distinction between high and low</tspan></text><text x="930" y="156" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>culture and emphasizes</tspan></text><text x="930" y="174" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>fragmentation and skepticism. Key</tspan></text><text x="930" y="192" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan>authors include </tspan><tspan fill="#34d399" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Thomas_Pynchon" target="_blank">Thomas Pynchon</a></tspan><tspan> and</tspan></text><text x="930" y="210" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="#e2e8f0"><tspan fill="#34d399" text-decoration="underline"><a href="https://en.wikipedia.org/wiki/Toni_Morrison" target="_blank">Toni Morrison</a></tspan><tspan>.</tspan></text></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+
+                </article>
+                <!-- Modal Overlay -->
+                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+                    <div class="modal-content" id="modalContent">
+                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+                        <div id="modalSvgContainer"></div>
+                        <div class="modal-zoom-controls">
+                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    const modalSvgContainer = document.getElementById('modalSvgContainer');
+                    
+                    // Zoom state
+                    let modalZoomLevel = 1;
+                    const MODAL_ZOOM_MIN = 0.25;
+                    const MODAL_ZOOM_MAX = 4;
+                    const MODAL_ZOOM_STEP = 0.25;
+
+                    function openModal(container) {
+                        // Reset zoom level
+                        modalZoomLevel = 1;
+                        updateZoomDisplay();
+                        
+                        // Clone the SVG from the clicked container
+                        const svg = container.querySelector('svg');
+                        const svgClone = svg.cloneNode(true);
+                        svgClone.style.transform = 'scale(1)';
+                        svgClone.style.transition = 'transform 0.2s ease';
+
+                        // Clear previous content and add new SVG
+                        modalSvgContainer.innerHTML = '';
+                        modalSvgContainer.appendChild(svgClone);
+
+                        // Show modal with animation
+                        modalOverlay.classList.add('active');
+
+                        // Prevent body scroll when modal is open
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeModal() {
+                        modalOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                        modalZoomLevel = 1;
+                    }
+
+                    function closeModalOnBackdrop(event) {
+                        // Only close if clicking the overlay itself, not the content
+                        if (event.target === modalOverlay) {
+                            closeModal();
+                        }
+                    }
+                    
+                    function modalZoomIn() {
+                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomOut() {
+                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomReset() {
+                        modalZoomLevel = 1;
+                        applyModalZoom();
+                    }
+                    
+                    function applyModalZoom() {
+                        const svg = modalSvgContainer.querySelector('svg');
+                        if (svg) {
+                            svg.style.transform = `scale(${modalZoomLevel})`;
+                        }
+                        updateZoomDisplay();
+                    }
+                    
+                    function updateZoomDisplay() {
+                        const display = document.getElementById('modalZoomLevel');
+                        if (display) {
+                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
+                        }
+                    }
+
+                    // Close modal with Escape key
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                            closeModal();
+                        }
+                    });
+                    const docopsCopy = {
+                        url: (btn) => {
+                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                navigator.clipboard.writeText(url).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                        svg: (btn) => {
+                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                            navigator.clipboard.writeText(svg).then(() => {
+                                const originalText = btn.innerText;
+                                btn.innerText = 'COPIED!';
+                                setTimeout(() => btn.innerText = originalText, 2000);
+                            });
+                        },
+                        png: (btn) => {
+                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                            const svgData = new XMLSerializer().serializeToString(svgElement);
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const img = new Image();
+                            
+                            img.onload = () => {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                                canvas.toBlob(blob => {
+                                    const item = new ClipboardItem({ "image/png": blob });
+                                    navigator.clipboard.write([item]);
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            };
+                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                        }
+                    };
+                    
+                </script>
+                <script>
+                    mermaid.initialize({ startOnLoad: true });
+                </script>
+                <script>
+                (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                const docopsData = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+                </script>
+                
+            </body>
+            </html>
