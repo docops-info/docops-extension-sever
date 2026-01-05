@@ -181,3 +181,24 @@ Home Decoration | 15
 Electronics | 28
 
 [/docops]
+
+## Magic Quadrant Chart
+
+[docops:quadrant]
+#title: Project Risk Assessment
+
+#xAxis: PROBABILITY
+#yAxis: IMPACT
+#leaders: HIGH PRIORITY
+#challengers: CRITICAL
+#visionaries: LOW PRIORITY
+#niche: MEDIUM PRIORITY
+
+---
+Security Breach | 30 | 95 | Security
+Budget Overrun | 70 | 75 | Financial
+Schedule Delay | 80 | 60 | Timeline
+Scope Creep | 85 | 50 | Management
+Resource Shortage | 60 | 70 | Staffing
+Technical Failure | 40 | 85 | Technical
+[/docops]

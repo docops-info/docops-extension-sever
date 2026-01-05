@@ -62,6 +62,21 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
         "link": "scorecard",
         "description": "Scorecards",
         "type": "scorecard"
+    },{
+        "label": "Badges And Shield",
+        "link": "badge",
+        "description": "Badges and Shield",
+        "type": "badge"
+    },{
+        "label": "Timeline",
+        "link": "timeline",
+        "description": "Timeline Visual",
+        "type": "timeline"
+    },{
+        "label": "Wordcloud",
+        "link": "wordcloud",
+        "description": "Wordclouds",
+        "type": "wordcloud"
     }
   ],
   "buttonType": "LARGE",
