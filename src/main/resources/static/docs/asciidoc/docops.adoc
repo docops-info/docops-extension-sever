@@ -1,0 +1,439 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Connectors
+:prev-page-url: connectors.html
+:next-page-title: Domain Visualizer
+:next-page-url: domain.html
+= DocOps Block Processor Documentation
+
+reactions::[role=right]
+
+[[top]]
+include::shared/buttons.adoc[]
+
+== Overview
+
+The DocOpsBlockProcessor is a powerful AsciidoctorJ extension that enables dynamic content generation through server-side processing. It creates interactive SVG visualizations and panels in AsciiDoc documents by connecting to a DocOps server.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Core Capabilities
+
+=== Dynamic Content Generation
+- **Server Integration**: Connects to DocOps server (default: `http://localhost:8010/extension`)
+- **Content Processing**: Processes block content through external services
+- **Multiple Output Formats**: Supports SVG and PDF generation
+- **Compression**: Automatically compresses payload data using GZIP
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Interactive Features
+- **Zoom Controls**: In/out zoom with reset functionality
+- **Copy Functionality**: Copy as SVG text or convert to PNG
+- **Fullscreen Mode**: Expand visualizations to full viewport
+- **Theme Support**: Light and dark theme compatibility
+
+== Basic Usage
+
+The processor uses the `docops` block name with a required `kind` parameter:
+
+[source,asciidoc]
+----
+[docops,kind="buttons"]
+----
+Your content here
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Configuration Parameters
+
+=== Required Parameters
+
+[cols="1,3"]
+|===
+|Parameter |Description
+
+|`kind`
+|Type of visualization to generate (e.g., "buttons", "flowchart", "dashboard")
+|===
+
+=== Optional Parameters
+
+[cols="1,1,1,3"]
+|===
+|Parameter |Type |Default |Description
+
+|`title`
+|String
+|"SVG Viewer"
+|Title for the generated content
+
+
+|`controls`
+|Boolean
+|false
+|Show interactive controls overlay
+
+|`copy`
+|Boolean
+|true
+|Allow copying functionality
+
+|`zoom`
+|Boolean
+|true
+|Enable zoom controls
+
+|`expand`
+|Boolean
+|true
+|Enable fullscreen mode
+
+|`theme`
+|String
+|"light"
+|Theme for controls (light/dark)
+
+|`role`
+|String
+|"center"
+|Alignment (left/center/right)
+
+|`useDark`
+|Boolean
+|false
+|Use dark theme for content
+
+|`scale`
+|String
+|"1.0"
+|Scaling factor for output
+
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Interactive Controls
+
+When `controls=true` is enabled, the processor generates an interactive SVG viewer:
+
+=== Zoom Controls
+- **Zoom In** (🔍+): Magnify content up to 5x
+- **Zoom Out** (🔍-): Reduce content down to 0.2x
+- **Reset Zoom** (⚪): Return to original size
+
+=== Copy Options
+- **Copy as SVG** (📋 SVG): Copy SVG markup to clipboard
+- **Copy as PNG** (📋 PNG): Convert SVG to PNG and copy as image
+
+=== Display Controls
+- **Toggle Fullscreen** (⛶): Expand to full viewport
+- **Floating Controls**: Minimalist gear icon (⚙️) overlay
+
+== Text Substitution
+
+The processor supports dynamic text replacement using the pattern `#[variable]`:
+
+[source,asciidoc]
+----
+:company-name: ACME Corp
+
+[docops,kind="buttons"]
+----
+Welcome to #[company-name]
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Environment Detection
+
+=== IntelliJ IDEA Integration
+When running in IntelliJ IDEA (`env=idea`):
+- Provides direct image embedding for IDE preview
+- Optimized for development workflow
+- Bypasses web-based rendering
+
+=== PDF Generation
+When `backend=pdf`:
+- Automatically detects PDF output
+- Generates appropriate image links
+- Handles scaling and formatting for print
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Server Configuration
+
+=== Document Attributes
+
+[cols="1,3"]
+|===
+|Attribute |Description
+
+|`panel-server`
+|Override default server URL for API calls
+
+|`panel-webserver`
+|Override web server URL for image generation
+
+|`local-debug`
+|Enable debug logging (true/false)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Server Health Checking
+- Automatic server availability verification via `/api/ping`
+- Graceful degradation when server unavailable
+- Configurable timeouts (20s connection, 1min request)
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Alignment and Styling
+
+=== Role-based Alignment
+
+[source,asciidoc]
+----
+[docops,kind="buttons",role="left"]
+----
+Left-aligned content
+----
+
+[docops,kind="buttons",role="center"]
+----
+Centered content
+----
+
+[docops,kind="buttons",role="right"]
+----
+Right-aligned content
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Responsive Design
+- Automatic width adjustment
+- Mobile-friendly controls
+- Scalable vector graphics
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Error Handling
+
+The processor includes comprehensive error handling:
+
+- **Missing Parameters**: Clear error messages for required parameters
+- **Server Unavailable**: Graceful fallback with user notification ("DocOps Server Unavailable! 😵")
+- **Network Timeouts**: Configurable timeout handling
+- **Compression Errors**: Safe error recovery with logging
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Performance Features
+
+=== Optimization
+- **Content Compression**: GZIP compression for payload efficiency
+- **HTTP/2 Support**: Modern HTTP client implementation
+- **Server-side Caching**: Caching through URL parameters
+- **Lazy Loading**: On-demand content generation
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Resource Management
+- Connection pooling for HTTP requests
+- Automatic resource cleanup
+- Memory-efficient processing
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Example Usage Scenarios
+
+=== Basic Visualization
+[source,asciidoc]
+----
+[docops,kind="flowchart"]
+----
+Start -> Process -> End
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Interactive Dashboard
+[source,asciidoc]
+----
+[docops,kind="dashboard",controls=true,theme="dark"]
+----
+metric1: 95%
+metric2: 87%
+metric3: 92%
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== PDF-Optimized Content
+[source,asciidoc]
+----
+[docops,kind="diagram",scale="1.5"]
+----
+Component A --> Component B
+Component B --> Component C
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Advanced Configuration
+[source,asciidoc]
+----
+[docops,kind="buttons",controls=true,copy=true,zoom=true,expand=true,theme="dark",role="center",title="My Dashboard"]
+----
+{
+"buttons": [
+{
+"label": "Dashboard",
+"link": "/dashboard",
+"description": "Main dashboard view"
+}
+]
+}
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Integration Requirements
+
+=== Prerequisites
+1. **DocOps Server**: Running DocOps server instance
+2. **Network Access**: Server accessible from AsciiDoc processing environment
+3. **AsciidoctorJ**: Compatible with AsciidoctorJ extension framework
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Installation
+The processor is automatically registered through the `PanelsRegistry` extension:
+
+[source,kotlin]
+----
+registry.block(DocOpsBlockProcessor::class.java)
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== API Integration
+
+=== Server Endpoints
+- `GET /api/ping`: Health check endpoint
+- `GET /api/docops/svg`: SVG generation endpoint with parameters:
+- `kind`: Visualization type
+- `payload`: Compressed content
+- `type`: Output format (SVG/PDF)
+- `useDark`: Dark theme flag
+- `title`: Content title
+- `backend`: Document backend
+- `filename`: Output filename
+- `scale`: Scaling factor (for PDF output)
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== URL Parameters
+The processor constructs URLs with compressed payloads and configuration parameters, enabling server-side processing and caching.
+
+== Troubleshooting
+
+=== Common Issues
+
+[cols="1,2,2"]
+|===
+|Issue |Cause |Solution
+
+|"Parameter Error: Missing 'kind'"
+|Required `kind` parameter not provided
+|Add `kind` parameter: `[docops,kind="buttons"]`
+
+|"DocOps Server Unavailable! 😵"
+|Server not running or unreachable
+|Start DocOps server and verify network connectivity
+
+|Empty output
+|Invalid content or server error
+|Check server logs and enable `local-debug=true`
+
+|Controls not showing
+|`controls=false` or JavaScript disabled
+|Set `controls=true` and ensure JavaScript is enabled
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Debug Mode
+Enable debug logging by setting the document attribute:
+
+[source,asciidoc]
+----
+:local-debug: true
+----
+
+This enables detailed logging of:
+- Server connectivity checks
+- URL construction
+- Content processing
+- Error details
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+=== Performance
+
+- Use appropriate `scale` values to balance quality and file size
+- Enable server-side caching for repeated content
+- Consider PDF-specific optimizations for print output
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Accessibility
+- Provide meaningful `title` attributes
+- Use sufficient color contrast in custom themes
+- Ensure keyboard navigation works with interactive controls
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Security
+- Validate server URLs in production environments
+- Use HTTPS for server communication when possible
+- Sanitize user input in content blocks
+
+This comprehensive documentation covers all aspects of the DocOpsBlockProcessor capabilities, from basic usage to advanced configuration and troubleshooting.
+

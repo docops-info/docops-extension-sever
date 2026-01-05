@@ -1,0 +1,188 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Planner
+:prev-page-url: planner.html
+:next-page-title: Release Strategy
+:next-page-url: releasestrategy.html
+= DocOps Quadrant Charts
+:imagesdir: images
+
+reactions::[role=right]
+
+[[top]]
+include::shared/buttons.adoc[]
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Introduction
+
+The DocOps Quadrant Chart Extension allows you to create visually appealing quadrant charts in your AsciiDoctor documents. Quadrant charts are powerful visualization tools for creating strategic priority matrices and impact vs. effort analysis charts. They help teams prioritize work by plotting items on a two-dimensional grid based on their relative importance.
+
+This guide will help you understand the basic concepts of quadrant charts, how to include them in your AsciiDoctor documents, and provide examples of different configurations.
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+== Basic Concepts
+
+=== What are Quadrant Charts?
+
+Quadrant charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each quadrant chart has:
+
+* A title (the main heading of the chart)
+* A subtitle (optional)
+* X and Y axis labels (typically "Effort" and "Impact")
+* Four quadrants, each with its own label and description
+* A series of data points plotted on the grid
+
+Quadrant charts are particularly useful for:
+
+* Strategic priority matrices
+* Impact vs. effort analysis
+* Risk assessment
+* Opportunity evaluation
+* Feature prioritization
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Quadrant Chart Components
+
+A quadrant chart includes:
+
+* A title and optional subtitle
+* X and Y axis labels
+* Four quadrants with labels and descriptions
+* Data points, each with a label, x-coordinate, y-coordinate, and optional category
+
+== AsciiDoctor Syntax for Quadrant Charts
+
+To include quadrant charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+
+[source,asciidoc]
+....
+[docops,quadrant,controls=true]
+----
+#title: Technology Magic Quadrant 2024
+#xAxis: Ability to Execute
+#yAxis: Completeness of Vision
+xAxisLabel: EFFORT REQUIRED
+yAxisLabel: IMPACT LEVEL
+#leaders: HIGH IMPACT
+#challengers: STRATEGIC
+#visionaries: FILL-INS
+#niche: THANKLESS
+
+---
+Feature A | 75 | 85 | Core
+Feature B | 30 | 70 | Enhancement
+Feature C | 60 | 40 | Nice-to-have
+Feature D | 20 | 30 | Optional
+----
+....
+
+The macro processes the configuration and data and generates an SVG representation of the quadrant chart that is embedded in your document.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Configuration Parameters
+
+The following configuration parameters are available:
+
+* `title` (optional): The main heading of the chart (default: "Strategic Priority Matrix")
+* `subtitle` (optional): The subtitle of the chart (default: "Impact vs. Effort Analysis")
+* `xAxisLabel` (optional): The label for the X-axis (default: "EFFORT REQUIRED")
+* `yAxisLabel` (optional): The label for the Y-axis (default: "IMPACT LEVEL")
+* `leaders` (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")
+* `challengers` (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")
+* `visionaries` (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")
+* `niche` (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")
+
+=== Data Format
+
+After the configuration section and the separator line (`---`), each line represents a data point with the following format:
+
+[source]
+----
+Label | X | Y [| Category]
+----
+
+* `Label` (required): The name or description of the data point
+* `X` (required): The X-coordinate (effort) value from 0 to 100
+* `Y` (required): The Y-coordinate (impact) value from 0 to 100
+* `Category` (optional): A category for the data point, which can be used for grouping or coloring
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Examples
+
+=== Basic Quadrant Chart Example
+
+Here's a simple example of a quadrant chart:
+
+[source,asciidoc]
+....
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad1.txt[]
+----
+....
+
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Customized Quadrant Labels Example
+
+You can customize the labels for each quadrant:
+
+[source,asciidoc]
+....
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad2.txt[]
+----
+....
+
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Project Risk Assessment Example
+
+Quadrant charts can also be used for risk assessment:
+
+[source,asciidoc]
+....
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad3.txt[]
+----
+....
+
+[docops,quadrant,controls=true,useDark=true]
+----
+include::data/quadrant/quad3.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Conclusion
+
+The DocOps Quadrant Chart Extension provides a powerful way to enhance AsciiDoctor documents with visually appealing quadrant charts. By using the simple key-value configuration format and pipe-separated data, one can create customized charts that match the document's style and purpose.
+
+Quadrant charts are versatile tools that can be used for various purposes, including strategic planning, feature prioritization, risk assessment, and more. The extension makes it easy to create these charts without requiring any external tools or complex setup.

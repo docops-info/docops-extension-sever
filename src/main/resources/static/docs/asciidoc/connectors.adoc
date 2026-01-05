@@ -1,0 +1,324 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Charts
+:prev-page-url: charts.html
+:next-page-title: DocOps Core
+:next-page-url: docops.html
+= DocOps Connectors
+:imagesdir: images
+
+reactions::[role=right]
+include::shared/buttons.adoc[]
+
+== Introduction
+
+The DocOps Connector Extension allows you to create visually appealing flow connectors in your AsciiDoctor documents. Connectors are useful for illustrating workflows, processes, and relationships between components.
+
+This guide will help users understand the basic concepts of connectors, how to include them in your AsciiDoctor documents, and provide examples of different types of connectors.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Basic Concepts
+
+=== What are Connectors?
+
+Connectors in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each connector has:
+
+* Text (displayed inside the connector box)
+* A description (providing additional context)
+* A base color (for visual customization)
+* An automatic letter identifier (A, B, C, etc.)
+
+The extension supports different display options, including:
+
+* Regular mode (light background)
+* Dark mode (dark background)
+* Different output types (SVG, PDF)
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Connector Components
+
+A connector diagram includes:
+
+* A series of connected boxes, each containing text
+* Arrows connecting the boxes in sequence
+* Letter identifiers for each box
+* A legend with descriptions for each connector
+
+[.back-to-top]
+<<top, 🔝>>
+
+== AsciiDoctor Syntax for Connectors
+
+To include connectors in your AsciiDoctor document, you use a special macro syntax. The DocOps Connector Extension supports two formats for defining connectors: JSON format and Table format.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== JSON Format
+
+Here's the basic format using JSON:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+{
+  "connectors": [
+    {
+      "text": "First Step",
+      "baseColor": "#E14D2A",
+      "description": "Description of the first step"
+    },
+    {
+      "text": "Second Step",
+      "baseColor": "#82CD47",
+      "description": "Description of the second step"
+    },
+    {
+      "text": "Third Step",
+      "baseColor": "#687EFF",
+      "description": "Description of the third step"
+    }
+  ]
+}
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Table Format
+
+Alternatively, you can use a more concise table format to define your connectors:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+---
+Text | Description | Color
+First Step | Description of the first step | #E14D2A
+Second Step | Description of the second step | #82CD47
+Third Step | Description of the third step | #687EFF
+----
+....
+
+The table format has the following structure:
+
+* It starts with `---` to indicate the beginning of the table
+* The first row is a header row with column names: `Text`, `Description`, and `Color`
+* Each subsequent row represents a connector with its text, description, and color (all separated by `|` characters)
+* The `Color` column is optional and defaults to `#E14D2A` if not provided
+* The `Description` column is also optional and defaults to an empty string if not provided
+
+The macro processes either the JSON configuration or the table format and generates an SVG representation of the connectors that is embedded in your document.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Connector Properties
+
+==== Main Properties
+
+* `connectors` (required): An array of connector objects
+
+==== Connector Object Properties
+
+Each connector in the `connectors` array has the following properties:
+
+* `text` (required): The text displayed inside the connector box
+* `baseColor` (optional): The color of the connector (default: "#E14D2A")
+* `description` (optional): Additional text describing the connector (default: "")
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Display Options
+
+When using the connector macro, you can specify additional parameters:
+
+* `useDark`: Set to `true` to use dark mode (default: `false`)
+* `type`: The output type, either "SVG" or "PDF" (default: "SVG")
+* `scale`: A scaling factor for the diagram (default: 1.0)
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Examples
+
+=== Basic Connector Example (JSON Format)
+
+Here's a simple example of a connector diagram using JSON format:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+include::data/connectors/connector1.json[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector1.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Basic Connector Example (Table Format)
+
+Here's the same connector diagram using the table format:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+include::data/connectors/connector2.txt[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+
+=== Software Development Lifecycle Example
+
+This example illustrates a software development lifecycle:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true,css=true]
+----
+include::data/connectors/connector3.json[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector3.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Dark Mode Connector Example
+
+You can create dark mode connectors by setting the `useDark` parameter to `true`:
+
+[source,asciidoc]
+....
+[docops,connector,useDark=true,controls=true]
+----
+include::data/connectors/connector4.json[]
+----
+....
+
+[docops,connector,useDark=true,controls=true]
+----
+include::data/connectors/connector4.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Multi-word Connector Example
+
+Connectors automatically handle multi-word text by displaying each word on a new line:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+include::data/connectors/connector5.json[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector5.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Cloud Architecture Example
+
+This example illustrates a cloud-based architecture:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+include::data/connectors/connector6.json[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector6.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== CI/CD Pipeline Example
+
+This example illustrates a continuous integration and deployment pipeline:
+
+[source,asciidoc]
+....
+[docops,connector,controls=true]
+----
+include::data/connectors/connector7.json[]
+----
+....
+
+[docops,connector,controls=true]
+----
+include::data/connectors/connector7.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== PDF Output Type Example
+
+This example demonstrates using the PDF output type, which changes the rendering style:
+
+[source,asciidoc]
+....
+[docops,connector,type=PDF,controls=true]
+----
+include::data/connectors/connector8.json[]
+----
+....
+
+[docops,connector,type=PDF,controls=true]
+----
+include::data/connectors/connector8.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Conclusion
+
+The DocOps Connector Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing flow diagrams. You can create customized connector diagrams that illustrate processes, workflows, and relationships between components using either:
+
+* JSON configuration format - offering full control over all connector properties
+* Table format - providing a more concise and readable syntax for simpler diagrams
+
+The extension supports both regular and dark mode displays, with various customization options for colors and descriptions, regardless of which format you choose to use.
+

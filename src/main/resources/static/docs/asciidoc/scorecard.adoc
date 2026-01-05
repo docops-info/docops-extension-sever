@@ -1,0 +1,156 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Roadmap
+:prev-page-url: roadmap.html
+:next-page-title: Badges & Shields
+:next-page-url: shield.html
+= ScoreCard Maker
+
+reactions::[role=right]
+
+include::shared/buttons.adoc[]
+
+[[top]]
+== Introduction
+The Migration ScoreCard Maker renders a two-column before/after scorecard as an SVG based on a simple table-like dTE format.
+It uses:
+- A title (supports optional subtitle appended as: Title — Subtitle)
+- Before and After columns with section headings
+- Items within each section (red bullets for Before; green checkmarks for After)
+
+
+[.back-to-top]
+<<top, 🔝>> 
+
+== Usage
+
+Insert a block using the docops extension and the scorecard type:
+
+[docops,scorecard]
+----
+include::data/scorecard/scorecard1.txt[]
+----
+
+
+[.back-to-top]
+<<top, 🔝>>
+
+NOTE: Within [before.items] and [after.items], use === to create section sub-headers. Items are entered as "Title | Description".
+
+=== Dark Mode
+
+[docops,scorecard, useDark=true, scale=0.75]
+----
+include::data/scorecard/scorecard2.txt[]
+----
+
+
+
+
+
+
+== Examples
+
+=== Security Hardening Release
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+include::data/scorecard/scorecard3.txt[]
+----
+....
+
+
+[docops,scorecard,controls=true]
+----
+include::data/scorecard/scorecard3.txt[]
+----
+
+
+
+[.back-to-top]
+<<top, 🔝>> 
+
+
+=== Cloud Cost Optimization
+
+[source,asciidoc]
+....
+[docops,scorecard]
+----
+include::data/scorecard/scorecard4.txt[]
+----
+....
+
+[docops,scorecard,controls=true]
+----
+include::data/scorecard/scorecard4.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>> 
+
+== Live Preview
+
+- Quick preview endpoint (static design): GET /api/scorecard/view-mode
+- Interactive editor: GET /api/scorecard/edit-mode
+  - Toggle Dark Mode in the editor; the UI will update the content and re-render.
+
+[.back-to-top]
+<<top, 🔝>> 
+
+== Attributes and Sections
+- title: Main title. If subtitle is present, output becomes "title — subtitle".
+- subtitle: Optional; appended to the title for display.
+- useDark: Optional; boolean flag to enable dark mode. Example: useDark=true. Defaults to false.
+- scale: Optional; numeric scale for the rendered SVG. Example: scale=1.5 (150% size). Defaults to 1.0.
+- [before] and [after]: Begin the respective columns. You may set a header title inside with a line like "title=BEFORE vX.Y".
+- [before.items] and [after.items]: Start the items area. Use === Heading to start a subgroup; following lines until next === or --- are items.
+- ---: Delimiter to end a section/group and begin another.
+
+[.back-to-top]
+<<top, 🔝>> 
+
+
+
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Dark Mode and Scaling
+The scorecard now supports dark mode and output scaling through two optional attributes:
+
+- useDark: Set to true to render the dark theme. Defaults to false.
+- scale: Set to a numeric factor to scale the SVG output. Defaults to 1.0.
+
+Example:
+
+[source,asciidoc]
+....
+[docops,scorecard,useDark=true,scale=1.5]
+----
+include::data/scorecard/scorecard5.txt[]
+----
+....
+
+[docops,scorecard,useDark=true,scale=1.0]
+----
+include::data/scorecard/scorecard5.txt[]
+----
+
+
+
+== Notes
+
+[NOTE]
+====
+- The current Maker focuses on the two primary columns and grouped item lists consistent with the reference design.
+- Additional sections like metrics, optimizations, team, etc., shown in some examples, are not yet rendered by this Maker and will be considered in future iterations.
+
+- Scaling is applied to the final SVG width and height while preserving a fixed internal viewBox for crisp rendering at any scale.
+- Dark mode adjusts page background, card panels, strokes, and text colors appropriately while keeping the header gradients and header labels readable.
+- You can also combine useDark with other attributes and content as in the usage examples above.
+====
+

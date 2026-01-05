@@ -1,0 +1,427 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+    /* Theme: Solarized Paper (Light) */
+    --bg-base: #fdf6e3;
+    --bg-surface: #eee8d5;
+    --bg-code: #fdf6e3;
+    --text-main: #073642;
+    --text-muted: #586e75;
+    --brand-main: #268bd2;
+    --brand-accent: #d33682;
+    --brand-deep: #00212b;
+    --border-sharp: #93a1a1;
+    --toc-bg: rgba(253, 246, 227, 0.95);
+
+    --body-font: 'Lexend', sans-serif;
+    --mono-font: 'JetBrains Mono', monospace;
+
+    --radius-none: 0px;
+    --radius-sharp: 4px;
+    --shadow-brutal: 8px 8px 0px;
+}
+
+:root.dark-mode {
+    /* Theme: Cyberpunk Forest (Dark) */
+    --bg-base: #022c22;
+    --bg-surface: #064e3b;
+    --bg-code: #011a14;
+    --text-main: #ecfdf5;
+    --text-muted: #6ee7b7;
+    --brand-main: #10b981;
+    --brand-accent: #fb7185;
+    --brand-deep: #042f2e;
+    --border-sharp: #065f46;
+    --toc-bg: rgba(2, 44, 34, 0.95);
+}
+
+/* Base Layout */
+body {
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: var(--body-font);
+    line-height: 1.6;
+    max-width: 55rem;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    background-image: radial-gradient(var(--border-sharp) 1px, transparent 0);
+    background-size: 40px 40px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.toc2 {
+    padding-left: 2rem; /* Keep content centered despite TOC */
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-top: 3rem;
+    color: var(--text-main);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    line-height: 0.9;
+    color: var(--brand-main);
+    border-left: 12px solid var(--brand-accent);
+    padding-left: 1.5rem;
+    margin-bottom: 4rem;
+    animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+h2 {
+    font-size: 1.8rem;
+    border-bottom: 4px solid var(--brand-main);
+    display: inline-block;
+    padding-bottom: 4px;
+    margin-bottom: 1.5rem;
+}
+
+/* Links */
+a {
+    color: var(--brand-main);
+    text-decoration: none;
+    box-shadow: 0 2px 0 0 var(--brand-main);
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    background: var(--brand-main);
+    color: var(--bg-base);
+}
+
+/* Code Blocks */
+pre {
+    background-color: var(--bg-code);
+    border: 2px solid var(--border-sharp);
+    border-radius: var(--radius-none);
+    padding: 1.5rem;
+    overflow-x: auto;
+    box-shadow: var(--shadow-brutal) var(--bg-surface);
+    margin: 2rem 0;
+}
+
+code {
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+    background: var(--bg-surface);
+    padding: 0.2rem 0.4rem;
+    color: var(--brand-accent);
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    color: var(--text-main);
+}
+
+/* Floating Instrument Panel TOC */
+#toc.toc2 {
+    position: fixed;
+    left: auto;
+    right: 2rem;
+    top: 2rem;
+    width: 280px;
+    height: auto;
+    max-height: 85vh;
+    border: 3px solid var(--brand-main);
+    background: var(--toc-bg);
+    backdrop-filter: blur(12px);
+    box-shadow: 12px 12px 0px var(--brand-accent);
+    transform: translateX(calc(100% + 3rem));
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1000;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+#toc.toc2:hover, #toc.toc2.active {
+    transform: translateX(0);
+}
+
+#toc #toctitle {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--brand-main);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-sharp);
+    padding-bottom: 0.5rem;
+}
+
+/* Staggered Reveal Logic */
+#toc li {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    list-style: none;
+    margin-bottom: 0.5rem;
+}
+
+#toc.toc2:hover li, #toc.toc2.active li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#toc li:nth-child(1) { transition-delay: 0.05s; }
+#toc li:nth-child(2) { transition-delay: 0.10s; }
+#toc li:nth-child(3) { transition-delay: 0.15s; }
+#toc li:nth-child(4) { transition-delay: 0.20s; }
+#toc li:nth-child(5) { transition-delay: 0.25s; }
+#toc li:nth-child(6) { transition-delay: 0.30s; }
+#toc li:nth-child(7) { transition-delay: 0.35s; }
+#toc li:nth-child(8) { transition-delay: 0.40s; }
+
+#toc a {
+    box-shadow: none;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+#toc a:hover {
+    color: var(--brand-accent);
+    background: transparent;
+}
+
+/* Admonition Blocks - Enhanced with DocOps.io styling */
+.admonitionblock {
+    margin: 3rem 0;
+    border: 3px solid var(--text-main);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-brutal) var(--brand-deep);
+    border-radius: var(--radius-none);
+    transition: transform 0.2s ease;
+}
+
+.admonitionblock:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 10px 10px 0px var(--brand-deep);
+}
+
+
+.admonitionblock > table {
+    border: none;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+    border-collapse: collapse;
+    height: 100%; /* Ensure table stretches */
+}
+
+
+
+.admonitionblock td.icon {
+    width: 80px;
+    min-width: 80px;
+    padding: 0;
+    border-right: 3px solid var(--text-main);
+    vertical-align: middle; /* Classic table centering backup */
+    position: relative;
+}
+
+/* Use a flex container INSIDE the td to ensure perfect centering and full height */
+.admonitionblock td.icon .title {
+    display: none; /* Hide default title if it exists */
+}
+
+.admonitionblock td.icon:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 2.2rem;
+    line-height: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.admonitionblock td.content {
+    padding: 1.5rem 2.5rem; /* Increased left padding for consistent start */
+    color: var(--text-main);
+    font-family: var(--body-font);
+    font-weight: 400;
+    vertical-align: middle;
+    background: var(--bg-surface); /* Solid background for text area */
+}
+
+.admonitionblock td.content .title {
+    font-family: var(--body-font);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    color: var(--brand-accent);
+}
+
+/* Warning Block Correction: Keep the pop of color but fix the gap */
+.admonitionblock.warning td.content {
+    background-color: var(--brand-accent);
+    color: var(--bg-base);
+}
+
+/* Specific Admonition Flavors */
+.admonitionblock.note td.icon { background-color: var(--brand-main); color: var(--bg-base); }
+.admonitionblock.note td.icon::before { content: "\f05a"; }
+
+.admonitionblock.tip td.icon { background-color: var(--brand-accent); color: var(--bg-base); }
+.admonitionblock.tip td.icon::before { content: "\f0eb"; }
+
+.admonitionblock.warning td.icon { background-color: #f59e0b; color: var(--brand-deep); }
+.admonitionblock.warning td.icon::before { content: "\f071"; }
+
+.admonitionblock.caution td.icon { background-color: #ef4444; color: white; }
+.admonitionblock.caution td.icon::before { content: "\f06d"; }
+
+.admonitionblock.important td.icon {
+    background-color: var(--brand-deep);
+    color: var(--brand-main);
+    text-shadow: 0 0 8px var(--brand-main);
+}
+.admonitionblock.important td.icon::before { content: "\f06a"; }
+
+
+
+/* Custom UI Elements */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: var(--brand-accent);
+    border: none;
+    cursor: pointer;
+    width: 60px;
+    height: 40px;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    z-index: 1001;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(-2deg);
+}
+
+.button.gradient {
+    display: inline-block;
+    background: var(--brand-main);
+    color: var(--bg-base);
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border: none;
+    box-shadow: 6px 6px 0px var(--brand-deep);
+    transition: transform 0.1s;
+    cursor: pointer;
+}
+
+.button.gradient:active {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0px var(--brand-deep);
+}
+
+
+
+
+
+
+
+/* Brutalist Table Styling - Refined for Cyberpunk Forest aesthetic */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin: 3rem 0;
+    border: 2px solid var(--brand-main);
+    /* Hard offset shadow creates the 'plate' look from the image */
+    box-shadow: 10px 10px 0px var(--brand-deep);
+    background: var(--bg-surface);
+    border-radius: var(--radius-none); /* Sharp edges for Brutalism */
+    overflow: hidden;
+    animation: tableReveal 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tableReveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+table thead {
+    background: var(--brand-deep); /* Dark background from image */
+    border-bottom: 3px solid var(--brand-main);
+}
+
+table th {
+    font-family: var(--body-font);
+    color: var(--brand-main); /* High contrast highlight color */
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.25em; /* Extreme tracking for Brutalist feel */
+    padding: 1.5rem 1rem;
+    text-align: left;
+    /* Subtle glow to the header text for readability */
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+table td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2); /* Faint brand-main lines */
+    border-right: 1px solid rgba(16, 185, 129, 0.1);
+    color: var(--text-main);
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+    transition: all 0.15s ease;
+}
+
+/* Zebra Striping using high-impact transparency */
+table tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Row Hover - Matches the 'glow' intent of the UI rules */
+table tr:hover td {
+    background: var(--brand-main);
+    color: var(--brand-deep);
+    border-color: var(--brand-deep);
+    cursor: crosshair;
+}
+
+/* Cell Hover - High Impact Moment */
+table td:hover {
+    background: var(--brand-accent) !important;
+    color: var(--bg-base) !important;
+    font-weight: 800;
+    box-shadow: inset 0 0 0 2px var(--brand-deep);
+}
+
+/* Footer/Last row adjustment */
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    #toc.toc2 {
+        width: calc(100% - 4rem);
+        right: 2rem;
+    }
+    h1 { font-size: 2.5rem; }
+}

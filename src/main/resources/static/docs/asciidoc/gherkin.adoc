@@ -1,0 +1,233 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Flow
+:prev-page-url: flow.html
+:next-page-title: Index
+:next-page-url: index.html
+= DocOps Gherkin
+
+reactions::[role=right]
+
+
+[[top]]
+include::shared/buttons.adoc[]
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Overview
+
+The DocOps Gherkin visualization renders readable, attractive diagrams from Gherkin feature definitions.
+It supports both plain-text Gherkin (Feature/Scenario/Steps) and a JSON specification for advanced
+styling, layout, and status control. Use it to communicate behavior-driven specifications directly in your
+AsciiDoc documentation.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Features
+
+* Accepts plain Gherkin text or JSON payloads
+* Visualizes Feature, Scenarios, and Steps with distinct icons and colors
+* Step and Scenario status indicators (PASSING, FAILING, PENDING, SKIPPED)
+* Optional dark mode rendering
+* Theme customization (colors, layout, typography) via JSON
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Quick Start (Plain Gherkin)
+
+[source,asciidoc]
+....
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin1.feature[]
+----
+....
+
+.User Authentication
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin1.feature[]
+----
+
+=== More Plain Gherkin Examples
+
+These richer examples stay within the supported syntax (Feature/Scenario/Steps) but tell more interesting stories.
+
+==== Shopping Cart Discounts
+
+[source,asciidoc]
+....
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin2.feature[]
+----
+....
+
+.Shopping Cart Discounts
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin2.feature[]
+----
+
+==== Service Resilience (Circuit Breaker)
+
+[source,asciidoc]
+....
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin3.feature[]
+----
+....
+
+.Service Resilience
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin3.feature[]
+----
+
+==== Dark Mode Example
+
+Render in dark theme using the useDark attribute.
+
+[source,asciidoc]
+....
+[docops,gherkin,controls=true,useDark=true]
+----
+include::data/gherkin/gherkin4.feature[]
+----
+....
+
+.Search Suggestions – Dark Mode
+[docops,gherkin,controls=true,useDark=true]
+----
+include::data/gherkin/gherkin4.feature[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== JSON Specification (Advanced)
+
+You can fully control colors, layout, typography, and status using a JSON payload. This is useful when you
+need to show step/scenario outcomes or adjust sizes.
+
+[source,asciidoc]
+....
+[docops,gherkin]
+----
+include::data/gherkin/gherkin5.json[]
+----
+....
+
+.Using JSON as input
+[docops,gherkin]
+----
+include::data/gherkin/gherkin5.json[]
+----
+
+=== Additional JSON Example
+
+This example mixes statuses and applies a distinct theme.
+
+[source,asciidoc]
+....
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin6.json[]
+----
+....
+
+[docops,gherkin,controls=true]
+----
+include::data/gherkin/gherkin6.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Supported Fields (JSON)
+
+Main:
+
+- feature: String (required)
+- scenarios: Array<GherkinScenario> (required)
+- theme: GherkinTheme (optional)
+
+GherkinScenario:
+
+- title: String (required)
+- steps: Array<GherkinStep> (required)
+- status: PASSING | FAILING | PENDING | SKIPPED (optional, default PASSING)
+
+GherkinStep:
+
+- type: GIVEN | WHEN | THEN | AND | BUT (required)
+- text: String (required)
+- status: PASSING | FAILING | PENDING | SKIPPED (optional, default PASSING)
+
+Theme:
+
+- colors: Customize feature/scenario/step and status colors
+- layout: width, height, padding, scenarioSpacing, stepSpacing
+- typography: featureSize, scenarioSize, stepSize, descriptionSize, fontFamily
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Block Attributes
+
+The Gherkin block supports the standard DocOps attributes described in xref:docops.adoc[DocOps Block Processor]:
+
+[cols="1,1,1,3"]
+|===
+|Attribute |Type |Default |Description
+
+|controls |Boolean |false |Show the interactive viewer (zoom/copy/fullscreen)
+|title    |String  |SVG Viewer |Viewer title (for controls)
+|useDark  |Boolean |false |Render using the dark theme palette
+|scale    |String  |1.0 |Scale factor sent to the server
+|role     |String  |center |Alignment for the rendered block (left/center/right)
+|===
+
+
+
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Notes
+
+- Plain text parsing supports: Feature:, Scenario:, and step keywords Given/When/Then/And/But
+- Plain text steps default to PASSING status; use JSON to specify statuses and theme overrides
+- The same server endpoint used by other DocOps visuals is called under the hood: kind=gherkin
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Additional Examples for Testing
+
+[docops,gherkin]
+----
+include::data/gherkin/gherkin7.feature[]
+----
+
+[docops,gherkin]
+----
+include::data/gherkin/gherkin8.feature[]
+----
+
+.long text
+[docops,gherkin]
+----
+Feature: Represents a specific functionality or feature of the system. It's a high-level description of what the system should do.
+  Scenario: A specific instance of the feature's behavior. It outlines a particular use case or test case.
+  Given: Describes the initial context or setup before the action. It sets the stage for the scenario.
+  When: Describes the action or event that triggers the behavior. It's the user action or system event.
+  Then: Describes the expected outcome or result after the action. It verifies the behavior.
+  And:Used to add more steps to the Given, When, or Then parts, making the scenario more detailed.
+  But: Similar to "And", but used to add an exception or negative condition.
+----

@@ -1,0 +1,255 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+= VCard Maker
+
+reactions::[role=right]
+include::shared/buttons.adoc[]
+
+[[top]]
+== Introduction
+The VCard Maker renders a clean, scannable contact card (SVG) from standard vCard 3.0 text. It’s great for team directories, speaker bios, internal wikis, and handoff documents. You write a tiny vCard block; DocOps turns it into a polished card with name, role, organization, phones, emails, and a compact QR code linking back to the card data.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Usage
+Insert a block using the docops extension and the vcard type. For reusability, keep your vCard content in data files and include them.
+
+[source,asciidoc]
+....
+[docops,vcard]
+----
+include::data/vcard/vcard1-basic.txt[]
+----
+....
+
+
+=== Default
+
+.Light Mode
+[docops,vcard]
+----
+include::data/vcard/vcard1-basic.txt[]
+----
+
+.Dark Mode
+[docops,vcard]
+----
+theme=dark
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+=== Business Card
+
+[docops,vcard]
+----
+design=business_card_design2
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+=== Tech Pattern
+
+[docops,vcard]
+----
+design=tech_pattern_background
+theme=dark
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+=== Business Card Template
+
+
+[docops,vcard]
+----
+design=business_card_template
+theme=dark
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+== Designs
+The VCard Maker supports multiple design templates and a light/dark theme. Choose a design via a small config header placed before your vCard content, separated by ---.
+
+Supported designs:
+
+- tech_pattern_background — Tech motif background with contrast blocks; pairs well with theme=dark
+- business_card_design — Classic business look (default if not specified)
+- business_card_design2 — Modern variant of the classic business card
+- business_card_template — Minimal template with clear information areas
+- creative_agency_pro_contact_card — Playful, agency-style layout with bold accents
+- modern_card — Contemporary, airy layout with generous spacing
+
+Themes:
+
+- theme=light (default)
+- theme=dark
+
+Example selector usage:
+
+[source,asciidoc]
+....
+[docops,vcard]
+----
+design=tech_pattern_background
+theme=dark
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Examples
+
+=== 1) Product PM (basic)
+[source,asciidoc]
+....
+[docops,vcard]
+----
+include::data/vcard/vcard1-basic.txt[]
+----
+....
+
+[docops,vcard]
+----
+include::data/vcard/vcard1-basic.txt[]
+----
+
+[source,asciidoc]
+....
+[docops,vcard]
+----
+design=creative_agency_pro_contact_card
+include::data/vcard/vcard1-basic.txt[]
+----
+....
+
+.Light theme
+[docops,vcard]
+----
+design=creative_agency_pro_contact_card
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+.Dark theme
+[docops,vcard]
+----
+design=creative_agency_pro_contact_card
+theme=dark
+---
+include::data/vcard/vcard1-basic.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== 2) Research Scientist (multiple channels)
+[source,asciidoc]
+....
+[docops,vcard]
+----
+include::data/vcard/vcard2-social.txt[]
+----
+....
+
+
+[docops,vcard]
+----
+theme=light
+---
+include::data/vcard/vcard2-social.txt[]
+----
+
+==== Modern
+
+[docops,vcard]
+----
+design=modern_card
+theme=light
+---
+include::data/vcard/vcard2-social.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== 3) Minimal contact
+[source,asciidoc]
+....
+[docops,vcard]
+----
+include::data/vcard/vcard3-minimal.txt[]
+----
+....
+
+[docops,vcard]
+----
+include::data/vcard/vcard3-minimal.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== 4) International profile
+[source,asciidoc]
+....
+[docops,vcard]
+----
+include::data/vcard/vcard4-international.txt[]
+----
+....
+
+[docops,vcard]
+----
+include::data/vcard/vcard4-international.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+== Attributes
+
+- design: Optional; selects the visual template. One of:
+* tech_pattern_background,
+* business_card_design,
+* business_card_design2,
+* business_card_template,
+* creative_agency_pro_contact_card,
+* modern_card.
+Defaults to business_card_design when omitted or invalid.
+- theme: Optional; light or dark. Defaults to light.
+- scale: Optional numeric factor to scale the rendered SVG. Defaults to 1.0.
+
+Notes on styling:
+- Colors, typography, and layout follow the chosen design and theme. Designs may emphasize different typography, spacing, or accents, while theme adjusts contrast.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Tips for great cards
+- Prefer FN (Formatted Name) and N (structured name) together so names render crisply and sort correctly.
+- Keep TITLE concise (e.g., Principal Engineer vs Principal Engineer — Platform Reliability) and move details to NOTE.
+- Include at least one EMAIL or TEL; the card will adapt gracefully if one is missing.
+- Use URL to link a profile or docs page; the QR encodes the vCard so mobile users can save the contact quickly.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Notes
+[NOTE]
+====
+- The input format is vCard 3.0 lines inside the block body. The maker supports FN, N, ORG, TITLE, TEL, EMAIL, URL, NOTE and gracefully ignores unknown properties.
+- For maintainability, keep vCard blocks in data files and include them, so the same card can be reused across adoc pages.
+====

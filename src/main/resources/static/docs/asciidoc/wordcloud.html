@@ -1,0 +1,3576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<link rel="icon" type="image/03" href="../images/favicon.svg?v=2025.03">
+<title>DocOps WordCloud Extension</title>
+<style>
+@import url(https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap);@keyframes slideIn{0%{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}@keyframes tableReveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#fdf6e3;--bg-surface:#eee8d5;--bg-code:#fdf6e3;--text-main:#073642;--text-muted:#586e75;--brand-main:#268bd2;--brand-accent:#d33682;--brand-deep:#00212b;--border-sharp:#93a1a1;--toc-bg:rgba(253, 246, 227, 0.95);--body-font:'Lexend', sans-serif;--mono-font:'JetBrains Mono', monospace;--radius-none:0px;--radius-sharp:4px;--shadow-brutal:8px 8px 0px}:root.dark-mode{--bg-base:#022c22;--bg-surface:#064e3b;--bg-code:#011a14;--text-main:#ecfdf5;--text-muted:#6ee7b7;--brand-main:#10b981;--brand-accent:#fb7185;--brand-deep:#042f2e;--border-sharp:#065f46;--toc-bg:rgba(2, 44, 34, 0.95)}body{background-color:var(--bg-base);font-family:var(--body-font);line-height:1.6;max-width:55rem;margin:0 auto;padding:4rem 2rem;background-image:radial-gradient(var(--border-sharp) 1px,transparent 0);background-size:40px 40px;transition:background-color .3s ease,color .3s ease}body.toc2{padding-left:2rem}h1{font-size:clamp(2.5rem,8vw,4rem);line-height:.9;border-left:12px solid var(--brand-accent);padding-left:1.5rem;margin-bottom:4rem;animation:slideIn .8s cubic-bezier(.16,1,.3,1)}body,h2,h3,h4,pre code{color:var(--text-main)}h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;text-transform:uppercase;margin-top:3rem}h2{font-size:1.8rem;border-bottom:4px solid var(--brand-main);display:inline-block;padding-bottom:4px;margin-bottom:1.5rem}#toc #toctitle,a,h1{color:var(--brand-main)}a{text-decoration:none;box-shadow:0 2px 0 0 var(--brand-main);transition:all .2s ease}a:hover{background:var(--brand-main);color:var(--bg-base)}pre{background-color:var(--bg-code);border:2px solid var(--border-sharp);border-radius:var(--radius-none);padding:1.5rem;overflow-x:auto;box-shadow:var(--shadow-brutal) var(--bg-surface);margin:2rem 0}code{font-family:var(--mono-font);font-size:.9rem;background:var(--bg-surface);padding:.2rem .4rem;color:var(--brand-accent)}pre code{background:0 0;padding:0}#toc.toc2{position:fixed;left:auto;right:2rem;top:2rem;width:280px;height:auto;max-height:85vh;border:3px solid var(--brand-main);background:var(--toc-bg);backdrop-filter:blur(12px);box-shadow:12px 12px 0 var(--brand-accent);transform:translateX(calc(100% + 3rem));transition:transform .6s cubic-bezier(.19,1,.22,1);z-index:1000;padding:1.5rem;overflow-y:auto}#toc.toc2.active,#toc.toc2:hover{transform:translateX(0)}#toc #toctitle{font-weight:800;text-transform:uppercase;font-size:.75rem;letter-spacing:.2em;margin-bottom:1rem;border-bottom:1px solid var(--border-sharp);padding-bottom:.5rem}#toc li{opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.16,1,.3,1);list-style:none;margin-bottom:.5rem}#toc.toc2.active li,#toc.toc2:hover li{opacity:1;transform:translateX(0)}#toc li:nth-child(1){transition-delay:.05s}#toc li:nth-child(2){transition-delay:.1s}#toc li:nth-child(3){transition-delay:.15s}#toc li:nth-child(4){transition-delay:.2s}#toc li:nth-child(5){transition-delay:.25s}#toc li:nth-child(6){transition-delay:.3s}#toc li:nth-child(7){transition-delay:.35s}#toc li:nth-child(8){transition-delay:.4s}#toc a,table td{color:var(--text-main);font-size:.9rem}#toc a{box-shadow:none;font-weight:600}#toc a:hover{color:var(--brand-accent);background:0 0}.admonitionblock{margin:3rem 0;border:3px solid var(--text-main);background:var(--bg-surface);box-shadow:var(--shadow-brutal) var(--brand-deep);border-radius:var(--radius-none);transition:transform .2s ease}.admonitionblock:hover,table{box-shadow:10px 10px 0 var(--brand-deep)}.admonitionblock:hover{transform:translate(-2px,-2px)}.admonitionblock>table{border:0;margin:0;box-shadow:none;background:0 0;border-collapse:collapse;height:100%}.admonitionblock td.icon{width:80px;min-width:80px;padding:0;border-right:3px solid var(--text-main);vertical-align:middle;position:relative}.admonitionblock td.icon .title{display:none}.admonitionblock td.icon:before,.theme-toggle{display:flex;align-items:center;justify-content:center}.admonitionblock td.icon:before{font-family:"Font Awesome 5 Free";font-weight:900;font-size:2.2rem;line-height:1;margin:0;position:absolute;top:0;left:0;right:0;bottom:0}.admonitionblock td.content{padding:1.5rem 2.5rem;color:var(--text-main);font-family:var(--body-font);font-weight:400;vertical-align:middle;background:var(--bg-surface)}.admonitionblock td.content .title{font-family:var(--body-font);font-weight:800;text-transform:uppercase;font-size:.8rem;letter-spacing:.1em;margin-bottom:.5rem;color:var(--brand-accent)}.admonitionblock.warning td.content{background-color:var(--brand-accent);color:var(--bg-base)}.admonitionblock.note td.icon{background-color:var(--brand-main);color:var(--bg-base)}.admonitionblock.note td.icon::before{content:""}.admonitionblock.tip td.icon{background-color:var(--brand-accent);color:var(--bg-base)}.admonitionblock.tip td.icon::before{content:""}.admonitionblock.warning td.icon{background-color:#f59e0b;color:var(--brand-deep)}.admonitionblock.warning td.icon::before{content:""}.admonitionblock.caution td.icon{background-color:#ef4444;color:#fff}.admonitionblock.caution td.icon::before{content:""}.admonitionblock.important td.icon{background-color:var(--brand-deep);color:var(--brand-main);text-shadow:0 0 8px var(--brand-main)}.admonitionblock.important td.icon::before{content:""}.theme-toggle{position:fixed;top:1rem;left:1rem;background:var(--brand-accent);border:0;cursor:pointer;width:60px;height:40px;clip-path:polygon(10%0,100%0,90% 100%,0 100%);transition:transform .2s;z-index:1001}.theme-toggle:hover{transform:scale(1.1) rotate(-2deg)}.button.gradient,table th{text-transform:uppercase;font-weight:800}.button.gradient{display:inline-block;background:var(--brand-main);color:var(--bg-base);padding:1rem 2rem;border:0;box-shadow:6px 6px 0 var(--brand-deep);transition:transform .1s;cursor:pointer}.button.gradient:active{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--brand-deep)}table{border-collapse:separate;border-spacing:0;width:100%;margin:3rem 0;border:2px solid var(--brand-main);background:var(--bg-surface);border-radius:var(--radius-none);overflow:hidden;animation:tableReveal 1s cubic-bezier(.16,1,.3,1)}table thead{background:var(--brand-deep);border-bottom:3px solid var(--brand-main)}table th{font-family:var(--body-font);color:var(--brand-main);font-size:.75rem;letter-spacing:.25em;padding:1.5rem 1rem;text-align:left;text-shadow:0 0 10px rgba(16,185,129,.3)}table td{padding:1.2rem 1rem;border-bottom:1px solid rgba(16,185,129,.2);border-right:1px solid rgba(16,185,129,.1);font-family:var(--mono-font);transition:all .15s ease}table tr:nth-child(even){background:rgba(0,0,0,.1)}table tr:hover td{background:var(--brand-main);color:var(--brand-deep);border-color:var(--brand-deep);cursor:crosshair}table td:hover{background:var(--brand-accent)!important;color:var(--bg-base)!important;font-weight:800;box-shadow:inset 0 0 0 2px var(--brand-deep)}table tr:last-child td{border-bottom:none}@media (max-width:768px){#toc.toc2{width:calc(100% - 4rem);right:2rem}h1{font-size:2.5rem}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+        --docops-bg: #0f172a;
+        --docops-card-bg: rgba(30, 41, 59, 0.7);
+        --docops-accent: #38bdf8;
+        --docops-accent-glow: rgba(56, 189, 248, 0.3);
+        --docops-text: #f1f5f9;
+        --docops-text-dim: #94a3b8;
+        --docops-border: rgba(255, 255, 255, 0.1);
+        --docops-glass: blur(12px);
+        --docops-font-main: 'Outfit', system-ui, sans-serif;
+        --docops-font-mono: 'JetBrains Mono', monospace;
+    }
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+<style>
+    /* Atmosphere & Depth */
+    .docops-showcase-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2.5rem;
+        padding: 3rem;
+        background: var(--docops-bg);
+        background-image:
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+        border-radius: 24px;
+        margin: 2rem 0;
+    }
+
+    /* Staggered Reveal Animation */
+    .gallery-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: revealIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        background: var(--docops-card-bg);
+        backdrop-filter: var(--docops-glass);
+        border: 1px solid var(--docops-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.4s ease;
+    }
+
+    /* Generating 10 delays for the staggered effect */
+    .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+    .gallery-item:nth-child(2) { animation-delay: 0.15s; }
+    .gallery-item:nth-child(3) { animation-delay: 0.2s; }
+    .gallery-item:nth-child(4) { animation-delay: 0.25s; }
+    .gallery-item:nth-child(5) { animation-delay: 0.3s; }
+
+
+    @keyframes revealIn {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery-item:hover {
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 30px var(--docops-accent-glow);
+        transform: scale(1.02);
+    }
+
+    .gallery-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--docops-border);
+        padding-bottom: 0.75rem;
+    }
+
+    .gallery-item-title {
+        font-family: var(--docops-font-main);
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: var(--docops-text);
+        letter-spacing: -0.02em;
+    }
+
+    .gallery-item-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .gallery-expand-btn,
+    .gallery-content-btn {
+        background: rgba(139, 92, 246, 0.2);
+        color: #c084fc;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-family: var(--docops-font-mono);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .gallery-content-btn:hover {
+        background: #8b5cf6;
+        color: white;
+    }
+
+    .gallery-content-btn {
+        color: #9b59b6;
+        font-weight: bold;
+    }
+
+    .gallery-expand-btn:hover {
+        color: #2980b9;
+        transform: scale(1.2);
+    }
+
+
+
+    .gallery-item-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .gallery-item-image svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Modal Styles */
+    .showcase-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(2, 6, 23, 0.85);
+        backdrop-filter: none;
+    }
+
+    /* Modal Overhaul */
+    .showcase-modal-content {
+        position: relative;
+        background: #ffffff; /* Keep white for SVG viewing */
+        border-radius: 16px;
+        max-width: 95vw;
+        max-height: 95vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        border: 1px solid var(--docops-border);
+    }
+
+    .showcase-content-code {
+        font-family: var(--docops-font-mono);
+        background: #0f172a !important;
+        color: #e2e8f0;
+    }
+
+    .showcase-content-modal-content {
+        max-width: 90vw;
+        width: 1000px;
+        background: #020617; /* Dark background only for the source viewer */
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--docops-border);
+        background: #f8fafc;
+    }
+
+    .showcase-content-modal-content .showcase-modal-header {
+        background: #1e293b;
+        border-bottom: 1px solid var(--docops-border);
+    }
+
+    .showcase-modal-title {
+        font-family: var(--docops-font-main);
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1e293b;
+    }
+
+    .showcase-content-modal-content .showcase-modal-title {
+        color: var(--docops-text);
+    }
+    .showcase-modal-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+        transition: color 0.2s;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        color: #e74c3c;
+    }
+
+    .showcase-modal-body {
+        padding: 2rem;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffffff; /* Default background for SVG viewing */
+    }
+
+
+    .showcase-content-body {
+        padding: 0;
+        align-items: stretch;
+        justify-content: stretch;
+        background: #0f172a; /* Explicit deep slate background for source code */
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        width: 100%;
+        max-height: calc(95vh - 150px);
+        overflow: auto;
+        background: transparent;
+    }
+
+    .showcase-content-code {
+        display: block;
+        padding: 1.5rem;
+        color: #e2e8f0; /* Light slate text for high contrast */
+        font-family: var(--docops-font-mono);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        white-space: pre;
+        tab-size: 4;
+    }
+
+
+    .showcase-content-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-copy-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s;
+    }
+
+    .showcase-copy-btn:hover {
+        background: #2980b9;
+    }
+
+    .showcase-copy-btn.copied {
+        background: #27ae60;
+    }
+
+    .showcase-modal-body svg {
+        max-width: 100%;
+        max-height: calc(95vh - 100px);
+        width: auto;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        .docops-showcase-gallery {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .showcase-modal-content {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+        }
+
+        .showcase-modal-body {
+            padding: 1rem;
+        }
+
+        .showcase-content-modal-content {
+            width: 100vw;
+        }
+    }
+    /* Slideshow Enhancements */
+    .docops-slideshow {
+        background: #020617;
+        border: 1px solid var(--docops-border);
+        height: 650px;
+    }
+
+    .docops-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    .docops-slide.active {
+        opacity: 1;
+        position: relative;
+    }
+
+    .docops-slide .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-title {
+        font-family: var(--docops-font-main);
+        color: var(--docops-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.9rem;
+    }
+
+    .docops-slide .slide-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #333;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .docops-slide .slide-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .docops-slide .slide-image svg {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* Responsive: Scale down on smaller screens */
+    @media (max-width: 820px) {
+        .docops-slideshow {
+            width: 100%;
+            height: calc(100vw * 0.75); /* Maintain 4:3 aspect ratio */
+            max-height: 600px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .docops-slide .slide-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            // Updated to target the nested <g> tag per ui.md rules
+            const target = container.querySelector('.docops-transform-group') || container.querySelector('svg');
+            if (!target) return;
+
+            let currentZoom = parseFloat(target.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            target.dataset.zoom = currentZoom;
+            target.style.transform = `scale(${currentZoom})`;
+            target.style.transformOrigin = "center center";
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+    },
+
+    closeCsv(id) {
+        const container = document.getElementById(`csv-container-${id}`);
+        container.style.display = 'none';
+    },
+    async loadCsvData(id) {
+        const svgContainer = document.getElementById(id);
+        const svg = svgContainer.querySelector('svg');
+
+        if (!svg) {
+            console.error('No SVG found');
+            return;
+        }
+
+        try {
+            // Method 1: Standard metadata with type
+            let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                return;
+            }
+
+            // Method 2: Custom csv-data element
+            csvMetadata = svg.querySelector('metadata csv-data');
+            if (csvMetadata) {
+                const csvData = JSON.parse(csvMetadata.textContent.trim());
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            // Method 3: Data attribute
+            const csvDataAttr = svg.getAttribute('data-csv');
+            if (csvDataAttr) {
+                const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                return;
+            }
+
+            console.error('No CSV data found in SVG');
+        } catch (error) {
+            console.error('Failed to parse CSV data:', error);
+        }
+    },
+
+    renderCsvTable(container, csvData, tableId) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+            return;
+        }
+
+        // Generate a unique table ID if not provided or make existing ID unique
+        const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        const table = document.createElement('table');
+        table.className = 'csv-table';
+        table.id = uniqueTableId;
+        // Create header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        csvData.headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        // Add button cell to header
+        const buttonTh = document.createElement('th');
+        buttonTh.className = 'csv-header-button-cell';
+
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'csv-copy-button';
+        copyButton.textContent = 'Copy';
+        copyButton.title = 'Copy as Tab-Delimited';
+        copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+        buttonTh.appendChild(copyButton);
+        headerRow.appendChild(buttonTh);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create body
+        const tbody = document.createElement('tbody');
+
+        csvData.rows.forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            // Add empty cell for button column
+            const emptyTd = document.createElement('td');
+            tr.appendChild(emptyTd);
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.innerHTML = '';
+        container.appendChild(table);
+        const tableElement = document.getElementById(uniqueTableId);
+        if (tableElement) {
+            tableElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+
+    },
+
+    copyCsvAsTabDelimited(csvData) {
+        if (!csvData || !csvData.headers || !csvData.rows) {
+            console.error('Invalid CSV data for copying');
+            return;
+        }
+
+        // Create tab-delimited string
+        let tabDelimitedData = '';
+
+        // Add headers
+        tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+        // Add rows
+        csvData.rows.forEach(row => {
+            tabDelimitedData += row.join('\t') + '\n';
+        });
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(tabDelimitedData).then(() => {
+            // Provide visual feedback
+            const buttons = document.querySelectorAll('.csv-copy-button');
+            buttons.forEach(button => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#007acc';
+                }, 2000);
+            });
+        }).catch(err => {
+            console.error('Failed to copy to clipboard:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = tabDelimitedData;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            } catch (fallbackErr) {
+                console.error('Fallback copy failed:', fallbackErr);
+                alert('Copy failed. Please select and copy the data manually.');
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+<script>
+    // Collapsible TOC JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const toc = document.getElementById('toc');
+
+        if (!toc) return;
+
+        // Transform the existing TOC structure to be collapsible
+        function initializeCollapsibleTOC() {
+            const tocLinks = toc.querySelectorAll('a');
+            const processedItems = new Set();
+
+            tocLinks.forEach(link => {
+                const listItem = link.parentElement;
+
+                if (processedItems.has(listItem)) return;
+                processedItems.add(listItem);
+
+                // Check if this item has nested lists (children)
+                const nestedList = listItem.querySelector('ul');
+                if (nestedList) {
+                    listItem.classList.add('toc-item', 'has-children');
+                    nestedList.classList.add('toc-list');
+
+                    // Add click handler to the arrow area
+                    link.addEventListener('click', function(e) {
+                        // Only handle clicks on the arrow area (first 20px)
+                        const rect = link.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+
+                        if (clickX <= 20) {
+                            e.preventDefault();
+                            toggleTOCItem(listItem);
+                        }
+                    });
+
+                    // Make nested items collapsible too
+                    const nestedItems = nestedList.querySelectorAll('li');
+                    nestedItems.forEach(nestedItem => {
+                        nestedItem.classList.add('toc-item');
+                        const nestedNestedList = nestedItem.querySelector('ul');
+                        if (nestedNestedList) {
+                            nestedItem.classList.add('has-children');
+                            nestedNestedList.classList.add('toc-list');
+                        }
+                    });
+                } else {
+                    listItem.classList.add('toc-item');
+                }
+            });
+
+            // Initially collapse all items beyond level 1
+            const level2Items = toc.querySelectorAll('.toc-list .toc-item.has-children');
+            level2Items.forEach(item => {
+                // item.classList.remove('expanded'); // Start collapsed
+            });
+        }
+
+        // Toggle a TOC item's expanded/collapsed state
+        function toggleTOCItem(item) {
+            item.classList.toggle('expanded');
+
+            // Update aria attributes for accessibility
+            const link = item.querySelector('a');
+            const isExpanded = item.classList.contains('expanded');
+            link.setAttribute('aria-expanded', isExpanded.toString());
+        }
+
+        // Add control buttons (optional)
+        function addTOCControls() {
+            const tocTitle = toc.querySelector('#toctitle, .title');
+            if (!tocTitle) return;
+
+            const controls = document.createElement('div');
+            controls.className = 'toc-controls';
+
+            const expandAllBtn = document.createElement('button');
+            expandAllBtn.className = 'toc-control-btn';
+            expandAllBtn.textContent = 'Expand All';
+            expandAllBtn.onclick = () => expandAllTOCItems(true);
+
+            const collapseAllBtn = document.createElement('button');
+            collapseAllBtn.className = 'toc-control-btn';
+            collapseAllBtn.textContent = 'Collapse All';
+            collapseAllBtn.onclick = () => expandAllTOCItems(false);
+
+            controls.appendChild(expandAllBtn);
+            controls.appendChild(collapseAllBtn);
+
+            tocTitle.parentNode.insertBefore(controls, tocTitle.nextSibling);
+        }
+
+        // Expand or collapse all TOC items
+        function expandAllTOCItems(expand) {
+            const tocItems = toc.querySelectorAll('.toc-item.has-children');
+            tocItems.forEach(item => {
+                if (expand) {
+                    item.classList.add('expanded');
+                } else {
+                    item.classList.remove('expanded');
+                }
+
+                const link = item.querySelector('a');
+                link.setAttribute('aria-expanded', expand.toString());
+            });
+        }
+
+        // Highlight current section in TOC
+        function highlightCurrentSection() {
+            const sections = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            const tocLinks = toc.querySelectorAll('a[href^="#"]');
+
+            function updateActiveSection() {
+                let currentSection = null;
+                const scrollPos = window.scrollY + 100; // Offset for better UX
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollPos >= sectionTop) {
+                        currentSection = section;
+                    }
+                });
+
+                // Remove all active classes
+                tocLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active class to current section
+                if (currentSection && currentSection.id) {
+                    const activeLink = toc.querySelector(`a[href="#${currentSection.id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+
+                        // Expand parent items to show active link
+                        let parent = activeLink.parentElement;
+                        while (parent && parent !== toc) {
+                            if (parent.classList.contains('has-children')) {
+                                parent.classList.add('expanded');
+                            }
+                            parent = parent.parentElement;
+                        }
+                    }
+                }
+            }
+
+            // Update on scroll (throttled)
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(updateActiveSection, 100);
+            });
+
+            // Initial update
+            updateActiveSection();
+        }
+
+        // Initialize everything
+        initializeCollapsibleTOC();
+        addTOCControls(); // Optional: comment out if you don't want control buttons
+        highlightCurrentSection();
+    });
+
+    // TOC Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const body = document.body;
+        const toc = document.getElementById('toc');
+
+        // Only add toggle functionality if TOC exists and is in sidebar mode (toc2)
+        if (toc && toc.classList.contains('toc2')) {
+            // Create toggle button
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'toc-toggle';
+            toggleButton.innerHTML = '☰';
+            toggleButton.setAttribute('aria-label', 'Toggle Table of Contents');
+            toggleButton.setAttribute('title', 'Toggle Table of Contents');
+
+            // Create overlay for mobile
+            const overlay = document.createElement('div');
+            overlay.className = 'toc-overlay';
+
+            // Add elements to DOM
+            body.appendChild(toggleButton);
+            body.appendChild(overlay);
+
+            // Toggle function
+            function toggleTOC() {
+                const isCollapsed = toc.classList.contains('toc-collapsed');
+                const isMobile = window.innerWidth <= 768;
+
+                if (isCollapsed) {
+                    // Show TOC
+                    toc.classList.remove('toc-collapsed');
+                    body.classList.remove('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.add('toc-mobile-open');
+                        overlay.classList.add('active');
+                    }
+                    toggleButton.innerHTML = '✕';
+                    toggleButton.setAttribute('title', 'Hide Table of Contents');
+                } else {
+                    // Hide TOC
+                    toc.classList.add('toc-collapsed');
+                    body.classList.add('toc-collapsed');
+                    if (isMobile) {
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                    }
+                    toggleButton.innerHTML = '☰';
+                    toggleButton.setAttribute('title', 'Show Table of Contents');
+                }
+            }
+
+            // Event listeners
+            toggleButton.addEventListener('click', toggleTOC);
+
+            // Close TOC when clicking overlay (mobile)
+            overlay.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toggleTOC();
+                    }
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // On mobile, always start with TOC hidden
+                    if (!toc.classList.contains('toc-collapsed')) {
+                        toc.classList.add('toc-collapsed');
+                        body.classList.add('toc-collapsed');
+                        toc.classList.remove('toc-mobile-open');
+                        overlay.classList.remove('active');
+                        toggleButton.innerHTML = '☰';
+                    }
+                } else {
+                    // On desktop, remove mobile classes
+                    toc.classList.remove('toc-mobile-open');
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                // Toggle TOC with Ctrl/Cmd + \
+                if ((e.ctrlKey || e.metaKey) && e.key === '\\') {
+                    e.preventDefault();
+                    toggleTOC();
+                }
+                // Close TOC with Escape key (when open)
+                else if (e.key === 'Escape' && !toc.classList.contains('toc-collapsed')) {
+                    toggleTOC();
+                }
+            });
+
+            // Auto-hide TOC on mobile by default
+            if (window.innerWidth <= 768) {
+                toc.classList.add('toc-collapsed');
+                body.classList.add('toc-collapsed');
+                toggleButton.innerHTML = '☰';
+            }
+        }
+    });
+</script>
+<script>
+    window.showcaseGallery = window.showcaseGallery || (function() {
+        let currentContent = '';
+        let currentSvg = null;
+
+        return {
+            expandItem: function(itemId, title) {
+                const galleryItem = document.getElementById(itemId);
+                const svgElement = galleryItem.querySelector('.gallery-item-image svg');
+
+                if (!svgElement) return;
+
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                // Clone the SVG for the modal
+                const clonedSvg = svgElement.cloneNode(true);
+
+                modalTitle.textContent = title;
+                modalBody.innerHTML = '';
+                modalBody.appendChild(clonedSvg);
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleEscKey);
+            },
+
+            closeModal: function() {
+                const modal = document.getElementById('showcase-gallery-modal');
+                const modalBody = modal.querySelector('.showcase-modal-body');
+
+                modal.style.display = 'none';
+                modalBody.innerHTML = '';
+                document.body.style.overflow = '';
+
+                document.removeEventListener('keydown', this.handleEscKey);
+            },
+
+            showContent: function(itemId, title, kind, content) {
+                const modal = document.getElementById('showcase-content-modal');
+                const modalTitle = modal.querySelector('.showcase-modal-title');
+                const codeElement = modal.querySelector('.showcase-content-code');
+
+                // Decode HTML entities
+                const textarea = document.createElement('textarea');
+                textarea.innerHTML = content;
+                const decodedContent = textarea.value;
+
+                currentContent = decodedContent;
+
+                modalTitle.textContent = title + ' (' + kind + ')';
+                codeElement.textContent = decodedContent;
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+                document.addEventListener('keydown', this.handleContentEscKey);
+            },
+
+            closeContentModal: function() {
+                const modal = document.getElementById('showcase-content-modal');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContent = '';
+
+                document.removeEventListener('keydown', this.handleContentEscKey);
+            },
+
+            copyContent: function() {
+                const btn = document.querySelector('.showcase-copy-btn');
+
+                navigator.clipboard.writeText(currentContent).then(function() {
+                    btn.textContent = '✓ Copied!';
+                    btn.classList.add('copied');
+
+                    setTimeout(function() {
+                        btn.textContent = '📋 Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            handleEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeModal();
+                }
+            },
+
+            handleContentEscKey: function(e) {
+                if (e.key === 'Escape') {
+                    showcaseGallery.closeContentModal();
+                }
+            }
+        };
+    })();
+
+    (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            const slideshows = document.querySelectorAll('.docops-slideshow');
+
+            slideshows.forEach(slideshow => {
+                const slides = slideshow.querySelectorAll('.docops-slide');
+                const interval = parseInt(slideshow.dataset.interval) || 30000;
+                let currentIndex = 0;
+
+                if (slides.length === 0) return;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        if (i === index) {
+                            slide.classList.add('active');
+                        } else {
+                            slide.classList.remove('active');
+                        }
+                    });
+                }
+
+                function nextSlide() {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    showSlide(currentIndex);
+                }
+
+                // Auto-advance slides every 30 seconds
+                setInterval(nextSlide, interval);
+
+                // Initialize first slide
+                showSlide(0);
+            });
+        });
+    })();
+</script>
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.9.0/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_docops_wordcloud_extension">DocOps WordCloud Extension</a>
+<ul class="sectlevel1">
+<li><a href="#_showcase">1. Showcase</a></li>
+<li><a href="#_overview">2. Overview</a></li>
+<li><a href="#_features">3. Features</a></li>
+<li><a href="#_usage">4. Usage</a></li>
+<li><a href="#_parsing_format">5. Parsing Format</a></li>
+<li><a href="#_configuration_parameters">6. Configuration Parameters</a></li>
+<li><a href="#_word_data_format">7. Word Data Format</a></li>
+<li><a href="#_examples">8. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_word_cloud">8.1. Basic Word Cloud</a></li>
+<li><a href="#_technology_trends_word_cloud">8.2. Technology Trends Word Cloud</a></li>
+<li><a href="#_dark_mode_word_cloud">8.3. Dark Mode Word Cloud</a></li>
+</ul>
+</li>
+<li><a href="#_technical_implementation">9. Technical Implementation</a></li>
+<li><a href="#_integration">10. Integration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toc = document.querySelector('#toc.toc2');
+    const body = document.body;
+    const themeToggle = document.querySelector('.theme-toggle');
+
+    // 1. Theme Toggle Logic
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('docs-theme', isDark ? 'dark' : 'light');
+        });
+
+        // Load saved preference
+        if (localStorage.getItem('docs-theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    }
+
+    // 2. TOC Interaction Logic
+    // If user clicks the TOC title, keep it pinned/active
+    const tocTitle = document.querySelector('#toctitle');
+    if (tocTitle && toc) {
+        tocTitle.addEventListener('click', () => {
+            toc.classList.toggle('active');
+        });
+    }
+
+    // 3. Active Section Tracking (Scrollspy)
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -80% 0px', // Trigger when section is near top
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                if (!id) return;
+
+                // Remove active class from all TOC links
+                document.querySelectorAll('#toc a').forEach(link => {
+                    link.classList.remove('active-section');
+                    // In our brutalist theme, active section gets a Rose accent
+                    link.style.color = '';
+                });
+
+                // Add to current
+                const activeLink = document.querySelector(`#toc a[href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-section');
+                    activeLink.style.color = 'var(--brand-accent)';
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Track all headers
+    document.querySelectorAll('h2, h3, h4').forEach(header => {
+        observer.observe(header);
+    });
+});
+</script>
+</div>
+</div>
+<h1 id="_docops_wordcloud_extension" class="sect0">DocOps WordCloud Extension</h1>
+<div class="openblock partintro">
+<div class="content">
+<div id="reactions-wordcloud" class="reactions-container" style="display: flex; align-items: center; margin: 20px 0; justify-content: flex-end;">
+    <div class="reactions-buttons" style="display: flex; gap: 2px;">
+        <button class="reaction-button reaction-thumbs_up"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Thumbs Up"
+        onclick="handleReactionClick('thumbs_up', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    👍
+</button>
+<button class="reaction-button reaction-thumbs_down"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Thumbs Down"
+        onclick="handleReactionClick('thumbs_down', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    👎
+</button>
+<button class="reaction-button reaction-smile"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Smile"
+        onclick="handleReactionClick('smile', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    😄
+</button>
+<button class="reaction-button reaction-party"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Celebration"
+        onclick="handleReactionClick('party', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    🎉
+</button>
+<button class="reaction-button reaction-confused"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Confused"
+        onclick="handleReactionClick('confused', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    😕
+</button>
+<button class="reaction-button reaction-heart"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Love"
+        onclick="handleReactionClick('heart', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    ❤️
+</button>
+<button class="reaction-button reaction-rocket"
+        style="background: none; border: none; cursor: pointer; font-size: 18px; margin: 0 5px;"
+        title="Rocket"
+        onclick="handleReactionClick('rocket', 'wordcloud', 'anonymous', 'reactions-wordcloud')">
+    🚀
+</button>
+    </div>
+    <div class="comment-bubble"
+         style="margin-left: 15px; cursor: pointer; font-size: 20px;"
+         onclick="showCommentForm('wordcloud', 'anonymous')">
+        💬
+    </div>
+</div>
+
+<!-- Comment Form Modal -->
+<div id="commentFormModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+     background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 20px; border-radius: 5px; width: 80%; max-width: 500px;">
+        <h3>Leave a Comment</h3>
+        <input type="hidden" id="commentDocName" value="">
+        <input type="hidden" id="commentAuthor" value="">
+        <input type="hidden" id="commentReactionType" value="">
+        <textarea id="commentText" style="width: 100%; height: 100px; margin: 10px 0; padding: 5px;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="closeCommentForm()" style="padding: 5px 10px;">Cancel</button>
+            <button onclick="submitComment()" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none;">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize reactions on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        restoreUserReactions('reactions-wordcloud');
+    });
+
+    function getStorageKey(reactionsId, reactionType) {
+        return 'reaction_' + reactionsId + '_' + reactionType;
+    }
+
+    function saveUserReaction(reactionsId, reactionType, selected) {
+        const key = getStorageKey(reactionsId, reactionType);
+        if (selected) {
+            localStorage.setItem(key, 'true');
+        } else {
+            localStorage.removeItem(key);
+        }
+    }
+
+    function getUserReaction(reactionsId, reactionType) {
+        const key = getStorageKey(reactionsId, reactionType);
+        return localStorage.getItem(key) === 'true';
+    }
+
+    function restoreUserReactions(reactionsId) {
+        const container = document.getElementById(reactionsId);
+        if (!container) return;
+
+        const reactionButtons = container.querySelectorAll('.reaction-button');
+        let hasSelection = false;
+
+        reactionButtons.forEach(btn => {
+            // Look for classes that match the pattern 'reaction-' followed by a reaction ID
+            // Exclude 'reaction-button' by checking the class is longer than 'reaction-'.length
+            const reactionType = Array.from(btn.classList)
+                .find(cls => cls.startsWith('reaction-') && cls !== 'reaction-button')
+                ?.replace('reaction-', '');
+
+            if (reactionType && getUserReaction(reactionsId, reactionType)) {
+                btn.style.transform = 'scale(1.2)';
+                btn.style.opacity = '1';
+                hasSelection = true;
+            } else {
+                btn.style.transform = 'scale(1)';
+                btn.style.opacity = hasSelection ? '0.5' : '1';
+            }
+        });
+    }
+
+
+    function handleReactionClick(reactionType, docName, author, reactionsId) {
+        const container = document.getElementById(reactionsId);
+        const reactionButtons = container.querySelectorAll('.reaction-button');
+        const clickedButton = container.querySelector('.reaction-' + reactionType);
+
+        // Check if this reaction is already selected
+        const isCurrentlySelected = getUserReaction(reactionsId, reactionType);
+
+        // Clear all previous selections for this reactions block
+        reactionButtons.forEach(btn => {
+            // Same fix here - exclude 'reaction-button' class
+            const btnReactionType = Array.from(btn.classList)
+                .find(cls => cls.startsWith('reaction-') && cls !== 'reaction-button')
+                ?.replace('reaction-', '');
+            if (btnReactionType) {
+                saveUserReaction(reactionsId, btnReactionType, false);
+            }
+        });
+
+        // Toggle the clicked reaction
+        const newSelectionState = !isCurrentlySelected;
+        if (newSelectionState) {
+            saveUserReaction(reactionsId, reactionType, true);
+        }
+
+        // Update visual state
+        reactionButtons.forEach(btn => {
+            if (btn.classList.contains('reaction-' + reactionType) && newSelectionState) {
+                btn.style.transform = 'scale(1.2)';
+                btn.style.opacity = '1';
+            } else {
+                btn.style.transform = 'scale(1)';
+                btn.style.opacity = newSelectionState ? '0.5' : '1';
+            }
+        });
+
+        // Post the data only if a reaction is selected
+        if (newSelectionState) {
+            const data = {
+                documentName: docName,
+                author: author,
+                reactionType: reactionType
+            };
+
+            console.log('Reaction data:', data);
+
+            // You can implement actual AJAX post here
+             fetch('reactions/api/feedback', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(data)
+             });
+        }
+    }
+
+
+    function showCommentForm(docName, author, reactionType = null) {
+        document.getElementById('commentDocName').value = docName;
+        document.getElementById('commentAuthor').value = author;
+        if (reactionType) {
+            document.getElementById('commentReactionType').value = reactionType;
+        }
+
+        const modal = document.getElementById('commentFormModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeCommentForm() {
+        const modal = document.getElementById('commentFormModal');
+        modal.style.display = 'none';
+        document.getElementById('commentText').value = '';
+    }
+
+    function submitComment() {
+        const docName = document.getElementById('commentDocName').value;
+        const author = document.getElementById('commentAuthor').value;
+        const comment = document.getElementById('commentText').value;
+        const reactionType = document.getElementById('commentReactionType').value;
+
+        if (!comment.trim()) {
+            alert('Please enter a comment');
+            return;
+        }
+
+        const data = {
+            documentName: docName,
+            author: author,
+            comment: comment,
+            reactionType: reactionType
+        };
+
+        console.log('Comment data:', data);
+
+        // You can implement actual AJAX post here
+         fetch('/reactions/api/comment', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify(data)
+         });
+
+        closeCommentForm();
+        alert('Thank you for your feedback!');
+    }
+</script>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_bc5fddf6-6f6b-496e-9636-284e77ae64a8" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#268bd2","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#268bd2","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#268bd2","true","false"],["Callout","callout.html","Callout Documentation","documentation","#268bd2","true","false"],["Charts","charts.html","Charts Documentation","documentation","#268bd2","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#268bd2","true","false"],["Domain Visualization","domain.html","Domain Visualization Documentation","documentation","#268bd2","true","false"],["Gherkin","gherkin.html","Gherkin Format support for DocOps","documentation","#268bd2","true","false"],["Index","index.html","Index of all documentation","documentation","#268bd2","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#268bd2","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#268bd2","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#268bd2","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#268bd2","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#268bd2","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#268bd2","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#268bd2","true","false"],["Shield","shield.html","Shield Documentation","documentation","#268bd2","true","false"],["Story","story.html","What is DocOps","documentation","#268bd2","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#268bd2","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#268bd2","true","false"],["Todo","todo.html","Todo Documentation","documentation","#268bd2","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#268bd2","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#268bd2","true","false"],["VCard","vcard.html","VCards","documentation","#268bd2","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#d33682","true","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><!-- Background Atmosphere Pattern --><pattern id="dotPattern_bc5fddf6-6f6b-496e-9636-284e77ae64a8" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.15" /></pattern><filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><!-- Glass Reflection Gradient --><linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="white" stop-opacity="0.4"/><stop offset="50%" stop-color="white" stop-opacity="0.05"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient><filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/></filter><radialGradient id="raisedButton_d25a7e62-567e-4bf9-b4e8-e8be6c058dc4" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad0-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_7bf75a3f-0cb7-45f4-9f46-607518eb8727" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad1-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_38455394-0730-442e-9abb-83aecce900b9" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad2-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_b972691f-0c00-4fb1-a486-f35e87f0a3b2" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad3-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_73bcd584-3ffe-44b5-80c2-c778ad422f5b" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad4-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_7c861994-8513-484a-abd4-4e033753fb96" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad5-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_c17d42f8-8383-4069-8de6-e19182f60335" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad6-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_889e814d-7b9f-4503-8255-24062895cf77" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad7-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_cc342897-93a3-435d-888f-4b471af45b9d" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad8-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_ff325666-9872-442e-a889-54a1cb2407bd" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad9-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_6d6175a5-2874-408d-a34c-0c3974687a60" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad10-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_698048b8-57c2-4fc4-82c4-604cd3b50dfd" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad11-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_984e4b7d-84e8-48da-ba50-90dd642e8cba" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad12-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_dea11136-6cde-436f-8603-16095b83dfdf" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad13-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_15287754-18c4-440a-8fec-74cee8d51320" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad14-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_db2bbf88-4fda-4113-99f7-0c0b4e0a102e" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad15-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_0bd7def1-69e9-497d-bdce-6f9d1069a008" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad16-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_d4d58272-05dd-4c40-86ac-c9276eae6586" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad17-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_95e8f071-79dc-471c-bb24-9dacfd2a6717" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad18-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_1ddd14de-5c7e-4e59-b3bf-ac4bd7cb91ef" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad19-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_e1c340f7-d7a8-4907-9076-df35b8d92541" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad20-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_a8b97312-1163-46bb-b45b-bc4109e55a3c" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad21-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_2c4ac231-3b20-40b6-9f2e-8df3ca372688" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad22-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_423a64be-88a1-4c46-b0ff-333fb58af5c1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#268bd2;stop-opacity:1" /><stop offset="100%" style="stop-color:#16537e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad23-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#268bd2"/><stop offset="100%" stop-color="#1a6193"/></linearGradient><radialGradient id="raisedButton_3418dc91-bdbc-4c24-9039-f66b654419ad" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#d33682;stop-opacity:1" /><stop offset="100%" style="stop-color:#7e204e;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad24-bc5fddf6-6f6b-496e-9636-284e77ae64a8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#d33682"/><stop offset="100%" stop-color="#93255b"/></linearGradient><style>.orb-group { cursor: pointer; } .orb-group .moving-group { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); } .glow-ring { transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease; stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 0.2; } .orb-group:hover .glow-ring { stroke-dashoffset: 0; opacity: 1; } .orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }</style></defs><!-- Apply atmospheric pattern background --><rect width="1233.0" height="405.0" fill="url(#dotPattern_bc5fddf6-6f6b-496e-9636-284e77ae64a8)" rx="12" pointer-events="none"/><g transform="scale(1.0)"><g transform="translate(70,65)" onclick="window.open('adr.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d25a7e62-567e-4bf9-b4e8-e8be6c058dc4)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> ADR</tspan></text></g></g><g transform="translate(200,65)" onclick="window.open('arch.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_7bf75a3f-0cb7-45f4-9f46-607518eb8727)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Architecture</tspan></text></g></g><g transform="translate(330,65)" onclick="window.open('buttons.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_38455394-0730-442e-9abb-83aecce900b9)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Buttons</tspan></text></g></g><g transform="translate(460,65)" onclick="window.open('callout.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b972691f-0c00-4fb1-a486-f35e87f0a3b2)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Callout</tspan></text></g></g><g transform="translate(590,65)" onclick="window.open('charts.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_73bcd584-3ffe-44b5-80c2-c778ad422f5b)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Charts</tspan></text></g></g><g transform="translate(720,65)" onclick="window.open('connectors.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_7c861994-8513-484a-abd4-4e033753fb96)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Connectors</tspan></text></g></g><g transform="translate(850,65)" onclick="window.open('domain.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_c17d42f8-8383-4069-8de6-e19182f60335)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Domain</tspan><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;">Visualization</tspan></text></g></g><g transform="translate(980,65)" onclick="window.open('gherkin.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_889e814d-7b9f-4503-8255-24062895cf77)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Gherkin</tspan></text></g></g><g transform="translate(1110,65)" onclick="window.open('index.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_cc342897-93a3-435d-888f-4b471af45b9d)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Index</tspan></text></g></g><g transform="translate(70,195)" onclick="window.open('metricscard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_ff325666-9872-442e-a889-54a1cb2407bd)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Metrics Card</tspan></text></g></g><g transform="translate(200,195)" onclick="window.open('placemat.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_6d6175a5-2874-408d-a34c-0c3974687a60)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Placemat</tspan></text></g></g><g transform="translate(330,195)" onclick="window.open('planner.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_698048b8-57c2-4fc4-82c4-604cd3b50dfd)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Planner</tspan></text></g></g><g transform="translate(460,195)" onclick="window.open('quadrant.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_984e4b7d-84e8-48da-ba50-90dd642e8cba)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Quadrant</tspan></text></g></g><g transform="translate(590,195)" onclick="window.open('releasestrategy.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_dea11136-6cde-436f-8603-16095b83dfdf)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;">Strategy</tspan></text></g></g><g transform="translate(720,195)" onclick="window.open('roadmap.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_15287754-18c4-440a-8fec-74cee8d51320)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Roadmap</tspan></text></g></g><g transform="translate(850,195)" onclick="window.open('scorecard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_db2bbf88-4fda-4113-99f7-0c0b4e0a102e)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Scorecard</tspan></text></g></g><g transform="translate(980,195)" onclick="window.open('shield.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_0bd7def1-69e9-497d-bdce-6f9d1069a008)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Shield</tspan></text></g></g><g transform="translate(1110,195)" onclick="window.open('story.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d4d58272-05dd-4c40-86ac-c9276eae6586)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Story</tspan></text></g></g><g transform="translate(70,330)" onclick="window.open('swimlane.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_95e8f071-79dc-471c-bb24-9dacfd2a6717)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Swimlane</tspan></text></g></g><g transform="translate(200,330)" onclick="window.open('timeline.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_1ddd14de-5c7e-4e59-b3bf-ac4bd7cb91ef)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Timeline</tspan></text></g></g><g transform="translate(330,330)" onclick="window.open('todo.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e1c340f7-d7a8-4907-9076-df35b8d92541)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Todo</tspan></text></g></g><g transform="translate(460,330)" onclick="window.open('treechart.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a8b97312-1163-46bb-b45b-bc4109e55a3c)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Tree Chart</tspan></text></g></g><g transform="translate(590,330)" onclick="window.open('tutorial.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_2c4ac231-3b20-40b6-9f2e-8df3ca372688)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Tutorial</tspan></text></g></g><g transform="translate(720,330)" onclick="window.open('vcard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#268bd2" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_423a64be-88a1-4c46-b0ff-333fb58af5c1)" stroke="#268bd2" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> VCard</tspan></text></g></g><g transform="translate(850,330)" onclick="window.open('wordcloud.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#d33682" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_3418dc91-bdbc-4c24-9039-f66b654419ad)" stroke="#d33682" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'JetBrains Mono', monospace, Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Word Cloud</tspan></text></g></g></g></svg></div></div></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_showcase">1. Showcase</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="wordcloudshowcase.html" target="_blank" rel="noopener">Word Cloud Showcase</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview">2. Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DocOps WordCloud Extension allows you to create visually appealing word clouds to highlight key terms and their relative importance. Word clouds are a great way to visualize text data where the size of each word indicates its frequency or importance.</p>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features">3. Features</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Interactive SVG-based word clouds</p>
+</li>
+<li>
+<p>Customizable dimensions, colors, and font sizes</p>
+</li>
+<li>
+<p>Individual color assignment for each word</p>
+</li>
+<li>
+<p>Hover effects for better user interaction</p>
+</li>
+<li>
+<p>Support for both light and dark themes</p>
+</li>
+<li>
+<p>Automatic word placement algorithm to avoid overlaps</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage">4. Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To create a word cloud, use the <code>wordcloud</code> block type in your AsciiDoc document:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,wordcloud,controls=true]
+----
+title= My Word Cloud Title
+minFontSize= 12
+maxFontSize= 60
+---
+Word 1 | 85 | #3498db
+Word 2 | 92 | #9b59b6
+Word 3 | 78 | #2ecc71
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_596fe923cec6488eb421be8ee81ec1ae" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","bfb498629f7d402ca723ce3702014d06","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","27e81223573449f6b003ae0b2f41186a","","","","","","",""],["","3","Word 3","78.0","c01a9dcd42d745018036e56cedfce437","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_596fe923cec6488eb421be8ee81ec1ae" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_596fe923cec6488eb421be8ee81ec1ae" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_596fe923cec6488eb421be8ee81ec1ae" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_596fe923cec6488eb421be8ee81ec1ae" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_596fe923cec6488eb421be8ee81ec1ae"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_596fe923cec6488eb421be8ee81ec1ae"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_596fe923cec6488eb421be8ee81ec1ae .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_596fe923cec6488eb421be8ee81ec1ae .word-text:hover { filter: url(#wordGlow_596fe923cec6488eb421be8ee81ec1ae); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g><rect x="243.20000000000002" y="20" width="313.59999999999997" height="50" rx="10" ry="10" fill="#f0f0f0" opacity="0.8"/><text x="400" y="50" text-anchor="middle" font-size="24" font-weight="bold" fill="#333" font-family="Arial, sans-serif">My Word Cloud Title</text></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_596fe923cec6488eb421be8ee81ec1ae)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="405.46311593449417" y="262.6599671818642" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_596fe923cec6488eb421be8ee81ec1ae)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="400.18829813872827" y="383.47572936325713" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_596fe923cec6488eb421be8ee81ec1ae)">Word 3<title>Word 3: weight 78.00</title></text></g></svg></div></div></div></div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parsing_format">5. Parsing Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Word clouds use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Configuration Section</strong>: Contains key-value pairs in the format <code>key=value</code> before the <code>---</code> separator</p>
+</li>
+<li>
+<p><strong>Data Section</strong>: Contains the word data after the separator in a tabular format</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For more information about the parsing framework, see the <a href="parsing.html">Parsing Utilities</a> documentation.</p>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_parameters">6. Configuration Parameters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The word cloud can be customized using the following configuration parameters:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Word Cloud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The title displayed at the top of the word cloud</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">width</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The width of the word cloud in pixels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">height</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">600</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The height of the word cloud in pixels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">minFontSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The minimum font size for words with the lowest weight</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">maxFontSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">60</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum font size for words with the highest weight</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">darkMode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to use a dark theme (true) or light theme (false)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">baseColor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#3498db</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default color for words without a specific color</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">shape</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rectangle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The shape of the word cloud (currently supports "rectangle")</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">scale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A scaling factor for the entire word cloud</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_word_data_format">7. Word Data Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After the configuration section and the separator line (<code>---</code>), each line represents a word in the format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Word | Weight | Color</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Word</code> is the text to display</p>
+</li>
+<li>
+<p><code>Weight</code> is a numeric value that determines the relative size of the word (higher values = larger font)</p>
+</li>
+<li>
+<p><code>Color</code> is an optional hex color code (e.g., #3498db) for the word</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">8. Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_word_cloud">8.1. Basic Word Cloud</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,wordcloud,controls=true]
+----
+title= Programming Languages 2024
+---
+JavaScript | 90 | #f1e05a
+Python | 85 | #3572A5
+Java | 80 | #b07219
+TypeScript | 75 | #2b7489
+C# | 70 | #178600
+PHP | 65 | #4F5D95
+C++ | 60 | #f34b7d
+Ruby | 55 | #701516
+Go | 50 | #00ADD8
+Rust | 45 | #dea584
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-a7681e1915dc6686" data-theme="light" data-original-content="title= Programming Languages 2024
+---
+JavaScript | 90 | #f1e05a
+Python | 85 | #3572A5
+Java | 80 | #b07219
+TypeScript | 75 | #2b7489
+C# | 70 | #178600
+PHP | 65 | #4F5D95
+C++ | 60 | #f34b7d
+Ruby | 55 | #701516
+Go | 50 | #00ADD8
+Rust | 45 | #dea584" data-kind="wordcloud">
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_f4d5d4407c054db6ab29c3d9533b5749" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","7a492c867954469a92510352d6ff3db0","false","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","844c9e8386e94fa9ad7b8d30e5fc1102","","","","","","",""],["","3","Java","80.0","d025228b0b294cdb845b8be8efae8f54","","","","","","",""],["","4","TypeScript","75.0","38b572fde3514186b5167c785a167af3","","","","","","",""],["","5","C#","70.0","9d9dbf4d73b84f51bdf4dc6b54e2926c","","","","","","",""],["","6","PHP","65.0","a85338f1f65c4f3ea7d18c126b845d86","","","","","","",""],["","7","C++","60.0","8ec60cf84d1942368df36bfc60648124","","","","","","",""],["","8","Ruby","55.0","86ee394c500f482394a44d4e2cce59d8","","","","","","",""],["","9","Go","50.0","1f8498a2f61b4bfd9890212df3dd670b","","","","","","",""],["","10","Rust","45.0","9ead040231dd4107b0592643a60f7bab","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_f4d5d4407c054db6ab29c3d9533b5749" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_f4d5d4407c054db6ab29c3d9533b5749" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_f4d5d4407c054db6ab29c3d9533b5749" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_f4d5d4407c054db6ab29c3d9533b5749" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_f4d5d4407c054db6ab29c3d9533b5749"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_f4d5d4407c054db6ab29c3d9533b5749"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_f4d5d4407c054db6ab29c3d9533b5749 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_f4d5d4407c054db6ab29c3d9533b5749 .word-text:hover { filter: url(#wordGlow_f4d5d4407c054db6ab29c3d9533b5749); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g><rect x="192.8" y="20" width="414.4" height="50" rx="10" ry="10" fill="#f0f0f0" opacity="0.8"/><text x="400" y="50" text-anchor="middle" font-size="24" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Programming Languages 2024</text></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="409.3899008646316" y="252.98225594544965" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="392.2339164763374" y="404.31858049537556" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="389.4492170360134" y="468.78051415468923" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="480.90180396561215" y="405.6657038487793" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="303.61818921655595" y="393.7301937661529" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="284.9132781377897" y="264.34661968953986" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="423.28407961335284" y="199.56545115752994" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="519.350104913629" y="268.1888422112156" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="309.91552771019974" y="427.1602168968754" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_f4d5d4407c054db6ab29c3d9533b5749)">Rust<title>Rust: weight 45.00</title></text></g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-a7681e1915dc6686')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-a7681e1915dc6686">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-a7681e1915dc6686')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-a7681e1915dc6686')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-a7681e1915dc6686')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-a7681e1915dc6686')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a7681e1915dc6686')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a7681e1915dc6686')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-a7681e1915dc6686')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-a7681e1915dc6686" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-a7681e1915dc6686')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-a7681e1915dc6686">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_technology_trends_word_cloud">8.2. Technology Trends Word Cloud</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,wordcloud,controls=true]
+----
+title= Technology Trends 2024
+width= 800
+height= 600
+minFontSize= 12
+maxFontSize= 60
+---
+Cloud Computing | 85 | #3498db
+Artificial Intelligence | 92 | #9b59b6
+Machine Learning | 78 | #2ecc71
+Blockchain | 65 | #e74c3c
+IoT | 70 | #f39c12
+Cybersecurity | 88 | #1abc9c
+Big Data | 75 | #34495e
+DevOps | 68 | #e67e22
+Quantum Computing | 55 | #27ae60
+Edge Computing | 60 | #d35400
+5G | 72 | #3498db
+AR/VR | 58 | #9b59b6
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-a04e36f901789ee2" data-theme="light" data-original-content="title= Technology Trends 2024
+width= 800
+height= 600
+minFontSize= 12
+maxFontSize= 60
+---
+Cloud Computing | 85 | #3498db
+Artificial Intelligence | 92 | #9b59b6
+Machine Learning | 78 | #2ecc71
+Blockchain | 65 | #e74c3c
+IoT | 70 | #f39c12
+Cybersecurity | 88 | #1abc9c
+Big Data | 75 | #34495e
+DevOps | 68 | #e67e22
+Quantum Computing | 55 | #27ae60
+Edge Computing | 60 | #d35400
+5G | 72 | #3498db
+AR/VR | 58 | #9b59b6" data-kind="wordcloud">
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_d21213c455e74268918104403b463601" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","c1157530686b46adb95d4145ab46cb93","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","f7b7ef1875dc4dd4a038c2ae9491e5e7","","","","","","",""],["","3","Machine Learning","78.0","d762d21bff6843d4b4304ac4e835cf92","","","","","","",""],["","4","Blockchain","65.0","25d8064979a3403283f20ab0bc7e7f5e","","","","","","",""],["","5","IoT","70.0","34ef095ddcdf47e0a0585f888d68cc18","","","","","","",""],["","6","Cybersecurity","88.0","bad87e2e650b46ee9f6372af35ceac10","","","","","","",""],["","7","Big Data","75.0","1ce1207336224795896fcb596a859cc3","","","","","","",""],["","8","DevOps","68.0","2152e37a2ee14b3fb55818afe2302a95","","","","","","",""],["","9","Quantum Computing","55.0","ef76deb2fdf54f68a50a58824e806e91","","","","","","",""],["","10","Edge Computing","60.0","a96935b4bab74dacbf78f131af4865ae","","","","","","",""],["","11","5G","72.0","b758968b0fc24d82b1a4f92a1c9ec4f7","","","","","","",""],["","12","AR/VR","58.0","1c960c50b05d415980c6287743912b20","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_d21213c455e74268918104403b463601" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_d21213c455e74268918104403b463601" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_d21213c455e74268918104403b463601" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_d21213c455e74268918104403b463601" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_d21213c455e74268918104403b463601"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_d21213c455e74268918104403b463601"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_d21213c455e74268918104403b463601 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_d21213c455e74268918104403b463601 .word-text:hover { filter: url(#wordGlow_d21213c455e74268918104403b463601); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g><rect x="221.6" y="20" width="356.8" height="50" rx="10" ry="10" fill="#f0f0f0" opacity="0.8"/><text x="400" y="50" text-anchor="middle" font-size="24" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Technology Trends 2024</text></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="393.2306051327205" y="408.0110764086137" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="394.28267990776226" y="255.25636865884243" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="407.6044561030789" y="189.1142228940343" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="424.9262656113361" y="472.265964988763" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="312.89094289419563" y="479.28650925618365" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_d21213c455e74268918104403b463601)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="410.42680301217155" y="522.1356136582267" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_d21213c455e74268918104403b463601)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="398.5275526779303" y="137.58730770616583" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_d21213c455e74268918104403b463601)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="292.1361850266505" y="524.8777086340001" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="536.7885362028683" y="141.96557517084386" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="544.823522067262" y="462.7752667230527" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_d21213c455e74268918104403b463601)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="504.35170028726094" y="511.7851541540456" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_d21213c455e74268918104403b463601)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-a04e36f901789ee2')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-a04e36f901789ee2">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-a04e36f901789ee2')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-a04e36f901789ee2')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-a04e36f901789ee2')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-a04e36f901789ee2')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a04e36f901789ee2')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a04e36f901789ee2')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-a04e36f901789ee2')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-a04e36f901789ee2" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-a04e36f901789ee2')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-a04e36f901789ee2">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dark_mode_word_cloud">8.3. Dark Mode Word Cloud</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,wordcloud,controls=true]
+----
+title= Software Development Concepts
+width= 800
+height= 600
+minFontSize= 14
+maxFontSize= 50
+darkMode= true
+---
+Agile | 90 | #ff7979
+CI/CD | 85 | #7ed6df
+Testing | 80 | #f6e58d
+Microservices | 75 | #badc58
+Containers | 70 | #ffbe76
+Serverless | 65 | #ff9ff3
+API | 60 | #f9ca24
+Refactoring | 55 | #686de0
+Clean Code | 50 | #be2edd
+Design Patterns | 45 | #eb4d4b
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-8e08d481ef76a0e8" data-theme="light" data-original-content="title= Software Development Concepts
+width= 800
+height= 600
+minFontSize= 14
+maxFontSize= 50
+darkMode= true
+---
+Agile | 90 | #ff7979
+CI/CD | 85 | #7ed6df
+Testing | 80 | #f6e58d
+Microservices | 75 | #badc58
+Containers | 70 | #ffbe76
+Serverless | 65 | #ff9ff3
+API | 60 | #f9ca24
+Refactoring | 55 | #686de0
+Clean Code | 50 | #be2edd
+Design Patterns | 45 | #eb4d4b" data-kind="wordcloud">
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_c18efcc717bd45f9bfe0faee65a40c0f" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","a927ec48462a4ac6a7b48efedad192a1","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","245e3a62242749f38fe59df6dbcce4e2","","","","","","",""],["","3","Testing","80.0","706d87c13a504525bc415860660299dc","","","","","","",""],["","4","Microservices","75.0","f8a12a3a6d8a4e47b46c1d7d7699c290","","","","","","",""],["","5","Containers","70.0","4e8a918ce6f846418346c6673e9679bb","","","","","","",""],["","6","Serverless","65.0","5bb18838c5674161884fa77608049361","","","","","","",""],["","7","API","60.0","500126b5ab894a3ba9d876d5bee3feef","","","","","","",""],["","8","Refactoring","55.0","c09a45ce18494ec3af8251a169a38624","","","","","","",""],["","9","Clean Code","50.0","4418f53e8e784fe0a804f0936c65b210","","","","","","",""],["","10","Design Patterns","45.0","5bb7ce8e7139448e914e4df1edac099f","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_c18efcc717bd45f9bfe0faee65a40c0f" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_c18efcc717bd45f9bfe0faee65a40c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_c18efcc717bd45f9bfe0faee65a40c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_c18efcc717bd45f9bfe0faee65a40c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_c18efcc717bd45f9bfe0faee65a40c0f"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_c18efcc717bd45f9bfe0faee65a40c0f"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_c18efcc717bd45f9bfe0faee65a40c0f .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_c18efcc717bd45f9bfe0faee65a40c0f .word-text:hover { filter: url(#wordGlow_c18efcc717bd45f9bfe0faee65a40c0f); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g><rect x="171.20000000000002" y="20" width="457.59999999999997" height="50" rx="10" ry="10" fill="#f0f0f0" opacity="0.8"/><text x="400" y="50" text-anchor="middle" font-size="24" font-weight="bold" fill="#333" font-family="Arial, sans-serif">Software Development Concepts</text></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="405.1572823143296" y="262.8752880370031" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="387.55655360037633" y="393.7318054048311" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="396.8479845490442" y="453.14559330940745" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="379.5499139094299" y="204.89346939233081" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="239.17020201410023" y="340.0641565418638" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="501.5967047725989" y="334.58272144637056" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">API<title>API: weight 60.00</title></text><text class="word-text" x="260.8545426667416" y="272.91121643380757" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="533.85550592179" y="297.48260110871496" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="535.6871157890592" y="386.70454417593993" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_c18efcc717bd45f9bfe0faee65a40c0f)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-8e08d481ef76a0e8')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-8e08d481ef76a0e8">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-8e08d481ef76a0e8')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-8e08d481ef76a0e8')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-8e08d481ef76a0e8')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-8e08d481ef76a0e8')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8e08d481ef76a0e8')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8e08d481ef76a0e8')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-8e08d481ef76a0e8')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-8e08d481ef76a0e8" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-8e08d481ef76a0e8')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-8e08d481ef76a0e8">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_technical_implementation">9. Technical Implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The word cloud is generated as an SVG with the following features:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Words are arranged in a spiral pattern to maximize space usage</p>
+</li>
+<li>
+<p>A collision detection algorithm ensures words don&#8217;t overlap</p>
+</li>
+<li>
+<p>Each word has a gradient effect based on its color</p>
+</li>
+<li>
+<p>Words have a subtle drop shadow for depth</p>
+</li>
+<li>
+<p>Interactive hover effects (scaling and brightness change)</p>
+</li>
+<li>
+<p>Random rotation of some words for visual interest</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_integration">10. Integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The word cloud extension integrates seamlessly with AsciiDoctor documents and can be used in any DocOps-enabled documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e1e8ed;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #657786;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .reading-time {
+        background: rgba(32, 35, 42, 0.95);
+        border-color: #444;
+        color: #8899a6;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .reading-time {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .reading-time {
+        display: none;
+    }
+}
+</style>
+<div class="reading-time">
+    <p>📖 3 min read • 1121 words</p>
+</div>
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<style>
+/* Universal diagram modal styles */
+.diagram-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+}
+
+.diagram-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.diagram-modal-content {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.diagram-container {
+    background: white;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.diagram-modal svg,
+.diagram-modal img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    background: white;
+    display: block;
+}
+
+.diagram-modal-close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+.diagram-modal-close:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.diagram-modal-controls {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10001;
+}
+
+.diagram-modal-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    color: #333;
+}
+
+.diagram-modal-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Clickable diagram indicators */
+.mermaid,
+.popup-diagram,
+img.popup-diagram {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    position: relative;
+}
+
+.mermaid:hover,
+.popup-diagram:hover,
+img.popup-diagram:hover {
+    opacity: 0.8;
+}
+
+.mermaid::after,
+.popup-diagram::after,
+img.popup-diagram::after {
+    content: '🔍';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.mermaid:hover::after,
+.popup-diagram:hover::after,
+img.popup-diagram:hover::after {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .diagram-modal-content {
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+        padding: 15px;
+    }
+    
+    .diagram-modal-controls {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .diagram-modal-btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+}
+</style>
+
+<script>
+// Universal diagram modal functionality
+window.diagramModal = {
+    currentPanzoom: null,
+    currentElement: null,
+    
+    init() {
+        // Create modal if it doesn't exist
+        if (!document.getElementById('diagram-modal')) {
+            const modal = document.createElement('div');
+            modal.id = 'diagram-modal';
+            modal.className = 'diagram-modal';
+            modal.innerHTML = `
+                <div class="diagram-modal-content">
+                    <button class="diagram-modal-close" onclick="diagramModal.close()" title="Close">&times;</button>
+                    <div class="diagram-modal-controls">
+                        <button class="diagram-modal-btn" onclick="diagramModal.zoomIn()" title="Zoom In">🔍+</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.zoomOut()" title="Zoom Out">🔍-</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.resetZoom()" title="Reset Zoom">⚪</button>
+                        <button class="diagram-modal-btn" onclick="diagramModal.fitToScreen()" title="Fit to Screen">⛶</button>
+                    </div>
+                    <div class="diagram-container"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.close();
+                }
+            });
+            
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    this.close();
+                }
+            });
+        }
+    },
+    
+    openSvg(svg) {
+        this.init();
+        const modal = document.getElementById('diagram-modal');
+        const container = modal.querySelector('.diagram-container');
+        
+        // Clone the SVG and ensure it has a white background
+        const clonedSvg = svg.cloneNode(true);
+        
+        // Ensure the SVG has proper styling for visibility
+        clonedSvg.style.backgroundColor = 'white';
+        clonedSvg.style.display = 'block';
+        
+        // Clear and add the cloned SVG
+        container.innerHTML = '';
+        container.appendChild(clonedSvg);
+        
+        this.currentElement = clonedSvg;
+        
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // Initialize panzoom ONLY for the modal SVG
+        setTimeout(() => {
+            if (window.svgPanZoom && clonedSvg) {
+                try {
+                    this.currentPanzoom = svgPanZoom(clonedSvg, {
+                        controlIconsEnabled: true,
+                        center: true,
+                        fit: true,
+                        minZoom: 0.1,
+                        maxZoom: 10,
+                        zoomScaleSensitivity: 0.5,
+                        mouseWheelZoomEnabled: true,
+                        preventMouseEventsDefault: true
+                    });
+                } catch (error) {
+                    console.warn('Failed to initialize panzoom for SVG:', error);
+                }
+            }
+        }, 150);
+    },
+    
+    openImage(img) {
+        this.init();
+        const modal = document.getElementById('diagram-modal');
+        const container = modal.querySelector('.diagram-container');
+        
+        // Create a new image element
+        const clonedImg = document.createElement('img');
+        clonedImg.src = img.src;
+        clonedImg.alt = img.alt || 'Diagram';
+        clonedImg.style.maxWidth = '100%';
+        clonedImg.style.maxHeight = '100%';
+        clonedImg.style.display = 'block';
+        clonedImg.style.margin = '0 auto';
+        
+        // Clear and add the image
+        container.innerHTML = '';
+        container.appendChild(clonedImg);
+        
+        this.currentElement = clonedImg;
+        
+        // Show modal
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // For images, we'll use CSS transforms for zoom instead of svgPanZoom
+        this.setupImageZoom(clonedImg);
+    },
+    
+    setupImageZoom(img) {
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let startTranslateX = 0;
+        let startTranslateY = 0;
+        
+        const updateTransform = () => {
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        };
+        
+        // Store zoom functions for the modal controls
+        this.currentPanzoom = {
+            zoomIn: () => {
+                scale = Math.min(scale * 1.3, 10);
+                updateTransform();
+            },
+            zoomOut: () => {
+                scale = Math.max(scale / 1.3, 0.1);
+                updateTransform();
+            },
+            resetZoom: () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            },
+            fit: () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            }
+        };
+        
+        // Mouse wheel zoom
+        img.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            scale = Math.max(0.1, Math.min(10, scale * delta));
+            updateTransform();
+        });
+        
+        // Drag functionality
+        img.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startTranslateX = translateX;
+            startTranslateY = translateY;
+            img.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            translateX = startTranslateX + (e.clientX - startX);
+            translateY = startTranslateY + (e.clientY - startY);
+            updateTransform();
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            img.style.cursor = 'grab';
+        });
+        
+        img.style.cursor = 'grab';
+    },
+    
+    close() {
+        const modal = document.getElementById('diagram-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            
+            // Cleanup panzoom
+            if (this.currentPanzoom && this.currentPanzoom.destroy) {
+                try {
+                    this.currentPanzoom.destroy();
+                } catch (error) {
+                    console.warn('Failed to destroy panzoom:', error);
+                }
+            }
+            this.currentPanzoom = null;
+            this.currentElement = null;
+        }
+    },
+    
+    zoomIn() {
+        if (this.currentPanzoom && this.currentPanzoom.zoomIn) {
+            this.currentPanzoom.zoomIn();
+        }
+    },
+    
+    zoomOut() {
+        if (this.currentPanzoom && this.currentPanzoom.zoomOut) {
+            this.currentPanzoom.zoomOut();
+        }
+    },
+    
+    resetZoom() {
+        if (this.currentPanzoom) {
+            if (this.currentPanzoom.resetZoom) {
+                this.currentPanzoom.resetZoom();
+            }
+            if (this.currentPanzoom.center) {
+                this.currentPanzoom.center();
+            }
+        }
+    },
+    
+    fitToScreen() {
+        if (this.currentPanzoom) {
+            if (this.currentPanzoom.fit) {
+                this.currentPanzoom.fit();
+            }
+            if (this.currentPanzoom.center) {
+                this.currentPanzoom.center();
+            }
+        }
+    }
+};
+
+// Initialize popup functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup both direct img.popup-diagram and div.popup-diagram > img structures
+    function setupPopupElement(element) {
+        if (element.hasAttribute('data-popup-initialized')) return;
+        
+        let img = null;
+        let clickTarget = element;
+        
+        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
+            // Direct img with popup-diagram class
+            img = element;
+        } else if (element.classList.contains('popup-diagram')) {
+            // div with popup-diagram class - find img inside
+            img = element.querySelector('img');
+            if (!img) return; // No img found, skip
+        }
+        
+        if (!img) return;
+        
+        clickTarget.style.cursor = 'pointer';
+        clickTarget.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            diagramModal.openImage(img);
+        });
+        clickTarget.title = 'Click to open in fullscreen with zoom controls';
+        element.setAttribute('data-popup-initialized', 'true');
+    }
+    
+    // Setup existing popup diagrams
+    document.querySelectorAll('img.popup-diagram, .popup-diagram').forEach(setupPopupElement);
+});
+
+// Also check for dynamically added images
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) { // Element node
+                // Check the node itself
+                if ((node.tagName === 'IMG' && node.classList.contains('popup-diagram')) ||
+                    (node.classList && node.classList.contains('popup-diagram'))) {
+                    setupPopupElement(node);
+                }
+                
+                // Check descendants
+                if (node.querySelectorAll) {
+                    const elements = node.querySelectorAll('img.popup-diagram, .popup-diagram');
+                    elements.forEach(setupPopupElement);
+                }
+            }
+        });
+    });
+    
+    function setupPopupElement(element) {
+        if (element.hasAttribute('data-popup-initialized')) return;
+        
+        let img = null;
+        let clickTarget = element;
+        
+        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
+            // Direct img with popup-diagram class
+            img = element;
+        } else if (element.classList.contains('popup-diagram')) {
+            // div with popup-diagram class - find img inside
+            img = element.querySelector('img');
+            if (!img) return; // No img found, skip
+        }
+        
+        if (!img) return;
+        
+        clickTarget.style.cursor = 'pointer';
+        clickTarget.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            diagramModal.openImage(img);
+        });
+        clickTarget.title = 'Click to open in fullscreen with zoom controls';
+        element.setAttribute('data-popup-initialized', 'true');
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
+
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neo',
+    look: 'neo'
+});
+
+mermaid.run({
+    querySelector: '.mermaid',
+    postRenderCallback: (id) => {
+        console.log('Post-render callback for diagram:', id);
+        const svg = document.getElementById(id);
+        const container = svg.parentNode;
+
+        // NO PANZOOM for embedded diagrams - just basic sizing
+        const bbox = svg.getBBox ? svg.getBBox() : { width: 800, height: 600 };
+        
+        container.style.width = bbox.width + 'px';
+        container.style.height = bbox.height + 'px';
+        svg.setAttribute('width', bbox.width);
+        svg.setAttribute('height', bbox.height);
+        
+        // Add click handler for fullscreen
+        svg.style.cursor = 'pointer';
+        svg.addEventListener('click', () => {
+            diagramModal.openSvg(svg);
+        });
+        
+        // Add tooltip
+        svg.title = 'Click to open in fullscreen with zoom controls';
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-container">
+    <a href="tutorial.html" class="nav-prev">&larr; Tutorial</a>
+          <span class="nav-next-disabled">Next &rarr;</span>
+  </div>
+</nav>
+</body>
+</html>

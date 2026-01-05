@@ -1,0 +1,1216 @@
+= 👩‍💻*Frontend Integration*
+
+[[top]]
+== *Overview*
+
+The DocOps Extension Server provides a powerful REST API through the `DocOpsRouter` that enables engineers to generate rich visualizations programmatically. This document demonstrates how to integrate with the DocOpsRouter using modern frontend frameworks like Vue.js, React, Angular, and HTMX.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *DocOpsRouter API*
+
+The DocOpsRouter exposes a REST endpoint at `/api/docops/svg` that accepts various parameters to generate SVG visualizations:
+
+=== Endpoint: GET /api/docops/svg
+
+==== Parameters
+
+[cols="1,1,1,2", options="header"]
+|===
+|Parameter |Type |Default |Description
+|kind |String |required |Type of visualization (adr, timeline, charts, etc.)
+|payload |String |required |URL-encoded and optionally compressed data payload
+|scale |String |1.0 |Scale factor for the visualization
+|type |String |SVG |Output type (currently SVG)
+|title |String |"" |Title for the visualization
+|useDark |Boolean |false |Enable dark theme
+|useGlass |Boolean |false |Enable glass effect
+|docname |String |unknown |Document name for metadata
+|backend |String |html |Backend type (html, html5)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Payload Encoding
+
+The payload parameter must be URL-encoded before sending to the server. The DocOpsRouter will:
+
+1. URL decode the payload
+2. Decompress if it's compressed
+3. Process the final payload
+
+==== Supported Visualization Types
+
+The DocOpsRouter supports the following visualization kinds:
+
+* **Documents**: adr, buttons, callout
+* **Charts**: pie, pieslice, bar, bargroup, line, combination, comp, treechart
+* **Planning**: timeline, roadmap, planner, scorecard, release
+* **Diagrams**: connector, placemat, quadrant, swim
+* **Miscellaneous**: badge, shield, cal, table, metricscard, wordcloud, feature
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *Vue.js Integration*
+
+=== Basic Vue Component
+
+Here's a Vue component that properly encodes payloads for the DocOpsRouter:
+
+[source,vue]
+----
+<template>
+  <div class="docops-visualizer">
+    <div v-if="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading visualization...</p>
+    </div>
+
+    <div v-else-if="error" class="error">
+      <p>Error: {{ error }}</p>
+    </div>
+
+    <div v-else-if="svgContent" class="svg-container" v-html="svgContent"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DocOpsVisualizer',
+  props: {
+    baseUrl: {
+      type: String,
+      default: 'http://localhost:8010'
+    },
+    kind: {
+      type: String,
+      required: true
+    },
+    payload: {
+      type: String,
+      required: true
+    },
+    scale: {
+      type: String,
+      default: '1.0'
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    useDark: {
+      type: Boolean,
+      default: false
+    },
+    useGlass: {
+      type: Boolean,
+      default: false
+    },
+    docname: {
+      type: String,
+      default: 'unknown'
+    },
+    backend: {
+      type: String,
+      default: 'html'
+    }
+  },
+  data() {
+    return {
+      svgContent: '',
+      loading: false,
+      error: null
+    }
+  },
+  watch: {
+    kind() { this.fetchSvg() },
+    payload() { this.fetchSvg() },
+    scale() { this.fetchSvg() },
+    title() { this.fetchSvg() },
+    useDark() { this.fetchSvg() },
+    useGlass() { this.fetchSvg() },
+    docname() { this.fetchSvg() },
+    backend() { this.fetchSvg() }
+  },
+  mounted() {
+    this.fetchSvg()
+  },
+  methods: {
+    buildUrl() {
+      // URL encode the payload before sending
+      const encodedPayload = encodeURIComponent(this.payload);
+
+      const params = new URLSearchParams({
+        kind: this.kind,
+        payload: encodedPayload,
+        scale: this.scale,
+        type: 'SVG',
+        title: this.title,
+        useDark: this.useDark.toString(),
+        useGlass: this.useGlass.toString(),
+        docname: this.docname,
+        backend: this.backend
+      });
+
+      return `${this.baseUrl}/api/docops/svg?${params.toString()}`;
+    },
+
+    async fetchSvg() {
+      if (!this.payload) return;
+
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await fetch(this.buildUrl());
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const svgText = await response.text();
+        this.svgContent = svgText;
+      } catch (err) {
+        this.error = err.message;
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  padding: 1rem;
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  color: #c33;
+}
+
+.svg-container {
+  width: 100%;
+  height: 100%;
+}
+</style>
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Vue Usage Example
+
+[source,vue]
+----
+<template>
+  <div class="app">
+    <h1>DocOps Visualizations</h1>
+
+    <!-- Timeline Visualization -->
+    <DocOpsVisualizer
+      kind="timeline"
+      :payload="timelineData"
+      title="Project Timeline"
+      :use-dark="false"
+    />
+
+    <!-- ADR Visualization -->
+    <DocOpsVisualizer
+      kind="adr"
+      :payload="adrData"
+      title="Architecture Decision Record"
+      :use-dark="true"
+    />
+  </div>
+</template>
+
+<script>
+import DocOpsVisualizer from './components/DocOpsVisualizer.vue'
+
+export default {
+  components: {
+    DocOpsVisualizer
+  },
+  data() {
+    return {
+      timelineData: `
+date: 2024-01-15
+text: Project kickoff and requirements gathering
+-
+date: 2024-02-01
+text: System architecture design completed
+-
+date: 2024-03-15
+text: MVP development milestone reached
+      `,
+      adrData: `
+title: Use React for Frontend
+status: Accepted
+date: 2024-01-20
+context: We need to choose a frontend framework
+decision: Use React with TypeScript
+consequences: Improved developer experience and type safety
+      `
+    }
+  }
+}
+</script>
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *React Integration*
+
+=== Basic React Component
+
+Here's a React component that properly handles payload encoding:
+
+[source,javascript]
+----
+import React, { useState, useEffect } from 'react';
+
+const DocOpsVisualizer = ({
+  baseUrl = 'http://localhost:8010',
+  kind,
+  payload,
+  scale = '1.0',
+  title = '',
+  useDark = false,
+  useGlass = false,
+  docname = 'unknown',
+  backend = 'html'
+}) => {
+  const [svgContent, setSvgContent] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchSvg = async () => {
+    if (!payload) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // URL encode the payload before sending
+      const encodedPayload = encodeURIComponent(payload);
+
+      const params = new URLSearchParams({
+        kind,
+        payload: encodedPayload,
+        scale,
+        type: 'SVG',
+        title,
+        useDark: useDark.toString(),
+        useGlass: useGlass.toString(),
+        docname,
+        backend
+      });
+
+      const response = await fetch(`${baseUrl}/api/docops/svg?${params}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const svgText = await response.text();
+      setSvgContent(svgText);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSvg();
+  }, [kind, payload, scale, title, useDark, useGlass, docname, backend]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <span className="ml-2">Loading visualization...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        Error: {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="docops-visualizer">
+      {svgContent && (
+        <div
+          className="svg-container"
+          dangerouslySetInnerHTML={{ __html: svgContent }}
+        />
+      )}
+    </div>
+  );
+};
+
+export default DocOpsVisualizer;
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== React Usage Example
+
+[source,javascript]
+----
+import React from 'react';
+import DocOpsVisualizer from './components/DocOpsVisualizer';
+
+const App = () => {
+  const chartData = `
+title: Q1 Sales Performance
+data:
+- name: Product A
+  value: 45
+- name: Product B
+  value: 25
+- name: Product C
+  value: 30
+  `;
+
+  const roadmapData = `
+title: Product Roadmap 2024
+quarters:
+  Q1: Foundation & Core Features
+  Q2: Enhanced UI/UX
+  Q3: API Integration
+  Q4: Performance Optimization
+  `;
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">DocOps Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-xl font-semibold mb-4">Sales Chart</h2>
+          <DocOpsVisualizer
+            kind="pie"
+            payload={chartData}
+            title="Q1 Sales"
+            scale="0.8"
+          />
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4">
+          <h2 className="text-xl font-semibold mb-4">Product Roadmap</h2>
+          <DocOpsVisualizer
+            kind="roadmap"
+            payload={roadmapData}
+            title="2024 Roadmap"
+            useDark={true}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Custom React Hook
+
+[source,javascript]
+----
+import { useState, useCallback } from 'react';
+
+export const useDocOpsRouter = (baseUrl = 'http://localhost:8010') => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const generateSvg = useCallback(async (config) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // URL encode the payload before sending
+      const encodedPayload = encodeURIComponent(config.payload);
+
+      const params = new URLSearchParams({
+        kind: config.kind,
+        payload: encodedPayload,
+        scale: config.scale || '1.0',
+        type: config.type || 'SVG',
+        title: config.title || '',
+        useDark: (config.useDark || false).toString(),
+        useGlass: (config.useGlass || false).toString(),
+        docname: config.docname || 'unknown',
+        backend: config.backend || 'html'
+      });
+
+      const response = await fetch(`${baseUrl}/api/docops/svg?${params}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.text();
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [baseUrl]);
+
+  return { generateSvg, loading, error };
+};
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *Angular Integration*
+
+=== Angular Service
+
+Create an Angular service to handle DocOpsRouter integration:
+
+[source,typescript]
+----
+// docops-router.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface DocOpsConfig {
+  kind: string;
+  payload: string;
+  scale?: string;
+  type?: string;
+  title?: string;
+  useDark?: boolean;
+  useGlass?: boolean;
+  docname?: string;
+  backend?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DocOpsRouterService {
+  private baseUrl = 'http://localhost:8010';
+
+  constructor(private http: HttpClient) { }
+
+  generateSvg(config: DocOpsConfig): Observable<string> {
+    // URL encode the payload before sending
+    const encodedPayload = encodeURIComponent(config.payload);
+
+    const params = new HttpParams()
+      .set('kind', config.kind)
+      .set('payload', encodedPayload)
+      .set('scale', config.scale || '1.0')
+      .set('type', config.type || 'SVG')
+      .set('title', config.title || '')
+      .set('useDark', (config.useDark || false).toString())
+      .set('useGlass', (config.useGlass || false).toString())
+      .set('docname', config.docname || 'unknown')
+      .set('backend', config.backend || 'html');
+
+    return this.http.get(`${this.baseUrl}/api/docops/svg`, {
+      params,
+      responseType: 'text'
+    });
+  }
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Angular Component
+
+[source,typescript]
+----
+// docops-visualizer.component.ts
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DocOpsRouterService, DocOpsConfig } from './docops-router.service';
+
+@Component({
+  selector: 'app-docops-visualizer',
+  template: `
+    <div class="docops-visualizer">
+      <div *ngIf="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading visualization...</p>
+      </div>
+
+      <div *ngIf="error" class="error">
+        <p>Error: {{ error }}</p>
+      </div>
+
+      <div *ngIf="svgContent && !loading"
+           class="svg-container"
+           [innerHTML]="svgContent">
+      </div>
+    </div>
+  `,
+  styles: [`
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error {
+      padding: 1rem;
+      background-color: #fee;
+      border: 1px solid #fcc;
+      border-radius: 4px;
+      color: #c33;
+    }
+
+    .svg-container {
+      width: 100%;
+      height: 100%;
+    }
+  `]
+})
+export class DocOpsVisualizerComponent implements OnInit, OnChanges {
+  @Input() kind!: string;
+  @Input() payload!: string;
+  @Input() scale: string = '1.0';
+  @Input() title: string = '';
+  @Input() useDark: boolean = false;
+  @Input() useGlass: boolean = false;
+  @Input() docname: string = 'unknown';
+  @Input() backend: string = 'html';
+
+  svgContent: SafeHtml = '';
+  loading: boolean = false;
+  error: string | null = null;
+
+  constructor(
+    private docOpsService: DocOpsRouterService,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchSvg();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['kind'] || changes['payload'] || changes['scale'] ||
+        changes['title'] || changes['useDark'] || changes['useGlass'] ||
+        changes['docname'] || changes['backend']) {
+      this.fetchSvg();
+    }
+  }
+
+  private fetchSvg(): void {
+    if (!this.payload) return;
+
+    this.loading = true;
+    this.error = null;
+
+    const config: DocOpsConfig = {
+      kind: this.kind,
+      payload: this.payload,
+      scale: this.scale,
+      title: this.title,
+      useDark: this.useDark,
+      useGlass: this.useGlass,
+      docname: this.docname,
+      backend: this.backend
+    };
+
+    this.docOpsService.generateSvg(config).subscribe({
+      next: (svgText) => {
+        this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgText);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err.message || 'Failed to generate visualization';
+        this.loading = false;
+      }
+    });
+  }
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Angular Usage Example
+
+[source,typescript]
+----
+// app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <div class="container mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-6">DocOps Dashboard</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-xl font-semibold mb-4">Timeline</h2>
+          <app-docops-visualizer
+            kind="timeline"
+            [payload]="timelineData"
+            title="Project Timeline"
+            [useDark]="false">
+          </app-docops-visualizer>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-xl font-semibold mb-4">Scorecard</h2>
+          <app-docops-visualizer
+            kind="scorecard"
+            [payload]="scorecardData"
+            title="Performance Metrics"
+            [useDark]="true">
+          </app-docops-visualizer>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class AppComponent {
+  timelineData = `
+date: 2024-01-15
+text: Project kickoff and requirements gathering
+-
+date: 2024-02-01
+text: System architecture design completed
+-
+date: 2024-03-15
+text: MVP development milestone reached
+  `;
+
+  scorecardData = `
+title: Q1 Performance Metrics
+metrics:
+- name: Performance Score
+  value: 85
+  target: 90
+- name: User Satisfaction
+  value: 92
+  target: 95
+- name: System Uptime
+  value: 99.8
+  target: 99.9
+  `;
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+== *HTMX Integration*
+
+=== HTMX with Server-Side Rendering
+
+HTMX provides a unique approach by generating URLs server-side and using hypermedia controls:
+
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DocOps with HTMX</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        .loading { text-align: center; padding: 2rem; }
+        .error { color: red; padding: 1rem; border: 1px solid red; border-radius: 4px; }
+        .svg-container { width: 100%; height: 100%; }
+        .docops-form { margin: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DocOps Visualizations with HTMX</h1>
+
+        <!-- Interactive Form -->
+        <div class="docops-form">
+            <h2>Generate Visualization</h2>
+            <form hx-post="/generate-docops-url"
+                  hx-target="#visualization-container"
+                  hx-indicator="#loading">
+
+                <div>
+                    <label for="kind">Visualization Type:</label>
+                    <select name="kind" id="kind">
+                        <option value="timeline">Timeline</option>
+                        <option value="adr">ADR</option>
+                        <option value="roadmap">Roadmap</option>
+                        <option value="pie">Pie Chart</option>
+                        <option value="bar">Bar Chart</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="payload">Data:</label>
+                    <textarea name="payload" id="payload" rows="6"
+                              placeholder="Enter your data here..."></textarea>
+                </div>
+
+                <div>
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" />
+                </div>
+
+                <div>
+                    <label for="scale">Scale:</label>
+                    <input type="number" name="scale" id="scale"
+                           value="1.0" step="0.1" />
+                </div>
+
+                <div>
+                    <label>
+                        <input type="checkbox" name="useDark" value="true" />
+                        Use Dark Theme
+                    </label>
+                </div>
+
+                <div>
+                    <label>
+                        <input type="checkbox" name="useGlass" value="true" />
+                        Use Glass Effect
+                    </label>
+                </div>
+
+                <button type="submit">Generate Visualization</button>
+            </form>
+        </div>
+
+        <!-- Loading indicator -->
+        <div id="loading" class="loading htmx-indicator">
+            Generating visualization...
+        </div>
+
+        <!-- Visualization container -->
+        <div id="visualization-container">
+            <!-- SVG will be loaded here -->
+        </div>
+
+        <!-- Pre-configured visualizations -->
+        <div class="preset-visualizations">
+            <h2>Sample Visualizations</h2>
+
+            <button hx-get="/docops-sample/timeline"
+                    hx-target="#sample-timeline"
+                    hx-indicator="#loading">
+                Load Timeline Sample
+            </button>
+            <div id="sample-timeline" class="svg-container"></div>
+
+            <button hx-get="/docops-sample/adr"
+                    hx-target="#sample-adr"
+                    hx-indicator="#loading">
+                Load ADR Sample
+            </button>
+            <div id="sample-adr" class="svg-container"></div>
+        </div>
+    </div>
+</body>
+</html>
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Server-Side Handler (Spring Boot)
+
+[source,java]
+----
+@RestController
+public class DocOpsHtmxController {
+
+    @PostMapping("/generate-docops-url")
+    public ResponseEntity<String> generateDocOpsUrl(
+            @RequestParam String kind,
+            @RequestParam String payload,
+            @RequestParam(defaultValue = "1.0") String scale,
+            @RequestParam(defaultValue = "") String title,
+            @RequestParam(defaultValue = "false") boolean useDark,
+            @RequestParam(defaultValue = "false") boolean useGlass,
+            HttpServletRequest request) {
+
+        try {
+            // URL encode the payload
+            String encodedPayload = URLEncoder.encode(payload, StandardCharsets.UTF_8);
+
+            // Build the DocOps API URL
+            String docOpsUrl = UriComponentsBuilder.fromUriString("http://localhost:8010")
+                .path("/api/docops/svg")
+                .queryParam("kind", kind)
+                .queryParam("payload", encodedPayload)
+                .queryParam("scale", scale)
+                .queryParam("title", title)
+                .queryParam("useDark", useDark)
+                .queryParam("useGlass", useGlass)
+                .queryParam("type", "SVG")
+                .build()
+                .toUriString();
+
+            // Return HTML that will fetch and display the SVG
+            String html = String.format("""
+                <div class="visualization-result">
+                    <h3>Generated Visualization</h3>
+                    <div hx-get="%s"
+                         hx-trigger="load"
+                         hx-target="this"
+                         class="svg-container">
+                        Loading...
+                    </div>
+                    <div class="url-display">
+                        <label>API URL:</label>
+                        <input type="text" value="%s" readonly onclick="this.select()" />
+                    </div>
+                </div>
+                """, docOpsUrl, docOpsUrl);
+
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(html);
+
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body("<div class='error'>Error generating visualization: " + e.getMessage() + "</div>");
+        }
+    }
+
+    @GetMapping("/docops-sample/{type}")
+    public ResponseEntity<String> getDocOpsSample(@PathVariable String type) {
+        String sampleData = getSampleData(type);
+
+        try {
+            String encodedPayload = URLEncoder.encode(sampleData, StandardCharsets.UTF_8);
+
+            String docOpsUrl = UriComponentsBuilder.fromUriString("http://localhost:8010")
+                .path("/api/docops/svg")
+                .queryParam("kind", type)
+                .queryParam("payload", encodedPayload)
+                .queryParam("scale", "0.8")
+                .queryParam("title", "Sample " + type.toUpperCase())
+                .queryParam("useDark", "false")
+                .build()
+                .toUriString();
+
+            // Fetch the SVG directly and return it
+            RestTemplate restTemplate = new RestTemplate();
+            String svgContent = restTemplate.getForObject(docOpsUrl, String.class);
+
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body("<div class='svg-container'>" + svgContent + "</div>");
+
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body("<div class='error'>Error loading sample: " + e.getMessage() + "</div>");
+        }
+    }
+
+    private String getSampleData(String type) {
+        return switch (type) {
+            case "timeline" -> """
+                date: 2024-01-15
+                text: Project kickoff
+                -
+                date: 2024-02-01
+                text: Design phase completed
+                -
+                date: 2024-03-15
+                text: MVP released
+                """;
+            case "adr" -> """
+                title: Use Microservices Architecture
+                status: Accepted
+                date: 2024-01-20
+                context: Need to scale application
+                decision: Implement microservices
+                consequences: Better scalability
+                """;
+            default -> "No sample data available";
+        };
+    }
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== HTMX with Client-Side URL Building
+
+For cases where you want to build URLs client-side with HTMX:
+
+[source,html]
+----
+<script>
+function generateDocOpsVisualization(kind, payload, options = {}) {
+    // URL encode the payload
+    const encodedPayload = encodeURIComponent(payload);
+
+    const params = new URLSearchParams({
+        kind: kind,
+        payload: encodedPayload,
+        scale: options.scale || '1.0',
+        title: options.title || '',
+        useDark: (options.useDark || false).toString(),
+        useGlass: (options.useGlass || false).toString(),
+        type: 'SVG'
+    });
+
+    const url = `http://localhost:8010/api/docops/svg?${params}`;
+
+    // Use HTMX to fetch and display
+    htmx.ajax('GET', url, {
+        target: '#visualization-target',
+        swap: 'innerHTML'
+    });
+}
+
+// Usage
+document.getElementById('generate-btn').addEventListener('click', function() {
+    const payload = document.getElementById('payload-input').value;
+    generateDocOpsVisualization('timeline', payload, {
+        title: 'My Timeline',
+        scale: '0.8',
+        useDark: true
+    });
+});
+</script>
+
+<div>
+    <textarea id="payload-input" placeholder="Enter timeline data..."></textarea>
+    <button id="generate-btn">Generate Timeline</button>
+    <div id="visualization-target"></div>
+</div>
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *Advanced Integration Patterns*
+
+=== Payload Compression
+
+For large payloads, you can implement compression before encoding:
+
+[source,javascript]
+----
+// Compression utility (requires pako library)
+import pako from 'pako';
+
+function compressPayload(payload) {
+    const compressed = pako.gzip(payload);
+    return btoa(String.fromCharCode.apply(null, compressed));
+}
+
+function preparePayload(payload) {
+    // For large payloads, compress first
+    if (payload.length > 1000) {
+        return compressPayload(payload);
+    }
+    // For smaller payloads, just URL encode
+    return encodeURIComponent(payload);
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Error Handling Best Practices
+
+[source,javascript]
+----
+async function fetchDocOpsVisualization(config) {
+    try {
+        const encodedPayload = encodeURIComponent(config.payload);
+        const params = new URLSearchParams({
+            kind: config.kind,
+            payload: encodedPayload,
+            // ... other params
+        });
+
+        const response = await fetch(`/api/docops/svg?${params}`);
+
+        if (!response.ok) {
+            throw new Error(`DocOps API error: ${response.status}`);
+        }
+
+        const svgContent = await response.text();
+
+        // Validate SVG content
+        if (!svgContent.includes('<svg')) {
+            throw new Error('Invalid SVG response from DocOps API');
+        }
+
+        return svgContent;
+
+    } catch (error) {
+        console.error('DocOps visualization failed:', error);
+        throw new Error(`Failed to generate ${config.kind} visualization: ${error.message}`);
+    }
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Performance Optimization
+
+[source,javascript]
+----
+// Debounced payload encoding for interactive forms
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Cache for repeated requests
+const visualizationCache = new Map();
+
+function getCachedVisualization(config) {
+    const key = JSON.stringify(config);
+    return visualizationCache.get(key);
+}
+
+function setCachedVisualization(config, svg) {
+    const key = JSON.stringify(config);
+    visualizationCache.set(key, svg);
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== *Security Considerations*
+
+=== Payload Validation
+
+Always validate payloads before sending to the DocOpsRouter:
+
+[source,javascript]
+----
+function validatePayload(payload, kind) {
+    if (!payload || typeof payload !== 'string') {
+        throw new Error('Payload must be a non-empty string');
+    }
+
+    if (payload.length > 100000) {
+        throw new Error('Payload too large (max 100KB)');
+    }
+
+    // Kind-specific validation
+    switch (kind) {
+        case 'timeline':
+            if (!payload.includes('date:')) {
+                throw new Error('Timeline payload must contain date entries');
+            }
+            break;
+        case 'adr':
+            if (!payload.includes('title:')) {
+                throw new Error('ADR payload must contain a title');
+            }
+            break;
+    }
+
+    return true;
+}
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Content Security Policy
+
+When displaying SVG content, ensure proper CSP headers:
+
+[source,html]
+----
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               img-src 'self' data:;
+               script-src 'self' 'unsafe-inline';">
+----
+
+== *Conclusion*
+
+The DocOpsRouter provides a flexible API for generating visualizations across multiple frontend frameworks and documentation platforms. Key points to remember:
+
+1. **Always URL-encode payloads** before sending to the API
+2. **Handle loading states** and errors appropriately
+3. **Validate payloads** before transmission
+4. **Use appropriate security measures** when displaying SVG content
+5. **Consider performance optimizations** for large or frequent requests
+6. **Provide fallback content** for Markdown integration
+7. **Cache responses** when appropriate
+
+Whether using Vue.js, React, Angular, HTMX, or Markdown processors, the pattern remains consistent: encode the payload, build the URL with proper parameters, and handle the SVG response appropriately for your chosen framework or platform.
+
+[.back-to-top]
+<<top, 🔝>>

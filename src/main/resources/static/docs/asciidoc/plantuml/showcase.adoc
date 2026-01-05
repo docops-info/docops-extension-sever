@@ -1,0 +1,734 @@
+= DocOps Plantuml Theme
+:doctype: book
+:stylesdir: ../styles
+:stylesheet: modern-style.min.css
+:toc: left
+:toclevels: 3
+:icons: font
+:icon-set: fas
+:imagesdir: images
+:source-highlighter: highlightjs
+:data-uri:
+:icons: font
+:sectids:
+:sectnums:
+
+++++
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+/>
+<script>
+class ThemeToggleTop {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.createToggleButton();
+        this.loadSavedTheme();
+        this.setupEventListeners();
+    }
+
+    createToggleButton() {
+        const button = document.createElement('button');
+        button.className = 'theme-toggle';
+        button.setAttribute('aria-label', 'Toggle theme');
+        button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+        document.body.appendChild(button);
+        this.toggleButton = button;
+    }
+
+    setupEventListeners() {
+        this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+        // Listen for system theme changes only when in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.getThemePreference() === 'auto') {
+                this.updateTheme();
+            }
+        });
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getThemePreference();
+        let newTheme;
+
+        switch (currentTheme) {
+            case 'light':
+                newTheme = 'dark';
+                break;
+            case 'dark':
+                newTheme = 'auto';
+                break;
+            case 'auto':
+                newTheme = 'light';
+                break;
+            default:
+                // Check current state of the document
+                const root = document.documentElement;
+                if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                    newTheme = 'light';
+                } else {
+                    newTheme = 'dark';
+                }
+        }
+
+        this.setTheme(newTheme);
+    }
+
+    setTheme(theme) {
+        localStorage.setItem('theme', theme);
+        this.updateTheme();
+    }
+
+    getThemePreference() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            return saved;
+        }
+
+        // If no saved preference, detect current state from DOM
+        const root = document.documentElement;
+        if (root.classList.contains('dark-mode')) {
+            return 'dark';
+        } else if (root.classList.contains('dark-mode-auto')) {
+            return 'auto';
+        }
+        return 'light';
+    }
+
+    updateTheme() {
+        const theme = this.getThemePreference();
+        const root = document.documentElement;
+
+        // Remove existing theme classes
+        root.classList.remove('dark-mode', 'dark-mode-auto');
+
+        switch (theme) {
+            case 'dark':
+                root.classList.add('dark-mode');
+                break;
+            case 'auto':
+                root.classList.add('dark-mode-auto');
+                break;
+            // 'light' theme uses default styles
+        }
+
+        // Update button aria-label
+        const themeNames = {
+            light: 'light',
+            dark: 'dark',
+            auto: 'auto (follows system)'
+        };
+        this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+    }
+
+    loadSavedTheme() {
+        this.updateTheme();
+    }
+}
+
+// Initialize theme toggle when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+} else {
+    new ThemeToggleTop();
+}
+</script>
+++++
+
+== Theme Showcase
+
+The Plantuml theme is an attempt to create a visually appealing and consistent look for Plantuml diagrams.  It leverages Apples's styling guidelines and colors to achieve this.
+
+== Class Diagram
+
+[plantuml, clazz, format=svg,role="popup-diagram"]
+----
+!theme docops from themes
+class Animal {
+  + eat()
+}
+class Dog extends Animal {
+  + bark()
+}
+interface Flyable {
+  + fly()
+}
+class Bird implements Flyable {
+  + fly()
+}
+class Customer
+class Order
+
+Customer "1" -- "*" Order : places
+
+class Car
+class Wheel
+
+Car "1" o-- "4" Wheel : has // Aggregation
+class House
+class Room
+
+House "1" *-- "many" Room : contains // Composition
+
+abstract class Shape {
+  + {abstract} calculateArea(): double
+}
+class Circle extends Shape {
+  + calculateArea(): double
+}
+
+
+class BattleshipGame {
+    - inputboard : ArrayList<ArrayList>
+
+    <<constructor>> BattleshipGame()
+    +playgame(board:board,player:player)
+
+}
+
+class Board {
+
+    - virtualboard : ArrayList<ArrayList>
+    - ships : ArrayList<ship>
+    - traps : ArrayList<trap>
+    - potions : ArrayList<potion>
+
+    <<constructor>> Board(ship:int,trap:int,potion:int)
+    +createboard() : ArrayList<ArrayList>
+    +createships(num:int)
+    +createtraps(num:int)
+    +createpotions(num:int)
+    +isoverlap(temp:potion) : boolean
+    +getship() : ArrayList<ship>
+    +gettrap() : ArrayList<trap>
+    +getpotion() : ArrayList<potion>
+    +getvirtualboard() : ArrayList<ArrayList>
+    +displayboard(board : ArrayList<ArrayList>)
+
+}
+
+
+class Player {
+    - live : int
+    - steptaken : int
+    - inputx : int
+    - inputy : int
+    - shipfound : int
+
+    <<constructor>> Player()
+    +getsteptaken() : int
+    +addstep()
+    +setlive(l:int)
+    +getlive() : int
+    +getshipfound() : int
+    +setshipfound()
+}
+
+class Potion {
+    - y : int
+    - x : int
+    - length : int
+    - isused : boolean
+
+    <<constructor>> Potion()
+    +gety() : int
+    +sety(y:int)
+    +getx(i:int) : int
+    +getlength() : int
+    +isused() : boolean
+    +setused()
+}
+
+class Ship {
+    -posx : ArrayList<Object>
+    -posy : int
+    -length : int
+    -sunken : boolean
+
+    <<constructor>> Ship()
+    +setposition(len:int)
+    +setsunken()
+    +getx(i:int) : int
+    +gety() : int
+    +getposx() : ArrayList<Object>
+    +issunken() : boolean
+    +getlength() : int
+    +generateposition(x:int,y:int,len:int)
+
+}
+
+class Trap {
+    - lives : int
+    - y : int
+    - x : int
+    - reveal : boolean
+
+    <<constructor>> Trap()
+    +gety() : int
+    +getx(i:int) : int
+    +revealed()
+    +isrevealed() : boolean
+    +getlive() : int
+    +getlength() : int
+
+}
+
+class ShipRevealPotion {
+    <<constructor>> ShipRevealPotion()
+    +revealship(temp:ArrayList<ship>, board:ArrayList<ArrayList>)
+}
+
+class LifeSaverPotion {
+    <<constructor>> LifeSaverPotion()
+    + reveal()
+}
+
+class TrapRevealPotion {
+    <<constructor>> TrapRevealPotion()
+    + revealtrap(temp:board, board:ArrayList<ArrayList>)
+}
+
+BattleshipGame "1" *-- "1" Board
+BattleshipGame "1" *-- "1" Player
+
+Board "1" *-- "20..80" Ship
+Board "1"  *-- "10..30" Trap
+Board "1"  *-- "0..18" Potion
+
+Potion <|-- ShipRevealPotion
+Potion <|-- LifeSaverPotion
+Potion <|-- TrapRevealPotion
+----
+
+== Sequence Diagram
+
+[plantuml, seq100, format=svg,role="popup-diagram"]
+----
+!theme docops from themes
+actor Utilisateur as user
+participant "formSign.js" as form <<Contrôleur formulaire>>
+participant "Sign.java" as controler <<(C,#ADD1B2) Contrôleur formulaire>>
+participant "Secure.java" as secure <<(C,#ADD1B2) authentification>>
+participant "Security.java" as security <<(C,#ADD1B2) sécurité>>
+
+box "Application Web" iOS_Green
+	participant form
+end box
+
+box "Serveur Play" iOS_Blue
+	participant controler
+	participant secure
+	participant security
+end box
+
+user -> form : submitSignIn()
+form -> form : getParameters()
+form -> form : result = checkFields()
+
+alt result
+
+    form -> controler : formSignIn(email,pwd)
+    controler -> controler : result = checkFields()
+
+    alt result
+    	controler -> secure : Secure.authenticate(email, pwd, true);
+    	secure -> security : onAuthenticated()
+    	security --> form : renderJSON(0);
+    	form --> user : display main page
+    else !result
+    	controler --> form : renderJSON(1)
+    	form --> user : display error
+    end
+
+else !result
+	form --> user : display error
+end
+
+----
+
+== Activity Diagram
+
+[plantuml, act100, format=svg,role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+
+
+title Servlet Container
+
+(*) --> "ClickServlet.handleRequest()"
+--> "new Page"
+
+if "Page.onSecurityCheck" then
+  ->[true] "Page.onInit()"
+
+  if "isForward?" then
+   ->[no] "Process controls"
+
+   if "continue processing?" then
+     -->[yes] ===RENDERING===
+   else
+     -->[no] ===REDIRECT_CHECK===
+   endif
+
+  else
+   -->[yes] ===RENDERING===
+  endif
+
+  if "is Post?" then
+    -->[yes] "Page.onPost()"
+    --> "Page.onRender()" as render
+    --> ===REDIRECT_CHECK===
+  else
+    -->[no] "Page.onGet()"
+    --> render
+  endif
+
+else
+  -->[false] ===REDIRECT_CHECK===
+endif
+
+if "Do redirect?" then
+ ->[yes] "redirect request"
+ --> ==BEFORE_DESTROY===
+else
+ if "Do Forward?" then
+  -left->[yes] "Forward request"
+  --> ==BEFORE_DESTROY===
+ else
+  -right->[no] "Render page template"
+  --> ==BEFORE_DESTROY===
+ endif
+endif
+
+--> "Page.onDestroy()"
+-->(*)
+
+@enduml
+----
+
+
+== Usecase Diagrams
+
+=== Todos
+[plantuml, use100, format=svg,role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+
+scale 1.2
+
+
+skinparam actor {
+    BorderColor Black
+    BackgroundColor<<author>> iOS_Orange
+    BackgroundColor<<assignee>> iOS_Blue
+}
+
+
+
+
+
+actor "Manager" <<author>> as pm
+actor "Developer" <<assignee>> as Developer
+
+file "ToDo" <<ticket>> as todo iOS_Red
+rectangle "The Next Thing" <<project>> as tnt iOS_Green
+
+rectangle Description <<property>> iOS_Blue
+rectangle Status <<property>> iOS_Blue
+rectangle Notes <<property>> iOS_Blue
+rectangle Files <<property>> iOS_Blue
+rectangle "Linked Tickets" <<property>> as Links iOS_Blue
+rectangle Dates <<property>> iOS_Blue
+rectangle "ID Number" <<property>> as Id iOS_Orange
+
+
+todo --> pm
+todo --> Developer
+todo --> tnt
+
+todo --> Description
+todo --> Status
+todo --> Notes
+todo --> Files
+todo --> Links
+todo --> Dates
+todo --> Id
+
+
+
+
+@enduml
+----
+
+=== Usecase Quiz
+
+[plantuml, use101, format=svg,role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+
+actor "Developer" <<User>> as ADEV
+actor "Expert" <<User>> as AEXPR
+actor "Maintainer" <<User>> as ADEVOP
+actor "Subscriber" <<User>> as ASUBSCR
+actor "Workforce" <<User>> as AWF
+
+component "Designer" <<Application>> as CQD
+component "Runner" <<Application>> as CQR
+component "MailServer" <<Software System>> as CMB
+
+usecase (Provides new versions) as UC1
+usecase (Updates quizzes content) as UC2
+usecase (Exports updated quizzes) as UC3
+usecase (Sends updated quizzes to subscribers) as UC4
+usecase (Receives updated quizzes) as UC5
+usecase (Add updated quizzes) as UC6
+usecase (Passes quizzes) as UC7
+usecase (Checks quiz results) as UC8
+
+ADEV -down-> UC1
+UC1 -left-> CQD
+UC1 -> CQR
+AEXPR -down-> UC2
+UC2 -down-> CQD
+UC3 -up-> CQD
+ADEVOP -up-> UC3
+ADEVOP -> UC4
+UC4 -right-> CMB
+ASUBSCR -down-> UC5
+UC5 -down-> CMB
+ASUBSCR -up-> UC6
+UC6 -up-> CQR
+UC7 -down-> CQR
+AWF -down-> UC7
+UC8 -left-> CQR
+ASUBSCR -up-> UC8
+
+@enduml
+----
+
+== Component
+
+[plantuml,comp100,formst=svg,role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+
+
+scale 1.2
+package "ArduCopter - Simple Version" {
+  [EnginesControl] -down-> Engines
+  [EnginesControl] - [MainCopterProcess]
+  [MainCopterProcess] - [Rangefinder]
+  [Rangefinder] -down-> BottomSonicSensor
+  [MainCopterProcess] -down- [GPSSignalListener]
+}
+package "CarDuino Nano" {
+  [GPSSignalMaker] -down- [MainCarDuinoProcess]
+  [MainCarDuinoProcess] -down- [CommandListener]
+  [GPSSignalMaker] -up- [GPSSignalSender]
+  [MainCarDuinoProcess] - [5x Rangefinders]
+  [5x Rangefinders] -down-> 5xSonicSensors
+  [TelemetricsSender] - [MainCarDuinoProcess]
+  [TelemetricsSender] -down- MiniUSB
+  [CommandListener] -left- MiniUSB
+}
+package "Intell 2800 - Simple Version" {
+  [ComputerCommunications] -up- USB
+  [ComputerCommunications] - [MainComputerProcess]
+  [KinectProcessing] -down-> KINECT
+  [KinectProcessing] - [MainComputerProcess]
+  [VideoProcessing] -down-> Camera
+  [VideoProcessing] - [MainComputerProcess]
+  [ComputerCommunications2] -up- [MainComputerProcess]
+  [ComputerCommunications2] -down- WiFi
+  [ComputerCommunications2] -down- Bluetooth
+}
+[GPSSignalListener] -down- [GPSSignalSender]
+USB -up- MiniUSB
+@enduml
+----
+
+== State Diagram
+
+[plantuml,state100,format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+
+[*] -right-> PENDING
+PENDING -right-> STARTED
+STARTED -down-> PROGRESS
+PROGRESS -right-> FAILURE
+PROGRESS -down-> REVOKED : <b> Revoked</b>\nby user
+PROGRESS -left-> SUCCESS
+FAILURE --> [*]
+REVOKED --> [*]
+SUCCESS --> [*]
+
+PENDING : <b>statistic attribute</b>
+PENDING : add_date  2013-01-06 05:01
+PENDING : <b>task state metadata</b>
+
+STARTED : <b>statistic attribute</b>
+STARTED : add_date  2013-01-06 05:01
+STARTED : <b>task state metadata</b>
+STARTED : pid       <i>of worker</i>
+STARTED : hostname  <i>of worker</i>
+
+PROGRESS : <b>statistic attribute</b>
+PROGRESS : add_date        2013-01-06 05:01
+PROGRESS : <b>task state metadata</b>
+PROGRESS : start_date      2013-01-06 05:02
+PROGRESS : elapsed_time    00:15:18
+PROGRESS : eta_time        00:03:12
+PROGRESS : media_size      23729373055
+PROGRESS : publish_size    18874368000
+PROGRESS : percent         80
+
+SUCCESS : <b>statistic attribute</b>
+SUCCESS : add_date      2013-01-06 05:01
+SUCCESS : <b>task state metadata</b>
+SUCCESS : result {
+SUCCESS : start_date    2013-01-06 05:02
+SUCCESS : elapsed_time  00:18:30
+SUCCESS : eta_time      <b>00:00:00</b>
+SUCCESS : media_size    23729373055
+SUCCESS : publish_size  23729373055
+SUCCESS : percent       <b>100</b>
+SUCCESS : hostname      publisher-0
+SUCCESS : pid           18307
+SUCCESS : }
+
+RETRY : <b>statistic attribute</b>
+RETRY : add_date   2013-01-06 05:01
+RETRY : <b>task state metadata</b>
+RETRY : result     <i>exception</i>
+RETRY : traceback  <i>stack trace</i>
+
+FAILURE : <b>statistic attribute</b>
+FAILURE : add_date   2013-01-06 05:01
+FAILURE : error         (=result)
+FAILURE : error_details (...)
+FAILURE : <b>task state metadata</b>
+FAILURE : result     <i>exception</i>
+FAILURE : traceback  <i>stack trace</i>
+
+REVOKED : <b>statistic attribute</b>
+REVOKED : add_date  2013-01-06 05:01
+REVOKED : <b>task state metadata</b>
+
+@enduml
+----
+
+[plantuml,state101, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+Preview -down-> Deploy
+
+state Deploy {
+
+[*] -down-> Deploy_Pre_Checking
+
+Deploy_Pre_Checking -down-> Deploy_Env_Comparing
+
+Deploy_Env_Comparing -down-> Deploy_Launch
+
+Deploy_Launch -down-> Deploy_Post_Confirmation
+
+}
+
+Deploy -down-> Operation
+@enduml
+----
+
+== C4
+
+[plantuml,c4100, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context Diagram for Online Store
+
+Person(customer, "Customer", "A customer browsing and purchasing products online.")
+System(online_store, "Online Store", "Allows customers to browse products, place orders, and manage accounts.")
+System_Ext(payment_gateway, "Payment Gateway", "Processes credit card payments securely.")
+System_Ext(shipping_service, "Shipping Service", "Handles the delivery of ordered products.")
+
+Rel(customer, online_store, "Uses")
+Rel(online_store, payment_gateway, "Processes payments using")
+Rel(online_store, shipping_service, "Sends order details to")
+
+@enduml
+----
+
+[plantuml,c4101, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include <C4/C4_Context>
+
+title System Context Diagram
+
+Person(customer, "Customer", "Uses the system")
+System(webapp, "Web Application", "Provides functionality")
+System_Ext(email, "Email System", "Sends emails")
+
+Rel(customer, webapp, "Uses")
+Rel(webapp, email, "Sends email via")
+@enduml
+----
+
+[plantuml,c4102, format=svg, role="popup-diagram"]
+----
+@startuml
+!theme docops from themes
+!include <C4/C4_Component>
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
+
+LAYOUT_WITH_LEGEND()
+
+title CRM Order Management System - Component Diagram
+
+System_Boundary(CRMSystem, "CRM Order Management System") {
+    Container(api, "API", "ASP.NET Core", "Handles incoming HTTP requests.") {
+        Component(orderController, "OrderController", "Handles order-related endpoints.")
+        Component(productController, "ProductController", "Handles product-related endpoints.")
+        Component(paymentService, "PaymentService", "Processes payments using external payment gateway.")
+        Component(orderService, "OrderService", "Manages the business logic of order processing.")
+        Component(productService, "ProductService", "Manages product catalog and inventory.")
+        Component(orderRepository, "OrderRepository", "Handles CRUD operations for orders.")
+        Component(productRepository, "ProductRepository", "Handles CRUD operations for products.")
+    }
+    ContainerDb(database, "Orders Database", "SQL Database", "Stores order and product data")
+}
+
+System_Ext(paymentGateway, "Payment Gateway", "External Service", "Handles payment transactions")
+
+Rel(orderController, orderService, "Processes order requests", $tags="sync")
+Rel(productController, productService, "Processes product requests", $tags="sync")
+Rel(orderService, orderRepository, "Stores orders in the database", $tags="sync")
+Rel(productService, productRepository, "Stores products in the database", $tags="sync")
+Rel(orderRepository, database, "Reads/Writes order data", $tags="sync")
+Rel(productRepository, database, "Reads/Writes product data", $tags="sync")
+Rel(orderService, paymentGateway, "Processes payments through", $tags="sync")
+
+@enduml
+
+----
+
+== Download Theme
+Our theme is link:themes/puml-theme-docops.puml[here]

@@ -1,0 +1,596 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:prev-page-title: Examples
+:prev-page-url: examples.html
+:next-page-title: Flow
+:next-page-url: flow.html
+= Docops Feature Cards
+
+reactions::[role=right]
+
+[[top]]
+include::shared/buttons.adoc[]
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Overview
+
+The Feature Card Maker is a tool for creating visually appealing, interactive feature cards that showcase product features, capabilities, or services. These cards are designed with modern aesthetics and interactive elements, making them perfect for product documentation, marketing materials, or feature comparison pages.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Features
+
+* Dynamic SVG generation based on table-formatted input
+* Modern card design with smooth animations and interactions
+* Three layout options: Grid, Row, and Column
+* Theme support (Light, Dark, Auto)
+* Seven color schemes: Blue, Green, Orange, Purple, Red, Teal, and Gray
+* Interactive cards with expandable details
+* Emoji support for visual appeal
+* Responsive design with hover effects
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Usage
+
+=== Basic Example
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Feature 1 | This is a description of feature 1 | 🚀 | BLUE
+>> This is a detail about feature 1
+>> Another detail about feature 1
+Feature 2 | This is a description of feature 2 | 🔍 | GREEN
+>> This is a detail about feature 2
+Feature 3 | This is a description of feature 3 | 🛠️ | ORANGE
+>> This is a detail about feature 3
+----
+....
+
+[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Feature 1 | This is a description of feature 1 | 🚀 | BLUE
+>> This is a detail about feature 1
+>> Another detail about feature 1
+Feature 2 | This is a description of feature 2 | 🔍 | GREEN
+>> This is a detail about feature 2
+Feature 3 | This is a description of feature 3 | 🛠️ | ORANGE
+>> This is a detail about feature 3
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Input Format
+
+The Feature Card Maker uses a simple table format for input, with configuration directives denoted by `@` markers at the beginning.
+
+==== Configuration Directives
+
+[cols="1,3"]
+|===
+|Directive |Description
+
+|@theme: light
+|Sets the theme to light mode (default)
+
+|@theme: dark
+|Sets the theme to dark mode
+
+|@theme: auto
+|Sets the theme to automatically adapt to the user's system preferences
+
+|@layout: grid
+|Arranges cards in a grid layout (default)
+
+|@layout: row
+|Arranges cards in a horizontal row
+
+|@layout: column
+|Arranges cards in a vertical column
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Card Data Format
+
+After the configuration directives, the card data is provided in a table format:
+
+[cols="1,3"]
+|===
+|Column |Description
+
+|Title
+|The title of the feature card
+
+|Description
+|A brief description of the feature
+
+|Emoji
+|An emoji that represents the feature (e.g., 🚀, 📊, 🔍)
+
+|ColorScheme
+|The color scheme for the card (BLUE, GREEN, ORANGE, PURPLE, RED, TEAL, GRAY)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Details
+
+Additional details can be added to each card by including lines that start with `>>` immediately after the card's main data row. These details will be displayed when the user clicks on the card.
+
+Example:
+[source,text]
+----
+Feature 1 | This is a description of feature 1 | 🚀 | BLUE
+>> This is a detail about feature 1
+>> Another detail about feature 1
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Examples
+
+=== Grid Layout (Default)
+
+The grid layout arranges cards in a grid pattern, with a maximum of 3 cards per row.
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Cloud Storage | Secure, scalable storage for all your data | ☁️ | BLUE
+>> End-to-end encryption for all files
+>> Automatic backup and version history
+>> Access from any device, anywhere
+Real-time Collaboration | Work together with your team in real-time | 👥 | GREEN
+>> Simultaneous editing with live cursors
+>> Comments and suggestions
+>> Activity history and notifications
+Advanced Analytics | Gain insights from your data with powerful analytics | 📊 | PURPLE
+>> Custom dashboards and reports
+>> AI-powered trend analysis
+>> Export and share insights
+Mobile Access | Access your work on the go with our mobile apps | 📱 | ORANGE
+>> Native iOS and Android apps
+>> Offline mode with sync
+>> Push notifications for updates
+Automation | Save time with powerful automation tools | ⚙️ | TEAL
+>> Custom workflow creation
+>> Scheduled tasks and triggers
+>> Integration with third-party services
+----
+....
+
+[docops,feature, controls=true]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Cloud Storage | Secure, scalable storage for all your data | ☁️ | BLUE
+>> End-to-end encryption for all files
+>> Automatic backup and version history
+>> Access from any device, anywhere
+Real-time Collaboration | Work together with your team in real-time | 👥 | GREEN
+>> Simultaneous editing with live cursors
+>> Comments and suggestions
+>> Activity history and notifications
+Advanced Analytics | Gain insights from your data with powerful analytics | 📊 | PURPLE
+>> Custom dashboards and reports
+>> AI-powered trend analysis
+>> Export and share insights
+Mobile Access | Access your work on the go with our mobile apps | 📱 | ORANGE
+>> Native iOS and Android apps
+>> Offline mode with sync
+>> Push notifications for updates
+Automation | Save time with powerful automation tools | ⚙️ | TEAL
+>> Custom workflow creation
+>> Scheduled tasks and triggers
+>> Integration with third-party services
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Row Layout
+
+The row layout arranges cards in a single horizontal row.
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Security | Enterprise-grade security for your data | 🔒 | RED
+>> SOC 2 Type II compliance
+>> GDPR and HIPAA compliant
+>> Regular security audits
+Performance | Lightning-fast performance for all operations | ⚡ | ORANGE
+>> Optimized algorithms
+>> Global CDN distribution
+>> Caching mechanisms
+Reliability | 99.99% uptime guarantee | 🛡️ | BLUE
+>> Redundant infrastructure
+>> Automatic failover
+>> 24/7 monitoring
+----
+....
+
+[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Security | Enterprise-grade security for your data | 🔒 | RED
+>> SOC 2 Type II compliance
+>> GDPR and HIPAA compliant
+>> Regular security audits
+Performance | Lightning-fast performance for all operations | ⚡ | ORANGE
+>> Optimized algorithms
+>> Global CDN distribution
+>> Caching mechanisms
+Reliability | 99.99% uptime guarantee | 🛡️ | BLUE
+>> Redundant infrastructure
+>> Automatic failover
+>> 24/7 monitoring
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Column Layout
+
+The column layout arranges cards in a single vertical column.
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: dark
+@layout: column
+
+Title | Description | Emoji | ColorScheme
+AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
+>> Natural language processing
+>> Contextual understanding
+>> Continuous learning
+Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
+>> API access
+>> Webhook support
+>> Pre-built connectors
+Premium Support | Get help when you need it | 🎯 | TEAL
+>> 24/7 live chat
+>> Dedicated support team
+>> Priority response times
+----
+....
+
+[docops,feature]
+----
+@theme: dark
+@layout: column
+
+Title | Description | Emoji | ColorScheme
+AI Assistant | Intelligent assistant powered by machine learning | 🤖 | PURPLE
+>> Natural language processing
+>> Contextual understanding
+>> Continuous learning
+Custom Integrations | Connect with your favorite tools and services | 🔌 | GREEN
+>> API access
+>> Webhook support
+>> Pre-built connectors
+Premium Support | Get help when you need it | 🎯 | TEAL
+>> 24/7 live chat
+>> Dedicated support team
+>> Priority response times
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Dark Theme
+
+The dark theme provides a sleek, modern look that's perfect for dark mode interfaces.
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Data Visualization | Create beautiful, interactive charts and graphs | 📈 | BLUE
+>> Line, bar, and pie charts
+>> Interactive tooltips and zooming
+>> Custom color schemes
+Team Management | Organize and manage your team effectively | 👨‍💼 | GREEN
+>> Role-based permissions
+>> Team performance analytics
+>> Resource allocation tools
+Content Creation | Create and publish content with ease | 📝 | ORANGE
+>> Rich text editor
+>> Media library
+>> Publishing workflow
+----
+....
+
+[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Data Visualization | Create beautiful, interactive charts and graphs | 📈 | BLUE
+>> Line, bar, and pie charts
+>> Interactive tooltips and zooming
+>> Custom color schemes
+Team Management | Organize and manage your team effectively | 👨‍💼 | GREEN
+>> Role-based permissions
+>> Team performance analytics
+>> Resource allocation tools
+Content Creation | Create and publish content with ease | 📝 | ORANGE
+>> Rich text editor
+>> Media library
+>> Publishing workflow
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Creative Use Cases
+
+=== Product Features Showcase
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Smart Notifications | Get notified about what matters most to you | 🔔 | BLUE
+>> Customizable notification preferences
+>> Priority-based filtering
+>> Scheduled quiet hours
+Cross-Platform Sync | Your data is always in sync across all devices | 🔄 | GREEN
+>> Real-time synchronization
+>> Conflict resolution
+>> Offline support with automatic sync
+Advanced Search | Find anything in seconds with our powerful search | 🔍 | PURPLE
+>> Full-text search
+>> Filters and advanced operators
+>> Recent and saved searches
+----
+....
+
+[docops,feature]
+----
+@theme: light
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Smart Notifications | Get notified about what matters most to you | 🔔 | BLUE
+>> Customizable notification preferences
+>> Priority-based filtering
+>> Scheduled quiet hours
+Cross-Platform Sync | Your data is always in sync across all devices | 🔄 | GREEN
+>> Real-time synchronization
+>> Conflict resolution
+>> Offline support with automatic sync
+Advanced Search | Find anything in seconds with our powerful search | 🔍 | PURPLE
+>> Full-text search
+>> Filters and advanced operators
+>> Recent and saved searches
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Service Tiers Comparison
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Basic Plan | Essential features for individuals | 🥉 | GRAY
+>> 10GB storage
+>> Basic support
+>> Core features
+Pro Plan | Advanced features for professionals | 🥈 | BLUE
+>> 100GB storage
+>> Priority support
+>> Advanced features
+>> Team collaboration
+Enterprise Plan | Complete solution for organizations | 🥇 | PURPLE
+>> Unlimited storage
+>> 24/7 dedicated support
+>> All features
+>> Custom integrations
+>> SLA guarantee
+----
+....
+
+[docops,feature]
+----
+@theme: light
+@layout: row
+
+Title | Description | Emoji | ColorScheme
+Basic Plan | Essential features for individuals | 🥉 | GRAY
+>> 10GB storage
+>> Basic support
+>> Core features
+Pro Plan | Advanced features for professionals | 🥈 | BLUE
+>> 100GB storage
+>> Priority support
+>> Advanced features
+>> Team collaboration
+Enterprise Plan | Complete solution for organizations | 🥇 | PURPLE
+>> Unlimited storage
+>> 24/7 dedicated support
+>> All features
+>> Custom integrations
+>> SLA guarantee
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Technology Stack Overview
+
+[source,asciidoc]
+....
+[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Frontend | Modern, responsive user interface | 🖥️ | BLUE
+>> React.js for component-based UI
+>> TypeScript for type safety
+>> Tailwind CSS for styling
+Backend | Scalable, reliable server architecture | ⚙️ | GREEN
+>> Node.js runtime
+>> Express.js framework
+>> GraphQL API
+Database | High-performance data storage | 🗄️ | ORANGE
+>> PostgreSQL for relational data
+>> Redis for caching
+>> MongoDB for document storage
+Infrastructure | Cloud-native deployment | ☁️ | PURPLE
+>> Docker containers
+>> Kubernetes orchestration
+>> AWS cloud services
+DevOps | Continuous integration and delivery | 🔄 | RED
+>> GitHub Actions for CI/CD
+>> Automated testing
+>> Infrastructure as code
+----
+....
+
+[docops,feature]
+----
+@theme: dark
+@layout: grid
+
+Title | Description | Emoji | ColorScheme
+Frontend | Modern, responsive user interface | 🖥️ | BLUE
+>> React.js for component-based UI
+>> TypeScript for type safety
+>> Tailwind CSS for styling
+Backend | Scalable, reliable server architecture | ⚙️ | GREEN
+>> Node.js runtime
+>> Express.js framework
+>> GraphQL API
+Database | High-performance data storage | 🗄️ | ORANGE
+>> PostgreSQL for relational data
+>> Redis for caching
+>> MongoDB for document storage
+Infrastructure | Cloud-native deployment | ☁️ | PURPLE
+>> Docker containers
+>> Kubernetes orchestration
+>> AWS cloud services
+DevOps | Continuous integration and delivery | 🔄 | RED
+>> GitHub Actions for CI/CD
+>> Automated testing
+>> Infrastructure as code
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+
+== Best Practices
+
+=== Creating Effective Feature Cards
+
+1. **Keep Descriptions Concise**: Aim for 1-2 sentences that clearly communicate the value proposition.
+2. **Choose Relevant Emojis**: Select emojis that visually represent the feature or concept.
+3. **Use Consistent Color Schemes**: Maintain visual harmony by using complementary colors or a consistent color theme.
+4. **Provide Meaningful Details**: Include 2-4 detail points that expand on the feature's capabilities or benefits.
+5. **Group Related Features**: Organize cards logically to tell a cohesive story about your product or service.
+6. **Consider the Layout**: Choose the layout that best suits your content and the context in which it will be displayed.
+7. **Match Theme to Context**: Use the light theme for light backgrounds and the dark theme for dark backgrounds.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Design Tips
+
+1. **Visual Hierarchy**: Place the most important features first in grid layouts, or at the top in column layouts.
+2. **Color Psychology**: Use colors strategically (e.g., blue for trust, green for growth, red for important features).
+3. **White Space**: The cards are designed with appropriate spacing, so don't overcrowd with too much text.
+4. **Interaction Cues**: Inform users that cards are interactive by adding a note or instruction above the cards.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== API
+
+The Feature Card Maker provides a REST API for generating feature cards:
+
+[cols="1,3"]
+|===
+|Endpoint |Description
+
+|GET /api/featurecard
+|Returns an HTML form for creating feature cards
+
+|POST /api/featurecard/render
+|Processes the input data and returns the rendered SVG
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Troubleshooting
+
+=== Common Issues
+
+* If cards are not appearing, check that your table format is correct with proper column separators (`|`).
+* If emojis don't display correctly, ensure you're using valid Unicode emoji characters.
+* If the layout doesn't look right, verify that you've specified a valid layout option (`grid`, `row`, or `column`).
+* If colors appear incorrect, confirm that you're using one of the supported color schemes.
+* If details aren't showing when clicking a card, make sure you've added detail lines starting with `>>` immediately after the card's main data row.
+* Long text in descriptions and details will automatically wrap to fit within the card boundaries, so you don't need to worry about text overflow.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Support
+
+For issues or feature requests, please contact the DocOps team.

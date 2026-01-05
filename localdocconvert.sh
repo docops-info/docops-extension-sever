@@ -3,7 +3,7 @@
 
 # Define relative paths
 SOURCE_DIR_REL="src/docs/asciidoc"
-OUTPUT_DIR_REL="src/main/resources/static/docs"
+OUTPUT_DIR_REL="src/main/resources/static/docs/asciidoc"
 
 # Get absolute paths
 SOURCE_DIR=$(realpath "$SOURCE_DIR_REL")
