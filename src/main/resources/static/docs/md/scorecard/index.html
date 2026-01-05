@@ -1,0 +1,1017 @@
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>index</title>
+                <style>
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+
+.markdown-body {
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
+}
+
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
+}
+
+@keyframes itemSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    border-bottom: none;
+}
+
+/* Code Blocks - IDE Aesthetic */
+.markdown-body pre {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
+}
+
+.markdown-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
+}
+
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+}
+
+.markdown-body td {
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    /* Force default cursor to remove the zoom/search icon */
+    cursor: default !important;
+    --max-content-width: 980px;
+    max-width: var(--max-content-width);
+}
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+    }
+}
+.docops-container {
+    display: inline-block;
+}
+.docops-media-card {
+    position: relative;
+    display: inline-block;
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+
+
+
+.docops-control-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid rgba(126, 87, 255, 0.4);
+    color: #b392ff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                      
+        .docops-data-panel {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+            border-top: 1px solid var(--accent-primary);
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .docops-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+        .docops-data-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .docops-action-btn {
+            background: rgba(126, 87, 255, 0.1);
+            border: 1px solid rgba(126, 87, 255, 0.3);
+            color: var(--accent-secondary);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .docops-action-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+            border-color: var(--accent-primary);
+        }
+
+        .docops-data-header span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ui.md: Distinctive Table Design */
+        .docops-data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .docops-data-table th {
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* ui.md: Motion - Staggered Row Entry */
+        .docops-data-table tr {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: rowSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes rowSlideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .docops-data-table td {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .docops-data-table tr:hover td {
+            background: rgba(126, 87, 255, 0.1);
+            color: #fff;
+        }
+        
+                    @media (prefers-color-scheme: dark) {
+                        body {
+                            background-color: #0d1117;
+                        }
+                    }
+                </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                <article class="markdown-body">
+                    <h1 id="docops-scorecard">DocOps Scorecard</h1>
+<p>DocOps scorecard is a tool for creating and managing scorecards. It allows users to create, edit, and organize scorecards, set targets, and track progress. The scorecard also provides a visual representation of the scorecard, making it easy to see the overall structure and dependencies between scorecards.</p>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_31UTXPbNhC981fsJT1ZnsbTaccHH-REmmpqJR5JOXVyWIJLEiN8MFhAsjr58V2AlO00tU6igN23H-89RB0N3W19G48YCDZkCJngcHP92_WvMIMlYUxy8Qvcpw62yVoMp4pTHUviWncBo_YO2uAtPFCH6gTbE0eyED2sfUPBwTyoXkdSGaqazWZV9XdNrQ_0tRpx7hfLz5vFVLZETAHXkmb5a3V3d_fcyzbKL1cfMexLAdj1ZAm-w1oza9dBOwVi20rNfJKYAtDTQEGTU1Stk4l6ZtB1CTtBTMPgQxSITz4CHlAbrA1dgdFWF4DO-BoNBELVV_PmgILSwJZQJoOlNpECS_o9slbA47F35nQFbPwRpLBMY3NWtXgqtWQ7jx-XknMey0lpbQcjs7hITbU7-tkSVfQB5in2cqjVuOvvUliloOMJDsk4Clhrk__Rk-bI1fxxBRuMBA_n9vNgMASfOcgI2KF2LKPWspmy3L-cPzpYMSfi6sF32kHUlnySpsqhYHzhPGUb6FuSbswJjO86WYMEVWuyPsgJ4Z5BkhvkvvYYmtztqIealLcCVDbiD8JIrlDJ9gjSYDw2oHwIaZiGzBcSLTk5js-XUrCR4TOrJala-zpDfFkVUIPDMI68kjWGFhVBHfyenBACdoxt6KAVZQ1FrLPglXdu2k0T_MDndNlflFlf37eiDuGLq4WVr0ybbidmuFyO1cdlZVIDKdKHfCr0CvUoeGlohCCuNlTE0FFmscBTCL5oabwaIbNaphjKPIqezGlyErbS59lI8-VusfnBR-X6tY0-0fGsOYZ504jUfrbS6kWIcNSxHx00BGopZAcBY57obSMVYHh_A-c7HnEwRW9lUiUcTGq84Kcliki1a0TYsr4CYHNFaQ7aEgW-yIV_stWfuutn3xIWY-QjGgMKiEosbYAsZTCFh0tm233ePQI6aW-9nWW1NHCznP_g1f9zXNaPMbrL8im8PT8mLwuNWuYsrMjzykI5e3MQvDcMuCV54LKK0clG7SjM3IZUOonOjqHI9aIZN_KEjWneCQCXBVr9DzVXYMe8xJnL2e9_vHvbnFlFqk9uL9uY7nm0eZlOy_BdeaFUT2rPb5pURpZGWB-yKVl3rtz3mMzzaM1Fm354ORq8L-bLXAWKoTxQorTXTF02bZ6KSoSwk5-IcZrb2-vbd9KfkTYFNbN5yblzPjklHfw3oGCJeztxHkMMqPZS9l8l4aX7gwcAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="svg-container">
+<svg width="1024" height="1090" viewBox="0 0 1024 1090.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Feature Status","Dark Mode Theme","Missing feature affecting user experience"],["BEFORE","Feature Status","Multi-language Support","Not available, limiting global reach"],["BEFORE","Feature Status","Advanced Search Filters","Basic search only, slow performance"],["BEFORE","Feature Status","Export to PDF","Feature not implemented"],["BEFORE","Feature Status","Two-Factor Authentication","Security vulnerability exists"],["BEFORE","Feature Status","API Rate Limiting","No protection against abuse"],["BEFORE","Known Issues","Login timeout issues","Users frequently logged out"],["BEFORE","Known Issues","Memory leaks in dashboard","System becomes slow over time"],["BEFORE","Known Issues","File upload corruption","Files sometimes corrupted during upload"],["BEFORE","Known Issues","Mobile UI overlapping","Interface broken on mobile devices"],["BEFORE","Known Issues","Database connection drops","Intermittent connection failures"],["BEFORE","Known Issues","Email notifications failing","Users not receiving important updates"],["BEFORE","Known Issues","Report generation errors","Reports fail to generate properly"],["AFTER","New Features Added","Dark Mode Theme","Implemented with user preference saving"],["AFTER","New Features Added","Multi-language Support","Added 12 languages with automatic detection"],["AFTER","New Features Added","Advanced Search Filters","Fast indexing with multiple filter options"],["AFTER","New Features Added","Export to PDF","High-quality PDF export with custom templates"],["AFTER","New Features Added","Two-Factor Authentication","TOTP and SMS-based 2FA implemented"],["AFTER","New Features Added","API Rate Limiting","Intelligent rate limiting with user tiers"],["AFTER","Bugs Resolved","Login timeout issues","Session management completely rewritten"],["AFTER","Bugs Resolved","Memory leaks in dashboard","React components optimized, memory usage -67%"],["AFTER","Bugs Resolved","File upload corruption","New chunked upload system with integrity checks"],["AFTER","Bugs Resolved","Mobile UI overlapping","Responsive design overhaul completed"],["AFTER","Bugs Resolved","Database connection drops","Connection pooling and retry logic implemented"],["AFTER","Bugs Resolved","Email notifications failing","New email service with 99.9% delivery rate"],["AFTER","Bugs Resolved","Report generation errors","Async report generation with progress tracking"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_b1910138-ece8-4b67-b952-7f31f22b0e12" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap'); .main-title_b1910138-ece8-4b67-b952-7f31f22b0e12 { font-family: 'Syne', sans-serif; font-size: 16px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12 { font-family: 'Syne', sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_b1910138-ece8-4b67-b952-7f31f22b0e12 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #cbd5e1; } .item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #64748b; } .meta-text_b1910138-ece8-4b67-b952-7f31f22b0e12 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #64748b; opacity: 0.5; } @keyframes slideUp_b1910138-ece8-4b67-b952-7f31f22b0e12 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_b1910138-ece8-4b67-b952-7f31f22b0e12 { animation: slideUp_b1910138-ece8-4b67-b952-7f31f22b0e12 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_b1910138-ece8-4b67-b952-7f31f22b0e12 { animation-delay: 0.1s; } .delay-2_b1910138-ece8-4b67-b952-7f31f22b0e12 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#020617"/><rect width="100%" height="100%" fill="url(#grid_b1910138-ece8-4b67-b952-7f31f22b0e12)" opacity="0.4"/><g transform="translate(40, 60)"><rect width="4" height="40" fill="#38bdf8" rx="2"/><text x="20" y="28" class="main-title_b1910138-ece8-4b67-b952-7f31f22b0e12">Software Release v2.4.0 - Feature &amp; Bug Summary —</text><text x="20" y="60" class="main-title_b1910138-ece8-4b67-b952-7f31f22b0e12">Migration from Legacy System to Modern Architecture</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_b1910138-ece8-4b67-b952-7f31f22b0e12 delay-1_b1910138-ece8-4b67-b952-7f31f22b0e12"><rect width="450" height="838" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#f43f5e" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #f43f5e">01_BEFORE v2.4.0</text><text x="24" y="80" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #f43f5e">Feature Status</text><circle cx="32" cy="115" r="4" fill="#f43f5e"/><text x="52" y="119" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Dark Mode Theme</text><text x="52" y="137" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Missing feature affecting user experience</text><circle cx="32" cy="163" r="4" fill="#f43f5e"/><text x="52" y="167" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Multi-language Support</text><text x="52" y="185" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Not available, limiting global reach</text><circle cx="32" cy="211" r="4" fill="#f43f5e"/><text x="52" y="215" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Advanced Search Filters</text><text x="52" y="233" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Basic search only, slow performance</text><circle cx="32" cy="259" r="4" fill="#f43f5e"/><text x="52" y="263" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Export to PDF</text><text x="52" y="281" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Feature not implemented</text><circle cx="32" cy="307" r="4" fill="#f43f5e"/><text x="52" y="311" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Two-Factor Authentication</text><text x="52" y="329" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Security vulnerability exists</text><circle cx="32" cy="355" r="4" fill="#f43f5e"/><text x="52" y="359" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">API Rate Limiting</text><text x="52" y="377" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// No protection against abuse</text><text x="24" y="433" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #f43f5e">Known Issues</text><circle cx="32" cy="468" r="4" fill="#f43f5e"/><text x="52" y="472" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Login timeout issues</text><text x="52" y="490" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Users frequently logged out</text><circle cx="32" cy="516" r="4" fill="#f43f5e"/><text x="52" y="520" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Memory leaks in dashboard</text><text x="52" y="538" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// System becomes slow over time</text><circle cx="32" cy="564" r="4" fill="#f43f5e"/><text x="52" y="568" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">File upload corruption</text><text x="52" y="586" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Files sometimes corrupted during upload</text><circle cx="32" cy="612" r="4" fill="#f43f5e"/><text x="52" y="616" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Mobile UI overlapping</text><text x="52" y="634" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Interface broken on mobile devices</text><circle cx="32" cy="660" r="4" fill="#f43f5e"/><text x="52" y="664" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Database connection drops</text><text x="52" y="682" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Intermittent connection failures</text><circle cx="32" cy="708" r="4" fill="#f43f5e"/><text x="52" y="712" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Email notifications failing</text><text x="52" y="730" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Users not receiving important updates</text><circle cx="32" cy="756" r="4" fill="#f43f5e"/><text x="52" y="760" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Report generation errors</text><text x="52" y="778" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Reports fail to generate properly</text></g></g><g transform="translate(492, 596.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#1e293b" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_b1910138-ece8-4b67-b952-7f31f22b0e12 delay-2_b1910138-ece8-4b67-b952-7f31f22b0e12"><rect width="450" height="908" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #10b981">02_AFTER v2.4.0</text><text x="24" y="80" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #10b981">New Features Added</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Dark Mode Theme</text><text x="52" y="137" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Implemented with user preference saving</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Multi-language Support</text><text x="52" y="185" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Added 12 languages with automatic detection</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Advanced Search Filters</text><text x="52" y="233" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Fast indexing with multiple filter options</text><path d="M24,259 L30,265 L40,255" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="263" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Export to PDF</text><text x="52" y="281" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// High-quality PDF export with custom</text><text x="52" y="295" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">templates</text><path d="M24,321 L30,327 L40,317" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="325" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Two-Factor Authentication</text><text x="52" y="343" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// TOTP and SMS-based 2FA implemented</text><path d="M24,369 L30,375 L40,365" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="373" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">API Rate Limiting</text><text x="52" y="391" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Intelligent rate limiting with user tiers</text><text x="24" y="447" class="sec-header_b1910138-ece8-4b67-b952-7f31f22b0e12" style="fill: #10b981">Bugs Resolved</text><path d="M24,482 L30,488 L40,478" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="486" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Login timeout issues</text><text x="52" y="504" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Session management completely rewritten</text><path d="M24,530 L30,536 L40,526" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="534" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Memory leaks in dashboard</text><text x="52" y="552" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// React components optimized, memory usage</text><text x="52" y="566" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">-67%</text><path d="M24,592 L30,598 L40,588" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="596" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">File upload corruption</text><text x="52" y="614" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// New chunked upload system with integrity</text><text x="52" y="628" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">checks</text><path d="M24,654 L30,660 L40,650" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="658" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Mobile UI overlapping</text><text x="52" y="676" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Responsive design overhaul completed</text><path d="M24,702 L30,708 L40,698" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="706" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Database connection drops</text><text x="52" y="724" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Connection pooling and retry logic</text><text x="52" y="738" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">implemented</text><path d="M24,764 L30,770 L40,760" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="768" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Email notifications failing</text><text x="52" y="786" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// New email service with 99.9% delivery rate</text><path d="M24,812 L30,818 L40,808" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="816" class="item-text_b1910138-ece8-4b67-b952-7f31f22b0e12">Report generation errors</text><text x="52" y="834" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">// Async report generation with progress</text><text x="52" y="848" class="item-desc_b1910138-ece8-4b67-b952-7f31f22b0e12">tracking</text></g></g><text x="40" y="1070.0" class="meta-text_b1910138-ece8-4b67-b952-7f31f22b0e12">SCORECARD_REF: B191 // SCALE: 1.0 // THEME: NEURAL_DARK</text></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+
+                </article>
+                <!-- Modal Overlay -->
+                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+                    <div class="modal-content" id="modalContent">
+                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+                        <div id="modalSvgContainer"></div>
+                        <div class="modal-zoom-controls">
+                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    const modalSvgContainer = document.getElementById('modalSvgContainer');
+                    
+                    // Zoom state
+                    let modalZoomLevel = 1;
+                    const MODAL_ZOOM_MIN = 0.25;
+                    const MODAL_ZOOM_MAX = 4;
+                    const MODAL_ZOOM_STEP = 0.25;
+
+                    function openModal(container) {
+                        // Reset zoom level
+                        modalZoomLevel = 1;
+                        updateZoomDisplay();
+                        
+                        // Clone the SVG from the clicked container
+                        const svg = container.querySelector('svg');
+                        const svgClone = svg.cloneNode(true);
+                        svgClone.style.transform = 'scale(1)';
+                        svgClone.style.transition = 'transform 0.2s ease';
+
+                        // Clear previous content and add new SVG
+                        modalSvgContainer.innerHTML = '';
+                        modalSvgContainer.appendChild(svgClone);
+
+                        // Show modal with animation
+                        modalOverlay.classList.add('active');
+
+                        // Prevent body scroll when modal is open
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeModal() {
+                        modalOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                        modalZoomLevel = 1;
+                    }
+
+                    function closeModalOnBackdrop(event) {
+                        // Only close if clicking the overlay itself, not the content
+                        if (event.target === modalOverlay) {
+                            closeModal();
+                        }
+                    }
+                    
+                    function modalZoomIn() {
+                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomOut() {
+                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomReset() {
+                        modalZoomLevel = 1;
+                        applyModalZoom();
+                    }
+                    
+                    function applyModalZoom() {
+                        const svg = modalSvgContainer.querySelector('svg');
+                        if (svg) {
+                            svg.style.transform = `scale(${modalZoomLevel})`;
+                        }
+                        updateZoomDisplay();
+                    }
+                    
+                    function updateZoomDisplay() {
+                        const display = document.getElementById('modalZoomLevel');
+                        if (display) {
+                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
+                        }
+                    }
+
+                    // Close modal with Escape key
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                            closeModal();
+                        }
+                    });
+                    const docopsCopy = {
+                        url: (btn) => {
+                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                navigator.clipboard.writeText(url).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                        svg: (btn) => {
+                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                            navigator.clipboard.writeText(svg).then(() => {
+                                const originalText = btn.innerText;
+                                btn.innerText = 'COPIED!';
+                                setTimeout(() => btn.innerText = originalText, 2000);
+                            });
+                        },
+                        png: (btn) => {
+                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                            const svgData = new XMLSerializer().serializeToString(svgElement);
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const img = new Image();
+                            
+                            img.onload = () => {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                                canvas.toBlob(blob => {
+                                    const item = new ClipboardItem({ "image/png": blob });
+                                    navigator.clipboard.write([item]);
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            };
+                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                        }
+                    };
+                    
+                </script>
+                <script>
+                    mermaid.initialize({ startOnLoad: true });
+                </script>
+                <script>
+                (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                const docopsData = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+                </script>
+                
+            </body>
+            </html>

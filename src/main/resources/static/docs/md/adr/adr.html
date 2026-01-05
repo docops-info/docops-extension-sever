@@ -1,0 +1,1042 @@
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>adr</title>
+                <style>
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+
+.markdown-body {
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
+}
+
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
+}
+
+@keyframes itemSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    border-bottom: none;
+}
+
+/* Code Blocks - IDE Aesthetic */
+.markdown-body pre {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
+}
+
+.markdown-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
+}
+
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+}
+
+.markdown-body td {
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    /* Force default cursor to remove the zoom/search icon */
+    cursor: default !important;
+    --max-content-width: 980px;
+    max-width: var(--max-content-width);
+}
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+    }
+}
+.docops-container {
+    display: inline-block;
+}
+.docops-media-card {
+    position: relative;
+    display: inline-block;
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+
+
+
+.docops-control-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid rgba(126, 87, 255, 0.4);
+    color: #b392ff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                      
+        .docops-data-panel {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+            border-top: 1px solid var(--accent-primary);
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .docops-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+        .docops-data-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .docops-action-btn {
+            background: rgba(126, 87, 255, 0.1);
+            border: 1px solid rgba(126, 87, 255, 0.3);
+            color: var(--accent-secondary);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .docops-action-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+            border-color: var(--accent-primary);
+        }
+
+        .docops-data-header span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ui.md: Distinctive Table Design */
+        .docops-data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .docops-data-table th {
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* ui.md: Motion - Staggered Row Entry */
+        .docops-data-table tr {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: rowSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes rowSlideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .docops-data-table td {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .docops-data-table tr:hover td {
+            background: rgba(126, 87, 255, 0.1);
+            color: #fff;
+        }
+        
+                    @media (prefers-color-scheme: dark) {
+                        body {
+                            background-color: #0d1117;
+                        }
+                    }
+                </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                <article class="markdown-body">
+                    <h1 id="docops-adr">Docops ADR</h1>
+<ul>
+<li><a href="#default-look">Default Look</a></li>
+<li><a href="#modern-brutalist-look">Modern Brutalist Look</a></li>
+</ul>
+<p>Architecture Decision Records (ADRs) are documents that capture significant design choices made during software development. They provide a structured way to record the context, rationale, and consequences of these decisions, ensuring future understanding and traceability. Essentially, ADRs act as a log of important architectural choices, helping teams understand why a system is designed the way it is.</p>
+<h2 id="default-look">Default Look</h2>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_3VSS2_bMAy-51fwmAIL0BXtJTcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcoI0JLhrDTLqfvA1kL5L2jMEDSl8418z56uGliz7JNGDCyTvlpNR1YIFbkOWfpEm-_Po94t5jfNTjN05AUQ8smbIQXPf6ZRODIDes6uOtoRxckw-7FS5esYM_0upDHmauGLiynsX-1GSrokboy5Wr-eo5Y3bctTyIrZJbWcipGSqPI5VF96tO5rDbVuGx0VUVgDUg1vM1IpHfclTcorWYjC7mxFQdZB1CUrlwnV87EOVmGqr3-zfE1AtxYgorIZjuhF1_kJPcHG1YDnjXKykJGbD_AUBg-rQDBf0Z5sUI36t9GNpvEtq6D5OoVWzcELeuzHghfeETzqJunr6rG5-QsFzMuYaAMAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" id="id_dd03293fea06436ba4daeb251147f4fe" width="700" height="700" viewBox="0 0 700 700" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Use Elasticsearch for Search Functionality"],["Status","Accepted"],["Date","2024-05-15"],["Context","- Our application needs robust search capabilities across multiple data types\n- We need to support full-text search with relevance ranking\n- The search functionality must scale with growing data volumes\n- We need to support faceted search and filtering"],["Decision","- We will use Elasticsearch as our search engine\n- We will integrate it with our existing PostgreSQL database\n- We will implement a synchronization mechanism to keep data in sync"],["Consequences","- Improved search performance and capabilities\n- Additional infrastructure to maintain\n- Need for expertise in Elasticsearch configuration and optimization\n- Potential complexity in keeping data synchronized"],["Participants","Jane Smith (Architect),John Doe (Developer),Alice Johnson (Product Manager),Mike Brown (DBA)"],["References",""],["Links",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_dd03293fea06436ba4daeb251147f4fe" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_dd03293fea06436ba4daeb251147f4fe" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_dd03293fea06436ba4daeb251147f4fe" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_dd03293fea06436ba4daeb251147f4fe" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><style type="text/css">#id_dd03293fea06436ba4daeb251147f4fe .card { fill: #1f2937; stroke: #374151; stroke-width: 1; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); } #id_dd03293fea06436ba4daeb251147f4fe .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #f9fafb; } #id_dd03293fea06436ba4daeb251147f4fe .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #9ca3af; } #id_dd03293fea06436ba4daeb251147f4fe .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_dd03293fea06436ba4daeb251147f4fe .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #e5e7eb; } #id_dd03293fea06436ba4daeb251147f4fe .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #f3f4f6; } #id_dd03293fea06436ba4daeb251147f4fe .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #f3f4f6; } #id_dd03293fea06436ba4daeb251147f4fe .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #d1d5db; text-anchor: middle; } #id_dd03293fea06436ba4daeb251147f4fe .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #60a5fa; text-anchor: middle; border-bottom: 1px dotted #60a5fa; } #id_dd03293fea06436ba4daeb251147f4fe .participant-name-with-email:hover { fill: #93c5fd; font-weight: 600; } #id_dd03293fea06436ba4daeb251147f4fe .participant-container { cursor: pointer; } #id_dd03293fea06436ba4daeb251147f4fe .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6)); transition: filter 0.3s ease; } #id_dd03293fea06436ba4daeb251147f4fe .participant-container:hover .participant-name { fill: #60a5fa; transition: fill 0.3s ease; } #id_dd03293fea06436ba4daeb251147f4fe .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_dd03293fea06436ba4daeb251147f4fe .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_dd03293fea06436ba4daeb251147f4fe .reference-link:hover { fill: #93c5fd; font-weight: 500; } #id_dd03293fea06436ba4daeb251147f4fe a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 688.0 A 12.0 12.0 0 0 1 688.0 700.0 L 12.0 700.0 A 12.0 12.0 0 0 1 0 688.0 Z" fill="url(#backgroundGradient_dd03293fea06436ba4daeb251147f4fe)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 688.0 A 12.0 12.0 0 0 1 688.0 700.0 L 12.0 700.0 A 12.0 12.0 0 0 1 0 688.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_dd03293fea06436ba4daeb251147f4fe)" stroke-width="1.5" filter="url(#glassDropShadow_dd03293fea06436ba4daeb251147f4fe)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 688.0 A 12.0 12.0 0 0 1 688.0 700.0 L 12.0 700.0 A 12.0 12.0 0 0 1 0 688.0 Z" fill="url(#glassOverlay_dd03293fea06436ba4daeb251147f4fe)" opacity="0.7" />        <rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Use Elasticsearch for Search Functionality</text><text x="35" y="70" class="subtitle">Date: 2024-05-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our application needs robust search capabilities across multiple data types</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">We need to support full-text search with relevance ranking</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">The search functionality must scale with growing data volumes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to support faceted search and filtering</text><rect x="20" y="240" width="660" height="100" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will use Elasticsearch as our search engine</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will integrate it with our existing PostgreSQL database</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a synchronization mechanism to keep data in sync</text><rect x="20" y="360" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="385" class="section-title">Consequences</text><circle cx="40" cy="405" r="3" fill="#333333" /><text x="50" y="410" class="content">Improved search performance and capabilities</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">Additional infrastructure to maintain</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Need for expertise in Elasticsearch configuration and optimization</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential complexity in keeping data synchronized</text><rect x="20" y="500" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="525" class="section-title">Participants</text><g><circle cx="140" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="555" text-anchor="middle" font-size="16">👤</text><text x="140" y="580" class="participant-name">Jane Smith</text><text x="140" y="595" class="participant-name">(Architect)</text></g><g><circle cx="350" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="555" text-anchor="middle" font-size="16">👤</text><text x="350" y="580" class="participant-name">John Doe (Developer)</text></g><g><circle cx="560" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="555" text-anchor="middle" font-size="16">👤</text><text x="560" y="580" class="participant-name">Alice Johnson</text><text x="560" y="595" class="participant-name">(Product Manager)</text></g><g><circle cx="140" cy="620" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="625" text-anchor="middle" font-size="16">👤</text><text x="140" y="650" class="participant-name">Mike Brown (DBA)</text></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="modern-brutalist-look">Modern Brutalist Look</h2>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_32UwU4bMRCG73mKkXreJEUQRE4NCiBaKBQqcUA5TNazGxevvdiz2SDxCJza3vsMPfel-ggdO2QbqNRDVmuP55uZ__eGqaoNMo3nvmE0OnCPNRsaw0S5muHEY734dAaF8zC5PIUzfCDfC4zcBDmT51QzqZ6KCNgZ7uxmw_3s7V4vd5ZpxeNeBheNh6uj688xP8AClwRzyl1FII_a0ApazQuo0D4AWVU7bTlI3rmbayOHjCbZAEukgB0UxPkCpCBC4V0FVWNYC-ZF7lQXBXnJe5muuu2UHxZYUzx-Qx3ek2pyArckn6VS2paAVkFj1faWKxKjB6Ao10E7O16DWm0M4D_iuWYtoEkC_j1ZobQsP6CViB_JSatumJQ8x_yuRa-SYshahNH8sEXRUcgqDoZQelQNClnLG0tjEFheqNxOaALBpHbGOLgmL8OmOrygrukOmRgyp1ga6L4hm1MYJ3-8iF4UOtedop08kfYsvRw9rWoviooBtCTjailHK3nqCFvbH8gUmXJ5E0tGgoglmZeO41rGMYTexkDeSL9du0xYybmP0b64Z6kVG53Z2FY5q9l5WcoINXqWdmuUtsaynsTbd6VlfITHZM_ES_9MOcsaJdr3KfqOVhj16IsBEnmze7w7OtqTt98_vj8J6D2GSluCGydlH-HYx-sv1c8Ilay_rMP9VsKvUcO9g9HoIKG-_RTUFJdawQcdg4fie8RMO9keRWeJ9-909Ro0PdjfH44S6OsvAXlKdz25BXB7u2Cuw3gwKKPB96bvfDno3L5IPorM02cLkuuz2YvMtm37mC7NhiGlB2JaGGwu04b3PwzZUsSg6El_a4ZNY9mcAme1x1y8otAhD2UbLjfbr5il3KFmnjDPyA7XfQdZ2WhF6f9owzzvvpGTGJvN_gCn_s0rEAUAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" id="cb_adr_51904add253e42079223545d256e6798" width="850" height="980" viewBox="0 0 850 980" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt GraphQL for API Layer"],["Status","Accepted"],["Date","2024-07-15"],["Context","- Our REST APIs have become complex with many endpoints\n- Mobile clients need to fetch data from multiple endpoints\n- Different clients need different data shapes\n- We need to reduce over-fetching and under-fetching of data"],["Decision","- We will adopt GraphQL for our API layer\n- We will maintain existing REST endpoints for backward compatibility\n- We will implement a gradual migration strategy\n- We will use Apollo Server for the GraphQL implementation"],["Consequences","- More efficient data fetching for clients\n- Improved developer experience with self-documenting API\n- Potential learning curve for the team\n- Need for new tooling and monitoring"],["Participants","Alex Rivera,Jasmine Wong,David Kim"],["References","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"],["Links","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="hexagons_51904add253e42079223545d256e6798" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)"><path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="#1e293b" stroke-width="1" /></pattern><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap'); #cb_adr_51904add253e42079223545d256e6798 .canvas { fill: #020617; } #cb_adr_51904add253e42079223545d256e6798 .bg-pattern { fill: url(#hexagons_51904add253e42079223545d256e6798); } #cb_adr_51904add253e42079223545d256e6798 .glass-panel { fill: rgba(15, 23, 42, 0.9); stroke: #10b981; stroke-width: 1.5; } #cb_adr_51904add253e42079223545d256e6798 .impact-panel { fill: rgba(30, 41, 59, 0.5); stroke: #475569; stroke-width: 1; stroke-dasharray: 4; } #cb_adr_51904add253e42079223545d256e6798 .accent-line { stroke: #10b981; stroke-width: 4; stroke-linecap: square; filter: drop-shadow(0 0 5px #10b981); } #cb_adr_51904add253e42079223545d256e6798 .adr-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; fill: #fff; text-transform: uppercase; letter-spacing: -1px; } #cb_adr_51904add253e42079223545d256e6798 .sec-header { font-family: 'Syne', sans-serif; font-size: 14px; fill: #10b981; text-transform: uppercase; letter-spacing: 2px; } #cb_adr_51904add253e42079223545d256e6798 .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #94a3b8; } #cb_adr_51904add253e42079223545d256e6798 .status-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; fill: #fff; } #cb_adr_51904add253e42079223545d256e6798 .participant-node { cursor: pointer; } #cb_adr_51904add253e42079223545d256e6798 .participant-node:hover .node-circle { stroke-width: 3; stroke: #818cf8; filter: drop-shadow(0 0 8px #6366f1); } #cb_adr_51904add253e42079223545d256e6798 .participant-node:hover .node-name { fill: #fff; } #cb_adr_51904add253e42079223545d256e6798 .chat-btn { transition: all 0.3s ease; cursor: pointer; } #cb_adr_51904add253e42079223545d256e6798 .chat-btn:hover { filter: brightness(1.2); } @keyframes slideIn_51904add253e42079223545d256e6798 { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } #cb_adr_51904add253e42079223545d256e6798 .entry { animation: slideIn_51904add253e42079223545d256e6798 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }</style></defs><rect width="100%" height="100%" class="canvas" /><rect width="100%" height="100%" class="bg-pattern" opacity="0.4" /><!-- Header: Moved Status to avoid overlap with wide Syne font --><g class="entry" style="animation-delay: 0s;"><line x1="40" y1="60" x2="40" y2="125" class="accent-line" /><text x="60" y="90" class="adr-title">Adopt GraphQL for API Layer</text><!-- Info Row --><text x="60" y="118" class="mono-text">DATE: 2024-07-15 // REF: ADR-5190</text><!-- Status Badge: Positioned at the far right --><g transform="translate(690, 100)"><rect width="120" height="26" rx="13" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1"/><text x="60" y="18" text-anchor="middle" class="status-label" style="fill: #10b981">● ACCEPTED</text></g></g><!-- 01 & 02: Dynamic Side-by-Side Panels --><g class="entry" style="animation-delay: 0.1s;"><rect x="40" y="160.0" width="370" height="220" class="glass-panel" rx="8" /><text x="60" y="195.0" class="sec-header">01_CONTEXT</text><text x="60" y="230" class="mono-text" >- Our REST APIs have become complex with</text><text x="60" y="250" class="mono-text" >many endpoints</text><text x="60" y="270" class="mono-text" >- Mobile clients need to fetch data from</text><text x="60" y="290" class="mono-text" >multiple endpoints</text><text x="60" y="310" class="mono-text" >- Different clients need different data</text><text x="60" y="330" class="mono-text" >shapes</text><text x="60" y="350" class="mono-text" >- We need to reduce over-fetching and</text><text x="60" y="370" class="mono-text" >under-fetching of data</text><rect x="430" y="160.0" width="370" height="220" class="glass-panel" rx="8" /><text x="450" y="195.0" class="sec-header">02_DECISION</text><text x="450" y="230" class="mono-text" style="fill:#fff">- We will adopt GraphQL for our API layer</text><text x="450" y="250" class="mono-text" style="fill:#fff">- We will maintain existing REST endpoints</text><text x="450" y="270" class="mono-text" style="fill:#fff">for backward compatibility</text><text x="450" y="290" class="mono-text" style="fill:#fff">- We will implement a gradual migration</text><text x="450" y="310" class="mono-text" style="fill:#fff">strategy</text><text x="450" y="330" class="mono-text" style="fill:#fff">- We will use Apollo Server for the</text><text x="450" y="350" class="mono-text" style="fill:#fff">GraphQL implementation</text></g><!-- 03: Dynamic Full-Width Consequences --><g class="entry" style="animation-delay: 0.2s;"><rect x="40" y="400.0" width="760" height="140" class="impact-panel" rx="8" /><text x="60" y="435.0" class="sec-header" style="fill:#f472b6">03_CONSEQUENCES</text><text x="60" y="470" class="mono-text" >- More efficient data fetching for clients</text><text x="60" y="490" class="mono-text" >- Improved developer experience with self-documenting API</text><text x="60" y="510" class="mono-text" >- Potential learning curve for the team</text><text x="60" y="530" class="mono-text" >- Need for new tooling and monitoring</text></g><!-- 04: Participants Section with Multi-row support --><g transform="translate(0, 580.0)"><g class="entry" style="animation-delay: 0.3s;"><text x="40" y="10" class="sec-header">04_PARTICIPANTS</text><g class="chat-btn" transform="translate(620, -15)"><rect width="180" height="34" rx="4" fill="#6366f1" /><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com,jasmine.wong@example.com,david.kim@example.com&amp;topicName=Adopt+GraphQL+for+API+Layer" target="_blank"><text x="90" y="22" text-anchor="middle" class="status-label">START GROUP CHAT</text></a></g><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(60, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">🔌</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#fff">Alex Rivera</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">API Architect</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=jasmine.wong@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(300, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">📱</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#fff">Jasmine Wong</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Frontend Lead</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=david.kim@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(540, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">💻</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#fff">David Kim</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Backend Developer</text></g></a></g></g>!-- 05: References - Correctly positioned and dynamically sized --><g transform="translate(0, 790.0)"><g class="entry" style="animation-delay: 0.4s;"><rect x="40" y="0" width="760" height="150" rx="4" fill="rgba(99, 102, 241, 0.05)" stroke="rgba(99, 102, 241, 0.2)" /><text x="60" y="25" class="sec-header" font-size="10">05_REFERENCES</text><text x="60" y="50" class="mono-text" style="fill:#818cf8"><a href="https://graphql.org/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Official Documentation</tspan></a></text><text x="60" y="75" class="mono-text" style="fill:#818cf8"><a href="https://www.apollographql.com/docs/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Apollo GraphQL Documentation</tspan></a></text><text x="60" y="100" class="mono-text" style="fill:#818cf8"><a href="https://engineering.example.com/graphql-best-practices" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Best Practices</tspan></a></text><text x="60" y="125" class="mono-text" style="fill:#818cf8"><a href="https://github.com/example/graphql-migration-guide" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Our GraphQL Migration Guide</tspan></a></text></g></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+
+                </article>
+                <!-- Modal Overlay -->
+                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+                    <div class="modal-content" id="modalContent">
+                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+                        <div id="modalSvgContainer"></div>
+                        <div class="modal-zoom-controls">
+                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    const modalSvgContainer = document.getElementById('modalSvgContainer');
+                    
+                    // Zoom state
+                    let modalZoomLevel = 1;
+                    const MODAL_ZOOM_MIN = 0.25;
+                    const MODAL_ZOOM_MAX = 4;
+                    const MODAL_ZOOM_STEP = 0.25;
+
+                    function openModal(container) {
+                        // Reset zoom level
+                        modalZoomLevel = 1;
+                        updateZoomDisplay();
+                        
+                        // Clone the SVG from the clicked container
+                        const svg = container.querySelector('svg');
+                        const svgClone = svg.cloneNode(true);
+                        svgClone.style.transform = 'scale(1)';
+                        svgClone.style.transition = 'transform 0.2s ease';
+
+                        // Clear previous content and add new SVG
+                        modalSvgContainer.innerHTML = '';
+                        modalSvgContainer.appendChild(svgClone);
+
+                        // Show modal with animation
+                        modalOverlay.classList.add('active');
+
+                        // Prevent body scroll when modal is open
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeModal() {
+                        modalOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                        modalZoomLevel = 1;
+                    }
+
+                    function closeModalOnBackdrop(event) {
+                        // Only close if clicking the overlay itself, not the content
+                        if (event.target === modalOverlay) {
+                            closeModal();
+                        }
+                    }
+                    
+                    function modalZoomIn() {
+                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomOut() {
+                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomReset() {
+                        modalZoomLevel = 1;
+                        applyModalZoom();
+                    }
+                    
+                    function applyModalZoom() {
+                        const svg = modalSvgContainer.querySelector('svg');
+                        if (svg) {
+                            svg.style.transform = `scale(${modalZoomLevel})`;
+                        }
+                        updateZoomDisplay();
+                    }
+                    
+                    function updateZoomDisplay() {
+                        const display = document.getElementById('modalZoomLevel');
+                        if (display) {
+                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
+                        }
+                    }
+
+                    // Close modal with Escape key
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                            closeModal();
+                        }
+                    });
+                    const docopsCopy = {
+                        url: (btn) => {
+                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                navigator.clipboard.writeText(url).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                        svg: (btn) => {
+                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                            navigator.clipboard.writeText(svg).then(() => {
+                                const originalText = btn.innerText;
+                                btn.innerText = 'COPIED!';
+                                setTimeout(() => btn.innerText = originalText, 2000);
+                            });
+                        },
+                        png: (btn) => {
+                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                            const svgData = new XMLSerializer().serializeToString(svgElement);
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const img = new Image();
+                            
+                            img.onload = () => {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                                canvas.toBlob(blob => {
+                                    const item = new ClipboardItem({ "image/png": blob });
+                                    navigator.clipboard.write([item]);
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            };
+                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                        }
+                    };
+                    
+                </script>
+                <script>
+                    mermaid.initialize({ startOnLoad: true });
+                </script>
+                <script>
+                (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                const docopsData = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+                </script>
+                
+            </body>
+            </html>

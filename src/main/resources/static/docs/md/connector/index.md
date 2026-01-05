@@ -1,0 +1,53 @@
+# DocOps Connectors
+
+[docops:connector]
+{
+"connectors": [
+{
+"text": "Code Commit",
+"baseColor": "#2d00f7",
+"description": "Developer pushes code to repository"
+},
+{
+"text": "Automated Tests",
+"baseColor": "#6a00f4",
+"description": "Unit and integration tests run"
+},
+{
+"text": "Code Quality",
+"baseColor": "#8900f2",
+"description": "Static analysis and code review"
+},
+{
+"text": "Build",
+"baseColor": "#a100f2",
+"description": "Compiling and packaging application"
+},
+{
+"text": "Artifact Storage",
+"baseColor": "#b100e8",
+"description": "Storing build artifacts"
+},
+{
+"text": "Staging Deploy",
+"baseColor": "#bc00dd",
+"description": "Deploying to staging environment"
+},
+{
+"text": "Acceptance Tests",
+"baseColor": "#d100d1",
+"description": "Automated acceptance testing"
+},
+{
+"text": "Production Deploy",
+"baseColor": "#db00b6",
+"description": "Deploying to production environment"
+},
+{
+"text": "Monitoring",
+"baseColor": "#e500a4",
+"description": "Continuous monitoring and alerting"
+}
+]
+}
+[/docops]
