@@ -21,65 +21,65 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
     },
     {
       "label": "Callouts",
-      "link": "callout",
+      "link": "callout/index.html",
       "description": "Callout",
       "type": "callout"
     },
     {
       "label": "Charts",
-      "link": "charts",
+      "link": "charts/index.html",
       "description": "Generate reports",
       "type": "charts"
     },
     {
       "label": "Connectors",
-      "link": "connector",
+      "link": "connector/index.html",
       "description": "Connectors",
       "type": "connectors"
     },
     {
       "label": "Domain Visualization",
-      "link": "domain",
+      "link": "domain/index.html",
       "description": "Domain Visualization",
       "type": "domain"
     },{
         "label": "Gherkin",
-        "link": "gherkin",
+        "link": "gherkin/index.html",
         "description": "Gherkin Visualized",
         "type": "gherkin"
     },{
         "label": "Metrics Card",
-        "link": "metrics",
+        "link": "metrics/index.html",
         "description": "Metrics Cards",
         "type": "metrics"
     },{
         "label": "Planner",
-        "link": "planner",
+        "link": "planner/index.html",
         "description": "Planner Cards",
         "type": "Plan"
     },{
         "label": "Scorecard",
-        "link": "scorecard",
+        "link": "scorecard/index.html",
         "description": "Scorecards",
         "type": "scorecard"
     },{
         "label": "Badges And Shield",
-        "link": "badge",
+        "link": "badge/index.html",
         "description": "Badges and Shield",
         "type": "badge"
     },{
         "label": "Timeline",
-        "link": "timeline",
+        "link": "timeline/index.html",
         "description": "Timeline Visual",
         "type": "timeline"
     },{
         "label": "Wordcloud",
-        "link": "wordcloud",
+        "link": "wordcloud/index.html",
         "description": "Wordclouds",
         "type": "wordcloud"
     },{
         "label": "Tree Chart",
-        "link": "treechart",
+        "link": "treechart/index.html",
         "description": "Tree Chart - Experimental",
         "type": "Tree Chart"
     }
