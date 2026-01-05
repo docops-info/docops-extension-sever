@@ -179,7 +179,7 @@ class CombinationChartImprovedTest {
         """.trimIndent()
 
         // Generate the combination chart
-        val svg = CombinationChartImproved(false).makeCombinationChartSvg(
+        val svg = CombinationChartImproved(true).makeCombinationChartSvg(
             combinationChartData,
             DefaultCsvResponse,
         )
