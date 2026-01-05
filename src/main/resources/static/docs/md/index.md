@@ -77,6 +77,11 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
         "link": "wordcloud",
         "description": "Wordclouds",
         "type": "wordcloud"
+    },{
+        "label": "Tree Chart",
+        "link": "treechart",
+        "description": "Tree Chart - Experimental",
+        "type": "Tree Chart"
     }
   ],
   "buttonType": "LARGE",

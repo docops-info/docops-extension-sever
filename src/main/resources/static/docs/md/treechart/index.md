@@ -1,0 +1,25 @@
+# DocOps Tree Chart Visualizer
+
+[docops:treechart]
+title=Organization Chart
+width=800
+height=600
+---
+CEO
+    CTO
+        Engineering Manager
+            Senior Developer
+            Developer
+            Junior Developer
+        QA Manager
+            QA Engineer
+            QA Analyst
+    CFO
+        Finance Manager
+            Accountant
+            Financial Analyst
+    CMO
+        Marketing Manager
+            Marketing Specialist
+            Content Creator
+[/docops]
