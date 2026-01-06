@@ -5,171 +5,357 @@
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                 <style>
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+                /* Modern macOS-inspired Markdown Stylesheet */
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --bg-tertiary: #fbfbfd;
+    --bg-code: #f7f7f8;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --accent: #007aff;
+    --accent-hover: #0051d5;
+    --border: #d2d2d7;
+    --shadow-sm: rgba(0, 0, 0, 0.04);
+    --shadow-md: rgba(0, 0, 0, 0.08);
+    --shadow-lg: rgba(0, 0, 0, 0.12);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-    background-color: #0d0d12; /* Matches the end of your radial gradient */
-    margin: 0;
-    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
-}
-
-.markdown-body {
-    /* Custom Variables - High Contrast & Sharp Accents */
-    --font-heading: 'Syne', sans-serif;
-    --font-body: 'Outfit', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    
-    --accent-primary: #7e57ff;
-    --accent-secondary: #00f2fe;
-    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
-    
-    background: var(--bg-gradient);
-    color: #e0e0e0;
-    font-family: var(--font-body);
-    line-height: 1.7;
-    padding: 3rem;
-    max-width: 980px;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    max-width: 820px;
     margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    padding: 3rem 2rem;
+    font-size: 17px;
+    letter-spacing: -0.01em;
 }
 
-/* Staggered Reveal for Content */
-.markdown-body > * {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: itemSlideIn 0.5s ease forwards;
-}
-
-.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
-.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
-.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
-.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
-
-@keyframes pageReveal {
-    to { opacity: 1; }
-}
-
-@keyframes itemSlideIn {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Typography */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
-    font-family: var(--font-heading);
-    color: #fff;
-    margin-top: 2.5rem;
-    line-height: 1.1;
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 2.5em;
+    margin-bottom: 0.75em;
+    color: var(--text-primary);
     letter-spacing: -0.02em;
 }
 
-.markdown-body h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+h1 {
+    font-size: 3em;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    background: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    border-bottom: none;
-    margin-bottom: 2rem;
+    background-clip: text;
 }
 
-.markdown-body h2 {
-    font-size: 2rem;
-    border-left: 4px solid var(--accent-primary);
-    padding-left: 1rem;
-    border-bottom: none;
+h2 {
+    font-size: 2.25em;
+    margin-top: 2em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--border);
 }
 
-/* Code Blocks - IDE Aesthetic */
-.markdown-body pre {
-    background: #000000 !important;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 1.5rem;
+h3 { font-size: 1.75em; }
+h4 { font-size: 1.4em; }
+h5 { font-size: 1.2em; }
+h6 {
+    font-size: 1em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Paragraphs */
+p {
+    margin: 1.25em 0;
+}
+
+/* Links */
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    overflow: hidden;
 }
 
-.markdown-body pre::before {
+a:hover {
+    color: var(--accent-hover);
+}
+
+a::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 2px; height: 100%;
-    background: var(--accent-primary);
+    width: 100%;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.markdown-body code {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    background: rgba(126, 87, 255, 0.15);
-    color: #b392ff;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
-.markdown-body pre code {
-    background: transparent;
-    color: #d1d1d1;
+/* Lists */
+ul, ol {
+    margin: 1.25em 0;
+    padding-left: 2em;
+}
+
+li {
+    margin: 0.75em 0;
+    padding-left: 0.25em;
+}
+
+li > ul, li > ol {
+    margin: 0.5em 0;
+}
+
+ul > li::marker {
+    color: var(--accent);
+}
+
+/* Code */
+code {
+    font-family: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
+    font-size: 0.88em;
+    background: var(--bg-code);
+    padding: 0.25em 0.5em;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    color: #d73a49;
+    font-weight: 400;
+}
+
+pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75em;
+    overflow-x: auto;
+    margin: 2em 0;
+    box-shadow: 0 4px 16px var(--shadow-sm), 0 8px 32px var(--shadow-md);
+    backdrop-filter: blur(20px);
+}
+
+pre code {
+    background: none;
     padding: 0;
-}
-
-/* Links & Accents */
-.markdown-body a {
-    color: var(--accent-secondary);
-    text-decoration: none;
-    border-bottom: 1px dashed var(--accent-secondary);
-    transition: all 0.2s ease;
-}
-
-.markdown-body a:hover {
-    color: #fff;
-    border-bottom-style: solid;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    border: none;
+    font-size: 0.9em;
+    line-height: 1.7;
+    color: var(--text-primary);
 }
 
 /* Blockquotes */
-.markdown-body blockquote {
-    margin: 2rem 0;
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--accent-secondary);
+blockquote {
+    margin: 2em 0;
+    padding: 1.5em 2em;
+    border-left: 4px solid var(--accent);
+    background: var(--bg-tertiary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    color: var(--text-secondary);
     font-style: italic;
-    color: #aaa;
+    box-shadow: 0 2px 8px var(--shadow-sm);
+    position: relative;
 }
 
-/* Custom Table Design */
-.markdown-body table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 2rem 0;
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
+blockquote::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent) 0%, rgba(0, 122, 255, 0.3) 100%);
+    border-radius: 2px 0 0 2px;
 }
 
-.markdown-body th {
-    background: #1a1a2e;
-    color: var(--accent-secondary);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    padding: 1rem;
+blockquote p {
+    margin: 0.5em 0;
+    color: var(--text-primary);
 }
 
-.markdown-body td {
-    padding: 1rem;
-    border-top: 1px solid #222;
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
 }
 
 /* Horizontal Rule */
-.markdown-body hr {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #444, transparent);
+hr {
     border: none;
-    margin: 4rem 0;
+    height: 1px;
+    background: var(--border);
+    margin: 3.5em 0;
+    opacity: 0.6;
 }
 
+/* Tables */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin: 2em 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow-sm), 0 4px 16px var(--shadow-md);
+    border: 1px solid var(--border);
+}
+
+thead {
+    background: var(--bg-secondary);
+    backdrop-filter: blur(20px);
+}
+
+th {
+    padding: 1em 1.25em;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95em;
+    letter-spacing: -0.01em;
+    border-bottom: 2px solid var(--border);
+}
+
+td {
+    padding: 0.875em 1.25em;
+    border-bottom: 1px solid var(--border);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr {
+    background: var(--bg-primary);
+    transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+tbody tr:hover {
+    background: var(--bg-tertiary);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: 2em 0;
+    box-shadow: 0 4px 16px var(--shadow-sm), 0 8px 32px var(--shadow-lg);
+    border: 1px solid var(--border);
+}
+
+/* Task Lists */
+input[type="checkbox"] {
+    margin-right: 0.75em;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--bg-primary);
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 2rem 1.5rem;
+        font-size: 16px;
+    }
+
+    h1 { font-size: 2.25em; }
+    h2 { font-size: 1.875em; }
+    h3 { font-size: 1.5em; }
+
+    pre {
+        padding: 1.25em;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+}
+
+/* Selection */
+::selection {
+    background: rgba(0, 122, 255, 0.2);
+    color: var(--text-primary);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Subtle animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body > * {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
                 </style>
                 <style>
                 .svg-container {
@@ -737,9 +923,9 @@ body {
             <body>
                 <article class="markdown-body">
                     <h1 id="docops-gherkin">DocOps Gherkin</h1>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=gherkin&payload=H4sIAAAAAAAA_51Vy27bMBC8-ysI5eoAih-y05vbPGo0NYw6aQ9FDjS1lIjQJCtSTdyg_95dSo5jB0GdwAdJY-7s7sySfOwkEnioK0g-sOSTNUGZ2taeTU2AouJBWcPmyoFWBpJuJ_ECDK-U9bj-Z-exkwQVdAxe1EKA97LWbFkrnTNucpaD03YdAwOmoahkPlksprPLBgTXMrEkrF0kupx-P58lXQTgIRAgbA5MeeZqX0LOgmUrrgyteEnK_nafc_34HKm2XKGEtjzXdsWq2viDyK73yXgVlOQieMarhjbErn2wFeQHcU5mZ0S55WwUW4EJ1CjGF8oUzJO4kL9aZ-e2Q7zP7LgxChnAY3GSK2y02HXhYjK9epMLnK2gKlAu-FUjLRliHZgD-3xhRL2tDx5A1AF2eTb1_c8DMvTJSl_aGq2lhqMRS23FXVP3Qewfb6533aAIJZCL67XHjtsEPiitUQlnq4APX-uwb8357Ow1a64UmnvPK4OmeJZbZmxoao6TubdbWqKDfUIhAo0MViuskarAzY2b0WMWcxwFibPwHs_0TuE089LWZn8Anjp_u3GiOYDgfVuHbxxp2ZbAeAhctIcGJfz6bZd68WU6n5-ftTZ1blFlXLYifnRMWG0r37w_OyaPhpClYuc4jLBM5UCOCS7UbzAR6_NxJiVh92ULyeUwS0dJk6qBeiAGy4wgnNqIZGI0HMVRWNaxuaNxvz8GQYjj3pOHTeRyPIzoZpcTCmn_pH8S14LJN6gcnso0jWXfKeegyTTOxnCaJTSkieZrG9OhzPcqDyW-jnopSlaCKkr6Z5DRp-N5S9sbkKCtDAvHRQP3I4wDu4V6GRlI9lm8WVy5bvK0wi7UHxI3Jnuia7CTbMPVfve6dE56USlHF9QGplCJE3TBV0oTe0K3WNVlk0px3WWeG3_soVKS_MbfP6TJO43-BgAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=gherkin&payload=H4sIAAAAAAAA_51Vy27bMBC8-ysI5eoAih-y05vbPGo0NYw6aQ9FDjS1lIjQJCtSTdyg_95dSo5jB0GdwAdJY-7s7sySfOwkEnioK0g-sOSTNUGZ2taeTU2AouJBWcPmyoFWBpJuJ_ECDK-U9bj-Z-exkwQVdAxe1EKA97LWbFkrnTNucpaD03YdAwOmoahkPlksprPLBgTXMrEkrF0kupx-P58lXQTgIRAgbA5MeeZqX0LOgmUrrgyteEnK_nafc_34HKm2XKGEtjzXdsWq2viDyK73yXgVlOQieMarhjbErn2wFeQHcU5mZ0S55WwUW4EJ1CjGF8oUzJO4kL9aZ-e2Q7zP7LgxChnAY3GSK2y02HXhYjK9epMLnK2gKlAu-FUjLRliHZgD-3xhRL2tDx5A1AF2eTb1_c8DMvTJSl_aGq2lhqMRS23FXVP3Qewfb6533aAIJZCL67XHjtsEPiitUQlnq4APX-uwb8357Ow1a64UmnvPK4OmeJZbZmxoao6TubdbWqKDfUIhAo0MViuskarAzY2b0WMWcxwFibPwHs_0TuE089LWZn8Anjp_u3GiOYDgfVuHbxxp2ZbAeAhctIcGJfz6bZd68WU6n5-ftTZ1blFlXLYifnRMWG0r37w_OyaPhpClYuc4jLBM5UCOCS7UbzAR6_NxJiVh92ULyeUwS0dJk6qBeiAGy4wgnNqIZGI0HMVRWNaxuaNxvz8GQYjj3pOHTeRyPIzoZpcTCmn_pH8S14LJN6gcnso0jWXfKeegyTTOxnCaJTSkieZrG9OhzPcqDyW-jnopSlaCKkr6Z5DRp-N5S9sbkKCtDAvHRQP3I4wDu4V6GRlI9lm8WVy5bvK0wi7UHxI3Jnuia7CTbMPVfve6dE56USlHF9QGplCJE3TBV0oTe0K3WNVlk0px3WWeG3_soVKS_MbfP6TJO43-BgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <div class="svg-container">
-<svg width="720" height="1095" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1095">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Feature","Scenario","Scenario Status","Step #","Step Type","Step Text","Step Status"],"rows":[["Continuous Integration Pipeline","Successful build and deploy","PASSING","1","GIVEN","code is pushed to main","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","2","WHEN","the build pipeline runs","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","3","THEN","artifacts are built and stored","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","4","AND","deployment to staging succeeds","PASSING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","1","GIVEN","a merge request is opened","PASSING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","2","WHEN","unit tests execute","FAILING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","3","THEN","the pipeline should fail and block merge","FAILING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","4","BUT","static analysis should still report results","PENDING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","1","GIVEN","linting is configured as non-blocking","PASSING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","2","WHEN","lint warnings are found","PENDING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","3","THEN","the pipeline should continue","PASSING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","4","AND","a report should be attached to the MR","SKIPPED"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#4a5568" opacity="0.3"/></pattern><linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" /></linearGradient><filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/></filter></defs><rect width="720" height="1095" fill="#0f172a" rx="16"/><rect width="720" height="1095" fill="url(#dotPattern)" rx="16"/><g transform="translate(40, 40)"><rect width="640" height="90" fill="#1e293b" opacity="0.9" rx="12" stroke="#334155" stroke-width="1"/><rect width="6" height="50" x="0" y="20" fill="url(#accentGradient)" rx="3" filter="url(#softGlow)"/><text x="30" y="35" font-family="Monaco, monospace" font-size="11" font-weight="bold" fill="#8b5cf6" letter-spacing="2">FEATURE</text><text x="30" y="65" font-family="sans-serif" font-size="24" font-weight="800" fill="#f8fafc">Continuous Integration Pipeline</text></g><g transform="translate(40, 160)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#1e293b" rx="12" stroke="#475569" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#3b82f6" letter-spacing="1.5">SCENARIO: SUCCESSFUL BUILD AND DEPLOY</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#064e3b" stroke="#059669" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#34d399" text-anchor="middle">PASSING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Given</tspan> code is pushed to main</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">When</tspan> the build pipeline runs</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Then</tspan> artifacts are built and stored</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">And</tspan> deployment to staging succeeds</text></g></g><g transform="translate(40, 465)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#1e293b" rx="12" stroke="#475569" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#3b82f6" letter-spacing="1.5">SCENARIO: UNIT TESTS FAILING</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#450a0a" stroke="#dc2626" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#f87171" text-anchor="middle">FAILING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Given</tspan> a merge request is opened</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">When</tspan> unit tests execute</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Then</tspan> the pipeline should fail and block merge</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">But</tspan> static analysis should still report results</text></g></g><g transform="translate(40, 770)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#1e293b" rx="12" stroke="#475569" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#3b82f6" letter-spacing="1.5">SCENARIO: LINT WARNINGS DO NOT FAIL BUILD</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#94a3b8" text-anchor="middle">PENDING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Given</tspan> linting is configured as non-blocking</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">When</tspan> lint warnings are found</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">Then</tspan> the pipeline should continue</text><path d="M 0 10 L 0 40" stroke="#475569" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#94a3b8"><tspan fill="#f8fafc" font-weight="bold">And</tspan> a report should be attached to the MR</text></g></g></svg>
+<svg width="720" height="1095" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1095">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Feature","Scenario","Scenario Status","Step #","Step Type","Step Text","Step Status"],"rows":[["Continuous Integration Pipeline","Successful build and deploy","PASSING","1","GIVEN","code is pushed to main","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","2","WHEN","the build pipeline runs","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","3","THEN","artifacts are built and stored","PASSING"],["Continuous Integration Pipeline","Successful build and deploy","PASSING","4","AND","deployment to staging succeeds","PASSING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","1","GIVEN","a merge request is opened","PASSING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","2","WHEN","unit tests execute","FAILING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","3","THEN","the pipeline should fail and block merge","FAILING"],["Continuous Integration Pipeline","Unit tests failing","FAILING","4","BUT","static analysis should still report results","PENDING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","1","GIVEN","linting is configured as non-blocking","PASSING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","2","WHEN","lint warnings are found","PENDING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","3","THEN","the pipeline should continue","PASSING"],["Continuous Integration Pipeline","Lint warnings do not fail build","PENDING","4","AND","a report should be attached to the MR","SKIPPED"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" opacity="0.3"/></pattern><linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" /></linearGradient><filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#cbd5e1" flood-opacity="0.2"/></filter></defs><rect width="720" height="1095" fill="#f8fafc" rx="16"/><rect width="720" height="1095" fill="url(#dotPattern)" rx="16"/><g transform="translate(40, 40)"><rect width="640" height="90" fill="#ffffff" opacity="0.9" rx="12" stroke="#e2e8f0" stroke-width="1"/><rect width="6" height="50" x="0" y="20" fill="url(#accentGradient)" rx="3" filter="url(#softGlow)"/><text x="30" y="35" font-family="Monaco, monospace" font-size="11" font-weight="bold" fill="#6366f1" letter-spacing="2">FEATURE</text><text x="30" y="65" font-family="sans-serif" font-size="24" font-weight="800" fill="#1e293b">Continuous Integration Pipeline</text></g><g transform="translate(40, 160)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#ffffff" rx="12" stroke="#cbd5e1" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#2563eb" letter-spacing="1.5">SCENARIO: SUCCESSFUL BUILD AND DEPLOY</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#15803d" text-anchor="middle">PASSING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Given</tspan> code is pushed to main</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">When</tspan> the build pipeline runs</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Then</tspan> artifacts are built and stored</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">And</tspan> deployment to staging succeeds</text></g></g><g transform="translate(40, 465)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#ffffff" rx="12" stroke="#cbd5e1" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#2563eb" letter-spacing="1.5">SCENARIO: UNIT TESTS FAILING</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#b91c1c" text-anchor="middle">FAILING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Given</tspan> a merge request is opened</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">When</tspan> unit tests execute</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Then</tspan> the pipeline should fail and block merge</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">But</tspan> static analysis should still report results</text></g></g><g transform="translate(40, 770)" filter="url(#cardShadow)"><rect width="640" height="265" fill="#ffffff" rx="12" stroke="#cbd5e1" stroke-width="0.5"/><text x="30" y="35" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#2563eb" letter-spacing="1.5">SCENARIO: LINT WARNINGS DO NOT FAIL BUILD</text><g transform="translate(540, 25)"><rect width="80" height="24" rx="12" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/><text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">PENDING</text></g><g transform="translate(35, 75)"><circle cx="0" cy="0" r="4" fill="#22c55e" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Given</tspan> linting is configured as non-blocking</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 115)"><circle cx="0" cy="0" r="4" fill="#3b82f6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">When</tspan> lint warnings are found</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 155)"><circle cx="0" cy="0" r="4" fill="#8b5cf6" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">Then</tspan> the pipeline should continue</text><path d="M 0 10 L 0 40" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 2"/></g><g transform="translate(35, 195)"><circle cx="0" cy="0" r="4" fill="#64748b" filter="url(#softGlow)"/><text x="25" y="5" font-family="sans-serif" font-size="14" fill="#64748b"><tspan fill="#1e293b" font-weight="bold">And</tspan> a report should be attached to the MR</text></g></g></svg>
 </div>
 <div class="docops-control-bar">
 <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
