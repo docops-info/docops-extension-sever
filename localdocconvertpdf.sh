@@ -4,7 +4,10 @@
 # Define relative paths
 SOURCE_DIR_REL="src/docs/md"
 OUTPUT_DIR_REL="src/main/resources/static/docs/md"
-THEME="md-light"
+THEME="brutalist-markdown-theme"
+#THEME="md-dark"
+#THEME="github-markdown-css"
+#THEME="mixu"
 
 # Get absolute paths
 SOURCE_DIR=$(realpath "$SOURCE_DIR_REL")

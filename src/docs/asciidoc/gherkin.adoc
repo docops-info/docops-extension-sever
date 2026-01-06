@@ -106,6 +106,56 @@ include::data/gherkin/gherkin4.feature[]
 include::data/gherkin/gherkin4.feature[]
 ----
 
+== Datatable
+
+[WARNING]
+====
+Data table support is experimental/limited. Number of columns is small because of the width real estate.
+====
+
+.User Login Validation
+[docops,gherkin]
+----
+Feature: User Login Validation
+
+  Scenario Outline: System authenticates users based on roles
+    Given the login page is displayed
+    When the user enters "<username>" and "<password>"
+    Then the system should grant access to the "<dashboard>"
+
+    Examples:
+      | username | password  | dashboard |
+      | admin    | secret123 | Admin     |
+      | editor   | edit456   | Content   |
+      | viewer   | view789   | Guest     |
+----
+
+.Tab names are correct
+[docops,gherkin]
+----
+  Scenario Outline: Tab names are correct
+    Given a user is logged in to TE Reporting
+    When I navigate to the following url - <url>
+    Then the tab name is: <tab_name>
+    Examples:
+      | url                         | tab_name               |
+      | /                           | Home                   |
+      | /dashboards/summary         | All Dashboards         |
+----
+
+.eating
+[docops,gherkin]
+----
+Scenario Outline: eating
+  Given there are <start> cucumbers
+  When I eat <eat> cucumbers
+  Then I should have <left> cucumbers
+
+  Examples:
+    | start | eat | left |
+    |    12 |   5 |    7 |
+    |    20 |   5 |   15 |
+----
 [.back-to-top]
 <<top, 🔝>>
 

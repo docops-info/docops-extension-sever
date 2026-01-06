@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.gherkin
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import org.springframework.stereotype.Service
 
 class GherkinMaker(val useDark: Boolean) {
@@ -100,6 +101,12 @@ class GherkinMaker(val useDark: Boolean) {
         return kotlin.math.max(20, lines.size * lineHeight)
     }
 
+    private fun calculateExamplesHeight(examples: GherkinExamples?, theme: GherkinTheme): Int {
+        if (examples == null) return 0
+        val rowHeight = 25
+        val headerHeight = 30
+        return headerHeight + (examples.rows.size * rowHeight) + 20 // + padding
+    }
     fun makeGherkin(spec: GherkinSpec): String {
         val totalHeight = calculateTotalHeight(spec, spec.theme)
         val width = spec.theme.layout.width
@@ -236,7 +243,8 @@ class GherkinMaker(val useDark: Boolean) {
                 append("""<circle cx="0" cy="0" r="4" fill="$stepColor" filter="url(#softGlow)"/>""")
 
                 lines.forEachIndexed { lIdx, line ->
-                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${step.type.name.lowercase().capitalize()}</tspan> $line""" else line
+                    val escapedLine = line.escapeXml()
+                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${step.type.name.lowercase().capitalize()}</tspan> $escapedLine""" else escapedLine
                     append("""<text x="25" y="${5 + (lIdx * 22)}" font-family="sans-serif" font-size="14" fill="$textColor">$content</text>""")
                 }
 
@@ -247,8 +255,13 @@ class GherkinMaker(val useDark: Boolean) {
                 append("</g>")
                 currentY += h + 18
             }
+            // Render Examples if present
+            scenario.examples?.let {
+                append(createExamplesTable(it, width, currentY + 10))
+            }
             append("</g>")
         }
+
     }
 
 
@@ -397,8 +410,11 @@ class GherkinMaker(val useDark: Boolean) {
             (lines.size * 22) + 18 // Line height + gap
         }
 
-        // 3. Header (40) + Title Space (20) + Steps + Bottom Padding (30)
-        return 40 + titleHeight + 20 + stepsHeight + 30
+        // 3. Examples height
+        val examplesHeight = calculateExamplesHeight(scenario.examples, theme)
+
+        // 4. Header (40) + Title Space (20) + Steps + Examples + Bottom Padding (30)
+        return 40 + titleHeight + 20 + stepsHeight + examplesHeight + 30
     }
 
     private fun calculateTotalHeight(spec: GherkinSpec, theme: GherkinTheme): Int {
@@ -417,5 +433,38 @@ class GherkinMaker(val useDark: Boolean) {
 
         // Extra bottom buffer
         return total + 20
+    }
+
+    private fun createExamplesTable(examples: GherkinExamples, width: Int, yOffset: Int): String {
+        val cellWidth = (width - 60) / examples.headers.size
+        val rowHeight = 25
+        val textColor = if (useDark) "#94a3b8" else "#475569"
+        val headerBg = if (useDark) "#334155" else "#f1f5f9"
+        val borderColor = if (useDark) "#475569" else "#cbd5e1"
+
+        return buildString {
+            append("""<g transform="translate(45, $yOffset)">""")
+            append("""<text x="0" y="-10" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#3b82f6">EXAMPLES:</text>""")
+
+            // Headers
+            examples.headers.forEachIndexed { i, header ->
+                append("""
+                            <rect x="${i * cellWidth}" y="0" width="$cellWidth" height="$rowHeight" fill="$headerBg" stroke="$borderColor" stroke-width="0.5"/>
+                            <text x="${i * cellWidth + cellWidth / 2}" y="17" font-family="sans-serif" font-size="11" font-weight="bold" fill="$textColor" text-anchor="middle">${header.escapeXml()}</text>
+                        """.trimIndent())
+            }
+
+            // Rows
+            examples.rows.forEachIndexed { rowIndex, row ->
+                val y = (rowIndex + 1) * rowHeight
+                row.forEachIndexed { colIndex, cell ->
+                    append("""
+                                <rect x="${colIndex * cellWidth}" y="$y" width="$cellWidth" height="$rowHeight" fill="none" stroke="$borderColor" stroke-width="0.5"/>
+                                <text x="${colIndex * cellWidth + cellWidth / 2}" y="${y + 17}" font-family="sans-serif" font-size="11" fill="$textColor" text-anchor="middle">${cell.escapeXml()}</text>
+                            """.trimIndent())
+                }
+            }
+            append("</g>")
+        }
     }
 }

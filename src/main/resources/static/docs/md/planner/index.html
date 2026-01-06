@@ -1,361 +1,175 @@
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="en" data-theme="dark">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                 <style>
-                /* Modern macOS-inspired Markdown Stylesheet */
-
-:root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f7;
-    --bg-tertiary: #fbfbfd;
-    --bg-code: #f7f7f8;
-    --text-primary: #1d1d1f;
-    --text-secondary: #86868b;
-    --accent: #007aff;
-    --accent-hover: #0051d5;
-    --border: #d2d2d7;
-    --shadow-sm: rgba(0, 0, 0, 0.04);
-    --shadow-md: rgba(0, 0, 0, 0.08);
-    --shadow-lg: rgba(0, 0, 0, 0.12);
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-}
-
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
+                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
-    line-height: 1.6;
-    color: var(--text-primary);
-    background: var(--bg-primary);
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
-    font-size: 17px;
-    letter-spacing: -0.01em;
+    background-color: #0d0d12; /* Matches the end of your radial gradient */
+    margin: 0;
+    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
 }
 
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    line-height: 1.2;
-    margin-top: 2.5em;
-    margin-bottom: 0.75em;
-    color: var(--text-primary);
+.markdown-body {
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
+}
+
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
+}
+
+@keyframes itemSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
     letter-spacing: -0.02em;
 }
 
-h1 {
-    font-size: 3em;
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 0.5em;
-    background: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    border-bottom: none;
+    margin-bottom: 2rem;
 }
 
-h2 {
-    font-size: 2.25em;
-    margin-top: 2em;
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid var(--border);
-}
-
-h3 { font-size: 1.75em; }
-h4 { font-size: 1.4em; }
-h5 { font-size: 1.2em; }
-h6 {
-    font-size: 1em;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-}
-
-/* Paragraphs */
-p {
-    margin: 1.25em 0;
-}
-
-/* Links */
-a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-a:hover {
-    color: var(--accent-hover);
-}
-
-a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    bottom: -2px;
-    left: 0;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-a:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-}
-
-/* Lists */
-ul, ol {
-    margin: 1.25em 0;
-    padding-left: 2em;
-}
-
-li {
-    margin: 0.75em 0;
-    padding-left: 0.25em;
-}
-
-li > ul, li > ol {
-    margin: 0.5em 0;
-}
-
-ul > li::marker {
-    color: var(--accent);
-}
-
-/* Code */
-code {
-    font-family: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
-    font-size: 0.88em;
-    background: var(--bg-code);
-    padding: 0.25em 0.5em;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    color: #d73a49;
-    font-weight: 400;
-}
-
-pre {
-    background: var(--bg-code);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.75em;
-    overflow-x: auto;
-    margin: 2em 0;
-    box-shadow: 0 4px 16px var(--shadow-sm), 0 8px 32px var(--shadow-md);
-    backdrop-filter: blur(20px);
-}
-
-pre code {
-    background: none;
-    padding: 0;
-    border: none;
-    font-size: 0.9em;
-    line-height: 1.7;
-    color: var(--text-primary);
-}
-
-/* Blockquotes */
-blockquote {
-    margin: 2em 0;
-    padding: 1.5em 2em;
-    border-left: 4px solid var(--accent);
-    background: var(--bg-tertiary);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    color: var(--text-secondary);
-    font-style: italic;
-    box-shadow: 0 2px 8px var(--shadow-sm);
-    position: relative;
-}
-
-blockquote::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(180deg, var(--accent) 0%, rgba(0, 122, 255, 0.3) 100%);
-    border-radius: 2px 0 0 2px;
-}
-
-blockquote p {
-    margin: 0.5em 0;
-    color: var(--text-primary);
-}
-
-blockquote p:first-child {
-    margin-top: 0;
-}
-
-blockquote p:last-child {
-    margin-bottom: 0;
-}
-
-/* Horizontal Rule */
-hr {
-    border: none;
-    height: 1px;
-    background: var(--border);
-    margin: 3.5em 0;
-    opacity: 0.6;
-}
-
-/* Tables */
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    width: 100%;
-    margin: 2em 0;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: 0 2px 8px var(--shadow-sm), 0 4px 16px var(--shadow-md);
-    border: 1px solid var(--border);
-}
-
-thead {
-    background: var(--bg-secondary);
-    backdrop-filter: blur(20px);
-}
-
-th {
-    padding: 1em 1.25em;
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-primary);
-    font-size: 0.95em;
-    letter-spacing: -0.01em;
-    border-bottom: 2px solid var(--border);
-}
-
-td {
-    padding: 0.875em 1.25em;
-    border-bottom: 1px solid var(--border);
-}
-
-tr:last-child td {
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
     border-bottom: none;
 }
 
-tbody tr {
-    background: var(--bg-primary);
-    transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-tbody tr:hover {
-    background: var(--bg-tertiary);
-}
-
-/* Images */
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-lg);
-    margin: 2em 0;
-    box-shadow: 0 4px 16px var(--shadow-sm), 0 8px 32px var(--shadow-lg);
-    border: 1px solid var(--border);
-}
-
-/* Task Lists */
-input[type="checkbox"] {
-    margin-right: 0.75em;
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
-    appearance: none;
-    -webkit-appearance: none;
-    background: var(--bg-primary);
+/* Code Blocks - IDE Aesthetic */
+.markdown-body pre {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
     position: relative;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
-input[type="checkbox"]:checked {
-    background: var(--accent);
-    border-color: var(--accent);
-}
-
-input[type="checkbox"]:checked::after {
-    content: '✓';
+.markdown-body pre::before {
+    content: '';
     position: absolute;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
 }
 
-input[type="checkbox"]:hover {
-    border-color: var(--accent);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    body {
-        padding: 2rem 1.5rem;
-        font-size: 16px;
-    }
-
-    h1 { font-size: 2.25em; }
-    h2 { font-size: 1.875em; }
-    h3 { font-size: 1.5em; }
-
-    pre {
-        padding: 1.25em;
-    }
-
-    table {
-        font-size: 0.9em;
-    }
-}
-
-/* Selection */
-::selection {
-    background: rgba(0, 122, 255, 0.2);
-    color: var(--text-primary);
-}
-
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Focus styles */
-:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+.markdown-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
     border-radius: 4px;
 }
 
-/* Subtle animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
 }
 
-body > * {
-    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
 }
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+}
+
+.markdown-body td {
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
+}
+
                 </style>
                 <style>
                 .svg-container {
@@ -403,6 +217,11 @@ body > * {
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-medium: rgba(0, 0, 0, 0.15);
     --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -415,8 +234,31 @@ body > * {
         --shadow-light: rgba(0, 0, 0, 0.3);
         --shadow-medium: rgba(0, 0, 0, 0.4);
         --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
     }
 }
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
 .docops-container {
     display: inline-block;
 }
@@ -434,23 +276,31 @@ body > * {
     transform: translateY(-4px);
 }
 
-
-
-
 .docops-control-bar {
     display: flex;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--control-bar-bg);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--control-bar-border);
     padding: 8px;
     gap: 8px;
     justify-content: flex-end;
 }
 
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
 .docops-btn {
     background: transparent;
-    border: 1px solid rgba(126, 87, 255, 0.4);
-    color: #b392ff;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
     font-family: 'Syne', sans-serif;
     font-size: 0.7rem;
     font-weight: 700;
@@ -924,10 +774,13 @@ body > * {
                 <article class="markdown-body">
                     <h1 id="docops-planner">DocOps Planner</h1>
 <p>DocOps planner is a tool for creating and managing plans and tasks. It allows users to create, edit, and organize tasks, set deadlines, and track progress. The planner also provides a visual representation of the plan, making it easy to see the overall structure and dependencies between tasks.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_0WQS3IDIQxE9z6FLpBDJPYmi1S5nFxAAz1jyiAREHF8-wjnt0QPXjd6INErvXC7wOiEDm7hvCPaq8QRjIKWCkumjVg433rqTp8jxNJ6I-O2-UMeMUECHB2wJgENSe8D1JFzko2qJrG-eyDBp9Gx6V1-wAey1uKyGdnABqpNTe1Wp-wN3eia7EyrhtFpazrqLHD6Tlm4I5IKrUBcOFw8Ibuk_fxoRu-5VE6b3Lvd86j8wTIvJ87Tecws1DX4kQpiYurWnG-3CRsqt9kOvVNDhkfPD0X1Hk-jex0H0_G_hOV3XDQi-_wVYbgkSbKZsg6J3sLBY-8oS4bv27mByxc8RpnWmQEAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_0WQS3IDIQxE9z6FLpBDJPYmi1S5nFxAAz1jyiAREHF8-wjnt0QPXjd6INErvXC7wOiEDm7hvCPaq8QRjIKWCkumjVg433rqTp8jxNJ6I-O2-UMeMUECHB2wJgENSe8D1JFzko2qJrG-eyDBp9Gx6V1-wAey1uKyGdnABqpNTe1Wp-wN3eia7EyrhtFpazrqLHD6Tlm4I5IKrUBcOFw8Ibuk_fxoRu-5VE6b3Lvd86j8wTIvJ87Tecws1DX4kQpiYurWnG-3CRsqt9kOvVNDhkfPD0X1Hk-jex0H0_G_hOV3XDQi-_wVYbgkSbKZsg6J3sLBY-8oS4bv27mByxc8RpnWmQEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_e2a31434d5354d4d856f8eef22a960fa" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Conduct competitor analysis\n  Identify target audience\n  Define unique selling points","true"],["next","2","  Create prototype\n  Test with focus groups\n  Refine based on feedback","true"],["later","3","  Develop marketing materials\n  Plan social media strategy\n  Prepare press releases","true"],["done","4","  Define business model\n  Secure initial funding\n  Assemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_e2a31434d5354d4d856f8eef22a960fa .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_e2a31434d5354d4d856f8eef22a960fa .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_e2a31434d5354d4d856f8eef22a960fa .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_e2a31434d5354d4d856f8eef22a960fa .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#f8fafc"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#09090b"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_460ef947e155467697e979bf6ad4948b" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Conduct competitor analysis\n  Identify target audience\n  Define unique selling points","true"],["next","2","  Create prototype\n  Test with focus groups\n  Refine based on feedback","true"],["later","3","  Develop marketing materials\n  Plan social media strategy\n  Prepare press releases","true"],["done","4","  Define business model\n  Secure initial funding\n  Assemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_460ef947e155467697e979bf6ad4948b .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_460ef947e155467697e979bf6ad4948b .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_460ef947e155467697e979bf6ad4948b .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_460ef947e155467697e979bf6ad4948b .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#09090b"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#f4f4f5"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#71717a"></text></g></g></g></g></svg>
 </div>
+<figcaption></figcaption>
+</figure>
 <div class="docops-control-bar">
 <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
 <button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>

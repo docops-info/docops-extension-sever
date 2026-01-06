@@ -56,3 +56,32 @@
 }
 
 [/docops]
+
+[docops:gherkin caption="User Login Validation"]
+Feature: User Login Validation
+
+    Scenario Outline: System authenticates users based on roles
+        Given the login page is displayed
+        When the user enters "<username>" and "<password>"
+        Then the system should grant access to the "<dashboard>"
+
+    Examples:
+      | username | password  | dashboard |
+      | admin    | secret123 | Admin     |
+      | editor   | edit456   | Content   |
+      | viewer   | view789   | Guest     |
+[/docops]
+
+
+[docops:gherkin title="Tab Navigation Verification"]
+  Scenario Outline: Tab names are correct
+    Given a user is logged in to TE Reporting
+    When I navigate to the following url - <url>
+    Then the tab name is: <tab_name>
+
+    Examples:
+      | url                         | tab_name               |
+      | /                           | Home                   |
+      | /dashboards/summary         | All Dashboards         |
+[/docops]
+
