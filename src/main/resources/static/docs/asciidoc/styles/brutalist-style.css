@@ -220,11 +220,6 @@ pre code {
     padding: 0;
 }
 
-/*!* Light/Dark mode reaction (already handled by variables) *!
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: var(--accent-primary);
-}*/
 
 
 /* Floating Instrument Panel TOC */
@@ -339,41 +334,63 @@ body.light-mode .reading-time {
 }
 
 /* Admonitions */
+/* Admonition Blocks - Stabilized Brutalist Style */
 .admonitionblock {
-    margin: 2rem 0;
+    margin: 2.5rem 0;
     border: none;
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--accent-secondary);
-    box-shadow: none;
+    background: var(--bg-surface);
+    border-left: 6px solid var(--accent-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .admonitionblock td.icon {
-    border-right: none;
-    background: transparent;
-    color: var(--accent-secondary);
+    width: 80px;
+    min-width: 80px;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+    background: rgba(0, 242, 254, 0.05); /* Cleaned up hardcoded opacity */
 }
 
 .admonitionblock td.content {
-    background: transparent;
-    color: #aaa;
+    padding: 1.5rem 2rem;
+    color: var(--text-main);
+    font-family: var(--font-body);
     font-style: italic;
+    line-height: 1.6;
+    vertical-align: middle;
 }
 
 .admonitionblock:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 10px 10px 0px var(--brand-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 
 .admonitionblock > table {
     border: none;
     margin: 0;
-    box-shadow: none;
+    width: 100%;
     background: transparent;
     border-collapse: collapse;
-    height: 100%; /* Ensure table stretches */
 }
 
+.admonitionblock:hover td.icon:before {
+    transform: scale(1.1);
+    color: var(--text-heading);
+}
+
+.admonitionblock td.content {
+    padding: 1.5rem 2rem;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-style: italic;
+    line-height: 1.6;
+    vertical-align: middle;
+}
 
 
 /* Use a flex container INSIDE the td to ensure perfect centering and full height */
@@ -381,20 +398,15 @@ body.light-mode .reading-time {
     display: none; /* Hide default title if it exists */
 }
 
+/* Remove absolute positioning and unresolved --brand-accent variables */
 .admonitionblock td.icon:before {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     line-height: 1;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    display: block;
+    color: var(--accent-secondary);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 
@@ -415,26 +427,21 @@ body.light-mode .reading-time {
     color: var(--bg-base);
 }
 
-/* Specific Admonition Flavors */
-.admonitionblock.note td.icon { background-color: var(--brand-main); color: var(--bg-base); }
-.admonitionblock.note td.icon::before { content: "\f05a"; }
+/* Cleaned up Admonition Colors - Removed dead --brand variables */
+.admonitionblock.note { border-left-color: var(--accent-primary); }
+.admonitionblock.note td.icon:before { content: "\f05a"; color: var(--accent-primary); }
 
-.admonitionblock.tip td.icon { background-color: var(--brand-accent); color: var(--bg-base); }
-.admonitionblock.tip td.icon::before { content: "\f0eb"; }
+.admonitionblock.tip { border-left-color: var(--accent-secondary); }
+.admonitionblock.tip td.icon:before { content: "\f0eb"; color: var(--accent-secondary); }
 
-.admonitionblock.warning td.icon { background-color: #f59e0b; color: var(--brand-deep); }
-.admonitionblock.warning td.icon::before { content: "\f071"; }
+.admonitionblock.warning { border-left-color: #f59e0b; }
+.admonitionblock.warning td.icon:before { content: "\f071"; color: #f59e0b; }
 
-.admonitionblock.caution td.icon { background-color: #ef4444; color: white; }
-.admonitionblock.caution td.icon::before { content: "\f06d"; }
+.admonitionblock.important { border-left-color: var(--accent-pink); }
+.admonitionblock.important td.icon:before { content: "\f06a"; color: var(--accent-pink); }
 
-.admonitionblock.important td.icon {
-    background-color: var(--brand-deep);
-    color: var(--brand-main);
-    text-shadow: 0 0 8px var(--brand-main);
-}
-.admonitionblock.important td.icon::before { content: "\f06a"; }
-
+.admonitionblock.caution { border-left-color: #ef4444; }
+.admonitionblock.caution td.icon:before { content: "\f06d"; color: #ef4444; }
 
 
 /* Custom UI Elements */
@@ -459,22 +466,23 @@ body.light-mode .reading-time {
     transform: scale(1.1) rotate(-2deg);
 }
 
+/* Fixed button.gradient to use active variables */
 .button.gradient {
     display: inline-block;
-    background: var(--brand-main);
-    color: var(--bg-base);
+    background: var(--accent-primary);
+    color: #fff;
     font-weight: 800;
     text-transform: uppercase;
     padding: 1rem 2rem;
     border: none;
-    box-shadow: 6px 6px 0px var(--brand-deep);
+    box-shadow: 6px 6px 0px var(--accent-pink);
     transition: transform 0.1s;
     cursor: pointer;
 }
 
 .button.gradient:active {
     transform: translate(3px, 3px);
-    box-shadow: 3px 3px 0px var(--brand-deep);
+    box-shadow: 3px 3px 0px var(--accent-pink);
 }
 
 
