@@ -15,7 +15,7 @@ class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
             csvResponse.update(adr.toCsv())
             return svg
         } else {
-            val generator = CyberBrutalistAdrSvgGenerator()
+            val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark)
             val svg = generator.generate(adr)
             csvResponse.update(adr.toCsv())
             return svg
