@@ -69,17 +69,12 @@ To include tree charts in your AsciiDoctor document, you use a special macro syn
 
 [source,asciidoc]
 ....
-[docops,treechart,controls=true]
+[docops,treechart,controls=true,useDark=true]
 ----
 title=Chart Title
 width=800
 height=600
 orientation=vertical
-collapsible=true
-expanded=true
-darkMode=false
-hover=true
-colors=#3498db,#2ecc71,#e74c3c,#f39c12,#9b59b6
 ---
 Root Node
     Child Node 1 | #3498db
@@ -172,7 +167,7 @@ CEO
 ----
 ....
 
-[docops,treechart,controls=true]
+[docops,treechart,controls=true,useDark=true]
 ----
 title=Organization Chart
 width=800
@@ -309,16 +304,15 @@ Application | #3498db
 
 === Dark Mode Tree Chart Example
 
-You can create dark mode tree charts by setting the `darkMode` property to `true`:
+You can create dark mode tree charts by setting the `useDark` property to `true`:
 
 [source,asciidoc]
 ....
-[docops,treechart,controls=true]
+[docops,treechart,controls=true,useDark=true]
 ----
 title=Project Dependencies
 width=800
 height=600
-darkMode=true
 ---
 Main Project
     Core Library
@@ -335,7 +329,7 @@ Main Project
 ----
 ....
 
-[docops,treechart,controls=true]
+[docops,treechart,controls=true,useDark=true]
 ----
 title=Project Dependencies
 width=800

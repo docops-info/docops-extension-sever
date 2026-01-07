@@ -3,7 +3,6 @@ package io.docops.docopsextensionssupport.diagram
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
-import java.util.UUID
 import kotlin.math.max
 
 class CyberTreeMaker(val useDark: Boolean = false) {
@@ -67,17 +66,22 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         """.trimIndent())
 
         // Background
-        svgBuilder.append("<rect width='100%' height='100%' fill='#020617' />")
-        svgBuilder.append("<circle cx='${calculatedWidth/2}' cy='${calculatedHeight/2}' r='${calculatedWidth/2}' fill='#7000ff' opacity='0.03' filter='blur(120px)' />")
+        val bgFill = if (useDark) "#020617" else "#f8fafc"
+        val glowColor = if (useDark) "#7000ff" else "#818cf8"
+        val nodeInnerFill = if (useDark) "rgba(15, 23, 42, 0.8)" else "rgba(255, 255, 255, 0.9)"
+        val titleColor = if (useDark) "#ffffff" else "#0f172a"
+
+        svgBuilder.append("<rect width='100%' height='100%' fill='$bgFill' />")
+        svgBuilder.append("<circle cx='${calculatedWidth/2}' cy='${calculatedHeight/2}' r='${calculatedWidth/2}' fill='$glowColor' opacity='0.05' filter='blur(120px)' />")
 
         // Draw Links first to keep them behind nodes
         drawLinks(svgBuilder, treeData, positions, nodeRadius, orientation)
-        drawNodes(svgBuilder, treeData, positions, customColors, nodeRadius, 0)
+        drawNodes(svgBuilder, treeData, positions, customColors, nodeRadius, 0, useDark = useDark, nodeInnerFill = nodeInnerFill)
 
         // Title
         svgBuilder.append("""
             <g transform="translate(40, 60)">
-                <text font-family="Syne, sans-serif" font-size="28" fill="#ffffff" font-weight="700">${title.uppercase()}</text>
+                <text font-family="Syne, sans-serif" font-size="28" fill="$titleColor" font-weight="700">${title.uppercase()}</text>
                 <rect y="15" width="100" height="4" fill="#7000ff" rx="2" />
             </g>
         """.trimIndent())
@@ -130,30 +134,41 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         }
     }
 
-    private fun drawNodes(sb: StringBuilder, node: TreeNode, pos: Map<TreeNode, Pair<Double, Double>>, colors: List<String>, radius: Int, level: Int, colorIdx: Int = 0) {
+    private fun drawNodes(
+        sb: StringBuilder,
+        node: TreeNode,
+        pos: Map<TreeNode, Pair<Double, Double>>,
+        colors: List<String>,
+        radius: Int,
+        level: Int,
+        colorIdx: Int = 0,
+        useDark: Boolean,
+        nodeInnerFill: String
+    ) {
         val (x, y) = pos[node]!!
         val accent = node.color ?: colors[colorIdx % colors.size]
         val lines = wrapText(node.label, 12)
 
         sb.append("<g class='node-group' style='animation-delay: ${level * 0.1}s;'>")
-        // Inner Glow
-        sb.append("<circle cx='$x' cy='$y' r='$radius' fill='rgba(15, 23, 42, 0.8)' stroke='$accent' stroke-width='2' />")
+        // Inner Glow - Using nodeInnerFill for theme-aware background
+        sb.append("<circle cx='$x' cy='$y' r='$radius' fill='$nodeInnerFill' stroke='$accent' stroke-width='2' />")
         sb.append("<circle cx='$x' cy='$y' r='${radius-5}' fill='none' stroke='$accent' stroke-width='0.5' stroke-opacity='0.3' />")
 
         // Multi-line Text logic
         val lineHeight = 14
         val startY = y - ((lines.size - 1) * lineHeight / 2.0)
+        val subLabelColor = if (useDark) "#94a3b8" else "#475569"
 
         lines.forEachIndexed { i, line ->
             val isFirst = i == 0
             val className = if (isFirst) "label-main" else "label-sub"
-            val fill = if (isFirst) accent else "#94a3b8"
+            val fill = if (isFirst) accent else subLabelColor
             sb.append("<text x='$x' y='${startY + (i * lineHeight)}' text-anchor='middle' dominant-baseline='middle' class='$className' fill='$fill'>$line</text>")
         }
         sb.append("</g>")
 
         node.children.forEachIndexed { i, child ->
-            drawNodes(sb, child, pos, colors, radius, level + 1, colorIdx + i + 1)
+            drawNodes(sb, child, pos, colors, radius, level + 1, colorIdx + i + 1, useDark, nodeInnerFill)
         }
     }
 
