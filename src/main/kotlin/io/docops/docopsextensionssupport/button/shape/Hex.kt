@@ -32,8 +32,8 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val rowStep = 255
         val internalHeight = (rows.size * rowStep + 100.0f)
 
-        // Return a smaller physical height to match the original "shrink" behavior (approx 56% of internal)
-        return (internalHeight * 0.56f) * scale
+        // Match the physical height to the scaled internal coordinate height
+        return internalHeight * scale
     }
     override fun draw() : String {
         val sb = StringBuilder()
@@ -46,7 +46,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val atmosphereColor = if (isDark) "#38bdf8" else "#818cf8"
         sb.append("""<circle cx="90%" cy="10%" r="250" fill="$atmosphereColor" fill-opacity="0.05" />""")
 
-        sb.append("""<g transform="scale(${buttons.theme?.scale})">""")
+        sb.append("""<g>""")
 
         var startX: Int
         var startY = 10
@@ -132,8 +132,8 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         }
         val internalWidth = (columns * BUTTON_WIDTH + columns * BUTTON_PADDING)
 
-        // Return a smaller physical width to match original behavior (approx 56% of internal)
-        return (internalWidth * 0.56f) * scale
+        // Match the physical width to the scaled internal coordinate width
+        return internalWidth * scale
     }
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val isDark = theme.useDark
