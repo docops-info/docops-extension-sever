@@ -71,3 +71,11 @@ Use `[ ]` to mark open and `[x]` when completed. Keep links to Plan and Requirem
 36. [x] Optimize Roadmap height: Implement dynamic tray heights based on content and refine SVG canvas calculation (Plan: P3; Reqs: R4, R11)
 37. [x] Fix Roadmap clipping: Increase dynamic tray height base and line spacing to ensure all implementation details are visible (Plan: P3; Reqs: R4, R11)
 38. [x] Fix Roadmap overlap: Correct expansion shift calculation to account for total vertical extent of expanded tray and prevent sibling overlap (Plan: P3; Reqs: R4, R11)
+
+## Phase 10 — Landing Page Overhaul
+
+39. [x] Redesign `index.html` with distinctive typography and cohesive theme (Plan: P12; Reqs: R13)
+40. [x] Integrate HTMX for interactive documentation loading and preview (Plan: P12; Reqs: R13)
+41. [x] Update content to reflect support for Asciidoctor, Mermaid, and HTTP GET SVG rendering (Plan: P12; Reqs: R13)
+42. [x] Link to both Asciidoctor and Markdown documentation (Plan: P12; Reqs: R13)
+43. [x] Apply layered backgrounds and subtle animations (Plan: P12; Reqs: R13)

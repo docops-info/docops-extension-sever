@@ -880,10 +880,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         box-shadow: 0 0 10px var(--accent-pink);
     }
 
-    /* Z-Index fix for TOC */
-    #toc.toc2 {
-        z-index: 1001 !important; /* Ensure it stays above slideshow shadows */
-    }
 </style>
 
 <!--gallery showcase style-->
@@ -1104,82 +1100,82 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </script>
 <!-- Showcase Gallery Script -->
 <script>
-        window.showcaseGallery = {
-            // Track TOC state so we can restore it exactly as it was
-            tocWasActive: false,
+    window.showcaseGallery = {
+        // Track TOC state so we can restore it exactly as it was
+        tocWasActive: false,
 
-            hideTOC() {
-                const toc = document.getElementById('toc');
-                const toggle = document.querySelector('.toc-toggle');
+        hideTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
 
-                if (toc) {
-                    // Save current state
-                    this.tocWasActive = toc.classList.contains('toc-active');
-                    // Force hide
-                    toc.classList.remove('toc-active');
-                }
+            if (toc) {
+                // Save current state
+                this.tocWasActive = toc.classList.contains('toc-active');
+                // Force hide
+                toc.classList.remove('toc-active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.style.display = 'none'; // Completely remove from UI during modal
+            }
+            document.body.classList.add('modal-open');
+        },
+
+        restoreTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            document.body.classList.remove('modal-open');
+
+            if (toggle) {
+                toggle.style.display = 'flex'; // Bring toggle back
+            }
+
+            // Restore TOC to its previous state (if it was open, re-open it)
+            if (toc && this.tocWasActive) {
+                toc.classList.add('toc-active');
                 if (toggle) {
-                    toggle.classList.remove('active');
-                    toggle.style.display = 'none'; // Completely remove from UI during modal
+                    toggle.classList.add('active');
+                    toggle.querySelector('span').textContent = 'CLOSE';
                 }
-                document.body.classList.add('modal-open');
-            },
+            } else if (toggle) {
+                toggle.querySelector('span').textContent = 'CONTENTS';
+            }
+        },
 
-            restoreTOC() {
-                const toc = document.getElementById('toc');
-                const toggle = document.querySelector('.toc-toggle');
+        showContent(itemId, title, kind, content) {
+            const modal = document.getElementById('showcase-content-modal');
+            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            modal.querySelector('.showcase-content-code').textContent = content;
 
-                document.body.classList.remove('modal-open');
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
 
-                if (toggle) {
-                    toggle.style.display = 'flex'; // Bring toggle back
-                }
+        expandItem(itemId, title) {
+            const item = document.getElementById(itemId);
+            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            const modal = document.getElementById('showcase-gallery-modal');
 
-                // Restore TOC to its previous state (if it was open, re-open it)
-                if (toc && this.tocWasActive) {
-                    toc.classList.add('toc-active');
-                    if (toggle) {
-                        toggle.classList.add('active');
-                        toggle.querySelector('span').textContent = 'CLOSE';
-                    }
-                } else if (toggle) {
-                    toggle.querySelector('span').textContent = 'CONTENTS';
-                }
-            },
+            modal.querySelector('.showcase-modal-title').textContent = title;
+            modal.querySelector('.showcase-modal-body').innerHTML =
+                `<div class="modal-svg-wrapper">${svgContent}</div>`;
 
-            showContent(itemId, title, kind, content) {
-                const modal = document.getElementById('showcase-content-modal');
-                modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-                modal.querySelector('.showcase-content-code').textContent = content;
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
 
-                this.hideTOC(); // Hide TOC before showing modal
-                modal.style.display = 'flex';
-                modal.querySelector('.showcase-modal-body').scrollTop = 0;
-            },
+        closeContentModal() {
+            document.getElementById('showcase-content-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
 
-            expandItem(itemId, title) {
-                const item = document.getElementById(itemId);
-                const svgContent = item.querySelector('.workbench-canvas').innerHTML;
-                const modal = document.getElementById('showcase-gallery-modal');
-
-                modal.querySelector('.showcase-modal-title').textContent = title;
-                modal.querySelector('.showcase-modal-body').innerHTML =
-                    `<div class="modal-svg-wrapper">${svgContent}</div>`;
-
-                this.hideTOC(); // Hide TOC before showing modal
-                modal.style.display = 'flex';
-                modal.querySelector('.showcase-modal-body').scrollTop = 0;
-            },
-
-            closeContentModal() {
-                document.getElementById('showcase-content-modal').style.display = 'none';
-                this.restoreTOC(); // Restore TOC state
-            },
-
-            closeModal() {
-                document.getElementById('showcase-gallery-modal').style.display = 'none';
-                this.restoreTOC(); // Restore TOC state
-            },
+        closeModal() {
+            document.getElementById('showcase-gallery-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
 
         copyContent() {
             const code = document.querySelector('.showcase-content-code').textContent;
@@ -1438,160 +1434,140 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 container.style.display = 'block';
                 this.loadCsvData(id);
             }
-    },
+        },
 
-    closeCsv(id) {
-        const container = document.getElementById(`csv-container-${id}`);
-        container.style.display = 'none';
-    },
-    async loadCsvData(id) {
-        const svgContainer = document.getElementById(id);
-        const svg = svgContainer.querySelector('svg');
+        closeCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            container.style.display = 'none';
+        },
+        async loadCsvData(id) {
+            const svgContainer = document.getElementById(id);
+            const svg = svgContainer.querySelector('svg');
 
-        if (!svg) {
-            console.error('No SVG found');
-            return;
-        }
-
-        try {
-            // Method 1: Standard metadata with type
-            let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
-            if (csvMetadata) {
-                const csvData = JSON.parse(csvMetadata.textContent.trim());
-                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+            if (!svg) {
+                console.error('No SVG found');
                 return;
             }
 
-            // Method 2: Custom csv-data element
-            csvMetadata = svg.querySelector('metadata csv-data');
-            if (csvMetadata) {
-                const csvData = JSON.parse(csvMetadata.textContent.trim());
-                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
-                return;
-            }
-
-            // Method 3: Data attribute
-            const csvDataAttr = svg.getAttribute('data-csv');
-            if (csvDataAttr) {
-                const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
-                this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
-                return;
-            }
-
-            console.error('No CSV data found in SVG');
-        } catch (error) {
-            console.error('Failed to parse CSV data:', error);
-        }
-    },
-
-    renderCsvTable(container, csvData, tableId) {
-        if (!csvData || !csvData.headers || !csvData.rows) {
-            container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
-            return;
-        }
-
-        // Generate a unique table ID if not provided or make existing ID unique
-        const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-        const table = document.createElement('table');
-        table.className = 'csv-table';
-        table.id = uniqueTableId;
-        // Create header
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-
-        csvData.headers.forEach(header => {
-            const th = document.createElement('th');
-            th.textContent = header;
-            headerRow.appendChild(th);
-        });
-
-        // Add button cell to header
-        const buttonTh = document.createElement('th');
-        buttonTh.className = 'csv-header-button-cell';
-
-        // Create copy button
-        const copyButton = document.createElement('button');
-        copyButton.className = 'csv-copy-button';
-        copyButton.textContent = 'Copy';
-        copyButton.title = 'Copy as Tab-Delimited';
-        copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
-
-        buttonTh.appendChild(copyButton);
-        headerRow.appendChild(buttonTh);
-
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        // Create body
-        const tbody = document.createElement('tbody');
-
-        csvData.rows.forEach(row => {
-            const tr = document.createElement('tr');
-            row.forEach(cell => {
-                const td = document.createElement('td');
-                td.textContent = cell;
-                tr.appendChild(td);
-            });
-            // Add empty cell for button column
-            const emptyTd = document.createElement('td');
-            tr.appendChild(emptyTd);
-            tbody.appendChild(tr);
-        });
-
-        table.appendChild(tbody);
-        container.innerHTML = '';
-        container.appendChild(table);
-        const tableElement = document.getElementById(uniqueTableId);
-        if (tableElement) {
-            tableElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-
-
-    },
-
-    copyCsvAsTabDelimited(csvData) {
-        if (!csvData || !csvData.headers || !csvData.rows) {
-            console.error('Invalid CSV data for copying');
-            return;
-        }
-
-        // Create tab-delimited string
-        let tabDelimitedData = '';
-
-        // Add headers
-        tabDelimitedData += csvData.headers.join('\t') + '\n';
-
-        // Add rows
-        csvData.rows.forEach(row => {
-            tabDelimitedData += row.join('\t') + '\n';
-        });
-
-        // Copy to clipboard
-        navigator.clipboard.writeText(tabDelimitedData).then(() => {
-            // Provide visual feedback
-            const buttons = document.querySelectorAll('.csv-copy-button');
-            buttons.forEach(button => {
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                button.style.background = '#28a745';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '#007acc';
-                }, 2000);
-            });
-        }).catch(err => {
-            console.error('Failed to copy to clipboard:', err);
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = tabDelimitedData;
-            document.body.appendChild(textArea);
-            textArea.select();
             try {
-                document.execCommand('copy');
+                // Method 1: Standard metadata with type
+                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                    return;
+                }
+
+                // Method 2: Custom csv-data element
+                csvMetadata = svg.querySelector('metadata csv-data');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                // Method 3: Data attribute
+                const csvDataAttr = svg.getAttribute('data-csv');
+                if (csvDataAttr) {
+                    const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                console.error('No CSV data found in SVG');
+            } catch (error) {
+                console.error('Failed to parse CSV data:', error);
+            }
+        },
+
+        renderCsvTable(container, csvData, tableId) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+                return;
+            }
+
+            // Generate a unique table ID if not provided or make existing ID unique
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const table = document.createElement('table');
+            table.className = 'csv-table';
+            table.id = uniqueTableId;
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            csvData.headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            // Add button cell to header
+            const buttonTh = document.createElement('th');
+            buttonTh.className = 'csv-header-button-cell';
+
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'csv-copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.title = 'Copy as Tab-Delimited';
+            copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+            buttonTh.appendChild(copyButton);
+            headerRow.appendChild(buttonTh);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement('tbody');
+
+            csvData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                // Add empty cell for button column
+                const emptyTd = document.createElement('td');
+                tr.appendChild(emptyTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+            const tableElement = document.getElementById(uniqueTableId);
+            if (tableElement) {
+                tableElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+
+        },
+
+        copyCsvAsTabDelimited(csvData) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                console.error('Invalid CSV data for copying');
+                return;
+            }
+
+            // Create tab-delimited string
+            let tabDelimitedData = '';
+
+            // Add headers
+            tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+            // Add rows
+            csvData.rows.forEach(row => {
+                tabDelimitedData += row.join('\t') + '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(tabDelimitedData).then(() => {
                 // Provide visual feedback
                 const buttons = document.querySelectorAll('.csv-copy-button');
                 buttons.forEach(button => {
@@ -1603,13 +1579,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                         button.style.background = '#007acc';
                     }, 2000);
                 });
-            } catch (fallbackErr) {
-                console.error('Fallback copy failed:', fallbackErr);
-                alert('Copy failed. Please select and copy the data manually.');
-            }
-            document.body.removeChild(textArea);
-        });
-    }
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = tabDelimitedData;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // Provide visual feedback
+                    const buttons = document.querySelectorAll('.csv-copy-button');
+                    buttons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.style.background = '#28a745';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#007acc';
+                        }, 2000);
+                    });
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed:', fallbackErr);
+                    alert('Copy failed. Please select and copy the data manually.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
     };
 
     // Close controls when clicking outside
@@ -1844,6 +1840,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         new ThemeToggleTop();
     }
 </script>
+<style>
+    #footer-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid var(--docops-border);
+        font-family: var(--docops-font-main);
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--docops-accent);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: var(--docops-accent-glow);
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 15px var(--docops-accent-glow);
+    }
+
+    .nav-link.next::after { content: ' →'; }
+    .nav-link.prev::before { content: '← '; }
+</style>
 <style>
 .hidden {
     display: none;
@@ -2343,7 +2372,7 @@ window.onload = function() {
     "colors": [
       "#1E93AB", "#007bff", "#28a745", "#dc3545", "#6c757d"
     ],
-    "scale": 1.2,
+    "scale": 1.0,
     "columns": 3,
     "buttonStyle": {
       "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"

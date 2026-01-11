@@ -1,621 +1,313 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO Meta Tags -->
-    <title>DocOps Extension Server - AsciiDoctor Visualizations & Extensions</title>
-    <meta name="description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents. Open source extensions for enhanced documentation.">
-    <meta name="keywords" content="AsciiDoctor, documentation, visualizations, charts, badges, timeline, Java, Kotlin, Maven, Gradle, technical documentation">
-    <meta name="author" content="DocOps.io">
-    <meta name="robots" content="index, follow">
+    <title>DocOps | Semantic Visualization for Engineers</title>
+    <!-- Professional Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://docops.io/">
-    <meta property="og:title" content="DocOps Extension Server - AsciiDoctor Visualizations">
-    <meta property="og:description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents.">
-    <meta property="og:image" content="https://docops.io/images/docops-social.png">
-    <meta property="og:site_name" content="DocOps.io">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://docops.io/">
-    <meta property="twitter:title" content="DocOps Extension Server - AsciiDoctor Visualizations">
-    <meta property="twitter:description" content="Create stunning data visualizations, charts, badges, timelines, and interactive elements for AsciiDoctor documents.">
-    <meta property="twitter:image" content="https://docops.io/images/docops-social.png">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://docops.io/">
-
-    <!-- Favicon improvements -->
-    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "DocOps Extension Server",
-            "description": "AsciiDoctor extensions for creating data visualizations, charts, badges, timelines, and interactive documentation elements",
-            "url": "https://docops.io",
-            "applicationCategory": "DeveloperApplication",
-            "operatingSystem": "Cross-platform",
-            "programmingLanguage": ["Java", "Kotlin"],
-            "author": {
-                "@type": "Organization",
-                "name": "DocOps.io"
-            },
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            },
-            "downloadUrl": "https://central.sonatype.com/artifact/io.docops/asciidoctorj-docops-panel",
-            "codeRepository": "https://github.com/docops-info/docops-extension-sever"
-        }
-    </script>
-
-
-    <link rel="shortcut icon" href="images/favicon.svg?v=2025.0.0" type="image/x-icon"/>
     <link href="css/output.css" rel="stylesheet">
     <script src="js/htmx.min.2.0.4.js"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-
     <style>
-        /* Professional Holiday Season Styling */
-        body.winter-season {
-            position: relative;
+        :root {
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.2);
+            --bg-pattern: rgba(0, 0, 0, 0.05);
+        }
+        .dark {
+            --accent: #818cf8;
+            --accent-glow: rgba(129, 140, 248, 0.2);
+            --bg-pattern: rgba(255, 255, 255, 0.05);
         }
 
-        /* Subtle background with overlay for readability */
-        body.winter-season::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('images/forest.svg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            opacity: 0.15;
-            z-index: -2;
+        body { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3, .font-display { font-family: 'Syne', sans-serif; }
+        code, pre { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-panel {
+            @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-800;
         }
 
-        /* Soft gradient overlay for better text contrast */
-        body.winter-season::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg,
-            rgba(224, 242, 254, 0.3) 0%,
-            rgba(239, 246, 255, 0.4) 50%,
-            rgba(224, 231, 255, 0.3) 100%);
-            z-index: -1;
+        .card-hover {
+            @apply transition-all duration-500 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 hover:border-accent/40;
         }
 
-        /* Subtle snowflake animation */
-        @keyframes snowfall {
-            0% {
-                transform: translateY(-10px) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(50px);
-                opacity: 0;
-            }
+
+        .hero-reveal {
+            animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1em;
-            pointer-events: none;
-            z-index: 1000;
-            animation: snowfall linear infinite;
+        @keyframes heroReveal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Holiday accent colors for header */
-        body.winter-season header {
-            background: linear-gradient(to right,
-            rgba(255, 255, 255, 0.95),
-            rgba(248, 250, 252, 0.95));
-            backdrop-filter: blur(10px);
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+
+        .bg-grid {
+            background-image: radial-gradient(var(--bg-pattern) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        /* Subtle festive border for cards during holiday season */
-        body.winter-season .bg-gray-50 {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
+        /* Minimal Dot Toggle */
+        .dot-toggle {
+            @apply flex gap-1.5 items-center px-3 py-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm transition-all cursor-pointer hover:scale-105;
+        }
+        .dot {
+            @apply w-1.5 h-1.5 rounded-full transition-all duration-500 opacity-20;
         }
 
-        /* Toggle button styling */
-        .holiday-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid #e5e7eb;
-            border-radius: 9999px;
-            padding: 10px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* State Indicators */
+        .mode-auto .dot-1 { @apply bg-indigo-500 opacity-100 shadow-[0_0_8px_var(--accent)]; }
+        .mode-light .dot-2 { @apply bg-amber-400 opacity-100 shadow-[0_0_8px_#fbbf24]; }
+        .mode-dark .dot-3 { @apply bg-slate-400 opacity-100 shadow-[0_0_8px_#94a3b8]; }
 
-        .holiday-toggle:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .holiday-toggle.disabled {
-            opacity: 0.6;
-        }
     </style>
+    <script>
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            root.classList.remove('dark', 'mode-auto', 'mode-light', 'mode-dark');
+
+            const isDark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) root.classList.add('dark');
+
+            root.classList.add(`mode-${theme}`);
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const current = localStorage.getItem('theme') || 'auto';
+            const modes = ['auto', 'light', 'dark'];
+            const next = modes[(modes.indexOf(current) + 1) % modes.length];
+            applyTheme(next);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => applyTheme(localStorage.getItem('theme') || 'auto'));
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-900">
-<!-- Header -->
-<header class="bg-white shadow-sm border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-6">
-            <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 flex items-center justify-center">
-                    <img src="images/docops.svg" alt="DocOps Logo" class="w-10 h-10" />
-                </div>
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">DocOps.io Extension Server</h1>
-                    <p class="text-sm text-gray-600">Flexible Visualizations to supplement AsciiDoctor and Markdown documents.</p>
-                </div>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500/30 transition-colors duration-300 bg-grid">
+
+<!-- Background Decals -->
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-500/5 dark:bg-blue-500/10 blur-[120px] rounded-full"></div>
+    <div class="absolute top-[20%] -right-[5%] w-[30%] h-[30%] bg-indigo-500/5 dark:bg-indigo-500/5 blur-[100px] rounded-full"></div>
+</div>
+
+<nav class="sticky top-0 z-50 glass-panel border-b py-4 px-8">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-4 group cursor-pointer" onclick="window.location.reload()">
+            <div class="w-11 h-11 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:rotate-12 transition-transform duration-500">
+                <img src="images/docops.svg" class="w-7 h-7 invert" alt="Logo">
             </div>
-            <div class="flex space-x-4">
-                <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
-                    <a href="#get-started" class="text-white">Get Started</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="docs/asciidoc/showcase.html">Showcase</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="https://github.com/docops-info/docops-extension-sever">GitHub</a>
-                </button>
-                <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors">
-                    <a href="docs/asciidoc/arch.html">Architecture</a>
-                </button>
+            <span class="text-2xl font-extrabold tracking-tighter font-display">DOCOPS<span class="text-indigo-600">.IO</span></span>
+        </div>
+
+        <div class="flex items-center gap-10">
+            <div class="hidden lg:flex gap-8 text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                <a href="#features" class="hover:text-indigo-600 transition-colors">Visuals</a>
+                <a href="docs/asciidoc/arch.html" class="hover:text-indigo-600 transition-colors">Arch</a>
+                <a href="docs/asciidoc/showcase.html" class="hover:text-indigo-600 transition-colors">Showcase</a>
+                <a href="https://github.com/docops-info/docops-extension-sever" class="hover:text-indigo-600 transition-colors">Source</a>
             </div>
+
+            <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:ring-2 ring-blue-500/50 transition-all group" aria-label="Toggle Theme">
+                <svg class="w-5 h-5 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg class="w-5 h-5 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
     </div>
-</header>
+</nav>
 
-<!-- Wrap all dynamic page content in a history element -->
-<main id="content" hx-history-elt hx-swap="innerHTML transition:true">
+<main class="max-w-7xl mx-auto px-6">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-24 text-center relative hero-reveal">
+        <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-10">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+            </span>
+            v2.0 Semantic Rendering Engine
+        </div>
 
-<!-- Hero Section -->
-<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl font-bold mb-6">Beautiful Data Visualizations Made For AsciiDoctor And Markdown</h2>
-        <p class="text-xl mb-8 max-w-3xl mx-auto">
-            Create stunning charts, buttons, planners, timelines, roadmap, and other visualizations with just a few lines of code.
-            Lightweight, flexible, and powerful.
+        <h1 class="text-6xl md:text-8xl font-black mb-10 tracking-tight text-slate-900 dark:text-white leading-[0.95]">
+            Technical clarity <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 via-blue-500 to-cyan-400">via Semantic Text.</span>
+        </h1>
+
+        <p class="text-slate-600 dark:text-slate-400 text-xl md:text-2xl max-w-4xl mx-auto mb-16 leading-relaxed font-light">
+            An ultra-fast extension server converting markup into high-fidelity, interactive SVGs. Built for engineers who treat documentation like code.
         </p>
-        <div class="flex justify-center flex-wrap gap-2">
-            <a href="docs/asciidoc/adrshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📝 ADR</a>
-            <a href="docs/asciidoc/barchartshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Charts</a>
-            <a href="docs/asciidoc/shieldshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🛡️ Shields & Badges</a>
-            <a href="docs/asciidoc/buttonsshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔘 Buttons</a>
-            <a href="docs/asciidoc/connectorsshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🔄 Connectors</a>
-            <a href="docs/asciidoc/plannershowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📋 Placemat & Planner</a>
-            <a href="docs/asciidoc/scorecardshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">📊 Scorecard</a>
-            <a href="docs/asciidoc/timelineshowcase.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">⏱️ Timeline</a>
-            <a href="docs/md/index.html" class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm text-gray-800 hover:bg-opacity-30">🕸️️ Markdown</a>
+
+        <div class="flex flex-wrap justify-center gap-6">
+            <a href="docs/asciidoc/showcase.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-5 rounded-sm font-black uppercase tracking-widest shadow-2xl shadow-indigo-500/30 transition-all hover:scale-[1.05] active:scale-95">
+                Explore Components
+            </a>
+            <a href="docs/asciidoc/tutorial.html" class="glass-panel px-10 py-5 rounded-sm font-black uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border-2">
+                Get Started
+            </a>
         </div>
+    </section>
 
-    </div>
-</section>
-
-<!-- Get Started Section -->
-<section id="get-started" class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 class="text-3xl font-bold text-center mb-8">Get Started</h3>
-        <div class="max-w-4xl mx-auto">
-            <p class="text-lg text-gray-700 mb-6">
-                Add the DocOps Extension Server to a project to create beautiful visualizations in an AsciiDoctor
-                document. Follow these steps to get started:
-            </p>
-
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold mb-4">Maven</h4>
-                    <div class="bg-gray-900 p-4 rounded-md">
-                        <pre class="text-sm text-white"><code>&lt;dependency&gt;
-  &lt;groupId&gt;io.docops&lt;/groupId&gt;
-  &lt;artifactId&gt;docops-extension-server&lt;/artifactId&gt;
-  &lt;version&gt;2024.00&lt;/version&gt;
-&lt;/dependency&gt;</code></pre>
-                    </div>
+    <!-- Content Area -->
+    <section id="view-port" class="relative min-h-[600px] mb-40 hero-reveal stagger-1">
+        <!-- Feature Grid (Initial View) -->
+        <div class="grid md:grid-cols-3 gap-10" id="features">
+            <!-- ADR Card -->
+            <div class="glass-panel p-10 rounded-sm card-hover group cursor-pointer border-t-4 border-t-indigo-500"
+                 onclick="window.location.href='docs/asciidoc/adr.html'">
+                <div class="text-indigo-600 dark:text-indigo-400 mb-8">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg">
-                    <h4 class="text-xl font-semibold mb-4">Gradle</h4>
-                    <div class="bg-gray-900 p-4 rounded-md">
-                        <pre class="text-sm text-white"><code>implementation 'io.docops:docops-extension-server:2024.00'</code></pre>
-                    </div>
+                <h3 class="text-3xl font-bold mb-6 tracking-tight">ADR Records</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-10">Capture architectural context and rationale with semantic SVGs that support team collaboration and Teams integration.</p>
+                <div class="flex items-center gap-3 text-indigo-600 font-black text-xs uppercase tracking-widest group-hover:gap-5 transition-all">
+                    View Patterns <span class="text-xl">→</span>
                 </div>
             </div>
 
-            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                <h4 class="text-xl font-semibold mb-4">Using with AsciiDoctorJ</h4>
-                <p class="text-gray-700 mb-4">
-                    After adding the dependency to a project,
-                    the project can use the DocOps extensions to add the dependencies to the AsciiDoctor documents:
+            <!-- Roadmaps Card -->
+            <div class="glass-panel p-10 rounded-sm card-hover group cursor-pointer border-t-4 border-t-cyan-500"
+                 onclick="window.location.href='docs/asciidoc/treechart.html'">
+                <div class="text-cyan-600 dark:text-cyan-400 mb-8">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                </div>
+                <h3 class="text-3xl font-bold mb-6 tracking-tight">CyberTrees</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-10">Visualize complex hierarchical data and product roadmaps with interactive layouts that scale to thousands of nodes.</p>
+                <div class="flex items-center gap-3 text-cyan-600 font-black text-xs uppercase tracking-widest group-hover:gap-5 transition-all">
+                    Explore Trees <span class="text-xl">→</span>
+                </div>
+            </div>
+
+            <!-- Visuals Card -->
+            <div class="glass-panel p-10 rounded-sm card-hover group cursor-pointer border-t-4 border-t-pink-500"
+                 onclick="window.location.href='docs/md/metrics/index.html'">
+                <div class="text-pink-600 dark:text-pink-400 mb-8">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-3xl font-bold mb-6 tracking-tight">Metrics Cards</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-10">Transform raw build telemetry or business KPIs into professional dashboards directly from your Markdown or AsciiDoc files.</p>
+                <div class="flex items-center gap-3 text-pink-600 font-black text-xs uppercase tracking-widest group-hover:gap-5 transition-all">
+                    See Dashboards <span class="text-xl">→</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section id="integration" class="pb-32">
+        <div class="grid lg:grid-cols-2 gap-12 items-center glass-panel p-12 rounded-[2.5rem] overflow-hidden">
+            <div>
+                <h2 class="text-3xl font-bold mb-6 tracking-tight">Simple Integration.</h2>
+                <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                    Our API is built for simplicity and speed. Send your markup via a standard GET request and receive a theme-aware SVG that integrates perfectly with any web platform or document builder.
                 </p>
-                <div class="bg-gray-900 p-4 rounded-md">
-                    <pre class="text-sm text-white"><code>// In your Java code
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
-
-// Initialize AsciiDoctorJ with DocOps extensions
-Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-ExtensionRegistry.registerExtension(asciidoctor);
-
-// Process your AsciiDoc content
-String html = asciidoctor.convert(asciiDocContent, options);</code></pre>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-center gap-3 text-sm font-medium">
+                        <div class="p-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                        Zero-configuration rendering
+                    </li>
+                    <li class="flex items-center gap-3 text-sm font-medium">
+                        <div class="p-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                        Automatic light/dark mode adaptation
+                    </li>
+                    <li class="flex items-center gap-3 text-sm font-medium">
+                        <div class="p-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                        SVG format for infinite scalability
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="bg-slate-900 dark:bg-black rounded-3xl p-8 font-mono text-sm shadow-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <svg width="120" height="120" viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="none" stroke="white" stroke-width="1" rx="10"/></svg>
                 </div>
-                <p class="text-gray-700 mt-4">
-                    Check out the examples below to see the various visualizations one can create with DocOps extensions.
-                </p>
+                <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+                    <span class="w-3 h-3 rounded-full bg-red-500/50"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/50"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/50"></span>
+                    <span class="ml-4 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Terminal Request</span>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-slate-500"># Render a CyberTree</p>
+                    <p class="text-white">
+                        <span class="text-blue-400">curl</span> 
+                        "https://docops.io/extension/api/docops/svg?kind=tree&" \
+                    </p>
+                    <p class="text-white">
+                        <span class="text-slate-400">--data-urlencode and compressed</span>
+                        "payload=H4sIAAAAAAAA_1VQzU7DMAy-7yn8AqEbQkJwqzSQduBHQ..."
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- Features Grid -->
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 class="text-3xl font-bold text-center mb-12">Core Capabilities</h3>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">📝</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/adr.html" class="hover:text-indigo-600">ADR</a></h4>
-                <p class="text-gray-600 mb-4">Architecture Decision Records with visual representation and tracking.</p>
-                <div class="text-sm text-indigo-600 font-medium">
-                    • <a href="docs/adr.html" class="hover:underline">Decision Documentation</a> • <a href="docs/adrshowcase.html" class="hover:underline">Architecture Records</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">📊</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/" class="hover:text-blue-600">Charts</a></h4>
-                <p class="text-gray-600 mb-4">Create various chart types with responsive design and smooth animations.</p>
-                <div class="text-sm text-blue-600 font-medium">
-                    • <a href="docs/piechartsshowcase.html" class="hover:underline">Pie Charts</a> • <a href="docs/barchartshowcase.html" class="hover:underline">Bar Charts</a> • <a href="docs/linechartsshowcase.html" class="hover:underline">Line Charts</a> • <a href="docs/combinationchartsshowcase.html" class="hover:underline">Combination Charts</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">🛡️</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/shield.html" class="hover:text-green-600">Shields & Badges</a></h4>
-                <p class="text-gray-600 mb-4">Create customizable status badges and shields for AsciiDoctor documentation.</p>
-                <div class="text-sm text-green-600 font-medium">
-                    • <a href="docs/shieldshowcase.html" class="hover:underline">Showcase</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">🔘</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/buttons.html" class="hover:text-purple-600">Buttons</a></h4>
-                <p class="text-gray-600 mb-4">Interactive and stylish buttons for enhanced document navigation and actions.</p>
-                <div class="text-sm text-purple-600 font-medium">
-                    • <a href="docs/buttonsshowcase.html" class="hover:underline">Showcase</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">🔄</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/connectors.html" class="hover:text-orange-600">Connectors</a></h4>
-                <p class="text-gray-600 mb-4">Create flow diagrams and relationship visualizations between components.</p>
-                <div class="text-sm text-orange-600 font-medium">
-                    • <a href="docs/connectorsshowcase.html" class="hover:underline">Showcase</a>
-                </div>
-            </div>
-
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">🚀</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="docs/releasestrategy.html" class="hover:text-yellow-600">Release Strategy</a></h4>
-                <p class="text-gray-600 mb-4">Visualize release plans, roadmaps, and deployment strategies.</p>
-                <div class="text-sm text-yellow-600 font-medium">
-                    • <a href="docs/releasestrategy.html" class="hover:underline">Release Planning</a> • <a href="docs/roadmap.html" class="hover:underline">Roadmaps</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">📊</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#scorecard-example" class="hover:text-blue-600">Scorecard</a></h4>
-                <p class="text-gray-600 mb-4">Create visual scorecards and metrics dashboards for project tracking.</p>
-                <div class="text-sm text-blue-600 font-medium">
-                    • <a href="#scorecard-example" class="hover:underline">Metrics Visualization</a> • <a href="#scorecard-example" class="hover:underline">KPI Tracking</a> • <a href="#scorecard-example" class="hover:underline">Status Reporting</a>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <span class="text-2xl">⏱️</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3"><a href="#timeline-example" class="hover:text-green-600">Timeline</a></h4>
-                <p class="text-gray-600 mb-4">Create interactive timelines for project history, roadmaps, and planning.</p>
-                <div class="text-sm text-green-600 font-medium">
-                    • <a href="#timeline-example" class="hover:underline">Project Timelines</a> • <a href="#timeline-example" class="hover:underline">Historical Views</a> • <a href="#timeline-example" class="hover:underline">Milestone Tracking</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
+    </section>
 </main>
 
-<!-- Optional loading indicator -->
-<div id="loading" class="htmx-indicator fixed top-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow">Loading…</div>
-
-<!-- Holiday theme toggle button -->
-<button id="holidayToggle" class="holiday-toggle" style="display: none;">
-    <span id="toggleIcon">❄️</span>
-    <span id="toggleText">Holiday Theme</span>
-</button>
-
-<!-- Footer -->
-<footer class="bg-gray-900 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-4 gap-8">
-            <div>
-                <div class="flex items-center space-x-2 mb-4">
-                    <img src="images/docops.svg" alt="DocOps Logo" class="w-8 h-8" />
-                    <span class="font-bold text-lg">DocOps.io</span>
+<footer class="border-t border-slate-200 dark:border-slate-800 py-16 bg-white dark:bg-slate-950 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
+        <div class="col-span-2">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <img src="images/docops.svg" class="w-5 h-5 invert" alt="Logo">
                 </div>
-                <p class="text-gray-400 text-sm">
-                    Modern data visualization library for the web. Create beautiful, interactive charts with ease.
-                </p>
+                <span class="text-lg font-bold tracking-tight font-display">DocOps<span class="text-blue-600">.io</span></span>
             </div>
-            <div>
-                <h5 class="font-semibold mb-3">Documentation</h5>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="#get-started" class="hover:text-white">Getting Started</a></li>
-                    <li><a href="docs/index.html" class="hover:text-white">AsciiDoctor Reference</a></li>
-                    <li><a href="docs/examples.html" class="hover:text-white">Examples</a></li>
-                    <li><a href="docs/tutorial.html" class="hover:text-white">Tutorials</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-semibold mb-3">Community</h5>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="#" class="hover:text-white">GitHub</a></li>
-                    <li><a href="#" class="hover:text-white">Discord</a></li>
-                    <li><a href="#" class="hover:text-white">Stack Overflow</a></li>
-                    <li><a href="#" class="hover:text-white">Blog</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-semibold mb-3">Resources</h5>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="changelog.html" class="hover:text-white">Changelog</a></li>
-                    <li><a href="#" class="hover:text-white">Roadmap</a></li>
-                    <li><a href="#" class="hover:text-white">Support</a></li>
-                    <li><a href="#" class="hover:text-white">License</a></li>
-                </ul>
-            </div>
+            <p class="text-slate-500 dark:text-slate-400 text-sm max-w-sm leading-relaxed">
+                Empowering technical writers and developers with high-performance semantic visualization tools. Built for the future of technical documentation.
+            </p>
         </div>
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 DocOps.io. All rights reserved. Built with ❤️ for developers.</p>
+        <div>
+            <h4 class="font-bold mb-6 text-sm uppercase tracking-widest">Resources</h4>
+            <ul class="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+                <li><a href="docs/asciidoc/showcase.html" class="hover:text-blue-600 transition-colors">Showcase</a></li>
+                <li><a href="docs/asciidoc/arch.html" class="hover:text-blue-600 transition-colors">Architecture</a></li>
+                <li><a href="docs/md/guide.html" class="hover:text-blue-600 transition-colors">MD Guide</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-bold mb-6 text-sm uppercase tracking-widest">Community</h4>
+            <ul class="space-y-4 text-sm text-slate-600 dark:text-slate-400">
+                <li><a href="https://github.com/docops-info/docops-extension-sever" class="hover:text-blue-600 transition-colors">GitHub</a></li>
+                <li><a href="#" class="hover:text-blue-600 transition-colors">Discussions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-slate-100 dark:border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+        <p>&copy; 2026 DocOps.io. All rights reserved.</p>
+        
+        <!-- Theme Status Dot Toggle -->
+        <div class="dot-toggle group" onclick="toggleTheme()" title="Switch Theme (Auto / Light / Dark)">
+            <div class="dot dot-1"></div>
+            <div class="dot dot-2"></div>
+            <div class="dot dot-3"></div>
+            <span class="ml-2 text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Theme</span>
+        </div>
+
+        <div class="flex gap-8">
+            <a href="#" class="hover:text-slate-600 transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-slate-600 transition-colors">Terms of Service</a>
         </div>
     </div>
 </footer>
+
+<!-- Loading Indicator -->
+<div id="loading" class="htmx-indicator fixed bottom-8 right-8 flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-3 rounded-2xl shadow-2xl z-[100] transition-all duration-300">
+    <div class="w-2 h-2 rounded-full bg-blue-600 animate-bounce"></div>
+    <div class="w-2 h-2 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.15s]"></div>
+    <div class="w-2 h-2 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.3s]"></div>
+    <span class="text-xs font-bold tracking-widest uppercase ml-2">Rendering</span>
+</div>
+
 <script>
-    // Color Gradient Generator Form Handling
-    document.addEventListener('DOMContentLoaded', function() {
-        const colorForm = document.getElementById('colorForm');
-        const gradientResult = document.getElementById('gradientResult');
-
-        if (colorForm) {
-            colorForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const hexColor = document.getElementById('hexColor').value;
-                // Validate hex color format
-                const hexRegex = /^#([A-Fa-f0-9]{6})$/;
-                if (!hexRegex.test(hexColor)) {
-                    gradientResult.innerHTML = '<p class="text-red-500">Please enter a valid hex color code (e.g., #4361ee)</p>';
-                    return;
-                }
-
-                // Show loading state
-                gradientResult.innerHTML = '<p class="text-gray-500">Generating gradient...</p>';
-
-                // Make API request to the putColors endpoint
-                fetch('api/grad?' + new URLSearchParams({
-                    gradColor: hexColor
-                }), {
-                    method: 'PUT'
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // Display the result
-                    gradientResult.innerHTML = data;
-
-                    // Initialize syntax highlighting if needed
-                    if (window.hljs) {
-                        document.querySelectorAll('pre code').forEach((el) => {
-                            hljs.highlightElement(el);
-                        });
-                    }
-                })
-                .catch(error => {
-                    gradientResult.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
-                });
-            });
+    document.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'view-port') {
+            window.scrollTo({ top: evt.detail.target.offsetTop - 100, behavior: 'smooth' });
         }
     });
-
-    // Button Type Dropdown Handling
-    function updateButtonType(buttonType) {
-        const contentTextarea = document.getElementById('content');
-        if (contentTextarea) {
-            try {
-                // Parse the current JSON content
-                const jsonContent = JSON.parse(contentTextarea.value);
-
-                // Update the buttonType property
-                jsonContent.buttonType = buttonType;
-
-                // Update the textarea with the modified JSON
-                contentTextarea.value = JSON.stringify(jsonContent, null, 2);
-            } catch (error) {
-                console.error('Error updating button type:', error);
-                alert('Error updating button type. Please check the JSON format.');
-            }
-        }
-    }
 </script>
-<script>
-    // Re-run client-side enhancements after swaps or history restores
-    document.addEventListener('htmx:afterSwap', (e) => {
-        if (e.detail.target && e.detail.target.id === 'content') {
-            if (window.Prism) { Prism.highlightAll(); }
-        }
-    });
-    document.addEventListener('htmx:historyRestore', (e) => {
-        if (window.Prism) { Prism.highlightAll(); }
-    });
-    // Professional Holiday Season Theme Manager
-    (function() {
-        const currentMonth = new Date().getMonth(); // 0-indexed: 0=Jan, 10=Nov, 11=Dec
-        const isHolidaySeason = currentMonth === 10 || currentMonth === 11; // November or December
-
-        if (!isHolidaySeason) return; // Exit if not holiday season
-
-        // Show toggle button
-        const toggleButton = document.getElementById('holidayToggle');
-        toggleButton.style.display = 'flex';
-
-        // Check localStorage for user preference
-        const holidayThemeEnabled = localStorage.getItem('holidayTheme') !== 'disabled';
-
-        // Function to create subtle snowflakes
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.innerHTML = '❄';
-            snowflake.style.left = Math.random() * 100 + '%';
-            snowflake.style.animationDuration = (Math.random() * 15 + 15) + 's'; // 15-30s
-            snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px'; // 10-20px
-            snowflake.style.opacity = Math.random() * 0.6 + 0.2; // 0.2-0.8
-            document.body.appendChild(snowflake);
-
-            // Remove snowflake after animation
-            setTimeout(() => {
-                snowflake.remove();
-            }, parseFloat(snowflake.style.animationDuration) * 1000);
-        }
-
-        // Snowflake generation interval
-        let snowflakeInterval;
-
-        function enableHolidayTheme() {
-            document.body.classList.add('winter-season');
-            localStorage.setItem('holidayTheme', 'enabled');
-            document.getElementById('toggleIcon').textContent = '❄️';
-            toggleButton.classList.remove('disabled');
-
-            // Create initial snowflakes
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => createSnowflake(), i * 2000);
-            }
-
-            // Generate new snowflakes periodically (every 3-5 seconds)
-            snowflakeInterval = setInterval(() => {
-                if (Math.random() > 0.5) {
-                    createSnowflake();
-                }
-            }, 3000);
-        }
-
-        function disableHolidayTheme() {
-            document.body.classList.remove('winter-season');
-            localStorage.setItem('holidayTheme', 'disabled');
-            document.getElementById('toggleIcon').textContent = '🔕';
-            toggleButton.classList.add('disabled');
-
-            // Clear snowflake interval
-            if (snowflakeInterval) {
-                clearInterval(snowflakeInterval);
-            }
-
-            // Remove existing snowflakes
-            document.querySelectorAll('.snowflake').forEach(flake => flake.remove());
-        }
-
-        // Initialize theme based on preference
-        if (holidayThemeEnabled) {
-            enableHolidayTheme();
-        }
-
-        // Toggle button click handler
-        toggleButton.addEventListener('click', function() {
-            if (document.body.classList.contains('winter-season')) {
-                disableHolidayTheme();
-            } else {
-                enableHolidayTheme();
-            }
-        });
-
-    })();
-</script>
-
 </body>
 </html>
