@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    darkMode: 'selector',
+    darkMode: 'class',
     content: [
         "src/main/resources/**/*.{html,js,ftlh}",
         "./src/**/*.html",  // Add this to ensure all HTML files are scanned
@@ -75,4 +75,3 @@ module.exports = {
     },
     plugins: [],
 }
-export default {  plugins: ["@tailwindcss/postcss"],};
