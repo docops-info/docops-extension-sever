@@ -225,8 +225,8 @@ pre code {
 /* Floating Instrument Panel TOC */
 #toc.toc2 {
     position: fixed;
-    left: auto;
-    right: 2rem;
+    left: 0.5rem;
+    right: auto;
     top: 5rem;
     width: 300px;
     height: auto;
@@ -312,12 +312,12 @@ pre code {
 /* Adjust main content to not overlap with fixed TOC */
 @media (min-width: 1280px) {
     body.toc2 {
+        padding-left: 320px !important;
         padding-right: 0px;
     }
     #header, #content, #footnotes, #footer {
-        /* Shift content to the left to make room for 300px TOC + 40px margin */
-        margin-left: calc(50% - 640px);
-        margin-right: 360px;
+        margin-left: 0;
+        margin-right: auto;
         max-width: 900px;
     }
 }
