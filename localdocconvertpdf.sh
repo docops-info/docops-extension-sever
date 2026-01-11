@@ -4,7 +4,9 @@
 # Define relative paths
 SOURCE_DIR_REL="src/docs/md"
 OUTPUT_DIR_REL="src/main/resources/static/docs/md"
-THEME="brutalist-markdown-theme"
+THEME="docops-md-light"
+#THEME="docops-md-dark"
+#THEME="brutalist-markdown-theme"
 #THEME="md-dark"
 #THEME="github-markdown-css"
 #THEME="mixu"

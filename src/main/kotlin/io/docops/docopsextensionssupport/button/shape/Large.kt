@@ -110,10 +110,15 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         val textPrimary = if (isDark) "#F8FAFC" else "#0F172A"
         val textSecondary = if (isDark) "#94A3B8" else "#475569"
         val strokeColor = button.color ?: (if (isDark) "#38BDF8" else "#0284C7")
-
+        var win = "_top"
+        buttons.theme?.let {
+            if (it.newWin) {
+                win = "_blank"
+            }
+        }
         // Wrap in link if href exists
         if (button.link.isNotEmpty()) {
-            sb.append("""<a xlink:href="${button.link}" href="${button.link}" target="_top" style="text-decoration: none;">""")
+            sb.append("""<a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">""")
         }
 
         sb.append("""<g transform="translate($x,$y)" class="modern-card-button">""")

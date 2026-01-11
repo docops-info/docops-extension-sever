@@ -91,6 +91,7 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
     ],
     "hexLinesEnabled": false,
     "strokeColor": "#3498db",
+    "newWin": true,
     "columns": 5,
     "scale": 1,
     "buttonStyle": {

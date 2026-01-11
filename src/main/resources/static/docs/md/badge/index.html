@@ -1,173 +1,94 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="dark">
+            <html lang="en" data-theme="light">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                 <style>
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
-body {
-    background-color: #0d0d12; /* Matches the end of your radial gradient */
-    margin: 0;
-    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
-}
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    /* Custom Variables - High Contrast & Sharp Accents */
-    --font-heading: 'Syne', sans-serif;
-    --font-body: 'Outfit', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    /* Design-Tricks System */
+    --base-hue: 220;
+    --primary: hsl(var(--base-hue), 90%, 56%);
+    /* Lighter: -15% Sat, +25% Brightness */
+    --primary-light: hsl(var(--base-hue), 75%, 81%);
+    /* Darker: +15% Sat, -25% Brightness */
+    --primary-dark: hsl(var(--base-hue), 100%, 31%);
     
-    --accent-primary: #7e57ff;
-    --accent-secondary: #00f2fe;
-    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
+    --card-bg: #FFFFFF;
+    --text-main: #1A1F26;
+    --text-muted: #64748B;
     
-    background: var(--bg-gradient);
-    color: #e0e0e0;
-    font-family: var(--font-body);
-    line-height: 1.7;
-    padding: 3rem;
-    max-width: 980px;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: 'Instrument Sans', sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 48px; /* 8pt grid: 6 * 8 */
+    border-radius: 24px;
 }
 
-/* Staggered Reveal for Content */
-.markdown-body > * {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: itemSlideIn 0.5s ease forwards;
-}
-
-.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
-.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
-.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
-.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
-
-@keyframes pageReveal {
-    to { opacity: 1; }
-}
-
-@keyframes itemSlideIn {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Typography */
+/* Typography Rules from design-tricks.md */
 .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-    font-family: var(--font-heading);
-    color: #fff;
-    margin-top: 2.5rem;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-main);
+    margin-top: 32px; /* 8pt grid */
+    margin-bottom: 16px;
 }
 
-.markdown-body h1 {
-    font-size: 3.5rem;
+.markdown-body h1 { 
+    font-size: 48px; 
+    letter-spacing: -0.01em; /* Rule #2 */
     font-weight: 800;
-    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    border-bottom: none;
-    margin-bottom: 2rem;
 }
 
-.markdown-body h2 {
-    font-size: 2rem;
-    border-left: 4px solid var(--accent-primary);
-    padding-left: 1rem;
-    border-bottom: none;
+.markdown-body h2 { 
+    font-size: 32px; 
+    font-weight: 700;
 }
 
-/* Code Blocks - IDE Aesthetic */
-.markdown-body pre {
-    background: #000000 !important;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
+/* 8pt Grid Spacing */
+.markdown-body p, .markdown-body ul, .markdown-body pre {
+    margin-bottom: 24px;
 }
 
-.markdown-body pre::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 2px; height: 100%;
-    background: var(--accent-primary);
-}
-
-.markdown-body code {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    background: rgba(126, 87, 255, 0.15);
-    color: #b392ff;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-}
-
-.markdown-body pre code {
-    background: transparent;
-    color: #d1d1d1;
-    padding: 0;
-}
-
-/* Links & Accents */
+/* "3x more obvious" Primary Elements */
 .markdown-body a {
-    color: var(--accent-secondary);
+    color: var(--primary);
     text-decoration: none;
-    border-bottom: 1px dashed var(--accent-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-light);
     transition: all 0.2s ease;
 }
 
 .markdown-body a:hover {
-    color: #fff;
-    border-bottom-style: solid;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 4px;
 }
 
-/* Blockquotes */
+/* Card Depth without Shadows (Rule #6) */
 .markdown-body blockquote {
-    margin: 2rem 0;
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--accent-secondary);
+    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
+    border-left: 4px solid var(--primary);
+    padding: 16px 24px;
+    margin: 32px 0;
+    border-radius: 0 12px 12px 0;
     font-style: italic;
-    color: #aaa;
 }
 
-/* Custom Table Design */
-.markdown-body table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 2rem 0;
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.markdown-body th {
-    background: #1a1a2e;
-    color: var(--accent-secondary);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    padding: 1rem;
-}
-
-.markdown-body td {
-    padding: 1rem;
-    border-top: 1px solid #222;
-}
-
-/* Horizontal Rule */
-.markdown-body hr {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #444, transparent);
-    border: none;
-    margin: 4rem 0;
+/* Code Blocks */
+.markdown-body pre {
+    background: #1E293B;
+    color: #F8FAFC;
+    padding: 24px;
+    border-radius: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    overflow-x: auto;
 }
 
                 </style>
@@ -763,7 +684,7 @@ body {
         
                     @media (prefers-color-scheme: dark) {
                         body {
-                            background-color: #0d1117;
+                            background-color: #f5f5f5;
                         }
                     }
                 </style>
@@ -775,10 +696,10 @@ body {
                     <h1 id="docops-badges">DocOps Badges</h1>
 <p>DocOps badges are a way to visually represent the status of various features and components within the DocOps platform. They provide quick insights into the health and progress of different aspects of the system, making it easier for users to understand the current state of the platform.</p>
 <h2 id="default">Default</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width='496.71667' height='22' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img' aria-label='Badge Collection'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Downloads","1.2M","","#e91e63","#6610f2","","#ffffff","false"],["Stars","12.5k","","#ffc107","#ffc107","","#ffffff","false"],["Forks","2.3k","","#607d8b","#0366d6","","#ffffff","false"],["Contributors","45","","#795548","#6610f2","","#ffffff","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><linearGradient id='a' x2='0' y2='100%'><stop offset='0' stop-opacity='.1' stop-color='#EEE'/><stop offset='1' stop-opacity='.1'/></linearGradient><linearGradient id="label_07f1c0849757460aa5771e53d0294ef7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e91e63"/><stop offset="100%" stop-color="#a31545"/></linearGradient><linearGradient id="message_07f1c0849757460aa5771e53d0294ef7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_07f1c0849757460aa5771e53d0294ef7'><rect width='140.39331' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_a27517d9234845aca1f80466269fb205" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><linearGradient id="message_a27517d9234845aca1f80466269fb205" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><mask id='mask_a27517d9234845aca1f80466269fb205'><rect width='109.30002' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_7d757ff3825245c8a2a260c23fd750d9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#607d8b"/><stop offset="100%" stop-color="#435761"/></linearGradient><linearGradient id="message_7d757ff3825245c8a2a260c23fd750d9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0366d6"/><stop offset="100%" stop-color="#024795"/></linearGradient><mask id='mask_7d757ff3825245c8a2a260c23fd750d9'><rect width='103.36001' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_5a13819b75e14df1972d7bad00cdbb5c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#795548"/><stop offset="100%" stop-color="#543b32"/></linearGradient><linearGradient id="message_5a13819b75e14df1972d7bad00cdbb5c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_5a13819b75e14df1972d7bad00cdbb5c'><rect width='135.66335' height='20' rx='3.0' fill='#FFF'/></mask></defs><style>/* Base badge styles */ svg { shape-rendering: crispEdges; } text { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; } /* Theme-aware styles */ @media (prefers-color-scheme: dark) { .badge-shape rect { filter: brightness(0.9); } } @media (prefers-color-scheme: light) { .badge-shape rect { filter: brightness(1); } } /* Hover effect for linked badges */ a { text-decoration: none; } a:hover { text-decoration: underline; } .badge-link:hover { opacity: 0.9; transition: opacity 0.2s ease; } /* Ensure animations degrade gracefully */ @media (prefers-reduced-motion: reduce) { a:hover, .badge-link:hover { transition: none; } }</style><g transform='translate(0.0,0)'><svg width='140.39331' height='20' viewBox='0 0 140.39331 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Downloads: 1.2M" class=""><title>Downloads: 1.2M</title><desc>Badge showing Downloads with value 1.2M</desc><!-- Badge shape with mask --><g mask='url(#mask_07f1c0849757460aa5771e53d0294ef7)' ><!-- Label background --><rect x='0' y='0' width='89.31831' height='20' fill='url(#label_07f1c0849757460aa5771e53d0294ef7)'/><!-- Message background --><rect x='89.31831' y='0' width='51.075' height='20' fill='url(#message_07f1c0849757460aa5771e53d0294ef7)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='140.39331' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Downloads</text><!-- Message text --><text x='99.31831' y='14' fill='#ffffff' style='font-weight: 400;'>1.2M</text></g><!-- Logo/icon --></svg></g><g transform='translate(142.39331,0)'><svg width='109.30002' height='20' viewBox='0 0 109.30002 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Stars: 12.5k" class=""><title>Stars: 12.5k</title><desc>Badge showing Stars with value 12.5k</desc><!-- Badge shape with mask --><g mask='url(#mask_a27517d9234845aca1f80466269fb205)' ><!-- Label background --><rect x='0' y='0' width='54.118347' height='20' fill='url(#label_a27517d9234845aca1f80466269fb205)'/><!-- Message background --><rect x='54.118347' y='0' width='55.18167' height='20' fill='url(#message_a27517d9234845aca1f80466269fb205)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='109.30002' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Stars</text><!-- Message text --><text x='64.11835' y='14' fill='#ffffff' style='font-weight: 400;'>12.5k</text></g><!-- Logo/icon --></svg></g><g transform='translate(253.69333,0)'><svg width='103.36001' height='20' viewBox='0 0 103.36001 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Forks: 2.3k" class=""><title>Forks: 2.3k</title><desc>Badge showing Forks with value 2.3k</desc><!-- Badge shape with mask --><g mask='url(#mask_7d757ff3825245c8a2a260c23fd750d9)' ><!-- Label background --><rect x='0' y='0' width='55.951668' height='20' fill='url(#label_7d757ff3825245c8a2a260c23fd750d9)'/><!-- Message background --><rect x='55.951668' y='0' width='47.40834' height='20' fill='url(#message_7d757ff3825245c8a2a260c23fd750d9)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='103.36001' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Forks</text><!-- Message text --><text x='65.95167' y='14' fill='#ffffff' style='font-weight: 400;'>2.3k</text></g><!-- Logo/icon --></svg></g><g transform='translate(359.05334,0)'><svg width='135.66335' height='20' viewBox='0 0 135.66335 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Contributors: 45" class=""><title>Contributors: 45</title><desc>Badge showing Contributors with value 45</desc><!-- Badge shape with mask --><g mask='url(#mask_5a13819b75e14df1972d7bad00cdbb5c)' ><!-- Label background --><rect x='0' y='0' width='100.116684' height='20' fill='url(#label_5a13819b75e14df1972d7bad00cdbb5c)'/><!-- Message background --><rect x='100.116684' y='0' width='35.546665' height='20' fill='url(#message_5a13819b75e14df1972d7bad00cdbb5c)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='135.66335' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Contributors</text><!-- Message text --><text x='110.116684' y='14' fill='#ffffff' style='font-weight: 400;'>45</text></g><!-- Logo/icon --></svg></g></svg>
+<svg width='496.71667' height='22' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img' aria-label='Badge Collection'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-11</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Downloads","1.2M","","#e91e63","#6610f2","","#ffffff","false"],["Stars","12.5k","","#ffc107","#ffc107","","#ffffff","false"],["Forks","2.3k","","#607d8b","#0366d6","","#ffffff","false"],["Contributors","45","","#795548","#6610f2","","#ffffff","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><linearGradient id='a' x2='0' y2='100%'><stop offset='0' stop-opacity='.1' stop-color='#EEE'/><stop offset='1' stop-opacity='.1'/></linearGradient><linearGradient id="label_0f3c09ab93164e979118966e26d1bdab" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e91e63"/><stop offset="100%" stop-color="#a31545"/></linearGradient><linearGradient id="message_0f3c09ab93164e979118966e26d1bdab" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_0f3c09ab93164e979118966e26d1bdab'><rect width='140.39331' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_a40d1262bb7a48b19b803fe6c6ca2a68" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><linearGradient id="message_a40d1262bb7a48b19b803fe6c6ca2a68" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><mask id='mask_a40d1262bb7a48b19b803fe6c6ca2a68'><rect width='109.30002' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_caf555dc1a0e4e9581a672f2066e8f5e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#607d8b"/><stop offset="100%" stop-color="#435761"/></linearGradient><linearGradient id="message_caf555dc1a0e4e9581a672f2066e8f5e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0366d6"/><stop offset="100%" stop-color="#024795"/></linearGradient><mask id='mask_caf555dc1a0e4e9581a672f2066e8f5e'><rect width='103.36001' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_5b6ae2eb06a440069525d2a2f66cc3bb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#795548"/><stop offset="100%" stop-color="#543b32"/></linearGradient><linearGradient id="message_5b6ae2eb06a440069525d2a2f66cc3bb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_5b6ae2eb06a440069525d2a2f66cc3bb'><rect width='135.66335' height='20' rx='3.0' fill='#FFF'/></mask></defs><style>/* Base badge styles */ svg { shape-rendering: crispEdges; } text { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; } /* Theme-aware styles */ @media (prefers-color-scheme: dark) { .badge-shape rect { filter: brightness(0.9); } } @media (prefers-color-scheme: light) { .badge-shape rect { filter: brightness(1); } } /* Hover effect for linked badges */ a { text-decoration: none; } a:hover { text-decoration: underline; } .badge-link:hover { opacity: 0.9; transition: opacity 0.2s ease; } /* Ensure animations degrade gracefully */ @media (prefers-reduced-motion: reduce) { a:hover, .badge-link:hover { transition: none; } }</style><g transform='translate(0.0,0)'><svg width='140.39331' height='20' viewBox='0 0 140.39331 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Downloads: 1.2M" class=""><title>Downloads: 1.2M</title><desc>Badge showing Downloads with value 1.2M</desc><!-- Badge shape with mask --><g mask='url(#mask_0f3c09ab93164e979118966e26d1bdab)' ><!-- Label background --><rect x='0' y='0' width='89.31831' height='20' fill='url(#label_0f3c09ab93164e979118966e26d1bdab)'/><!-- Message background --><rect x='89.31831' y='0' width='51.075' height='20' fill='url(#message_0f3c09ab93164e979118966e26d1bdab)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='140.39331' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Downloads</text><!-- Message text --><text x='99.31831' y='14' fill='#ffffff' style='font-weight: 400;'>1.2M</text></g><!-- Logo/icon --></svg></g><g transform='translate(142.39331,0)'><svg width='109.30002' height='20' viewBox='0 0 109.30002 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Stars: 12.5k" class=""><title>Stars: 12.5k</title><desc>Badge showing Stars with value 12.5k</desc><!-- Badge shape with mask --><g mask='url(#mask_a40d1262bb7a48b19b803fe6c6ca2a68)' ><!-- Label background --><rect x='0' y='0' width='54.118347' height='20' fill='url(#label_a40d1262bb7a48b19b803fe6c6ca2a68)'/><!-- Message background --><rect x='54.118347' y='0' width='55.18167' height='20' fill='url(#message_a40d1262bb7a48b19b803fe6c6ca2a68)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='109.30002' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Stars</text><!-- Message text --><text x='64.11835' y='14' fill='#ffffff' style='font-weight: 400;'>12.5k</text></g><!-- Logo/icon --></svg></g><g transform='translate(253.69333,0)'><svg width='103.36001' height='20' viewBox='0 0 103.36001 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Forks: 2.3k" class=""><title>Forks: 2.3k</title><desc>Badge showing Forks with value 2.3k</desc><!-- Badge shape with mask --><g mask='url(#mask_caf555dc1a0e4e9581a672f2066e8f5e)' ><!-- Label background --><rect x='0' y='0' width='55.951668' height='20' fill='url(#label_caf555dc1a0e4e9581a672f2066e8f5e)'/><!-- Message background --><rect x='55.951668' y='0' width='47.40834' height='20' fill='url(#message_caf555dc1a0e4e9581a672f2066e8f5e)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='103.36001' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Forks</text><!-- Message text --><text x='65.95167' y='14' fill='#ffffff' style='font-weight: 400;'>2.3k</text></g><!-- Logo/icon --></svg></g><g transform='translate(359.05334,0)'><svg width='135.66335' height='20' viewBox='0 0 135.66335 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Contributors: 45" class=""><title>Contributors: 45</title><desc>Badge showing Contributors with value 45</desc><!-- Badge shape with mask --><g mask='url(#mask_5b6ae2eb06a440069525d2a2f66cc3bb)' ><!-- Label background --><rect x='0' y='0' width='100.116684' height='20' fill='url(#label_5b6ae2eb06a440069525d2a2f66cc3bb)'/><!-- Message background --><rect x='100.116684' y='0' width='35.546665' height='20' fill='url(#message_5b6ae2eb06a440069525d2a2f66cc3bb)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='135.66335' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Contributors</text><!-- Message text --><text x='110.116684' y='14' fill='#ffffff' style='font-weight: 400;'>45</text></g><!-- Logo/icon --></svg></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -791,10 +712,10 @@ body {
 </div>
 </div>
 <h2 id="minimal">Minimal</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="190" height="28" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .border-line { stroke: rgba(255,255,255,0.2); } .text-all { fill: #f5f5f5; } .divider { stroke: rgba(255,255,255,0.15); } } @media (prefers-color-scheme: light) { .border-line { stroke: rgba(0,0,0,0.15); } .text-all { fill: #171717; } .divider { stroke: rgba(0,0,0,0.1); } }</style></defs><g transform="translate(0, 0)"><rect x="0.5" y="0.5" width="189" height="27" rx="4" fill="none" class="border-line" stroke-width="1"/><line class="divider" x1="95" y1="6" x2="95" y2="22" stroke-width="1"/><text class="text-all" x="47" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="10" font-weight="500" letter-spacing="0.3">MADE WITH</text><text class="text-all" x="142" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="11" font-weight="600">Kotlin</text></g></svg>
+<svg width="190" height="28" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-11</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .border-line { stroke: rgba(255,255,255,0.2); } .text-all { fill: #f5f5f5; } .divider { stroke: rgba(255,255,255,0.15); } } @media (prefers-color-scheme: light) { .border-line { stroke: rgba(0,0,0,0.15); } .text-all { fill: #171717; } .divider { stroke: rgba(0,0,0,0.1); } }</style></defs><g transform="translate(0, 0)"><rect x="0.5" y="0.5" width="189" height="27" rx="4" fill="none" class="border-line" stroke-width="1"/><line class="divider" x1="95" y1="6" x2="95" y2="22" stroke-width="1"/><text class="text-all" x="47" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="10" font-weight="500" letter-spacing="0.3">MADE WITH</text><text class="text-all" x="142" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="11" font-weight="600">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -807,10 +728,10 @@ body {
 </div>
 </div>
 <h3 id="brutalist">Brutalist</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-main { fill: #18181b; } .bg-accent { fill: #fbbf24; } .text-label { fill: #fafafa; } .text-value { fill: #18181b; } .shadow-box { fill: rgba(251, 191, 36, 0.2); } } @media (prefers-color-scheme: light) { .bg-main { fill: #fafafa; } .bg-accent { fill: #f59e0b; } .text-label { fill: #18181b; } .text-value { fill: #fefce8; } .shadow-box { fill: rgba(245, 158, 11, 0.15); } }</style></defs><g transform="translate(0, 0)"><rect class="shadow-box" x="4" y="4" width="196" height="36"/><rect class="bg-main" x="0" y="0" width="110.00000000000001" height="40" stroke="#18181b" stroke-width="2"/><rect class="bg-accent" x="110.00000000000001" y="0" width="89.99999999999999" height="40" stroke="#18181b" stroke-width="2"/><text class="text-label" x="55.00000000000001" y="25" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="13" font-weight="900" letter-spacing="1">MADE WITH</text><text class="text-value" x="155.0" y="26" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="16" font-weight="900">Kotlin</text></g></svg>
+<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-11</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-main { fill: #18181b; } .bg-accent { fill: #fbbf24; } .text-label { fill: #fafafa; } .text-value { fill: #18181b; } .shadow-box { fill: rgba(251, 191, 36, 0.2); } } @media (prefers-color-scheme: light) { .bg-main { fill: #fafafa; } .bg-accent { fill: #f59e0b; } .text-label { fill: #18181b; } .text-value { fill: #fefce8; } .shadow-box { fill: rgba(245, 158, 11, 0.15); } }</style></defs><g transform="translate(0, 0)"><rect class="shadow-box" x="4" y="4" width="196" height="36"/><rect class="bg-main" x="0" y="0" width="110.00000000000001" height="40" stroke="#18181b" stroke-width="2"/><rect class="bg-accent" x="110.00000000000001" y="0" width="89.99999999999999" height="40" stroke="#18181b" stroke-width="2"/><text class="text-label" x="55.00000000000001" y="25" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="13" font-weight="900" letter-spacing="1">MADE WITH</text><text class="text-value" x="155.0" y="26" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="16" font-weight="900">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -823,10 +744,10 @@ body {
 </div>
 </div>
 <h3 id="glassmorphic">Glassmorphic</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="180" height="32" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-left { fill: rgba(255,255,255,0.08); } .bg-right { fill: rgba(74, 222, 128, 0.15); } .text-left { fill: #e5e7eb; } .text-right { fill: #4ade80; } .border { stroke: rgba(255,255,255,0.12); } .glow { filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3)); } } @media (prefers-color-scheme: light) { .bg-left { fill: rgba(0,0,0,0.04); } .bg-right { fill: rgba(34, 197, 94, 0.12); } .text-left { fill: #374151; } .text-right { fill: #16a34a; } .border { stroke: rgba(0,0,0,0.08); } .glow { filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.2)); } }</style></defs><g transform="translate(0, 0)"><rect class="bg-left" x="0" y="0" width="84.6" height="32" rx="6"/><rect class="bg-right glow" x="84.6" y="0" width="95.4" height="32" rx="6"/><rect class="border" x="0.5" y="0.5" width="179" height="31" rx="5.5" fill="none" stroke-width="1"/><text class="text-left" x="42.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="600">Made With</text><text class="text-right" x="132.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="700">Kotlin</text></g></svg>
+<svg width="180" height="32" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-11</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-left { fill: rgba(255,255,255,0.08); } .bg-right { fill: rgba(74, 222, 128, 0.15); } .text-left { fill: #e5e7eb; } .text-right { fill: #4ade80; } .border { stroke: rgba(255,255,255,0.12); } .glow { filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3)); } } @media (prefers-color-scheme: light) { .bg-left { fill: rgba(0,0,0,0.04); } .bg-right { fill: rgba(34, 197, 94, 0.12); } .text-left { fill: #374151; } .text-right { fill: #16a34a; } .border { stroke: rgba(0,0,0,0.08); } .glow { filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.2)); } }</style></defs><g transform="translate(0, 0)"><rect class="bg-left" x="0" y="0" width="84.6" height="32" rx="6"/><rect class="bg-right glow" x="84.6" y="0" width="95.4" height="32" rx="6"/><rect class="border" x="0.5" y="0.5" width="179" height="31" rx="5.5" fill="none" stroke-width="1"/><text class="text-left" x="42.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="600">Made With</text><text class="text-right" x="132.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="700">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -839,10 +760,10 @@ body {
 </div>
 </div>
 <h3 id="neon">Neon</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="160" height="36" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .outline { stroke: #a855f7; fill: rgba(168, 85, 247, 0.08); } .label { fill: #c4b5fd; } .value { fill: #e9d5ff; } .divider { stroke: #a855f7; } .glow { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5)); } } @media (prefers-color-scheme: light) { .outline { stroke: #7c3aed; fill: rgba(124, 58, 237, 0.05); } .label { fill: #6d28d9; } .value { fill: #5b21b6; } .divider { stroke: #7c3aed; } .glow { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.25)); } }</style></defs><g transform="translate(0, 0)"><rect class="outline glow" x="2" y="2" width="156" height="32" rx="18" stroke-width="2"/><line class="divider" x1="80" y1="8" x2="80" y2="28" stroke-width="1.5" stroke-linecap="round"/><text class="label" x="40" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">MADE WITH</text><text class="value" x="120" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="12" font-weight="700">KOTLIN</text></g></svg>
+<svg width="160" height="36" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-11</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .outline { stroke: #a855f7; fill: rgba(168, 85, 247, 0.08); } .label { fill: #c4b5fd; } .value { fill: #e9d5ff; } .divider { stroke: #a855f7; } .glow { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5)); } } @media (prefers-color-scheme: light) { .outline { stroke: #7c3aed; fill: rgba(124, 58, 237, 0.05); } .label { fill: #6d28d9; } .value { fill: #5b21b6; } .divider { stroke: #7c3aed; } .glow { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.25)); } }</style></defs><g transform="translate(0, 0)"><rect class="outline glow" x="2" y="2" width="156" height="32" rx="18" stroke-width="2"/><line class="divider" x1="80" y1="8" x2="80" y2="28" stroke-width="1.5" stroke-linecap="round"/><text class="label" x="40" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">MADE WITH</text><text class="value" x="120" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="12" font-weight="700">KOTLIN</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
