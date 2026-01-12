@@ -788,16 +788,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     .docops-slideshow {
         position: relative;
         width: 100%;
-        height: 500px; /* Adjust based on your preferred height */
+        height: 500px;
         background: var(--bg-surface);
         border: 2px solid var(--accent-primary);
-        box-shadow: 10px 10px 0px var(--accent-pink);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
         margin: 3rem 0;
         overflow: hidden;
         display: flex;
         flex-direction: column;
     }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
 
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
     .docops-slide {
         position: absolute;
         top: 0;
@@ -861,23 +890,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 10px;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
         z-index: 10;
     }
 
     .nav-dot {
-        width: 12px;
-        height: 12px;
-        background: var(--bg-base);
-        border: 2px solid var(--accent-primary);
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .nav-dot.active {
-        background: var(--accent-pink);
-        transform: scale(1.2);
-        box-shadow: 0 0 10px var(--accent-pink);
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
     }
 
 </style>
@@ -1060,8 +1089,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         slideshows.forEach(ss => {
             const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
             const interval = parseInt(ss.dataset.interval) || 5000;
             let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
 
             // Create navigation dots
             const nav = document.createElement('div');
@@ -1069,10 +1113,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             slides.forEach((_, i) => {
                 const dot = document.createElement('div');
                 dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
-                dot.onclick = () => goToSlide(i);
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
                 nav.appendChild(dot);
             });
             ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
 
             function goToSlide(index) {
                 slides[currentIndex].classList.remove('active');
@@ -1082,6 +1142,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                 slides[currentIndex].classList.add('active');
                 nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
             }
 
             function nextSlide() {
@@ -1089,12 +1151,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 goToSlide(next);
             }
 
+            // Initial State
+            updateCounter();
+            resetProgress();
+
             // Start autoplay
             let slideTimer = setInterval(nextSlide, interval);
 
             // Pause on hover
-            ss.addEventListener('mouseenter', () => clearInterval(slideTimer));
-            ss.addEventListener('mouseleave', () => slideTimer = setInterval(nextSlide, interval));
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
         });
     });
 </script>
@@ -2341,21 +2414,7 @@ window.onload = function() {
       "description": "Sharing documentation experience for developers to extend with AsciiDoctor",
       "type": "docs",
       "embeddedImage": {
-        "ref": "../images/docops.svg"
-      },
-      "date": "",
-      "author": [
-        "Steve Roach",
-        "Ian Rose"
-      ]
-    },
-    {
-      "label": "Consumer Https Changes",
-      "link": "#[link-server]#[app]",
-      "description": "Sharing documentation experience for developers to extend with AsciiDoctor",
-      "type": "docs",
-      "embeddedImage": {
-        "ref": "../images/docops.svg"
+        "ref": "../../images/docops.svg"
       },
       "date": "",
       "author": [
@@ -2370,9 +2429,14 @@ window.onload = function() {
     "strokeColor": "#ffad00",
     "colorTypeMap": {"software": "#058296", "social": "#3a3bf6"},
     "colors": [
-      "#1E93AB", "#007bff", "#28a745", "#dc3545", "#6c757d"
+      "#E11D48",
+      "#22D3EE",
+      "#8B5CF6",
+      "#C40C0C",
+      "#45618E",
+      "#FF5BAE"
     ],
-    "scale": 1.0,
+    "scale": 0.8,
     "columns": 3,
     "buttonStyle": {
       "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"
@@ -3372,7 +3436,7 @@ body.light-mode .reading-time {
 }
 </style>
 <div class="reading-time">
-    <p>📖 6 min read • 2043 words</p>
+    <p>📖 6 min read • 2017 words</p>
 </div>
 <style>
 .listingblock {

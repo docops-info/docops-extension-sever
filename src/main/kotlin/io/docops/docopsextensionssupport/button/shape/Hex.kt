@@ -71,17 +71,28 @@ class Hex(buttons: Buttons) : Regular(buttons) {
 
     override fun defs(): String {
         return """
-            <defs>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
-                .hex-container {
-                    cursor: pointer;
-                    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    transform-box: fill-box;
-                    transform-origin: center;
-                }
+                <defs>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+                    
+                    @keyframes hexEntrance {
+                        from { opacity: 0; transform: scale(0.9) translateY(20px); }
+                        to { opacity: 1; transform: scale(1) translateY(0); }
+                    }
+
+                    .hex-container {
+                        cursor: pointer;
+                        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                        transform-box: fill-box;
+                        transform-origin: center;
+                        animation: hexEntrance 0.6s ease-out backwards;
+                    }
+                    
+                    .hex-container:hover {
+                        transform: scale(1.05);
+                    }
                
-                .hex-label {
+                    .hex-label {
                     font-family: 'Syne', sans-serif;
                     font-weight: 800;
                     text-transform: uppercase;
@@ -137,20 +148,19 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     }
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
         val isDark = theme.useDark
-        val primaryTextColor = if (isDark) "#f8fafc" else "#1e1b4b"
-        val secondaryTextColor = if (isDark) "#38bdf8" else "#6366f1"
-        // Design Decision: In light mode, use a subtle tint of the user color for the fill
-        // instead of the raw saturated color. This keeps it professional and "designed".
-        val cardFill = if (isDark) {
-            "rgba(30, 41, 59, 0.9)"
-        } else {
-            // Apply a very light tint of the user color (10% opacity) or stay white
-            "#ffffff"
-        }
         val isActive = button.enabled
         val actualColor = button.color!!
 
-        val cardStroke = actualColor
+        // Calculate a staggered delay based on coordinates or a global index
+
+        val primaryTextColor = determineTextColor(actualColor)
+
+        val secondaryTextColor = if (isDark) "#38bdf8" else "#6366f1"
+
+        // Reverting to use button color for fill as per user feedback
+        val cardFill = actualColor
+
+        val cardStroke = if (isDark) "#f8fafc" else "#1e1b4b"
         val cardStrokeWidth = if (isDark) "1" else "2"
 
 
@@ -176,7 +186,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         textSpans.forEachIndexed { index, s ->
             val calculatedDy = if (index > 0) fontSize + lineSpacing else 0
             // Added letter-spacing for that "Designed" look
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: 'Syne', sans-serif !important; letter-spacing: 0.5px; $cleanUserStyle">${s.escapeXml()}</tspan>""")
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: 'Syne', sans-serif !important; letter-spacing: 0.5px; fill: $primaryTextColor !important; $cleanUserStyle">${s.escapeXml()}</tspan>""")
         }
 
         var win = "_top"
@@ -196,42 +206,46 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var typeText = ""
         button.type?.let { typeText = it.uppercase() }
 
-        return """
-    <g transform="translate($x,$y)" class="hex-container $additionalClass" $href>
-        <title>${descriptionOrLabel(button)}</title>
-        
-        <!-- Hexagon Base: Light Mode uses the user color for the stroke -->
-        <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
-                 fill="$cardFill" 
-                 stroke="$cardStroke" 
-                 stroke-width="${if(button.active) "4" else cardStrokeWidth}"
-                 ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
+        val delay = (x / 100 * 0.1) + (y / 100 * 0.1)
 
-        <!-- Icon Wrapper: Optionally tint with user color in light mode -->
-        <g transform="translate(120,50) scale(0.8)">
-         $img 
-        </g>
-        
-        <!-- Main Label with Syne and override protection -->
-        <text x="149" y="$startTextY" text-anchor="middle" 
-              fill="$primaryTextColor" 
-              class="hex-label" 
-              font-size="$fontSize"
-              style="fill: $primaryTextColor !important;">$spans</text>
-        
-        <!-- Sharp Accent Line -->
-        <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
-              stroke="$actualColor" stroke-width="3" stroke-linecap="round" stroke-opacity="0.8"/>
-        
-        <!-- Type Text -->
-        <text x="149" y="${endY + 28}" text-anchor="middle" 
-              fill="$secondaryTextColor" 
-              font-family="'Syne', sans-serif" 
-              font-size="10" 
-              font-weight="800"
-              style="letter-spacing: 2px;">$typeText</text>
-    </g>
-    """.trimIndent()
+        return """
+            <g transform="translate($x,$y)">
+                <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s">
+                    <title>${descriptionOrLabel(button)}</title>
+            
+                    <!-- Hexagon Base -->
+                    <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
+                             fill="$cardFill" 
+                             stroke="$cardStroke" 
+                             stroke-width="${if(button.active) "4" else cardStrokeWidth}"
+                             ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
+    
+                    <!-- Icon Wrapper -->
+                    <g transform="translate(120,50) scale(0.8)">
+                     $img 
+                    </g>
+            
+                    <!-- Main Label -->
+                    <text x="149" y="$startTextY" text-anchor="middle" 
+                          fill="$primaryTextColor" 
+                          class="hex-label" 
+                          font-size="$fontSize"
+                          style="fill: $primaryTextColor !important;">$spans</text>
+            
+                    <!-- Sharp Accent Line -->
+                    <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
+                          stroke="$primaryTextColor" stroke-width="3" stroke-linecap="round" stroke-opacity="0.6"/>
+            
+                    <!-- Type Text -->
+                    <text x="149" y="${endY + 28}" text-anchor="middle" 
+                          fill="$primaryTextColor" 
+                          font-family="'Syne', sans-serif" 
+                          font-size="10" 
+                          font-weight="800"
+                          style="letter-spacing: 2px; fill: $primaryTextColor !important; opacity: 0.9;">$typeText</text>
+                </g>
+            </g>
+            """.trimIndent()
     }
 
 
