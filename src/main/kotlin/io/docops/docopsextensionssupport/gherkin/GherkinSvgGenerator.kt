@@ -1,9 +1,13 @@
 package io.docops.docopsextensionssupport.gherkin
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import org.springframework.stereotype.Service
 
 class GherkinMaker(val useDark: Boolean) {
+    // Resolve the theme once for the entire generator
+    private lateinit var theme: DocOpsTheme
 
     private fun wrapText(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
         val avgCharWidth = fontSizePx * 0.55 // Heuristic for sans-serif
@@ -108,6 +112,9 @@ class GherkinMaker(val useDark: Boolean) {
         return headerHeight + (examples.rows.size * rowHeight) + 20 // + padding
     }
     fun makeGherkin(spec: GherkinSpec): String {
+        // Initialize the design system theme based on the incoming spec
+        theme = ThemeFactory.getTheme(spec.theme)
+
         val totalHeight = calculateTotalHeight(spec, spec.theme)
         val width = spec.theme.layout.width
 
@@ -135,14 +142,22 @@ class GherkinMaker(val useDark: Boolean) {
     }
 
     private fun createDefinitions(): String {
-        val accentStart = if (useDark) "#8b5cf6" else "#6366f1"
-        val accentEnd = if (useDark) "#3b82f6" else "#a855f7"
+        // Use accentColor from theme for gradients
+        val accentStart = theme.accentColor
+        // Generate a variation for the gradient end (or use a secondary from theme)
+        val accentEnd = theme.secondaryText
+
+        // Shadow color should match the surface impact of the theme
+        val shadowColor = if (useDark) "#000000" else "#cbd5e1"
+        val shadowOpacity = if (useDark) "0.5" else "0.2"
+
+
         val stopColor = if (useDark) "#000000" else "#cbd5e1"
 
         return """
                 <defs>
                     <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${if (useDark) "#4a5568" else "#cbd5e1"}" opacity="0.3"/>
+                        <circle cx="2" cy="2" r="1" fill="${theme.secondaryText}" opacity="0.15"/>
                     </pattern>
                     <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color:$accentStart;stop-opacity:1" />
@@ -153,7 +168,7 @@ class GherkinMaker(val useDark: Boolean) {
                         <feComposite in="SourceGraphic" in2="blur" operator="over" />
                     </filter>
                     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%">
-                        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="$stopColor" flood-opacity="${if (useDark) "0.5" else "0.2"}"/>
+                        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="$shadowColor" flood-opacity="$shadowOpacity"/>
                     </filter>
                 </defs>
             """.trimIndent()
@@ -162,23 +177,23 @@ class GherkinMaker(val useDark: Boolean) {
 
 
     private fun createBackground(width: Int, height: Int): String {
-        val bgColor = if (useDark) "#0f172a" else "#f8fafc"
         return """
-                <rect width="$width" height="$height" fill="$bgColor" rx="16"/>
-                <rect width="$width" height="$height" fill="url(#dotPattern)" rx="16"/>
+                <rect width="$width" height="$height" fill="${theme.canvas}" rx="${theme.cornerRadius}"/>
+                <rect width="$width" height="$height" fill="url(#dotPattern)" rx="${theme.cornerRadius}"/>
             """.trimIndent()
     }
 
-    private fun createFeatureHeader(featureTitle: String, theme: GherkinTheme): Pair<String, Int> {
-        val width = theme.layout.width - 80
+    private fun createFeatureHeader(featureTitle: String, gherkinTheme: GherkinTheme): Pair<String, Int> {
+        val width = gherkinTheme.layout.width - 80
         val lines = wrapText(featureTitle, width - 60, 24)
         val lineHeight = 30
         val bgHeight = (lines.size * lineHeight) + 60
 
-        val bgColor = if (useDark) "#1e293b" else "#ffffff"
-        val strokeColor = if (useDark) "#334155" else "#e2e8f0"
-        val textColor = if (useDark) "#f8fafc" else "#1e293b"
-        val labelColor = if (useDark) "#8b5cf6" else "#6366f1"
+        // DESIGN SYSTEM TRANSITION: Use theme instead of local useDark checks
+        val bgColor = theme.glassEffect // or theme.canvas for solid
+        val strokeColor = theme.accentColor
+        val textColor = theme.primaryText
+        val labelColor = theme.accentColor
 
         val sb = StringBuilder()
         sb.append("""
@@ -195,13 +210,13 @@ class GherkinMaker(val useDark: Boolean) {
         return Pair(sb.toString(), bgHeight)
     }
 
-    private fun createScenario(scenario: GherkinScenario, theme: GherkinTheme, yOffset: Int): String {
-        val width = theme.layout.width - 80
-        val textColor = if (useDark) "#94a3b8" else "#64748b"
-        val highlightColor = if (useDark) "#f8fafc" else "#1e293b"
-        val metaColor = if (useDark) "#3b82f6" else "#2563eb"
-        val bgColor = if (useDark) "#1e293b" else "#ffffff"
-        val strokeColor = if (useDark) "#475569" else "#cbd5e1"
+    private fun createScenario(scenario: GherkinScenario, gherkinTheme: GherkinTheme, yOffset: Int): String {
+        val width = gherkinTheme.layout.width - 80
+        val textColor = theme.primaryText
+        val highlightColor = theme.primaryText
+        val metaColor = theme.accentColor
+        val bgColor = theme.glassEffect
+        val strokeColor = theme.accentColor
 
         // 1. Wrap Scenario Title
         val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, 10)
@@ -438,9 +453,9 @@ class GherkinMaker(val useDark: Boolean) {
     private fun createExamplesTable(examples: GherkinExamples, width: Int, yOffset: Int): String {
         val cellWidth = (width - 60) / examples.headers.size
         val rowHeight = 25
-        val textColor = if (useDark) "#94a3b8" else "#475569"
-        val headerBg = if (useDark) "#334155" else "#f1f5f9"
-        val borderColor = if (useDark) "#475569" else "#cbd5e1"
+        val textColor = theme.primaryText
+        val headerBg = theme.canvas
+        val borderColor = theme.accentColor
 
         return buildString {
             append("""<g transform="translate(45, $yOffset)">""")

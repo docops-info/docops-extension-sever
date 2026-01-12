@@ -130,9 +130,14 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         return try {
             val gherkinMaker = GherkinMaker(context.useDark)
             val gherkinSpec = parseGherkinContent(payload)
+
+            val finalSpec = gherkinSpec.copy(
+                theme = gherkinSpec.theme.copy(useDark = context.useDark)
+            )
+
             // Update CSV response similar to other handlers
-            csvResponse.update(gherkinSpec.toCsv())
-            val svg = gherkinMaker.makeGherkin(gherkinSpec)
+            csvResponse.update(finalSpec.toCsv())
+            val svg = gherkinMaker.makeGherkin(finalSpec)
             svg
         } catch (e: Exception) {
             """

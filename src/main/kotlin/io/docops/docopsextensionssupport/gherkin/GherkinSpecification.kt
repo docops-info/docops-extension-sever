@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.gherkin
 
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 
@@ -30,8 +31,10 @@ data class GherkinStep(
 data class GherkinTheme(
     val colors: GherkinColors = GherkinColors(),
     val layout: GherkinLayout = GherkinLayout(),
-    val typography: GherkinTypography = GherkinTypography()
-)
+    val typography: GherkinTypography = GherkinTypography(),
+    override val useDark: Boolean = false,
+    override val visualVersion: Int = 1
+) : VisualDisplay
 
 @Serializable
 data class GherkinColors(
