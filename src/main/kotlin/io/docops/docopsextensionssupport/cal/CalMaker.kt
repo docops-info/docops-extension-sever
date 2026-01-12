@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.cal
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -10,6 +12,8 @@ class CalMaker {
         val today = LocalDate.now()
         val month = entry?.month ?: monFmt.format(today)
         val year = entry?.year ?: today.year
+
+        val theme = ThemeFactory.getTheme(entry?.darkMode ?: false)
 
         val svg = if(entry!!.darkMode) {
             createDarkModeCalendar(month = month, year = year)

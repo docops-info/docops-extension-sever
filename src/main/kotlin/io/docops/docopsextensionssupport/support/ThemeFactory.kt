@@ -18,9 +18,12 @@ object ThemeFactory {
                 if (isDark) ModernDarkTheme() else ModernLightTheme()
             }
             else -> {
-                if (isDark) ClassicDarkTheme() else ClassicLightTheme()
+                 if (isDark) ProDarkTheme() else ClassicLightTheme()
             }
         }
+    }
+    fun getTheme(useDark: Boolean): DocOpsTheme {
+        return if (useDark) ProDarkTheme() else ClassicLightTheme()
     }
 }
 
@@ -89,4 +92,18 @@ class BrutalistDarkTheme : DocOpsTheme {
     override val surfaceImpact = "rgba(30, 41, 59, 0.5)"
     override val fontFamily = "'Syne', sans-serif"
     override val cornerRadius = 0 // Sharp edges for brutalist
+}
+
+/**
+ * Pro "v2" Dark Theme - High contrast, sharp accents, unique typography
+ */
+class ProDarkTheme : DocOpsTheme {
+    override val canvas = "#0f172a" // Deep Slate
+    override val primaryText = "#f8fafc"
+    override val secondaryText = "#94a3b8"
+    override val accentColor = "#38bdf8" // Sky Blue accent
+    override val glassEffect = "rgba(15, 23, 42, 0.8)"
+    override val surfaceImpact = "rgba(56, 189, 248, 0.1)"
+    override val fontFamily = "'Syne', sans-serif"
+    override val cornerRadius = 12
 }
