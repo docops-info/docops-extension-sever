@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import java.util.UUID
 
@@ -10,11 +12,12 @@ class AdrMaker {
     private val dy = 15.0f
     private val headerX = 20 // Consistent x-coordinate for all section headers
     fun makeAdrSvg(adr: Adr, dropShadow: Boolean = true, config: AdrParserConfig, useDark: Boolean) : String {
+        val theme = ThemeFactory.getTheme(useDark, false)
         val editorColor = if(useDark) EditorDark() else EditorLite()
         val sb = StringBuilder()
-        sb.append(defs(editorColor, adr))
-        sb.append(setBackground(editorColor, config, useDark))
-        sb.append(title(adr, editorColor))
+        sb.append(defs(theme, adr))
+        sb.append(setBackground(theme, config, useDark))
+        sb.append(title(adr, theme))
         sb.append(status(adr, editorColor, mapBgFromStatus(adr = adr)))
 
         // We don't need the vertical line anymore since we're using cards
@@ -48,7 +51,7 @@ class AdrMaker {
             >
         """.trimIndent()
     }
-    fun defs(editorColor: EditorColor, adr: Adr) : String {
+    fun defs(theme: DocOpsTheme, adr: Adr) : String {
         //language=html
         val statusColor = mapBgFromStatus(adr)
         return """
@@ -87,25 +90,25 @@ class AdrMaker {
                 <circle cx="12" cy="12" r="6" fill="${statusColor}" />
             </symbol>
 
-            ${editorColor.backGrad().linearGradient}
+            ${SVGColor(theme.canvas).linearGradient}
             </defs>
         """.trimIndent()
     }
     fun tail() = "</svg>"
 
-    fun setBackground(editorColor: EditorColor, config: AdrParserConfig, useDark: Boolean) : String {
-        var fill = "url(#${editorColor.id})"
+    fun setBackground(theme: DocOpsTheme, config: AdrParserConfig, useDark: Boolean) : String {
+        var fill = "url(#${theme.id})"
         if(config.isPdf || !useDark) {
-            fill = editorColor.background
+            fill = theme.canvas
         }
         val sb = StringBuilder()
-        sb.append("<rect width=\"100%\" height=\"100%\" fill='$fill' stroke=\"${editorColor.lineColor}\" stroke-width=\"2\" rx=\"5\" ry=\"5\"/>")
+        sb.append("<rect width=\"100%\" height=\"100%\" fill='$fill' stroke=\"${theme.accentColor}\" stroke-width=\"2\" rx=\"5\" ry=\"5\"/>")
 
         // Add subtle grid pattern for light mode
         if (!useDark) {
             sb.append("""
                 <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="${editorColor.lineColor}" stroke-width="0.5" stroke-opacity="0.1"/>
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="${theme.accentColor}" stroke-width="0.5" stroke-opacity="0.1"/>
                 </pattern>
                 <rect width="100%" height="100%" fill="url(#grid)" />
             """.trimIndent())
@@ -113,10 +116,10 @@ class AdrMaker {
 
         return sb.toString()
     }
-    fun title(adr: Adr, editorColor: EditorColor): String {
+    fun title(adr: Adr, theme: DocOpsTheme): String {
 
-        return """<text x="50%" y="30" text-anchor="middle" fill="${editorColor.titleColor}" filter="url(#dropShadow)"
-          style="font-weight: 700; font-size: 26px; font-family: Roboto,Helvetica Neue,Vazirmatn,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji; letter-spacing: 0.5px;">
+        return """<text x="50%" y="30" text-anchor="middle" fill="${theme.primaryText}" filter="url(#dropShadow)"
+          style="font-weight: 700; font-size: 26px; font-family: ${theme.fontFamily}; letter-spacing: 0.5px;">
             ${adr.title}
         </text>"""
     }

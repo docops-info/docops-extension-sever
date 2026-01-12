@@ -25,6 +25,19 @@ object ThemeFactory {
     fun getTheme(useDark: Boolean): DocOpsTheme {
         return if (useDark) ProDarkTheme() else ClassicLightTheme()
     }
+
+    /**
+     * Strategic Theme Selection based on Versioning
+     * Version 1: Classic (Clean, Arial)
+     * Version 2: Cyber-Brutalist (Sharp, Syne, High Impact)
+     */
+    fun getTheme(useDark: Boolean, isBrutalist: Boolean): DocOpsTheme {
+        return if (isBrutalist) {
+            if (useDark) BrutalistDarkTheme() else BrutalistLightTheme()
+        } else {
+            if (useDark) ClassicDarkTheme() else ClassicLightTheme()
+        }
+    }
 }
 
 /**
@@ -106,4 +119,15 @@ class ProDarkTheme : DocOpsTheme {
     override val surfaceImpact = "rgba(56, 189, 248, 0.1)"
     override val fontFamily = "'Syne', sans-serif"
     override val cornerRadius = 12
+}
+
+class BrutalistLightTheme : DocOpsTheme {
+    override val canvas = "#f8fafc"
+    override val primaryText = "#0f172a"
+    override val secondaryText = "#475569"
+    override val accentColor = "#6366f1"
+    override val glassEffect = "rgba(255, 255, 255, 0.9)"
+    override val surfaceImpact = "rgba(226, 232, 240, 0.5)"
+    override val fontFamily = "'Syne', sans-serif"
+    override val cornerRadius = 0
 }

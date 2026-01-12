@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.UrlUtil.urlEncode
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -32,8 +33,9 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean) {
     @OptIn(ExperimentalUuidApi::class)
     fun generate(adr: Adr): String {
         val id = Uuid.random().toHexString()
+        val theme = ThemeFactory.getTheme(useDark, true)
         val colors = getThemeColors(useDark)
-        val statusColor = STATUS_COLORS[adr.status] ?: "#6366f1"
+        val statusColor = STATUS_COLORS[adr.status] ?: theme.accentColor
         val svgWidth = 850
         val lineSpacing = 20
         val panelPadding = 60
@@ -81,23 +83,22 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean) {
              groupChatUrl = "https://teams.microsoft.com/l/chat/0/0?users=${participantEmails.joinToString(",")}&topicName=${adr.title.urlEncode()}"
         }
         return """
-    <svg xmlns="http://www.w3.org/2000/svg" id="cb_adr_$id" width="$svgWidth" height="$totalHeight" viewBox="0 0 $svgWidth $totalHeight" preserveAspectRatio='xMidYMid meet'>
-      <defs>
-        <pattern id="hexagons_$id" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)">
-          <path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="$patternStroke" stroke-width="1" />
-        </pattern>
-        <style type="text/css">
-          @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
+        <svg xmlns="http://www.w3.org/2000/svg" id="cb_adr_$id" width="$svgWidth" height="$totalHeight" viewBox="0 0 $svgWidth $totalHeight" preserveAspectRatio='xMidYMid meet'>
+          <defs>
+            <pattern id="hexagons_$id" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)">
+              <path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="$patternStroke" stroke-width="1" />
+            </pattern>
+            <style type="text/css">
+              @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
       
-          #cb_adr_$id .canvas { fill: ${colors["canvas"]}; }
-          #cb_adr_$id .bg-pattern { fill: url(#hexagons_$id); }
-          #cb_adr_$id .glass-panel { fill: ${colors["glassFill"]}; stroke: $statusColor; stroke-width: 1.5; }
-          #cb_adr_$id .impact-panel { fill: ${colors["impactFill"]}; stroke: ${colors["subText"]}; stroke-width: 1; stroke-dasharray: 4; }
-          #cb_adr_$id .accent-line { stroke: $statusColor; stroke-width: 4; stroke-linecap: square; filter: drop-shadow(0 0 5px $statusColor); }
+              #cb_adr_$id .canvas { fill: ${theme.canvas}; }
+              #cb_adr_$id .bg-pattern { fill: url(#hexagons_$id); }
+              #cb_adr_$id .glass-panel { fill: ${theme.glassEffect}; stroke: $statusColor; stroke-width: 1.5; }
+              #cb_adr_$id .impact-panel { fill: ${theme.surfaceImpact}; stroke: ${theme.secondaryText}; stroke-width: 1; stroke-dasharray: 4; }
+              #cb_adr_$id .accent-line { stroke: $statusColor; stroke-width: 4; stroke-linecap: square; filter: drop-shadow(0 0 5px $statusColor); }
       
-          #cb_adr_$id .adr-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; fill: ${colors["text"]}; text-transform: uppercase; letter-spacing: -1px; }
-          #cb_adr_$id .sec-header { font-family: 'Syne', sans-serif; font-size: 14px; fill: $statusColor; text-transform: uppercase; letter-spacing: 2px; }
-          #cb_adr_$id .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${colors["subText"]}; }
+              #cb_adr_$id .adr-title { font-family: ${theme.fontFamily}; font-weight: 800; font-size: 18px; fill: ${theme.primaryText}; text-transform: uppercase; letter-spacing: -1px; }
+              #cb_adr_$id .sec-header { font-family: ${theme.fontFamily}; font-size: 14px; fill: $statusColor; text-transform: uppercase; letter-spacing: 2px; }       #cb_adr_$id .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${colors["subText"]}; }
           #cb_adr_$id .status-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; fill: #fff; }
 
           #cb_adr_$id .participant-node { cursor: pointer; }
