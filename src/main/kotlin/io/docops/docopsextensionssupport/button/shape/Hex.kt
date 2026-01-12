@@ -40,11 +40,12 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         //isDark = buttons.theme?.useDark == true
         val bgColor = if (isDark) "#020617" else "#f1f5f9"
 
-        sb.append("""<rect width="100%" height="100%" fill="$bgColor" />""")
-
-        // Add atmospheric background element
+        // Pro Tip: Instead of a solid rect, add an "Ambient Light Source"
+        // This creates atmosphere without a "heavy" background
         val atmosphereColor = if (isDark) "#38bdf8" else "#818cf8"
-        sb.append("""<circle cx="90%" cy="10%" r="250" fill="$atmosphereColor" fill-opacity="0.05" />""")
+        sb.append("""
+                <circle cx="50%" cy="50%" r="400" fill="$atmosphereColor" fill-opacity="${if (isDark) "0.03" else "0.02"}" />
+            """.trimIndent())
 
         sb.append("""<g>""")
 
@@ -70,6 +71,15 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     }
 
     override fun defs(): String {
+        val gradientDefs = buttons.buttons.mapIndexed { index, button ->
+            val color = button.color ?: "#38bdf8"
+            """
+                <linearGradient id="hexGrad_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="$color" />
+                    <stop offset="100%" stop-color="$color" stop-opacity="0.7" />
+                </linearGradient>
+                """.trimIndent()
+        }.joinToString("\n")
         return """
                 <defs>
                 <style>
@@ -107,6 +117,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                 
                 
             </style>
+             $gradientDefs
             ${
             if (!isPdf) """
             <filter id="hexShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
@@ -155,12 +166,15 @@ class Hex(buttons: Buttons) : Regular(buttons) {
 
         val primaryTextColor = determineTextColor(actualColor)
 
-        val secondaryTextColor = if (isDark) "#38bdf8" else "#6366f1"
+        // Use Cyan for accents in Dark Mode, Indigo in Light Mode
+        val secondaryTextColor = if (isDark) "#22d3ee" else "#4f46e5"
 
-        // Reverting to use button color for fill as per user feedback
-        val cardFill = actualColor
+        // Reference the gradient ID instead of the solid color
+        val cardFill = "url(#hexGrad_${button.id})"
 
-        val cardStroke = if (isDark) "#f8fafc" else "#1e1b4b"
+        // Sharp Accents: Thinner, brighter strokes for dark mode
+        val cardStroke = if (isDark) "#ffffff" else "#1e1b4b"
+        val cardStrokeOpacity = if (isDark) "0.4" else "1.0"
         val cardStrokeWidth = if (isDark) "1" else "2"
 
 
@@ -209,41 +223,48 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val delay = (x / 100 * 0.1) + (y / 100 * 0.1)
 
         return """
-            <g transform="translate($x,$y)">
-                <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s">
-                    <title>${descriptionOrLabel(button)}</title>
+                <g transform="translate($x,$y)">
+                    <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s">
+                        <title>${descriptionOrLabel(button)}</title>
             
-                    <!-- Hexagon Base -->
-                    <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
-                             fill="$cardFill" 
-                             stroke="$cardStroke" 
-                             stroke-width="${if(button.active) "4" else cardStrokeWidth}"
-                             ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
-    
+                        <!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) -->
+                        ${if (isDark) """<circle cx="149" cy="170" r="120" fill="$actualColor" fill-opacity="0.15" filter="blur(20px)"/>""" else ""}
+
+                        <!-- Layer 2: Hexagon Base -->
+                        <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
+                                 fill="$cardFill" 
+                                 stroke="$cardStroke" 
+                                 stroke-opacity="$cardStrokeOpacity"
+                                 stroke-width="${if(button.active) "4" else cardStrokeWidth}"
+                                 ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
+
+                        <!-- Layer 3: Glass highlight -->
+                        <polygon points="149,15 280,95 149,175 18,95" 
+                                 fill="white" fill-opacity="${if (isDark) "0.08" else "0.03"}" pointer-events="none"/>
                     <!-- Icon Wrapper -->
                     <g transform="translate(120,50) scale(0.8)">
                      $img 
                     </g>
             
                     <!-- Main Label -->
-                    <text x="149" y="$startTextY" text-anchor="middle" 
-                          fill="$primaryTextColor" 
-                          class="hex-label" 
-                          font-size="$fontSize"
-                          style="fill: $primaryTextColor !important;">$spans</text>
+                        <text x="149" y="$startTextY" text-anchor="middle" 
+                              fill="$primaryTextColor" 
+                              class="hex-label" 
+                              font-size="$fontSize"
+                              style="fill: $primaryTextColor !important;">$spans</text>
             
-                    <!-- Sharp Accent Line -->
-                    <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
-                          stroke="$primaryTextColor" stroke-width="3" stroke-linecap="round" stroke-opacity="0.6"/>
+                        <!-- Sharp Accent Line: Uses secondary accent color -->
+                        <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
+                              stroke="$secondaryTextColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/>
             
-                    <!-- Type Text -->
-                    <text x="149" y="${endY + 28}" text-anchor="middle" 
-                          fill="$primaryTextColor" 
-                          font-family="'Syne', sans-serif" 
-                          font-size="10" 
-                          font-weight="800"
-                          style="letter-spacing: 2px; fill: $primaryTextColor !important; opacity: 0.9;">$typeText</text>
-                </g>
+                        <!-- Type Text: Uses secondary accent color -->
+                        <text x="149" y="${endY + 28}" text-anchor="middle" 
+                              fill="$secondaryTextColor" 
+                              font-family="'Syne', sans-serif" 
+                              font-size="10" 
+                              font-weight="800"
+                              style="letter-spacing: 2px; fill: $secondaryTextColor !important; opacity: 0.9;">$typeText</text>
+                    </g>
             </g>
             """.trimIndent()
     }
