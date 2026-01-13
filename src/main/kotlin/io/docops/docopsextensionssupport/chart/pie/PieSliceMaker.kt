@@ -1,5 +1,7 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.chart.chartColorAsSVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.Point
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
@@ -101,7 +103,7 @@ open class PieSliceMaker {
             val labelPoint = polarToCartesian(centerX, centerY, radius / 2, midAngle)
             //val outerLabelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX.toInt(), centerY.toInt())
             //val labelPoint = findArcCenter(radius, Point(start.x, start.y), Point(end.x, end.y), centerX, centerY)
-            val textColor = determineTextColor(ChartColors.modernColors[index].color)
+            val textColor = determineTextColor(ChartColors.Companion.modernColors[index].color)
             labels.append("<text x=\"${labelPoint.x}\" y=\"${labelPoint.y}\" text-anchor=\"middle\" fill=\"$textColor\" style=\"font-size: 20px; font-family: Arial, Helvetica, sans-serif;\">")
             val fontSize = 20
             val spans = itemTextWidth(segment.label, 60F, fontSize)

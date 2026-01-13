@@ -1,6 +1,9 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.line
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
@@ -13,6 +16,16 @@ class LineChartImproved {
 
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
+        val visualVersion = config["visualVersion"]?.toIntOrNull() ?: 1
+
+        val display = LineChartDisplay(
+            useDark = useDark,
+            visualVersion = visualVersion,
+            smoothLines = config["smooth"]?.toBoolean() ?: true,
+            showArea = config["area"]?.toBoolean() ?: false
+        )
+        val theme = ThemeFactory.getTheme(display)
+
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
         val customColors = configColors
@@ -33,7 +46,7 @@ class LineChartImproved {
 
         csvResponse.update(convertLineDataSeriesToCsv(lineData))
 
-        var colors = ChartColors.modernColors
+        var colors = ChartColors.Companion.modernColors
         if (customColors != null) {
             colors = mutableListOf<SVGColor>()
             customColors.forEach {
@@ -54,7 +67,7 @@ class LineChartImproved {
             showGrid,
             xAxisLabel,
             yAxisLabel,
-            darkMode
+            theme, display
         )
         return svg
     }
@@ -118,17 +131,24 @@ class LineChartImproved {
         showGrid: Boolean,
         xAxisLabel: String,
         yAxisLabel: String,
-        darkMode: Boolean = false
+        theme: DocOpsTheme,
+        display: LineChartDisplay
     ): String {
+        val darkMode = theme.canvas != "#ffffff"
         if (seriesList.isEmpty()) {
             return "<svg width='$width' height='$height'><text x='${width/2}' y='${height/2}' text-anchor='middle'>No data</text></svg>"
         }
 
-        // Calculate chart dimensions and margins
-        val margin = 50
-        val legendWidth = if (showLegend) 220 else 0
-        val chartWidth = width - margin * 2 - legendWidth
-        val chartHeight = height - margin * 2
+        // Define asymmetrical margins to prevent label clipping
+        val marginLeft = 85
+        val marginRight = if (showLegend) 220 else 40
+        val marginTop = 70
+        val marginBottom = 80
+
+        val chartWidth = width - marginLeft - marginRight
+        val chartHeight = height - marginTop - marginBottom
+
+
 
         // Find min and max values for x and y axes
         val allPoints = seriesList.flatMap { it.points }
@@ -148,21 +168,21 @@ class LineChartImproved {
         val svgBuilder = StringBuilder()
 
         // Define colors based on dark mode (Midnight IDE aesthetic)
-        val backgroundColor = if (darkMode) "#020617" else "#ffffff"
-        val textColor = if (darkMode) "#f8fafc" else "#0f172a"
-        val gridColor = if (darkMode) "#1e293b" else "#e2e8f0"
-        val axisColor = if (darkMode) "#334155" else "#475569"
-        val pointStrokeColor = if (darkMode) "#020617" else "white"
-        // Use a clearly defined glass color for the legend
-        val legendBg = if (darkMode) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
+        // Define colors based on ThemeFactory
+        val backgroundColor = theme.canvas
+        val textColor = theme.primaryText
+        val gridColor = theme.accentColor
+        val axisColor = theme.accentColor
+        val pointStrokeColor = theme.canvas
+        val legendBg = theme.glassEffect
 
 
-
-        val id = UUID.randomUUID().toString()
+        val id = display.id
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
 
         svgBuilder.append("<defs>")
+        svgBuilder.append(theme.fontImport)
         svgBuilder.append("""
                 <filter id="legendGlass_$id" x="0" y="0" width="100%" height="100%">
                     <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
@@ -189,21 +209,14 @@ class LineChartImproved {
                 </filter>
             """.trimIndent())
         // Add responsive CSS that adapts to system color scheme
-        var chartStyle = """
-                #ID_$id .chart-text { fill: #0f172a; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.5px; }
-                #ID_$id .chart-grid { stroke: #e2e8f0; stroke-dasharray: 3,3; }
-                #ID_$id .chart-axis { stroke: #475569; stroke-width: 1.5; }
-                #ID_$id .chart-background { fill: transparent; }
+        val chartStyle = """
+                #ID_$id .chart-text { fill: ${theme.primaryText}; font-family: ${theme.fontFamily}; letter-spacing: -0.5px; }
+                #ID_$id .chart-grid { stroke: ${theme.accentColor}; stroke-dasharray: 3,3; stroke-opacity: 0.2; }
+                #ID_$id .chart-axis { stroke: ${theme.accentColor}; stroke-width: 1.5; stroke-opacity: 0.5; }
+                #ID_$id .chart-background { fill: ${theme.canvas}; }
+                #ID_$id .legend-box { fill: ${theme.glassEffect}; stroke: ${theme.accentColor}; stroke-width: 1; }
             """.trimIndent()
-        if(darkMode) {
-            chartStyle = """
-                   #ID_$id .chart-text { fill: #f8fafc !important; font-family: 'JetBrains Mono', monospace; }
-                   #ID_$id .chart-grid { stroke: #1e293b !important; stroke-dasharray: 3,3; }
-                   #ID_$id .chart-axis { stroke: #334155 !important; }
-                   #ID_$id .chart-background { fill: #020617 !important; }
-                   #ID_$id .legend-box { fill: $legendBg !important; stroke: #475569; stroke-width: 1; }
-                """.trimIndent()
-        }
+
         svgBuilder.append("""
         <style>
             <![CDATA[
@@ -257,8 +270,9 @@ class LineChartImproved {
 
 
         // Define chart area
-        val chartX = margin
-        val chartY = margin + 10 // Add space for title
+        // Define chart area
+        val chartX = marginLeft
+        val chartY = marginTop
 
         // Function to convert data coordinates to SVG coordinates
         fun xToSvg(x: Double): Double = chartX + (x - paddedMinX) * chartWidth / (paddedMaxX - paddedMinX)
@@ -336,10 +350,12 @@ class LineChartImproved {
 
         // Add axis labels if provided
         if (xAxisLabel.isNotEmpty()) {
-            svgBuilder.append("<text x='${chartX + chartWidth / 2}' y='${chartY + chartHeight + 45}' font-size='13' text-anchor='middle' font-weight='600' class='chart-text'>$xAxisLabel</text>")
+            val xLabelY = chartY + chartHeight + 55
+            svgBuilder.append("<text x='${chartX + chartWidth / 2}' y='$xLabelY' font-size='14' text-anchor='middle' font-weight='600' class='chart-text'>$xAxisLabel</text>")
         }
         if (yAxisLabel.isNotEmpty()) {
-            svgBuilder.append("<text x='${chartX - 45}' y='${chartY + chartHeight / 2}' font-size='13' text-anchor='middle' font-weight='600' transform='rotate(-90, ${chartX - 45}, ${chartY + chartHeight / 2})' class='chart-text'>$yAxisLabel</text>")
+            val yLabelX = chartX - 65
+            svgBuilder.append("<text x='$yLabelX' y='${chartY + chartHeight / 2}' font-size='14' text-anchor='middle' font-weight='600' transform='rotate(-90, $yLabelX, ${chartY + chartHeight / 2})' class='chart-text'>$yAxisLabel</text>")
         }
 
         svgBuilder.append("</g>")

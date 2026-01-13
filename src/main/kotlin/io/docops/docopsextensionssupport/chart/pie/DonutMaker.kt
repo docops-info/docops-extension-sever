@@ -1,5 +1,7 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.chart.chartColorAsSVGColor
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
@@ -129,7 +131,7 @@ class DonutMaker : PieSliceMaker(){
 
         commands.forEachIndexed { index, it ->
             // Determine text color based on background
-            val textColor = determineTextColor(ChartColors.modernColors[index].color)
+            val textColor = determineTextColor(ChartColors.Companion.modernColors[index].color)
 
             // Add animation to the donut slices
             sb.append("""

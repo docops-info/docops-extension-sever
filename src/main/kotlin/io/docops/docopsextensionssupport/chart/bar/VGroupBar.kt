@@ -1,7 +1,10 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.awt.Font
@@ -10,10 +13,13 @@ class VGroupBar {
     private var height  = 600
     private var fontDisplayColor = "#111111"
     private val width = 900 // Increased from 800 to provide more space for labels
+    
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+    
+
     fun makeVerticalBar(barGroup: BarGroup, isPdf: Boolean): String {
-        if(barGroup.display.useDark) {
-            fontDisplayColor = "#fcfcfc"
-        }
+        theme = ThemeFactory.getTheme(barGroup.display)
+
         val sb = StringBuilder()
         sb.append(head(barGroup))
         sb.append(makeDefs(makeGradient(barGroup.display), barGroup))
@@ -38,22 +44,22 @@ class VGroupBar {
         val bars = (group.series.size * 24) /2 + 6
 
         // Improve group label styling
-        val labelColor = if (barGroup.display.useDark) "#e5e7eb" else "#666"
+        val labelColor = theme.secondaryText
         sb.append("""
             <text x="-10" y="$bars" text-anchor="end"
-                  style="fill: $labelColor; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">${group.label}
+                  style="fill: $labelColor; font-family: ${theme.fontFamily}; font-size: 14px; font-weight: bold;">${group.label}
             </text>
         """.trimIndent())
 
         // Create bars with modern styling
         group.series.forEachIndexed { idx, it ->
             val per = barGroup.scaleUp(it.value)
-            val valueColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+            val valueColor = theme.primaryText
 
             // Add bar with rounded corners, animation, and hover effect
             var fill = "url(#defColor_$idx)"
             if(isPdf) {
-                fill = ChartColors.modernColors[idx].color
+                fill = ChartColors.Companion.modernColors[idx].color
             }
             sb.append("""
             <g class="bar-group">
@@ -62,11 +68,11 @@ class VGroupBar {
                     <animate attributeName="width" from="0" to="$per" dur="1s" fill="freeze"/>
                 </rect>
                 <text x="${per+5}" y="${currentY + 16}" 
-                      style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: $valueColor;">
+                      style="font-family: ${theme.fontFamily}; font-size: 12px; font-weight: bold; fill: $valueColor;">
                     ${barGroup.valueFmt(it.value)}
                 </text>
                 <text x="5" y="${currentY + 16}" 
-                      style="font-family: Arial, sans-serif; font-size: 12px; fill: $labelColor;">
+                      style="font-family: ${theme.fontFamily}; font-size: 12px; fill: $labelColor;">
                     ${it.label ?: ""}
                 </text>
             </g>
@@ -88,20 +94,21 @@ class VGroupBar {
         return """
             <?xml version="1.0" encoding="UTF-8"?>
             <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg" id="id_${barGroup.id}">
+            ${theme.fontImport}
         """.trimIndent()
     }
     private fun tail(): String {
         return "</svg>"
     }
     private fun makeBackground(barGroup: BarGroup): String {
-        val backgroundColor = if(barGroup.display.useDark) "#1f2937" else "#f8f9fa"
+        val backgroundColor = theme.canvas
         return """
             <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """.trimIndent()
     }
     private fun makeTitle(barGroup: BarGroup): String {
-        val titleBgColor = if (barGroup.display.useDark) "#374151" else "#f0f0f0"
-        val titleTextColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+        val titleBgColor = theme.canvas
+        val titleTextColor = theme.primaryText
 
         // Calculate the width of the title text
         val titleWidth = barGroup.title.textWidth("Arial", 24, Font.BOLD)
@@ -112,31 +119,31 @@ class VGroupBar {
 
         return """
         <g>
-            <rect x="${width/2 - rectWidth/2}" y="10" width="$rectWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.7"/>
-            <text x="${width/2}" y="38" style="font-family: Arial, sans-serif; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold; -webkit-filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2)); filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2));">${barGroup.title.escapeXml()}</text>
+            <rect x="${width/2 - rectWidth/2}" y="10" width="$rectWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.1" stroke="${theme.accentColor}" stroke-width="1"/>
+            <text x="${width/2}" y="38" style="font-family: ${theme.fontFamily}; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold;">${barGroup.title.escapeXml()}</text>
         </g>
         """.trimIndent()
     }
     private fun makeLineSeparator(barGroup: BarGroup) : String{
-        val axisColor = if (barGroup.display.useDark) "#9ca3af" else "#666"
+        val axisColor = theme.accentColor
         return """
-            <line x1="200" x2="200" y1="85" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="200" x2="200" y1="85" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.3"/>
         """.trimIndent()
     }
 
     private fun makeColumnHeader(barGroup: BarGroup) : String {
-        val textColor = if (barGroup.display.useDark) "#e5e7eb" else "#666"
+        val textColor = theme.secondaryText
         return """
         <g>
-            <text x="180" y="75" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
-            <text x="220" y="75" text-anchor="start" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
+            <text x="180" y="75" text-anchor="end" style="font-family: ${theme.fontFamily}; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+            <text x="220" y="75" text-anchor="start" style="font-family: ${theme.fontFamily}; fill: $textColor; font-size: 16px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
         </g>
         """.trimIndent()
     }
     private fun addLegend(d: Double, group: BarGroup): String {
-        val legendBgColor = if (group.display.useDark) "#374151" else "#f0f0f0"
-        val legendTextColor = if (group.display.useDark) "#e5e7eb" else "#666"
-        val legendBorderColor = if (group.display.useDark) "#4b5563" else "#ddd"
+        val legendBgColor = theme.canvas
+        val legendTextColor = theme.primaryText
+        val legendBorderColor = theme.accentColor
 
         val sb = StringBuilder()
         val distinct = group.legendLabel().distinct()
@@ -157,10 +164,10 @@ class VGroupBar {
         // Modern legend background with rounded corners and drop shadow
         sb.append("""
             <rect x="$legendX" y="10" width="$legendWidth" height="$legendHeight" rx="15" ry="15" 
-                  fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1" opacity="0.9"
+                  fill="$legendBgColor" fill-opacity="0.1" stroke="$legendBorderColor" stroke-width="1"
                   filter="url(#dropShadow)"/>
             <text x="${width/2}" y="30" text-anchor="middle" 
-                  style="font-family: Arial, sans-serif; fill: $legendTextColor; font-size: 16px; font-weight: bold;">Legend</text>
+                  style="font-family: ${theme.fontFamily}; fill: $legendTextColor; font-size: 16px; font-weight: bold;">Legend</text>
         """.trimIndent())
 
         // Create a more organized legend layout
@@ -175,12 +182,12 @@ class VGroupBar {
             val itemX = legendX + 30 + (col * itemWidth)
             val itemY = 50 + (row * 20)
 
-            val color = "url(#defColor_$index)"
+            val itemColor = "url(#defColor_$index)"
             sb.append("""
                 <g class="legend-item">
-                    <rect x="$itemX" y="$itemY" width="12" height="12" rx="2" ry="2" fill="$color"/>
+                    <rect x="$itemX" y="$itemY" width="12" height="12" rx="2" ry="2" fill="$itemColor"/>
                     <text x="${itemX + 18}" y="${itemY + 10}" 
-                          style="font-family: Arial, sans-serif; fill: $legendTextColor; font-size: 12px;">$item</text>
+                          style="font-family: ${theme.fontFamily}; fill: $legendTextColor; font-size: 12px;">$item</text>
                 </g>
             """.trimIndent())
         }
@@ -195,7 +202,7 @@ class VGroupBar {
     private fun makeDefs(gradients: String, barGroup: BarGroup): String {
         val defGrad = StringBuilder()
 
-        ChartColors.modernColors.forEachIndexed { idx, item->
+        ChartColors.Companion.modernColors.forEachIndexed { idx, item->
             // Create more vibrant gradients for each color
             val svgColor = item.createSimpleGradient(item.color, "defColor_$idx")
 

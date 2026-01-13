@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.line.LineChartImproved
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.util.UrlUtil
 import io.docops.docopsextensionssupport.web.DefaultCsvResponse

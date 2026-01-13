@@ -1,6 +1,9 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlinx.serialization.encodeToString
@@ -10,8 +13,11 @@ import java.io.File
 class BarGroupMaker(val useDark: Boolean) {
 
     private var fontColor = "#fcfcfc"
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
+
     fun makeBar(barGroup: BarGroup, isPdf: Boolean): String {
         barGroup.display.useDark = useDark
+        theme = ThemeFactory.getTheme(barGroup.display)
         if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
             val brutalistMaker = CyberBrutalistBarGroupMaker(useDark)
             return brutalistMaker.makeBar(barGroup).first
@@ -24,8 +30,6 @@ class BarGroupMaker(val useDark: Boolean) {
         sb.append(makeTitle(barGroup))
         sb.append(makeXLabel(barGroup))
         sb.append(makeYLabel(barGroup))
-        sb.append(makeXLine(barGroup))
-        sb.append(makeYLine(barGroup))
         var startX = 110.0
         val elements = StringBuilder()
         barGroup.groups.forEach { group ->
@@ -67,13 +71,13 @@ class BarGroupMaker(val useDark: Boolean) {
         val legendX = (group.calcWidth() - legendWidth) / 2 // Center horizontally
         val legendY = 540 // Position below the x-axis categories
 
-        // Use colors based on dark mode
-        val legendBgColor = if (group.display.useDark) "#374151" else "#f8f9fa"
-        val legendBorderColor = if (group.display.useDark) "#4b5563" else "#ddd"
-        val legendTextColor = if (group.display.useDark) "#f9fafb" else "#666"
+        // Use colors based on ThemeFactory
+        val legendBgColor = theme.canvas
+        val legendBorderColor = theme.accentColor
+        val legendTextColor = theme.primaryText
 
         // Create legend background
-        sb.append("""<rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" rx="10" ry="10" fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1"/>""")
+        sb.append("""<rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" rx="10" ry="10" fill="$legendBgColor" fill-opacity="0.1" stroke="$legendBorderColor" stroke-width="1"/>""")
 
         // Add legend items
         distinctLabels.forEachIndexed { index, label ->
@@ -90,7 +94,7 @@ class BarGroupMaker(val useDark: Boolean) {
             sb.append("""<rect x="${itemX}" y="${itemY}" width="15" height="15" rx="3" ry="3" fill="url(#$colorId)"/>""")
 
             // Add label text
-            sb.append("""<text x="${itemX + 25}" y="${itemY + 12}" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="$legendTextColor">$label</text>""")
+            sb.append("""<text x="${itemX + 25}" y="${itemY + 12}" font-family="${theme.fontFamily}" font-size="12" text-anchor="start" fill="$legendTextColor">$label</text>""")
         }
 
         return sb.toString()
@@ -109,7 +113,7 @@ class BarGroupMaker(val useDark: Boolean) {
 
             // Create glass effect bar with layered structure
             if(isPdf) {
-                val svgColor = ChartColors.getColorForIndex(index)
+                val svgColor = ChartColors.Companion.getColorForIndex(index)
                 color = svgColor.color
                 sb.append("""
                     <g class="glass-bar">
@@ -187,7 +191,7 @@ class BarGroupMaker(val useDark: Boolean) {
 
             if(series.value > 0) {
                 // Value label on top of bar with color based on dark mode
-                val valueLabelColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+                val valueLabelColor =  theme.primaryText
                 sb.append("""<text x="${counter + 20}" y="${500 - per - 8}" style="${barGroup.display.barFontValueStyle}; fill: $valueLabelColor; text-anchor: middle; font-weight: bold;">${barGroup.valueFmt(series.value)}</text>""")
             }
             counter += 40.5
@@ -200,7 +204,7 @@ class BarGroupMaker(val useDark: Boolean) {
     private fun makeSeriesLabel(x: Double, y: Double, label: String, barGroup: BarGroup): String {
         val sb = StringBuilder()
         // Use color based on dark mode for series labels
-        val seriesLabelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+        val seriesLabelColor = theme.secondaryText
         sb.append("""<text x="$x" y="$y" style="${barGroup.display.barSeriesFontStyle}; fill: $seriesLabelColor;" >""")
         val str = label.split(" ")
         str.forEachIndexed { index, s ->
@@ -221,8 +225,8 @@ class BarGroupMaker(val useDark: Boolean) {
         while(i < maxV ) {
             val y = 500 - barGroup.scaleUp(i)
             sb.append("""
-     <line x1="100" x2="108" y1="$y" y2="$y" stroke="${barGroup.display.lineColor}" stroke-width="3"/>
-    <text x="90" y="${y+3}" text-anchor="end" style="font-family: Arial, sans-serif; fill: ${if (barGroup.display.useDark) "#f9fafb" else "#666"}; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
+     <line x1="100" x2="108" y1="$y" y2="$y" stroke="${theme.accentColor}" stroke-width="3"/>
+    <text x="90" y="${y+3}" text-anchor="end" style="font-family: ${theme.fontFamily}; fill: ${theme.primaryText}; font-size:10px; text-anchor:end">${barGroup.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -244,8 +248,8 @@ class BarGroupMaker(val useDark: Boolean) {
     private fun makeTitle(barGroup: BarGroup): String {
         val center = barGroup.calcWidth()/2
         // Use #f0f0f0 for title background and #333 for title text like in bar.svg
-        val titleBgColor = if (barGroup.display.useDark) "#374151" else "#f0f0f0"
-        val titleTextColor = if (barGroup.display.useDark) "#f9fafb" else "#333"
+        val titleBgColor = theme.canvas
+        val titleTextColor = theme.primaryText
 
         // Estimate the width needed for the title text (font size is 24px)
         val estimatedTextWidth = estimateTextWidth(barGroup.title, 24)
@@ -261,19 +265,19 @@ class BarGroupMaker(val useDark: Boolean) {
 
         return """
             <g>
-                <rect x="${center - adjustedWidth/2}" y="10" width="$adjustedWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.7"/>
-                <text x="$center" y="38" style="font-family: Arial, sans-serif; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold; -webkit-filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2)); filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2));">${barGroup.title}</text>
+                <rect x="${center - adjustedWidth/2}" y="10" width="$adjustedWidth" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.1" stroke="${theme.accentColor}" stroke-width="1"/>
+                <text x="$center" y="38" style="font-family: ${theme.fontFamily}; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold;">${barGroup.title}</text>
             </g>
         """.trimIndent()
     }
     private fun makeXLabel(barGroup: BarGroup): String {
         val center = barGroup.calcWidth()/2
         // Use #666 for axis labels like in bar.svg
-        val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+        val labelColor = theme.secondaryText
 
         return """
             <text x="$center" y="610" 
-                  style="font-family: Arial, sans-serif; fill: $labelColor; 
+                  style="font-family: ${theme.fontFamily}; fill: $labelColor; 
                   text-anchor: middle; font-size: 14px; font-weight: bold;">
                 ${barGroup.xLabel}
             </text>
@@ -281,12 +285,11 @@ class BarGroupMaker(val useDark: Boolean) {
     }
 
     private fun makeYLabel(barGroup: BarGroup): String {
-        // Use #666 for axis labels like in bar.svg
-        val labelColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+        val labelColor = theme.secondaryText
 
         return """
             <text x="250" y="-40" 
-                  style="font-family: Arial, sans-serif; fill: $labelColor; 
+                  style="font-family: ${theme.fontFamily}; fill: $labelColor; 
                   text-anchor: middle; font-size: 14px; font-weight: bold;" 
                   transform="rotate(90)">
                 ${barGroup.yLabel}
@@ -295,11 +298,11 @@ class BarGroupMaker(val useDark: Boolean) {
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
-        // Increase the height to accommodate labels better and legend
-        val svgHeight = 650 // Increased from 600 to 650 to accommodate legend
+        val svgHeight = 650
         return """
             <?xml version="1.0" encoding="UTF-8"?>
             <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
+            ${theme.fontImport}
         """.trimIndent()
     }
 
@@ -359,7 +362,7 @@ class BarGroupMaker(val useDark: Boolean) {
         // Create gradients matching bar.svg format
         for(i in 0 until sz) {
 
-            val svgColor = ChartColors.getColorForIndex(i)
+            val svgColor = ChartColors.Companion.getColorForIndex(i)
             defGrad.append("""
                 <linearGradient id="svgGradientColor_$i" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="${svgColor.lighter()}"/>
@@ -495,10 +498,9 @@ class BarGroupMaker(val useDark: Boolean) {
         val maxData = barGroup.maxData() + 100
 
         // Define colors based on dark mode, matching bar.svg aesthetics
-        val gridLineColor = if (barGroup.display.useDark) "#374151" else "#eee"
-        val axisColor = if (barGroup.display.useDark) "#9ca3af" else "#ccc"
-        val backgroundColor = if (barGroup.display.useDark) "#1f2937" else "#f8f9fa"
-        val textColor = if (barGroup.display.useDark) "#f9fafb" else "#666"
+        val gridLineColor = theme.accentColor
+        val axisColor = theme.accentColor
+        val backgroundColor = theme.canvas
 
         // Create a cleaner grid with fewer lines
         val yGap = maxHeight / 5 // Reduced number of horizontal grid lines
@@ -506,14 +508,13 @@ class BarGroupMaker(val useDark: Boolean) {
 
         val elements = StringBuilder()
 
-        // Use light background with rounded corners like in bar.svg
+        // Use theme canvas for background
         elements.append("""<rect width='100%' height='100%' fill='${backgroundColor}' rx="15" ry="15"/>""")
 
-        // Add horizontal grid lines (reduced number for cleaner look)
+        // Add horizontal grid lines
         for (i in 1..4) {
-            elements.append("""<line x1="90" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="${gridLineColor}" stroke-width="1" stroke-dasharray="5,5"/>""")
+            elements.append("""<line x1="90" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="${gridLineColor}" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/>""")
         }
-
         // Add vertical grid lines for each data point
         var num = xGap
         barGroup.maxGroup().series.forEach {

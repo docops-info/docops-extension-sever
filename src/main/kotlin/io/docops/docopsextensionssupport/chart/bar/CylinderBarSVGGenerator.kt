@@ -1,8 +1,9 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.util.BackgroundHelper
 import kotlin.uuid.ExperimentalUuidApi
 
 
@@ -10,6 +11,7 @@ class CylinderBarMaker {
 
     @OptIn(ExperimentalUuidApi::class)
     fun makeVerticalCylinderBar(bar: Bar, isPDf: Boolean): String {
+        val theme = ThemeFactory.getTheme(bar.display)
         val width = 800.0
         val height = 600.0
         val leftMargin = 80.0
@@ -49,21 +51,22 @@ class CylinderBarMaker {
 
         // Add defs for gradients, filters, and effects
         sb.append(generateDefs(series, bar.display))
+        sb.append(theme.fontImport)
 
         // Background
-        val textColor = if (bar.display.useDark) "#e0e0e0" else "#111111"
-        val bg = BackgroundHelper.getBackGroundPath(useDark = bar.display.useDark, bar.display.id, width = width.toFloat(), height=height.toFloat())
-        sb.append(bg)
+        val textColor = theme.primaryText
+        sb.append("""<rect width="$width" height="$height" fill="${theme.canvas}"/>""")
         sb.append("\n")
 
         // Title
-        sb.append("""<text x="${width / 2}" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="$textColor">${bar.title}</text>""")
+        sb.append("""<text x="${width / 2}" y="50" text-anchor="middle" font-family="${theme.fontFamily}" font-size="24" font-weight="bold" fill="$textColor">${bar.title}</text>""")
         sb.append("\n")
+
 
         // Y-axis label
         bar.yLabel?.let {
             if (it.isNotEmpty()) {
-                sb.append("""<text x="20" y="${height / 2}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" fill="$textColor" transform="rotate(-90 20 ${height / 2})">${bar.yLabel}</text>""")
+                sb.append("""<text x="20" y="${height / 2}" font-family="${theme.fontFamily}" text-anchor="middle" font-size="14" fill="$textColor" transform="rotate(-90 20 ${height / 2})">${bar.yLabel}</text>""")
                 sb.append("\n")
             }
         }
@@ -71,7 +74,7 @@ class CylinderBarMaker {
         // X-axis label
         bar.xLabel?.let {
             if (it.isNotEmpty()) {
-                sb.append("""<text x="${width / 2}" y="${height - 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" fill="$textColor">${bar.xLabel}</text>""")
+                sb.append("""<text x="${width / 2}" y="${height - 20}" font-family="${theme.fontFamily}" text-anchor="middle" font-size="14" fill="$textColor">${bar.xLabel}</text>""")
                 sb.append("\n")
             }
         }
@@ -89,11 +92,11 @@ class CylinderBarMaker {
         for (i in 0..numYTicks) {
             val y = yAxisBottom - (chartHeight * i / numYTicks)
             val value = (maxValue * i / numYTicks)
-            val gridColor = if (bar.display.useDark) "#444444" else "#e0e0e0"
+            val gridColor = theme.accentColor
 
-            sb.append("""<line x1="$yAxisX" y1="$y" x2="${width - rightMargin}" y2="$y" stroke="$gridColor" stroke-width="1" opacity="0.5"/>""")
+            sb.append("""<line x1="$yAxisX" y1="$y" x2="${width - rightMargin}" y2="$y" stroke="$gridColor" stroke-width="1" opacity="0.3"/>""")
             sb.append("\n")
-            sb.append("""<text x="${yAxisX - 10}" y="${y + 5}" font-family="Arial, sans-serif" text-anchor="end" font-size="12" fill="$textColor">${bar.valueFmt(value)}</text>""")
+            sb.append("""<text x="${yAxisX - 10}" y="${y + 5}" font-family="${theme.fontFamily}" text-anchor="end" font-size="12" fill="$textColor">${bar.valueFmt(value)}</text>""")
             sb.append("\n")
         }
 
@@ -108,7 +111,7 @@ class CylinderBarMaker {
             val y = yAxisBottom - barHeight
 
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index).color
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.Companion.getColorForIndex(index).color
             val gradientId = "cylinderGradient${index}_${bar.display.id}"
 
             sb.append(generateCylinderBar(
@@ -125,7 +128,7 @@ class CylinderBarMaker {
                 yAxisBottom = yAxisBottom,
                 textColor = textColor,
                 useDark = bar.display.useDark,
-                id = bar.display.id, isPDf
+                id = bar.display.id, isPDf, fontFamily = theme.fontFamily
             ))
         }
 
@@ -138,11 +141,10 @@ class CylinderBarMaker {
         val sb = StringBuilder()
         sb.append("<defs>\n")
 
-        sb.append(BackgroundHelper.getBackgroundGradient(display.useDark, display.id))
         // Generate gradients for each bar using modern colors
         series.forEachIndexed { index, seriesItem ->
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.getColorForIndex(index).color
+            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.Companion.getColorForIndex(index).color
             val gradientId = "cylinderGradient${index}_${display.id}"
 
             sb.append(generateRadialGradient(gradientId, color))
@@ -229,7 +231,8 @@ class CylinderBarMaker {
         yAxisBottom: Double,
         textColor: String,
         useDark: Boolean, id: String,
-        isPDf: Boolean
+        isPDf: Boolean,
+        fontFamily: String
     ): String {
         val sb = StringBuilder()
         val cx = x + width / 2
@@ -280,7 +283,7 @@ class CylinderBarMaker {
         sb.append("</g>\n")
 
         // Label below the bar
-        sb.append("""<text x="$cx" y="${yAxisBottom + 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="12" font-weight="bold" fill="$textColor">$label</text>""")
+        sb.append("""<text x="$cx" y="${yAxisBottom + 20}" font-family="$fontFamily" text-anchor="middle" font-size="12" font-weight="bold" fill="$textColor">$label</text>""")
         sb.append("\n")
 
         var opacity = 0.0
@@ -288,8 +291,8 @@ class CylinderBarMaker {
             opacity = 1.0
         }
         // Value above the bar
-        val valueColor = if (useDark) "#ffffff" else "#111111"
-        sb.append("""<text x="$cx" y="${y - 20}" font-family="Arial, sans-serif" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="$opacity">${value}""")
+        val valueColor = textColor
+        sb.append("""<text x="$cx" y="${y - 20}" font-family="$fontFamily" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="$opacity">${value}""")
         sb.append("""<animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.5s" fill="freeze"/>""")
         sb.append("""</text>""")
         sb.append("\n")

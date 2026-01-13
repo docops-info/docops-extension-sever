@@ -1,9 +1,13 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.util.BackgroundHelper
+import java.io.File
 import kotlin.math.min
 
 class VBarMaker {
@@ -16,8 +20,10 @@ class VBarMaker {
     private val yAxisEnd = 380  // Increased to provide more space for x-axis labels
     private val barWidth = 60
     private val barSpacing = 100 // Center-to-center spacing between bars
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
     fun makeVerticalBar(bar: Bar, isPDf: Boolean): String {
+        theme = ThemeFactory.getTheme(bar.display)
         bar.sorted()
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
@@ -40,9 +46,9 @@ class VBarMaker {
         // Calculate the maximum value for scaling
         val maxValue = bar.series.maxOf { it.value }
 
-        // Define text colors based on dark mode
-        val labelColor = if (bar.display.useDark) "#e5e7eb" else "#666"
-        val valueColor = if (bar.display.useDark) "#f9fafb" else "#333"
+        // Define text colors based on theme
+        val labelColor = theme.secondaryText
+        val valueColor = theme.primaryText
 
         // Calculate available width for bars
         val availableWidth = xAxisEnd - xAxisStart
@@ -66,7 +72,7 @@ class VBarMaker {
             val gradientId = "gradient${index + 1}"
 
             // Add the gradient definition
-            val svgColor = ChartColors.getColorForIndex(index)
+            val svgColor = ChartColors.Companion.getColorForIndex(index)
             sb.append("""
                 <defs>
                     <linearGradient id="$gradientId" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -80,59 +86,59 @@ class VBarMaker {
             if(!isPDf) {
                 sb.append(
                     """
-                <g class="glass-bar">
-                    <!-- Base rectangle with gradient -->
-                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
-                          fill="url(#$gradientId)"
-                          filter="url(#glassDropShadow)"
-                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
-                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
-                    </rect>
+                    <g class="glass-bar">
+                        <!-- Base rectangle with gradient -->
+                        <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
+                              fill="url(#$gradientId)"
+                              filter="url(#glassDropShadow)"
+                              stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                            <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                        </rect>
 
-                    <!-- Glass overlay with transparency -->
-                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6"
-                          fill="url(#glassOverlay)"
-                          filter="url(#glassBlur)">
-                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
-                    </rect>
-                    <!-- Top highlight for shine -->
-                    <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${
+                        <!-- Glass overlay with transparency -->
+                        <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6"
+                              fill="url(#glassOverlay)"
+                              filter="url(#glassBlur)">
+                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                            <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                        </rect>
+                        <!-- Top highlight for shine -->
+                        <rect x="${barX + 3}" y="${barY + 3}" width="${barWidth - 6}" height="${
                         min(
                             barHeight / 4,
                             20.0
                         )
                     }" rx="4" ry="4"
-                          fill="url(#glassHighlight)">
-                        <animate attributeName="y" from="${yAxisEnd - 3}" to="${barY + 3}" dur="1s" fill="freeze"/>
-                    </rect>
-                </g>
+                              fill="url(#glassHighlight)">
+                            <animate attributeName="y" from="${yAxisEnd - 3}" to="${barY + 3}" dur="1s" fill="freeze"/>
+                        </rect>
+                    </g>
 
-                <!-- Create wrapped label text -->
-                <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
-                    ${createWrappedLabel(series.label, barWidth)}
-                </text>
-                <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
-            """.trimIndent()
+                    <!-- Create wrapped label text -->
+                    <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="${theme.fontFamily}" font-size="12" text-anchor="middle" fill="$labelColor">
+                        ${createWrappedLabel(series.label, barWidth)}
+                    </text>
+                    <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="${theme.fontFamily}" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
+                """.trimIndent()
                 )
             } else {
                 sb.append("""
-                    <g class="glass-bar">
-                    <!-- Base rectangle with gradient -->
-                    <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
-                          fill="${svgColor.lighter()}"
-                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
-                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                        <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
-                    </rect>
-                    </g>
-                    <!-- Create wrapped label text -->
-                <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="$labelColor">
-                    ${createWrappedLabel(series.label, barWidth)}
-                </text>
-                <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
-                """.trimIndent())
+                        <g class="glass-bar">
+                        <!-- Base rectangle with gradient -->
+                        <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
+                              fill="${svgColor.lighter()}"
+                              stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                            <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
+                        </rect>
+                        </g>
+                        <!-- Create wrapped label text -->
+                    <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="${theme.fontFamily}" font-size="12" text-anchor="middle" fill="$labelColor">
+                        ${createWrappedLabel(series.label, barWidth)}
+                    </text>
+                    <text x="${barX + barWidth / 2}" y="${barY - 10}" font-family="${theme.fontFamily}" font-size="12" font-weight="bold" text-anchor="middle" fill="$valueColor">${series.value.toInt()}</text>
+                    """.trimIndent())
             }
 
         }
@@ -140,8 +146,8 @@ class VBarMaker {
         // Add X-axis label
         if (bar.xLabel != null && bar.xLabel.isNotEmpty()) {
             sb.append("""
-                <text x="${(xAxisStart + xAxisEnd) / 2}" y="${yAxisEnd + 50}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="$labelColor">${bar.xLabel.escapeXml()}</text>
-            """.trimIndent())
+                    <text x="${(xAxisStart + xAxisEnd) / 2}" y="${yAxisEnd + 50}" font-family="${theme.fontFamily}" font-size="14" font-weight="bold" text-anchor="middle" fill="$labelColor">${bar.xLabel.escapeXml()}</text>
+                """.trimIndent())
         }
 
         return sb.toString()
@@ -152,8 +158,8 @@ class VBarMaker {
     private fun addGrid(bar: Bar): String {
         val sb = StringBuilder()
 
-        // Define grid line color based on dark mode
-        val gridLineColor = if (bar.display.useDark) "#374151" else "#eee"
+        // Define grid line color based on theme
+        val gridLineColor = theme.accentColor
 
         // Calculate y-axis tick positions
         val yAxisHeight = yAxisEnd - yAxisStart
@@ -164,29 +170,29 @@ class VBarMaker {
         for (i in 0 until tickCount) {
             val yPos = yAxisEnd - (i * tickSpacing)
             sb.append("""
-                <line x1="$xAxisStart" y1="$yPos" x2="$xAxisEnd" y2="$yPos" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>
-            """.trimIndent())
+                    <line x1="$xAxisStart" y1="$yPos" x2="$xAxisEnd" y2="$yPos" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/>
+                """.trimIndent())
         }
 
         return sb.toString()
     }
 
     private fun addAxes(bar: Bar): String {
-        val axisColor = if (bar.display.useDark) "#9ca3af" else "#ccc"
+        val axisColor = theme.accentColor
         return """
-            <!-- Y-axis -->
-            <line x1="$xAxisStart" y1="$yAxisStart" x2="$xAxisStart" y2="$yAxisEnd" stroke="$axisColor" stroke-width="2"/>
+                <!-- Y-axis -->
+                <line x1="$xAxisStart" y1="$yAxisStart" x2="$xAxisStart" y2="$yAxisEnd" stroke="$axisColor" stroke-width="2" stroke-opacity="0.5"/>
 
-            <!-- X-axis -->
-            <line x1="$xAxisStart" y1="$yAxisEnd" x2="$xAxisEnd" y2="$yAxisEnd" stroke="$axisColor" stroke-width="2"/>
-        """.trimIndent()
+                <!-- X-axis -->
+                <line x1="$xAxisStart" y1="$yAxisEnd" x2="$xAxisEnd" y2="$yAxisEnd" stroke="$axisColor" stroke-width="2" stroke-opacity="0.5"/>
+            """.trimIndent()
     }
 
     private fun addAxisLabels(bar: Bar): String {
         val sb = StringBuilder()
 
-        // Define text color based on dark mode
-        val textColor = if (bar.display.useDark) "#e5e7eb" else "#666"
+        // Define text color based on theme
+        val textColor = theme.secondaryText
 
         // Calculate y-axis tick positions
         val yAxisHeight = yAxisEnd - yAxisStart
@@ -198,30 +204,31 @@ class VBarMaker {
             val yPos = yAxisEnd - (i * tickSpacing)
             val value = (i * 25) // 0, 25, 50, 75, 100
             sb.append("""
-                <text x="${xAxisStart - 15}" y="${yPos + 4}" font-family="Arial, sans-serif" font-size="12" text-anchor="end" fill="$textColor">$value</text>
-                <line x1="${xAxisStart - 5}" y1="$yPos" x2="$xAxisStart" y2="$yPos" stroke="$textColor" stroke-width="1"/>
-            """.trimIndent())
+                    <text x="${xAxisStart - 15}" y="${yPos + 4}" font-family="${theme.fontFamily}" font-size="12" text-anchor="end" fill="$textColor">$value</text>
+                    <line x1="${xAxisStart - 5}" y1="$yPos" x2="$xAxisStart" y2="$yPos" stroke="$textColor" stroke-width="1" stroke-opacity="0.6"/>
+                """.trimIndent())
         }
 
         // Add Y-axis label
         if (bar.yLabel != null && bar.yLabel.isNotEmpty()) {
             sb.append("""
-                <text x="30" y="${(yAxisStart + yAxisEnd) / 2}" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="$textColor" transform="rotate(-90, 30, ${(yAxisStart + yAxisEnd) / 2})">${bar.yLabel.escapeXml()}</text>
-            """.trimIndent())
+                    <text x="30" y="${(yAxisStart + yAxisEnd) / 2}" font-family="${theme.fontFamily}" font-size="14" font-weight="bold" text-anchor="middle" fill="$textColor" transform="rotate(-90, 30, ${(yAxisStart + yAxisEnd) / 2})">${bar.yLabel.escapeXml()}</text>
+                """.trimIndent())
         }
 
         return sb.toString()
     }
 
     private fun makeBackground(bar: Bar): String {
-        return BackgroundHelper.getBackground(bar.display.useDark, bar.display.id)
+        return """<rect width="100%" height="100%" fill="${theme.canvas}" rx="15" ry="15"/>"""
     }
 
     private fun head(bar: Bar): String {
         return """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width/DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" id="id_${bar.display.id}">
-        """.trimIndent()
+                <?xml version="1.0" encoding="UTF-8"?>
+                <svg width="${width/DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" id="id_${bar.display.id}">
+                ${theme.fontImport}
+            """.trimIndent()
     }
 
     private fun tail(): String {
@@ -229,11 +236,11 @@ class VBarMaker {
     }
 
     private fun addTitle(bar: Bar): String {
-        val titleColor = if (bar.display.useDark) "#f9fafb" else "#333"
+        val titleColor = theme.primaryText
         return """
-            <!-- Title -->
-            <text x="${width/2}" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="$titleColor">${bar.title.escapeXml()}</text>
-        """.trimIndent()
+                <!-- Title -->
+                <text x="${width/2}" y="40" font-family="${theme.fontFamily}" font-size="24" font-weight="bold" text-anchor="middle" fill="$titleColor">${bar.title.escapeXml()}</text>
+            """.trimIndent()
     }
 
     private fun addLegend(bar: Bar): String {
@@ -358,13 +365,16 @@ class VBarMaker {
 
                 <style>
                    #id_${bar.display.id} .glass-bar {
-                        transition: all 0.3s ease;
-                    }
-                    #id_${bar.display.id} .glass-bar:hover {
-                        filter: url(#glow);
-                        transform: scale(1.02);
-                        cursor: pointer;
-                    }
+                            transition: all 0.3s ease;
+                        }
+                        #id_${bar.display.id} .glass-bar:hover {
+                            filter: url(#glow);
+                            transform: scale(1.02);
+                            cursor: pointer;
+                        }
+                        #id_${bar.display.id} text {
+                            font-family: ${theme.fontFamily};
+                        }
                 </style>
             </defs>
         """.trimIndent()
@@ -393,7 +403,7 @@ fun main() {
     val svg = VBarMaker().makeVerticalBar(bar, false)
 
     // Save the chart to a file
-    val outfile = java.io.File("gen/vertical_bar_chart.svg")
+    val outfile = File("gen/vertical_bar_chart.svg")
     outfile.writeBytes(svg.toByteArray())
 
     println("Vertical bar chart saved to ${outfile.absolutePath}")
@@ -424,7 +434,7 @@ fun main() {
     val svgWithMoreBars = VBarMaker().makeVerticalBar(barWithMoreSeries, false)
 
     // Save the chart to a file
-    val outfileWithMoreBars = java.io.File("gen/vertical_bar_chart_more_bars.svg")
+    val outfileWithMoreBars = File("gen/vertical_bar_chart_more_bars.svg")
     outfileWithMoreBars.writeBytes(svgWithMoreBars.toByteArray())
 
     println("Vertical bar chart with more bars saved to ${outfileWithMoreBars.absolutePath}")

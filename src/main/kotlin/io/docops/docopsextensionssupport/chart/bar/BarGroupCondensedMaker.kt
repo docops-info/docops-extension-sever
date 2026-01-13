@@ -1,13 +1,14 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import java.util.UUID
-import kotlin.collections.get
 
 
 class BarGroupCondensedMaker {
@@ -19,9 +20,9 @@ class BarGroupCondensedMaker {
     private var TOTAL_BAR_HEIGHT = 400f
 
     private var fontColor = "#fcfcfc"
-    var theme = BarTheme()
+    var theme: DocOpsTheme = ThemeFactory.getTheme(false)
     fun makeBar(barGroup: BarGroup): String {
-        theme = getTheme(barGroup.display.useDark)
+        theme = ThemeFactory.getTheme(barGroup.display)
         fontColor = determineTextColor(barGroup.display.baseColor)
         val sb = StringBuilder()
         val h = determineHeight(barGroup)
@@ -31,8 +32,8 @@ class BarGroupCondensedMaker {
         height = h
         sb.append(makeDefs(barGroup))
         sb.append("<g transform='scale(${barGroup.display.scale})'>")
-        sb.append("""<rect width="100%" height="100%" fill="${theme.background}"/>""")
-        sb.append("""<text x="${width/2}" text-anchor="middle" y="16" style="font-size: 16px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.title}</text>""")
+        sb.append("""<rect width="100%" height="100%" fill="${theme.canvas}"/>""")
+        sb.append("""<text x="${width/2}" text-anchor="middle" y="16" style="font-size: 16px; fill: ${theme.primaryText}; font-family: Arial, Helvetica, sans-serif;">${barGroup.title}</text>""")
         sb.append(makeColumnHeader(barGroup))
         sb.append(addTickBars(h, w, barGroup))
         sb.append("""<g transform="translate(100,20)">""")
@@ -60,7 +61,7 @@ class BarGroupCondensedMaker {
         var startY = 10
         val bars = (added.series.size * 10) /2 + 14
         sb.append("""
-            <text x="0" y="$bars" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:8px;">${added.label}</text>
+            <text x="0" y="$bars" text-anchor="end" style="fill: ${theme.primaryText}; font-family: Arial; Helvetica; sans-serif; font-size:8px;">${added.label}</text>
         """.trimIndent())
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
@@ -71,7 +72,7 @@ class BarGroupCondensedMaker {
             sb.append("""
            <g transform="translate(10, $startY)">
                 <path d="$path" fill="$color" class="bar shadowed"/>
-                <text x="${per+5}" y="8" class="bar-label" style="font-size: 8px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(series.value)}</text>
+                <text x="${per+5}" y="8" class="bar-label" style="font-size: 8px; fill: ${theme.primaryText}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(series.value)}</text>
             </g>
             """.trimIndent())
             startY+=10
@@ -106,7 +107,7 @@ class BarGroupCondensedMaker {
         val labels = barGroup.uniqueLabels()
         val sz = labels.size
         for(i in 0 until sz) {
-            val color = ChartColors.modernColors[i]
+            val color = ChartColors.Companion.modernColors[i]
             defs.append(color.createSimpleGradient(color.original(), labels[i].replace(" ", "")))
         }
 
@@ -145,20 +146,20 @@ class BarGroupCondensedMaker {
         val sb = StringBuilder()
 
         // Main vertical axis with slightly thicker stroke
-        sb.append("""<line x1="109" x2="109" y1="30" y2="$bottom" class="light-shadow" stroke-width="2" stroke="${theme.lineColor}" stroke-opacity="0.8" />""")
+        sb.append("""<line x1="109" x2="109" y1="30" y2="$bottom" class="light-shadow" stroke-width="2" stroke="${theme.accentColor}" stroke-opacity="0.8" />""")
 
         // Tick marks with alternating opacity for a more elegant grid
         for(i in 1..8 step 1) {  // Changed from 9 to 8 ticks
             val spot = barGroup.scaleUp(tickBar * i) + 108
             val opacity = if (i % 2 == 0) "0.4" else "0.6"  // Alternating opacity
             sb.append("""
-                <line x1="$spot" x2="$spot" y1="30" y2="$bottom" class="light-shadow" stroke-width="1" stroke="${theme.lineColor}" stroke-opacity="$opacity" stroke-dasharray="${if (i % 4 == 0) "none" else "1,1"}" />
-                <text x="$spot" y="${bottom+15}" text-anchor="middle" style="font-size: 10px; fill: ${theme.titleColor}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(tickBar*i)}</text>
+                <line x1="$spot" x2="$spot" y1="30" y2="$bottom" class="light-shadow" stroke-width="1" stroke="${theme.accentColor}" stroke-opacity="$opacity" stroke-dasharray="${if (i % 4 == 0) "none" else "1,1"}" />
+                <text x="$spot" y="${bottom+15}" text-anchor="middle" style="font-size: 10px; fill: ${theme.primaryText}; font-family: Arial, Helvetica, sans-serif;">${barGroup.valueFmt(tickBar*i)}</text>
             """.trimIndent())
         }
 
         // Bottom horizontal axis
-        sb.append("""<line x1="0" x2="$width" y1="$bottom" y2="$bottom" class="light-shadow" stroke-width="1.5" stroke="${theme.lineColor}" stroke-opacity="0.8" />""")
+        sb.append("""<line x1="0" x2="$width" y1="$bottom" y2="$bottom" class="light-shadow" stroke-width="1.5" stroke="${theme.accentColor}" stroke-opacity="0.8" />""")
         return sb.toString()
     }
     private fun determineHeight(barGroup: BarGroup): Float {
@@ -187,7 +188,7 @@ class BarGroupCondensedMaker {
         return width
     }
     private fun addLegend(d: Float, group: BarGroup): String {
-        val fColor = theme.titleColor
+        val fColor = theme.primaryText
         val sb = StringBuilder()
         val distinct = group.uniqueLabels()
 
@@ -210,7 +211,7 @@ class BarGroupCondensedMaker {
         sb.append("<g transform='translate(0, $d)'>")
 
         // Add a subtle background for the legend with adjusted width and height
-        sb.append("""<rect x="$legendX" y="2" width="$legendWidth" height="$legendHeight" rx="5" ry="5" fill="${theme.lineColor}" fill-opacity="0.05" stroke="${theme.lineColor}" stroke-opacity="0.2" stroke-width="1" />""")
+        sb.append("""<rect x="$legendX" y="2" width="$legendWidth" height="$legendHeight" rx="5" ry="5" fill="${theme.accentColor}" fill-opacity="0.05" stroke="${theme.accentColor}" stroke-opacity="0.2" stroke-width="1" />""")
 
         // Legend title with improved styling - centered within the calculated width
         sb.append("""<text x="${width/2}" y="16" text-anchor="middle" style="font-family: Arial,Helvetica, sans-serif; fill: $fColor; font-size:12px; font-weight: 500;">Legend</text> """)
@@ -336,11 +337,11 @@ class BarGroupCondensedMaker {
     private fun makeColumnHeader(barGroup: BarGroup) : String {
         return """
      <g>
-        <rect x="20" y="18" width="85" height="16" rx="3" ry="3" fill="${theme.lineColor}" fill-opacity="0.1" />
-        <text x="107" y="28" text-anchor="end" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
+        <rect x="20" y="18" width="85" height="16" rx="3" ry="3" fill="${theme.accentColor}" fill-opacity="0.1" />
+        <text x="107" y="28" text-anchor="end" style="fill: ${theme.primaryText}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.xLabel?.escapeXml()}</text>
 
-        <rect x="112" y="18" width="120" height="16" rx="3" ry="3" fill="${theme.lineColor}" fill-opacity="0.1" />
-        <text x="115" y="28" text-anchor="start" style="fill: ${theme.textColor}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
+        <rect x="112" y="18" width="120" height="16" rx="3" ry="3" fill="${theme.accentColor}" fill-opacity="0.1" />
+        <text x="115" y="28" text-anchor="start" style="fill: ${theme.primaryText}; font-family: Arial; Helvetica; sans-serif; font-size:12px; font-weight: bold;">${barGroup.yLabel?.escapeXml()}</text>
     </g>
         """.trimIndent()
     }

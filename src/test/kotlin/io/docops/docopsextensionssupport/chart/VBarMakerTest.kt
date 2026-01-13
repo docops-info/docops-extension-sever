@@ -1,5 +1,9 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.bar.Bar
+import io.docops.docopsextensionssupport.chart.bar.BarDisplay
+import io.docops.docopsextensionssupport.chart.bar.Series
+import io.docops.docopsextensionssupport.chart.bar.VBarMaker
 import org.junit.jupiter.api.Test
 import java.io.File
 

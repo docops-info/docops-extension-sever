@@ -1,5 +1,7 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.NiceScale
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -28,10 +30,11 @@ class BarGroupDisplay(
     val lineColor: String = "#FFBB5C",
     val vBar: Boolean = false,
     val condensed: Boolean = false,
-    var useDark: Boolean = false,
+    override var useDark: Boolean = false,
+    override val visualVersion: Int = 1,
     val theme: String = "classic",
     val scale: Double = 1.0
-)
+) : VisualDisplay
 
 @Serializable
 class Group(val label: String, val series: MutableList<Series>)

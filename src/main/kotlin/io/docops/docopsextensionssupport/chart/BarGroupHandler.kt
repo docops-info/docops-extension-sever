@@ -1,5 +1,8 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.bar.BarChartImproved
+import io.docops.docopsextensionssupport.chart.bar.BarGroup
+import io.docops.docopsextensionssupport.chart.bar.BarGroupMaker
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext

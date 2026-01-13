@@ -1,18 +1,16 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlin.math.*
 
 class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
 
-    private val titleFont = "Syne, sans-serif"
-    private val monoFont = "JetBrains Mono, monospace"
-    private val bgColorStart = "#1e1b4b"
-    private val bgColorEnd = "#0f172a"
-    private val textColor = "#f8fafc"
-    private val subTextColor = "#94a3b8"
-    private val accentColor = "#818cf8"
-    private val secondaryColor = "#fbbf24"
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
+
+
 
     private fun getColors(): Map<String, String> {
         return if (useDark) {
@@ -34,25 +32,26 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         }
     }
     fun makeBar(barGroup: BarGroup): Pair<String, CsvResponse> {
+        theme = ThemeFactory.getTheme(barGroup.display)
         val colors = getColors()
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
-        sb.append(makeDefs(barGroup, colors))
+        sb.append(makeDefs(barGroup))
 
         // Background - reduced height to 650
         sb.append("""<rect id="bg_${barGroup.id}" x="0" y="0" width="${barGroup.calcWidth()}" height="650" fill="url(#group_bg)" rx="16" />""")
 
-        sb.append(makeTitle(barGroup, colors))
-        sb.append(makeXLabel(barGroup, colors))
-        sb.append(makeYLabel(barGroup, colors))
+        sb.append(makeTitle(barGroup))
+        sb.append(makeXLabel(barGroup))
+        sb.append(makeYLabel(barGroup))
         
         // Grid lines
-        sb.append(addGrid(barGroup, colors))
-        
+        sb.append(addGrid(barGroup))
+
         var startX = 110.0
         val elements = StringBuilder()
         barGroup.groups.forEachIndexed { index, group ->
-            val added = addGroup(barGroup, group, startX, index, colors)
+            val added = addGroup(barGroup, group, startX, index)
             startX += group.series.size * 50.0 + 30.0 // Adjusted for plate padding
             elements.append(added)
         }
@@ -61,8 +60,8 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         sb.append(elements.toString())
         sb.append("</g>")
         
-        sb.append(addTicks(barGroup, colors))
-        sb.append(addLegend(barGroup, colors))
+        sb.append(addTicks(barGroup))
+        sb.append(addLegend(barGroup))
         sb.append("</svg>")
         
         return Pair(sb.toString(), barGroup.toCsv())
@@ -70,9 +69,10 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
 
     private fun makeHead(barGroup: BarGroup): String {
         return """<svg xmlns="http://www.w3.org/2000/svg" width="${barGroup.calcWidth()}" height="650" viewBox="0 0 ${barGroup.calcWidth()} 650">
+            ${theme.fontImport}
             <style>
-                .title-text { font-family: $titleFont; font-weight: 800; text-transform: uppercase; }
-                .mono-text { font-family: $monoFont; }
+                .title-text { font-family: ${theme.fontFamily}; font-weight: 800; text-transform: uppercase; }
+                .mono-text { font-family: 'JetBrains Mono', monospace; }
                 .group-plate { opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
                 .bar-anim { transform-origin: bottom; animation: growBar 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -81,7 +81,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         """.trimIndent()
     }
 
-    private fun makeDefs(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun makeDefs(barGroup: BarGroup): String {
         val sb = StringBuilder()
         val plateOpacity = if (useDark) "0.05" else "0.15"
         val plateColor = if (useDark) "#ffffff" else "#000000"
@@ -89,8 +89,8 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         sb.append("<defs>")
         sb.append("""
                 <radialGradient id="group_bg" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                    <stop offset="0%" style="stop-color:${colors["bgStart"]};stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:${colors["bgEnd"]};stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:${theme.canvas};stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:${darkenColor(theme.canvas, 0.2)};stop-opacity:1" />
                 </radialGradient>
                 <linearGradient id="plate_grad" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:$plateColor;stop-opacity:$plateOpacity" />
@@ -104,7 +104,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         
         // Group gradients based on ChartColors
         barGroup.legendLabel().distinct().forEachIndexed { index, _ ->
-            val color = ChartColors.getColorForIndex(index).color
+            val color = ChartColors.Companion.getColorForIndex(index).color
             sb.append("""
                 <linearGradient id="brut_grad_$index" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:$color;" />
@@ -116,38 +116,38 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         return sb.toString()
     }
 
-    private fun makeTitle(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun makeTitle(barGroup: BarGroup): String {
         return """
-                <text x="40" y="60" class="title-text" font-size="24" fill="${colors["text"]}">${barGroup.title}</text>
-                <text x="40" y="90" class="mono-text" font-size="12" fill="${colors["subText"]}" opacity="0.8">Comparative Resource Metrics // v2.4</text>
+                <text x="40" y="60" class="title-text" font-size="24" fill="${theme.primaryText}">${barGroup.title}</text>
+                <text x="40" y="90" class="mono-text" font-size="12" fill="${theme.secondaryText}" opacity="0.8">Comparative Resource Metrics // v2.4</text>
             """.trimIndent()
     }
 
-    private fun makeXLabel(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun makeXLabel(barGroup: BarGroup): String {
         val x = barGroup.calcWidth() / 2
         val y = 630 // Shifted up from 780
-        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="${colors["subText"]}">${barGroup.xLabel ?: ""}</text>"""
+        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="${theme.secondaryText}">${barGroup.xLabel ?: ""}</text>"""
     }
 
-    private fun makeYLabel(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun makeYLabel(barGroup: BarGroup): String {
         val x = 20
         val y = 325 // Shifted up from 415 to stay centered on shorter Y axis
-        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="${colors["subText"]}" transform="rotate(-90, $x, $y)">${barGroup.yLabel ?: ""}</text>"""
+        return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="${theme.secondaryText}" transform="rotate(-90, $x, $y)">${barGroup.yLabel ?: ""}</text>"""
     }
 
-    private fun addGrid(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun addGrid(barGroup: BarGroup): String {
         val sb = StringBuilder()
         val ticks = barGroup.ticks()
         var current = ticks.getNiceMin()
         while (current <= ticks.getNiceMax()) {
             val y = 500 - barGroup.scaleUp(current) // Baseline changed from 650 to 500
-            sb.append("""<line x1="80" y1="$y" x2="${barGroup.calcWidth() - 40}" y2="$y" stroke="${colors["subText"]}" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.2" />""")
+            sb.append("""<line x1="80" y1="$y" x2="${barGroup.calcWidth() - 40}" y2="$y" stroke="${theme.secondaryText}" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.2" />""")
             current += ticks.getTickSpacing()
         }
         return sb.toString()
     }
 
-    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, groupIndex: Int, colors: Map<String, String>): String {
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, groupIndex: Int): String {
         val sb = StringBuilder()
         val groupWidth = added.series.size * 50.0 + 20.0
         val plateHeight = 320.0
@@ -158,7 +158,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         sb.append("""<rect x="$startX" y="$plateY" width="$groupWidth" height="$plateHeight" fill="url(#plate_grad)" rx="8" />""")
 
         // Group label rotated - repositioned y to stay within the shortened plate
-        sb.append("""<text x="${startX + 15}" y="${plateY + plateHeight - 20}" class="title-text" font-size="14" font-weight="700" fill="${colors["accent"]}" transform="rotate(-90, ${startX + 15}, ${plateY + plateHeight - 20})">${added.label}</text>""")
+        sb.append("""<text x="${startX + 15}" y="${plateY + plateHeight - 20}" class="title-text" font-size="14" font-weight="700" fill="${theme.accentColor}" transform="rotate(-90, ${startX + 15}, ${plateY + plateHeight - 20})">${added.label}</text>""")
 
         var counter = startX + 40.0
         added.series.forEachIndexed { index, series ->
@@ -172,7 +172,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
             sb.append("""
                     <g class="bar-hover">
                         <rect class="bar-anim" x="$barX" y="$barY" width="$barWidth" height="$barHeight" fill="$color" rx="4" filter="url(#glow)" style="animation-delay: ${0.4 + 0.1 * index}s" />
-                        <text x="${barX + barWidth / 2}" y="${barY - 10}" class="mono-text" font-size="10" text-anchor="middle" fill="${colors["text"]}">${barGroup.valueFmt(series.value)}</text>
+                        <text x="${barX + barWidth / 2}" y="${barY - 10}" class="mono-text" font-size="10" text-anchor="middle" fill="${theme.primaryText}">${barGroup.valueFmt(series.value)}</text>
                     </g>
                 """.trimIndent())
             counter += 50.0
@@ -181,11 +181,11 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         return sb.toString()
     }
 
-    private fun addTicks(barGroup: BarGroup, colors: Map<String, String>): String {
+    private fun addTicks(barGroup: BarGroup): String {
         val sb = StringBuilder()
         val ticks = barGroup.ticks()
         var current = ticks.getNiceMin()
-        sb.append("""<g class="mono-text" font-size="10" fill="${colors["subText"]}">""")
+        sb.append("""<g class="mono-text" font-size="10" fill="${theme.secondaryText}">""")
         while (current <= ticks.getNiceMax()) {
             val y = 500 - barGroup.scaleUp(current) // Baseline changed from 650 to 500
             sb.append("""<text x="75" y="${y + 4}" text-anchor="end">${barGroup.valueFmt(current)}</text>""")
@@ -195,7 +195,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         return sb.toString()
     }
 
-    private fun addLegend(group: BarGroup, colors: Map<String, String>): String {
+    private fun addLegend(group: BarGroup): String {
         val sb = StringBuilder()
         val distinctLabels = group.legendLabel().distinct()
         if (distinctLabels.isEmpty()) return ""
@@ -216,11 +216,11 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
 
         val legendX = (chartWidth - legendWidth) / 2.0
         val legendY = 560.0 // Shifted up from 725
-        
+
         sb.append("""<g transform="translate($legendX, $legendY)">""")
         
         // Legend background plate (glassmorphism style)
-        sb.append("""<rect x="-15" y="-12" width="${legendWidth + 20}" height="${rows * 25 + 10}" fill="url(#plate_grad)" rx="12" stroke="${colors["subText"]}" stroke-opacity="0.1" />""")
+        sb.append("""<rect x="-15" y="-12" width="${legendWidth + 20}" height="${rows * 25 + 10}" fill="url(#plate_grad)" rx="12" stroke="${theme.secondaryText}" stroke-opacity="0.1" />""")
 
         distinctLabels.forEachIndexed { index, label ->
             val row = index / itemsPerRow
@@ -232,7 +232,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
             sb.append("""
                     <g class="legend-item" transform="translate($x, $y)">
                         <rect width="14" height="14" fill="$color" rx="3" filter="url(#glow)" />
-                        <text x="22" y="11" class="mono-text" font-size="11" fill="${colors["text"]}" style="font-weight: 500;">$label</text>
+                        <text x="22" y="11" class="mono-text" font-size="11" fill="${theme.primaryText}" style="font-weight: 500;">$label</text>
                     </g>
                 """.trimIndent())
         }

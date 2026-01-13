@@ -1,5 +1,6 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.math.abs
@@ -16,7 +17,9 @@ fun PieSlice.displayColor(index: Int) : String {
 }
 
 @Serializable
-data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f, val useDark: Boolean = false)
+data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f, override val useDark: Boolean = false,
+                        override val visualVersion: Int = 1):
+    VisualDisplay
 
 @Serializable
 data class SliceItemDisplay(val id: String = UUID.randomUUID().toString(), val color: String?)

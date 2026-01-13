@@ -1,5 +1,7 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.chart.NiceScale
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -12,7 +14,9 @@ class Bar(val title: String, val yLabel: String? = "", val xLabel: String? = "",
 class Series(val label: String? = "", val value: Double, val itemDisplay: BarDisplay? = null, val id: String = UUID.randomUUID().toString())
 
 @Serializable
-class BarDisplay(val id: String = UUID.randomUUID().toString(), val baseColor: String = "#FE7A36", val type: String = "R", val vBar : Boolean = false, var useDark: Boolean = false, val sorted: Boolean=false, val theme: String = "classic", val scale: Float = 1.0f)
+class BarDisplay(val id: String = UUID.randomUUID().toString(), val baseColor: String = "#FE7A36", val type: String = "R", val vBar : Boolean = false, val sorted: Boolean=false, val theme: String = "classic", val scale: Float = 1.0f,  override var useDark: Boolean = false,
+                 override val visualVersion: Int = 1,):
+    VisualDisplay
 
 
 fun Bar.seriesTotal() = series.sumOf { it.value }

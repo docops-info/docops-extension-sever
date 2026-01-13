@@ -1,6 +1,9 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.formatDecimal
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
@@ -15,9 +18,17 @@ import kotlin.uuid.Uuid
 
 class PieChartImproved {
 
+    private var theme = ThemeFactory.getTheme(false)
     fun makePieSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean, useDark: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
+        val display = SliceDisplay(
+            useDark = useDark,
+            visualVersion = config["visualVersion"]?.toIntOrNull() ?: 1,
+            donut = config["donut"]?.toBoolean() ?: true,
+            showLegend = config["legend"]?.toBoolean() ?: true
+        )
+        theme = ThemeFactory.getTheme(display)
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
         val customColors = configColors
@@ -36,7 +47,7 @@ class PieChartImproved {
         }
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-        var colors = ChartColors.modernColors
+        var colors = ChartColors.Companion.modernColors
         if (customColors != null) {
             colors = mutableListOf<SVGColor>()
             customColors.forEach {
@@ -53,7 +64,7 @@ class PieChartImproved {
             showPercentages,
             colors.map { it.color },
             enableHoverEffects,
-            isDonut, darkMode, isPdf = isPdf
+            isDonut, darkMode, isPdf = isPdf, display = display
         )
         csvResponse.update(payloadToSimpleCsv(pieData))
         return svg.trimIndent()
@@ -104,10 +115,12 @@ class PieChartImproved {
         enableHoverEffects: Boolean,
         isDonut: Boolean,
         darkMode: Boolean = false,
-        isPdf: Boolean
+        isPdf: Boolean,
+        display: SliceDisplay
     ): String {
         val svgBuilder = StringBuilder()
-        val id = Uuid.random().toHexString()
+        val id = display.id
+        val darkMode = theme.canvas != "#ffffff"
 
         // Calculate chart dimensions considering legend
         val legendWidth = if (showLegend) 200 else 0
@@ -212,7 +225,7 @@ class PieChartImproved {
         // Enhanced CSS with better glass effects
         svgBuilder.append("""
         <style>
-            @keyframes revealPie {
+             @keyframes revealPie {
                     from { transform: scale(0.85); opacity: 0; }
                     to { transform: scale(1); opacity: 1; }
             }
@@ -229,12 +242,12 @@ class PieChartImproved {
                     cursor: pointer; 
                 }
                 .chart-title {
-                    font-family: 'JetBrains Mono', monospace;
+                    font-family: ${theme.fontFamily};
                     text-transform: uppercase;
                     letter-spacing: 1px;
                 }
                 .legend-text {
-                    font-family: 'JetBrains Mono', monospace;
+                    font-family: ${theme.fontFamily};
                 }
             .pie-segment-overlay { 
                 pointer-events: none; 
@@ -344,7 +357,7 @@ class PieChartImproved {
             if (showPercentages) {
                 svgBuilder.append("""
                     <text x="$labelX" y="$labelY" 
-                          font-family="'JetBrains Mono', monospace" 
+                          font-family="${theme.fontFamily}" 
                           font-size="12" 
                           font-weight="800"
                           text-anchor="middle" 
@@ -361,7 +374,7 @@ class PieChartImproved {
         if (isDonut) {
             svgBuilder.append("""
             <circle cx="$centerX" cy="$centerY" r="$innerRadius" 
-                    fill="$backgroundColor" 
+                    fill="${theme.canvas}" 
                     stroke="url(#glassBorder_$id)" 
                     stroke-width="1"/>
             <circle cx="$centerX" cy="$centerY" r="$innerRadius" 
@@ -376,16 +389,16 @@ class PieChartImproved {
                   font-size="22" 
                   font-weight="800"
                   text-anchor="middle" 
-                  fill="$textColorPrimary"
+                  fill="${theme.primaryText}"
                   class="glass-title chart-title">$title</text>
         """.trimIndent())
 
         // Add legend if enabled - positioned properly on the right
         if (showLegend) {
-            val legendX = chartWidth + 20  // 20px padding from chart area
-            val legendY = 80  // Start below title
+            val legendX = chartWidth + 20
+            val legendY = 80
             svgBuilder.append("<g transform='translate(-10,0)'>")
-            svgBuilder.append(generateLegend(segmentsWithAngles, legendX, legendY, darkMode, id, isPdf = isPdf))
+            svgBuilder.append(generateLegend(segmentsWithAngles, legendX, legendY, theme, id, isPdf = isPdf))
             svgBuilder.append("</g>")
         }
 
@@ -397,12 +410,12 @@ class PieChartImproved {
         segments: List<SegmentWithAngles>,
         x: Int,
         y: Int,
-        darkMode: Boolean,
+        theme: DocOpsTheme,
         id: String,
         isPdf: Boolean
     ): String {
         val legendBuilder = StringBuilder()
-
+        val darkMode = theme.canvas != "#ffffff"
         // Add iOS card theme definitions
         legendBuilder.append("""
             <!-- iOS Card Theme Definitions -->
@@ -482,32 +495,32 @@ class PieChartImproved {
 
                 <!-- Label Text -->
                 <text x="${x + 36}" y="${cardY + 14}" 
-                      font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+                      font-family="${theme.fontFamily}" 
                       font-size="13" 
                       font-weight="500"
                       dominant-baseline="middle"
-                      fill="${if (darkMode) "#f9fafb" else "#111827"}">
+                      fill="${theme.primaryText}">
                     ${segment.segment.label}
                 </text>
 
                 <!-- Percentage Text -->
                 <text x="${x + 36}" y="${cardY + 26}" 
-                      font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+                      font-family="${theme.fontFamily}" 
                       font-size="11" 
                       font-weight="400"
                       dominant-baseline="middle"
-                      fill="${if (darkMode) "#9ca3af" else "#6b7280"}">
+                      fill="${theme.secondaryText}">
                     ${formatDecimal(segment.percentage, 1)}%
                 </text>
 
                 <!-- Value Text (right aligned) -->
                 <text x="${x + cardWidth - 8}" y="${cardY + 20}" 
-                      font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+                      font-family="${theme.fontFamily}" 
                       font-size="12" 
                       font-weight="600"
                       text-anchor="end"
                       dominant-baseline="middle"
-                      fill="${if (darkMode) "#d1d5db" else "#374151"}">
+                      fill="${theme.secondaryText}">
                     ${segment.segment.value.toInt()}
                 </text>
             </g>

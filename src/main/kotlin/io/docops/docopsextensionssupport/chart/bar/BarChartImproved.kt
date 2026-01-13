@@ -1,4 +1,4 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
@@ -29,7 +29,9 @@ class BarChartImproved(val useDark: Boolean) {
         // Create Bar object from parsed data
         val bar = createBarFromData(config, chartData)
         csvResponse.update(bar.toCsv())
+
         bar.display.useDark = useDark
+
 
         if(bar.display.type == "C") {
             val cylinderBarMaker = CylinderBarMaker()

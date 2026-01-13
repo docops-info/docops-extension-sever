@@ -1,6 +1,8 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.bar
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.gradientFromColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
@@ -12,7 +14,10 @@ import kotlin.math.min
 class BarMaker {
 
     private var fontColor = "#fcfcfc"
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+
     fun makeHorizontalBar(bar: Bar) : String {
+        theme = ThemeFactory.getTheme(bar.display)
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(bar))
@@ -44,10 +49,11 @@ class BarMaker {
     private fun makeHead(bar: Bar): String {
         val height = 540 * bar.display.scale
         val width = bar.calcWidth() * bar.display.scale
-        val backgroundColor = if (bar.display.useDark) "#1f2937" else "#f8f9fa"
+        val backgroundColor = theme.canvas
         return """
             <?xml version="1.0" encoding="UTF-8"?>
             <svg id="id_${bar.display.id}" width="${width/ DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 ${width} $height" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: BarChart'>
+                ${theme.fontImport}
                 <rect width="100%" height="100%" fill="$backgroundColor" rx="15" ry="15"/>
         """.trimIndent()
     }
@@ -60,18 +66,19 @@ class BarMaker {
         val tickSpacing = nice.getTickSpacing()
         var i = minV
 
-        val textColor = if (bar.display.useDark) "#e5e7eb" else "#666"
+        val textColor = theme.secondaryText
+        val primaryTextColor = theme.primaryText
 
         // Add y-axis label
         sb.append("""
-            <text x="25" y="250" text-anchor="middle" transform="rotate(-90, 25, 250)" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.yLabel}</text>
+            <text x="25" y="250" text-anchor="middle" transform="rotate(-90, 25, 250)" style="font-family: ${theme.fontFamily}; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.yLabel}</text>
         """.trimIndent())
 
         while(i < maxV ) {
             val y = 500 - bar.scaleUp(i)
             sb.append("""
-                <line x1="74" x2="80" y1="$y" y2="$y" stroke="$textColor" stroke-width="2"/>
-                <text x="70" y="${y+4}" text-anchor="end" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 12px; font-weight: 500;">${bar.valueFmt(i)}</text>
+                <line x1="74" x2="80" y1="$y" y2="$y" stroke="$textColor" stroke-width="2" stroke-opacity="0.6"/>
+                <text x="70" y="${y+4}" text-anchor="end" style="font-family: ${theme.fontFamily}; fill: $primaryTextColor; font-size: 12px; font-weight: 500;">${bar.valueFmt(i)}</text>
             """.trimIndent())
 
             i+=tickSpacing
@@ -80,7 +87,7 @@ class BarMaker {
         // Add x-axis label
         val center = bar.centerWidth()
         sb.append("""
-            <text x="$center" y="530" text-anchor="middle" style="font-family: Arial, sans-serif; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.xLabel}</text>
+            <text x="$center" y="530" text-anchor="middle" style="font-family: ${theme.fontFamily}; fill: $textColor; font-size: 14px; font-weight: bold;">${bar.xLabel}</text>
         """.trimIndent())
 
         return sb.toString()
@@ -115,8 +122,8 @@ class BarMaker {
             <g transform="translate($startX,$startY)">
                 $shape
 
-                <text x="${per-4}" y="$labelY" style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:11px; font-weight: bold;" text-anchor="end" >${barData.value.toInt()}</text>
-                <text x="10" y="19"  style="font-family: Arial,Helvetica, sans-serif; fill: ${fontColor}; font-size:12px; text-anchor: start;" >${escapeXml(barData.label)}</text>
+                <text x="${per-4}" y="$labelY" style="font-family: ${theme.fontFamily}; fill: ${fontColor}; font-size:11px; font-weight: bold;" text-anchor="end" >${barData.value.toInt()}</text>
+                <text x="10" y="19"  style="font-family: ${theme.fontFamily}; fill: ${fontColor}; font-size:12px; text-anchor: start;" >${escapeXml(barData.label)}</text>
             </g>
         """.trimIndent()
     }
@@ -141,14 +148,14 @@ class BarMaker {
     }
     private fun addTitle(bar: Bar): String {
         val center = bar.centerWidth()
-        val titleBgColor = if (bar.display.useDark) "#374151" else "#f0f0f0"
-        val titleTextColor = if (bar.display.useDark) "#f9fafb" else "#333"
+        val titleBgColor = theme.canvas
+        val titleTextColor = theme.primaryText
         return """
             <g>
-                <rect x="${center - 150}" y="10" width="300" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.7"/>
-                <text x="$center" y="38" style="font-family: Arial,Helvetica, sans-serif; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold; -webkit-filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2)); filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, .2));">${bar.title}</text>
+                <rect x="${center - 150}" y="10" width="300" height="40" rx="10" ry="10" fill="$titleBgColor" opacity="0.1" stroke="${theme.accentColor}" stroke-width="1"/>
+                <text x="$center" y="38" style="font-family: ${theme.fontFamily}; fill: $titleTextColor; text-anchor: middle; font-size: 24px; font-weight: bold;">${bar.title}</text>
             </g>
-        """
+        """.trimIndent()
     }
     private fun addGrid(bar: Bar) : String
     {
@@ -162,29 +169,29 @@ class BarMaker {
         val num2 = yGap
         val elements = StringBuilder()
 
-        // Define colors based on dark mode
-        val gridLineColor = if (bar.display.useDark) "#374151" else "#eee"
-        val axisColor = if (bar.display.useDark) "#9ca3af" else "#666"
+        // Define colors based on theme
+        val gridLineColor = theme.accentColor
+        val axisColor = theme.accentColor
 
         // We don't need this background rect since we added one in makeHead
         // elements.append("""<rect width='100%' height='100%' fill='url(#backGrad_${bar.display.id})' stroke="#aaaaaa" stroke-width="1"/>""")
 
         // Add horizontal grid lines (reduced number for cleaner look)
         for (i in 1..4) {
-            elements.append("""<line x1="90" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>""")
+            elements.append("""<line x1="90" y1="${i * yGap}" x2="${maxWidth}" y2="${i * yGap}" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/>""")
         }
 
         // Add vertical grid lines for each data point
         bar.series.forEach {
             val per = bar.scaleUp(it.value)
-            elements.append("""<line x1="$num" y1="12" x2="$num" y2="500" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5"/>""")
+            elements.append("""<line x1="$num" y1="12" x2="$num" y2="500" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/>""")
             num += xGap
         }
 
         // Add main axes with better styling
         elements.append("""
-            <line x1="90" x2="${bar.calcWidth()}" y1="500" y2="500" stroke="$axisColor" stroke-width="2"/>
-            <line x1="90" x2="90" y1="12" y2="501" stroke="$axisColor" stroke-width="2"/>
+            <line x1="90" x2="${bar.calcWidth()}" y1="500" y2="500" stroke="$axisColor" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="90" x2="90" y1="12" y2="501" stroke="$axisColor" stroke-width="2" stroke-opacity="0.5"/>
         """.trimIndent())
 
         return elements.toString()
@@ -238,20 +245,21 @@ class BarMaker {
                         cursor: pointer;
                     }
                     #id_${bar.display.id} .chart-title {
-                        font-family: Arial, sans-serif;
+                        font-family: ${theme.fontFamily};
                         font-size: 24px;
                         font-weight: bold;
                     }
                     #id_${bar.display.id} .axis-label {
-                        font-family: Arial, sans-serif;
+                        font-family: ${theme.fontFamily};
                         font-size: 14px;
-                        fill: #666;
+                        fill: ${theme.secondaryText};
                     }
                     #id_${bar.display.id} .tick-label {
-                        font-family: Arial, sans-serif;
+                        font-family: ${theme.fontFamily};
                         font-size: 12px;
-                        fill: #666;
+                        fill: ${theme.primaryText};
                     }
+                    </style>
                     </style>
                 </defs>"""
     }
