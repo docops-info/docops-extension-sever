@@ -159,6 +159,35 @@ class Oval(buttons: Buttons) : Regular(buttons) {
         val h = BUTTON_HEIGHT + 40
         return h * scale
     }
+
+    override fun defs(): String {
+        val gradientDefs = buttons.buttons.mapIndexed { index, button ->
+            val color = button.color ?: "#38bdf8"
+            """
+                <linearGradient id="btn_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="$color" />
+                    <stop offset="100%" stop-color="$color" stop-opacity="0.7" />
+                </linearGradient>
+                """.trimIndent()
+        }.joinToString("\n")
+        val style = StringBuilder()
+        buttons.buttons.forEach { button ->
+            style.append("""
+                #btn_${buttons.id} .btn_${button.id}_cls {
+                    fill: url(#btn_${button.id});
+                }
+            """.trimIndent())
+        }
+        return """
+            <defs>
+            ${filters()}
+            $gradientDefs
+            <style>
+            $style
+            </style>
+            </defs>
+        """.trimIndent()
+    }
     companion object {
         const val BUTTON_HEIGHT: Int = 90
         const val BUTTON_WIDTH = 250

@@ -91,9 +91,12 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
         buttonList.forEachIndexed { btnIdx, button ->
-            val accentColor = button.color ?: "#6366F1"
-            val bodyFill = if (buttons.useDark) "#1A1A1A" else "#F8F8F8"
+            val accentColor = button.color ?: docOpsTheme.accentColor
+            val bodyFill = if (buttons.useDark) docOpsTheme.canvas else "#F8F8F8"
 
+            // Fix: Use theme typography
+            val font = docOpsTheme.fontFamily
+            
             // Fix: Ensure high contrast for text
             val textFillColor = if (buttons.useDark) {
                 accentColor // Neon glow on dark
@@ -119,18 +122,18 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
 
             btns.append("""
-            <g transform="translate($startX,$startY)">
-                <g $groupClass $groupStyle $href>
-                    <!-- Shadow/Accent Layer -->
-                    <rect x="4" y="4" width="300" height="32" rx="2" fill="$accentColor" opacity="0.3"/>
-                    <!-- Main Button Body -->
-                    <rect x="0" y="0" width="300" height="32" rx="2" fill="$bodyFill" stroke="$accentColor" stroke-width="1.5" class="btn-main"/>
+                    <g transform="translate($startX,$startY)">
+            <g $groupClass $groupStyle $href>
+                <!-- Shadow Layer uses theme's surface impact -->
+                <rect x="4" y="4" width="300" height="32" rx="${docOpsTheme.cornerRadius / 2}" fill="${docOpsTheme.surfaceImpact}" opacity="0.3"/>
+                <!-- Main Button Body -->
+                <rect x="0" y="0" width="300" height="32" rx="${docOpsTheme.cornerRadius / 2}" fill="$bodyFill" stroke="$accentColor" stroke-width="1.5" class="btn-main"/>
                     ${if (!isPdfMode) """<rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/>""" else ""}
                     
-                    <text x="150" y="21" text-anchor="middle" fill="$textFillColor" 
-                        style="!important;$cleanUserStyle}">
-                        ${button.label.escapeXml()}
-                    </text>
+                   <text x="150" y="21" text-anchor="middle" fill="$textFillColor" 
+                    style="font-family: $font !important;$cleanUserStyle}">
+                    ${button.label.escapeXml()}
+                </text>
                 </g>
             </g>
             """.trimIndent())
@@ -168,16 +171,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         var style = """
              <style>
             $customStyle
-            ${glass()}
-            ${lightShadow()}
-            ${raise(strokeColor = strokeColor)}
-            ${baseCard()}
-            ${gradientStyle()}
-            ${myBox()}
-            ${keyFrame()}
-            ${linkText()}
-            ${modernText()}
-            ${modernCard()}
+
             #${buttons.id} .bar:hover {
                 filter: grayscale(100%) sepia(100%);
             }
@@ -195,10 +189,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         return """
             <defs>
-            ${filters()}
-            ${naturalShadow()}
-            ${gradient()}
-            ${modernGradients()}
+            
             ${uses()}
            $style
             </defs>

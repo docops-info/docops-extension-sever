@@ -57,7 +57,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
         buttonList.forEach { button ->
 
             var lines = ""
-            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
+            val accentColor = button.color ?: docOpsTheme.accentColor
 
             button.description?.let {
                 lines += """<text class="card-text title-text" x="75" y="75" text-anchor="middle">"""
@@ -95,22 +95,22 @@ class Slim(buttons: Buttons) : Regular(buttons) {
             }
 
             btns.append("""
-            <g transform="translate($startX,$startY)" class="card-group" onclick="$href" style="cursor: pointer;">
+             <g transform="translate($startX,$startY)" class="card-group" onclick="$href" style="cursor: pointer;">
                 <!-- Fixed Shadow Layer -->
-                <rect x="2" y="2" width="150" height="150" rx="4" fill="rgba(0,0,0,0.4)" filter="url(#cardShadow)"/>
-                
+                <rect x="2" y="2" width="150" height="150" rx="${docOpsTheme.cornerRadius / 3}" fill="${docOpsTheme.surfaceImpact}" filter="url(#cardShadow)"/>
+            
                 <!-- Shifting Body Group -->
                 <g class="moving-group">
                     <!-- Card background -->
-                    <rect class="card-bg" x="0" y="0" width="150" height="150" rx="4" fill="url(#btn_${button.id})"/>
-                    
-                    <!-- Sharp Accent Border (The dash-offset border you liked) -->
-                    <rect class="accent-border" x="0" y="0" width="150" height="150" rx="4" 
+                    <rect class="card-bg" x="0" y="0" width="150" height="150" rx="${docOpsTheme.cornerRadius / 3}" fill="url(#btn_${button.id})"/>
+                
+                    <!-- Sharp Accent Border -->
+                    <rect class="accent-border" x="0" y="0" width="150" height="150" rx="${docOpsTheme.cornerRadius / 3}" 
                           fill="none" 
-                          stroke="${accentColor}" 
+                          stroke="$accentColor" 
                           stroke-width="2.5" 
                           stroke-linecap="square"/>
-                    
+                
                     <!-- Sharp Corner Accent -->
                     <path class="corner-accent" d="M 0 25 L 0 0 L 25 0" fill="none" 
                           stroke="$accentColor" 

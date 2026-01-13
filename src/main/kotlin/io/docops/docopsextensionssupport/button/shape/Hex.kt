@@ -41,8 +41,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val bgColor = if (isDark) "#020617" else "#f1f5f9"
 
         // Pro Tip: Instead of a solid rect, add an "Ambient Light Source"
-        // This creates atmosphere without a "heavy" background
-        val atmosphereColor = if (isDark) "#38bdf8" else "#818cf8"
+        // Resolve aesthetic from Factory
+        val atmosphereColor = docOpsTheme.accentColor
+
         sb.append("""
                 <circle cx="50%" cy="50%" r="400" fill="$atmosphereColor" fill-opacity="${if (isDark) "0.03" else "0.02"}" />
             """.trimIndent())
@@ -71,8 +72,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
     }
 
     override fun defs(): String {
+        val atmosphereColor = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
-            val color = button.color ?: "#38bdf8"
+            val color = button.color ?: docOpsTheme.accentColor
             """
                 <linearGradient id="hexGrad_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color" />
@@ -83,8 +85,14 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         return """
                 <defs>
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
-                    
+                    ${docOpsTheme.fontImport}
+                    /* Typography driven by ThemeFactory */
+                    .hex-label {
+                        font-family: ${docOpsTheme.fontFamily};
+                        font-weight: 800;
+                        text-transform: uppercase;
+                    }
+                
                     @keyframes hexEntrance {
                         from { opacity: 0; transform: scale(0.9) translateY(20px); }
                         to { opacity: 1; transform: scale(1) translateY(0); }
@@ -97,26 +105,18 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                         transform-origin: center;
                         animation: hexEntrance 0.6s ease-out backwards;
                     }
-                    
+                
                     .hex-container:hover {
                         transform: scale(1.05);
                     }
                
-                    .hex-label {
-                    font-family: 'Syne', sans-serif;
-                    font-weight: 800;
-                    text-transform: uppercase;
-                }
-                
-                /* Neon Pulse Animation for Active State */
-                @keyframes neonPulse {
-                    0% { filter: drop-shadow(0 0 2px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 0.9; }
-                    50% { filter: drop-shadow(0 0 12px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 1; }
-                    100% { filter: drop-shadow(0 0 2px ${if (isDark) "#38bdf8" else "#6366f1"}); opacity: 0.9; }
-                }
-                
-                
-            </style>
+                    /* Neon Pulse Animation for Active State using Theme Accent */
+                    @keyframes neonPulse {
+                        0% { filter: drop-shadow(0 0 2px $atmosphereColor); opacity: 0.9; }
+                        50% { filter: drop-shadow(0 0 12px $atmosphereColor); opacity: 1; }
+                        100% { filter: drop-shadow(0 0 2px $atmosphereColor); opacity: 0.9; }
+                    }
+                </style>
              $gradientDefs
             ${
             if (!isPdf) """
@@ -158,49 +158,46 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         return internalWidth * scale
     }
     private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
-        val isDark = theme.useDark
-        val isActive = button.enabled
-        val actualColor = button.color!!
+        val isDark = buttons.useDark
+        val isActive = button.active
+        val actualColor = button.color ?: docOpsTheme.accentColor
+
 
         // Calculate a staggered delay based on coordinates or a global index
 
-        val primaryTextColor = determineTextColor(actualColor)
-
-        // Use Cyan for accents in Dark Mode, Indigo in Light Mode
-        val secondaryTextColor = if (isDark) "#22d3ee" else "#4f46e5"
+        val primaryTextColor = docOpsTheme.primaryText
+        val secondaryTextColor = docOpsTheme.secondaryText
 
         // Reference the gradient ID instead of the solid color
         val cardFill = "url(#hexGrad_${button.id})"
 
-        // Sharp Accents: Thinner, brighter strokes for dark mode
-        val cardStroke = if (isDark) "#ffffff" else "#1e1b4b"
+        // Sharp Accents driven by Theme
+        val cardStroke = if (isDark) "#ffffff" else docOpsTheme.primaryText
         val cardStrokeOpacity = if (isDark) "0.4" else "1.0"
-        val cardStrokeWidth = if (isDark) "1" else "2"
-
+        val cardStrokeWidth = if (isActive) "4" else "1"
 
         // Strip conflicting fill from user style
         val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
 
         val spans = StringBuilder()
-        val fontSize = button.buttonStyle?.labelStyle?.let { style ->
-            parseStyleForFontSize(style, button.buttonStyle?.fontSize ?: 16)
-        } ?: button.buttonStyle?.fontSize ?: 16 // Defaulting to 16px
+        val fontSize = button.buttonStyle?.let {
+            parseStyleForFontSize(it.labelStyle, it.fontSize)
+        } ?: 16
 
 
-        // Syne is wide, so we treat our 295px wide button as if it only has 170px
-        // worth of "Helvetica space" to force the wrap early enough.
-        val adjustedMaxWidth = 140F
+        // Use the multiplier provided directly by the theme
+        val adjustedMaxWidth = 140F / docOpsTheme.fontWidthMultiplier
         val textSpans = itemTextWidth(itemText = button.label, maxWidth = adjustedMaxWidth, fontSize = fontSize)
 
-        // Centering logic remains the same
-        val lineSpacing = 4
-        val totalTextHeight = (textSpans.size * fontSize) + ((textSpans.size - 1) * lineSpacing)
-        val startTextY = 185 - (totalTextHeight / 2)
+        val verticalStep = (fontSize * docOpsTheme.fontLineHeight).toInt()
+        val totalTextHeight = (textSpans.size * verticalStep)
+        val startTextY = 185 - (totalTextHeight / 2) + (fontSize / 2) // Adjusted for baseline shift
 
         textSpans.forEachIndexed { index, s ->
-            val calculatedDy = if (index > 0) fontSize + lineSpacing else 0
-            // Added letter-spacing for that "Designed" look
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: 'Syne', sans-serif !important; letter-spacing: 0.5px; fill: $primaryTextColor !important; $cleanUserStyle">${s.escapeXml()}</tspan>""")
+            // Use the calculated verticalStep for dy instead of raw lineSpacing
+            val calculatedDy = if (index > 0) verticalStep else 0
+
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: ${docOpsTheme.fontFamily} !important; letter-spacing: 0.5px; fill: ${docOpsTheme.primaryText} !important; $cleanUserStyle">${s.escapeXml()}</tspan>""")
         }
 
         var win = "_top"

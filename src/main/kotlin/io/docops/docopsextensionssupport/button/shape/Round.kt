@@ -92,7 +92,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             val title = linesToMultiLineText(button.buttonStyle?.labelStyle,
                 lines, 12, 0)
 
-            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
+            val accentColor = button.color ?: docOpsTheme.accentColor
 
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
             if(!button.enabled) {
@@ -100,10 +100,10 @@ class Round(buttons: Buttons) : Regular(buttons) {
             }
             btns.append("""
                 <g transform="translate($startX,$startY)" $href class="orb-group">
-                    <!-- STATIC LAYER: The Glow Ring stays behind -->
-                    <circle r="62" cx="0" cy="0" fill="none" stroke="${button.color}" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/>
+                        <!-- STATIC LAYER: The Glow Ring stays behind -->
+                        <circle r="62" cx="0" cy="0" fill="none" stroke="$accentColor" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/>
                     
-                    <g class="moving-group">
+                        <g class="moving-group">
                         <!-- SHIFTING LAYER: The Shadow -->
                         <circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/>
                         
@@ -121,10 +121,10 @@ class Round(buttons: Buttons) : Regular(buttons) {
                     
                     <!-- Content -->
                     <g class="moving-group">
-                        <text x="0" y="$lineY" text-anchor="middle" class="orb-text" style="fill: ${if(buttons.useDark) "#ffffff" else "#1e293b"}">
-                            $title
-                        </text>
-                    </g>
+                            <text x="0" y="$lineY" text-anchor="middle" class="orb-text" style="fill: ${docOpsTheme.primaryText}; font-family: ${docOpsTheme.fontFamily}">
+                                $title
+                            </text>
+                        </g>
                 </g>
                 """.trimIndent())
 

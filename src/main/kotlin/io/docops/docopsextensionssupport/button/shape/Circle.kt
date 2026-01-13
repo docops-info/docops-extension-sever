@@ -75,38 +75,38 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 href = ""
             }
 
-            // Aesthetic logic based on ui.md
-            val accentColor = if (buttons.useDark) "#3b82f6" else "#1e293b"
-            val textColor = if (buttons.useDark) "#ffffff" else "#1e293b"
-            val labelColor = if (buttons.useDark) "#60a5fa" else "#475569"
+            // Aesthetic logic driven by ThemeFactory
+            val accentColor = button.color ?: docOpsTheme.accentColor
+            val textColor = docOpsTheme.primaryText
+            val labelColor = docOpsTheme.secondaryText
 
             btns.append(
                 """
             <g role="button" transform="translate($startX,$startY)" class="circle-group" $href>
-                <title class="description">${button.description?.escapeXml() ?: ""}</title>
+                    <title class="description">${button.description?.escapeXml() ?: ""}</title>
             
-                <!-- FIXED Shadow Layer (Aligned to center 60,60) -->
-                <circle r="50" cx="60" cy="60" fill="black" opacity="0.2" filter="url(#dropShadow)"/>
+                    <!-- FIXED Shadow Layer -->
+                    <circle r="50" cx="60" cy="60" fill="black" opacity="0.2" filter="url(#dropShadow)"/>
 
-                <!-- SHIFTING Technical Ring (Aligned to center 60,60) -->
-                <circle class="moving-orb tech-ring" r="58" cx="60" cy="60" fill="none" stroke="$accentColor" stroke-width="2" filter="url(#ringGlow)"/>
+                    <!-- SHIFTING Technical Ring -->
+                    <circle class="moving-orb tech-ring" r="58" cx="60" cy="60" fill="none" stroke="$accentColor" stroke-width="2" filter="url(#ringGlow)"/>
 
-                <!-- SHIFTING Body (Aligned to center 60,60) -->
-                <circle class="moving-orb" r="50" cx="60" cy="60" fill="url(#circleGradient_${button.id})" stroke="${button.color}" stroke-width="1.5"/>
-                
+                    <!-- SHIFTING Body -->
+                    <circle class="moving-orb" r="50" cx="60" cy="60" fill="url(#circleGradient_${button.id})" stroke="$accentColor" stroke-width="1.5"/>
+                     
                 <!-- SHIFTING Glass Layer (Aligned to center 60,60) -->
                 ${if(!isPdf) """<circle class="moving-orb" r="46" cx="60" cy="60" fill="url(#glassReflection)" pointer-events="none"/>""" else ""}
 
                 <!-- SHIFTING Content Group -->
                 <g class="moving-text">
-                    <!-- Technical Corner Accent - Adjusted to frame the center -->
-                    <path d="M 25 35 L 25 25 L 35 25" fill="none" stroke="$accentColor" stroke-width="2.5" opacity="0.8"/>
+                        <!-- Technical Corner Accent -->
+                        <path d="M 25 35 L 25 25 L 35 25" fill="none" stroke="$accentColor" stroke-width="2.5" opacity="0.8"/>
                     
-                    <text x="60" y="60" text-anchor="middle" dominant-baseline="central" class="label-text" fill="$textColor">
-                        $title
-                    </text>
-                    <text x="60" y="78" text-anchor="middle" class="label-text technical-id" fill="$labelColor">ID: 0x${idx + 100}</text>
-                </g>
+                        <text x="60" y="60" text-anchor="middle" dominant-baseline="central" class="label-text" fill="$textColor" style="font-family: ${docOpsTheme.fontFamily}">
+                            $title
+                        </text>
+                        <text x="60" y="78" text-anchor="middle" class="label-text technical-id" fill="$labelColor" style="font-family: ${docOpsTheme.fontFamily}">ID: 0x${idx + 100}</text>
+                    </g>
             </g>
             """.trimIndent()
             )

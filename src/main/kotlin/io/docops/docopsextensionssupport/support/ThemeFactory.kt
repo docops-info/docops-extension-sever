@@ -51,6 +51,9 @@ class ModernDarkTheme : DocOpsTheme {
     override val glassEffect = "rgba(15, 23, 42, 0.8)"
     override val surfaceImpact = "rgba(56, 189, 248, 0.15)"
     override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
 
@@ -60,11 +63,14 @@ class ModernDarkTheme : DocOpsTheme {
 class ModernLightTheme : DocOpsTheme {
     override val canvas = "#f1f5f9"
     override val primaryText = "#0f172a"
-    override val secondaryText = "#4f46e5" // Indigo accent
+    override val secondaryText = "#4338ca" // Indigo accent
     override val accentColor = "#818cf8"
     override val glassEffect = "rgba(255, 255, 255, 0.7)"
     override val surfaceImpact = "rgba(129, 140, 248, 0.1)"
     override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
 
@@ -79,6 +85,9 @@ class ClassicDarkTheme : DocOpsTheme {
     override val glassEffect = "rgba(30, 41, 59, 0.5)"
     override val surfaceImpact = "rgba(255, 255, 255, 0.05)"
     override val fontFamily = "Arial, Helvetica, sans-serif"
+    override val fontImport = ""
+    override val fontWidthMultiplier: Float = 1.0f
+    override val fontLineHeight = 1.1f // Standard leading
     override val cornerRadius = 4
 }
 
@@ -88,12 +97,16 @@ class ClassicDarkTheme : DocOpsTheme {
 class ClassicLightTheme : DocOpsTheme {
     override val canvas = "#ffffff"
     override val primaryText = "#111111"
-    override val secondaryText = "#4b5563"
+    override val secondaryText = "#4338ca"
     override val accentColor = "#2563eb"
     override val glassEffect = "rgba(255, 255, 255, 0.9)"
     override val surfaceImpact = "rgba(0, 0, 0, 0.05)"
     override val fontFamily = "Arial, Helvetica, sans-serif"
+    override val fontImport = ""
+    override val fontWidthMultiplier: Float = 1.0f
+    override val fontLineHeight = 1.1f // Standard leading
     override val cornerRadius = 4
+
 }
 
 class BrutalistDarkTheme : DocOpsTheme {
@@ -104,6 +117,9 @@ class BrutalistDarkTheme : DocOpsTheme {
     override val glassEffect = "rgba(15, 23, 42, 0.9)"
     override val surfaceImpact = "rgba(30, 41, 59, 0.5)"
     override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 0 // Sharp edges for brutalist
 }
 
@@ -113,11 +129,14 @@ class BrutalistDarkTheme : DocOpsTheme {
 class ProDarkTheme : DocOpsTheme {
     override val canvas = "#0f172a" // Deep Slate
     override val primaryText = "#f8fafc"
-    override val secondaryText = "#94a3b8"
+    override val secondaryText = "#22d3ee"
     override val accentColor = "#38bdf8" // Sky Blue accent
     override val glassEffect = "rgba(15, 23, 42, 0.8)"
     override val surfaceImpact = "rgba(56, 189, 248, 0.1)"
     override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
 
@@ -129,5 +148,8 @@ class BrutalistLightTheme : DocOpsTheme {
     override val glassEffect = "rgba(255, 255, 255, 0.9)"
     override val surfaceImpact = "rgba(226, 232, 240, 0.5)"
     override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 0
 }

@@ -108,9 +108,6 @@ fun filters() = """
 
 fun DARK1() = mutableListOf("#080808", "#101010", "#181818","#202020","#282828", "#303030")
 
-fun DARKREDLIGHT() = mutableListOf("#080000", "#100000", "#180000", "#200000", "#280000", "#300000", "#380000", "#400000")
-
-fun REDLIGHT() = mutableListOf("#780000","#800000", "#880000","#900000", "#980000", "#A00000", "#A80000")
 
 fun modernGradients() = """
     <linearGradient id="modernBlueGradient" x1="0%" y1="0%" x2="100%" y2="100%">

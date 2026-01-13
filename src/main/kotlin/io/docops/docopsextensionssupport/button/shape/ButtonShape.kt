@@ -18,6 +18,8 @@ package io.docops.docopsextensionssupport.button.shape
 
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.support.ThemeFactory
+import io.docops.docopsextensionssupport.support.VisualDisplay
 
 /**
  * Defines the contract for rendering different button shapes in SVG format.
@@ -88,6 +90,10 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     protected var vbWidth = 0f
     /** Indicates whether the output is intended for PDF format */
     protected var isPdf = false
+
+
+    // Resolve the global design system theme
+    protected val docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, buttons.visualVersion))
 
     /**
      * Implements the [ButtonShape.drawShape] method by calling the abstract [createShape] method
@@ -268,3 +274,8 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     }
 }
 
+class ButtonVisualDisplay(
+    override val useDark: Boolean,
+    override val visualVersion: Int
+): VisualDisplay {
+}

@@ -18,6 +18,7 @@ package io.docops.docopsextensionssupport.button
 
 import io.docops.docopsextensionssupport.button.shape.*
 import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -321,7 +322,7 @@ class Sort(val sort: ButtonSortBy = ButtonSortBy.LABEL, val direction: SortDirec
  */
 @Serializable
 class ButtonDisplay(
-    val colors: List<String> = DARK1(),
+    var colors: List<String> = DARK1(),
     val colorTypeMap: MutableMap<String, String> = mutableMapOf(),
     val scale: Float = 1.0f,
     val columns: Int = 3,
@@ -395,6 +396,7 @@ class Buttons(
     var theme: ButtonDisplay? = null,
     var themeUrl: String? = null,
     var useDark: Boolean = false,
+    var visualVersion : Int = 1,
     var docname: String = "",
     val id: String = UUID.randomUUID().toString()
 ) {
@@ -406,9 +408,15 @@ class Buttons(
             val content = getResourceFromUrl(it)
             theme = Json.decodeFromString<ButtonDisplay>(content)
         }
+        val docOpsTheme = ThemeFactory.getTheme(useDark)
         theme?.let {
             if(!it.useDark) {
                 it.useDark = useDark
+            }
+            // If no colors provided in JSON, seed from the resolved theme
+            if(it.colors.isEmpty() || it.colors == DARK1()) {
+                // Seed with a palette derived from the theme's accent
+                it.colors = listOf(docOpsTheme.accentColor, docOpsTheme.secondaryText)
             }
             if(it.colorTypeMap.isNotEmpty()) {
                 typeMap.putAll(it.colorTypeMap)

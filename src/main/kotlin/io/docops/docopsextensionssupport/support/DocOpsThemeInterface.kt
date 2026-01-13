@@ -16,5 +16,8 @@ interface DocOpsTheme {
     
     // Aesthetic specific (e.g., Syne for Pro, Arial for Classic)
     val fontFamily: String
+    val fontImport: String
     val cornerRadius: Int
+    val fontWidthMultiplier: Float // 1.0 for Arial, 1.35 for Syne
+    val fontLineHeight: Float // New: 1.0 for standard, 1.2+ for designer fonts
 }
