@@ -1,5 +1,9 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.diagram.connector.Connector
+import io.docops.docopsextensionssupport.diagram.connector.ConnectorMaker
+import io.docops.docopsextensionssupport.diagram.connector.Connectors
+import io.docops.docopsextensionssupport.diagram.connector.toCsv
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext

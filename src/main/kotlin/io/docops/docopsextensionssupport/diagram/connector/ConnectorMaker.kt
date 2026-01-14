@@ -1,7 +1,9 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.diagram.connector
 
+import io.docops.docopsextensionssupport.diagram.gradientMapToHsl
+import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
-import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.getRandomColorHex
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.web.ShapeResponse
@@ -27,7 +29,12 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private var bgColor = "#F8F9FA"
     private var fill = ""
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
+
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
+
+
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
+        bgColor = theme.canvas
         if(useDark) {
             bgColor = "#111827"
         }
@@ -81,10 +88,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private fun descriptions(start: Float): String {
         val sb = StringBuilder("<g transform='translate(100,${start})'>")
         var y = 0
-        var textColor = "#111827"
-        if(useDark){
-            textColor = "#F3F4F6"
-        }
+        val textColor = theme.primaryText
+
 
         connectors.forEachIndexed { i, item ->
             // Skip if the description is empty (e.g., the last element 'L' in your example)
@@ -98,8 +103,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                     <g style="animation: slideIn 0.4s ease-out ${animationDelay}s both;">
                         <rect x="0" y="0" width="24" height="24" fill="#000000" />
                         <rect x="2" y="2" width="20" height="20" fill="$boxColor" />
-                        <text x="12" y="17" fill="white" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 800;">${alphabets[i]}</text>
-                        <text x="36" y="17" fill="$textColor" style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">${item.description}</text>
+                        <text x="12" y="17" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 12px; font-weight: 800;">${alphabets[i]}</text>
+                        <text x="36" y="17" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">${item.description}</text>
                         <line x1="0" y1="28" x2="400" y2="28" stroke="$textColor" stroke-width="1" stroke-opacity="0.1" />
                     </g>
                 """.trimIndent())
@@ -133,7 +138,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     }
     private fun defs(id: String) : String {
         val grad= StringBuilder()
-        val connectorColor = if(useDark) "#94A3B8" else "#000000"
+        val connectorColor = theme.accentColor
         val connectorOpacity = if(useDark) "0.6" else "1.0"
 
 
@@ -171,7 +176,7 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 
         val styles = """
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&amp;display=swap');
+                    ${theme.fontImport}
                 
                     #diag_$id .module-card {
                         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -210,14 +215,15 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val sb = StringBuilder()
         var x = 0
         var y = 0
-        val connectorColor = if(useDark) "#64748B" else "#000000"
+        val connectorColor = theme.accentColor
+        val textColor = theme.primaryText
 
         connectors.forEachIndexed { i, conn ->
             val boxColor = colors[i]
             val animationDelay = i * 0.08
 
             val lines = conn.textToLines()
-            val textContent = StringBuilder("""<text x="25" y="48" fill="#111827" style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">""")
+            val textContent = StringBuilder("""<text x="25" y="48" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">""")
             lines.forEachIndexed { j, content ->
                 val dy = if (j > 0) "20" else "0"
                 textContent.append("""<tspan x="25" dy="$dy">$content</tspan>""")
@@ -231,18 +237,18 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             sb.append("""
                 <g class="module-card" style="animation: slideIn 0.5s ease-out ${animationDelay}s both;">
                     <!-- The "Module" Base with hard shadow -->
-                    <rect x="0" y="0" width="260" height="100" fill="white" stroke="#000000" stroke-width="3" filter="url(#brutalistShadow)" />
-            
+                    <rect x="0" y="0" width="260" height="100" fill="${theme.canvas}" stroke="#000000" stroke-width="3" filter="url(#brutalistShadow)" />
+        
                     <!-- Color Header/Accent Area -->
                     <rect x="0" y="0" width="260" height="12" fill="$boxColor" stroke="#000000" stroke-width="3" />
-            
+        
                     <!-- Decorative corner notch -->
                     <path d="M 240 100 L 260 80 L 260 100 Z" fill="#000000" />
-            
+        
                     <!-- Identifier Tab -->
                     <rect x="220" y="12" width="40" height="25" fill="#000000" />
-                    <text x="240" y="30" fill="white" text-anchor="middle" style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 800;">${alphabets[i]}</text>
-            
+                    <text x="240" y="30" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 800;">${alphabets[i]}</text>
+   
                     $textContent
             
                     <!-- Interactive Hover Accent Bar -->
@@ -295,16 +301,16 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
 fun main() {
     val connectors = mutableListOf<Connector>()
     connectors.add(Connector("Developer", description = "Writes unit tests"))
-    connectors.add(Connector("Unit Tests", description ="Unit tests produces excel"))
-    connectors.add(Connector("Microsoft Excel", description ="Excel is stored in test engine"))
-    connectors.add(Connector("Test Engine", description ="Test Engine write documentation"))
-    connectors.add(Connector("API Documentation Output", description ="Documentation is committed"))
-    connectors.add(Connector("GitHub", description ="Triggers a webhook"))
-    connectors.add(Connector("Developer", description ="Developer consumes git content"))
-    connectors.add(Connector("Unit Tests", description ="Unit tests produces excel"))
-    connectors.add(Connector("Microsoft Excel", description ="Excel is stored in test engine"))
-    connectors.add(Connector("Test Engine", description ="Test Engine write documentation"))
-    connectors.add(Connector("API Documentation Output", description ="Documentation is committed"))
+    connectors.add(Connector("Unit Tests", description = "Unit tests produces excel"))
+    connectors.add(Connector("Microsoft Excel", description = "Excel is stored in test engine"))
+    connectors.add(Connector("Test Engine", description = "Test Engine write documentation"))
+    connectors.add(Connector("API Documentation Output", description = "Documentation is committed"))
+    connectors.add(Connector("GitHub", description = "Triggers a webhook"))
+    connectors.add(Connector("Developer", description = "Developer consumes git content"))
+    connectors.add(Connector("Unit Tests", description = "Unit tests produces excel"))
+    connectors.add(Connector("Microsoft Excel", description = "Excel is stored in test engine"))
+    connectors.add(Connector("Test Engine", description = "Test Engine write documentation"))
+    connectors.add(Connector("API Documentation Output", description = "Documentation is committed"))
     connectors.add(Connector("GitHub", ""))
     val maker = ConnectorMaker(connectors, true, "PDF")
     val svg = maker.makeConnectorImage()

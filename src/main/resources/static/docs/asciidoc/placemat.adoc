@@ -507,6 +507,32 @@ First, create a placemat to show the components:
   }
 }
 ----
+
+.Dark Mode
+[docops,placemat,useDark=true]
+----
+{
+  "title": "Microservices Architecture",
+  "placeMats": [
+    {"name": "API Gateway", "legend": "Gateway"},
+    {"name": "User Service", "legend": "Service"},
+    {"name": "Product Service", "legend": "Service"},
+    {"name": "Order Service", "legend": "Service"},
+    {"name": "Payment Service", "legend": "Service"},
+    {"name": "User Database", "legend": "Database"},
+    {"name": "Product Database", "legend": "Database"},
+    {"name": "Order Database", "legend": "Database"},
+    {"name": "Payment Database", "legend": "Database"}
+  ],
+  "config": {
+    "legend": [
+      {"legend": "Gateway", "color": "#4cc9f0"},
+      {"legend": "Service", "color": "#4361ee"},
+      {"legend": "Database", "color": "#3a0ca3"}
+    ]
+  }
+}
+----
 Then, use connectors to show the flow between components:
 
 [source,asciidoc]

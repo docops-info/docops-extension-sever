@@ -16,8 +16,6 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
-import io.docops.docopsextensionssupport.diagram.PlaceMatMaker
-import io.docops.docopsextensionssupport.diagram.PlaceMatRequest
 import io.docops.docopsextensionssupport.svgsupport.compressString
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
 import io.github.oshai.kotlinlogging.KotlinLogging

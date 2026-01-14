@@ -1,4 +1,4 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.diagram.connector
 
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable

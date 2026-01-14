@@ -1,5 +1,6 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.diagram.placemat
 
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -72,4 +73,6 @@ fun PlaceMatConfig.colorFromLegendName(name : String): ColorLegendConfig {
 data class PlaceMats(val placemats: MutableList<PlaceMat>, val config: PlaceMatConfig = PlaceMatConfig())
 
 @Serializable
-data class PlaceMatRequest(val placeMats: MutableList<PlaceMat>, var useDark: Boolean = false, val config: PlaceMatConfig= PlaceMatConfig(), val title: String = "", val scale: Float= 1.0f, val fill: Boolean = true)
+data class PlaceMatRequest(val placeMats: MutableList<PlaceMat>, override var useDark: Boolean = false,
+                           override val visualVersion: Int = 1, val config: PlaceMatConfig= PlaceMatConfig(), val title: String = "", val scale: Float= 1.0f, val fill: Boolean = true):
+    VisualDisplay

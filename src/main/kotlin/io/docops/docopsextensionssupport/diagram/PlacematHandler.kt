@@ -1,5 +1,8 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.diagram.placemat.PlaceMatMaker
+import io.docops.docopsextensionssupport.diagram.placemat.PlaceMatRequest
+import io.docops.docopsextensionssupport.diagram.placemat.toCsv
 import io.docops.docopsextensionssupport.web.*
 import kotlinx.serialization.json.Json
 

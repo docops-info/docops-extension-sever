@@ -1,10 +1,8 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.diagram.connector
 
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * Generates SVG connectors between diagram elements.
