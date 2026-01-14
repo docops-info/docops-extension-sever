@@ -9,6 +9,7 @@ import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
+import java.io.File
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -25,7 +26,7 @@ class PieChartImproved {
         val display = SliceDisplay(
             useDark = useDark,
             visualVersion = config["visualVersion"]?.toIntOrNull() ?: 1,
-            donut = config["donut"]?.toBoolean() ?: true,
+            donut = config["donut"]?.toBoolean() ?: false,
             showLegend = config["legend"]?.toBoolean() ?: true
         )
         theme = ThemeFactory.getTheme(display)
@@ -39,7 +40,7 @@ class PieChartImproved {
         val showLegend = config["legend"]?.toBoolean() ?: true
         val showPercentages = config["percentages"]?.toBoolean() ?: true
         val enableHoverEffects = config["hover"]?.toBoolean() ?: true
-        val isDonut = config["donut"]?.toBoolean() ?: true
+        val isDonut = config["donut"]?.toBoolean() ?: false
 
         var darkMode = config["darkMode"]?.toBoolean() ?: false
         if(useDark) {
@@ -54,6 +55,31 @@ class PieChartImproved {
                 colors.add(SVGColor(it))
             }
         }
+        if(isDonut && display.visualVersion ==2) {
+            val maker = DonutMakerImproved()
+            val slices = pieData.map { segment ->
+                PieSlice(
+                    label = segment.label,
+                    amount = segment.value,
+                    itemDisplay = SliceItemDisplay(color = segment.color)
+                )
+            }.toMutableList()
+            // Construct the PieSlices wrapper
+            val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
+            return maker.makeDonut(pieSlices = pieSlicesObj)
+        }
+        if(!isDonut) {
+            val maker = PieSliceMakerImproved()
+            val slices = pieData.map { segment ->
+                PieSlice(
+                    label = segment.label,
+                    amount = segment.value,
+                    itemDisplay = SliceItemDisplay(color = segment.color)
+                )
+            }.toMutableList()
+            val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
+            return maker.makePie(pieSlices = pieSlicesObj)
+        }
         // Generate SVG
         val svg = generatePieChartSvg(
             pieData,
@@ -66,6 +92,7 @@ class PieChartImproved {
             enableHoverEffects,
             isDonut, darkMode, isPdf = isPdf, display = display
         )
+
         csvResponse.update(payloadToSimpleCsv(pieData))
         return svg.trimIndent()
     }
@@ -593,4 +620,20 @@ class PieChartImproved {
         val percentage: Double,
         val color: String
     )
+}
+
+fun main() {
+    val payload = """legend=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10""".trimIndent()
+    val pieChartImproved = PieChartImproved()
+    val csvResponse = CsvResponse(mutableListOf(), mutableListOf())
+    val svg = pieChartImproved.makePieSvg(payload, csvResponse, false, false)
+
+    val f = File("gen/pie_not_donut.svg")
+    f.writeBytes(svg.toByteArray())
 }

@@ -258,15 +258,7 @@ class DonutMaker : PieSliceMaker(){
     }
 }
 
-data class DonutSliceWithCommands(
-    val id: String,
-    val percent: Double,
-    val amount: Double,
-    val color: String,
-    val label: String,
-    val offset: Double,
-    val commands: String
-)
+
 
 // Main function to test the DonutMaker implementation
 fun main() {
