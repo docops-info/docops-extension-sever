@@ -1,4 +1,4 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.diagram.treechart
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse

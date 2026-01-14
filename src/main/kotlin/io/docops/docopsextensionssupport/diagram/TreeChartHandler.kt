@@ -1,9 +1,9 @@
 package io.docops.docopsextensionssupport.diagram
 
+import io.docops.docopsextensionssupport.diagram.treechart.CyberTreeMaker
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.DocOpsHandler
 
 class TreeChartHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 

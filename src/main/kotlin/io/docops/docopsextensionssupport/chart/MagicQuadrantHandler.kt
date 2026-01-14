@@ -1,5 +1,9 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.quadrant.MagicQuadrantConfig
+import io.docops.docopsextensionssupport.chart.quadrant.MagicQuadrantSvgGenerator
+import io.docops.docopsextensionssupport.chart.quadrant.QuadrantCompany
+import io.docops.docopsextensionssupport.chart.quadrant.toCsvResponse
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
@@ -7,7 +11,7 @@ import io.docops.docopsextensionssupport.web.update
 
 class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
-    fun parseTabularData(input: String): MagicQuadrantConfig {
+    fun parseTabularData(input: String, useDark: Boolean): MagicQuadrantConfig {
         var leadersLabel = "Leaders"
         var challengersLabel = "Challengers"
         var visionariesLabel = "Visionaries"
@@ -22,6 +26,7 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
         var title = "Magic Quadrant"
         var xAxisLabel = "Ability to Execute"
         var yAxisLabel = "Completeness of Vision"
+        var visualVersion = 1
         val companies = mutableListOf<QuadrantCompany>()
 
         var headerProcessed = false
@@ -39,6 +44,9 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
                 }
                 configLine.startsWith("yAxis:") -> {
                     yAxisLabel = configLine.substring("yAxis:".length).trim()
+                }
+                configLine.startsWith("visualVersion:") -> {
+                    visualVersion = configLine.substring("visualVersion:".length).trim().toIntOrNull() ?: 1
                 }
                 configLine.startsWith("leaders:") -> leadersLabel = configLine.substring("leaders:".length).trim()
                 configLine.startsWith("challengers:") -> challengersLabel = configLine.substring("challengers:".length).trim()
@@ -112,17 +120,28 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
             throw IllegalArgumentException("No valid company data found. Expected format: Name | X | Y | Description | Size | URL")
         }
 
-        return MagicQuadrantConfig(title, xAxisLabel, yAxisLabel, companies, leadersLabel = leadersLabel,challengersLabel = challengersLabel,visionariesLabel = visionariesLabel, nichePlayersLabel = nichePlayersLabel)
+        return MagicQuadrantConfig(
+            title,
+            xAxisLabel,
+            yAxisLabel,
+            companies,
+            leadersLabel = leadersLabel,
+            challengersLabel = challengersLabel,
+            visionariesLabel = visionariesLabel,
+            nichePlayersLabel = nichePlayersLabel,
+            visualVersion = visualVersion,
+            useDark = useDark
+        )
     }
 
     fun generateSvg(
         config: MagicQuadrantConfig,
-        isDarkMode: Boolean = false,
         scale: String = "1.0"
     ): String {
 
         val generator = MagicQuadrantSvgGenerator()
-        return generator.generateMagicQuadrant(config, isDarkMode, scale)
+
+        return generator.generateMagicQuadrant(config,  scale)
     }
 
 
@@ -131,9 +150,9 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
         payload: String,
         context: DocOpsContext
     ): String {
-        val config = parseTabularData(payload)
+        val config = parseTabularData(payload, context.useDark)
         csvResponse.update(config.toCsvResponse())
-        val svg = generateSvg(config, context.useDark, context.scale)
+        val svg = generateSvg(config, context.scale)
         return svg
     }
 }

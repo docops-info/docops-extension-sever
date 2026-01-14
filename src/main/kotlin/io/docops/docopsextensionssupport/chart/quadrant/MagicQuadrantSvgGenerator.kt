@@ -1,6 +1,8 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.chart.quadrant
 
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlin.math.max
@@ -54,10 +56,13 @@ class MagicQuadrantSvgGenerator {
         val lightText: String
     )
 
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+
+
     @OptIn(ExperimentalUuidApi::class)
-    fun generateMagicQuadrant(config: MagicQuadrantConfig, isDarkMode: Boolean = false, scale: String = "1.0", isPdf: Boolean = false): String {
+    fun generateMagicQuadrant(config: MagicQuadrantConfig, scale: String = "1.0", isPdf: Boolean = false): String {
         val svgId = "mq_${Uuid.random().toHexString()}"
-        val theme = if (isDarkMode) DarkTheme else LightTheme
+        theme = ThemeFactory.getTheme(config)
         val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
         val baseWidth = 700
@@ -74,8 +79,8 @@ class MagicQuadrantSvgGenerator {
             append("""<?xml version="1.0" encoding="UTF-8"?>""")
             append("""<svg width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
 
-            append(generateStyles(svgId, theme, isPdf))
-            append(appendDefs(svgId, theme))
+            append(generateStyles(svgId,  isPdf))
+            append(appendDefs(svgId))
 
             // Background Layers
             append("""<rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/>""")
@@ -97,7 +102,7 @@ class MagicQuadrantSvgGenerator {
             append("""<line x1="$margin" y1="$cy" x2="${margin + chartWidth}" y2="$cy" class="grid-line" stroke-dasharray="4,4"/>""")
 
             // Quadrant labels
-            appendQuadrantLabels(config, margin, chartStartY, qw, qh, theme)
+            appendQuadrantLabels(config, margin, chartStartY, qw, qh, theme, svgId)
 
             // Axis labels
             append("""<text x="${baseWidth / 2}" y="${baseHeight - 15}" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabel.uppercase())} —&gt;</text>""")
@@ -203,55 +208,53 @@ class MagicQuadrantSvgGenerator {
         sb.append("""<rect x="${margin + quadrantWidth}" y="${chartStartY + quadrantHeight}" width="$quadrantWidth" height="$quadrantHeight" fill="url(#visionariesGradient_$svgId)"/>""")
     }
 
-    private fun appendQuadrantLabels(
-        sb: StringBuilder,
-        svgId: String,
+    // Changed to an extension function: StringBuilder.appendQuadrantLabels
+    private fun StringBuilder.appendQuadrantLabels(
+        config: MagicQuadrantConfig,
         margin: Int,
         chartStartY: Int,
         quadrantWidth: Int,
         quadrantHeight: Int,
-        colors: QuadrantColors,
-        isDarkMode: Boolean, config: MagicQuadrantConfig
+        theme: DocOpsTheme,
+        svgId: String
     ) {
-        val labelBg = if (isDarkMode) "#1e293b" else "#ffffff"
-        val labelOpacity = if (isDarkMode) "0.9" else "0.95"
+        val labelBg = theme.glassEffect
+        val labelOpacity = "0.9"
 
-        // Challengers label
-        val challengersX = margin + quadrantWidth / 2
-        val challengersY = chartStartY + 30
-        val challengersText = config.challengersLabel.uppercase()
-        val challengersWidth = estimateTextWidth(challengersText, 14) + 20
-        sb.append("""<rect x="${challengersX - 75}" y="${challengersY - 15}" width="150" height="30" rx="15" fill="$labelBg" opacity="$labelOpacity" filter="url(#labelShadow_$svgId)"/>""")
-        sb.append("""<text x="$challengersX" y="${challengersY + 5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" fill="${colors.challengers}">$challengersText</text>""")
+        val qColors = object {
+            val leaders = "#10b981"
+            val challengers = "#f59e0b"
+            val visionaries = "#3b82f6"
+            val nichePlayers = "#f43f5e"
+        }
 
-        // Leaders label
-        val leadersX = margin + quadrantWidth + quadrantWidth / 2
-        val leadersY = chartStartY + 30
-        val leadersText = config.leadersLabel.uppercase()
-        val leadersWidth = estimateTextWidth(leadersText, 14) + 20
-        sb.append("""<rect x="${leadersX - 60}" y="${leadersY - 15}" width="120" height="30" rx="15" fill="$labelBg" opacity="$labelOpacity" filter="url(#labelShadow_$svgId)"/>""")
-        sb.append("""<text x="$leadersX" y="${leadersY + 5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" fill="${colors.leaders}">$leadersText</text>""")
-
-        // Niche Players label
-        val nicheX = margin + quadrantWidth / 2
-        val nicheY = chartStartY + quadrantHeight + quadrantHeight - 20
-        val nicheText = config.nichePlayersLabel.uppercase()
-        val nicheWidth = estimateTextWidth(nicheText, 14) + 20
-        sb.append("""<rect x="${nicheX - 85}" y="${nicheY - 15}" width="170" height="30" rx="15" fill="$labelBg" opacity="$labelOpacity" filter="url(#labelShadow_$svgId)"/>""")
-        sb.append("""<text x="$nicheX" y="${nicheY + 5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" fill="${colors.nichePlayers}">$nicheText</text>""")
-
-        // Visionaries label
-        val visionariesX = margin + quadrantWidth + quadrantWidth / 2
-        val visionariesY = chartStartY + quadrantHeight + quadrantHeight - 20
-        val visionariesText = config.visionariesLabel.uppercase()
-        val visionariesWidth = estimateTextWidth(visionariesText, 14) + 20
-        sb.append("""<rect x="${visionariesX - 75}" y="${visionariesY - 15}" width="150" height="30" rx="15" fill="$labelBg" opacity="$labelOpacity" filter="url(#labelShadow_$svgId)"/>""")
-        sb.append("""<text x="$visionariesX" y="${visionariesY + 5}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" fill="${colors.visionaries}">$visionariesText</text>""")
+        // Now 'this' refers to the StringBuilder, and it can call other StringBuilder extensions
+        appendLabel(svgId, margin + quadrantWidth / 2, chartStartY + 30, config.challengersLabel, qColors.challengers, labelBg, labelOpacity, theme.fontFamily)
+        appendLabel(svgId, margin + quadrantWidth + quadrantWidth / 2, chartStartY + 30, config.leadersLabel, qColors.leaders, labelBg, labelOpacity, theme.fontFamily)
+        appendLabel(svgId, margin + quadrantWidth / 2, chartStartY + quadrantHeight * 2 - 20, config.nichePlayersLabel, qColors.nichePlayers, labelBg, labelOpacity, theme.fontFamily)
+        appendLabel(svgId, margin + quadrantWidth + quadrantWidth / 2, chartStartY + quadrantHeight * 2 - 20, config.visionariesLabel, qColors.visionaries, labelBg, labelOpacity, theme.fontFamily)
     }
+
+    private fun StringBuilder.appendLabel(
+        svgId: String,
+        x: Int,
+        y: Int,
+        text: String,
+        textColor: String,
+        bg: String,
+        opacity: String,
+        fontFamily: String
+    ) {
+        val uppercaseText = text.uppercase()
+        val labelWidth = estimateTextWidth(uppercaseText, 14) + 40
+        append("""<rect x="${x - labelWidth / 2}" y="${y - 15}" width="$labelWidth" height="30" rx="15" fill="$bg" opacity="$opacity" filter="url(#labelShadow_$svgId)"/>""")
+        append("""<text x="$x" y="${y + 5}" text-anchor="middle" font-family="$fontFamily" font-size="14" font-weight="600" fill="$textColor">$uppercaseText</text>""")
+    }
+
+
 
     // Add helper method to estimate text width for dynamic sizing
     private fun estimateTextWidth(text: String, fontSize: Int): Int {
-        // Rough estimation: average character width is about 0.6 * fontSize
         return (text.length * fontSize * 0.6).toInt()
     }
 
@@ -263,8 +266,7 @@ class MagicQuadrantSvgGenerator {
         chartStartY: Int,
         chartWidth: Int,
         chartHeight: Int,
-        colors: QuadrantColors,
-        isDarkMode: Boolean
+        colors: QuadrantColors
     ) {
         // Convert 0-100 scale to chart coordinates
         val x = margin + (company.x / 100.0 * chartWidth).toInt()
@@ -298,33 +300,34 @@ class MagicQuadrantSvgGenerator {
         sb.append("""</g>""")
     }
 
-    private fun generateStyles(id: String, theme: Theme, isPdf: Boolean): String {
+    private fun generateStyles(id: String, isPdf: Boolean): String {
         return """
         <style>
-            #$id .bg-rect { fill: ${theme.background}; }
+            ${theme.fontImport}
+            #$id .bg-rect { fill: ${theme.canvas}; }
             #$id .title-text { 
-                fill: ${theme.textPrimary}; 
-                font-family: 'Outfit', 'Segoe UI', sans-serif; 
+                fill: ${theme.primaryText}; 
+                font-family: ${theme.fontFamily}; 
                 font-size: 28px; 
                 font-weight: 800; 
                 letter-spacing: -0.5px;
             }
-            #$id .grid-line { stroke: ${theme.gridLines}; stroke-width: 2; opacity: 0.6; }
+            #$id .grid-line { stroke: ${theme.accentColor}; stroke-width: 2; opacity: 0.2; }
             #$id .axis-label { 
-                fill: ${theme.textSecondary}; 
-                font-family: 'JetBrains Mono', 'Courier New', monospace; 
+                fill: ${theme.secondaryText}; 
+                font-family: ${theme.fontFamily}; 
                 font-size: 11px; 
                 font-weight: 800; 
                 letter-spacing: 2px;
             }
             #$id .quadrant-label { 
-                font-family: 'JetBrains Mono', monospace; 
+                font-family: ${theme.fontFamily}; 
                 font-size: 11px; 
                 font-weight: bold; 
             }
             #$id .company-name { 
-                fill: ${theme.textPrimary}; 
-                font-family: 'Outfit', sans-serif; 
+                fill: ${theme.primaryText}; 
+                font-family: ${theme.fontFamily}; 
                 font-size: 12px; 
                 font-weight: 600;
             }
@@ -339,17 +342,40 @@ class MagicQuadrantSvgGenerator {
         """.trimIndent()
     }
 
-    private fun appendDefs(svgId: String, theme: Theme): String {
+    private fun appendDefs(svgId: String): String {
+        val leaders = "#10b981"
+        val challengers = "#f59e0b"
+        val visionaries = "#3b82f6"
+        val nichePlayers = "#f43f5e"
+
         return """
         <defs>
             <pattern id="gridPattern_$svgId" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridLines}" stroke-width="1" opacity="0.3"/>
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.accentColor}" stroke-width="1" opacity="0.3"/>
             </pattern>
-            <radialGradient id="gradLeaders_$svgId" cx="100%" cy="0%"><stop offset="0%" stop-color="${theme.leaders}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-            <radialGradient id="gradChallengers_$svgId" cx="0%" cy="0%"><stop offset="0%" stop-color="${theme.challengers}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-            <radialGradient id="gradVisionaries_$svgId" cx="100%" cy="100%"><stop offset="0%" stop-color="${theme.visionaries}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-            <radialGradient id="gradNiche_$svgId" cx="0%" cy="100%"><stop offset="0%" stop-color="${theme.nichePlayers}" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient>
-            <filter id="glow_$svgId"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+            <radialGradient id="gradLeaders_$svgId" cx="100%" cy="0%">
+                <stop offset="0%" stop-color="$leaders" stop-opacity="0.15"/>
+                <stop offset="100%" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gradChallengers_$svgId" cx="0%" cy="0%">
+                <stop offset="0%" stop-color="$challengers" stop-opacity="0.15"/>
+                <stop offset="100%" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gradVisionaries_$svgId" cx="100%" cy="100%">
+                <stop offset="0%" stop-color="$visionaries" stop-opacity="0.15"/>
+                <stop offset="100%" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gradNiche_$svgId" cx="0%" cy="100%">
+                <stop offset="0%" stop-color="$nichePlayers" stop-opacity="0.15"/>
+                <stop offset="100%" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow_$svgId">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+            <filter id="labelShadow_$svgId">
+                <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/>
+            </filter>
         </defs>
         """.trimIndent()
     }

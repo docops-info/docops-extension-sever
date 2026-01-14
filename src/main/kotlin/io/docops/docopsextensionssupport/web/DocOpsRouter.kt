@@ -8,7 +8,6 @@ import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.*
 import io.docops.docopsextensionssupport.diagram.*
-import io.docops.docopsextensionssupport.domain.DomainHandler
 import io.docops.docopsextensionssupport.domainviz.DomainVizHandler
 import io.docops.docopsextensionssupport.flow.FlowHandler
 import io.docops.docopsextensionssupport.gherkin.GherkinHandler

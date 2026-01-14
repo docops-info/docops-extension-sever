@@ -1,5 +1,6 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.chart.quadrant
 
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.web.CsvResponse
 
 data class MagicQuadrantConfig(
@@ -12,8 +13,10 @@ data class MagicQuadrantConfig(
     val leadersLabel: String = "Leaders",
     val challengersLabel: String = "Challengers",
     val visionariesLabel: String = "Visionaries",
-    val nichePlayersLabel: String = "Niche Players"
-)
+    val nichePlayersLabel: String = "Niche Players",
+    override var useDark: Boolean = false,
+    override val visualVersion: Int = 1
+): VisualDisplay
 
 data class QuadrantCompany(
     val name: String,

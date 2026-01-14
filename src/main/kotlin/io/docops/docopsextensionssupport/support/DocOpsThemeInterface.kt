@@ -7,6 +7,7 @@ interface DocOpsTheme {
     @OptIn(ExperimentalUuidApi::class)
     val id: String
         get() = Uuid.random().toHexString()
+    val name: String
     val canvas: String
     val primaryText: String
     val secondaryText: String
