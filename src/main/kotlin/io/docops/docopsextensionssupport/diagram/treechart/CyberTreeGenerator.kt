@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.diagram.treechart
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 class CyberTreeMaker(val useDark: Boolean = false) {
@@ -232,7 +233,10 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         return root
     }
 
-    private data class TreeNode(val label: String, val color: String? = null, val children: MutableList<TreeNode> = mutableListOf()) {
-        fun toCsv(): CsvResponse = CsvResponse(listOf("Label"), listOf(listOf(label))) // Simplified for example
-    }
+
+}
+
+@Serializable
+data class TreeNode(val label: String, val color: String? = null, val children: MutableList<TreeNode> = mutableListOf()) {
+    fun toCsv(): CsvResponse = CsvResponse(listOf("Label"), listOf(listOf(label))) // Simplified for example
 }
