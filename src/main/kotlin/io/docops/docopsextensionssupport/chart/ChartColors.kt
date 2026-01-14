@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.ChartColors.Companion.CYBER_PALETTE
 import io.docops.docopsextensionssupport.support.SVGColor
 
 /**
@@ -66,6 +67,18 @@ class ChartColors {
             SVGColor("#FB923C"), SVGColor("#3B82F6"), SVGColor("#14B8A6"),
             SVGColor("#F59E0B"), SVGColor("#DC2626")
         )
+        // High-Impact Cyber-Brutalist Palette (Version 3+)
+        val CYBER_PALETTE = listOf(
+            SVGColor("#f72585"), // Neon Pink
+            SVGColor("#7209b7"), // Vivid Purple
+            SVGColor("#3a0ca3"), // Deep Indigo
+            SVGColor("#4361ee"), // Royal Blue
+            SVGColor("#4cc9f0"), // Vivid Cyan
+            SVGColor("#00f5d4"), // Aquamarine
+            SVGColor("#00bbf9"), // Sky Blue
+            SVGColor("#ff0054"), // Fashion Magenta
+            SVGColor("#ff9e00")  // Amber
+        )
 
         fun getColorForIndex(index: Int): SVGColor {
             return modernColors[index % modernColors.size]
@@ -97,11 +110,12 @@ val STUNNINGPIE = listOf(
     "#003f5c", "#ffa600", "#ff6361", "#4BC0C0", "#FFCE56", "#FF9F40", "#C9CBCF"
 )
 
+
 fun chartColorAsSVGColor (id: String = "svgGradientColor") : MutableList<SVGColor> {
     val list = mutableListOf<SVGColor>()
-    STUNNINGPIE.forEachIndexed { index, it ->
+    CYBER_PALETTE.forEachIndexed { index, it ->
         val identity = if(id.isEmpty()) { "svgGradientColor_$index"} else { "${id}_$index" }
-        list.add(SVGColor(it, identity))
+        list.add(SVGColor(it.color, identity))
     }
     return list
 }

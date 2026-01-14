@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.formatHex
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
@@ -9,11 +10,12 @@ import java.io.File
 class PieMaker {
 
     // Array of modern, visually appealing colors for the pie charts
-    private val MODERN_COLORS = arrayOf(
+   /* private val MODERN_COLORS = arrayOf(
         "#4361ee", "#3a0ca3", "#7209b7", "#f72585", "#4cc9f0",
         "#4895ef", "#560bad", "#f15bb5", "#00bbf9", "#00f5d4",
         "#ff9e00", "#ff0054", "#390099", "#9e0059", "#ffbd00"
-    )
+    )*/
+    private val MODERN_COLORS = ChartColors.CYBER_PALETTE
 
     private var theme = ThemeFactory.getTheme(false)
     fun makePies(pies: Pies) : String {
@@ -269,7 +271,7 @@ class PieMaker {
         }
 
         // Otherwise use our modern color palette
-        return MODERN_COLORS[index % MODERN_COLORS.size]
+        return MODERN_COLORS[index % MODERN_COLORS.size].color
     }
 
     /**

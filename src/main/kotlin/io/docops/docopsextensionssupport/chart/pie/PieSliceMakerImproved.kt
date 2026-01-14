@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.chart.chartColorAsSVGColor
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
@@ -77,7 +78,11 @@ class PieSliceMakerImproved {
 
     private fun createEnhancedDefs(pieSlices: PieSlices): String {
         val defGrad = StringBuilder()
-        val clrs = chartColorAsSVGColor()
+        val clrs = if (pieSlices.display.visualVersion >= 3) {
+            ChartColors.CYBER_PALETTE
+        } else {
+            chartColorAsSVGColor()
+        }
         for (i in 0 until pieSlices.slices.size) {
             defGrad.append(clrs[i % clrs.size].linearGradient)
         }

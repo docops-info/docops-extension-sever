@@ -48,9 +48,9 @@ class PieChartImproved {
         }
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-        var colors = ChartColors.Companion.modernColors
+        var colors = ChartColors.CYBER_PALETTE
         if (customColors != null) {
-            colors = mutableListOf<SVGColor>()
+            colors = mutableListOf()
             customColors.forEach {
                 colors.add(SVGColor(it))
             }

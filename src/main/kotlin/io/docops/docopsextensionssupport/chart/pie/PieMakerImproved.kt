@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
@@ -8,10 +9,7 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 
 class PieMakerImproved {
 
-    private val MODERN_COLORS = arrayOf(
-        "#f72585", "#7209b7", "#3a0ca3", "#4361ee", "#4cc9f0",
-        "#00f5d4", "#00bbf9", "#ff0054", "#ff9e00"
-    )
+    private val MODERN_COLORS = ChartColors.CYBER_PALETTE
 
     fun makePies(pies: Pies): String {
         val theme = ThemeFactory.getTheme(pies.pieDisplay)
@@ -64,8 +62,7 @@ class PieMakerImproved {
 
     private fun makePieSvg(pie: Pie, index: Int, theme: DocOpsTheme, id: String): String {
         val gradId = "grad_${id}_$index"
-        val strokeColor = MODERN_COLORS[index % MODERN_COLORS.size]
-        
+
         return """
             <svg class="pie-unit" width="48" height="48" x="16" y="5" viewBox="0 0 36 36">
                 <!-- Inner Depth -->
@@ -123,7 +120,7 @@ class PieMakerImproved {
     private fun makePieGradients(pies: Pies): String {
         val sb = StringBuilder()
         pies.pies.forEachIndexed { i, _ ->
-            val color = MODERN_COLORS[i % MODERN_COLORS.size]
+            val color = MODERN_COLORS[i % MODERN_COLORS.size].color
             sb.append("""
                 <linearGradient id="grad_${pies.pieDisplay.id}_$i" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="$color" stop-opacity="0.8"/>

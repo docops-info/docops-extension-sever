@@ -1,11 +1,9 @@
 package io.docops.docopsextensionssupport.chart.pie
 
 
-import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.chart.chartColorAsSVGColor
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
-import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.math.*
@@ -94,7 +92,6 @@ class DonutMakerImproved {
         sb.append("""<circle cx="${viewBox / 2}" cy="${viewBox / 2}" r="65" fill="${theme.canvas}" stroke="$accentColor" stroke-opacity="0.2"/>""")
 
         commands.forEachIndexed { index, it ->
-            val textColor = determineTextColor(ChartColors.modernColors[index % ChartColors.modernColors.size].color)
             sb.append("""
                 <path d="${it.commands}" fill="${it.color}" transform="rotate(${it.offset})" class="pie" style="transform-origin: center; cursor: pointer;">
                     <animate attributeName="opacity" from="0" to="1" dur="${0.5 + index * 0.1}s" fill="freeze"/>
