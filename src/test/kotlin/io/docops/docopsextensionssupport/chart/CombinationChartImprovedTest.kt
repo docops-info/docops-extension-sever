@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart
 
+import io.docops.docopsextensionssupport.chart.combo.CombinationChartImproved
 import io.docops.docopsextensionssupport.web.DefaultCsvResponse
 import org.junit.jupiter.api.Test
 import java.io.File

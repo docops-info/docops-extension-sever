@@ -43,7 +43,7 @@ object ThemeFactory {
 /**
  * Modern "Pro" Dark Theme - High impact, sharp accents
  */
-class ModernDarkTheme : DocOpsTheme {
+open class ModernDarkTheme : DocOpsTheme {
     override val canvas = "#020617"
     override val primaryText = "#f8fafc"
     override val secondaryText = "#38bdf8" // Cyan accent

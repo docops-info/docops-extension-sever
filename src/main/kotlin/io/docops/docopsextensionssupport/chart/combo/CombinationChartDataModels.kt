@@ -1,5 +1,6 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.combo
 
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -46,7 +47,8 @@ data class CombinationChartDisplay(
     val id: String = UUID.randomUUID().toString(),
     val baseColor: String = "#4361ee",
     val backgroundColor: String = "#f8f9fa",
-    var useDark: Boolean = false,
+    override var useDark: Boolean = false,
+    override val visualVersion: Int = 1,
     val scale: Double = 1.0,
     val showGrid: Boolean = true,
     val showLegend: Boolean = true,
@@ -54,7 +56,7 @@ data class CombinationChartDisplay(
     val showPoints: Boolean = true,
     val dualYAxis: Boolean = false,
     val useGlass: Boolean = false
-)
+) : VisualDisplay
 
 /**
  * Converts a CombinationChart to CSV format

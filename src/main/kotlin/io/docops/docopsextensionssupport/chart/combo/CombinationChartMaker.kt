@@ -1,8 +1,8 @@
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.combo
 
-import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import java.util.*
 
 class CombinationChartMaker {
 
@@ -10,10 +10,13 @@ class CombinationChartMaker {
         "#4361ee", "#4cc9f0", "#4895ef", "#560bad", "#7209b7",
         "#b5179e", "#f72585", "#3f37c9", "#3a0ca3", "#480ca8"
     )
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
-    private val fontFamily = "'JetBrains Mono', monospace"
+
+
 
     fun makeChart(chart: CombinationChart): String {
+        theme = ThemeFactory.getTheme(chart.display)
         val sb = StringBuilder()
 
         sb.append(makeHead(chart))
@@ -44,6 +47,7 @@ class CombinationChartMaker {
                  height="${(height * chart.display.scale) / DISPLAY_RATIO_16_9}" 
                  viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" 
                  aria-label='DocOps: Combination Chart'>
+                 ${theme.fontImport}
         """.trimIndent()
     }
 
@@ -166,16 +170,16 @@ class CombinationChartMaker {
             """.trimIndent())
         }
 
-        val textColor = if (chart.display.useDark) "#f8fafc" else "#0f172a"
-        val gridColor = if (chart.display.useDark) "#1e293b" else "#e2e8f0"
-        val axisColor = if (chart.display.useDark) "#334155" else "#475569"
+        val textColor = theme.primaryText
+        val gridColor = theme.accentColor
+        val axisColor = theme.accentColor
 
         sb.append("""
                 <style>
-                    #combo_chart_${chart.id} .chart-text { fill: $textColor; font-family: $fontFamily; letter-spacing: -0.5px; }
-                    #combo_chart_${chart.id} .chart-grid { stroke: $gridColor; stroke-dasharray: 3,3; }
-                    #combo_chart_${chart.id} .chart-axis { stroke: $axisColor; stroke-width: 1.5; }
-                    
+                    #combo_chart_${chart.id} .chart-text { fill: $textColor; font-family: ${theme.fontFamily}; letter-spacing: -0.5px; }
+                    #combo_chart_${chart.id} .chart-grid { stroke: $gridColor; stroke-dasharray: 3,3; stroke-opacity: 0.2; }
+                    #combo_chart_${chart.id} .chart-axis { stroke: $axisColor; stroke-width: 1.5; stroke-opacity: 0.5; }
+                  
                     @keyframes revealBar {
                         from { transform: scaleY(0); opacity: 0; }
                         to { transform: scaleY(1); opacity: 1; }
@@ -218,25 +222,26 @@ class CombinationChartMaker {
     private fun makeBackground(chart: CombinationChart): String {
         val id = chart.id
         val sb = StringBuilder()
+        // Use theme canvas for consistent backgrounds
+        sb.append("""<rect width="100%" height="100%" fill="${theme.canvas}" rx="10" ry="10"/>""")
+
         if (chart.display.useDark) {
-            sb.append("""<rect width="100%" height="100%" fill="url(#bgGlow_$id)" rx="10" ry="10"/>""")
-        } else {
-            sb.append("""<rect width="100%" height="100%" fill="${chart.display.backgroundColor}" rx="10" ry="10"/>""")
+            sb.append("""<rect width="100%" height="100%" fill="url(#bgGlow_$id)" rx="10" ry="10" opacity="0.3"/>""")
         }
         sb.append("""<rect width="100%" height="100%" fill="url(#dotPattern_$id)" rx="10" ry="10" opacity="0.5"/>""")
         return sb.toString()
     }
 
     private fun makeTitle(chart: CombinationChart): String {
-        val titleColor = if (chart.display.useDark) "#f8fafc" else "#0f172a"
-        val titleBgColor = if (chart.display.useDark) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
+        val titleColor = theme.primaryText
+        val titleBgColor = theme.glassEffect
         val id = chart.id
 
         return """
             <g class="fade-in">
-                <rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="$titleBgColor" filter="url(#legendGlass_$id)"/>
+                <rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="$titleBgColor" stroke="${theme.accentColor}" stroke-opacity="0.2"/>
                 <text x="400" y="35" text-anchor="middle" font-size="20" font-weight="bold" 
-                      fill="$titleColor" font-family="$fontFamily">
+                      fill="$titleColor" font-family="${theme.fontFamily}">
                     ${chart.title}
                 </text>
             </g>
@@ -610,8 +615,9 @@ class CombinationChartMaker {
     private fun makeLegend(chart: CombinationChart): String {
         val sb = StringBuilder()
         val id = chart.id
-        val legendBgColor = if (chart.display.useDark) "rgba(30, 41, 59, 0.7)" else "rgba(255, 255, 255, 0.8)"
-        val legendBorderColor = if (chart.display.useDark) "#4b5563" else "#d1d5db"
+        val legendBgColor = theme.glassEffect
+        val legendBorderColor = theme.accentColor
+
 
         // Position legend on the right side, after secondary axis label
         val legendX = 820
@@ -622,7 +628,7 @@ class CombinationChartMaker {
         sb.append("""
             <g class="fade-in">
             <rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" 
-                  fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1" 
+                  fill="$legendBgColor" stroke="$legendBorderColor" stroke-width="1" stroke-opacity="0.3" 
                   rx="8" ry="8" filter="url(#legendGlass_$id)"/>
         """.trimIndent())
 

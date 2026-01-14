@@ -1,5 +1,4 @@
-
-package io.docops.docopsextensionssupport.chart
+package io.docops.docopsextensionssupport.chart.combo
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse

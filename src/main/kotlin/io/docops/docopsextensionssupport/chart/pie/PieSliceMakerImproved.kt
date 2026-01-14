@@ -33,7 +33,7 @@ class PieSliceMakerImproved {
         sb.append(createEnhancedDefs(pieSlices))
 
         val titleColor = theme.primaryText
-        sb.append("""<text x="${width / 2}" y="35" text-anchor="middle" style="font-size: 24px; font-family: ${theme.fontFamily}; fill: $titleColor; font-weight: 800; text-transform: uppercase;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<text x="${width / 2}" y="35" text-anchor="middle" style="font-size: 12px; font-family: ${theme.fontFamily}; fill: $titleColor; font-weight: 800; text-transform: uppercase;">${pieSlices.title.escapeXml()}</text>""")
 
         val total = pieSlices.sum()
         val centerX = width / 2.0
