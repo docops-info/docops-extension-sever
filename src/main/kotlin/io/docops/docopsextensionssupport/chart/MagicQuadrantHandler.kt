@@ -25,8 +25,10 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
 
         var title = "Magic Quadrant"
         var xAxisLabel = "Ability to Execute"
+        var xAxisLabelEnd = ""
         var yAxisLabel = "Completeness of Vision"
         var visualVersion = 1
+        var yAxisLabelEnd = ""
         val companies = mutableListOf<QuadrantCompany>()
 
         var headerProcessed = false
@@ -40,10 +42,24 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
                     title = configLine.substring("title:".length).trim()
                 }
                 configLine.startsWith("xAxis:") -> {
-                    xAxisLabel = configLine.substring("xAxis:".length).trim()
+                    val valStr = configLine.substring("xAxis:".length).trim()
+                    if (valStr.contains("|")) {
+                        val parts = valStr.split("|")
+                        xAxisLabel = parts[0].trim()
+                        xAxisLabelEnd = parts[1].trim()
+                    } else {
+                        xAxisLabel = valStr
+                    }
                 }
                 configLine.startsWith("yAxis:") -> {
-                    yAxisLabel = configLine.substring("yAxis:".length).trim()
+                    val valStr = configLine.substring("yAxis:".length).trim()
+                    if (valStr.contains("|")) {
+                        val parts = valStr.split("|")
+                        yAxisLabel = parts[0].trim()
+                        yAxisLabelEnd = parts[1].trim()
+                    } else {
+                        yAxisLabel = valStr
+                    }
                 }
                 configLine.startsWith("visualVersion:") -> {
                     visualVersion = configLine.substring("visualVersion:".length).trim().toIntOrNull() ?: 1
@@ -122,9 +138,11 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
 
         return MagicQuadrantConfig(
             title,
-            xAxisLabel,
-            yAxisLabel,
-            companies,
+            xAxisLabel = xAxisLabel,
+            xAxisLabelEnd = xAxisLabelEnd,
+            yAxisLabel = yAxisLabel,
+            yAxisLabelEnd = yAxisLabelEnd,
+            companies = companies,
             leadersLabel = leadersLabel,
             challengersLabel = challengersLabel,
             visionariesLabel = visionariesLabel,

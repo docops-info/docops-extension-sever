@@ -104,10 +104,25 @@ class MagicQuadrantSvgGenerator {
             // Quadrant labels
             appendQuadrantLabels(config, margin, chartStartY, qw, qh, theme, svgId)
 
-            // Axis labels
-            append("""<text x="${baseWidth / 2}" y="${baseHeight - 15}" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabel.uppercase())} —&gt;</text>""")
-            append("""<text x="20" y="${chartStartY + chartHeight / 2}" text-anchor="middle" class="axis-label" transform="rotate(-90 20 ${chartStartY + chartHeight / 2})">${escapeXml(config.yAxisLabel.uppercase())} —&gt;</text>""")
+            // Axis labels - Split display
+            // X-Axis: Start label centered under left half, End label centered under right half
+            val xAxisY = baseHeight - 15
+            append("""<text x="${margin + qw / 2}" y="$xAxisY" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabel.uppercase())}</text>""")
 
+            if (config.xAxisLabelEnd.isNotEmpty()) {
+                append("""<text x="${margin + qw + qw / 2}" y="$xAxisY" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabelEnd.uppercase())} →</text>""")
+            }
+
+            // Y-Axis: Start label centered next to bottom half, End label centered next to top half
+            val yAxisX = 20
+            val yBottomHalfCenter = chartStartY + qh + qh / 2
+            val yTopHalfCenter = chartStartY + qh / 2
+
+            append("""<text x="$yAxisX" y="$yBottomHalfCenter" text-anchor="middle" class="axis-label" transform="rotate(-90 $yAxisX $yBottomHalfCenter)">${escapeXml(config.yAxisLabel.uppercase())}</text>""")
+
+            if (config.yAxisLabelEnd.isNotEmpty()) {
+                append("""<text x="$yAxisX" y="$yTopHalfCenter" text-anchor="middle" class="axis-label" transform="rotate(-90 $yAxisX $yTopHalfCenter)">${escapeXml(config.yAxisLabelEnd.uppercase())} →</text>""")
+            }
             // Plot companies
             config.companies.forEach { company ->
                 appendPlotCompany(this, svgId, company, margin, chartStartY, chartWidth, chartHeight, isPdf)
@@ -301,6 +316,7 @@ class MagicQuadrantSvgGenerator {
     }
 
     private fun generateStyles(id: String, isPdf: Boolean): String {
+        val fontSize = 24 / theme.fontWidthMultiplier
         return """
         <style>
             ${theme.fontImport}
@@ -308,7 +324,7 @@ class MagicQuadrantSvgGenerator {
             #$id .title-text { 
                 fill: ${theme.primaryText}; 
                 font-family: ${theme.fontFamily}; 
-                font-size: 28px; 
+                font-size: ${fontSize}px; 
                 font-weight: 800; 
                 letter-spacing: -0.5px;
             }

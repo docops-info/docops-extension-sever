@@ -6,7 +6,9 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 data class MagicQuadrantConfig(
     val title: String = "Magic Quadrant",
     val xAxisLabel: String = "Ability to Execute",
+    val xAxisLabelEnd: String = "", // Added for split axis
     val yAxisLabel: String = "Completeness of Vision",
+    val yAxisLabelEnd: String = "", // Added for split axis
     val companies: List<QuadrantCompany>,
 
     // Add custom quadrant labels
