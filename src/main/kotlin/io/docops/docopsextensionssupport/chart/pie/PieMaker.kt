@@ -1,13 +1,11 @@
-package io.docops.docopsextensionssupport.diagram
+package io.docops.docopsextensionssupport.chart.pie
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.formatHex
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import java.io.File
-import kotlin.div
-import kotlin.text.toFloat
-import kotlin.times
 
 class PieMaker {
 
@@ -18,7 +16,9 @@ class PieMaker {
         "#ff9e00", "#ff0054", "#390099", "#9e0059", "#ffbd00"
     )
 
+    private var theme = ThemeFactory.getTheme(false)
     fun makePies(pies: Pies) : String {
+        theme = ThemeFactory.getTheme(pies.pieDisplay)
         val pieCount = pies.pies.size
         val pieWidth = 60 // Increased from 36 to prevent horizontal overlap
         val totalPieWidth = pieCount * pieWidth
@@ -36,13 +36,13 @@ class PieMaker {
         // Atmospheric Dot Pattern
         sb.append("""
                 <pattern id="dotPattern_${pies.pieDisplay.id}" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="0.8" fill="${if (pies.pieDisplay.useDark) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
+                    <circle cx="2" cy="2" r="0.8" fill="${theme.secondaryText}" fill-opacity="0.4" />
                 </pattern>
             """.trimIndent())
         sb.append(BackgroundHelper.getBackgroundGradient(pies.pieDisplay.useDark, pies.pieDisplay.id))
         sb.append("</defs>")
         // Apply Background Pattern overlay
-        sb.append("<rect width='100%' height='100%' fill='url(#dotPattern_${pies.pieDisplay.id})' rx='12' pointer-events='none'/>")
+        sb.append("<rect width='100%' height='100%' fill='url(#dotPattern_${pies.pieDisplay.id})' rx='${theme.cornerRadius}' pointer-events='none'/>")
 
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
@@ -81,9 +81,8 @@ class PieMaker {
     private fun tail() = """</svg></svg>"""
 
     private fun makePieSvg(pie: Pie, display: PieDisplay, index: Int) : String {
-        val fill = if(display.useDark) "#0f172a" else "rgba(255,255,255,0.1)"
+        val fill = theme.glassEffect
         val gradientId = "pieGradient_$index"
-        val textColor = if(display.useDark) "#f8fafc" else "#0f172a"
 
 
         //language=svg
@@ -108,7 +107,7 @@ class PieMaker {
                 </path>
 
                 <!-- Distinctive Percentage Text -->
-                <text x="18" y="18" dy="0.35em" style="font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 800; text-anchor: middle; fill: ${textColor}; opacity: 0;">
+                <text x="18" y="18" dy="0.35em" style="font-family: ${theme.fontFamily}; font-size: 6px; font-weight: 800; text-anchor: middle; fill: ${theme.primaryText}; opacity: 0;">
                     ${pie.percent}%
                     <animate attributeName="opacity" values="0;1" dur="1s" delay="0.5s" fill="freeze"/>
                 </text>
@@ -116,10 +115,9 @@ class PieMaker {
             """.trimIndent()
     }
     private fun makeLabel(pie: Pie, display: PieDisplay): String {
-        val textColor = if(display.useDark) "#94a3b8" else "#475569"
         val sb = StringBuilder()
         // Adjusted x to 30 (center of 60px pieWidth)
-        sb.append("""<text x="30" y="48" style="font-family: 'JetBrains Mono', monospace; font-size: 5px; font-weight: 700; text-anchor: middle; text-transform: uppercase; letter-spacing: 0.5px;">""")
+        sb.append("""<text x="30" y="48" style="font-family: ${theme.fontFamily}; font-size: 5px; font-weight: 700; text-anchor: middle; text-transform: uppercase; letter-spacing: 0.5px;">""")
         val labels = pie.label.split(" ")
         labels.forEachIndexed { idx, s ->
             var dy = 6
@@ -127,7 +125,7 @@ class PieMaker {
                 dy = 0
             }
             sb.append("""
-                <tspan x="30" dy="$dy" style="fill: ${textColor};">${s.escapeXml()}</tspan>
+                <tspan x="30" dy="$dy" style="fill: ${theme.secondaryText};">${s.escapeXml()}</tspan>
                 """.trimIndent())
         }
         sb.append("</text>")
@@ -137,6 +135,7 @@ class PieMaker {
     private fun filters(pies: Pies) =
         """
              <style>
+                ${theme.fontImport}
                 @keyframes revealScale {
                     from { transform: scale(0.8); opacity: 0; }
                     to { transform: scale(1); opacity: 1; }
@@ -254,16 +253,16 @@ class PieMaker {
             // Create enhanced gradient with glass-like appearance
             sb.append("""
                 <linearGradient id="pieGradient_$index" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="${brighterColor}" stop-opacity="0.9"/>
-                    <stop offset="40%" stop-color="${color}" stop-opacity="0.95"/>
-                    <stop offset="100%" stop-color="${color}" stop-opacity="0.8"/>
+                    <stop offset="0%" stop-color="$brighterColor" stop-opacity="0.9"/>
+                    <stop offset="40%" stop-color="$color" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="$color" stop-opacity="0.8"/>
                 </linearGradient>
 
                 <!-- Radial gradient for this specific pie segment -->
                 <radialGradient id="pieRadial_$index" cx="30%" cy="30%" r="70%">
-                    <stop offset="0%" stop-color="${brighterColor}" stop-opacity="0.7"/>
-                    <stop offset="70%" stop-color="${color}" stop-opacity="0.3"/>
-                    <stop offset="100%" stop-color="${color}" stop-opacity="0.1"/>
+                    <stop offset="0%" stop-color="$brighterColor" stop-opacity="0.7"/>
+                    <stop offset="70%" stop-color="$color" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="$color" stop-opacity="0.1"/>
                 </radialGradient>
             """.trimIndent())
         }

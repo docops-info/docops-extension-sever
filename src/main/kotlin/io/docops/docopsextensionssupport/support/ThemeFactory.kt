@@ -16,6 +16,9 @@ object ThemeFactory {
         val version = display?.visualVersion ?: 1
 
         val theme =  when {
+            version >= 3 -> {
+                if (isDark) CyberDarkTheme() else CyberLightTheme()
+            }
             version >= 2 -> {
                 if (isDark) ModernDarkTheme() else ModernLightTheme()
             }
@@ -163,4 +166,31 @@ class BrutalistLightTheme : DocOpsTheme {
     override val fontWidthMultiplier = 1.35f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 0
+}
+
+/**
+ * Cyber-Brutalist "v3" themes
+ */
+class CyberDarkTheme : ModernDarkTheme() {
+    override val name = "CyberDarkTheme"
+    override val canvas = "#0a0e27" // Deep Midnight Blue
+    override val primaryText = "#f8fafc"
+    override val secondaryText = "#38bdf8"
+    override val accentColor = "#6366f1"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+}
+
+class CyberLightTheme : DocOpsTheme {
+    override val name = "CyberLightTheme"
+    override val canvas = "#fafbfc"
+    override val primaryText = "#0f172a"
+    override val secondaryText = "#475569"
+    override val accentColor = "#6366f1"
+    override val glassEffect = "rgba(255, 255, 255, 0.9)"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.1)"
+    override val fontFamily = "'Syne', sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.35f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 16
 }
