@@ -4,11 +4,7 @@ import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.util.BackgroundHelper
-import java.util.UUID
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.PI
+
 
 class PieMakerImproved {
 
@@ -31,19 +27,11 @@ class PieMakerImproved {
         sb.append("<defs>")
         sb.append(filters(pies, theme))
         
-        // Geometric Atmospheric Pattern
-        sb.append("""
-            <pattern id="dotPattern_${pies.pieDisplay.id}" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1.2" fill="${theme.accentColor}" fill-opacity="0.15" />
-            </pattern>
-        """.trimIndent())
-        
-        sb.append(BackgroundHelper.getBackgroundGradient(pies.pieDisplay.useDark, pies.pieDisplay.id))
         sb.append(makePieGradients(pies))
         sb.append("</defs>")
 
         // Background with 8-point grid spacing and theme corners
-        sb.append("<rect width='100%' height='100%' fill='url(#dotPattern_${pies.pieDisplay.id})' rx='${theme.cornerRadius}' pointer-events='none'/>")
+        sb.append("<rect width='100%' height='100%' fill='${theme.canvas}' rx='${theme.cornerRadius}' pointer-events='none'/>")
 
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
@@ -68,11 +56,9 @@ class PieMakerImproved {
         val outerHeight = (1 + pies.pieDisplay.scale) * paddedHeight
         val outerWidth = (1 + pies.pieDisplay.scale) * paddedWidth
 
-        val bgPath = BackgroundHelper.getBackGroundPath(pies.pieDisplay.useDark, pies.pieDisplay.id, width.toFloat(), height.toFloat())
 
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="${height+16}" viewBox="0 0 $width ${height+16}">
-            $bgPath
         """
     }
 

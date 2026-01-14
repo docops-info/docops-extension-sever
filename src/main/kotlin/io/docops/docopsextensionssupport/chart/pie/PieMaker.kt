@@ -4,7 +4,6 @@ import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.formatHex
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import io.docops.docopsextensionssupport.util.BackgroundHelper
 import java.io.File
 
 class PieMaker {
@@ -33,16 +32,10 @@ class PieMaker {
         sb.append("<defs>")
         sb.append(filters(pies))
         sb.append(gradients(pies))
-        // Atmospheric Dot Pattern
-        sb.append("""
-                <pattern id="dotPattern_${pies.pieDisplay.id}" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="0.8" fill="${theme.secondaryText}" fill-opacity="0.4" />
-                </pattern>
-            """.trimIndent())
-        sb.append(BackgroundHelper.getBackgroundGradient(pies.pieDisplay.useDark, pies.pieDisplay.id))
+
         sb.append("</defs>")
         // Apply Background Pattern overlay
-        sb.append("<rect width='100%' height='100%' fill='url(#dotPattern_${pies.pieDisplay.id})' rx='${theme.cornerRadius}' pointer-events='none'/>")
+        sb.append("<rect width='100%' height='100%' fill='${theme.canvas}' rx='${theme.cornerRadius}' pointer-events='none'/>")
 
         pies.pies.forEachIndexed { index, pie ->
             val x = leftMargin + (index * pieWidth)
@@ -69,11 +62,10 @@ class PieMaker {
         val outerHeight = (1+pies.pieDisplay.scale) * paddedHeight
         val outerWidth = (1+pies.pieDisplay.scale) * paddedWidth
 
-        val bg =  BackgroundHelper.getBackGroundPath(pies.pieDisplay.useDark, pies.pieDisplay.id, width = width.toFloat(), height = height.toFloat())
+        //val bg =  BackgroundHelper.getBackGroundPath(pies.pieDisplay.useDark, pies.pieDisplay.id, width = width.toFloat(), height = height.toFloat())
 
         return """<svg xmlns="http://www.w3.org/2000/svg" height="${outerHeight/ DISPLAY_RATIO_16_9}" width="${outerWidth/DISPLAY_RATIO_16_9}" viewBox="-$shadowPadding -$shadowPadding $paddedWidth $paddedHeight" id="id_${pies.pieDisplay.id}">
             <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="${height+10}" viewBox="0 0 $width ${height+10}" >
-            $bg
             """
     }
 
@@ -89,7 +81,7 @@ class PieMaker {
         return """
             <svg class="pie" width="36" height="36" x="12" y="5" viewBox="0 0 36 36">
                 <!-- Background circle -->
-                <circle cx="18" cy="18" r="16" fill="${fill}" filter="url(#glassDropShadow)"/>
+                <circle cx="18" cy="18" r="16" fill="${fill}"/>
 
                 <!-- Glass overlay -->
                 <circle cx="18" cy="18" r="16" fill="url(#glassOverlay)" class="glass-overlay"/>
