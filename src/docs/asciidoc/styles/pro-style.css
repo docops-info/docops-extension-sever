@@ -549,3 +549,74 @@ tr:hover td {
     :root.dark-mode-auto .theme-toggle .light-icon { display: none; }
 }
 
+.mermaid {
+    background: var(--bg-surface);
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+}
+
+/* Glassmorphism for clusters and backgrounds */
+.mermaid .cluster rect {
+    fill: var(--bg-base) !important;
+    fill-opacity: 0.5 !important;
+    stroke: var(--border-color) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* Ensure font consistency for all Mermaid labels */
+.mermaid text {
+    font-family: var(--font-body) !important;
+    letter-spacing: -0.01em;
+}
+
+/* Highlight "Active" states in Gantt or State diagrams */
+.mermaid .active, .mermaid .task0 {
+    fill: var(--accent-primary) !important;
+    stroke: var(--accent-secondary) !important;
+}
+:root.dark-mode .mermaid .messageText,
+:root.dark-mode .mermaid .loopText,
+:root.dark-mode .mermaid .sectionTitle,
+:root.dark-mode .mermaid .taskText,
+:root.dark-mode .mermaid .noteText {
+    fill: var(--text-heading) !important;
+    color: var(--text-heading) !important;
+    stroke: none !important;
+}
+
+:root.dark-mode .mermaid .messageLine0,
+:root.dark-mode .mermaid .messageLine1 {
+    stroke: var(--accent-secondary) !important;
+    stroke-opacity: 0.6;
+}
+
+/* Fix for the Yellow Note box in the image */
+:root.dark-mode .mermaid .note {
+    fill: var(--bg-surface) !important;
+    stroke: var(--accent-primary) !important;
+}
+
+:root.dark-mode .mermaid .noteText > tspan {
+    fill: var(--accent-primary) !important;
+}
+
+/* Ensure actor labels stay readable */
+:root.dark-mode .mermaid .actor {
+    fill: var(--bg-surface) !important;
+    stroke: var(--accent-primary) !important;
+}
+
+:root.dark-mode .mermaid text.actor > tspan {
+    fill: var(--text-heading) !important;
+    font-weight: 600;
+}
+
+/* Flowchart Edge Labels */
+:root.dark-mode .mermaid .edgeLabel,
+:root.dark-mode .mermaid .edgeLabel rect {
+    fill: var(--bg-base) !important;
+    color: var(--text-main) !important;
+}
