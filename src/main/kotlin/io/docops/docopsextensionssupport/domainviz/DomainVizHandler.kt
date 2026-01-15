@@ -18,7 +18,7 @@ class DomainVizHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse)
             val diagramGenerator = NeuralDomainVisualizer(useDark = context.useDark)
             diagramGenerator.generateSVG(data)
         } else {
-            val diagramGenerator = SVGDiagramGenerator(useDark = context.useDark)
+            val diagramGenerator = DomainVisualizer(useDark = context.useDark)
             diagramGenerator.generateSVG(data)
         }
 

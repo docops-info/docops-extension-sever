@@ -11,9 +11,9 @@ import kotlin.text.toInt
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class DomainVisualizer
 
-class SVGDiagramGenerator @OptIn(ExperimentalUuidApi::class) constructor(
+
+class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
     val id: String = Uuid.random().toHexString(),
     val useDark: Boolean = false) {
     companion object {
