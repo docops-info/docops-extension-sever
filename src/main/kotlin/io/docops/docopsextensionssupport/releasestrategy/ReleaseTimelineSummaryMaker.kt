@@ -16,9 +16,15 @@
 
 package io.docops.docopsextensionssupport.releasestrategy
 
+import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlinx.serialization.json.Json
 import java.io.File
+import kotlin.compareTo
+import kotlin.text.lines
+import kotlin.times
+import kotlin.toString
 
 
 /**
@@ -33,16 +39,17 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         private const val CARD_WIDTH = 400f
         private const val CARD_HEIGHT = 200f
         private const val TRIANGLE_WIDTH = 100f
-        private const val CARD_SPACING = 20f
-        private const val TITLE_HEIGHT = 60f
-        private const val MARGIN = 20f
-        private const val TEXT_MARGIN = 20f
-        private const val GOAL_MAX_CHARS = 58  // Increased for longer goal text
-        private const val DETAIL_MAX_CHARS = 80  // Increased for wider bullet wrapping
-        private const val GOAL_HEIGHT = 45f  // Space reserved for goal text
-        private const val MAX_BULLET_LINES = 8  // Maximum bullet lines before showing "..."
+        private const val CARD_SPACING = 24f       // Was 20f - now 8-point grid compliant
+        private const val TITLE_HEIGHT = 64f       // Was 60f - now 8-point grid compliant
+        private const val MARGIN = 24f             // Was 20f - now 8-point grid compliant
+        private const val TEXT_MARGIN = 24f        // Was 20f - now 8-point grid compliant
+        private const val GOAL_MAX_CHARS = 58
+        private const val DETAIL_MAX_CHARS = 80
+        private const val GOAL_HEIGHT = 45f
+        private const val MAX_BULLET_LINES = 8
     }
 
+    private var theme = ThemeFactory.getTheme(false)
     /**
      * Generates a SVG string representation of a document using the given release strategy.
      *
@@ -51,6 +58,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
      * @return The SVG string representation of the generated document.
      */
     override fun make(releaseStrategy: ReleaseStrategy, isPdf: Boolean): String {
+        theme = ThemeFactory.getTheme(releaseStrategy.useDark)
         val dimensions = calculateDimensions(releaseStrategy)
         val id = releaseStrategy.id
 
@@ -82,14 +90,8 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
     private fun createSvgHeader(dimensions: Dimensions, id: String, title: String): String {
         return """
-            <svg width="${dimensions.scaledWidth}" height="${dimensions.scaledHeight}" 
-                 viewBox="0 0 ${dimensions.contentWidth} ${dimensions.contentHeight}" 
-                 xmlns="http://www.w3.org/2000/svg" 
-                 xmlns:xlink="http://www.w3.org/1999/xlink" 
-                 role="img" 
-                 aria-label="DocOps: Release Strategy" 
-                 id="ID$id">
-                <desc>https://docops.io/extension</desc>
+            <svg width="${dimensions.scaledWidth}" height="${dimensions.scaledHeight}" viewBox="0 0 ${dimensions.contentWidth} ${dimensions.contentHeight}"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID$id">
+                <desc>Release Strategy</desc>
                 <title>${title.escapeXml()}</title>
         """.trimIndent()
     }
@@ -136,10 +138,11 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
 
     private fun createGradient(id: String, color: String): String {
+        val svgColor = SVGColor(color, id)
         return """
             <linearGradient id="$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:$color;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:${darkenColor(color)};stop-opacity:1" />
+                <stop offset="0%" style="stop-color:${svgColor.color};stop-opacity:1" />
+                <stop offset="100%" style="stop-color:${svgColor.darkenColor(color, 0.3)};stop-opacity:1" />
             </linearGradient>
             <linearGradient id="glass_$id" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" />
@@ -148,16 +151,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         """.trimIndent()
     }
 
-    private fun darkenColor(color: String): String {
-        return try {
-            val r = color.substring(1, 3).toInt(16)
-            val g = color.substring(3, 5).toInt(16)
-            val b = color.substring(5, 7).toInt(16)
-            String.format("#%02x%02x%02x", (r * 0.8).toInt(), (g * 0.8).toInt(), (b * 0.8).toInt())
-        } catch (e: Exception) {
-            color
-        }
-    }
+
 
 
 
@@ -186,19 +180,36 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
 
     private fun createStyles(id: String, releaseStrategy: ReleaseStrategy): String {
+        val totalReleases = releaseStrategy.releases.size
+        val gaDelay = (totalReleases - 1) * 0.15 + 0.8 // After all cards fade in
+
         return """
             <style>
-                @keyframes fadeInCustom {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
+                @keyframes fadeInSlide {
+                    from { opacity: 0; transform: translateX(-20px); }
+                    to { opacity: 1; transform: translateX(0); }
                 }
+                @keyframes gaPulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.02); }
+                }
+                @keyframes flowLine {
+                    from { stroke-dashoffset: 24; }
+                    to { stroke-dashoffset: 0; }
+                }
+                /* Outer group only handles opacity fade - NO transform here */
                 #ID$id .release-card {
-                    animation: fadeInCustom 0.8s ease-out forwards;
-                    opacity: 0;
+                    opacity: 1;
                 }
-                /* Use a separate class for the motion to avoid coordinate conflicts */
+                /* Inner group handles the slide animation safely */
                 #ID$id .animated-content {
+                    animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    opacity: 0;
                     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+                #ID$id .release-card.ga-release .animated-content {
+                    animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                               gaPulse 2s ease-in-out ${gaDelay}s 2;
                 }
                 #ID$id .release-card:hover .animated-content {
                     transform: translateY(-8px);
@@ -218,7 +229,9 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
                     font-size: 13px;
                     font-weight: 700;
                 }
-                /* Remove transform-box: fill-box; as it breaks relative translation in many SVG renderers */
+                #ID$id .flow-connector {
+                    animation: flowLine 1s linear infinite;
+                }
                 #ID$id text {
                     user-select: none;
                 }
@@ -226,10 +239,9 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         """.trimIndent()
     }
 
-
     private fun createBackground(dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
-        val backgroundColor = if (releaseStrategy.useDark) "#0f172a" else "#f8fafc"
-        val patternColor = if (releaseStrategy.useDark) "#38bdf8" else "#020617"
+        val backgroundColor = theme.canvas
+        val patternColor = theme.accentColor
         val id = releaseStrategy.id
         return """
             <rect width="${dimensions.contentWidth}" height="${dimensions.contentHeight}" fill="$backgroundColor"/>
@@ -245,35 +257,67 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
 
 
     private fun createTitle(title: String, dimensions: Dimensions, releaseStrategy: ReleaseStrategy): String {
-        val titleFill = if (releaseStrategy.useDark) "#fcfcfc" else "#000000"
+        val titleFill = if (releaseStrategy.useDark) "#fcfcfc" else "#0f172a"
+        val accentColor = theme.accentColor
+        // Left-aligned title with accent bar (like ReleaseRoadMapMaker)
         return """
-            <text x="${dimensions.contentWidth / 2}" y="30" 
-                  fill="$titleFill" 
-                  text-anchor="middle" 
-                  font-size="18px" 
-                  font-family="'Plus Jakarta Sans', 'Outfit', sans-serif" 
-                  font-weight="800"
-                  class="milestone-text">
-                ${title.escapeXml()}
-            </text>
+            <g transform="translate(${MARGIN}, 38)">
+                <text fill="$titleFill" 
+                      font-size="24px" 
+                      font-family="'Outfit', sans-serif" 
+                      font-weight="800"
+                      style="letter-spacing: -0.5px;"
+                      class="milestone-text">
+                    ${title.escapeXml()}
+                </text>
+                <rect y="8" width="48" height="4" fill="$accentColor" rx="2"/>
+            </g>
         """.trimIndent()
     }
 
     private fun createMainContent(releaseStrategy: ReleaseStrategy, isPdf: Boolean, id: String, dimensions: Dimensions): String {
         val str = StringBuilder()
 
+        // Add flow connectors between cards (animated dashed lines)
+        if (!isPdf && releaseStrategy.releases.size > 1) {
+            str.append(createFlowConnectors(releaseStrategy, id))
+        }
+
         releaseStrategy.releases.forEachIndexed { index, release ->
             val x = MARGIN + (index * (CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING))
             val y = TITLE_HEIGHT
             val delay = index * 0.15
 
-            // The outer group handles the SVG layout coordinates (Stable)
-            str.append("""<g transform="translate($x,$y)" style="animation-delay: ${delay}s" class="release-card">""")
-            // An inner group can safely handle CSS transforms for hover effects
-            str.append("""<g class="animated-content">""")
+            val isGaRelease = release.type.toString().startsWith("G")
+            val cardClass = if (isGaRelease) "release-card ga-release" else "release-card"
+
+            // Outer group: ONLY handles layout position via transform="translate()"
+            // NO animation-delay here - that goes on the inner group
+            str.append("""<g transform="translate($x,$y)" class="$cardClass">""")
+            // Inner group: handles ALL CSS animations and transitions safely
+            str.append("""<g class="animated-content" style="animation-delay: ${delay}s">""")
             str.append(createReleaseCard(release, isPdf, id, releaseStrategy))
             str.append("</g>")
             str.append("</g>")
+        }
+
+        return str.toString()
+    }
+
+    private fun createFlowConnectors(releaseStrategy: ReleaseStrategy, id: String): String {
+        val str = StringBuilder()
+        val connectorY = TITLE_HEIGHT + (CARD_HEIGHT / 2)
+        val connectorColor = theme.accentColor
+
+        for (i in 0 until releaseStrategy.releases.size - 1) {
+            val startX = MARGIN + (i * (CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING)) + CARD_WIDTH + TRIANGLE_WIDTH + 4
+            val endX = MARGIN + ((i + 1) * (CARD_WIDTH + TRIANGLE_WIDTH + CARD_SPACING)) - 4
+
+            str.append("""
+                <line x1="$startX" y1="$connectorY" x2="$endX" y2="$connectorY" 
+                      stroke="$connectorColor" stroke-width="2" stroke-dasharray="8 4" 
+                      stroke-linecap="round" opacity="0.4" class="flow-connector"/>
+            """.trimIndent())
         }
 
         return str.toString()
@@ -289,40 +333,69 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
         val goalLines = wrapText(release.goal, GOAL_MAX_CHARS)
         val actualGoalHeight = (goalLines.size * 20f) + 10f
 
+        val depth = 8f
+
+        // Check if this is the final release (GA) for emphasis
+        val isGaRelease = release.type.toString().startsWith("G")
+        val cardFilter = if (isGaRelease) "url(#glowEffect)" else "url(#dropShadow)"
+
+        // GA highlight path follows the full card + triangle shape (single continuous outline)
+        val o = 4f // offset for the highlight border
+        val gaHighlight = if (isGaRelease) """
+            <path d="M -$o,-$o 
+                     H ${CARD_WIDTH} 
+                     L ${CARD_WIDTH + TRIANGLE_WIDTH + o},${CARD_HEIGHT/2} 
+                     L ${CARD_WIDTH},${CARD_HEIGHT + o} 
+                     H -$o 
+                     Z" 
+                  fill="none" stroke="${theme.accentColor}" stroke-width="2" 
+                  stroke-linejoin="round" opacity="0.5"/>
+        """.trimIndent() else ""
+
         // IMPORTANT: No translate() inside here. Everything starts from 0,0 relative to the parent <g>
         return """
+            $gaHighlight
+
+            <!-- Left-side Depth Effect -->
+            <path d="M 0,0 L -$depth,$depth V ${CARD_HEIGHT + depth} L 0,${CARD_HEIGHT} Z"
+                  fill="rgba(0,0,0,0.15)" pointer-events="none"/>
+          
+            <!-- Bottom Depth Effect (The "Thickness") -->
+            <path d="M 0,${CARD_HEIGHT} L -$depth,${CARD_HEIGHT + depth} H ${CARD_WIDTH} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2 + depth} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} L ${CARD_WIDTH},${CARD_HEIGHT} Z" 
+                  fill="rgba(0,0,0,0.2)" pointer-events="none"/>
+
             <!-- Main Card Body -->
             <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
                   fill="url(#$gradientId)" 
                   stroke="rgba(255,255,255,0.2)" 
                   stroke-width="1" 
-                  filter="url(#dropShadow)"/>
-            
+                  filter="$cardFilter"/>
+
             <path d="M 0,0 H ${CARD_WIDTH} V ${CARD_HEIGHT} H 0 Z" 
                   fill="url(#glass_$gradientId)" 
                   pointer-events="none"/>
 
-            <!-- Arrow Triangle (Relative to 0,0 of this card) -->
+            <!-- Arrow Triangle -->
             <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
                   fill="url(#$gradientId)" 
                   stroke="rgba(255,255,255,0.2)" 
                   stroke-width="1"/>
-            
+
             <path d="M ${CARD_WIDTH},0 V ${CARD_HEIGHT} L ${CARD_WIDTH + TRIANGLE_WIDTH},${CARD_HEIGHT/2} Z" 
                   fill="url(#glass_$gradientId)" 
                   pointer-events="none"/>
-            
-            <text x="${CARD_WIDTH/2}" y="-15" fill="${if (releaseStrategy.useDark) "#94a3b8" else "#475569"}" text-anchor="middle" class="date-text">
+
+            <text x="${CARD_WIDTH/2}" y="-15" fill="$dateColor" text-anchor="middle" class="date-text">
                 ${release.date}
             </text>
-            
+
             <text x="${CARD_WIDTH + TRIANGLE_WIDTH/2}" y="${CARD_HEIGHT/2 + 10}" 
-                  fill="white" text-anchor="middle" font-size="28px" class="milestone-text">
+                  fill="white" text-anchor="middle" font-size="${if (isGaRelease) "32" else "28"}px" class="milestone-text">
                 ${release.type}
             </text>
-            
+
             ${createWrappedGoalText(release.goal, TEXT_MARGIN, 35.0f, goalMaxWidth, fontColor)}
-            
+
             ${createDetailLines(release.lines, 35f + actualGoalHeight + 15f, CARD_WIDTH - (2 * TEXT_MARGIN), fontColor)}
         """.trimIndent()
     }
@@ -437,7 +510,7 @@ class ReleaseTimelineSummaryMaker : ReleaseTimelineMaker() {
     }
 
 
-     // Data class to hold dimension calculations
+    // Data class to hold dimension calculations
     private data class Dimensions(
         val contentWidth: Float,
         val contentHeight: Float,
