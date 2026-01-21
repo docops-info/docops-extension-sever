@@ -26,7 +26,7 @@ object ThemeFactory {
                  if (isDark) ProDarkTheme() else ClassicLightTheme()
             }
         }
-        logger.info("Selected theme for version $version and dark mode id $isDark and theme: ${theme.name}")
+        logger.debug("Selected theme for version $version and dark mode id $isDark and theme: ${theme.name}")
         return theme
     }
     fun getTheme(useDark: Boolean): DocOpsTheme {
