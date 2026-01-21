@@ -8,7 +8,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
  * This parser is intentionally minimal to unblock rendering; it can be extended later.
  */
 class ScoreCardParser {
-    private val log = KotlinLogging.logger {}
 
     fun parse(payload: String, useDark: Boolean, scale: String): ScoreCard {
         val lines = payload.lines()
@@ -16,6 +15,7 @@ class ScoreCardParser {
         var subtitle = ""
         var initiativeTitle = "BEFORE"
         var outcomeTitle = "AFTER"
+        var visualVersion = 1
         val beforeSections: MutableList<BeforeSection> = mutableListOf()
         val afterSections: MutableList<AfterSection> = mutableListOf()
         val outcomeItems: MutableList<ScoreCardItem> = mutableListOf()
@@ -81,6 +81,7 @@ class ScoreCardParser {
                 // top-level attributes
                 line.startsWith("title=") -> title = line.removePrefix("title=").trim()
                 line.startsWith("subtitle=") -> subtitle = line.removePrefix("subtitle=").trim()
+                line.startsWith("visualVersion=") -> visualVersion = line.removePrefix("visualVersion=").trim().toIntOrNull() ?: 1
                 line == "---" -> { currentSection = null; currentItemsTitle = null }
 
                 // item lines
@@ -125,7 +126,8 @@ class ScoreCardParser {
             beforeSections = beforeSections,
             afterTitle = outcomeTitle.ifBlank { "AFTER" },
             afterSections = afterSections,
-            theme = ScoreCardTheme(useDark, scale.toFloat())
+            useDark = useDark,
+            visualVersion = visualVersion
         )
     }
 }

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.scorecard
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.max
 import kotlin.text.toInt
@@ -8,17 +9,17 @@ import kotlin.text.toInt
  * Maker to generate an iOS-style two-column ScoreCard SVG based on ScoreCard model.
  * This follows the general pattern of other Makers in the project: pure-SVG generation as a String.
  */
-class ScoreCardMaker {
+class ScoreCardMaker(val useDark: Boolean, val scale: Float = 1.0f) {
+
+    private var theme = ThemeFactory.getTheme(useDark)
     fun make(scorecard: ScoreCard): String {
-        val useDark = scorecard.theme.useDark
-        val scale = scorecard.theme.scale
+        theme = ThemeFactory.getTheme(scorecard)
         val baseWidth = 1024
         val margin = 40
         val gutter = 44
         val cardWidth = (baseWidth - (margin * 2) - gutter) / 2
 
         // Theme Configuration
-        val theme = if (useDark) DarkTheme() else LightTheme()
 
         val titleFontSize = 26
         val titleLines = wrapByCharsForTitle(scorecard.title, baseWidth - 80, titleFontSize)
@@ -26,11 +27,11 @@ class ScoreCardMaker {
         val topY = 110.0 + (titleLines.size - 1) * titleLineHeight
 
         // Build Cards
-        val beforeCard = buildCard(cardWidth, scorecard.beforeSections, theme, scorecard.id,
+        val beforeCard = buildCard(cardWidth, scorecard.beforeSections,  scorecard.id,
             headerTitle = scorecard.beforeTitle.ifBlank { "BEFORE" },
             isBefore = true)
 
-        val afterCard = buildCard(cardWidth, scorecard.afterSections, theme, scorecard.id,
+        val afterCard = buildCard(cardWidth, scorecard.afterSections, scorecard.id,
             headerTitle = scorecard.afterTitle.ifBlank { "AFTER" },
             isBefore = false)
 
@@ -41,17 +42,17 @@ class ScoreCardMaker {
 
         return buildString {
             append("""<svg width="$canvasWidth" height="$canvasHeight" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg">""")
-            append(generateDefs(theme, scorecard.id))
+            append(generateDefs( scorecard.id))
 
             // Background
-            append("""<rect width="100%" height="100%" fill="${theme.bg}"/>""")
+            append("""<rect width="100%" height="100%" fill="${theme.canvas}"/>""")
             append("""<rect width="100%" height="100%" fill="url(#grid_${scorecard.id})" opacity="0.4"/>""")
 
             // Header Title
             append("""<g transform="translate($margin, 60)">""")
-            append("""<rect width="4" height="40" fill="${theme.accentPrimary}" rx="2"/>""")
+            append("""<rect x="0" y="8" width="4" height="40" fill="${theme.accentColor}" rx="2"/>""")
             titleLines.forEachIndexed { i, line ->
-                append("""<text x="20" y="${28 + i * titleLineHeight}" class="main-title_${scorecard.id}">${escape(line)}</text>""")
+                append("""<text x="16" y="${28 + i * titleLineHeight}" class="main-title_${scorecard.id}">${escape(line)}</text>""")
             }
             append("</g>")
 
@@ -64,7 +65,7 @@ class ScoreCardMaker {
             // Transition Arrow
             append("""
                 <g transform="translate(${(margin + cardWidth + gutter / 2 - 20)}, ${topY + cardHeightMax / 2})">
-                    <path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="${theme.panelStroke}" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/>
+                    <path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="${theme.accentColor}" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/>
                 </g>
             """.trimIndent())
 
@@ -73,23 +74,23 @@ class ScoreCardMaker {
             append("""<g class="anim-panel_${scorecard.id} delay-2_${scorecard.id}">${afterCard.svg}</g>""")
             append("</g>")
 
-            append("""<text x="$margin" y="${baseHeight - 20}" class="meta-text_${scorecard.id}">SCORECARD_REF: ${scorecard.id.take(4).uppercase()} // SCALE: $scale // THEME: ${if (useDark) "NEURAL_DARK" else "NEURAL_LIGHT"}</text>""")
+            append("""<text x="$margin" y="${baseHeight - 20}" class="meta-text_${scorecard.id}">SCORECARD_REF: ${scorecard.id.take(4).uppercase()} // SCALE: $scale // THEME: ${theme.name}</text>""")
             append("</svg>")
         }
     }
 
-    private fun generateDefs(theme: ScoreCardThemeColors, id: String) = """
+    private fun generateDefs( id: String) = """
             <defs>
                 <pattern id="grid_$id" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.gridColor}" stroke-width="1"/>
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.accentColor}" stroke-width="1"/>
                 </pattern>
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
-                    .main-title_$id { font-family: 'Syne', sans-serif; font-size: 16px; fill: ${theme.titleFill}; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; }
-                    .sec-header_$id { font-family: 'Syne', sans-serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
-                    .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.itemTextFill}; }
-                    .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.itemDescFill}; }
-                    .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.itemDescFill}; opacity: 0.5; }
+                    ${theme.fontImport}
+                    .main-title_$id { font-family: ${theme.fontFamily}; font-size: ${16/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; }
+                    .sec-header_$id { font-family: ${theme.fontFamily}; font-size: ${14 / theme.fontWidthMultiplier}px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+                    .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.secondaryText}; }
+                    .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.secondaryText}; }
+                    .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.secondaryText}; opacity: 0.5; }
                 
                 @keyframes slideUp_$id { 
                     from { opacity: 0; transform: translateY(30px); } 
@@ -102,8 +103,8 @@ class ScoreCardMaker {
         </defs>
     """.trimIndent()
 
-    private fun buildCard(width: Int, sections: List<Section>, theme: ScoreCardThemeColors, id: String, headerTitle: String, isBefore: Boolean): BuiltCard {
-        val accent = if (isBefore) theme.accentBefore else theme.accentAfter
+    private fun buildCard(width: Int, sections: List<Section>, id: String, headerTitle: String, isBefore: Boolean): BuiltCard {
+        val accent = if (isBefore) theme.accentColor else "#10b981"
         var currentY = 60
         val innerPadding = 24
         val contentWidth = width - innerPadding * 2 - 30
@@ -140,7 +141,7 @@ class ScoreCardMaker {
 
         val totalHeight = max(currentY + innerPadding, 200)
         val svg = """
-            <rect width="$width" height="$totalHeight" fill="${theme.panelFill}" stroke="${accent}" stroke-width="1.5" rx="4"/>
+            <rect width="$width" height="$totalHeight" fill="${theme.canvas}" stroke="${accent}" stroke-width="1.5" rx="4"/>
             <rect width="$width" height="40" fill="$accent" fill-opacity="0.1" rx="4"/>
             <text x="$innerPadding" y="26" class="sec-header_$id" style="fill: $accent">0${if (isBefore) 1 else 2}_${escape(headerTitle)}</text>
             $body

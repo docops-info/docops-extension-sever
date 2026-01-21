@@ -29,7 +29,7 @@ class ScorecardHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         val model = parser.parse(payload, useDark, scale)
         // populate CSV metadata for router embedding
         csvResponse.update(model.toCsv())
-        val maker = ScoreCardMaker()
+        val maker = ScoreCardMaker(useDark)
         return maker.make(model)
     }
 

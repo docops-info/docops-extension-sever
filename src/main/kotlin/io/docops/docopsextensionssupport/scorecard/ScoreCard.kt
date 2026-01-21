@@ -17,11 +17,15 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.support.VisualDisplay
 import io.docops.docopsextensionssupport.svgsupport.SvgToPng
 import io.docops.docopsextensionssupport.svgsupport.textWidth
+import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.math.max
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Represents a scorecard for tracking scores and outcomes.
@@ -36,18 +40,19 @@ import kotlin.math.max
  * @property scoreCardTheme The theme settings for the scorecard. Default value is ScoreCardTheme().
  */
 @Serializable
-class ScoreCard (val id: String = UUID.randomUUID().toString(),
-                 val title: String,
-                 val beforeTitle: String,
-                 val beforeSections: MutableList<BeforeSection>,
-                 val afterTitle: String,
-                 val afterSections: MutableList<AfterSection>,
-                 val theme: ScoreCardTheme = ScoreCardTheme()
+class ScoreCard @OptIn(ExperimentalUuidApi::class) constructor(val id: String = Uuid.random().toHexString(),
+                                                               val title: String,
+                                                               val beforeTitle: String,
+                                                               val beforeSections: MutableList<BeforeSection>,
+                                                               val afterTitle: String,
+                                                               val afterSections: MutableList<AfterSection>,
+                                                               override var useDark: Boolean = false,
+                                                               override var visualVersion: Int = 1
 
-)
+): VisualDisplay
 
 // Convert a ScoreCard to a CSV representation for metadata embedding
-fun ScoreCard.toCsv(): io.docops.docopsextensionssupport.web.CsvResponse {
+fun ScoreCard.toCsv(): CsvResponse {
     val headers = listOf("column", "section", "item", "description")
     val rows = mutableListOf<List<String>>()
 
@@ -65,13 +70,13 @@ fun ScoreCard.toCsv(): io.docops.docopsextensionssupport.web.CsvResponse {
             rows.add(listOf("AFTER", sectionTitle, item.displayText, item.description ?: ""))
         }
     }
-    return io.docops.docopsextensionssupport.web.CsvResponse(headers, rows)
+    return CsvResponse(headers, rows)
 }
 
 
 
 /**
-    }
+}
  * Represents a scorecard item with display text and an optional description.
  *
  * @property displayText The text to be displayed for the scorecard item.
@@ -90,7 +95,7 @@ open class Section
 {
     var title: String = ""
     var items: MutableList<ScoreCardItem> = mutableListOf()
-    
+
 }
 
 @Serializable
