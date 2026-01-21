@@ -20,10 +20,13 @@ import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.logging.LoggingMeterRegistry
 import io.micrometer.core.instrument.logging.LoggingRegistryConfig
 import io.micrometer.core.instrument.util.NamedThreadFactory
+import io.micrometer.tracing.Tracer
+import org.springframework.stereotype.Service
 import java.time.Duration
 
 
-class LoggingMeterRegistryConfig {
+@Service
+class LoggingMeterRegistryConfig(val tracer: Tracer) {
     fun loggingMeterRegistry(): LoggingMeterRegistry {
         val config: LoggingRegistryConfig = object : LoggingRegistryConfig {
             override fun get(s: String): String? {
