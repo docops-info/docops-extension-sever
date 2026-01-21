@@ -25,8 +25,7 @@ import org.springframework.stereotype.Service
 import java.time.Duration
 
 
-@Service
-class LoggingMeterRegistryConfig(val tracer: Tracer) {
+class LoggingMeterRegistryConfig() {
     fun loggingMeterRegistry(): LoggingMeterRegistry {
         val config: LoggingRegistryConfig = object : LoggingRegistryConfig {
             override fun get(s: String): String? {
