@@ -69,23 +69,7 @@ class AutoTimingConfiguration {
         return ObservedAspect(observationRegistry!!)
     }
 
-    /**
-     * Adds traceId to the response headers using the X-B3-TraceId header.
-     *
-     * @param tracer the Tracer instance used to get the current span
-     * @return a Filter instance
-     */
-    @Bean
-    fun traceIdInResponseFilter(tracer: Tracer): Filter {
-        return Filter { request, response, chain ->
-            val currentSpan: Span? = tracer.currentSpan()
-            if (currentSpan != null) {
-                val resp = response as HttpServletResponse
-                resp.addHeader("X-B3-TraceId", currentSpan.context().traceId())
-            }
-            chain.doFilter(request, response)
-        }
-    }
+
 
     // Example of Async Servlets setup
     @Configuration(proxyBeanMethods = false)

@@ -26,7 +26,6 @@ import io.docops.docopsextensionssupport.todo.TodoHandler
 import io.docops.docopsextensionssupport.vcard.VCardHandler
 import io.docops.docopsextensionssupport.wordcloud.WordCloudHandler
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.github.sercasti.tracing.Traceable
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.Serializable
@@ -98,7 +97,6 @@ class DocOpsRouter(
     }
 
 
-    @Traceable
     @GetMapping("/svg")
     @Timed(
         value = "docops.router.svg",
