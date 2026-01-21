@@ -91,7 +91,7 @@ class ScoreCardMakerTest {
         assertTrue(afterCount >= 13, "Expected at least 13 after items, got $afterCount")
 
         // Make SVG
-        val maker = ScoreCardMaker()
+        val maker = ScoreCardMaker(false)
         val svg = maker.make(model)
 
         val f = File(outputPath)
