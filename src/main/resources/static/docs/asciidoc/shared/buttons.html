@@ -788,16 +788,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     .docops-slideshow {
         position: relative;
         width: 100%;
-        height: 500px; /* Adjust based on your preferred height */
+        height: 500px;
         background: var(--bg-surface);
         border: 2px solid var(--accent-primary);
-        box-shadow: 10px 10px 0px var(--accent-pink);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
         margin: 3rem 0;
         overflow: hidden;
         display: flex;
         flex-direction: column;
     }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
 
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
     .docops-slide {
         position: absolute;
         top: 0;
@@ -861,23 +890,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 10px;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
         z-index: 10;
     }
 
     .nav-dot {
-        width: 12px;
-        height: 12px;
-        background: var(--bg-base);
-        border: 2px solid var(--accent-primary);
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .nav-dot.active {
-        background: var(--accent-pink);
-        transform: scale(1.2);
-        box-shadow: 0 0 10px var(--accent-pink);
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
     }
 
 </style>
@@ -1060,8 +1089,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         slideshows.forEach(ss => {
             const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
             const interval = parseInt(ss.dataset.interval) || 5000;
             let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
 
             // Create navigation dots
             const nav = document.createElement('div');
@@ -1069,10 +1113,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             slides.forEach((_, i) => {
                 const dot = document.createElement('div');
                 dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
-                dot.onclick = () => goToSlide(i);
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
                 nav.appendChild(dot);
             });
             ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
 
             function goToSlide(index) {
                 slides[currentIndex].classList.remove('active');
@@ -1082,6 +1142,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                 slides[currentIndex].classList.add('active');
                 nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
             }
 
             function nextSlide() {
@@ -1089,12 +1151,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 goToSlide(next);
             }
 
+            // Initial State
+            updateCounter();
+            resetProgress();
+
             // Start autoplay
             let slideTimer = setInterval(nextSlide, interval);
 
             // Pause on hover
-            ss.addEventListener('mouseenter', () => clearInterval(slideTimer));
-            ss.addEventListener('mouseleave', () => slideTimer = setInterval(nextSlide, interval));
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
         });
     });
 </script>
@@ -1872,7 +1945,249 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
     .nav-link.next::after { content: ' →'; }
     .nav-link.prev::before { content: '← '; }
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--modal-overlay-bg); /* Use variable */
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10000;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        position: relative;
+        width: 90vw;
+        height: 85vh;
+        background: var(--modal-content-bg); /* Use variable */
+        border: 1px solid var(--modal-content-border); /* Use variable */
+        box-shadow: var(--modal-shadow);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        transform: scale(0.8) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    #modalSvgContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modalSvgContainer svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--docops-accent);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10002;
+    }
+
+    .close-button:hover {
+        background: var(--docops-accent);
+    }
+    .modal-zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+    }
+
+    .modal-zoom-level {
+        color: white;
+        font-family: var(--docops-font-mono);
+        font-size: 12px;
+        min-width: 45px;
+        text-align: center;
+    }
 </style>
+<script>
+
+    // Zoom state
+    let modalZoomLevel = 1;
+    const MODAL_ZOOM_MIN = 0.25;
+    const MODAL_ZOOM_MAX = 4;
+    const MODAL_ZOOM_STEP = 0.25;
+
+    function openModal(container) {
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+
+        if (!modalOverlay || !modalSvgContainer) {
+            console.error("Modal elements not found in DOM");
+            return;
+        }
+        // Reset zoom level
+        modalZoomLevel = 1;
+        updateZoomDisplay();
+
+        // Clone the SVG from the clicked container
+        const svg = container.querySelector('svg');
+        const svgClone = svg.cloneNode(true);
+        svgClone.style.transform = 'scale(1)';
+        svgClone.style.transition = 'transform 0.2s ease';
+
+        // Clear previous content and add new SVG
+        modalSvgContainer.innerHTML = '';
+        modalSvgContainer.appendChild(svgClone);
+
+        // Show modal with animation
+        modalOverlay.classList.add('active');
+
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        modalZoomLevel = 1;
+    }
+
+    function closeModalOnBackdrop(event) {
+        // Only close if clicking the overlay itself, not the content
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    }
+
+    function modalZoomIn() {
+        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomOut() {
+        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomReset() {
+        modalZoomLevel = 1;
+        applyModalZoom();
+    }
+
+    function applyModalZoom() {
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const svg = modalSvgContainer.querySelector('svg');
+        if (svg) {
+            // Same here: use concatenation
+            svg.style.transform = "scale(" + modalZoomLevel + ")";
+        }
+        updateZoomDisplay();
+    }
+
+    function updateZoomDisplay() {
+        const display = document.getElementById('modalZoomLevel');
+        if (display) {
+            // Change from template literal to standard concatenation
+            // to avoid issues with Kotlin/Asciidoctor interpolation
+            display.textContent = Math.round(modalZoomLevel * 100) + "%";
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    const docopsCopy = {
+        url: (btn) => {
+            const url = btn.closest('.docops-media-card').getAttribute('data-url');
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        svg: (btn) => {
+            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        png: (btn) => {
+            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]);
+                    const originalText = btn.innerText;
+                    btn.innerText = 'COPIED!';
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+    };
+
+</script>
+
 <style>
 .hidden {
     display: none;
@@ -2111,7 +2426,7 @@ window.onload = function() {
 };
 </script>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.9.0/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
 <body class="book">
@@ -2120,7 +2435,7 @@ window.onload = function() {
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_18d05b76-c25f-4720-b647-e4891bddca11" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#6366f1","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#6366f1","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#00f5ff","true","true"],["Callout","callout.html","Callout Documentation","documentation","#6366f1","true","false"],["Charts","charts.html","Charts Documentation","documentation","#6366f1","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#6366f1","true","false"],["Domain Visualization","domain.html","Domain Visualization Documentation","documentation","#6366f1","true","false"],["Gherkin","gherkin.html","Gherkin Format support for DocOps","documentation","#6366f1","true","false"],["Index","index.html","Index of all documentation","documentation","#6366f1","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#6366f1","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#6366f1","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#6366f1","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#6366f1","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#6366f1","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#6366f1","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#6366f1","true","false"],["Shield","shield.html","Shield Documentation","documentation","#6366f1","true","false"],["Story","story.html","What is DocOps","documentation","#6366f1","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#6366f1","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#6366f1","true","false"],["Todo","todo.html","Todo Documentation","documentation","#6366f1","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#6366f1","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#6366f1","true","false"],["VCard","vcard.html","VCards","documentation","#6366f1","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#6366f1","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><!-- Background Atmosphere Pattern --><pattern id="dotPattern_18d05b76-c25f-4720-b647-e4891bddca11" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.15" /></pattern><filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><!-- Glass Reflection Gradient --><linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="white" stop-opacity="0.4"/><stop offset="50%" stop-color="white" stop-opacity="0.05"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient><filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/></filter><radialGradient id="raisedButton_5aeefc8d-0eba-4eb9-8779-0a00d82f1732" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad0-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d9ded751-7c15-430f-94cc-5034338a8d9d" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad1-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_18c9ea39-951d-4c51-baa4-193eb2ea1e57" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" /><stop offset="100%" style="stop-color:#009399;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad2-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#00f5ff"/><stop offset="100%" stop-color="#00abb2"/></linearGradient><radialGradient id="raisedButton_0e84eba7-98b8-46cc-9e57-32d06f811568" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad3-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_cd34eb60-8a3f-4ccc-8e92-cd2260830b98" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad4-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_e6827b2f-c0c6-4b2f-a670-a9d5eff2549f" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad5-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_06b4dce6-ca7f-410a-8c69-85e764d6c752" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad6-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_c705d262-224f-4fbb-baac-e9b9730a3887" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad7-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_49539873-b6ca-4af7-bb8d-7928d7d84695" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad8-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d38078a1-2a03-4893-8a6b-301b19151354" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad9-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_444e2449-4b9f-4aa3-97d6-ba4645498dab" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad10-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_ac43e3ad-35bf-4771-984b-2a23c78cd8a1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad11-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_415e8e13-139b-4a4a-b43c-8ecf28f75796" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad12-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_9948c14e-8f31-48ad-8552-534456244152" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad13-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d5665c5d-f4a7-41b1-9495-7e9b5e7d8207" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad14-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d364db09-5095-4ef2-ab7a-6faa6a7da6c0" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad15-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_f5062d01-2461-4e11-a422-eb3edc2d5ab7" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad16-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_b4995811-46ef-4e1f-864d-61f5dfadcef1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad17-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_8e9f3317-05d5-43d0-bf4c-bcc9c31c0120" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad18-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_3d77b2d0-242c-43ff-aa33-6986558d06c5" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad19-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_c3bd808e-1847-487b-86ea-e5b6bb20f4aa" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad20-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_830cbf74-8478-4239-b820-d05a12375bff" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad21-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_382b25dd-4dcb-4d31-a286-79bdc15758af" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad22-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_903d8595-d2a3-4e10-ae4e-d433487fc097" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad23-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_3695d305-7087-4b7c-9c25-f576a5edf2f6" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad24-18d05b76-c25f-4720-b647-e4891bddca11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><style>.orb-group { cursor: pointer; } .orb-group .moving-group { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); } .glow-ring { transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease; stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 0.2; } .orb-group:hover .glow-ring { stroke-dashoffset: 0; opacity: 1; } .orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }</style></defs><!-- Apply atmospheric pattern background --><rect width="1233.0" height="405.0" fill="url(#dotPattern_18d05b76-c25f-4720-b647-e4891bddca11)" rx="12" pointer-events="none"/><g transform="scale(1.0)"><g transform="translate(70,65)" onclick="window.open('adr.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_5aeefc8d-0eba-4eb9-8779-0a00d82f1732)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> ADR</tspan></text></g></g><g transform="translate(200,65)" onclick="window.open('arch.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d9ded751-7c15-430f-94cc-5034338a8d9d)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Architecture</tspan></text></g></g><g transform="translate(330,65)" onclick="window.open('buttons.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#00f5ff" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_18c9ea39-951d-4c51-baa4-193eb2ea1e57)" stroke="#00f5ff" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Buttons</tspan></text></g></g><g transform="translate(460,65)" onclick="window.open('callout.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_0e84eba7-98b8-46cc-9e57-32d06f811568)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Callout</tspan></text></g></g><g transform="translate(590,65)" onclick="window.open('charts.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_cd34eb60-8a3f-4ccc-8e92-cd2260830b98)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Charts</tspan></text></g></g><g transform="translate(720,65)" onclick="window.open('connectors.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e6827b2f-c0c6-4b2f-a670-a9d5eff2549f)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Connectors</tspan></text></g></g><g transform="translate(850,65)" onclick="window.open('domain.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_06b4dce6-ca7f-410a-8c69-85e764d6c752)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Domain</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;">Visualization</tspan></text></g></g><g transform="translate(980,65)" onclick="window.open('gherkin.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_c705d262-224f-4fbb-baac-e9b9730a3887)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Gherkin</tspan></text></g></g><g transform="translate(1110,65)" onclick="window.open('index.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_49539873-b6ca-4af7-bb8d-7928d7d84695)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Index</tspan></text></g></g><g transform="translate(70,195)" onclick="window.open('metricscard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d38078a1-2a03-4893-8a6b-301b19151354)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Metrics Card</tspan></text></g></g><g transform="translate(200,195)" onclick="window.open('placemat.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_444e2449-4b9f-4aa3-97d6-ba4645498dab)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Placemat</tspan></text></g></g><g transform="translate(330,195)" onclick="window.open('planner.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_ac43e3ad-35bf-4771-984b-2a23c78cd8a1)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Planner</tspan></text></g></g><g transform="translate(460,195)" onclick="window.open('quadrant.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_415e8e13-139b-4a4a-b43c-8ecf28f75796)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Quadrant</tspan></text></g></g><g transform="translate(590,195)" onclick="window.open('releasestrategy.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_9948c14e-8f31-48ad-8552-534456244152)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;">Strategy</tspan></text></g></g><g transform="translate(720,195)" onclick="window.open('roadmap.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d5665c5d-f4a7-41b1-9495-7e9b5e7d8207)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Roadmap</tspan></text></g></g><g transform="translate(850,195)" onclick="window.open('scorecard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d364db09-5095-4ef2-ab7a-6faa6a7da6c0)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Scorecard</tspan></text></g></g><g transform="translate(980,195)" onclick="window.open('shield.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_f5062d01-2461-4e11-a422-eb3edc2d5ab7)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Shield</tspan></text></g></g><g transform="translate(1110,195)" onclick="window.open('story.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b4995811-46ef-4e1f-864d-61f5dfadcef1)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Story</tspan></text></g></g><g transform="translate(70,330)" onclick="window.open('swimlane.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_8e9f3317-05d5-43d0-bf4c-bcc9c31c0120)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Swimlane</tspan></text></g></g><g transform="translate(200,330)" onclick="window.open('timeline.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_3d77b2d0-242c-43ff-aa33-6986558d06c5)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Timeline</tspan></text></g></g><g transform="translate(330,330)" onclick="window.open('todo.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_c3bd808e-1847-487b-86ea-e5b6bb20f4aa)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Todo</tspan></text></g></g><g transform="translate(460,330)" onclick="window.open('treechart.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_830cbf74-8478-4239-b820-d05a12375bff)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Tree Chart</tspan></text></g></g><g transform="translate(590,330)" onclick="window.open('tutorial.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_382b25dd-4dcb-4d31-a286-79bdc15758af)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Tutorial</tspan></text></g></g><g transform="translate(720,330)" onclick="window.open('vcard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_903d8595-d2a3-4e10-ae4e-d433487fc097)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> VCard</tspan></text></g></g><g transform="translate(850,330)" onclick="window.open('wordcloud.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_3695d305-7087-4b7c-9c25-f576a5edf2f6)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #1e293b"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"> Word Cloud</tspan></text></g></g></g></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#6366f1","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#6366f1","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#00f5ff","true","true"],["Callout","callout.html","Callout Documentation","documentation","#6366f1","true","false"],["Charts","charts.html","Charts Documentation","documentation","#6366f1","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#6366f1","true","false"],["Domain Visualization","domain.html","Domain Visualization Documentation","documentation","#6366f1","true","false"],["Gherkin","gherkin.html","Gherkin Format support for DocOps","documentation","#6366f1","true","false"],["Index","index.html","Index of all documentation","documentation","#6366f1","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#6366f1","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#6366f1","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#6366f1","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#6366f1","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#6366f1","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#6366f1","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#6366f1","true","false"],["Shield","shield.html","Shield Documentation","documentation","#6366f1","true","false"],["Story","story.html","What is DocOps","documentation","#6366f1","true","false"],["Swimlane","swimlane.html","Swimlane Documentation","documentation","#6366f1","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#6366f1","true","false"],["Todo","todo.html","Todo Documentation","documentation","#6366f1","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#6366f1","true","false"],["Tutorial","tutorial.html","Sample Tutorials","documentation","#6366f1","true","false"],["VCard","vcard.html","VCards","documentation","#6366f1","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#6366f1","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><!-- Background Atmosphere Pattern --><pattern id="dotPattern_2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.15" /></pattern><filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><!-- Glass Reflection Gradient --><linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="white" stop-opacity="0.4"/><stop offset="50%" stop-color="white" stop-opacity="0.05"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient><filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/></filter><radialGradient id="raisedButton_7114989c-4bc1-417e-8765-3ef61f5cdf35" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad0-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_a7daf47e-b2bb-4c78-9bd2-90c818857be8" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad1-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_b3c8580c-7762-4b71-a0d0-9cd6bbc036a1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" /><stop offset="100%" style="stop-color:#009399;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad2-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#00f5ff"/><stop offset="100%" stop-color="#00abb2"/></linearGradient><radialGradient id="raisedButton_b15b33c5-03dd-4154-add2-69cd53372858" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad3-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_25cdc380-1c67-4be5-9870-8124d73262bb" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad4-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_c3b35354-89a0-491a-bb13-abf8c44d6a27" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad5-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d1eb095d-5538-41f3-a08c-d4c29de3c4af" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad6-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_b88d371c-cc99-4ea2-aded-e2090ac158af" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad7-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_4a9912f7-2cd4-4604-ab38-59a77b397b7c" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad8-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_7f43f552-02e5-45a7-a2bd-c2c561610ff1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad9-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_2f151762-0b41-42e9-a01d-8b7bb3ddb6e9" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad10-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_5be0ad11-71bf-43b9-ba87-87762d365364" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad11-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_10c071ab-0fb8-44c6-9a6d-c8d20fc251d0" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad12-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d966ded7-0f4f-43c0-a33a-074a91ddde3e" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad13-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_9d64cfa0-151c-40a9-8f1f-5fac849037f1" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad14-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_a028a4b1-ac9a-4844-87a5-678f56e3cc38" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad15-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_c9feba89-4c20-453e-a0d5-5713d20e0a8c" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad16-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_cbbc3e8d-3adf-4286-90c8-ecc2be2829bc" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad17-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d82fd043-120d-436b-becf-9873b6f2eb4a" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad18-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_db0f2edf-c7de-40f4-be6a-caebd4111d09" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad19-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_6e25fac5-a47a-414b-8039-ce541a57f328" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad20-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_061f271d-88e1-4908-a584-8a8f6441bdd0" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad21-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_a4ae3c2d-78fc-4bf5-9ccb-b07836f63608" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad22-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_936b5136-7b44-41d2-a4cb-c706132dff69" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad23-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_cb146746-d81b-4d70-9289-fea4a9310116" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad24-2a23ff78-4e17-429b-8c2d-0a2219bf9e6c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><style>.orb-group { cursor: pointer; } .orb-group .moving-group { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); } .glow-ring { transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease; stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 0.2; } .orb-group:hover .glow-ring { stroke-dashoffset: 0; opacity: 1; } .orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }</style></defs><!-- Apply atmospheric pattern background --><rect width="1233.0" height="405.0" fill="url(#dotPattern_2a23ff78-4e17-429b-8c2d-0a2219bf9e6c)" rx="12" pointer-events="none"/><g transform="scale(1.0)"><g transform="translate(70,65)" onclick="window.open('adr.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_7114989c-4bc1-417e-8765-3ef61f5cdf35)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> ADR</tspan></text></g></g><g transform="translate(200,65)" onclick="window.open('arch.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a7daf47e-b2bb-4c78-9bd2-90c818857be8)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Architecture</tspan></text></g></g><g transform="translate(330,65)" onclick="window.open('buttons.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#00f5ff" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b3c8580c-7762-4b71-a0d0-9cd6bbc036a1)" stroke="#00f5ff" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Buttons</tspan></text></g></g><g transform="translate(460,65)" onclick="window.open('callout.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b15b33c5-03dd-4154-add2-69cd53372858)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Callout</tspan></text></g></g><g transform="translate(590,65)" onclick="window.open('charts.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_25cdc380-1c67-4be5-9870-8124d73262bb)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Charts</tspan></text></g></g><g transform="translate(720,65)" onclick="window.open('connectors.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_c3b35354-89a0-491a-bb13-abf8c44d6a27)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Connectors</tspan></text></g></g><g transform="translate(850,65)" onclick="window.open('domain.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d1eb095d-5538-41f3-a08c-d4c29de3c4af)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Domain</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;">Visualization</tspan></text></g></g><g transform="translate(980,65)" onclick="window.open('gherkin.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b88d371c-cc99-4ea2-aded-e2090ac158af)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Gherkin</tspan></text></g></g><g transform="translate(1110,65)" onclick="window.open('index.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_4a9912f7-2cd4-4604-ab38-59a77b397b7c)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Index</tspan></text></g></g><g transform="translate(70,195)" onclick="window.open('metricscard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_7f43f552-02e5-45a7-a2bd-c2c561610ff1)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Metrics Card</tspan></text></g></g><g transform="translate(200,195)" onclick="window.open('placemat.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_2f151762-0b41-42e9-a01d-8b7bb3ddb6e9)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Placemat</tspan></text></g></g><g transform="translate(330,195)" onclick="window.open('planner.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_5be0ad11-71bf-43b9-ba87-87762d365364)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Planner</tspan></text></g></g><g transform="translate(460,195)" onclick="window.open('quadrant.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_10c071ab-0fb8-44c6-9a6d-c8d20fc251d0)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Quadrant</tspan></text></g></g><g transform="translate(590,195)" onclick="window.open('releasestrategy.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d966ded7-0f4f-43c0-a33a-074a91ddde3e)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;">Strategy</tspan></text></g></g><g transform="translate(720,195)" onclick="window.open('roadmap.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_9d64cfa0-151c-40a9-8f1f-5fac849037f1)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Roadmap</tspan></text></g></g><g transform="translate(850,195)" onclick="window.open('scorecard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a028a4b1-ac9a-4844-87a5-678f56e3cc38)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Scorecard</tspan></text></g></g><g transform="translate(980,195)" onclick="window.open('shield.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_c9feba89-4c20-453e-a0d5-5713d20e0a8c)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Shield</tspan></text></g></g><g transform="translate(1110,195)" onclick="window.open('story.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_cbbc3e8d-3adf-4286-90c8-ecc2be2829bc)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Story</tspan></text></g></g><g transform="translate(70,330)" onclick="window.open('swimlane.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d82fd043-120d-436b-becf-9873b6f2eb4a)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Swimlane</tspan></text></g></g><g transform="translate(200,330)" onclick="window.open('timeline.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_db0f2edf-c7de-40f4-be6a-caebd4111d09)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Timeline</tspan></text></g></g><g transform="translate(330,330)" onclick="window.open('todo.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_6e25fac5-a47a-414b-8039-ce541a57f328)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Todo</tspan></text></g></g><g transform="translate(460,330)" onclick="window.open('treechart.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_061f271d-88e1-4908-a584-8a8f6441bdd0)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Tree Chart</tspan></text></g></g><g transform="translate(590,330)" onclick="window.open('tutorial.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a4ae3c2d-78fc-4bf5-9ccb-b07836f63608)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Tutorial</tspan></text></g></g><g transform="translate(720,330)" onclick="window.open('vcard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_936b5136-7b44-41d2-a4cb-c706132dff69)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> VCard</tspan></text></g></g><g transform="translate(850,330)" onclick="window.open('wordcloud.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_cb146746-d81b-4d70-9289-fea4a9310116)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Word Cloud</tspan></text></g></g></g></svg></div></div></div></div>
 </div>
 </div>
 </div>
@@ -2298,534 +2613,74 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<style>
-/* Universal diagram modal styles */
-.diagram-modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(5px);
-}
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+        <!-- The JS specifically fails because this ID is missing -->
+        <div id="modalSvgContainer"></div>
 
-.diagram-modal.show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: modalFadeIn 0.3s ease-out;
-}
-
-@keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.diagram-modal-content {
-    position: relative;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
-
-.diagram-container {
-    background: white;
-    border-radius: 4px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-}
-
-.diagram-modal svg,
-.diagram-modal img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    background: white;
-    display: block;
-}
-
-.diagram-modal-close {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    color: #333;
-}
-
-.diagram-modal-close:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.diagram-modal-controls {
-    position: absolute;
-    top: -10px;
-    left: 10px;
-    display: flex;
-    gap: 10px;
-    z-index: 10001;
-}
-
-.diagram-modal-btn {
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    white-space: nowrap;
-    color: #333;
-}
-
-.diagram-modal-btn:hover {
-    background: rgba(255, 255, 255, 1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-/* Clickable diagram indicators */
-.mermaid,
-.popup-diagram,
-img.popup-diagram {
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    position: relative;
-}
-
-.mermaid:hover,
-.popup-diagram:hover,
-img.popup-diagram:hover {
-    opacity: 0.8;
-}
-
-.mermaid::after,
-.popup-diagram::after,
-img.popup-diagram::after {
-    content: '🔍';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-.mermaid:hover::after,
-.popup-diagram:hover::after,
-img.popup-diagram:hover::after {
-    opacity: 1;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .diagram-modal-content {
-        margin: 10px;
-        max-width: calc(100vw - 20px);
-        max-height: calc(100vh - 20px);
-        padding: 15px;
-    }
-    
-    .diagram-modal-controls {
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    
-    .diagram-modal-btn {
-        font-size: 10px;
-        padding: 6px 8px;
-    }
-}
-</style>
-
+        <div class="modal-zoom-controls">
+            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+        </div>
+    </div>
+</div>
 <script>
-// Universal diagram modal functionality
-window.diagramModal = {
-    currentPanzoom: null,
-    currentElement: null,
-    
-    init() {
-        // Create modal if it doesn't exist
-        if (!document.getElementById('diagram-modal')) {
-            const modal = document.createElement('div');
-            modal.id = 'diagram-modal';
-            modal.className = 'diagram-modal';
-            modal.innerHTML = `
-                <div class="diagram-modal-content">
-                    <button class="diagram-modal-close" onclick="diagramModal.close()" title="Close">&times;</button>
-                    <div class="diagram-modal-controls">
-                        <button class="diagram-modal-btn" onclick="diagramModal.zoomIn()" title="Zoom In">🔍+</button>
-                        <button class="diagram-modal-btn" onclick="diagramModal.zoomOut()" title="Zoom Out">🔍-</button>
-                        <button class="diagram-modal-btn" onclick="diagramModal.resetZoom()" title="Reset Zoom">⚪</button>
-                        <button class="diagram-modal-btn" onclick="diagramModal.fitToScreen()" title="Fit to Screen">⛶</button>
-                    </div>
-                    <div class="diagram-container"></div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Close on background click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.close();
-                }
-            });
-            
-            // Close on Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('show')) {
-                    this.close();
-                }
-            });
-        }
-    },
-    
-    openSvg(svg) {
-        this.init();
-        const modal = document.getElementById('diagram-modal');
-        const container = modal.querySelector('.diagram-container');
-        
-        // Clone the SVG and ensure it has a white background
-        const clonedSvg = svg.cloneNode(true);
-        
-        // Ensure the SVG has proper styling for visibility
-        clonedSvg.style.backgroundColor = 'white';
-        clonedSvg.style.display = 'block';
-        
-        // Clear and add the cloned SVG
-        container.innerHTML = '';
-        container.appendChild(clonedSvg);
-        
-        this.currentElement = clonedSvg;
-        
-        // Show modal
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        
-        // Initialize panzoom ONLY for the modal SVG
-        setTimeout(() => {
-            if (window.svgPanZoom && clonedSvg) {
-                try {
-                    this.currentPanzoom = svgPanZoom(clonedSvg, {
-                        controlIconsEnabled: true,
-                        center: true,
-                        fit: true,
-                        minZoom: 0.1,
-                        maxZoom: 10,
-                        zoomScaleSensitivity: 0.5,
-                        mouseWheelZoomEnabled: true,
-                        preventMouseEventsDefault: true
-                    });
-                } catch (error) {
-                    console.warn('Failed to initialize panzoom for SVG:', error);
-                }
-            }
-        }, 150);
-    },
-    
-    openImage(img) {
-        this.init();
-        const modal = document.getElementById('diagram-modal');
-        const container = modal.querySelector('.diagram-container');
-        
-        // Create a new image element
-        const clonedImg = document.createElement('img');
-        clonedImg.src = img.src;
-        clonedImg.alt = img.alt || 'Diagram';
-        clonedImg.style.maxWidth = '100%';
-        clonedImg.style.maxHeight = '100%';
-        clonedImg.style.display = 'block';
-        clonedImg.style.margin = '0 auto';
-        
-        // Clear and add the image
-        container.innerHTML = '';
-        container.appendChild(clonedImg);
-        
-        this.currentElement = clonedImg;
-        
-        // Show modal
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        
-        // For images, we'll use CSS transforms for zoom instead of svgPanZoom
-        this.setupImageZoom(clonedImg);
-    },
-    
-    setupImageZoom(img) {
-        let scale = 1;
-        let translateX = 0;
-        let translateY = 0;
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let startTranslateX = 0;
-        let startTranslateY = 0;
-        
-        const updateTransform = () => {
-            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        };
-        
-        // Store zoom functions for the modal controls
-        this.currentPanzoom = {
-            zoomIn: () => {
-                scale = Math.min(scale * 1.3, 10);
-                updateTransform();
-            },
-            zoomOut: () => {
-                scale = Math.max(scale / 1.3, 0.1);
-                updateTransform();
-            },
-            resetZoom: () => {
-                scale = 1;
-                translateX = 0;
-                translateY = 0;
-                updateTransform();
-            },
-            fit: () => {
-                scale = 1;
-                translateX = 0;
-                translateY = 0;
-                updateTransform();
-            }
-        };
-        
-        // Mouse wheel zoom
-        img.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            scale = Math.max(0.1, Math.min(10, scale * delta));
-            updateTransform();
-        });
-        
-        // Drag functionality
-        img.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startTranslateX = translateX;
-            startTranslateY = translateY;
-            img.style.cursor = 'grabbing';
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            translateX = startTranslateX + (e.clientX - startX);
-            translateY = startTranslateY + (e.clientY - startY);
-            updateTransform();
-        });
-        
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            img.style.cursor = 'grab';
-        });
-        
-        img.style.cursor = 'grab';
-    },
-    
-    close() {
-        const modal = document.getElementById('diagram-modal');
-        if (modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-            
-            // Cleanup panzoom
-            if (this.currentPanzoom && this.currentPanzoom.destroy) {
-                try {
-                    this.currentPanzoom.destroy();
-                } catch (error) {
-                    console.warn('Failed to destroy panzoom:', error);
-                }
-            }
-            this.currentPanzoom = null;
-            this.currentElement = null;
-        }
-    },
-    
-    zoomIn() {
-        if (this.currentPanzoom && this.currentPanzoom.zoomIn) {
-            this.currentPanzoom.zoomIn();
-        }
-    },
-    
-    zoomOut() {
-        if (this.currentPanzoom && this.currentPanzoom.zoomOut) {
-            this.currentPanzoom.zoomOut();
-        }
-    },
-    
-    resetZoom() {
-        if (this.currentPanzoom) {
-            if (this.currentPanzoom.resetZoom) {
-                this.currentPanzoom.resetZoom();
-            }
-            if (this.currentPanzoom.center) {
-                this.currentPanzoom.center();
-            }
-        }
-    },
-    
-    fitToScreen() {
-        if (this.currentPanzoom) {
-            if (this.currentPanzoom.fit) {
-                this.currentPanzoom.fit();
-            }
-            if (this.currentPanzoom.center) {
-                this.currentPanzoom.center();
-            }
-        }
-    }
-};
-
-// Initialize popup functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Setup both direct img.popup-diagram and div.popup-diagram > img structures
-    function setupPopupElement(element) {
-        if (element.hasAttribute('data-popup-initialized')) return;
-        
-        let img = null;
-        let clickTarget = element;
-        
-        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
-            // Direct img with popup-diagram class
-            img = element;
-        } else if (element.classList.contains('popup-diagram')) {
-            // div with popup-diagram class - find img inside
-            img = element.querySelector('img');
-            if (!img) return; // No img found, skip
-        }
-        
-        if (!img) return;
-        
-        clickTarget.style.cursor = 'pointer';
-        clickTarget.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            diagramModal.openImage(img);
-        });
-        clickTarget.title = 'Click to open in fullscreen with zoom controls';
-        element.setAttribute('data-popup-initialized', 'true');
-    }
-    
-    // Setup existing popup diagrams
-    document.querySelectorAll('img.popup-diagram, .popup-diagram').forEach(setupPopupElement);
-});
-
-// Also check for dynamically added images
-const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-        mutation.addedNodes.forEach(function(node) {
-            if (node.nodeType === 1) { // Element node
-                // Check the node itself
-                if ((node.tagName === 'IMG' && node.classList.contains('popup-diagram')) ||
-                    (node.classList && node.classList.contains('popup-diagram'))) {
-                    setupPopupElement(node);
-                }
-                
-                // Check descendants
-                if (node.querySelectorAll) {
-                    const elements = node.querySelectorAll('img.popup-diagram, .popup-diagram');
-                    elements.forEach(setupPopupElement);
-                }
-            }
-        });
-    });
-    
-    function setupPopupElement(element) {
-        if (element.hasAttribute('data-popup-initialized')) return;
-        
-        let img = null;
-        let clickTarget = element;
-        
-        if (element.tagName === 'IMG' && element.classList.contains('popup-diagram')) {
-            // Direct img with popup-diagram class
-            img = element;
-        } else if (element.classList.contains('popup-diagram')) {
-            // div with popup-diagram class - find img inside
-            img = element.querySelector('img');
-            if (!img) return; // No img found, skip
-        }
-        
-        if (!img) return;
-        
-        clickTarget.style.cursor = 'pointer';
-        clickTarget.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            diagramModal.openImage(img);
-        });
-        clickTarget.title = 'Click to open in fullscreen with zoom controls';
-        element.setAttribute('data-popup-initialized', 'true');
-    }
-});
-observer.observe(document.body, { childList: true, subtree: true });
-
 mermaid.initialize({
     startOnLoad: true,
-    theme: 'neo',
-    look: 'neo'
-});
-
-mermaid.run({
-    querySelector: '.mermaid',
-    postRenderCallback: (id) => {
-        console.log('Post-render callback for diagram:', id);
-        const svg = document.getElementById(id);
-        const container = svg.parentNode;
-
-        // NO PANZOOM for embedded diagrams - just basic sizing
-        const bbox = svg.getBBox ? svg.getBBox() : { width: 800, height: 600 };
+    theme: 'base',
+    themeVariables: {
+        // Typography - Matching pro-style.css
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: "14px",
         
-        container.style.width = bbox.width + 'px';
-        container.style.height = bbox.height + 'px';
-        svg.setAttribute('width', bbox.width);
-        svg.setAttribute('height', bbox.height);
+        // Colors - Using your CSS Variables
+        primaryColor: 'var(--bg-surface)',
+        primaryTextColor: 'var(--text-main)',
+        primaryBorderColor: 'var(--accent-primary)',
+        lineColor: 'var(--accent-secondary)',
+        secondaryColor: 'var(--bg-base)',
+        tertiaryColor: 'var(--bg-surface)',
         
-        // Add click handler for fullscreen
-        svg.style.cursor = 'pointer';
-        svg.addEventListener('click', () => {
-            diagramModal.openSvg(svg);
-        });
+        // Specific Element Overrides
+        nodeBorder: 'var(--accent-primary)',
+        clusterBkg: 'var(--bg-base)',
+        clusterBorder: 'var(--border-color)',
+        titleColor: 'var(--text-heading)',
+        edgeLabelBackground: 'var(--bg-surface)',
         
-        // Add tooltip
-        svg.title = 'Click to open in fullscreen with zoom controls';
-    }
+        // Sequence Diagram specific
+        actorBkg: 'var(--bg-surface)',
+        actorBorder: 'var(--accent-primary)',
+        actorTextColor: 'var(--text-heading)',
+        noteBkgColor: 'var(--accent-glow)',
+        noteTextColor: 'var(--accent-primary)',
+    },
+    // Custom CSS for "AI Assistant" flair
+    themeCSS: `
+        .node rect, .node circle, .node ellipse, .node polygon {
+            stroke-width: 2px;
+            filter: drop-shadow(2px 2px 0px var(--accent-glow));
+        }
+        .label-container {
+            fill: var(--bg-surface);
+        }
+        .edgePath .path {
+            stroke: var(--accent-secondary) !important;
+            stroke-width: 1.5px !important;
+        }
+        .marker {
+            fill: var(--accent-secondary) !important;
+            stroke: var(--accent-secondary) !important;
+        }
+        text.titleText {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+        }
+    `
 });
 </script>
 </body>
