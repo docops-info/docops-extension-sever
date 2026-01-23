@@ -169,6 +169,38 @@ Product E | 10
 
 [/docops]
 
+[docops:pieslice]
+title=Sales Distribution by Product
+width=700
+height=600
+legend=true
+percentages=true
+donut=true
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+
+[/docops]
+
+[docops:pieslice]
+title=Sales Distribution by Product
+width=700
+height=600
+legend=true
+percentages=true
+donut=true
+visualVersion=2
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+
+[/docops]
 ### Multi-Pie Charts
 [docops:pie]
 outlineColor=#FA4032
