@@ -1,13 +1,12 @@
 package io.docops.docopsextensionssupport.chart.bar
 
-import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.chart.ColorPaletteFactory
 import io.docops.docopsextensionssupport.support.DocOpsTheme
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.textWidth
-import java.awt.Font
 
 class VGroupBar {
     private var height  = 600
@@ -20,16 +19,20 @@ class VGroupBar {
     fun makeVerticalBar(barGroup: BarGroup, isPdf: Boolean): String {
         theme = ThemeFactory.getTheme(barGroup.display)
 
+        // Get the palette type for this bar group
+        val paletteType = getPaletteType(barGroup.display)
+
+
         val sb = StringBuilder()
         sb.append(head(barGroup))
-        sb.append(makeDefs(makeGradient(barGroup.display), barGroup))
+        sb.append(makeDefs(makeGradient(barGroup.display), barGroup, paletteType))
         sb.append(makeBackground(barGroup))
         sb.append(makeTitle(barGroup))
         sb.append(makeLineSeparator(barGroup))
         sb.append(makeColumnHeader(barGroup))
         var startY = 90 // Increased from 80 to align with the new line separator position
         barGroup.groups.forEach { t ->
-            startY = makeGroup(startY, t, barGroup, sb, isPdf)
+            startY = makeGroup(startY, t, barGroup, sb, isPdf, paletteType)
         }
         val lastBar = startY
         sb.append(addLegend(lastBar.toDouble(), barGroup))
@@ -37,7 +40,7 @@ class VGroupBar {
         return sb.toString()
     }
 
-    private fun makeGroup(startY: Int, group: Group, barGroup: BarGroup, builder: StringBuilder, isPdf: Boolean): Int {
+    private fun makeGroup(startY: Int, group: Group, barGroup: BarGroup, builder: StringBuilder, isPdf: Boolean, paletteType: ColorPaletteFactory.PaletteType): Int {
         val sb = StringBuilder()
         sb.append("""<g aria-label="${group.label}" transform="translate(203,$startY)">""")
         var currentY = 0
@@ -56,10 +59,11 @@ class VGroupBar {
             val per = barGroup.scaleUp(it.value)
             val valueColor = theme.primaryText
 
-            // Add bar with rounded corners, animation, and hover effect
-            var fill = "url(#defColor_$idx)"
-            if(isPdf) {
-                fill = ChartColors.Companion.modernColors[idx].color
+            // Use ColorPaletteFactory for colors
+            var fill = if(isPdf) {
+                ColorPaletteFactory.getColorCyclic(paletteType, idx) ?: "#4361ee"
+            } else {
+                "url(#defColor_$idx)"
             }
             sb.append("""
             <g class="bar-group">
@@ -111,7 +115,7 @@ class VGroupBar {
         val titleTextColor = theme.primaryText
 
         // Calculate the width of the title text
-        val titleWidth = barGroup.title.textWidth("Arial", 24, Font.BOLD)
+        val titleWidth = barGroup.title.textWidth("Arial", 24, 1)
 
         // Add padding to ensure the text fits comfortably
         val padding = 40
@@ -199,14 +203,44 @@ class VGroupBar {
     private fun min(a: Int, b: Int): Int {
         return if (a < b) a else b
     }
-    private fun makeDefs(gradients: String, barGroup: BarGroup): String {
+    // Helper method to determine palette type (similar to BarGroupMaker)
+    private fun getPaletteType(display: BarGroupDisplay): ColorPaletteFactory.PaletteType {
+        return when {
+            display.paletteType.isNotBlank() -> {
+                try {
+                    ColorPaletteFactory.PaletteType.valueOf(display.paletteType.uppercase())
+                } catch (e: IllegalArgumentException) {
+                    getDefaultPaletteType(display.useDark)
+                }
+            }
+            else -> getDefaultPaletteType(display.useDark)
+        }
+    }
+
+    private fun getDefaultPaletteType(useDark: Boolean): ColorPaletteFactory.PaletteType {
+        return if (useDark) {
+            ColorPaletteFactory.PaletteType.URBAN_NIGHT
+        } else {
+            ColorPaletteFactory.PaletteType.TABLEAU
+        }
+    }
+
+    private fun makeDefs(gradients: String, barGroup: BarGroup, paletteType: ColorPaletteFactory.PaletteType): String {
         val defGrad = StringBuilder()
 
-        ChartColors.Companion.modernColors.forEachIndexed { idx, item->
-            // Create more vibrant gradients for each color
-            val svgColor = item.createSimpleGradient(item.color, "defColor_$idx")
+        // Create gradients using the specified palette type
+        barGroup.groups.flatMap { it.series }.forEachIndexed { idx, _ ->
+            val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, idx) ?: "#4361ee"
+            val svgColor = SVGColor(baseColor)
+            val lighterColor = svgColor.brightenColor(baseColor, 0.15)
+            val darkerColor = svgColor.darkenColor(baseColor, 0.2)
 
-            defGrad.append(svgColor)
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="$lighterColor"/>
+                    <stop offset="100%" stop-color="$darkerColor"/>
+                </linearGradient>
+            """.trimIndent())
         }
 
         val backColor = SVGColor(barGroup.display.baseColor, "backGrad_${barGroup.id}")
@@ -270,31 +304,9 @@ class VGroupBar {
            </defs>"""
     }
 
-    // Helper function to brighten a color
-    private fun brightenColor(hexColor: String, factor: Double): String {
-        return adjustColor(hexColor, factor, true)
-    }
 
-    // Helper function to darken a color
-    private fun darkenColor(hexColor: String, factor: Double): String {
-        return adjustColor(hexColor, factor, false)
-    }
 
-    // Helper function to adjust a color's brightness
-    private fun adjustColor(hexColor: String, factor: Double, brighten: Boolean): String {
-        val hex = hexColor.replace("#", "")
-        val r = Integer.parseInt(hex.substring(0, 2), 16)
-        val g = Integer.parseInt(hex.substring(2, 4), 16)
-        val b = Integer.parseInt(hex.substring(4, 6), 16)
 
-        val adjustment = if (brighten) factor else -factor
-
-        val newR = (r + (255 - r) * adjustment).toInt().coerceIn(0, 255)
-        val newG = (g + (255 - g) * adjustment).toInt().coerceIn(0, 255)
-        val newB = (b + (255 - b) * adjustment).toInt().coerceIn(0, 255)
-
-        return String.format("#%02x%02x%02x", newR, newG, newB)
-    }
     private fun makeGradient(barDisplay: BarGroupDisplay): String {
         val gradient1 = SVGColor(barDisplay.baseColor, "linearGradient_${barDisplay.id}")
         return gradient1.linearGradient
