@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.timeline
 
+
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -86,7 +88,7 @@ class TimelineSvgGenerator {
 
         // Calculate timeline line length
         val lineStartY = topMargin
-        val lineEndY = height - bottomMargin
+        val lineEndY = baseHeight - bottomMargin
 
         // Main timeline line - Precise and technical
         sb.append("""<line x1="$centerX" y1="$lineStartY" x2="$centerX" y2="$lineEndY" stroke="${if (isDarkMode) "#334155" else "#cbd5e1"}" stroke-width="2" stroke-dasharray="8 4"/>""")
@@ -385,7 +387,7 @@ class TimelineSvgGenerator {
             val linkText = match.groupValues[2]
             sb.append("""<tspan fill="$linkColor" text-decoration="underline">""")
             sb.append("""<a href="$url" target="_blank">""")
-            sb.append(linkText)
+            sb.append(linkText.escapeXml())
             sb.append("""</a>""")
             sb.append("""</tspan>""")
             currentX += estimateTextWidth(linkText, 13)
@@ -397,7 +399,7 @@ class TimelineSvgGenerator {
         if (lastIndex < text.length) {
             val remainingText = text.substring(lastIndex)
             sb.append("""<tspan>""")
-            sb.append(remainingText)
+            sb.append(remainingText.escapeXml())
             sb.append("""</tspan>""")
         }
 
