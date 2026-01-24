@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.chart.bar.BarGroupMaker
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.json.Json
 
 class BarGroupHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
@@ -15,7 +16,7 @@ class BarGroupHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         val svg = if (payload.contains("---") || !payload.trim().startsWith("{")) {
             // Use BarChartImproved for table format
             val barChartImproved = BarChartImproved(useDark)
-            barChartImproved.makeGroupBarSvg(payload, csvResponse, isPdf)
+            barChartImproved.makeGroupBarSvg(payload,  isPdf)
         } else {
             // Use traditional JSON format
             val maker = BarGroupMaker(useDark)
@@ -28,8 +29,9 @@ class BarGroupHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
                 maker.makeBar(bar, isPdf)
             }
         }
+        csvResponse.update(svg.second)
 
-        return svg
+        return svg.first
     }
 
     override fun handleSVG(

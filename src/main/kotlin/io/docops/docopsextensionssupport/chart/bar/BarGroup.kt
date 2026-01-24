@@ -1,15 +1,18 @@
 package io.docops.docopsextensionssupport.chart.bar
 
+
 import io.docops.docopsextensionssupport.chart.NiceScale
 import io.docops.docopsextensionssupport.support.VisualDisplay
+import io.docops.docopsextensionssupport.svgsupport.formatDecimal
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
-import java.util.UUID
 import kotlin.math.abs
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Serializable
-class BarGroup(
-    val id: String = UUID.randomUUID().toString(),
+class BarGroup @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toHexString(),
     val title: String,
     val yLabel: String? = "",
     val xLabel: String? = "",
@@ -18,8 +21,8 @@ class BarGroup(
 )
 
 @Serializable
-class BarGroupDisplay(
-    val id: String = UUID.randomUUID().toString(),
+class BarGroupDisplay @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: String = Uuid.random().toHexString(),
     val baseColor: String = "#D988B9",
     val barSeriesFontStyle: String = "font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle",
     val barSeriesLabelFontStyle: String = "font-family: Arial,Helvetica, sans-serif;  font-size:12px; text-anchor:start;",
@@ -33,7 +36,8 @@ class BarGroupDisplay(
     override var useDark: Boolean = false,
     override val visualVersion: Int = 1,
     val theme: String = "classic",
-    val scale: Double = 1.0
+    val scale: Double = 1.0,
+    val paletteType: String = "" // Empty string means use defaults, otherwise specify palette name
 ) : VisualDisplay
 
 @Serializable
@@ -110,16 +114,12 @@ fun BarGroup.valueFmt(value: Double): String {
 
     numberString = when {
         abs(value / 1000000) > 1 -> {
-            String.format("%.1f", (value / 1000000)) + "m"
-
-
+            formatDecimal((value / 1000000),1) + "m"
         }
 
         abs(value / 1000) > 1 -> {
-            String.format("%.1f", (value / 1000)) + "k"
-
+            formatDecimal((value / 1000), 1) + "k"
         }
-
         else -> {
             value.toInt().toString()
         }

@@ -1,31 +1,44 @@
 package io.docops.docopsextensionssupport.chart.bar
 
-import io.docops.docopsextensionssupport.chart.ChartColors
+
+import io.docops.docopsextensionssupport.chart.ColorPaletteFactory
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.File
+import io.docops.docopsextensionssupport.web.CsvResponse
+import kotlin.math.min
+import kotlin.math.max
+import kotlin.math.ceil
 
 class BarGroupMaker(val useDark: Boolean) {
 
     private var fontColor = "#fcfcfc"
     private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
 
-    fun makeBar(barGroup: BarGroup, isPdf: Boolean): String {
+    // Default palette type - can be made configurable via BarGroupDisplay in the future
+    private var paletteType = if (useDark) {
+        ColorPaletteFactory.PaletteType.URBAN_NIGHT
+    } else {
+        ColorPaletteFactory.PaletteType.TABLEAU
+    }
+
+    fun makeBar(barGroup: BarGroup, isPdf: Boolean): Pair<String, CsvResponse> {
         barGroup.display.useDark = useDark
         theme = ThemeFactory.getTheme(barGroup.display)
         if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
             val brutalistMaker = CyberBrutalistBarGroupMaker(useDark)
-            return brutalistMaker.makeBar(barGroup).first
+            return brutalistMaker.makeBar(barGroup)
         }
+        val svgColor = SVGColor(barGroup.display.baseColor)
         fontColor = determineTextColor(barGroup.display.baseColor)
+        // Get the palette type for this bar group
+        paletteType = getPaletteType(barGroup.display)
+
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
-        sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup=barGroup))
+        sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup=barGroup, paletteType = paletteType))
         sb.append(addGrid(barGroup))
         sb.append(makeTitle(barGroup))
         sb.append(makeXLabel(barGroup))
@@ -33,7 +46,7 @@ class BarGroupMaker(val useDark: Boolean) {
         var startX = 110.0
         val elements = StringBuilder()
         barGroup.groups.forEach { group ->
-            val added = addGroup(barGroup, group, startX, isPdf)
+            val added = addGroup(barGroup, group, startX, isPdf, paletteType)
             startX += group.series.size * 45.0 + 2
             elements.append(added)
         }
@@ -44,40 +57,55 @@ class BarGroupMaker(val useDark: Boolean) {
         sb.append(addTicks(barGroup))
         sb.append(addLegend(startX + ((barGroup.calcWidth() - startX)/2), barGroup))
         sb.append(end())
-        return  sb.toString()
+        return  Pair(sb.toString(), barGroup.toCsv())
     }
 
     private fun addLegend(d: Double, group: BarGroup): String {
         val sb = StringBuilder()
         val distinctLabels = group.legendLabel().distinct()
 
-        // Skip if no distinct labels
         if (distinctLabels.isEmpty()) {
             return ""
         }
 
-        // Calculate legend dimensions and position
-        val itemWidth = 120 // Width for each legend item
-        val itemHeight = 25 // Height for each legend item
-        val itemsPerRow = 4 // Number of items per row
-        val legendPadding = 10 // Padding around the legend
+        // Improved spacing using 8pt grid
+        val itemWidth = 120
+        val itemHeight = 32 // Changed to 32 (4 × 8)
+        val itemsPerRow = 4
+        val legendPadding = 16 // Changed to 16 (2 × 8)
 
-        // Calculate number of rows needed
-        val rows = Math.ceil(distinctLabels.size.toDouble() / itemsPerRow).toInt()
-        val legendWidth = Math.min(group.calcWidth() - 40, itemWidth * itemsPerRow + legendPadding * 2)
+        val rows = ceil(distinctLabels.size.toDouble() / itemsPerRow).toInt()
+        val legendWidth = min(group.calcWidth() - 40, itemWidth * itemsPerRow + legendPadding * 2)
         val legendHeight = itemHeight * rows + legendPadding * 2
 
-        // Position the legend below the x-axis categories
-        val legendX = (group.calcWidth() - legendWidth) / 2 // Center horizontally
-        val legendY = 540 // Position below the x-axis categories
+        val legendX = (group.calcWidth() - legendWidth) / 2
+        // Legend positioned with proper spacing below category labels
+        val legendY = 560 // Moved from 575 to 560 to give more room for X-label below
 
-        // Use colors based on ThemeFactory
         val legendBgColor = theme.canvas
         val legendBorderColor = theme.accentColor
         val legendTextColor = theme.primaryText
 
-        // Create legend background
-        sb.append("""<rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" rx="10" ry="10" fill="$legendBgColor" fill-opacity="0.1" stroke="$legendBorderColor" stroke-width="1"/>""")
+        // Add shadow filter for depth
+        sb.append("""
+        <defs>
+            <filter id="legendShadow_${group.id}" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                <feOffset dx="0" dy="2" result="offsetBlur"/>
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.15"/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+    """.trimIndent())
+
+        // Create depth with subtle background elevation (not opacity)
+        val bgElevation = if (useDark) "#1e293b" else "#ffffff"
+        sb.append("""<rect x="$legendX" y="$legendY" width="$legendWidth" height="$legendHeight" rx="12" ry="12" fill="$bgElevation" stroke="$legendBorderColor" stroke-width="1" stroke-opacity="0.3" filter="url(#legendShadow_${group.id})"/>""")
 
         // Add legend items
         distinctLabels.forEachIndexed { index, label ->
@@ -87,20 +115,20 @@ class BarGroupMaker(val useDark: Boolean) {
             val itemX = legendX + legendPadding + col * itemWidth
             val itemY = legendY + legendPadding + row * itemHeight
 
-            // Use the same gradient as the corresponding bar
             val colorId = "svgGradientColor_$index"
 
-            // Add color box
-            sb.append("""<rect x="${itemX}" y="${itemY}" width="15" height="15" rx="3" ry="3" fill="url(#$colorId)"/>""")
+            // Color box with proper corner radius
+            sb.append("""<rect x="${itemX}" y="${itemY}" width="16" height="16" rx="4" ry="4" fill="url(#$colorId)"/>""")
 
-            // Add label text
-            sb.append("""<text x="${itemX + 25}" y="${itemY + 12}" font-family="${theme.fontFamily}" font-size="12" text-anchor="start" fill="$legendTextColor">$label</text>""")
+            // Label text with better vertical centering
+            sb.append("""<text x="${itemX + 24}" y="${itemY + 12}" font-family="${theme.fontFamily}" font-size="12" text-anchor="start" fill="$legendTextColor">$label</text>""")
         }
 
         return sb.toString()
     }
 
-    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, isPdf: Boolean): String {
+
+    private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, isPdf: Boolean, paletteType: ColorPaletteFactory.PaletteType): String {
         val sb = StringBuilder()
         var counter = startX
         added.series.forEachIndexed { index, series ->
@@ -111,13 +139,12 @@ class BarGroupMaker(val useDark: Boolean) {
             val barWidth = 40.0
             val barHeight = per
 
-            // Create glass effect bar with layered structure
             if(isPdf) {
-                val svgColor = ChartColors.Companion.getColorForIndex(index)
-                color = svgColor.color
+                // Use ColorPaletteFactory for PDF rendering
+                val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, index) ?: "#4361ee"
+                color = baseColor
                 sb.append("""
                     <g class="glass-bar">
-                    <!-- Base rectangle with gradient -->
                     <rect x="$barX" 
                           y="$barY" 
                           width="$barWidth" 
@@ -134,59 +161,49 @@ class BarGroupMaker(val useDark: Boolean) {
                 """.trimIndent())
             }
             else {
-                sb.append(
-                    """
-                <g class="glass-bar">
-                    <!-- Base rectangle with gradient -->
-                    <rect x="$barX" 
-                          y="$barY" 
-                          width="$barWidth" 
-                          height="$barHeight" 
-                          rx="6" 
-                          ry="6" 
-                          fill="$color"
-                          filter="url(#glassDropShadow)"
-                          stroke="rgba(255,255,255,0.3)" stroke-width="1">
-                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                        <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
-                    </rect>
+                sb.append("""
+                    <g class="glass-bar">
+                        <!-- Base rectangle with outer radius -->
+                        <rect x="$barX" 
+                              y="$barY" 
+                              width="$barWidth" 
+                              height="$barHeight" 
+                              rx="6" 
+                              ry="6" 
+                              fill="$color"
+                              filter="url(#glassDropShadow)"
+                              stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                            <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
+                        </rect>
 
-                    <!-- Glass overlay with transparency -->
-                    <rect x="$barX" 
-                          y="$barY" 
-                          width="$barWidth" 
-                          height="$barHeight" 
-                          rx="6" 
-                          ry="6"
-                          fill="url(#glassOverlay)"
-                          filter="url(#glassBlur)">
-                        <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                        <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
-                    </rect>
+                        <!-- Glass overlay with NO gap = NO radius needed -->
+                        <rect x="$barX" 
+                              y="$barY" 
+                              width="$barWidth" 
+                              height="$barHeight" 
+                              rx="6" 
+                              ry="6"
+                              fill="url(#glassOverlay)"
+                              pointer-events="none">
+                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
+                            <animate attributeName="y" from="500" to="$barY" dur="1s" fill="freeze"/>
+                        </rect>
 
-                    <!-- Radial highlight for realistic light effect -->
-                    <ellipse cx="${barX + barWidth / 4}" 
-                             cy="${barY + barHeight / 5}" 
-                             rx="${barWidth / 3}" 
-                             ry="${Math.min(barHeight / 6, 15.0)}"
-                             fill="url(#glassRadial)"
-                             opacity="0.7">
-                        <animate attributeName="cy" from="510" to="${barY + barHeight / 5}" dur="1s" fill="freeze"/>
-                    </ellipse>
-
-                    <!-- Top highlight for shine -->
-                    <rect x="${barX + 3}" 
-                          y="${barY + 3}" 
-                          width="${barWidth - 6}" 
-                          height="${Math.min(barHeight / 4, 20.0)}" 
-                          rx="4" 
-                          ry="4"
-                          fill="url(#glassHighlight)">
-                        <animate attributeName="y" from="497" to="${barY + 3}" dur="1s" fill="freeze"/>
-                    </rect>
-                </g>
-            """.trimIndent()
-                )
+                        <!-- Top highlight with proper inner radius calculation -->
+                        <!-- Gap = 3px, so inner radius = 6 - 3 = 3px -->
+                        <rect x="${barX + 3}" 
+                              y="${barY + 3}" 
+                              width="${barWidth - 6}" 
+                              height="${min(barHeight / 4, 20.0)}" 
+                              rx="3" 
+                              ry="3"
+                              fill="url(#glassHighlight)"
+                              pointer-events="none">
+                            <animate attributeName="y" from="497" to="${barY + 3}" dur="1s" fill="freeze"/>
+                        </rect>
+                    </g>
+                """.trimIndent())
             }
 
             if(series.value > 0) {
@@ -197,9 +214,11 @@ class BarGroupMaker(val useDark: Boolean) {
             counter += 40.5
         }
         val textX = startX + (added.series.size / 2 * 45.0)
-        sb.append(makeSeriesLabel(textX, 510.0, added.label, barGroup))
+        // Changed from 510.0 to 505.0 to move labels higher and away from legend
+        sb.append(makeSeriesLabel(textX, 505.0, added.label, barGroup))
         return sb.toString()
     }
+
 
     private fun makeSeriesLabel(x: Double, y: Double, label: String, barGroup: BarGroup): String {
         val sb = StringBuilder()
@@ -258,10 +277,10 @@ class BarGroupMaker(val useDark: Boolean) {
         val rectWidth = estimatedTextWidth + 80
 
         // Ensure minimum width of 300px
-        val finalWidth = Math.max(300, rectWidth)
+        val finalWidth = max(300, rectWidth)
 
         // Ensure the title fits within the graph width
-        val adjustedWidth = Math.min(finalWidth, barGroup.calcWidth() - 40)
+        val adjustedWidth = min(finalWidth, barGroup.calcWidth() - 40)
 
         return """
             <g>
@@ -272,16 +291,16 @@ class BarGroupMaker(val useDark: Boolean) {
     }
     private fun makeXLabel(barGroup: BarGroup): String {
         val center = barGroup.calcWidth()/2
-        // Use #666 for axis labels like in bar.svg
         val labelColor = theme.secondaryText
 
+        // Move X-label BELOW the legend (legend ends at ~620, so place at 650)
         return """
-            <text x="$center" y="610" 
-                  style="font-family: ${theme.fontFamily}; fill: $labelColor; 
-                  text-anchor: middle; font-size: 14px; font-weight: bold;">
-                ${barGroup.xLabel}
-            </text>
-        """.trimIndent()
+        <text x="$center" y="650" 
+              style="font-family: ${theme.fontFamily}; fill: $labelColor; 
+              text-anchor: middle; font-size: 14px; font-weight: bold;">
+            ${barGroup.xLabel}
+        </text>
+    """.trimIndent()
     }
 
     private fun makeYLabel(barGroup: BarGroup): String {
@@ -298,18 +317,20 @@ class BarGroupMaker(val useDark: Boolean) {
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
-        val svgHeight = 650
+        // Increased from 650 to 680 to accommodate all elements
+        val svgHeight = 680
         return """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
-            ${theme.fontImport}
-        """.trimIndent()
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
+        ${theme.fontImport}
+    """.trimIndent()
     }
 
     private fun makeGradient(barDisplay: BarGroupDisplay): String {
         // Create a gradient matching bar.svg format with two stops
         val baseColor = barDisplay.baseColor
-        val darkerColor = darkenColor(baseColor, 0.3) // Create a darker color for the gradient end
+        val svgColor = SVGColor(baseColor)
+        val darkerColor = svgColor.darkenColor(baseColor, 0.3) // Create a darker color for the gradient end
 
         return """
         <linearGradient id="linearGradient_${barDisplay.id}" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -319,54 +340,26 @@ class BarGroupMaker(val useDark: Boolean) {
         """.trimIndent()
     }
 
-    // Helper function to brighten a color
-    private fun brightenColor(hexColor: String, factor: Double): String {
-        return adjustColor(hexColor, factor, true)
-    }
 
-    // Helper function to darken a color
-    private fun darkenColor(hexColor: String, factor: Double): String {
-        return adjustColor(hexColor, factor, false)
-    }
 
-    // Helper function to adjust a color's brightness
-    private fun adjustColor(hexColor: String, factor: Double, brighten: Boolean): String {
-        val hex = hexColor.replace("#", "")
-        val r = Integer.parseInt(hex.substring(0, 2), 16)
-        val g = Integer.parseInt(hex.substring(2, 4), 16)
-        val b = Integer.parseInt(hex.substring(4, 6), 16)
-
-        val adjustment = if (brighten) factor else -factor
-
-        val newR = (r + (255 - r) * adjustment).toInt().coerceIn(0, 255)
-        val newG = (g + (255 - g) * adjustment).toInt().coerceIn(0, 255)
-        val newB = (b + (255 - b) * adjustment).toInt().coerceIn(0, 255)
-
-        return String.format("#%02x%02x%02x", newR, newG, newB)
-    }
-
-    private fun makeDefs(gradients: String, barGroup: BarGroup): String {
-        // Define color palettes exactly matching bar.svg gradients
-        val modernColors = listOf(
-            Triple("#4361ee", "#3a0ca3", "#4361ee"), // Bar 1: Blue to Purple
-            Triple("#4cc9f0", "#4361ee", "#4cc9f0"), // Bar 2: Light Blue to Blue
-            Triple("#f72585", "#b5179e", "#f72585"), // Bar 3: Pink to Purple
-            Triple("#7209b7", "#560bad", "#7209b7"), // Bar 4: Purple to Dark Purple
-            Triple("#f77f00", "#d62828", "#f77f00"), // Bar 5: Orange to Red
-            Triple("#2a9d8f", "#264653", "#2a9d8f")  // Bar 6: Teal to Dark Blue
-        )
-
+    private fun makeDefs(gradients: String, barGroup: BarGroup, paletteType: ColorPaletteFactory.PaletteType): String {
         val defGrad = StringBuilder()
         val sz = barGroup.maxGroup().series.size
 
-        // Create gradients matching bar.svg format
+        // Create gradients using the specified palette type
         for(i in 0 until sz) {
+            // Get color from palette (cycles if index exceeds palette size)
+            val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, i) ?: "#4361ee"
 
-            val svgColor = ChartColors.Companion.getColorForIndex(i)
+            // Create lighter and darker variants for gradient
+            val svgColor = SVGColor(baseColor)
+            val lighterColor = svgColor.brightenColor(baseColor, 0.15)
+            val darkerColor = svgColor.darkenColor(baseColor, 0.2)
+
             defGrad.append("""
                 <linearGradient id="svgGradientColor_$i" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="${svgColor.lighter()}"/>
-                    <stop offset="100%" stop-color="${svgColor.darker()}"/>
+                    <stop offset="0%" stop-color="$lighterColor"/>
+                    <stop offset="100%" stop-color="$darkerColor"/>
                 </linearGradient>
             """.trimIndent())
         }
@@ -492,24 +485,23 @@ class BarGroupMaker(val useDark: Boolean) {
         </defs>"""
     }
 
+
     private fun addGrid(barGroup: BarGroup): String {
         val maxHeight = 540
         val maxWidth = barGroup.calcWidth()
-        val maxData = barGroup.maxData() + 100
 
-        // Define colors based on dark mode, matching bar.svg aesthetics
+        // Use slightly elevated colors instead of pure theme colors
+        val backgroundColor = if (useDark) "#0A0E1A" else "#FAFBFD" // Not pure black/white
         val gridLineColor = theme.accentColor
         val axisColor = theme.accentColor
-        val backgroundColor = theme.canvas
 
-        // Create a cleaner grid with fewer lines
-        val yGap = maxHeight / 5 // Reduced number of horizontal grid lines
+        val yGap = maxHeight / 5
         val xGap = maxWidth / (barGroup.maxGroup().series.size + 1)
 
         val elements = StringBuilder()
 
-        // Use theme canvas for background
-        elements.append("""<rect width='100%' height='100%' fill='${backgroundColor}' rx="15" ry="15"/>""")
+        // Improved background with subtle depth
+        elements.append("""<rect width='100%' height='100%' fill='$backgroundColor' rx="15" ry="15"/>""")
 
         // Add horizontal grid lines
         for (i in 1..4) {
@@ -548,81 +540,41 @@ class BarGroupMaker(val useDark: Boolean) {
         """.trimMargin()
     }
 
-    fun makeVGroupBar(group: BarGroup, isPdf: Boolean): String {
+    fun makeVGroupBar(group: BarGroup, isPdf: Boolean): Pair<String, CsvResponse> {
         val vGroupBar = VGroupBar()
-        return vGroupBar.makeVerticalBar(group, isPdf)
+        return Pair(vGroupBar.makeVerticalBar(group, isPdf), group.toCsv())
     }
-    fun makeCondensed(group: BarGroup): String {
+    fun makeCondensed(group: BarGroup): Pair<String, CsvResponse> {
         val vGroupBar = BarGroupCondensedMaker()
-        return vGroupBar.makeBar(group)
+        return Pair(vGroupBar.makeBar(group), group.toCsv())
+    }
+
+    // Determine palette type with fallbacks
+    private fun getPaletteType(display: BarGroupDisplay): ColorPaletteFactory.PaletteType {
+        return when {
+            display.paletteType.isNotBlank() -> {
+                // Try to parse the custom palette type
+                try {
+                    ColorPaletteFactory.PaletteType.valueOf(display.paletteType.uppercase())
+                } catch (e: IllegalArgumentException) {
+                    // Fallback to default if invalid palette name
+                    getDefaultPaletteType(display.useDark)
+                }
+            }
+            else -> getDefaultPaletteType(display.useDark)
+        }
+    }
+
+    // Get the default palette type based on theme
+    private fun getDefaultPaletteType(useDark: Boolean): ColorPaletteFactory.PaletteType {
+        return if (useDark) {
+            ColorPaletteFactory.PaletteType.URBAN_NIGHT
+        } else {
+            ColorPaletteFactory.PaletteType.TABLEAU
+        }
     }
 }
 
 
-fun createBarGroupTestData(): BarGroup {
-    val seriesA1 = Series(label = "Q1", value = 5000.0)
-    val seriesA2 = Series(label = "Q2", value = 7000.0)
-    val seriesA3 = Series(label = "Q3", value = 8000.0)
-    val seriesA4 = Series(label = "Q4", value = 6000.0)
-
-    val seriesB1 = Series(label = "Q1", value = 6000.0)
-    val seriesB2 = Series(label = "Q2", value = 8000.0)
-    val seriesB3 = Series(label = "Q3", value = 7000.0)
-    val seriesB4 = Series(label = "Q4", value = 9000.0)
-
-    val seriesC1 = Series(label = "Q1", value = 6000.0)
-    val seriesC2 = Series(label = "Q2", value = 8000.0)
-    val seriesC3 = Series(label = "Q3", value = 7000.0)
-    val seriesC4 = Series(label = "Q4", value = 9000.0)
-
-    val seriesD1 = Series(label = "Q1", value = 6000.0)
-    val seriesD2 = Series(label = "Q2", value = 8000.0)
-    val seriesD3 = Series(label = "Q3", value = 7000.0)
-    val seriesD4 = Series(label = "Q4", value = 9000.0)
-
-    val seriesE1 = Series(label = "Q1", value = 6000.0)
-    val seriesE2 = Series(label = "Q2", value = 8000.0)
-    val seriesE3 = Series(label = "Q3", value = 7000.0)
-    val seriesE4 = Series(label = "Q4", value = 9000.0)
 
 
-    val groupA = Group(
-        label = "Product A",
-        series = mutableListOf(seriesA1, seriesA2, seriesA3, seriesA4)
-    )
-
-    val groupB = Group(
-        label = "Product B",
-        series = mutableListOf(seriesB1, seriesB2, seriesB3, seriesB4)
-    )
-
-    val groupC = Group(
-        label = "Product C",
-        series = mutableListOf(seriesC1, seriesC2, seriesC3, seriesC4)
-    )
-
-    val groupD = Group(label = "Product D", series = mutableListOf(seriesD1, seriesD2, seriesD3, seriesD4))
-
-    val groupE = Group(label = "Product E", series = mutableListOf(seriesE1, seriesE2, seriesE3, seriesE4))
-    val barGroup = BarGroup(
-        title = "Annual Product Sales Report",
-        yLabel = "Sales (USD)",
-        xLabel = "Quarters",
-        groups = mutableListOf(groupA, groupB, groupC, groupD, groupE),
-        display = BarGroupDisplay(lineColor = "#921A40", baseColor = "#F3EDED", barFontValueStyle = "font-family: Arial,Helvetica, sans-serif; font-size:9px;"
-            , scale = 1.0, useDark = false)
-    )
-
-    return barGroup
-}
-
-fun main() {
-    val barGroupTestData = createBarGroupTestData()
-
-
-    val str = Json.encodeToString(barGroupTestData)
-    println(str)
-    val svg = BarGroupMaker(true).makeBar(barGroupTestData, false)
-    val outfile2 = File("gen/groupbar.svg")
-    outfile2.writeBytes(svg.toByteArray())
-}

@@ -1,14 +1,17 @@
 package io.docops.docopsextensionssupport.chart.bar
 
-import io.docops.docopsextensionssupport.chart.ChartColors
+
+import io.docops.docopsextensionssupport.chart.ColorPaletteFactory
 import io.docops.docopsextensionssupport.support.DocOpsTheme
-import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.generateRectanglePathData
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.textWidth
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 class BarGroupCondensedMaker {
@@ -23,14 +26,20 @@ class BarGroupCondensedMaker {
     var theme: DocOpsTheme = ThemeFactory.getTheme(false)
     fun makeBar(barGroup: BarGroup): String {
         theme = ThemeFactory.getTheme(barGroup.display)
+        val svgColor = SVGColor(barGroup.display.baseColor)
         fontColor = determineTextColor(barGroup.display.baseColor)
+
+        // Get the palette type for this bar group
+        val paletteType = getPaletteType(barGroup.display)
+
+
         val sb = StringBuilder()
         val h = determineHeight(barGroup)
         val w = determineWidth(barGroup)
         sb.append(makeHead(h, w, barGroup, scale= barGroup.display.scale))
 
         height = h
-        sb.append(makeDefs(barGroup))
+        sb.append(makeDefs(barGroup, paletteType))
         sb.append("<g transform='scale(${barGroup.display.scale})'>")
         sb.append("""<rect width="100%" height="100%" fill="${theme.canvas}"/>""")
         sb.append("""<text x="${width/2}" text-anchor="middle" y="16" style="font-size: 16px; fill: ${theme.primaryText}; font-family: Arial, Helvetica, sans-serif;">${barGroup.title}</text>""")
@@ -40,7 +49,7 @@ class BarGroupCondensedMaker {
         var startY= 0
         barGroup.groups.forEach { group ->
             sb.append("""<g transform="translate(0,$startY)">""")
-            sb.append(addGroup(barGroup, group))
+            sb.append(addGroup(barGroup, group, paletteType))
             sb.append("</g>")
             startY += group.series.size * 10 + 5
 
@@ -56,7 +65,7 @@ class BarGroupCondensedMaker {
         sb.append(end())
         return sb.toString()
     }
-    private fun addGroup(barGroup: BarGroup, added: Group): String {
+    private fun addGroup(barGroup: BarGroup, added: Group, paletteType: ColorPaletteFactory.PaletteType): String {
         val sb = StringBuilder()
         var startY = 10
         val bars = (added.series.size * 10) /2 + 14
@@ -65,7 +74,9 @@ class BarGroupCondensedMaker {
         """.trimIndent())
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
-            val color = "url(#${series.label?.replace(" ", "")})"
+            // Use ColorPaletteFactory for colors
+            val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, index) ?: "#4361ee"
+            val color = baseColor
             //println("${series.value} -> $per -> ${500-per}")
             // Improved rounded corners for a more modern look
             val path = generateRectanglePathData(per.toFloat(), 10f, 0.0f, 5.0f, 5.0f, 0.0f).replace("\n", "")
@@ -90,25 +101,42 @@ class BarGroupCondensedMaker {
     }
 
     private fun end() = "</svg>"
-    private fun makeDefs(barGroup: BarGroup): String {
+    // Helper methods for palette type determination
+    private fun getPaletteType(display: BarGroupDisplay): ColorPaletteFactory.PaletteType {
+        return when {
+            display.paletteType.isNotBlank() -> {
+                try {
+                    ColorPaletteFactory.PaletteType.valueOf(display.paletteType.uppercase())
+                } catch (e: IllegalArgumentException) {
+                    getDefaultPaletteType(display.useDark)
+                }
+            }
+            else -> getDefaultPaletteType(display.useDark)
+        }
+    }
+
+    private fun getDefaultPaletteType(useDark: Boolean): ColorPaletteFactory.PaletteType {
+        return if (useDark) {
+            ColorPaletteFactory.PaletteType.URBAN_NIGHT
+        } else {
+            ColorPaletteFactory.PaletteType.TABLEAU
+        }
+    }
+
+    private fun makeDefs(barGroup: BarGroup, paletteType: ColorPaletteFactory.PaletteType): String {
         val defs = StringBuilder()
         defs.append("<defs>")
-        defs.append("""
-            <linearGradient id="condensedLite" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="#ffffff"/>
-            <stop class="stop2" offset="50%" stop-color="#F8FAFC"/>
-            <stop class="stop3" offset="100%" stop-color="#e2e8f0"/>
-        </linearGradient>
-            <linearGradient id="condensedDark" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop class="stop1" offset="0%" stop-color="#1e293b"/>
-            <stop class="stop2" offset="50%" stop-color="#334155"/>
-            <stop class="stop3" offset="100%" stop-color="#475569"/>
-        </linearGradient>""")
+
+        // Use ColorPaletteFactory for gradient definitions
         val labels = barGroup.uniqueLabels()
         val sz = labels.size
         for(i in 0 until sz) {
-            val color = ChartColors.Companion.modernColors[i]
-            defs.append(color.createSimpleGradient(color.original(), labels[i].replace(" ", "")))
+            val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, i) ?: "#4361ee"
+            val svgColor = SVGColor(baseColor)
+            val lighterColor = svgColor.brightenColor(baseColor, 0.15)
+            val darkerColor = svgColor.darkenColor(baseColor, 0.2)
+
+            defs.append(svgColor.createSimpleGradient(lighterColor, labels[i].replace(" ", "")))
         }
 
         defs.append("<style type=\"text/css\">")
@@ -347,7 +375,7 @@ class BarGroupCondensedMaker {
     }
 }
 
-open class BarTheme(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#111111", val titleColor: String = "#000000", val id: String = UUID.randomUUID().toString())
+open class BarTheme @OptIn(ExperimentalUuidApi::class) constructor(val background: String = "#F7F7F7", val lineColor: String = "#111111", val textColor: String = "#111111", val titleColor: String = "#000000", val id: String = Uuid.random().toHexString())
 
 class BarThemeLite(background: String = "url(#condensedLite)", lineColor: String="#94a3b8", textColor: String="#334155", titleColor: String="#1e293b"): BarTheme(background, lineColor, textColor, titleColor)
 class BarThemeDark(background: String = "url(#condensedDark)",  lineColor: String = "#94a3b8",  textColor: String = "#e2e8f0", titleColor: String = "#f8fafc"): BarTheme(background, lineColor, textColor, titleColor)

@@ -1,9 +1,11 @@
 package io.docops.docopsextensionssupport.chart.bar
 
+
+
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
-import io.docops.docopsextensionssupport.web.update
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class BarChartImproved(val useDark: Boolean) {
 
@@ -21,44 +23,43 @@ class BarChartImproved(val useDark: Boolean) {
         "#d35400"  // Burnt Orange
     )
 
-    fun makeBarSvg(payload: String, csvResponse: CsvResponse,  backend: String): String {
+    fun makeBarSvg(payload: String,  backend: String): Pair<String, CsvResponse> {
         val isPDf = "pdf" == backend
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
         // Create Bar object from parsed data
         val bar = createBarFromData(config, chartData)
-        csvResponse.update(bar.toCsv())
 
         bar.display.useDark = useDark
 
 
         if(bar.display.type == "C") {
             val cylinderBarMaker = CylinderBarMaker()
-            return cylinderBarMaker.makeVerticalCylinderBar(bar, isPDf)
+            return Pair(cylinderBarMaker.makeVerticalCylinderBar(bar, isPDf), bar.toCsv())
         }
         // Use existing BarMaker to generate SVG
         val barMaker = BarMaker()
-        return barMaker.makeVerticalBar(bar, isPDf)
+        return Pair(barMaker.makeVerticalBar(bar, isPDf), bar.toCsv())
     }
 
-    fun makeGroupBarSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean): String {
+    fun makeGroupBarSvg(payload: String, isPdf: Boolean): Pair<String, CsvResponse> {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
 
         // Create BarGroup object from parsed data
         val barGroup = createBarGroupFromData(config, chartData)
 
-        csvResponse.update(barGroup.toCsv())
         // Use existing BarGroupMaker to generate SVG
         val barGroupMaker = BarGroupMaker(useDark)
-        return if (barGroup.display.vBar) {
+        val svgPair = if (barGroup.display.vBar) {
             barGroupMaker.makeVGroupBar(barGroup, isPdf)
         } else if (barGroup.display.condensed) {
             barGroupMaker.makeCondensed(barGroup)
         } else {
             barGroupMaker.makeBar(barGroup, isPdf)
         }
+        return svgPair
     }
 
     /**
@@ -79,16 +80,17 @@ class BarChartImproved(val useDark: Boolean) {
      * @param chartData The chart data string
      * @return A Bar object
      */
+    @OptIn(ExperimentalUuidApi::class)
     private fun createBarFromData(config: Map<String, String>, chartData: String): Bar {
-        val title = config.getOrDefault("title", "Bar Chart")
-        val yLabel = config.getOrDefault("yLabel", "")
-        val xLabel = config.getOrDefault("xLabel", "")
-        val baseColor = config.getOrDefault("baseColor", "#4361ee")
+        val title = config["title"] ?: "Bar Chart"
+        val yLabel = config["yLabel"] ?: ""
+        val xLabel = config["xLabel"] ?: ""
+        val baseColor = config["baseColor"] ?: "#4361ee"
         val vBar = config["vBar"]?.toBoolean() ?: false
         val sorted = config["sorted"]?.toBoolean() ?: false
         val scale = config["scale"]?.toFloatOrNull() ?: 1.0f
         val theme = config["theme"] ?: "classic"
-        val type = config.getOrDefault("type", "R")
+        val type = config["type"] ?: "R"
 
         // Parse series data
         val series = mutableListOf<Series>()
@@ -103,7 +105,7 @@ class BarChartImproved(val useDark: Boolean) {
                     // Create itemDisplay if color is provided
                     val itemDisplay = if (color != null) {
                         BarDisplay(
-                            id = UUID.randomUUID().toString(),
+                            id = Uuid.random().toHexString(),
                             baseColor = color,
                             type = type,
                             vBar = vBar,
@@ -139,15 +141,17 @@ class BarChartImproved(val useDark: Boolean) {
      * @param chartData The chart data string
      * @return A BarGroup object
      */
+    @OptIn(ExperimentalUuidApi::class)
     private fun createBarGroupFromData(config: Map<String, String>, chartData: String): BarGroup {
-        val title = config.getOrDefault("title", "Bar Group Chart")
-        val yLabel = config.getOrDefault("yLabel", "")
-        val xLabel = config.getOrDefault("xLabel", "")
-        val baseColor = config.getOrDefault("baseColor", "#D988B9")
+        val title = config["title"] ?: "Bar Group Chart"
+        val yLabel = config["yLabel"] ?: ""
+        val xLabel = config["xLabel"] ?: ""
+        val baseColor = config["baseColor"] ?: "#D988B9"
         val vBar = config["vBar"]?.toBoolean() ?: false
         val condensed = config["condensed"]?.toBoolean() ?: false
         val theme = config["theme"] ?: "classic"
         val scale = config["scale"]?.toDoubleOrNull() ?: 1.0
+        val paletteType = config["paletteType"] ?: "CORPORATE"
 
         // Parse group data
         val groupMap = mutableMapOf<String, MutableList<Series>>()
@@ -164,7 +168,7 @@ class BarChartImproved(val useDark: Boolean) {
                     // Create itemDisplay if color is provided
                     val itemDisplay = if (color != null) {
                         BarDisplay(
-                            id = UUID.randomUUID().toString(),
+                            id = Uuid.random().toHexString(),
                             baseColor = color,
                             vBar = vBar,
                             useDark = useDark
@@ -181,7 +185,7 @@ class BarChartImproved(val useDark: Boolean) {
         }
 
         // Convert groupMap to groups list
-        val groups = groupMap.map { (name, series) -> 
+        val groups = groupMap.map { (name, series) ->
             Group(name, series)
         }.toMutableList()
 
@@ -192,7 +196,8 @@ class BarChartImproved(val useDark: Boolean) {
             condensed = condensed,
             useDark = useDark,
             theme = theme,
-            scale = scale
+            scale = scale,
+            paletteType = paletteType
         )
 
         return BarGroup(

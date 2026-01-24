@@ -4,13 +4,15 @@ import io.docops.docopsextensionssupport.chart.bar.BarChartImproved
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
+import io.docops.docopsextensionssupport.web.update
 
 class BarHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
     fun handleSVGInternal(payload: String, useDark: Boolean, backend: String) : String {
         val barChartImproved = BarChartImproved(useDark)
-        val svg = barChartImproved.makeBarSvg(payload, csvResponse, backend)
-        return svg
+        val svg = barChartImproved.makeBarSvg(payload,  backend)
+        csvResponse.update(svg.second)
+        return svg.first
     }
 
     override fun handleSVG(
