@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&amp;display=swap');
+    </style>
+    <linearGradient id="connector-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#818cf8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Circular background -->
+  <circle cx="256" cy="256" r="240" fill="url(#connector-bg)"/>
+  
+  <!-- Content clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+    <!-- Grid pattern overlay -->
+    <g opacity="0.08">
+      <path d="M100,100 L412,100 M100,200 L412,200 M100,300 L412,300 M100,400 L412,400" stroke="#ffffff" stroke-width="1.5"/>
+      <circle cx="256" cy="256" r="120" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    </g>
+    
+    <!-- Flow nodes (5 connected boxes) -->
+    <!-- Node 1 -->
+    <g transform="translate(80, 120)">
+      <rect x="0" y="0" width="100" height="60" rx="8" fill="#10b981" stroke="#34d399" stroke-width="2" filter="url(#glow)"/>
+      <text x="50" y="35" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">START</text>
+    </g>
+    
+    <!-- Arrow 1 -->
+    <g transform="translate(190, 150)">
+      <line x1="0" y1="0" x2="50" y2="0" stroke="url(#flow-grad)" stroke-width="3" stroke-dasharray="5,3"/>
+      <path d="M 50,0 L 42,-4 L 45,0 L 42,4 Z" fill="#06b6d4"/>
+    </g>
+    
+    <!-- Node 2 -->
+    <g transform="translate(250, 120)">
+      <rect x="0" y="0" width="100" height="60" rx="8" fill="#3b82f6" stroke="#60a5fa" stroke-width="2" filter="url(#glow)"/>
+      <text x="50" y="35" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">PROCESS</text>
+    </g>
+    
+    <!-- Arrow 2 (curved down-right) -->
+    <path d="M 350,180 Q 380,220 300,260" stroke="url(#flow-grad)" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+    <path d="M 300,260 L 306,252 L 303,260 L 310,264 Z" fill="#06b6d4"/>
+    
+    <!-- Node 3 -->
+    <g transform="translate(206, 270)">
+      <rect x="0" y="0" width="100" height="60" rx="8" fill="#8b5cf6" stroke="#a78bfa" stroke-width="2" filter="url(#glow)"/>
+      <text x="50" y="35" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">TRANSFORM</text>
+    </g>
+    
+    <!-- Arrow 3 (curved left) -->
+    <path d="M 206,300 Q 150,300 150,240" stroke="url(#flow-grad)" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+    <path d="M 150,240 L 146,248 L 150,242 L 156,245 Z" fill="#06b6d4"/>
+    
+    <!-- Node 4 -->
+    <g transform="translate(80, 210)">
+      <rect x="0" y="0" width="100" height="60" rx="8" fill="#f59e0b" stroke="#fbbf24" stroke-width="2" filter="url(#glow)"/>
+      <text x="50" y="35" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">VALIDATE</text>
+    </g>
+    
+    <!-- Arrow 4 (down) -->
+    <g transform="translate(130, 280)">
+      <line x1="0" y1="0" x2="0" y2="50" stroke="url(#flow-grad)" stroke-width="3" stroke-dasharray="5,3"/>
+      <path d="M 0,50 L -4,42 L 0,45 L 4,42 Z" fill="#06b6d4"/>
+    </g>
+    
+    <!-- Node 5 (End) -->
+    <g transform="translate(80, 340)">
+      <rect x="0" y="0" width="100" height="60" rx="8" fill="#ec4899" stroke="#f472b6" stroke-width="2" filter="url(#glow)"/>
+      <text x="50" y="35" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="12" fill="#ffffff" text-anchor="middle">COMPLETE</text>
+    </g>
+    
+    <!-- Data flow particles -->
+    <g opacity="0.6">
+      <circle cx="200" cy="150" r="4" fill="#06b6d4"/>
+      <circle cx="320" cy="200" r="4" fill="#06b6d4"/>
+      <circle cx="170" cy="270" r="4" fill="#06b6d4"/>
+      <circle cx="130" cy="305" r="4" fill="#06b6d4"/>
+    </g>
+    
+    <!-- Corner accents -->
+    <path d="M 60,60 L 60,80 M 60,60 L 80,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 452,60 L 452,80 M 452,60 L 432,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  
+  <!-- Circular border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#a5b4fc" stroke-width="3" opacity="0.6"/>
+</svg>

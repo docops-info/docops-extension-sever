@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&amp;display=swap');
+    </style>
+    <linearGradient id="gherkin-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="given-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="when-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="then-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="text-glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Circular background -->
+  <circle cx="256" cy="256" r="240" fill="url(#gherkin-bg)"/>
+  
+  <!-- Content clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+    <!-- Code editor pattern -->
+    <g opacity="0.08">
+      <rect x="80" y="100" width="352" height="312" rx="8" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <path d="M80,140 L432,140" stroke="#ffffff" stroke-width="1"/>
+      <circle cx="100" cy="120" r="4" fill="#ffffff"/>
+      <circle cx="120" cy="120" r="4" fill="#ffffff"/>
+      <circle cx="140" cy="120" r="4" fill="#ffffff"/>
+    </g>
+    
+    <!-- Feature keyword (top) -->
+    <g transform="translate(100, 100)">
+      <rect x="0" y="0" width="120" height="35" rx="6" fill="#5eead4" opacity="0.3"/>
+      <text x="10" y="23" font-family="'Fira Code', monospace" font-weight="700" font-size="16" fill="#ffffff" filter="url(#text-glow)">Feature:</text>
+    </g>
+    
+    <!-- GIVEN step -->
+    <g transform="translate(110, 160)">
+      <rect x="0" y="0" width="280" height="45" rx="8" fill="url(#given-grad)" stroke="#60a5fa" stroke-width="2" opacity="0.9"/>
+      <circle cx="15" cy="22.5" r="6" fill="#ffffff"/>
+      <text x="30" y="17" font-family="'Fira Code', monospace" font-weight="700" font-size="12" fill="#ffffff">GIVEN</text>
+      <text x="30" y="32" font-family="'Fira Code', monospace" font-weight="500" font-size="9" fill="#ffffff" opacity="0.9">user is authenticated</text>
+    </g>
+    
+    <!-- Connector line 1 -->
+    <line x1="120" y1="210" x2="120" y2="230" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+    
+    <!-- WHEN step -->
+    <g transform="translate(110, 230)">
+      <rect x="0" y="0" width="280" height="45" rx="8" fill="url(#when-grad)" stroke="#fbbf24" stroke-width="2" opacity="0.9"/>
+      <circle cx="15" cy="22.5" r="6" fill="#ffffff"/>
+      <text x="30" y="17" font-family="'Fira Code', monospace" font-weight="700" font-size="12" fill="#ffffff">WHEN</text>
+      <text x="30" y="32" font-family="'Fira Code', monospace" font-weight="500" font-size="9" fill="#ffffff" opacity="0.9">request is submitted</text>
+    </g>
+    
+    <!-- Connector line 2 -->
+    <line x1="120" y1="280" x2="120" y2="300" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+    
+    <!-- THEN step -->
+    <g transform="translate(110, 300)">
+      <rect x="0" y="0" width="280" height="45" rx="8" fill="url(#then-grad)" stroke="#34d399" stroke-width="2" opacity="0.9"/>
+      <circle cx="15" cy="22.5" r="6" fill="#ffffff"/>
+      <text x="30" y="17" font-family="'Fira Code', monospace" font-weight="700" font-size="12" fill="#ffffff">THEN</text>
+      <text x="30" y="32" font-family="'Fira Code', monospace" font-weight="500" font-size="9" fill="#ffffff" opacity="0.9">response is successful</text>
+    </g>
+    
+    <!-- Status indicators (right side) -->
+    <g transform="translate(410, 180)">
+      <!-- Pass -->
+      <circle cx="0" cy="0" r="10" fill="#10b981"/>
+      <path d="M -4,0 L -1,4 L 5,-4" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    
+    <g transform="translate(410, 250)">
+      <!-- Pass -->
+      <circle cx="0" cy="0" r="10" fill="#10b981"/>
+      <path d="M -4,0 L -1,4 L 5,-4" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    
+    <g transform="translate(410, 320)">
+      <!-- Pass -->
+      <circle cx="0" cy="0" r="10" fill="#10b981"/>
+      <path d="M -4,0 L -1,4 L 5,-4" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </g>
+    
+    <!-- BDD label (bottom) -->
+    <g transform="translate(180, 380)">
+      <rect x="0" y="0" width="150" height="30" rx="15" fill="#ffffff" opacity="0.2"/>
+      <text x="75" y="20" font-family="'Fira Code', monospace" font-weight="700" font-size="14" fill="#ffffff" text-anchor="middle">BDD Testing</text>
+    </g>
+    
+    <!-- Corner accents -->
+    <path d="M 60,60 L 60,80 M 60,60 L 80,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 452,60 L 452,80 M 452,60 L 432,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  
+  <!-- Circular border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#5eead4" stroke-width="3" opacity="0.6"/>
+</svg>

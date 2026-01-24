@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+    </style>
+    <linearGradient id="timeline-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f766e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-amber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-sky" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-rose" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fb7185;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="card-shadow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="240" fill="url(#timeline-bg)"/>
+
+  <g clip-path="url(#circle-clip)">
+    <g opacity="0.1" stroke="#ffffff" stroke-width="2">
+      <path d="M90,140 L422,140 M90,220 L422,220 M90,300 L422,300 M90,380 L422,380"/>
+    </g>
+
+    <!-- Vertical timeline spine -->
+    <rect x="150" y="110" width="6" height="290" rx="3" fill="#ffffff" opacity="0.5"/>
+
+    <!-- Timeline nodes -->
+    <circle cx="153" cy="140" r="10" fill="url(#accent-amber)" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="153" cy="220" r="10" fill="url(#accent-sky)" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="153" cy="300" r="10" fill="url(#accent-rose)" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Cards -->
+    <g transform="translate(180, 110)">
+      <rect x="0" y="0" width="250" height="60" rx="12" fill="#ffffff" opacity="0.96" filter="url(#card-shadow)"/>
+      <text x="18" y="26" font-family="'Poppins', sans-serif" font-size="12" font-weight="700" fill="#0f172a">Q1 2024</text>
+      <rect x="18" y="34" width="180" height="8" rx="4" fill="#e2e8f0"/>
+      <rect x="18" y="48" width="140" height="6" rx="3" fill="#e2e8f0" opacity="0.7"/>
+    </g>
+
+    <g transform="translate(180, 190)">
+      <rect x="0" y="0" width="250" height="60" rx="12" fill="#ffffff" opacity="0.96" filter="url(#card-shadow)"/>
+      <text x="18" y="26" font-family="'Poppins', sans-serif" font-size="12" font-weight="700" fill="#0f172a">Q2 2024</text>
+      <rect x="18" y="34" width="190" height="8" rx="4" fill="#e2e8f0"/>
+      <rect x="18" y="48" width="120" height="6" rx="3" fill="#e2e8f0" opacity="0.7"/>
+    </g>
+
+    <g transform="translate(180, 270)">
+      <rect x="0" y="0" width="250" height="60" rx="12" fill="#ffffff" opacity="0.96" filter="url(#card-shadow)"/>
+      <text x="18" y="26" font-family="'Poppins', sans-serif" font-size="12" font-weight="700" fill="#0f172a">Q3 2024</text>
+      <rect x="18" y="34" width="170" height="8" rx="4" fill="#e2e8f0"/>
+      <rect x="18" y="48" width="150" height="6" rx="3" fill="#e2e8f0" opacity="0.7"/>
+    </g>
+
+    <!-- Corner accents -->
+    <path d="M 70,70 L 70,90 M 70,70 L 90,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 442,70 L 442,90 M 442,70 L 422,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#5eead4" stroke-width="3" opacity="0.6"/>
+</svg>
