@@ -296,6 +296,25 @@ Product E | 10
 
 [/docops]
 
+### Portfolio Split Example
+
+[docops:pieslice]
+title=Recommended Portfolio Split
+width=700
+height=600
+legend=true
+percentages=true
+donut=true
+visualVersion=2
+---
+Equity | 30
+Real-estate | 27
+Debt | 23
+Bullion | 18
+Insurance | 2
+
+[/docops]
+
 ### Multi-Pie Display
 
 Show multiple related pie charts in a single visualization.
