@@ -1,9 +1,7 @@
 package io.docops.docopsextensionssupport.scorecard
 
 import io.docops.docopsextensionssupport.support.ThemeFactory
-import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.math.max
-import kotlin.text.toInt
 
 /**
  * Maker to generate an iOS-style two-column ScoreCard SVG based on ScoreCard model.

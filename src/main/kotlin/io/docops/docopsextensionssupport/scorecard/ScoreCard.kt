@@ -16,14 +16,11 @@
 
 package io.docops.docopsextensionssupport.scorecard
 
+
 import io.docops.docopsextensionssupport.roadmap.wrapText
 import io.docops.docopsextensionssupport.support.VisualDisplay
-import io.docops.docopsextensionssupport.svgsupport.SvgToPng
-import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.Serializable
-import java.util.*
-import kotlin.math.max
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -76,7 +73,7 @@ fun ScoreCard.toCsv(): CsvResponse {
 
 
 /**
-}
+    }
  * Represents a scorecard item with display text and an optional description.
  *
  * @property displayText The text to be displayed for the scorecard item.
@@ -95,7 +92,7 @@ open class Section
 {
     var title: String = ""
     var items: MutableList<ScoreCardItem> = mutableListOf()
-
+    
 }
 
 @Serializable

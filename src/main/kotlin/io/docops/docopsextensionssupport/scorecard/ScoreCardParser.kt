@@ -1,6 +1,5 @@
 package io.docops.docopsextensionssupport.scorecard
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Parser for ScoreCard content blocks.
