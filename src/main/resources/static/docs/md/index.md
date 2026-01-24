@@ -47,32 +47,50 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
       "label": "Connectors",
       "link": "connector/index.html",
       "description": "Connectors",
+      "embeddedImage": {
+      "ref": "images/ConnectorIcon.svg"
+      },
       "type": "connectors"
     },
     {
       "label": "Domain Visualization",
       "link": "domain/index.html",
       "description": "Domain Visualization",
+      "embeddedImage": {
+      "ref": "images/DomainVisualizationIcon.svg"
+      },
       "type": "domain"
     },{
         "label": "Gherkin",
         "link": "gherkin/index.html",
         "description": "Gherkin Visualized",
+      "embeddedImage": {
+      "ref": "images/GherkinIcon.svg"
+      },
         "type": "gherkin"
     },{
         "label": "Metrics Card",
         "link": "metrics/index.html",
         "description": "Metrics Cards",
+        "embeddedImage": {
+        "ref": "images/MetricsIcon.svg"
+        },
         "type": "metrics"
     },{
         "label": "Planner",
         "link": "planner/index.html",
         "description": "Planner Cards",
+        "embeddedImage": {
+        "ref": "images/PlannerIcon.svg"
+        },
         "type": "Plan"
     },{
         "label": "Scorecard",
         "link": "scorecard/index.html",
         "description": "Scorecards",
+        "embeddedImage": {
+            "ref": "images/ScorecardIcon.svg"
+        },
         "type": "scorecard"
     },{
         "label": "Badges And Shield",
@@ -86,16 +104,25 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
         "label": "Timeline",
         "link": "timeline/index.html",
         "description": "Timeline Visual",
+        "embeddedImage": {
+            "ref": "images/TimelineIcon.svg"
+        },
         "type": "timeline"
     },{
         "label": "Wordcloud",
         "link": "wordcloud/index.html",
         "description": "Wordclouds",
+        "embeddedImage": {
+            "ref": "images/WordcloudIcon.svg"
+        },
         "type": "wordcloud"
     },{
         "label": "Tree Chart",
         "link": "treechart/index.html",
         "description": "Tree Chart - Experimental",
+        "embeddedImage": {
+            "ref": "images/TreechartIcon.svg"
+        },
         "type": "Tree Chart"
     }
   ],
@@ -116,3 +143,4 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
   }
 }
 [/docops]
+
