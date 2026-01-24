@@ -11,25 +11,37 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
       "label": "ADR",
       "link": "adr/adr.html",
       "description": "Architecture Decision Records",
+        "embeddedImage": {
+        "ref": "images/ADRIcon.svg"
+        },
       "type": "adr"
     },
     {
       "label": "Buttons",
       "link": "buttons/buttons.html",
       "description": "Buttons",
+        "embeddedImage": {
+        "ref": "images/ButtonIcon.svg"
+        },
       "type": "buttons"
     },
     {
       "label": "Callouts",
       "link": "callout/index.html",
       "description": "Callout",
+      "embeddedImage": {
+      "ref": "images/CalloutIcon.svg"
+      },
       "type": "callout"
     },
     {
       "label": "Charts",
       "link": "charts/index.html",
       "description": "Generate reports",
-      "type": "charts"
+      "embeddedImage": {
+      "ref": "images/ChartIcon.svg"
+      },
+            "type": "charts"
     },
     {
       "label": "Connectors",
@@ -66,6 +78,9 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
         "label": "Badges And Shield",
         "link": "badge/index.html",
         "description": "Badges and Shield",
+        "embeddedImage": {
+            "ref": "images/BadgeShieldIcon.svg"
+        },
         "type": "badge"
     },{
         "label": "Timeline",
@@ -87,13 +102,13 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
   "buttonType": "LARGE",
   "theme": {
     "colors": [
-      "#268bd2"
+        "#1e3a8a"
     ],
     "hexLinesEnabled": false,
     "strokeColor": "#3498db",
     "newWin": true,
-    "columns": 5,
-    "scale": 1,
+    "columns": 4,
+    "scale": 1.5,
     "buttonStyle": {
       "labelStyle": "font-family: 'Poppins', sans-serif; font-size: 44px; fill: #fcfcfc; font-weight: bold;",
       "descriptionStyle": "font-family: 'Poppins', sans-serif; font-size: 12px; fill: #fcfcfc;"

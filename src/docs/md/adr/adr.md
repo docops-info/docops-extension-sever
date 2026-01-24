@@ -1,7 +1,27 @@
-# Docops ADR
+# Architecture Decision Records
+
+<div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+  <div style="display: flex; align-items: center; gap: 24px;">
+    <div style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 20px; border-radius: 12px;">
+      <img src="../images/ADRIcon.svg" alt="ADR Icon" width="80" height="80" />
+    </div>
+    <div>
+      <h1 style="margin: 0 0 12px 0; color: #1e3a8a; font-size: 32px;">Architecture Decision Records</h1>
+      <p style="margin: 0; color: #64748b; font-size: 16px;">Capture and communicate your architectural decisions effectively</p>
+    </div>
+  </div>
+</div>
+
 [TOC]
 
-Architecture Decision Records (ADRs) are documents that capture significant design choices made during software development. They provide a structured way to record the context, rationale, and consequences of these decisions, ensuring future understanding and traceability. Essentially, ADRs act as a log of important architectural choices, helping teams understand why a system is designed the way it is.
+## What are Architecture Decision Records?
+
+Essentially, ADRs act as a log of important architectural choices, helping teams understand why a system is designed the way it is. They serve as:
+
+- **Decision Documentation** - Permanent record of key architectural decisions
+- **Context Preservation** - Captures the circumstances and constraints at decision time
+- **Knowledge Transfer** - Helps new team members understand system design
+- **Audit Trail** - Provides traceability for compliance and review
 
 ## Default Look
 
@@ -58,3 +78,22 @@ context:
   [[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
   [[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]
 [/docops]
+
+---
+
+## Key Components of an ADR
+
+Each ADR typically includes:
+
+1. **Title** - Clear, concise description of the decision
+2. **Status** - Current state (Proposed, Accepted, Superseded, Deprecated, Rejected)
+3. **Date** - When the decision was made
+4. **Context** - The circumstances requiring a decision
+5. **Decision** - The chosen approach and rationale
+6. **Consequences** - Trade-offs, risks, and implications
+7. **Participants** - Who was involved in the decision
+
+<div style="background: #f8fafc; border-left: 4px solid #3b82f6; padding: 16px 24px; margin: 32px 0; border-radius: 4px;">
+  <p style="margin: 0; color: #1e3a8a; font-weight: 600;">💡 Best Practice</p>
+  <p style="margin: 8px 0 0 0; color: #475569;">Keep ADRs concise and focused. One decision per record. Use simple language and avoid jargon where possible.</p>
+</div>
