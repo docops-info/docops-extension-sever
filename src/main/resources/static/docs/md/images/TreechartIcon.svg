@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+    </style>
+    <linearGradient id="tree-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#166534;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4ade80;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#bbf7d0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#86efac;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-amber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fde68a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-sky" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#bae6fd;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="card-shadow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="240" fill="url(#tree-bg)"/>
+
+  <g clip-path="url(#circle-clip)">
+    <g opacity="0.08" stroke="#ffffff" stroke-width="2">
+      <path d="M80,150 L432,150 M80,256 L432,256 M80,362 L432,362"/>
+    </g>
+
+    <!-- Tree connectors -->
+    <g stroke="#ffffff" stroke-width="3" opacity="0.7" fill="none" stroke-linecap="round">
+      <path d="M256,130 L256,190"/>
+      <path d="M256,190 L160,240"/>
+      <path d="M256,190 L352,240"/>
+      <path d="M160,240 L160,300"/>
+      <path d="M352,240 L352,300"/>
+      <path d="M160,300 L110,350"/>
+      <path d="M160,300 L210,350"/>
+      <path d="M352,300 L302,350"/>
+      <path d="M352,300 L402,350"/>
+    </g>
+
+    <!-- Root node -->
+    <g transform="translate(196, 100)">
+      <rect x="0" y="0" width="120" height="40" rx="10" fill="#ffffff" opacity="0.95" filter="url(#card-shadow)"/>
+      <rect x="10" y="12" width="80" height="8" rx="4" fill="#e2e8f0"/>
+      <rect x="10" y="24" width="60" height="6" rx="3" fill="#e2e8f0" opacity="0.7"/>
+    </g>
+
+    <!-- Mid nodes -->
+    <g transform="translate(100, 220)">
+      <rect x="0" y="0" width="120" height="40" rx="10" fill="url(#node-amber)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="12" y="16" width="70" height="8" rx="4" fill="#fef3c7"/>
+    </g>
+    <g transform="translate(292, 220)">
+      <rect x="0" y="0" width="120" height="40" rx="10" fill="url(#node-sky)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="12" y="16" width="70" height="8" rx="4" fill="#e0f2fe"/>
+    </g>
+
+    <!-- Leaf nodes -->
+    <g transform="translate(70, 340)">
+      <rect x="0" y="0" width="90" height="34" rx="8" fill="url(#node-green)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="10" y="14" width="50" height="6" rx="3" fill="#dcfce7"/>
+    </g>
+    <g transform="translate(170, 340)">
+      <rect x="0" y="0" width="90" height="34" rx="8" fill="url(#node-green)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="10" y="14" width="50" height="6" rx="3" fill="#dcfce7"/>
+    </g>
+    <g transform="translate(260, 340)">
+      <rect x="0" y="0" width="90" height="34" rx="8" fill="url(#node-green)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="10" y="14" width="50" height="6" rx="3" fill="#dcfce7"/>
+    </g>
+    <g transform="translate(360, 340)">
+      <rect x="0" y="0" width="90" height="34" rx="8" fill="url(#node-green)" opacity="0.9" filter="url(#card-shadow)"/>
+      <rect x="10" y="14" width="50" height="6" rx="3" fill="#dcfce7"/>
+    </g>
+
+    <!-- Corner accents -->
+    <path d="M 70,70 L 70,90 M 70,70 L 90,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 442,70 L 442,90 M 442,70 L 422,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#86efac" stroke-width="3" opacity="0.6"/>
+</svg>

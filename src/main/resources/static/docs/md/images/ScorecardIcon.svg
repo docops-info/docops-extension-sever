@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+    </style>
+    <linearGradient id="scorecard-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#15803d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-red" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f87171;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16a34a;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="card-shadow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="240" fill="url(#scorecard-bg)"/>
+
+  <g clip-path="url(#circle-clip)">
+    <g opacity="0.08" stroke="#ffffff" stroke-width="2">
+      <path d="M80,150 L432,150 M80,240 L432,240 M80,330 L432,330"/>
+    </g>
+
+    <!-- Scorecard container -->
+    <g transform="translate(96, 120)">
+      <rect x="0" y="0" width="320" height="260" rx="16" fill="#ffffff" opacity="0.96" filter="url(#card-shadow)"/>
+      <rect x="0" y="0" width="320" height="50" rx="16" fill="#dcfce7"/>
+      <text x="18" y="32" font-family="'Poppins', sans-serif" font-size="14" font-weight="700" fill="#166534">Release Scorecard</text>
+
+      <!-- Before column -->
+      <g transform="translate(18, 70)">
+        <text x="0" y="14" font-family="'Poppins', sans-serif" font-size="11" font-weight="700" fill="#991b1b">BEFORE</text>
+        <rect x="0" y="24" width="130" height="26" rx="6" fill="#fee2e2"/>
+        <rect x="8" y="32" width="90" height="6" rx="3" fill="#fecaca"/>
+        <rect x="0" y="58" width="130" height="26" rx="6" fill="#fee2e2"/>
+        <rect x="8" y="66" width="80" height="6" rx="3" fill="#fecaca"/>
+        <rect x="0" y="92" width="130" height="26" rx="6" fill="#fee2e2"/>
+        <rect x="8" y="100" width="70" height="6" rx="3" fill="#fecaca"/>
+      </g>
+
+      <!-- After column -->
+      <g transform="translate(172, 70)">
+        <text x="0" y="14" font-family="'Poppins', sans-serif" font-size="11" font-weight="700" fill="#14532d">AFTER</text>
+        <rect x="0" y="24" width="130" height="26" rx="6" fill="#dcfce7"/>
+        <path d="M 10 37 L 14 41 L 22 31" stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="28" y="33" width="80" height="6" rx="3" fill="#bbf7d0"/>
+        <rect x="0" y="58" width="130" height="26" rx="6" fill="#dcfce7"/>
+        <path d="M 10 71 L 14 75 L 22 65" stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="28" y="67" width="70" height="6" rx="3" fill="#bbf7d0"/>
+        <rect x="0" y="92" width="130" height="26" rx="6" fill="#dcfce7"/>
+        <path d="M 10 105 L 14 109 L 22 99" stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="28" y="101" width="90" height="6" rx="3" fill="#bbf7d0"/>
+      </g>
+
+      <!-- Progress bar -->
+      <g transform="translate(18, 210)">
+        <rect x="0" y="0" width="284" height="12" rx="6" fill="#e2e8f0"/>
+        <rect x="0" y="0" width="210" height="12" rx="6" fill="url(#accent-green)"/>
+        <circle cx="210" cy="6" r="7" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
+      </g>
+    </g>
+
+    <!-- Corner accents -->
+    <path d="M 70,70 L 70,90 M 70,70 L 90,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 442,70 L 442,90 M 442,70 L 422,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#86efac" stroke-width="3" opacity="0.6"/>
+</svg>

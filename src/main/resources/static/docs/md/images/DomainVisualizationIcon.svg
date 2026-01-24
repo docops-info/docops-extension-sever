@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&amp;display=swap');
+    </style>
+    <linearGradient id="domain-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="layer-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="layer-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="layer-grad-3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="layer-glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Circular background -->
+  <circle cx="256" cy="256" r="240" fill="url(#domain-bg)"/>
+  
+  <!-- Content clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+    <!-- Network grid pattern -->
+    <g opacity="0.1" stroke="#ffffff" stroke-width="1">
+      <circle cx="256" cy="256" r="80" fill="none"/>
+      <circle cx="256" cy="256" r="140" fill="none"/>
+      <circle cx="256" cy="256" r="200" fill="none"/>
+      <path d="M256,56 L256,456 M56,256 L456,256"/>
+      <path d="M128,128 L384,384 M384,128 L128,384"/>
+    </g>
+    
+    <!-- Central domain node -->
+    <g transform="translate(256, 256)">
+      <circle r="45" fill="#ffffff" opacity="0.15"/>
+      <circle r="40" fill="url(#domain-bg)" stroke="#34d399" stroke-width="3" filter="url(#layer-glow)"/>
+      <text y="6" font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="16" fill="#ffffff" text-anchor="middle">CORE</text>
+    </g>
+    
+    <!-- Layer 1: Inner ring (4 nodes) -->
+    <g opacity="0.9">
+      <!-- Top -->
+      <g transform="translate(256, 150)">
+        <rect x="-35" y="-15" width="70" height="30" rx="15" fill="url(#layer-grad-1)" stroke="#22d3ee" stroke-width="2" filter="url(#layer-glow)"/>
+        <text y="5" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="10" fill="#ffffff" text-anchor="middle">API</text>
+      </g>
+      
+      <!-- Right -->
+      <g transform="translate(362, 256)">
+        <rect x="-35" y="-15" width="70" height="30" rx="15" fill="url(#layer-grad-1)" stroke="#22d3ee" stroke-width="2" filter="url(#layer-glow)"/>
+        <text y="5" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="10" fill="#ffffff" text-anchor="middle">DATA</text>
+      </g>
+      
+      <!-- Bottom -->
+      <g transform="translate(256, 362)">
+        <rect x="-35" y="-15" width="70" height="30" rx="15" fill="url(#layer-grad-1)" stroke="#22d3ee" stroke-width="2" filter="url(#layer-glow)"/>
+        <text y="5" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="10" fill="#ffffff" text-anchor="middle">AUTH</text>
+      </g>
+      
+      <!-- Left -->
+      <g transform="translate(150, 256)">
+        <rect x="-35" y="-15" width="70" height="30" rx="15" fill="url(#layer-grad-1)" stroke="#22d3ee" stroke-width="2" filter="url(#layer-glow)"/>
+        <text y="5" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="10" fill="#ffffff" text-anchor="middle">UI</text>
+      </g>
+      
+      <!-- Connecting lines to center -->
+      <line x1="256" y1="210" x2="256" y2="165" stroke="#22d3ee" stroke-width="2" opacity="0.4"/>
+      <line x1="302" y1="256" x2="347" y2="256" stroke="#22d3ee" stroke-width="2" opacity="0.4"/>
+      <line x1="256" y1="302" x2="256" y2="347" stroke="#22d3ee" stroke-width="2" opacity="0.4"/>
+      <line x1="210" y1="256" x2="165" y2="256" stroke="#22d3ee" stroke-width="2" opacity="0.4"/>
+    </g>
+    
+    <!-- Layer 2: Outer ring (8 smaller nodes) -->
+    <g opacity="0.8">
+      <!-- Top-right -->
+      <circle cx="340" cy="172" r="18" fill="url(#layer-grad-2)" stroke="#c4b5fd" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="340" y="176" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">DB</text>
+      
+      <!-- Right-top -->
+      <circle cx="420" cy="220" r="18" fill="url(#layer-grad-3)" stroke="#fde68a" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="420" y="224" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">LOG</text>
+      
+      <!-- Right-bottom -->
+      <circle cx="420" cy="292" r="18" fill="url(#layer-grad-2)" stroke="#c4b5fd" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="420" y="296" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">Q</text>
+      
+      <!-- Bottom-right -->
+      <circle cx="340" cy="340" r="18" fill="url(#layer-grad-3)" stroke="#fde68a" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="340" y="344" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">WEB</text>
+      
+      <!-- Bottom-left -->
+      <circle cx="172" cy="340" r="18" fill="url(#layer-grad-2)" stroke="#c4b5fd" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="172" y="344" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">CDN</text>
+      
+      <!-- Left-bottom -->
+      <circle cx="92" cy="292" r="18" fill="url(#layer-grad-3)" stroke="#fde68a" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="92" y="296" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">IAM</text>
+      
+      <!-- Left-top -->
+      <circle cx="92" cy="220" r="18" fill="url(#layer-grad-2)" stroke="#c4b5fd" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="92" y="224" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">DNS</text>
+      
+      <!-- Top-left -->
+      <circle cx="172" cy="172" r="18" fill="url(#layer-grad-3)" stroke="#fde68a" stroke-width="2" filter="url(#layer-glow)"/>
+      <text x="172" y="176" font-family="'IBM Plex Mono', monospace" font-weight="600" font-size="8" fill="#ffffff" text-anchor="middle">APP</text>
+    </g>
+    
+    <!-- Connection indicators -->
+    <g opacity="0.3" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,2">
+      <line x1="291" y1="221" x2="340" y2="172"/>
+      <line x1="362" y1="241" x2="420" y2="220"/>
+      <line x1="362" y1="271" x2="420" y2="292"/>
+      <line x1="291" y1="291" x2="340" y2="340"/>
+      <line x1="221" y1="291" x2="172" y2="340"/>
+      <line x1="150" y1="271" x2="92" y2="292"/>
+      <line x1="150" y1="241" x2="92" y2="220"/>
+      <line x1="221" y1="221" x2="172" y2="172"/>
+    </g>
+    
+    <!-- Corner accents -->
+    <path d="M 60,60 L 60,80 M 60,60 L 80,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 452,60 L 452,80 M 452,60 L 432,60" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  
+  <!-- Circular border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#6ee7b7" stroke-width="3" opacity="0.6"/>
+</svg>
