@@ -122,12 +122,8 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
                 win = "_blank"
             }
         }
-        // Wrap in link if href exists
-        if (button.link.isNotEmpty()) {
-            sb.append("""<a xlink:href="${button.link}" href="${button.link}" target="$win" style="text-decoration: none;">""")
-        }
 
-        sb.append("""<g transform="translate($x,$y)" class="modern-card-button">""")
+        sb.append("""<g transform="translate($x,$y)" class="modern-card-button" onclick="window.open('${button.link}', '$win')>""")
 
         // Main card background - High contrast border/glow for dark, subtle shadow for light
         val filterAttr = if (!isPdf) "filter=\"url(#cardShadow_$id)\"" else ""
@@ -185,9 +181,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         sb.append("</g>")
 
-        if (button.link.isNotEmpty()) {
-            sb.append("</a>")
-        }
+
 
         return sb.toString()
     }
