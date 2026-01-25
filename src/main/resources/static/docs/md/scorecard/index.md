@@ -119,7 +119,7 @@ Observability | Tracing coverage at 85%
 
 Define `title`, `subtitle`, then `before` and `after` blocks with grouped items:
 
-```text
+``````terminaloutput
 [docops:scorecard]
 title=Release Summary
 subtitle=Highlights
@@ -140,7 +140,7 @@ title=AFTER
 === Category
 Item | Description
 [/docops]
-```
+``````
 
 ### Sections
 

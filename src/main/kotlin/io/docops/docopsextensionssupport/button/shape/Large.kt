@@ -267,12 +267,12 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         sb.append("""<g transform="translate(20, 210)">""")
 
         // Type/Category (Monospaced style)
-        sb.append("""<text x="0" y="20" font-family="$fontMono" font-size="11" font-weight="600" fill="$accent" style="text-transform: uppercase; letter-spacing: 2px;">""")
+        sb.append("""<text x="0" y="20" font-family="$fontMono" font-size="${11/docOpsTheme.fontWidthMultiplier}" font-weight="600" fill="$accent" style="text-transform: uppercase; letter-spacing: 2px;">""")
         sb.append(button.type?.let { escapeXml(it) } ?: "COMPONENT")
         sb.append("</text>")
 
         // Title
-        sb.append("""<text x="0" y="50" font-family="$fontMain" font-size="22" font-weight="800" fill="$primary" style="text-transform: uppercase; letter-spacing: -0.5px;">""")
+        sb.append("""<text x="0" y="50" font-family="$fontMain" font-size="${22 / docOpsTheme.fontWidthMultiplier}" font-weight="800" fill="$primary" style="text-transform: uppercase; letter-spacing: -0.5px;">""")
         sb.append(escapeXml(button.label))
         sb.append("</text>")
 

@@ -163,6 +163,27 @@ For more detailed information about charts, see the link:charts.html[Charts Docu
 [.back-to-top]
 <<top, 🔝>>
 
+=== Venn Diagram Example (Proposed)
+
+The Venn diagram format below uses a table for data entry. Each row represents either a set or an overlap.
+
+[cols="1,1,2,1,1",options="header"]
+|===
+|Type |Sets |Label |Value |Color
+|set |A |Reliability |42 |#f4a261
+|set |B |Speed |36 |#2a9d8f
+|set |C |Cost |30 |#e76f51
+|overlap |A&B |Resilient Speed |12 |#b9a44c
+|overlap |A&C |Lean Reliability |9 |#d08a5c
+|overlap |B&C |Fast Savings |6 |#8ccfb8
+|overlap |A&B&C |All Three |4 |#6d597a
+|===
+
+Example SVG output: `designs/venn.svg`
+
+[.back-to-top]
+<<top, 🔝>>
+
 == Button Examples
 
 DocOps.io Extension Server allows you to create interactive buttons with various styles and layouts.
@@ -528,4 +549,3 @@ String html = asciidoctor.convert(asciiDocContent, options);
 The DocOps.io Extension Server provides a rich set of tools for enhancing your AsciiDoctor documents with interactive and visually appealing elements. By using these extensions, you can create more engaging and informative documentation that better communicates complex information to your audience.
 
 For more information and detailed documentation on each extension, visit the specific documentation pages linked throughout this guide.
-

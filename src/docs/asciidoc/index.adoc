@@ -1,165 +1,148 @@
 include::_base.adoc[]
-:enable-navigation:
-:page-navigation: true
-:prev-page-title: Gherkin
-:prev-page-url: gherkin.html
-:next-page-title: Metrics Cards
-:next-page-url: metricscard.html
-= DocOps Extension Server
+= DocOps AsciiDoctor Support
+:toc:
 
+== DocOps Extensions
 
+DocOps Extensions can now be embedded in Asciidoctor Files. Using the DocOps converter, you can seamlessly integrate visualizations, diagrams, and interactive components directly into your Asciidoctor documents. This allows for a more engaging and informative way to present information, making it easier for readers to understand complex concepts and processes.
 
-[[top]]
-include::shared/buttons.adoc[]
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Transform Your Documentation with Powerful Visualizations
-
-**DocOps Extension Server** is the ultimate solution for creating rich, interactive documentation that captivates your audience and communicates complex ideas with clarity. Say goodbye to static documentation and hello to dynamic, engaging content that drives results.
-
-[.lead]
-*Turn your documentation into a competitive advantage with over 20+ visualization types, seamless integration, and enterprise-grade performance.*
-
-=== Why DocOps Extension Server?
-
-==== 🚀 **Instant Visual Impact**
-Transform boring text into compelling visuals in seconds. Our server supports **20+ visualization types** including roadmaps, timelines, charts, scorecards, and architectural diagrams - all generated from simple text markup.
-
-==== 💡 **Zero Learning Curve**
-Built for **AsciiDoc** - the documentation format you already know and love. No complex tools, no proprietary formats. Just add a simple block directive and watch your content come to life.
-
-==== ⚡ **Enterprise Performance**
-- **Sub-second rendering** with optimized SVG generation
-- **Scalable architecture** handling thousands of concurrent requests
-- **Production-ready** with comprehensive monitoring and error handling
-- **RESTful API** for seamless integration with your existing tools
-
-==== 🎨 **Professional Design**
-- **Modern, responsive designs** that look great on any device
-- **Dark/Light theme support** for brand consistency
-- **Customizable colors and styling** to match your corporate identity
-- **Publication-ready output** for reports, presentations, and web
-
-[.back-to-top]
-<<top, 🔝>>
-
-== What You Can Create
-
-=== 📊 **Dynamic Charts & Analytics**
-- **Bar Charts, Pie Charts, Line Charts** - Transform your data into insights
-- **Comparison Charts** - Show competitive advantages clearly
-- **Metrics Cards** - Highlight KPIs and performance indicators
-- **Word Clouds** - Visualize trends and themes
-
-=== 🗺️ **Strategic Planning**
-- **Product Roadmaps** - Communicate your vision with timeline precision
-- **Release Strategies** - Plan and track feature delivery
-- **Project Timelines** - Keep stakeholders aligned on progress
-- **Planning Boards** - Organize tasks and milestones visually
-
-=== 🏗️ **Architecture & Design**
-- **System Architecture Diagrams** - Document your technical landscape
-- **Process Flow Diagrams** - Map out workflows and procedures
-- **Connector Diagrams** - Show system integrations and dependencies
-- **Swimlane Diagrams** - Clarify roles and responsibilities
-
-=== 📋 **Business Documentation**
-- **Scorecards** - Track performance against objectives
-- **Feature Comparison** - Help customers choose the right solution
-- **Decision Records (ADR)** - Document architectural decisions
-- **Callouts & Annotations** - Highlight important information
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Real-World Success Stories
-
-=== 🏢 **Enterprise Use Cases**
-- **Product Teams** use roadmaps to align stakeholders on feature priorities
-- **Engineering Teams** leverage architecture diagrams for system documentation
-- **Marketing Teams** create compelling comparison charts for sales materials
-- **Executive Teams** track progress with dynamic scorecards and dashboards
-
-=== 💼 **Business Impact**
-- **50% reduction** in documentation creation time
-- **3x improvement** in stakeholder engagement
-- **Zero maintenance** overhead - content updates automatically
-- **Universal compatibility** - works with any AsciiDoc toolchain
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Getting Started in Minutes
-
-=== 1. **Simple Integration**
-
-[source,bash]
+[docops,buttons,useDark=true]
 ----
-# Docker deployment
-docker run -p 8080:8080 docops/extension-server
+{
+  "buttons": [
+    {
+      "label": "ADR",
+      "link": "adr.html",
+      "description": "Capture and share architecture decisions.",
+        "embeddedImage": {
+        "ref": "images/icons/ADRIcon.svg"
+        },
+      "type": "adr"
+    },
+    {
+      "label": "Buttons",
+      "link": "buttons.html",
+      "description": "Create a clean grid of linked actions.",
+        "embeddedImage": {
+        "ref": "images/icons/ButtonIcon.svg"
+        },
+      "type": "buttons"
+    },
+    {
+      "label": "Callouts",
+      "link": "callout.html",
+      "description": "Draw attention to key notes and warnings.",
+      "embeddedImage": {
+      "ref": "images/icons/CalloutIcon.svg"
+      },
+      "type": "callout"
+    },
+    {
+      "label": "Charts",
+      "link": "charts.html",
+      "description": "Turn data into clear, visual reports.",
+      "embeddedImage": {
+      "ref": "images/icons/ChartIcon.svg"
+      },
+            "type": "charts"
+    },
+    {
+      "label": "Connectors",
+      "link": "connectors.html",
+      "description": "Link related items with connector lines.",
+      "embeddedImage": {
+      "ref": "images/icons/ConnectorIcon.svg"
+      },
+      "type": "connectors"
+    },
+    {
+      "label": "Domain Visual",
+      "link": "domain.html",
+      "description": "Visualize domain models and relationships.",
+      "embeddedImage": {
+      "ref": "images/icons/DomainVisualizationIcon.svg"
+      },
+      "type": "domain"
+    },{
+        "label": "Gherkin",
+        "link": "gherkin.html",
+        "description": "Render Gherkin scenarios as visuals.",
+      "embeddedImage": {
+      "ref": "images/icons/GherkinIcon.svg"
+      },
+        "type": "gherkin"
+    },{
+        "label": "Metrics Card",
+        "link": "metricscard.html",
+        "description": "Summarize KPIs in compact cards.",
+        "embeddedImage": {
+        "ref": "images/icons/MetricsIcon.svg"
+        },
+        "type": "metrics"
+    },{
+        "label": "Planner",
+        "link": "planner.html",
+        "description": "Plan and track work at a glance.",
+        "embeddedImage": {
+        "ref": "images/icons/PlannerIcon.svg"
+        },
+        "type": "Plan"
+    },{
+        "label": "Scorecard",
+        "link": "scorecard.html",
+        "description": "Compare performance with scorecards.",
+        "embeddedImage": {
+            "ref": "images/icons/ScorecardIcon.svg"
+        },
+        "type": "scorecard"
+    },{
+        "label": "Badges And Shield",
+        "link": "shield.html",
+        "description": "Show status with badges and shields.",
+        "embeddedImage": {
+            "ref": "images/icons/BadgeShieldIcon.svg"
+        },
+        "type": "badge"
+    },{
+        "label": "Timeline",
+        "link": "timeline.html",
+        "description": "Lay out events along a timeline.",
+        "embeddedImage": {
+            "ref": "images/icons/TimelineIcon.svg"
+        },
+        "type": "timeline"
+    },{
+        "label": "Wordcloud",
+        "link": "wordcloud.html",
+        "description": "Surface key terms in a wordcloud.",
+        "embeddedImage": {
+            "ref": "images/icons/WordcloudIcon.svg"
+        },
+        "type": "wordcloud"
+    },{
+        "label": "Tree Chart",
+        "link": "treechart.html",
+        "description": "Explore hierarchies with tree charts.",
+        "embeddedImage": {
+            "ref": "images/icons/TreechartIcon.svg"
+        },
+        "type": "Tree Chart"
+    }
+  ],
+  "buttonType": "LARGE",
+  "theme": {
+    "colors": [
+        "#1e3a8a"
+    ],
+    "hexLinesEnabled": false,
+    "strokeColor": "#3498db",
+    "newWin": true,
+    "columns": 4,
+    "scale": 1.0,
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Poppins', sans-serif; font-size: 44px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Poppins', sans-serif; font-size: 12px; fill: #fcfcfc;"
+    }
+  }
+}
 ----
-
-=== Or integrate with your existing AsciiDoc pipeline
-
-=== 2. **Write Once, Visualize Everywhere**
-
-
-=== 3. **Professional Results**
-Your text automatically transforms into beautiful, interactive visualizations that scale perfectly across all devices and platforms.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Technical Excellence
-
-=== 🔧 **Built for Developers**
-- **RESTful API** with OpenAPI specification
-- **Kotlin/Spring Boot** architecture for reliability
-- **SVG output** for crisp, scalable graphics
-- **Comprehensive error handling** and validation
-
-=== 🛡️ **Enterprise Security**
-- **Stateless architecture** for horizontal scaling
-- **Input validation** and sanitization
-- **CORS support** for cross-origin requests
-- **Health checks** and monitoring endpoints
-
-=== 📈 **Performance Optimized**
-- **Cached rendering** for frequently accessed content
-- **Efficient parsing** with minimal memory footprint
-- **Parallel processing** for bulk operations
-- **CDN-friendly** static asset generation
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Pricing & Licensing
-
-=== 🆓 **Open Source Foundation**
-- **MIT License** - Use freely in commercial projects
-- **Community support** through GitHub discussions
-- **Regular updates** and security patches
-- **Extensive documentation** and examples
-
-=== 💼 **Enterprise Support**
-- **Professional services** for custom integrations
-- **Training workshops** for your team
-- **Priority support** with SLA guarantees
-- **Custom visualization development**
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Ready to Transform Your Documentation?
-
-Join developers and organizations who have already discovered the power of DocOps Extension Server.
-
-=== What's Next?
-
-* **link:tutorial.html[📚 Tutorial]** - Step-by-step guide to your first visualization
-* **link:examples.html[💡 Examples]** - Comprehensive gallery of use cases
-* **link:arch.html[🏗️ Architecture]** - Technical deep dive and integration guide
-* **link:roadmap.html[🗺️ Roadmap]** - See what's coming next
-
