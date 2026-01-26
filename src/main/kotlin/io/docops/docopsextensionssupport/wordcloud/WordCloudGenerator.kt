@@ -113,13 +113,11 @@ class WordCloudMaker {
         val titleX = (800 - titleWidth) / 2  // Center the box
 
         return """
-            <g>
-                <rect x="$titleX" y="20" width="$titleWidth" height="50" rx="10" ry="10" 
-                      fill="$titleBgColor" opacity="0.8"/>
-                <text x="400" y="50" text-anchor="middle" font-size="$fontSize" 
-                      font-weight="bold" fill="$titleColor" font-family="Arial, sans-serif">
-                    ${escapeXml(wordCloud.title)}
+            <g transform="translate(24.0, 38)">
+                <text fill="$titleColor" font-size="$fontSize" font-family="'Outfit', sans-serif" font-weight="800"
+                      style="letter-spacing: -0.5px;" class="milestone-text">${escapeXml(wordCloud.title)}
                 </text>
+                <rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/>
             </g>
         """.trimIndent()
     }

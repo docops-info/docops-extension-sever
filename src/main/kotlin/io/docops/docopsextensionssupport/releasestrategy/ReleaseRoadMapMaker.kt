@@ -17,11 +17,6 @@
 package io.docops.docopsextensionssupport.releasestrategy
 
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import java.util.*
-import kotlin.collections.get
-import kotlin.text.lines
-import kotlin.times
-import kotlin.toString
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -66,7 +61,10 @@ class ReleaseRoadMapMaker {
                  <g transform="scale(${releaseStrategy.scale})">
                     <!-- Atmospheric Background -->
                     <rect width="1200" height="$height" fill="$bgColor"/>
-                    <rect width="1200" height="$height" fill="url(#pattern_Roadmap_Dots)" opacity="0.4"/>
+                    <rect width="1200" height="$height" fill="url(#roadmap_bg)" opacity="${if (releaseStrategy.useDark) "0.8" else "1"}"/>
+                    <rect width="1200" height="$height" fill="url(#roadmap_glow)" opacity="${if (releaseStrategy.useDark) "0.3" else "0.5"}"/>
+                    <rect width="1200" height="$height" fill="url(#pattern_Roadmap_Dots)" opacity="${if (releaseStrategy.useDark) "0.18" else "0.35"}"/>
+                    <rect width="1200" height="$height" fill="url(#roadmap_vignette)" opacity="${if (releaseStrategy.useDark) "0.45" else "0.35"}"/>
 
                     <!-- Header Section -->
                     <g transform="translate(96, 56)">
@@ -140,18 +138,18 @@ class ReleaseRoadMapMaker {
 
 
     private fun svgDefs(releaseStrategy: ReleaseStrategy): String {
-        val fontUrl = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;family=Outfit:wght@400;600&amp;display=swap"
+        val fontUrl = "https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Alegreya+Sans:wght@400;700;800&amp;display=swap"
 
         return """
                 <defs>
                     <style>
                         @import url('$fontUrl');
                 
-                        .roadmap-header-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -0.04em; }
-                        .id-badge { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; }
-                        .release-goal { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 700; }
-                        .release-date { font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-                        .details-content { font-family: 'Outfit', sans-serif; font-size: 14px; }
+                        .roadmap-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; font-weight: 400; letter-spacing: 0.02em; }
+                        .id-badge { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; }
+                        .release-goal { font-family: 'Alegreya Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 0.01em; }
+                        .release-date { font-family: 'Alegreya Sans', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; }
+                        .details-content { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; }
 
                         @keyframes slideIn {
                             from { opacity: 0; transform: translateY(16px); }
@@ -208,8 +206,21 @@ class ReleaseRoadMapMaker {
                             filter: drop-shadow(0 0 8px ${releaseStrategy.displayConfig.circleColors[2]});
                         }
                     </style>
+                    <linearGradient id="roadmap_bg" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="${if(releaseStrategy.useDark) "#0b0b12" else "#f9fafb"}"/>
+                        <stop offset="45%" stop-color="${if(releaseStrategy.useDark) "#111827" else "#eef2f7"}"/>
+                        <stop offset="100%" stop-color="${if(releaseStrategy.useDark) "#09090b" else "#f7f8fb"}"/>
+                    </linearGradient>
+                    <radialGradient id="roadmap_glow" cx="0.2" cy="0.1" r="0.6">
+                        <stop offset="0%" stop-color="${if(releaseStrategy.useDark) "#1d4ed8" else "#93c5fd"}" stop-opacity="0.35"/>
+                        <stop offset="70%" stop-color="${if(releaseStrategy.useDark) "#0b0b12" else "#f9fafb"}" stop-opacity="0"/>
+                    </radialGradient>
+                    <radialGradient id="roadmap_vignette" cx="0.5" cy="0.5" r="0.8">
+                        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+                        <stop offset="100%" stop-color="#000000" stop-opacity="${if(releaseStrategy.useDark) "0.35" else "0.18"}"/>
+                    </radialGradient>
                     <pattern id="pattern_Roadmap_Dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${if(releaseStrategy.useDark) "#ffffff" else "#000000"}" opacity="0.2"/>
+                        <circle cx="2" cy="2" r="1" fill="${if(releaseStrategy.useDark) "#ffffff" else "#000000"}" opacity="${if (releaseStrategy.useDark) "0.12" else "0.2"}"/>
                     </pattern>
                 </defs>
             """.trimIndent()
@@ -225,4 +236,3 @@ fun releaseStroke(release: Release, releaseStrategy: ReleaseStrategy): String = 
     release.type.toString().startsWith("G") -> releaseStrategy.displayConfig.circleColors[2]
     else -> "#3b82f6"
 }
-

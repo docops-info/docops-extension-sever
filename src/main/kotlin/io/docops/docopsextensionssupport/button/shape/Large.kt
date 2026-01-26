@@ -123,7 +123,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
         }
 
-        sb.append("""<g transform="translate($x,$y)" class="modern-card-button" onclick="window.open('${button.link}', '$win')>""")
+        sb.append("""<g transform="translate($x,$y)" class="modern-card-button" onclick="window.open('${button.link}', '$win')">""")
 
         // Main card background - High contrast border/glow for dark, subtle shadow for light
         val filterAttr = if (!isPdf) "filter=\"url(#cardShadow_$id)\"" else ""
@@ -364,11 +364,13 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     private fun createStyles(id: String): String {
         if (isPdf) return ""
+        //language=html
         return """
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&amp;family=JetBrains+Mono:wght@600&amp;display=swap');
                 #$id .modern-card-button {
                     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    cursor: pointer;
                 }                
                 #$id .hover-overlay {
                     transition: opacity 0.3s ease;
