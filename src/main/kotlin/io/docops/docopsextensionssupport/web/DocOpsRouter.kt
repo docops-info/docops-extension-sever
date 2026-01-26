@@ -141,11 +141,10 @@ class DocOpsRouter(
             }
 
             val data = uncompressString(decodedPayload)
-            val finalPayload = decodePayloadIfNeeded(data)
             if(handler is DocOpsMermaid) {
-                 handler.handleSVG(finalPayload, context)
+                 handler.handleSVG(data, context)
             } else {
-                joinXmlLines(addSvgMetadata(handler.handleSVG(finalPayload, context), response))
+                joinXmlLines(addSvgMetadata(handler.handleSVG(data, context), response))
             }
         }
 
