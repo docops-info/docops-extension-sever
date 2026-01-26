@@ -254,26 +254,33 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     private fun createTextContent(button: Button, primary: String, secondary: String, accent: String): String {
         val sb = StringBuilder()
-        // Use standard fonts for PDF compatibility, Google Fonts for Web via CSS
         val fontMain = if (isPdf) "Helvetica" else docOpsTheme.fontFamily
         val fontMono = if (isPdf) "Courier" else "'JetBrains Mono', monospace"
 
         sb.append("""<g transform="translate(20, 210)">""")
 
         // Type/Category (Monospaced style)
-        sb.append("""<text x="0" y="20" font-family="$fontMono" font-size="${11/docOpsTheme.fontWidthMultiplier}" font-weight="600" fill="$accent" style="text-transform: uppercase; letter-spacing: 2px;">""")
+        sb.append(
+            """<text x="0" y="20" font-family="$fontMono" font-size="${11 / docOpsTheme.fontWidthMultiplier}" font-weight="600" fill="$accent" style="text-transform: uppercase; letter-spacing: 2px;">"""
+        )
         sb.append(button.type?.let { escapeXml(it) } ?: "COMPONENT")
         sb.append("</text>")
 
-        // Title
-        sb.append("""<text x="0" y="50" font-family="$fontMain" font-size="${22 / docOpsTheme.fontWidthMultiplier}" font-weight="800" fill="$primary" style="text-transform: uppercase; letter-spacing: -0.5px;">""")
-        sb.append(escapeXml(button.label))
+        // Title (WRAPPED)
+        val titleFontSize = computeTitleFontSize(button.label)
+        sb.append(
+            """<text x="0" y="50" font-family="$fontMain" font-size="$titleFontSize" font-weight="800" fill="$primary" style="text-transform: uppercase; letter-spacing: -0.5px;">"""
+        )
+        sb.append(createWrappedTitle(button.label, maxCharsPerLine = 18, maxLines = 2))
         sb.append("</text>")
 
         // Description
         button.description?.let {
             if (it.isNotEmpty()) {
-                sb.append(wrapDescription(it, 260, 75, secondary, fontMain))
+                // If title wraps to 2 lines, push description down a bit
+                val titleLineCount = estimateLineCount(button.label, maxCharsPerLine = 18)
+                val descY = if (titleLineCount > 1) 95 else 75
+                sb.append(wrapDescription(it, 260, descY, secondary, fontMain))
             }
         }
 
@@ -282,7 +289,9 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
         // Date / Author
         button.date?.let {
-            sb.append("""<text x="260" y="170" text-anchor="end" font-family="$fontMain" font-size="11" font-weight="500" fill="$secondary" opacity="0.8">""")
+            sb.append(
+                """<text x="260" y="170" text-anchor="end" font-family="$fontMain" font-size="11" font-weight="500" fill="$secondary" opacity="0.8">"""
+            )
             sb.append(escapeXml(it))
             sb.append("</text>")
         }
@@ -291,6 +300,53 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         return sb.toString()
     }
 
+    private fun createWrappedTitle(label: String, maxCharsPerLine: Int, maxLines: Int): String {
+        val clean = label.trim()
+        if (clean.isEmpty()) return ""
+
+        // Simple word wrap by character count (consistent with your description wrapping approach)
+        val words = clean.split(Regex("\\s+"))
+        val lines = mutableListOf<String>()
+        var current = StringBuilder()
+
+        for (w in words) {
+            val candidate = if (current.isEmpty()) w else "${current} $w"
+            if (candidate.length <= maxCharsPerLine || current.isEmpty()) {
+                if (current.isNotEmpty()) current.append(" ")
+                current.append(w)
+            } else {
+                lines.add(current.toString())
+                current = StringBuilder(w)
+                if (lines.size == maxLines) break
+            }
+        }
+        if (lines.size < maxLines && current.isNotEmpty()) lines.add(current.toString())
+
+        val clipped = if (lines.size > maxLines) lines.take(maxLines) else lines
+        return buildString {
+            clipped.forEachIndexed { idx, line ->
+                val dy = if (idx == 0) "0" else "1.15em"
+                append("""<tspan x="0" dy="$dy">${escapeXml(line)}</tspan>""")
+            }
+        }
+    }
+
+    private fun estimateLineCount(label: String, maxCharsPerLine: Int): Int {
+        val len = label.trim().length
+        if (len <= maxCharsPerLine) return 1
+        return 2 // we only wrap to max 2 lines above
+    }
+
+    private fun computeTitleFontSize(label: String): Int {
+        // Base is 22 (as before), reduce slightly for very long labels
+        val base = (22 / docOpsTheme.fontWidthMultiplier).toInt()
+        val len = label.trim().length
+        return when {
+            len > 40 -> (base - 4).coerceAtLeast(14)
+            len > 28 -> (base - 2).coerceAtLeast(16)
+            else -> base
+        }
+    }
     private fun wrapDescription(text: String, maxWidth: Int, startY: Int, color: String, font: String): String {
         val sb = StringBuilder()
         val words = text.split(" ")
