@@ -2,9 +2,16 @@ package io.docops.docopsextensionssupport.chart.bar
 
 import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.web.CsvResponse
+import kotlin.collections.plusAssign
+import kotlin.div
 import kotlin.math.*
+import kotlin.rem
+import kotlin.text.compareTo
+import kotlin.text.toDouble
+import kotlin.times
 
 class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
 
@@ -44,7 +51,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         sb.append(makeTitle(barGroup))
         sb.append(makeXLabel(barGroup))
         sb.append(makeYLabel(barGroup))
-        
+
         // Grid lines
         sb.append(addGrid(barGroup))
 
@@ -59,11 +66,11 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
         sb.append(elements.toString())
         sb.append("</g>")
-        
+
         sb.append(addTicks(barGroup))
         sb.append(addLegend(barGroup))
         sb.append("</svg>")
-        
+
         return Pair(sb.toString(), barGroup.toCsv())
     }
 
@@ -85,12 +92,12 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         val sb = StringBuilder()
         val plateOpacity = if (useDark) "0.05" else "0.15"
         val plateColor = if (useDark) "#ffffff" else "#000000"
-
+        val svgColor = SVGColor(theme.canvas)
         sb.append("<defs>")
         sb.append("""
                 <radialGradient id="group_bg" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                     <stop offset="0%" style="stop-color:${theme.canvas};stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:${darkenColor(theme.canvas, 0.2)};stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:${svgColor.darkenColor(theme.canvas, 0.2)};stop-opacity:1" />
                 </radialGradient>
                 <linearGradient id="plate_grad" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:$plateColor;stop-opacity:$plateOpacity" />
@@ -101,14 +108,14 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
         """)
-        
+
         // Group gradients based on ChartColors
         barGroup.legendLabel().distinct().forEachIndexed { index, _ ->
-            val color = ChartColors.Companion.getColorForIndex(index).color
+            val color = ChartColors.getColorForIndex(index).color
             sb.append("""
                 <linearGradient id="brut_grad_$index" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:$color;" />
-                    <stop offset="100%" style="stop-color:${darkenColor(color, 0.3)};" />
+                    <stop offset="100%" style="stop-color:${svgColor.darkenColor(color, 0.3)};" />
                 </linearGradient>
             """)
         }
@@ -125,7 +132,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
 
     private fun makeXLabel(barGroup: BarGroup): String {
         val x = barGroup.calcWidth() / 2
-        val y = 630 // Shifted up from 780
+        val y = 640 // Moved down from 630 to make room for legend
         return """<text x="$x" y="$y" class="mono-text" font-size="14" text-anchor="middle" fill="${theme.secondaryText}">${barGroup.xLabel ?: ""}</text>"""
     }
 
@@ -140,7 +147,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         val ticks = barGroup.ticks()
         var current = ticks.getNiceMin()
         while (current <= ticks.getNiceMax()) {
-            val y = 500 - barGroup.scaleUp(current) // Baseline changed from 650 to 500
+            val y = 600 - barGroup.scaleUp(current) // Baseline changed from 500 to 600
             sb.append("""<line x1="80" y1="$y" x2="${barGroup.calcWidth() - 40}" y2="$y" stroke="${theme.secondaryText}" stroke-width="0.5" stroke-dasharray="4,4" stroke-opacity="0.2" />""")
             current += ticks.getTickSpacing()
         }
@@ -150,7 +157,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
     private fun addGroup(barGroup: BarGroup, added: Group, startX: Double, groupIndex: Int): String {
         val sb = StringBuilder()
         val groupWidth = added.series.size * 50.0 + 20.0
-        val plateHeight = 320.0
+        val plateHeight = 420.0
         val plateY = 180.0
 
         sb.append("""<g class="group-plate" style="animation-delay: ${0.1 * groupIndex}s">""")
@@ -164,7 +171,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         added.series.forEachIndexed { index, series ->
             val per = barGroup.scaleUp(series.value)
             val barX = counter
-            val barY = 500 - per // Baseline changed from 650 to 500
+            val barY = 600 - per // Baseline changed from 500 to 600
             val barWidth = 30.0
             val barHeight = per
             val color = "url(#brut_grad_$index)"
@@ -187,7 +194,7 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         var current = ticks.getNiceMin()
         sb.append("""<g class="mono-text" font-size="10" fill="${theme.secondaryText}">""")
         while (current <= ticks.getNiceMax()) {
-            val y = 500 - barGroup.scaleUp(current) // Baseline changed from 650 to 500
+            val y = 600 - barGroup.scaleUp(current) // Baseline changed from 500 to 600
             sb.append("""<text x="75" y="${y + 4}" text-anchor="end">${barGroup.valueFmt(current)}</text>""")
             current += ticks.getTickSpacing()
         }
@@ -203,22 +210,22 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         val itemWidth = 110.0
         val chartWidth = group.calcWidth()
         val maxAvailableWidth = chartWidth - 100.0
-        
+
         // Calculate how many items can fit in one row
         var itemsPerRow = floor(maxAvailableWidth / itemWidth).toInt()
         if (itemsPerRow <= 0) itemsPerRow = 1
-        
+
         val rows = ceil(distinctLabels.size.toDouble() / itemsPerRow).toInt()
-        
+
         // Calculate actual legend width based on items or available space
         val actualItemsInFirstRow = min(distinctLabels.size, itemsPerRow)
         val legendWidth = actualItemsInFirstRow * itemWidth
 
         val legendX = (chartWidth - legendWidth) / 2.0
-        val legendY = 560.0 // Shifted up from 725
+        val legendY = 615.0 // Increased from 610 to add 5px breathing room from baseline
 
         sb.append("""<g transform="translate($legendX, $legendY)">""")
-        
+
         // Legend background plate (glassmorphism style)
         sb.append("""<rect x="-15" y="-12" width="${legendWidth + 20}" height="${rows * 25 + 10}" fill="url(#plate_grad)" rx="12" stroke="${theme.secondaryText}" stroke-opacity="0.1" />""")
 
@@ -238,13 +245,5 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         }
         sb.append("</g>")
         return sb.toString()
-    }
-
-    private fun darkenColor(hexColor: String, factor: Double): String {
-        val color = hexColor.removePrefix("#")
-        val r = (color.substring(0, 2).toInt(16) * (1 - factor)).toInt()
-        val g = (color.substring(2, 4).toInt(16) * (1 - factor)).toInt()
-        val b = (color.substring(4, 6).toInt(16) * (1 - factor)).toInt()
-        return "#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}"
     }
 }

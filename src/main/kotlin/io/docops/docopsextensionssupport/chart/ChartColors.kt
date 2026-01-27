@@ -81,7 +81,7 @@ class ChartColors {
         )
 
         fun getColorForIndex(index: Int): SVGColor {
-            return modernColors[index % modernColors.size]
+            return CYBER_PALETTE[index % CYBER_PALETTE.size]
         }
     }
 }
@@ -119,3 +119,4 @@ fun chartColorAsSVGColor (id: String = "svgGradientColor") : MutableList<SVGColo
     }
     return list
 }
+
