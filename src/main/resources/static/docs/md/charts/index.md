@@ -79,6 +79,7 @@ title=Berry Picking by Month 2024
 yLabel=Number of Sales
 xLabel=Month
 type=C
+paletteType=OCEAN_BREEZE
 ---
 Jan | 120.0
 Feb | 334.0
@@ -100,6 +101,7 @@ Compare multiple data series across categories.
 title=Annual Product Sales Report
 yLabel=Sales (USD)
 xLabel=Quarters
+paletteType=OCEAN_BREEZE
 ---
 Product A | Q1 | 5000.0
 Product A | Q2 | 7000.0
@@ -120,6 +122,7 @@ title=Annual Product Sales Report
 yLabel=Sales (USD)
 xLabel=Quarters
 vBar=true
+paletteType=OCEAN_BREEZE
 ---
 Product A | Q1 | 5000.0
 Product A | Q2 | 7000.0
@@ -140,6 +143,7 @@ title=System Performance Analysis
 yLabel=Latency (ms)
 xLabel=Data Centers
 theme=brutalist
+paletteType=OCEAN_BREEZE
 ---
 Edge Node | Tokyo | 24.5
 Edge Node | London | 45.2
