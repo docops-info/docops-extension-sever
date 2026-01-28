@@ -1,16 +1,11 @@
 package io.docops.docopsextensionssupport.support
 
-import io.docops.docopsextensionssupport.button.ButtonDisplay
-import org.slf4j.LoggerFactory
-import kotlin.reflect.jvm.jvmName
-
 /**
  * ThemeFactory centralizes the selection of visual aesthetics.
  * This allows us to introduce new "Pro" features (v2) without breaking 
  * the existing look for "Classic" users (v1).
  */
 object ThemeFactory {
-    private val logger = LoggerFactory.getLogger(ThemeFactory::class.jvmName)
     fun getTheme(display: VisualDisplay?): DocOpsTheme {
         val isDark = display?.useDark == true
         val version = display?.visualVersion ?: 1
@@ -23,10 +18,10 @@ object ThemeFactory {
                 if (isDark) ModernDarkTheme() else ModernLightTheme()
             }
             else -> {
-                 if (isDark) ProDarkTheme() else ClassicLightTheme()
+                if (isDark) ProDarkTheme() else ClassicLightTheme()
             }
         }
-        logger.debug("Selected theme for version $version and dark mode id $isDark and theme: ${theme.name}")
+        println("Selected theme for version $version and dark mode id $isDark and theme: ${theme.name}")
         return theme
     }
     fun getTheme(useDark: Boolean): DocOpsTheme {
@@ -58,9 +53,9 @@ open class ModernDarkTheme : DocOpsTheme {
     override val accentColor = "#38bdf8"
     override val glassEffect = "rgba(15, 23, 42, 0.8)"
     override val surfaceImpact = "rgba(56, 189, 248, 0.15)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
@@ -76,9 +71,9 @@ class ModernLightTheme : DocOpsTheme {
     override val accentColor = "#818cf8"
     override val glassEffect = "rgba(255, 255, 255, 0.7)"
     override val surfaceImpact = "rgba(129, 140, 248, 0.1)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
@@ -128,9 +123,9 @@ class BrutalistDarkTheme : DocOpsTheme {
     override val accentColor = "#38bdf8"
     override val glassEffect = "rgba(15, 23, 42, 0.9)"
     override val surfaceImpact = "rgba(30, 41, 59, 0.5)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 0 // Sharp edges for brutalist
 }
@@ -146,9 +141,9 @@ class ProDarkTheme : DocOpsTheme {
     override val accentColor = "#38bdf8" // Sky Blue accent
     override val glassEffect = "rgba(15, 23, 42, 0.8)"
     override val surfaceImpact = "rgba(56, 189, 248, 0.1)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
 }
@@ -161,9 +156,9 @@ class BrutalistLightTheme : DocOpsTheme {
     override val accentColor = "#6366f1"
     override val glassEffect = "rgba(255, 255, 255, 0.9)"
     override val surfaceImpact = "rgba(226, 232, 240, 0.5)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 0
 }
@@ -188,9 +183,9 @@ class CyberLightTheme : DocOpsTheme {
     override val accentColor = "#6366f1"
     override val glassEffect = "rgba(255, 255, 255, 0.9)"
     override val surfaceImpact = "rgba(99, 102, 241, 0.1)"
-    override val fontFamily = "'Syne', sans-serif"
-    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.35f
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f
     override val cornerRadius = 16
 }

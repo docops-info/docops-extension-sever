@@ -3,9 +3,6 @@ package io.docops.docopsextensionssupport.timeline
 
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
-import kotlin.rem
-import kotlin.text.get
-import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
