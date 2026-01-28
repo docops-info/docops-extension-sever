@@ -1,6 +1,8 @@
 package io.docops.docopsextensionssupport.chart.bar
 
 import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.chart.ColorPaletteFactory
+import io.docops.docopsextensionssupport.chart.ColorPaletteFactory.getColorCyclic
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
@@ -18,29 +20,8 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
     private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
 
 
-
-    private fun getColors(): Map<String, String> {
-        return if (useDark) {
-            mapOf(
-                "bgStart" to "#1e1b4b",
-                "bgEnd" to "#0f172a",
-                "text" to "#f8fafc",
-                "subText" to "#94a3b8",
-                "accent" to "#818cf8"
-            )
-        } else {
-            mapOf(
-                "bgStart" to "#f8fafc",
-                "bgEnd" to "#e2e8f0",
-                "text" to "#0f172a",
-                "subText" to "#475569",
-                "accent" to "#4f46e5"
-            )
-        }
-    }
     fun makeBar(barGroup: BarGroup): Pair<String, CsvResponse> {
         theme = ThemeFactory.getTheme(barGroup.display)
-        val colors = getColors()
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
         sb.append(makeDefs(barGroup))
@@ -109,13 +90,16 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
             </filter>
         """)
 
+        val colorPalette = getPaletteType(barGroup.display)
         // Group gradients based on ChartColors
         barGroup.legendLabel().distinct().forEachIndexed { index, _ ->
-            val color = ChartColors.getColorForIndex(index).color
+
+            val color = getColorCyclic(colorPalette, index)
+            //val color = ChartColors.getColorForIndex(index).color
             sb.append("""
                 <linearGradient id="brut_grad_$index" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:$color;" />
-                    <stop offset="100%" style="stop-color:${svgColor.darkenColor(color, 0.3)};" />
+                    <stop offset="100%" style="stop-color:${svgColor.darkenColor(color!!, 0.3)};" />
                 </linearGradient>
             """)
         }
@@ -123,6 +107,24 @@ class CyberBrutalistBarGroupMaker(val useDark: Boolean) {
         return sb.toString()
     }
 
+    private fun getPaletteType(display: BarGroupDisplay): ColorPaletteFactory.PaletteType {
+        return when {
+            display.paletteType.isNotBlank() -> {
+                // Try to parse the custom palette type
+                try {
+                    ColorPaletteFactory.PaletteType.valueOf(display.paletteType.uppercase())
+                } catch (e: IllegalArgumentException) {
+                    // Fallback to default if invalid palette name
+                    getDefaultPaletteType(display.useDark)
+                }
+            }
+            else -> getDefaultPaletteType(display.useDark)
+        }
+    }
+    // Get the default palette type based on theme
+    private fun getDefaultPaletteType(useDark: Boolean): ColorPaletteFactory.PaletteType {
+        return ColorPaletteFactory.PaletteType.OCEAN_BREEZE
+    }
     private fun makeTitle(barGroup: BarGroup): String {
         return """
                 <text x="40" y="60" class="title-text" font-size="24" fill="${theme.primaryText}">${barGroup.title}</text>
