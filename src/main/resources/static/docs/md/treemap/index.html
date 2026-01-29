@@ -1,0 +1,1029 @@
+            <!DOCTYPE html>
+            <html lang="en" data-theme="dark">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>index</title>
+                <style>
+                @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
+
+.markdown-body {
+    --primary: #38BDF8;
+    --primary-glow: rgba(56, 189, 248, 0.15);
+    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
+    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
+    
+    background-color: var(--bg);
+    color: #E2E8F0;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.7;
+    max-width: 850px;
+    margin: 64px auto;
+    padding: 48px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Headlines with Tracking Rules */
+.markdown-body h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
+    line-height: 0.95;
+    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
+}
+
+.markdown-body h2 {
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    color: var(--primary);
+    margin-top: 48px;
+}
+
+/* Motion: High-impact reveal (ui.md) */
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.markdown-body > * {
+    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Rounded Corners (Rule #4) */
+.markdown-body pre {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 24px;
+    border-radius: 20px; /* Outer */
+}
+
+.markdown-body code {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 8px; /* Inner: 20px - 12px gap */
+}
+
+/* Tables (ui.md style) */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 32px 0;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.markdown-body td {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    /* Force default cursor to remove the zoom/search icon */
+    cursor: default !important;
+    --max-content-width: 980px;
+    max-width: var(--max-content-width);
+}
+
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+}
+
+/* Constrain SVGs and their interactive containers */
+.markdown-body svg,
+.svg-viewer-container,
+.svg-with-controls {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the DocOps specific media cards respect the boundary */
+.docops-media-card {
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
+    }
+}
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
+.docops-container {
+    display: inline-block;
+}
+.docops-media-card {
+    position: relative;
+    display: inline-block;
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                      
+        .docops-data-panel {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+            border-top: 1px solid var(--accent-primary);
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .docops-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+        .docops-data-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .docops-action-btn {
+            background: rgba(126, 87, 255, 0.1);
+            border: 1px solid rgba(126, 87, 255, 0.3);
+            color: var(--accent-secondary);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .docops-action-btn:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+            border-color: var(--accent-primary);
+        }
+
+        .docops-data-header span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ui.md: Distinctive Table Design */
+        .docops-data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .docops-data-table th {
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* ui.md: Motion - Staggered Row Entry */
+        .docops-data-table tr {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: rowSlideIn 0.4s ease forwards;
+        }
+
+        @keyframes rowSlideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .docops-data-table td {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .docops-data-table tr:hover td {
+            background: rgba(126, 87, 255, 0.1);
+            color: #fff;
+        }
+        
+                    @media (prefers-color-scheme: dark) {
+                        body {
+                            background-color: #0d1117;
+                        }
+                    }
+                </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                <article class="markdown-body">
+                    <h1 id="docops-word-cloud-visualizer">DocOps Word Cloud Visualizer</h1>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treemap&payload=H4sIAAAAAAAA_1WQQU_DMAyF7_kVOSBunbqoEuPQQ8eqaVq7VVtB4hharwm0SZW4TEj78XiEIZGT_fw-2S9RFEUMNfaQVs6-Q4O8sg5PtteWi1gkzE9vYb58Xq3zmmdFsX_K6s1-x5evfJVX2aEu813NzrpFlc5FHDMFulOYLqhEBQOkg23BGTbKHhCh_hppXXas84J5Zc8vsp_Ap-gm-OkrcA0YlN1NvB6Zm04bAKdNxy9cJPH1UbWCT-jtOBDA7_nGnJz0BDU4OaDxhd-JWVIySteSSP3j4o_0ujMEHcCDdI0KdppvWSndB2DYdY0UiLWzZ1RELJ00bbDPZ6JkRwrmqXsQv84DXWUm4PsRnERtjQ9uMmzZPzG5IcdpHOnrg4_U7Te3tsrMnAEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-28</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["Engineering","2400000.0","42.0","Development & Infrastructure","$2.4M"],["Product","980000.0","17.1","Design & Research","$980K"],["Marketing","1200000.0","21.0","Growth & Brand","$1.2M"],["Sales","720000.0","12.6","Revenue Operations","$720K"],["Operations","420000.0","7.3","Support","$420K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); .treemap-rect { stroke: #0f172a; stroke-width: 3; opacity: 0; animation: slideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 18px; fill: #0f172a; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #f8fafc; letter-spacing: -0.03em; } .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #22d3ee; letter-spacing: 0.05em; } @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#0a0e1a"/><circle cx="900.0" cy="200.0" r="400" fill="#9775fa" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#4dabf7" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">PROJECT PORTFOLIO 2024</text><text class="title-sub" y="30">BUDGET ALLOCATION BY DEPARTMENT</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g>                <g><title>Engineering Development &amp; Infrastructure Value: $2.4M Share: 42.0% Metric: $2.4M</title><rect class="treemap-rect" x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#grad-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="24" y="40" font-size="18">Engineering</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Development & Infrastructure</text><text class="label-metric" x="24" y="512.0" font-size="32" fill="#0f172a">$2.4M</text><text class="label-value" x="24" y="532.0" font-size="13" fill="rgba(15, 23, 42, 0.7)">42.0% of total</text></g></g>                <g><title>Product Design &amp; Research Value: $980K Share: 17.1% Metric: $980K</title><rect class="treemap-rect" x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#grad-1)" style="animation-delay: 0.1s;"/><rect x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(517.146853146853, 144.0)"><text class="label-category" x="24" y="40" font-size="16">Product</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Design & Research</text><text class="label-metric" x="24" y="512.0" font-size="28" fill="#0f172a">$980K</text><text class="label-value" x="24" y="532.0" font-size="13" fill="rgba(15, 23, 42, 0.7)">17.1% of total</text></g></g>                <g><title>Marketing Growth &amp; Brand Value: $1.2M Share: 21.0% Metric: $1.2M</title><rect class="treemap-rect" x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#grad-2)" style="animation-delay: 0.2s;"/><rect x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(743.7202797202796, 144.0)"><text class="label-category" x="24" y="40" font-size="18">Marketing</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Growth & Brand</text><text class="label-metric" x="24" y="200.1132075471698" font-size="32" fill="#0f172a">$1.2M</text><text class="label-value" x="24" y="220.1132075471698" font-size="13" fill="rgba(15, 23, 42, 0.7)">21.0% of total</text></g></g>                <g><title>Sales Revenue Operations Value: $720K Share: 12.6% Metric: $720K</title><rect class="treemap-rect" x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#grad-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(743.7202797202796, 412.1132075471698)"><text class="label-category" x="24" y="40" font-size="18">Sales</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Revenue Operations</text><text class="label-metric" x="24" y="128.9811320754717" font-size="32" fill="#0f172a">$720K</text><text class="label-value" x="24" y="148.9811320754717" font-size="13" fill="rgba(15, 23, 42, 0.7)">12.6% of total</text></g></g>                <g><title>Operations Support Value: $420K Share: 7.3% Metric: $420K</title><rect class="treemap-rect" x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#grad-4)" style="animation-delay: 0.4s;"/><rect x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(743.7202797202796, 609.0943396226414)"><text class="label-category" x="24" y="40" font-size="18">Operations</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Support</text><text class="label-value" x="24" y="66.90566037735852" font-size="13" fill="rgba(15, 23, 42, 0.7)">7.3% of total</text></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#22d3ee">Updated: 2026-01-28 • Hover for details</text></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="cloud-infrastructure-costs">Cloud Infrastructure Costs</h2>
+<p>Track cloud spending across different services:</p>
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treemap&payload=H4sIAAAAAAAA_1WRQY-iQBCF7_0r6rBXDaJMuHBQYHaMLhoxM9lj25bATNNtuos1JvPjtwDXZE_dvK6X-t6DGtKYpNp2Z1ibi5OeXKeocwip9eSF7040zPzaFce37W9YfpRQ7vMiWxc_YXXIl5ts91GIW3OmOpmFQSBqbKqakpivVGOLSaWl961117pR4io1EuHxfsVkvyyP-Vb42t7epe7QJ7wdh-89OoWGZMXiRWqPYjKZiDwNGdOTNAo9fMMiCoKAz9S2144QHHrbufHtG34soo04ZCVkkuRJ-kEO49HyT4OaczamGh1hvBHlHEqyjlez0ifqx3enT1QE_vnAw7NwI4bqXp01BGlWsBpHDyJDzA9n1M0fdPfREU-ZaCvb01nCa2cUNdb0UC_hYCrR8axG70E9Eg22lylvylclvFvdtUOMKB4cK23V1_9U0ZQz5Fw5NalUNT5q4mNtJi3yf7iD4odn5kUP1dcBRyeNv6BjdT4SFUg3674AK9dTDfPznuZge7po3lc0omRFCZ4DNM_6Z0zyFxQl19hhAgAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-28</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["EC2 Instances","45000.0","39.1","Compute resources","$45K"],["RDS Databases","28000.0","24.3","Database hosting","$28K"],["S3 Storage","12000.0","10.4","Object storage","$12K"],["CloudFront CDN","8500.0","7.4","Content delivery","$8.5K"],["Lambda Functions","6200.0","5.4","Serverless compute","$6.2K"],["EBS Volumes","5800.0","5.0","Block storage","$5.8K"],["ElastiCache","4500.0","3.9","In-memory caching","$4.5K"],["Data Transfer","3200.0","2.8","Network egress","$3.2K"],["Route 53","1800.0","1.6","DNS services","$1.8K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); .treemap-rect { stroke: #0f172a; stroke-width: 3; opacity: 0; animation: slideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 18px; fill: #0f172a; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #f8fafc; letter-spacing: -0.03em; } .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #22d3ee; letter-spacing: 0.05em; } @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><linearGradient id="grad-5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFB703;stop-opacity:1" /><stop offset="100%" style="stop-color:#d89b02;stop-opacity:1" /></linearGradient><linearGradient id="grad-6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#0a0e1a"/><circle cx="900.0" cy="200.0" r="400" fill="#9775fa" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#4dabf7" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">CLOUD INFRASTRUCTURE COSTS</text><text class="title-sub" y="30">MONTHLY AWS SPENDING BREAKDOWN</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g>                <g><title>EC2 Instances Compute resources Value: $45K Share: 39.1% Metric: $45K</title><rect class="treemap-rect" x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#grad-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="24" y="40" font-size="18">EC2 Instances</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Compute resources</text><text class="label-metric" x="24" y="512.0" font-size="32" fill="#0f172a">$45K</text><text class="label-value" x="24" y="532.0" font-size="13" fill="rgba(15, 23, 42, 0.7)">39.1% of total</text></g></g>                <g><title>RDS Databases Database hosting Value: $28K Share: 24.3% Metric: $28K</title><rect class="treemap-rect" x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#grad-1)" style="animation-delay: 0.1s;"/><rect x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(486.60869565217394, 144.0)"><text class="label-category" x="24" y="40" font-size="16">RDS Databases</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Database hosting</text><text class="label-metric" x="24" y="512.0" font-size="28" fill="#0f172a">$28K</text><text class="label-value" x="24" y="532.0" font-size="13" fill="rgba(15, 23, 42, 0.7)">24.3% of total</text></g></g>                <g><title>S3 Storage Object storage Value: $12K Share: 10.4% Metric: $12K</title><rect class="treemap-rect" x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#grad-2)" style="animation-delay: 0.2s;"/><rect x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(749.5652173913044, 144.0)"><text class="label-category" x="24" y="40" font-size="16">S3 Storage</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Object storage</text><text class="label-metric" x="24" y="147.83275261324042" font-size="28" fill="#0f172a">$12K</text><text class="label-value" x="24" y="167.83275261324042" font-size="13" fill="rgba(15, 23, 42, 0.7)">10.4% of total</text></g></g>                <g><title>CloudFront CDN Content delivery Value: $9K Share: 7.4% Metric: $8.5K</title><rect class="treemap-rect" x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#grad-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(749.5652173913044, 359.8327526132404)"><text class="label-category" x="24" y="40" font-size="16">CloudFront CDN</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Content delivery</text><text class="label-metric" x="24" y="84.88153310104525" font-size="28" fill="#0f172a">$8.5K</text><text class="label-value" x="24" y="104.88153310104525" font-size="13" fill="rgba(15, 23, 42, 0.7)">7.4% of total</text></g></g>                <g><title>Lambda Functions Serverless compute Value: $6K Share: 5.4% Metric: $6.2K</title><rect class="treemap-rect" x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#grad-4)" style="animation-delay: 0.4s;"/><rect x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(1052.4084025403029, 144.0)"><text class="label-category" x="24" y="40" font-size="12"></text></g></g>                <g><title>EBS Volumes Block storage Value: $6K Share: 5.0% Metric: $5.8K</title><rect class="treemap-rect" x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#grad-5)" style="animation-delay: 0.5s;"/><rect x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(749.5652173913044, 512.7142857142857)"><text class="label-category" x="24" y="40" font-size="14">EBS Volu…</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Block st…</text><text class="label-metric" x="24" y="143.28571428571433" font-size="20" fill="#0f172a">$5.8K</text><text class="label-value" x="24" y="163.28571428571433" font-size="11" fill="rgba(15, 23, 42, 0.7)">5.0% of total</text></g></g>                <g><title>ElastiCache In-memory caching Value: $5K Share: 3.9% Metric: $4.5K</title><rect class="treemap-rect" x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#grad-6)" style="animation-delay: 0.6000000000000001s;"/><rect x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(899.0895140664961, 512.7142857142857)"><text class="label-category" x="24" y="40" font-size="12">Elast…</text><text class="label-metric" x="24" y="143.28571428571433" font-size="20" fill="#0f172a">$4.5K</text><text class="label-value" x="24" y="163.28571428571433" font-size="10" fill="rgba(15, 23, 42, 0.7)">3.9% of total</text></g></g>                <g><title>Data Transfer Network egress Value: $3K Share: 2.8% Metric: $3.2K</title><rect class="treemap-rect" x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#grad-7)" style="animation-delay: 0.7000000000000001s;"/><rect x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(1015.0997442455243, 512.7142857142857)"><text class="label-category" x="24" y="40" font-size="14">Data T…</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">Networ…</text><text class="label-metric" x="24" y="67.22285714285718" font-size="20" fill="#0f172a">$3.2K</text><text class="label-value" x="24" y="87.22285714285718" font-size="11" fill="rgba(15, 23, 42, 0.7)">2.8% of total</text></g></g>                <g><title>Route 53 DNS services Value: $2K Share: 1.6% Metric: $1.8K</title><rect class="treemap-rect" x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#grad-8)" style="animation-delay: 0.8s;"/><rect x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#dots)" pointer-events="none"/><g transform="translate(1015.0997442455243, 647.9371428571428)"><text class="label-category" x="24" y="40" font-size="14">Route …</text><text class="label-value" x="24" y="60" fill="rgba(15, 23, 42, 0.7)">DNS se…</text></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#22d3ee">Updated: 2026-01-28 • Hover for details</text></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+
+                </article>
+                <!-- Modal Overlay -->
+                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+                    <div class="modal-content" id="modalContent">
+                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+                        <div id="modalSvgContainer"></div>
+                        <div class="modal-zoom-controls">
+                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    const modalSvgContainer = document.getElementById('modalSvgContainer');
+                    
+                    // Zoom state
+                    let modalZoomLevel = 1;
+                    const MODAL_ZOOM_MIN = 0.25;
+                    const MODAL_ZOOM_MAX = 4;
+                    const MODAL_ZOOM_STEP = 0.25;
+
+                    function openModal(container) {
+                        // Reset zoom level
+                        modalZoomLevel = 1;
+                        updateZoomDisplay();
+                        
+                        // Clone the SVG from the clicked container
+                        const svg = container.querySelector('svg');
+                        const svgClone = svg.cloneNode(true);
+                        svgClone.style.transform = 'scale(1)';
+                        svgClone.style.transition = 'transform 0.2s ease';
+
+                        // Clear previous content and add new SVG
+                        modalSvgContainer.innerHTML = '';
+                        modalSvgContainer.appendChild(svgClone);
+
+                        // Show modal with animation
+                        modalOverlay.classList.add('active');
+
+                        // Prevent body scroll when modal is open
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeModal() {
+                        modalOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                        modalZoomLevel = 1;
+                    }
+
+                    function closeModalOnBackdrop(event) {
+                        // Only close if clicking the overlay itself, not the content
+                        if (event.target === modalOverlay) {
+                            closeModal();
+                        }
+                    }
+                    
+                    function modalZoomIn() {
+                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomOut() {
+                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+                            applyModalZoom();
+                        }
+                    }
+                    
+                    function modalZoomReset() {
+                        modalZoomLevel = 1;
+                        applyModalZoom();
+                    }
+                    
+                    function applyModalZoom() {
+                        const svg = modalSvgContainer.querySelector('svg');
+                        if (svg) {
+                            svg.style.transform = `scale(${modalZoomLevel})`;
+                        }
+                        updateZoomDisplay();
+                    }
+                    
+                    function updateZoomDisplay() {
+                        const display = document.getElementById('modalZoomLevel');
+                        if (display) {
+                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
+                        }
+                    }
+
+                    // Close modal with Escape key
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                            closeModal();
+                        }
+                    });
+                    const docopsCopy = {
+                        url: (btn) => {
+                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                navigator.clipboard.writeText(url).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                        svg: (btn) => {
+                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                            navigator.clipboard.writeText(svg).then(() => {
+                                const originalText = btn.innerText;
+                                btn.innerText = 'COPIED!';
+                                setTimeout(() => btn.innerText = originalText, 2000);
+                            });
+                        },
+                        png: (btn) => {
+                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                            const svgData = new XMLSerializer().serializeToString(svgElement);
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const img = new Image();
+                            
+                            img.onload = () => {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                                canvas.toBlob(blob => {
+                                    const item = new ClipboardItem({ "image/png": blob });
+                                    navigator.clipboard.write([item]);
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            };
+                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                        }
+                    };
+                    
+                </script>
+                <script>
+                    mermaid.initialize({ startOnLoad: true });
+                </script>
+                <script>
+                (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                const docopsData = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+                </script>
+                
+            </body>
+            </html>

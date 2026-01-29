@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="treemap-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f766e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5eead4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tile-emerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tile-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tile-amber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="tile-rose" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fb7185;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f43f5e;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="card-shadow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="240" fill="url(#treemap-bg)"/>
+
+  <g clip-path="url(#circle-clip)">
+    <g opacity="0.08" stroke="#ffffff" stroke-width="2">
+      <path d="M80,150 L432,150 M80,256 L432,256 M80,362 L432,362"/>
+      <path d="M150,80 L150,432 M256,80 L256,432 M362,80 L362,432"/>
+    </g>
+
+    <g transform="translate(96, 110)">
+      <rect x="0" y="0" width="320" height="290" rx="18" fill="#0f172a" opacity="0.18"/>
+      <rect x="0" y="0" width="320" height="290" rx="18" fill="#ffffff" opacity="0.94" filter="url(#card-shadow)"/>
+    </g>
+
+    <g stroke="#ffffff" stroke-width="3" opacity="0.9">
+      <rect x="112" y="126" width="170" height="160" rx="12" fill="url(#tile-emerald)"/>
+      <rect x="112" y="294" width="80" height="90" rx="10" fill="url(#tile-rose)"/>
+      <rect x="200" y="294" width="82" height="90" rx="10" fill="url(#tile-blue)"/>
+      <rect x="290" y="126" width="110" height="90" rx="10" fill="url(#tile-blue)"/>
+      <rect x="290" y="224" width="110" height="80" rx="10" fill="url(#tile-amber)"/>
+      <rect x="290" y="312" width="110" height="72" rx="10" fill="url(#tile-emerald)"/>
+    </g>
+
+    <g opacity="0.6">
+      <rect x="130" y="146" width="80" height="8" rx="4" fill="#ecfeff"/>
+      <rect x="130" y="162" width="60" height="6" rx="3" fill="#ecfeff"/>
+      <rect x="308" y="146" width="60" height="8" rx="4" fill="#e0f2fe"/>
+      <rect x="308" y="240" width="55" height="7" rx="3.5" fill="#fef3c7"/>
+      <rect x="308" y="330" width="48" height="7" rx="3.5" fill="#dcfce7"/>
+      <rect x="130" y="322" width="40" height="6" rx="3" fill="#ffe4e6"/>
+      <rect x="218" y="322" width="40" height="6" rx="3" fill="#e0f2fe"/>
+    </g>
+
+    <path d="M 70,70 L 70,90 M 70,70 L 90,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 442,70 L 442,90 M 442,70 L 422,70" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#5eead4" stroke-width="3" opacity="0.6"/>
+</svg>
