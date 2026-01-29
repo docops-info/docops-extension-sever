@@ -124,6 +124,14 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
             "ref": "images/TreechartIcon.svg"
         },
         "type": "Tree Chart"
+    },{
+        "label": "TreeMap",
+        "link": "treemap/index.html",
+        "description": "Treemap - Alpha",
+        "embeddedImage": {
+            "ref": "images/TreemapIcon.svg"
+        },
+        "type": "Treemap"
     }
   ],
   "buttonType": "LARGE",

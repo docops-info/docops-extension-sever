@@ -7,6 +7,7 @@ import io.docops.docopsextensionssupport.button.ButtonHandler
 import io.docops.docopsextensionssupport.cal.CalHandler
 import io.docops.docopsextensionssupport.callout.CalloutHandler
 import io.docops.docopsextensionssupport.chart.*
+import io.docops.docopsextensionssupport.chart.treemap.TreemapHandler
 import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.domainviz.DomainVizHandler
 import io.docops.docopsextensionssupport.flow.FlowHandler
@@ -92,6 +93,7 @@ class DocOpsRouter(
             "flow" -> FlowHandler(csvResponse)
             "domain" -> DomainVizHandler(csvResponse)
             "vcard" -> VCardHandler(csvResponse)
+            "treemap" -> TreemapHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }

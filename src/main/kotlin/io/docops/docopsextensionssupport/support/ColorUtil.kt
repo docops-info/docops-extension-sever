@@ -221,4 +221,17 @@ class SVGColor(
         return String.format("#%02x%02x%02x", r, g, b)
     }
 
+
+    /**
+     * Returns a color string with adjusted opacity
+     * @param hexColor The hex color to adjust
+     * @param opacity Opacity value between 0.0 and 1.0
+     * @return rgba color string with opacity
+     */
+    fun adjustOpacity(hexColor: String, opacity: Double): String {
+        val rgb = hexToRgb(hexColor)
+        val clampedOpacity = opacity.coerceIn(0.0, 1.0)
+        return "rgba(${rgb["r"]}, ${rgb["g"]}, ${rgb["b"]}, $clampedOpacity)"
+    }
+
 }

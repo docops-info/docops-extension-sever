@@ -1,0 +1,471 @@
+include::_base.adoc[]
+= DocOps Treemap Visualizations
+:imagesdir: images
+
+image::icons/TreemapIcon.svg[Treemap Icon,80,80]
+
+
+[[top]]
+include::shared/buttons.adoc[]
+
+== Introduction
+
+The DocOps Treemap Extension allows you to create hierarchical data visualizations that show proportional relationships through nested rectangles. Treemaps are excellent for displaying budget allocations, disk space usage, portfolio compositions, and any data where you want to show both hierarchy and proportion.
+
+This guide provides examples of different treemap styles and use cases.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Basic Concepts
+
+=== What are Treemaps?
+
+Treemaps visualize hierarchical data using nested rectangles. Each rectangle's area is proportional to its value, making it easy to:
+
+* Compare relative sizes at a glance
+* Identify the largest contributors
+* Understand resource distribution
+* Spot patterns in hierarchical data
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Project Budget Allocation
+
+A classic use case - visualizing how budget is distributed across departments:
+
+[docops,treemap,controls=true]
+----
+title=Project Portfolio 2024
+subtitle=BUDGET ALLOCATION BY DEPARTMENT
+width=1200
+height=800
+theme=modern
+paletteType=PASTEL
+showValues=true
+showPercentages=true
+---
+Engineering | 2400000 | Development & Infrastructure | | $2.4M
+Product | 980000 | Design & Research | | $980K
+Marketing | 1200000 | Growth & Brand | | $1.2M
+Sales | 720000 | Revenue Operations | | $720K
+Operations | 420000 | Support | | $420K
+----
+
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Cloud Infrastructure Costs
+
+Track cloud spending across different services:
+
+[docops,treemap,useDark=true,controls=true]
+----
+title=Cloud Infrastructure Costs
+subtitle=MONTHLY AWS SPENDING BREAKDOWN
+width=1200
+height=800
+theme=modern
+paletteType=PASTEL
+showValues=true
+showPercentages=true
+---
+EC2 Instances | 45000 | Compute resources | | $45K
+RDS Databases | 28000 | Database hosting | | $28K
+S3 Storage | 12000 | Object storage | | $12K
+CloudFront CDN | 8500 | Content delivery | | $8.5K
+Lambda Functions | 6200 | Serverless compute | | $6.2K
+EBS Volumes | 5800 | Block storage | | $5.8K
+ElastiCache | 4500 | In-memory caching | | $4.5K
+Data Transfer | 3200 | Network egress | | $3.2K
+Route 53 | 1800 | DNS services | | $1.8K
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Market Share Analysis
+
+Visualize market distribution among competitors:
+
+[docops,treemap,controls=true]
+----
+title=Smartphone Market Share 2024
+subtitle=GLOBAL MARKET DISTRIBUTION
+width=1200
+height=800
+theme=modern
+paletteType=PASTEL
+showValues=true
+showPercentages=true
+---
+Samsung | 285 | South Korean electronics | | 28.5%
+Apple | 243 | Premium smartphones | | 24.3%
+Xiaomi | 156 | Value-focused brand | | 15.6%
+Oppo | 98 | Chinese manufacturer | | 9.8%
+Vivo | 87 | BBK Electronics brand | | 8.7%
+Others | 131 | Various manufacturers | | 13.1%
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Disk Space Usage
+
+Show how storage is consumed across different categories:
+
+[docops,treemap,controls=true]
+----
+title=Server Disk Usage
+subtitle=STORAGE ALLOCATION - PRODUCTION SERVER
+width=1200
+height=800
+theme=modern
+paletteType=PASTEL
+showValues=true
+showPercentages=true
+---
+Application Logs | 485 | Historical log files | | 485GB
+Database Backups | 1250 | Daily backup archives | | 1.25TB
+Media Assets | 890 | Images and videos | | 890GB
+User Uploads | 670 | Customer content | | 670GB
+Docker Images | 320 | Container registry | | 320GB
+System Files | 180 | OS and binaries | | 180GB
+Cache | 95 | Temporary files | | 95GB
+Monitoring Data | 110 | Metrics and traces | | 110GB
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Investment Portfolio
+
+Display asset allocation in an investment portfolio:
+
+[docops,treemap,controls=true]
+----
+title=Investment Portfolio
+subtitle=ASSET ALLOCATION BREAKDOWN
+width=1200
+height=800
+theme=modern
+paletteType=PROFESSIONAL
+showValues=true
+showPercentages=true
+---
+US Stocks | 425000 | Domestic equities | | $425K
+International Stocks | 280000 | Foreign markets | | $280K
+Bonds | 190000 | Fixed income | | $190K
+Real Estate | 150000 | REITs and property | | $150K
+Commodities | 85000 | Gold and metals | | $85K
+Cash | 70000 | Money market | | $70K
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Website Traffic Sources
+
+Analyze where your traffic comes from:
+
+[docops,treemap,controls=true]
+----
+title=Website Traffic Sources
+subtitle=MONTHLY VISITOR BREAKDOWN
+width=1200
+height=800
+theme=modern
+paletteType=OCEAN_BREEZE
+showValues=true
+showPercentages=true
+---
+Organic Search | 485000 | Google & Bing | | 485K
+Direct Traffic | 320000 | Bookmarks & typed URLs | | 320K
+Social Media | 245000 | Facebook, Twitter, LinkedIn | | 245K
+Referral | 180000 | External links | | 180K
+Paid Search | 125000 | Google Ads | | 125K
+Email Campaigns | 95000 | Newsletter traffic | | 95K
+Display Ads | 50000 | Banner ads | | 50K
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Sales Performance by Region
+
+Compare regional sales contributions:
+
+[docops,treemap,controls=true]
+----
+title=Quarterly Sales Performance
+subtitle=Q4 2024 REVENUE BY REGION
+width=1200
+height=800
+theme=modern
+paletteType=SUNSET
+showValues=true
+showPercentages=true
+---
+North America | 5600000 | US and Canada | | $5.6M
+Europe | 3800000 | EU markets | | $3.8M
+Asia Pacific | 4200000 | China, Japan, India | | $4.2M
+Latin America | 1400000 | South America | | $1.4M
+Middle East | 980000 | Gulf states | | $980K
+Africa | 520000 | Emerging markets | | $520K
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Development Team Allocation
+
+Show how development resources are distributed:
+
+[docops,treemap,controls=true]
+----
+title=Development Team Allocation
+subtitle=SPRINT 23 RESOURCE DISTRIBUTION
+width=1200
+height=800
+theme=modern
+paletteType=VIBRANT
+showValues=true
+showPercentages=true
+---
+New Features | 45 | Product roadmap items | | 45%
+Bug Fixes | 20 | Technical debt | | 20%
+Infrastructure | 15 | DevOps improvements | | 15%
+Testing | 10 | QA and automation | | 10%
+Documentation | 5 | User guides | | 5%
+Meetings | 5 | Planning and standups | | 5%
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Brutalist Theme Example
+
+Same data with high-contrast brutalist styling:
+
+
+[docops,treemap,controls=true]
+----
+title=Department Budget 2024
+subtitle=ANNUAL SPENDING ALLOCATION
+width=1200
+height=800
+theme=brutalist
+paletteType=TABLEAU
+showValues=true
+showPercentages=true
+---
+Engineering | 2400000 | Development & Infrastructure | | $2.4M
+Product | 980000 | Design & Research | | $980K
+Marketing | 1200000 | Growth & Brand | | $1.2M
+Sales | 720000 | Revenue Operations | | $720K
+Operations | 420000 | Support | | $420K
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Dark Mode Example
+
+Professional dark theme for presentations:
+
+[docops,treemap,controls=true,useDark=true]
+----
+title=Cloud Resource Usage
+subtitle=COMPUTE HOURS BY SERVICE
+width=1200
+height=800
+theme=modern
+paletteType=PASTEL
+showValues=true
+showPercentages=true
+---
+Web Servers | 8760 | Frontend application | | 8760h
+API Servers | 7200 | Backend services | | 7200h
+Background Workers | 5400 | Async processing | | 5400h
+Database Replicas | 3600 | Read replicas | | 3600h
+Cache Servers | 2400 | Redis clusters | | 2400h
+Build Agents | 1200 | CI/CD pipeline | | 1200h
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Configuration Reference
+
+=== Basic Syntax
+
+
+[source,asciidoc]
+----
+[docops,treemap,controls=true]
+----
+title=Your Title
+subtitle=Optional Subtitle
+width=1200
+height=800
+theme=modern
+paletteType=OCEAN_BREEZE
+showValues=true
+showPercentages=true
+---
+Category | Value | Description | Color | Metric
+----
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Configuration Options
+
+==== Display Properties
+
+[cols="1,2,1,2"]
+|===
+|Property |Description |Default |Example
+
+|`title`
+|Main chart title
+|"Budget Allocation"
+|`title=Q4 Sales Report`
+
+|`subtitle`
+|Secondary title
+|""
+|`subtitle=REGIONAL BREAKDOWN`
+
+|`width`
+|Chart width in pixels
+|1200
+|`width=1400`
+
+|`height`
+|Chart height in pixels
+|800
+|`height=900`
+
+|`theme`
+|Visual theme
+|"modern"
+|`theme=brutalist`
+
+|`paletteType`
+|Color palette
+|""
+|`paletteType=OCEAN_BREEZE`
+
+|`showValues`
+|Display numeric values
+|true
+|`showValues=false`
+
+|`showPercentages`
+|Display percentages
+|true
+|`showPercentages=false`
+
+|`useDark`
+|Dark mode
+|false
+|`useDark=true`
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Data Format
+
+Each data row contains pipe-separated values:
+
+[source]
+----
+Label | Value | Description | Color | Metric
+----
+
+* **Label** (required): Category name
+* **Value** (required): Numeric value for sizing
+* **Description** (optional): Additional context
+* **Color** (optional): Custom hex color
+* **Metric** (optional): Formatted display value
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Available Themes
+
+* `modern` - Clean, contemporary design with gradients
+* `brutalist` - High-contrast, bold design
+* `neon` - Glowing neon effects (coming soon)
+* `glassmorphic` - Frosted glass effect (coming soon)
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Available Color Palettes
+
+* `OCEAN_BREEZE` - Blues and teals
+* `SUNSET` - Warm oranges and reds
+* `FOREST` - Greens and earth tones
+* `VIBRANT` - High-saturation colors
+* `PROFESSIONAL` - Muted business colors
+* `NEON` - Electric bright colors
+* `URBAN_NIGHT` - Dark mode optimized
+* `TABLEAU` - Data visualization standard
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+=== Data Guidelines
+
+1. **Reasonable Range** - Use 4-10 categories for optimal readability
+2. **Meaningful Labels** - Keep category names concise but descriptive
+3. **Proportional Values** - Large differences in values work better than similar values
+4. **Context Matters** - Use descriptions to add context without cluttering
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Visual Design
+
+1. **Color Consistency** - Choose palettes that match your brand or content
+2. **Text Readability** - Ensure labels are visible against background colors
+3. **Appropriate Size** - Larger treemaps show more detail
+4. **Theme Selection** - Match theme to your presentation context
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Use Cases
+
+**Best for:**
+
+* Budget allocations
+* Resource distribution
+* Market share analysis
+* Disk space usage
+* Time allocation
+* Portfolio composition
+
+**Not ideal for:**
+
+* Time-series data (use line charts)
+* Precise comparisons (use bar charts)
+* Many small categories (use pie charts)
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Conclusion
+
+DocOps Treemaps provide a powerful way to visualize hierarchical proportional data. With multiple themes, color palettes, and configuration options, you can create compelling visualizations that communicate complex information at a glance.
+
+[.back-to-top]
+<<top, 🔝>>
