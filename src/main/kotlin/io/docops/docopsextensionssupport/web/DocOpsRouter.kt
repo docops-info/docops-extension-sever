@@ -10,7 +10,6 @@ import io.docops.docopsextensionssupport.chart.*
 import io.docops.docopsextensionssupport.chart.treemap.TreemapHandler
 import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.domainviz.DomainVizHandler
-import io.docops.docopsextensionssupport.flow.FlowHandler
 import io.docops.docopsextensionssupport.gherkin.GherkinHandler
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
@@ -90,7 +89,6 @@ class DocOpsRouter(
             "mermaid" -> DocOpsMermaid(csvResponse)
             "gherkin" -> GherkinHandler(csvResponse)
             "todo" -> TodoHandler(csvResponse)
-            "flow" -> FlowHandler(csvResponse)
             "domain" -> DomainVizHandler(csvResponse)
             "vcard" -> VCardHandler(csvResponse)
             "treemap" -> TreemapHandler(csvResponse)

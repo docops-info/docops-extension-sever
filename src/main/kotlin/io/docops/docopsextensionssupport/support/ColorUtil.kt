@@ -20,6 +20,7 @@ import kotlinx.serialization.Serializable
 import java.awt.Color
 import java.util.*
 import kotlin.math.floor
+import kotlin.math.roundToInt
 
 fun getRandomColorHex(): String {
     val random = Random()
@@ -234,4 +235,52 @@ class SVGColor(
         return "rgba(${rgb["r"]}, ${rgb["g"]}, ${rgb["b"]}, $clampedOpacity)"
     }
 
+}
+
+fun rgbToHSL(r: Int, g: Int, b: Int): String {
+    // Make r, g, and b fractions of 1
+    var rf = r / 255.0
+    var gf = g / 255.0
+    var bf = b / 255.0
+    // Find greatest and smallest channel values
+    val cmin = minOf(rf, gf, bf)
+    val cmax = maxOf(rf, gf, bf)
+    val delta = cmax - cmin
+    var h = 0.0
+    var s: Double
+    var l: Double
+    // Calculate hue
+    // No difference
+    if (delta == 0.0) {
+        h = 0.0
+        // Red is max
+    } else if (cmax == rf) {
+        h = ((gf - bf) / delta) % 6
+        // Green is max
+    } else if (cmax == gf) {
+        h = (bf - rf) / delta + 2
+        // Blue is max
+    } else {
+        h = (rf - gf) / delta + 4
+    }
+    h = (h * 60).roundToInt().toDouble()
+    // Make negative hues positive behind 360°
+    if (h < 0)
+        h += 360
+    // Calculate lightness
+    l = (cmax + cmin) / 2
+    // Calculate saturation
+    s = if (delta == 0.0) 0.0 else delta / (1 - Math.abs(2 * l - 1))
+    // Multiply l and s by 100 and round to 1 decimal place
+    s = (s * 100).toBigDecimal().setScale(1, java.math.RoundingMode.HALF_EVEN).toDouble()
+    l = (l * 100).toBigDecimal().setScale(1, java.math.RoundingMode.HALF_EVEN).toDouble()
+    return "hsl($h,${s}%,${l}%)"
+}
+
+fun hexToHsl(hex: String, isPdf: Boolean = false): String {
+    if(isPdf) {
+        return hex
+    }
+    val c = Color.decode(hex)
+    return rgbToHSL(c.red, c.green, c.blue)
 }
