@@ -6,6 +6,8 @@ import io.docops.docopsextensionssupport.chart.ColorPaletteFactory.getColorCycli
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
+import io.docops.docopsextensionssupport.svgsupport.ToolTip
+import io.docops.docopsextensionssupport.svgsupport.ToolTipConfig
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.round
@@ -20,10 +22,12 @@ class TreemapGenerator(private val useDark: Boolean = false) {
     private val svgColor = SVGColor("#fcfcfc")
     @OptIn(ExperimentalUuidApi::class)
     private val guid = Uuid.random().toHexString()
+    private val toolTip = ToolTip()
 
     fun generate(treemap: Treemap): String {
         val theme = ThemeFactory.getTheme(useDark)
         val paletteType = getPaletteType(treemap.display)
+
 
         return when (treemap.display.theme.lowercase()) {
             "brutalist" -> generateBrutalistTheme(treemap, paletteType)
@@ -39,6 +43,7 @@ class TreemapGenerator(private val useDark: Boolean = false) {
 
         val sb = StringBuilder()
         val rects = calculateTreemapLayout(treemap)
+        val itemCount = treemap.items.size
 
         sb.append("""
             <svg width="${treemap.display.width}" height="${treemap.display.height}" 
@@ -52,7 +57,7 @@ class TreemapGenerator(private val useDark: Boolean = false) {
                             stroke: ${theme.canvas};
                             stroke-width: 3;
                             opacity: 0;
-                            animation: slideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                            animation: slideIn-${guid} 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
                         }
                         
                         #ID_${guid} .treemap-rect:hover {
@@ -97,7 +102,56 @@ class TreemapGenerator(private val useDark: Boolean = false) {
                             letter-spacing: 0.05em;
                         }
                         
-                        @keyframes slideIn {
+                        /* Custom ToolTip Styles - tooltips in separate layer */
+                        #ID_${guid} .tooltip-group {
+                            pointer-events: none;
+                        }
+                        
+                        #ID_${guid} .tooltip-content {
+                            opacity: 0;
+                            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                                        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                            transform: translateY(8px);
+                        }
+                        
+                        /* Hover selectors linking tiles to their tooltips via sibling combinator */
+                        ${(0 until itemCount).joinToString("\n                        ") { i ->
+                            "#ID_${guid} #tile-${guid}-${i}:hover ~ .tooltips-layer #tooltip-${guid}-${i} .tooltip-content { opacity: 1; transform: translateY(0); }"
+                        }}
+                        
+                        #ID_${guid} .tooltip-bg {
+                            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) 
+                                    drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+                        }
+                        
+                        #ID_${guid} .tooltip-title {
+                            font-family: $fontFamily;
+                            font-weight: 700;
+                            font-size: 13px;
+                            letter-spacing: -0.01em;
+                        }
+                        
+                        #ID_${guid} .tooltip-value {
+                            font-family: 'JetBrains Mono', monospace;
+                            font-weight: 700;
+                            font-size: 18px;
+                        }
+                        
+                        #ID_${guid} .tooltip-label {
+                            font-family: 'JetBrains Mono', monospace;
+                            font-weight: 500;
+                            font-size: 10px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.08em;
+                        }
+                        
+                        #ID_${guid} .tooltip-percent {
+                            font-family: 'JetBrains Mono', monospace;
+                            font-weight: 600;
+                            font-size: 11px;
+                        }
+                        
+                        @keyframes slideIn-${guid} {
                             from { opacity: 0; transform: scale(0.95); }
                             to { opacity: 1; transform: scale(1); }
                         }
@@ -111,16 +165,26 @@ class TreemapGenerator(private val useDark: Boolean = false) {
         // Generate gradients
         tileColors.forEachIndexed { index, color ->
             sb.append("""
-                <linearGradient id="grad-${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="grad-${guid}-${index}" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:${color};stop-opacity:1" />
                     <stop offset="100%" style="stop-color:${svgColor.darkenColor(color, 0.15)};stop-opacity:1" />
                 </linearGradient>
             """.trimIndent())
         }
 
+        // Tooltip background gradient - glassmorphic dark slate
+        val tooltipBgColor = if (useDark) "#1e293b" else "#0f172a"
+        val tooltipBgColorEnd = if (useDark) "#334155" else "#1e293b"
+        sb.append("""
+            <linearGradient id="tooltip-bg-grad-${guid}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:$tooltipBgColor;stop-opacity:0.97" />
+                <stop offset="100%" style="stop-color:$tooltipBgColorEnd;stop-opacity:0.95" />
+            </linearGradient>
+        """.trimIndent())
+
         // Texture pattern
         sb.append("""
-            <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <pattern id="dots-${guid}" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
                 <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/>
             </pattern>
         """.trimIndent())
@@ -152,13 +216,16 @@ class TreemapGenerator(private val useDark: Boolean = false) {
 
         // Treemap rectangles
         val total = treemap.items.sumOf { it.value }
+
+        // Store tooltip SVG for rendering in a separate layer at the end
+        val tooltipsSvg = StringBuilder()
+
         rects.forEachIndexed { index, rect ->
             val item = treemap.items[index]
             val tileColor = tileColors[index]
             val textColor = determineTextColor(tileColor)
             val percentage = (item.value / total * 100)
             val delay = treemap.display.animationDelay * index
-            val tooltip = buildTooltip(item, percentage)
 
             // Determine if we have enough space for text
             val hasSpaceForLabel = rect.width > 80 && rect.height > 30
@@ -166,14 +233,15 @@ class TreemapGenerator(private val useDark: Boolean = false) {
             val hasSpaceForMetric = rect.width > 100 && rect.height > 120
             val hasSpaceForPercentage = rect.width > 100 && rect.height > 100
 
+            // Open tile group for hover detection - add ID for CSS targeting
+            sb.append("""<g class="tile-group" id="tile-${guid}-${index}">""")
+
             sb.append("""
-                <g>
-                    <title>${escapeForTitle(tooltip)}</title>
                     <rect class="treemap-rect" 
                           x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" 
-                          rx="8" fill="url(#grad-${index})" style="animation-delay: ${delay}s;"/>
+                          rx="8" fill="url(#grad-${guid}-${index})" style="animation-delay: ${delay}s;"/>
                     <rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" 
-                          rx="8" fill="url(#dots)" pointer-events="none"/>
+                          rx="8" fill="url(#dots-${guid})" pointer-events="none"/>
             """.trimIndent())
 
             if (hasSpaceForLabel) {
@@ -250,8 +318,17 @@ class TreemapGenerator(private val useDark: Boolean = false) {
                 sb.append("</g>")
             }
 
+            // Close tile group
             sb.append("</g>")
+
+            // Collect tooltip for the separate layer
+            tooltipsSvg.append(buildCustomTooltip(item, rect, tileColor, percentage, treemap.display, index))
         }
+
+        // Render tooltips layer AFTER all tiles (so it's always on top)
+        sb.append("""<g class="tooltips-layer">""")
+        sb.append(tooltipsSvg)
+        sb.append("</g>")
 
         // Footer annotation
         sb.append("""
@@ -266,23 +343,143 @@ class TreemapGenerator(private val useDark: Boolean = false) {
         return sb.toString()
     }
 
+    /**
+     * Builds a custom styled tooltip using the ToolTip class
+     */
+    private fun buildCustomTooltip(
+        item: TreemapItem,
+        rect: Rectangle,
+        tileColor: String,
+        percentage: Double,
+        display: TreemapDisplay,
+        index: Int
+    ): String {
+        // Calculate tooltip dimensions based on content
+        val tooltipWidth = 180
+        val tooltipHeight = 90
+        val offset = 12
+        val radius = 6
+
+        // Determine tooltip position: prefer top, but use bottom if near top edge
+        val rectCenterX = rect.x + rect.width / 2
+
+        // Check if we have space above for the tooltip
+        val spaceAbove = rect.y - 140 // Account for title section
+        val spaceBelow = display.height - (rect.y + rect.height) - 80 // Account for footer
+
+        val useTopTooltip = spaceAbove > (tooltipHeight + offset + 20)
+
+        // Anchor Y position based on tooltip direction
+        val anchorY = if (useTopTooltip) rect.y else rect.y + rect.height
+
+        val tooltipConfig = ToolTipConfig(offset = offset, radius = radius, width = tooltipWidth, height = tooltipHeight)
+        val tooltipPath = if (useTopTooltip) {
+            toolTip.getTopToolTip(tooltipConfig)
+        } else {
+            toolTip.bottomTooltipPath(tooltipWidth, tooltipHeight, offset, radius)
+        }
+
+        // Text positioning within tooltip
+        val textOffsetY = if (useTopTooltip) {
+            -offset - tooltipHeight + 22
+        } else {
+            offset + 22
+        }
+
+        val accentColor = svgColor.brightenColor(tileColor, 0.3)
+        val valueText = item.metric.ifBlank { formatValue(item.value) }
+        val percentText = "${formatDecimal(percentage, 1)}%"
+        val truncatedLabel = if (item.label.length > 18) item.label.take(16) + "…" else item.label
+
+        // Use nested groups: outer for position with ID, inner for animation
+        return """
+            <g class="tooltip-group" id="tooltip-${guid}-${index}" transform="translate($rectCenterX, $anchorY)">
+                <g class="tooltip-content">
+                    <path class="tooltip-bg" d="$tooltipPath" fill="url(#tooltip-bg-grad-${guid})" stroke="$accentColor" stroke-width="1.5"/>
+                    
+                    <!-- Accent bar -->
+                    <rect x="${-tooltipWidth / 2 + 12}" y="${textOffsetY - 14}" width="4" height="36" rx="2" fill="$accentColor"/>
+                    
+                    <!-- Category label -->
+                    <text class="tooltip-title" x="${-tooltipWidth / 2 + 24}" y="$textOffsetY" fill="#f8fafc">${escapeXml(truncatedLabel)}</text>
+                    
+                    <!-- Value -->
+                    <text class="tooltip-value" x="${-tooltipWidth / 2 + 24}" y="${textOffsetY + 24}" fill="$accentColor">${escapeXml(valueText)}</text>
+                    
+                    <!-- Labels row -->
+                    <text class="tooltip-label" x="${-tooltipWidth / 2 + 24}" y="${textOffsetY + 42}" fill="#94a3b8">VALUE</text>
+                    
+                    <!-- Percentage badge -->
+                    <rect x="${tooltipWidth / 2 - 52}" y="${textOffsetY + 8}" width="42" height="20" rx="4" fill="$accentColor" opacity="0.2"/>
+                    <text class="tooltip-percent" x="${tooltipWidth / 2 - 31}" y="${textOffsetY + 22}" fill="$accentColor" text-anchor="middle">$percentText</text>
+                    
+                    <!-- Separator line -->
+                    <line x1="${-tooltipWidth / 2 + 12}" y1="${textOffsetY + 52}" x2="${tooltipWidth / 2 - 12}" y2="${textOffsetY + 52}" stroke="#334155" stroke-width="1"/>
+                    
+                    <!-- Footer hint -->
+                    <text class="tooltip-label" x="0" y="${textOffsetY + 66}" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text>
+                </g>
+            </g>
+        """.trimIndent()
+    }
+
     private fun generateBrutalistTheme(treemap: Treemap, paletteType: ColorPaletteFactory.PaletteType): String {
         val theme = ThemeFactory.getTheme(useDark)
+        val fontFamily = treemap.display.fontFamily.ifBlank { "'Space Grotesk', sans-serif" }
         val sb = StringBuilder()
         val rects = calculateTreemapLayout(treemap)
+        val itemCount = treemap.items.size
 
         sb.append("""
             <svg width="${treemap.display.width}" height="${treemap.display.height}" 
                  viewBox="0 0 ${treemap.display.width} ${treemap.display.height}" 
-                 xmlns="http://www.w3.org/2000/svg">
+                 xmlns="http://www.w3.org/2000/svg" id="ID_${guid}">
                 <defs>
                     <style>
                         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&amp;family=Roboto+Mono:wght@700&amp;display=swap');
-                        .brut-rect { stroke: ${theme.canvas}; stroke-width: 4; transition: all 0.2s; }
-                        .brut-rect:hover { transform: scale(1.02); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); }
-                        .brut-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
-                        .brut-label { font-family: 'Roboto Mono', monospace; font-weight: 700; }
+                        #ID_${guid} .brut-rect { stroke: ${theme.canvas}; stroke-width: 4; transition: all 0.2s; }
+                        #ID_${guid} .brut-rect:hover { filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); cursor: pointer; }
+                        #ID_${guid} .brut-title { font-family: $fontFamily; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
+                        #ID_${guid} .brut-label { font-family: 'Roboto Mono', monospace; font-weight: 700; }
+                        
+                        /* Brutalist ToolTip Styles - tooltips in separate layer */
+                        #ID_${guid} .tooltip-group {
+                            pointer-events: none;
+                        }
+                        
+                        #ID_${guid} .tooltip-content {
+                            opacity: 0;
+                            transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+                        }
+                        
+                        /* Hover selectors linking tiles to their tooltips via sibling combinator */
+                        ${(0 until itemCount).joinToString("\n                        ") { i ->
+            "#ID_${guid} #tile-${guid}-${i}:hover ~ .tooltips-layer #tooltip-${guid}-${i} .tooltip-content { opacity: 1; transform: translateX(0) !important; }"
+        }}
+                        
+                        #ID_${guid} .tooltip-bg-brut {
+                            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.8));
+                        }
+                        
+                        #ID_${guid} .tooltip-title-brut {
+                            font-family: $fontFamily;
+                            font-weight: 700;
+                            font-size: 14px;
+                            text-transform: uppercase;
+                        }
+                        
+                        #ID_${guid} .tooltip-value-brut {
+                            font-family: 'Roboto Mono', monospace;
+                            font-weight: 700;
+                            font-size: 24px;
+                        }
                     </style>
+                    
+                    <!-- Brutalist tooltip gradient -->
+                    <linearGradient id="brut-tooltip-bg-${guid}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fef08a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#fde047;stop-opacity:1" />
+                    </linearGradient>
                 </defs>
                 
                 <rect width="100%" height="100%" fill="${theme.canvas}"/>
@@ -292,28 +489,97 @@ class TreemapGenerator(private val useDark: Boolean = false) {
         """.trimIndent())
 
         val total = treemap.items.sumOf { it.value }
+
+        // Store tooltip SVG for rendering in a separate layer at the end
+        val tooltipsSvg = StringBuilder()
+
         rects.forEachIndexed { index, rect ->
             val item = treemap.items[index]
             val color = getColorCyclic(paletteType, index)
             val percentage = (item.value / total * 100)
-            val tooltip = buildTooltip(item, percentage)
+
+            // Open tile group with ID for CSS targeting
+            sb.append("""<g class="tile-group" id="tile-${guid}-${index}">""")
 
             sb.append("""
-                <g>
-                    <title>${escapeForTitle(tooltip)}</title>
                     <rect class="brut-rect" x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" 
                           fill="$color" rx="0"/>
-                </g>
                 <text class="brut-label" x="${rect.x + 20}" y="${rect.y + 40}" font-size="20" fill="${theme.canvas}">${escapeXml(item.label)}</text>
                 <text class="brut-label" x="${rect.x + 20}" y="${rect.y + rect.height - 40}" font-size="36" fill="${theme.canvas}">${formatValue(item.value)}</text>
                 <text class="brut-label" x="${rect.x + 20}" y="${rect.y + rect.height - 20}" font-size="14" fill="${theme.canvas}" opacity="0.8">${formatDecimal(percentage, 1)}%</text>
             """.trimIndent())
+
+            // Close tile group
+            sb.append("</g>")
+
+            // Collect brutalist tooltip for the separate layer - pass svgWidth for boundary detection
+            tooltipsSvg.append(buildBrutalistTooltip(item, rect, color!!, percentage, index, treemap.display.width))
         }
+
+        // Render tooltips layer AFTER all tiles (so it's always on top)
+        sb.append("""<g class="tooltips-layer">""")
+        sb.append(tooltipsSvg)
+        sb.append("</g>")
 
         sb.append("</svg>")
         return sb.toString()
     }
 
+    /**
+     * Builds a brutalist-style tooltip using the ToolTip class
+     */
+    private fun buildBrutalistTooltip(
+        item: TreemapItem,
+        rect: Rectangle,
+        tileColor: String,
+        percentage: Double,
+        index: Int,
+        svgWidth: Int
+    ): String {
+        val tooltipWidth = 160
+        val tooltipHeight = 70
+        val offset = 10
+        val radius = 0 // Brutalist = no rounded corners
+
+        // Check if there's enough space on the right for the tooltip
+        val spaceOnRight = svgWidth - (rect.x + rect.width)
+        val useLeftTooltip = spaceOnRight < (tooltipWidth + offset + 20)
+
+        val tooltipPath = if (useLeftTooltip) {
+            toolTip.leftTooltipPath(tooltipWidth, tooltipHeight, offset, radius)
+        } else {
+            toolTip.rightTooltipPath(tooltipWidth, tooltipHeight, offset, radius)
+        }
+
+        // Anchor position based on tooltip direction
+        val anchorX = if (useLeftTooltip) rect.x else rect.x + rect.width
+        val anchorY = rect.y + rect.height / 2
+
+        val valueText = item.metric.ifBlank { formatValue(item.value) }
+        val truncatedLabel = if (item.label.length > 14) item.label.take(12) + "…" else item.label
+
+        // Text positioning differs based on direction
+        val textX = if (useLeftTooltip) {
+            -(offset + tooltipWidth - 14) // Position text inside left tooltip
+        } else {
+            offset + 14 // Position text inside right tooltip
+        }
+
+        // Use nested groups: outer for position with ID, inner for animation
+        val transformDirection = if (useLeftTooltip) "translateX(8px)" else "translateX(-8px)"
+
+        return """
+            <g class="tooltip-group" id="tooltip-${guid}-${index}" transform="translate($anchorX, $anchorY)">
+                <g class="tooltip-content" style="transform: $transformDirection;">
+                    <path class="tooltip-bg-brut" d="$tooltipPath" fill="url(#brut-tooltip-bg-${guid})" stroke="#0f172a" stroke-width="3"/>
+                    
+                    <text class="tooltip-title-brut" x="$textX" y="-12" fill="#0f172a">${escapeXml(truncatedLabel)}</text>
+                    <text class="tooltip-value-brut" x="$textX" y="18" fill="#0f172a">${escapeXml(valueText)}</text>
+                    <text class="brut-label" x="$textX" y="32" font-size="11" fill="#334155">${formatDecimal(percentage, 1)}% SHARE</text>
+                </g>
+            </g>
+        """.trimIndent()
+    }
     private fun generateNeonTheme(treemap: Treemap, paletteType: ColorPaletteFactory.PaletteType): String {
         // Neon theme with glowing effects - abbreviated for brevity
         return generateModernTheme(treemap, paletteType) // Simplified, can be expanded
