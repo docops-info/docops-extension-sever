@@ -4,10 +4,15 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.ButtonDisplay
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.parseStyleForFontSize
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import org.silentsoft.simpleicons.SimpleIcons
+import kotlin.compareTo
+import kotlin.div
+import kotlin.text.toInt
+import kotlin.times
 
 class Hex(buttons: Buttons) : Regular(buttons) {
 
@@ -18,6 +23,9 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         const val BUTTON_PADDING = 10
     }
 
+    init {
+        docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, 4))
+    }
     private var rows = mutableListOf<MutableList<Button>>()
 
     override fun height(): Float {
@@ -36,6 +44,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         return internalHeight * scale
     }
     override fun draw() : String {
+
         val sb = StringBuilder()
         //isDark = buttons.theme?.useDark == true
         val bgColor = if (isDark) "#020617" else "#f1f5f9"
@@ -124,7 +133,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                 <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="${if (isDark) "rgba(0,0,0,0.5)" else "rgba(99,102,241,0.12)"}"/>
             </filter>
             """.trimIndent() else ""
-            }
+        }
         </defs>
         """.trimIndent()
     }
@@ -204,14 +213,14 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         buttons.theme?.let { if (it.newWin) { win = "_blank" } }
 
         // Determine active status: Force check if useActiveColor is on
-        
+
         val additionalClass = if (isActive) "active-neon" else ""
 
         var img = ""
         button.embeddedImage?.let { img = getIcon(it.ref) }
 
         val endY = startTextY + (textSpans.size * fontSize)
-        var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+        var href = """onclick="window.open('${button.link}', '$win')" """
         if(!button.enabled) { href = "" }
 
         var typeText = ""
@@ -221,7 +230,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
 
         return """
                 <g transform="translate($x,$y)">
-                    <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s">
+                    <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s;cursor: pointer;">
                         <title>${descriptionOrLabel(button)}</title>
             
                         <!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) -->
@@ -257,8 +266,8 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                         <!-- Type Text: Uses secondary accent color -->
                         <text x="149" y="${endY + 28}" text-anchor="middle" 
                               fill="$secondaryTextColor" 
-                              font-family="'Syne', sans-serif" 
-                              font-size="10" 
+                              font-family="${docOpsTheme.fontFamily}" 
+                              font-size="14" 
                               font-weight="800"
                               style="letter-spacing: 2px; fill: $secondaryTextColor !important; opacity: 0.9;">$typeText</text>
                     </g>

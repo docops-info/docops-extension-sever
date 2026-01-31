@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
     /* Base Colors - Light Mode */
@@ -219,7 +219,7 @@ a:hover {
     padding-left: 4px;
 }
 
-/* Admonitions - High Contrast & Modern */
+/* /* Admonitions - High Contrast & Modern */
 .admonitionblock {
     margin: 2rem 0;
     border-radius: 0.75rem;
@@ -227,16 +227,72 @@ a:hover {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
 }
 
+/* Icon Column */
 .admonitionblock td.icon {
-    width: 3rem;
-    padding: 1.5rem 0 1.5rem 1.5rem;
+    width: 4rem;
+    min-width: 4rem;
+    padding: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.02);
 }
 
+.admonitionblock td.icon .icon-note::before,
+.admonitionblock td.icon .fa-note::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f05a"; /* info-circle */
+    font-size: 1.5rem;
+    color: var(--note-color);
+}
+
+.admonitionblock td.icon .icon-tip::before,
+.admonitionblock td.icon .fa-lightbulb::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f0eb"; /* lightbulb */
+    font-size: 1.5rem;
+    color: var(--tip-color);
+}
+
+.admonitionblock td.icon .icon-warning::before,
+.admonitionblock td.icon .fa-exclamation-triangle::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f071"; /* exclamation-triangle */
+    font-size: 1.5rem;
+    color: var(--warning-color);
+}
+
+.admonitionblock td.icon .icon-caution::before,
+.admonitionblock td.icon .fa-fire::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f06d"; /* fire */
+    font-size: 1.5rem;
+    color: var(--caution-color);
+}
+
+.admonitionblock td.icon .icon-important::before,
+.admonitionblock td.icon .fa-exclamation-circle::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f06a"; /* exclamation-circle */
+    font-size: 1.5rem;
+    color: var(--important-color);
+}
+
+/* Content Column */
 .admonitionblock td.content {
     padding: 1.5rem;
     font-size: 0.95rem;
+    flex: 1;
 }
 
 .admonitionblock .title {
@@ -244,25 +300,51 @@ a:hover {
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
 }
 
-/* Variants */
-.admonitionblock.note { border-left: 4px solid var(--note-color); }
-.admonitionblock.note .title { color: var(--note-color); }
+/* Variants - Border Colors */
+.admonitionblock.note {
+    border-left: 4px solid var(--note-color);
+}
+.admonitionblock.note .title {
+    color: var(--note-color);
+}
 
-.admonitionblock.tip { border-left: 4px solid var(--tip-color); }
-.admonitionblock.tip .title { color: var(--tip-color); }
+.admonitionblock.tip {
+    border-left: 4px solid var(--tip-color);
+}
+.admonitionblock.tip .title {
+    color: var(--tip-color);
+}
 
-.admonitionblock.warning { border-left: 4px solid var(--warning-color); }
-.admonitionblock.warning .title { color: var(--warning-color); }
+.admonitionblock.warning {
+    border-left: 4px solid var(--warning-color);
+}
+.admonitionblock.warning .title {
+    color: var(--warning-color);
+}
 
-.admonitionblock.caution { border-left: 4px solid var(--caution-color); }
-.admonitionblock.caution .title { color: var(--caution-color); }
+.admonitionblock.caution {
+    border-left: 4px solid var(--caution-color);
+}
+.admonitionblock.caution .title {
+    color: var(--caution-color);
+}
 
-.admonitionblock.important { border-left: 4px solid var(--important-color); }
-.admonitionblock.important .title { color: var(--important-color); }
+.admonitionblock.important {
+    border-left: 4px solid var(--important-color);
+}
+.admonitionblock.important .title {
+    color: var(--important-color);
+}
 
+/* Dark mode text fix */
+:root.dark-mode .admonitionblock td.content,
+:root.dark-mode-auto .admonitionblock td.content {
+    color: var(--text-main);
+}
 /* Listing Blocks - Terminal Style */
 .listingblock pre {
     background: #0f172a !important; /* slate-900 */

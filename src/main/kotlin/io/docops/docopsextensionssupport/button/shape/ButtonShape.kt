@@ -93,7 +93,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
 
 
     // Resolve the global design system theme
-    protected val docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, buttons.visualVersion))
+    open protected var docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, buttons.visualVersion))
 
     /**
      * Implements the [ButtonShape.drawShape] method by calling the abstract [createShape] method
