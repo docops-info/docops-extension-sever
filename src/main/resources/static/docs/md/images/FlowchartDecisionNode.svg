@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&amp;display=swap');
+    </style>
+    <linearGradient id="mermaid-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff3670;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b9d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-cyan" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-emerald" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="node-amber" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+    <filter id="node-shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Circular background -->
+  <circle cx="256" cy="256" r="240" fill="url(#mermaid-bg)"/>
+
+  <!-- Content clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+    <!-- Subtle grid pattern -->
+    <g opacity="0.1">
+      <path d="M80,100 L432,100 M80,180 L432,180 M80,260 L432,260 M80,340 L432,340 M80,420 L432,420" 
+            stroke="#ffffff" stroke-width="1"/>
+      <path d="M130,60 L130,460 M210,60 L210,460 M290,60 L290,460 M370,60 L370,460" 
+            stroke="#ffffff" stroke-width="1"/>
+    </g>
+
+    <!-- Flowchart: Decision diamond at top -->
+    <g transform="translate(256, 130)">
+      <polygon points="0,-45 55,0 0,45 -55,0" fill="url(#node-amber)" stroke="#ffffff" stroke-width="3" filter="url(#node-shadow)"/>
+      <text x="0" y="6" font-family="'Fira Code', monospace" font-weight="600" font-size="14" fill="#0f172a" text-anchor="middle">?</text>
+    </g>
+
+    <!-- Left branch node -->
+    <g transform="translate(140, 260)">
+      <rect x="-50" y="-28" width="100" height="56" rx="10" fill="url(#node-cyan)" stroke="#ffffff" stroke-width="3" filter="url(#node-shadow)"/>
+      <text x="0" y="6" font-family="'Fira Code', monospace" font-weight="600" font-size="13" fill="#0f172a" text-anchor="middle">Yes</text>
+    </g>
+
+    <!-- Right branch node -->
+    <g transform="translate(372, 260)">
+      <rect x="-50" y="-28" width="100" height="56" rx="10" fill="url(#node-emerald)" stroke="#ffffff" stroke-width="3" filter="url(#node-shadow)"/>
+      <text x="0" y="6" font-family="'Fira Code', monospace" font-weight="600" font-size="13" fill="#0f172a" text-anchor="middle">No</text>
+    </g>
+
+    <!-- Bottom merge node (rounded) -->
+    <g transform="translate(256, 380)">
+      <ellipse cx="0" cy="0" rx="60" ry="35" fill="#ffffff" stroke="#ff3670" stroke-width="4" filter="url(#node-shadow)"/>
+      <text x="0" y="6" font-family="'Fira Code', monospace" font-weight="600" font-size="14" fill="#ff3670" text-anchor="middle">End</text>
+    </g>
+
+    <!-- Connectors -->
+    <!-- Decision to Left -->
+    <path d="M 201,130 L 140,232" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="140,232 146,218 152,224" fill="#ffffff"/>
+    
+    <!-- Decision to Right -->
+    <path d="M 311,130 L 372,232" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="372,232 366,218 360,224" fill="#ffffff"/>
+    
+    <!-- Left to End -->
+    <path d="M 140,288 L 140,350 Q 140,380 180,380 L 196,380" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="196,380 184,374 184,386" fill="#ffffff"/>
+    
+    <!-- Right to End -->
+    <path d="M 372,288 L 372,350 Q 372,380 332,380 L 316,380" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="316,380 328,374 328,386" fill="#ffffff"/>
+
+    <!-- Animated flow dots -->
+    <g opacity="0.8" filter="url(#glow)">
+      <circle cx="170" cy="180" r="5" fill="#ffffff"/>
+      <circle cx="340" cy="195" r="5" fill="#ffffff"/>
+      <circle cx="140" cy="320" r="5" fill="#ffffff"/>
+      <circle cx="372" cy="330" r="5" fill="#ffffff"/>
+    </g>
+
+    <!-- Corner accents -->
+    <path d="M 60,60 L 60,85 M 60,60 L 85,60" stroke="#fef08a" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 452,60 L 452,85 M 452,60 L 427,60" stroke="#fef08a" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 60,452 L 60,427 M 60,452 L 85,452" stroke="#fef08a" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+    <path d="M 452,452 L 452,427 M 452,452 L 427,452" stroke="#fef08a" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Circular border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#fecdd3" stroke-width="4" opacity="0.7"/>
+</svg>
