@@ -10,11 +10,14 @@ object ThemeFactory {
         val isDark = display?.useDark == true
         val version = display?.visualVersion ?: 1
 
-        val theme =  when {
-            version >= 3 -> {
+        val theme = when (version) {
+            4 -> {
+                if(isDark) ProDarkTheme() else HexLightTheme()
+            }
+            3 -> {
                 if (isDark) CyberDarkTheme() else CyberLightTheme()
             }
-            version >= 2 -> {
+            2 -> {
                 if (isDark) ModernDarkTheme() else ModernLightTheme()
             }
             else -> {
@@ -175,7 +178,7 @@ class CyberDarkTheme : ModernDarkTheme() {
     override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
 }
 
-class CyberLightTheme : DocOpsTheme {
+open class CyberLightTheme : DocOpsTheme {
     override val name = "CyberLightTheme"
     override val canvas = "#fafbfc"
     override val primaryText = "#0f172a"
@@ -188,4 +191,12 @@ class CyberLightTheme : DocOpsTheme {
     override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f
     override val cornerRadius = 16
+}
+
+class HexLightTheme: CyberLightTheme() {
+    override val name = "HexLightTheme"
+    override val primaryText = "#f8fafc"
+    override val secondaryText = "#38bdf8"
+    override val accentColor = "#6366f1"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
 }
