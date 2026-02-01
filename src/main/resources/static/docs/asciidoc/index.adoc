@@ -1,164 +1,341 @@
 include::_base.adoc[]
-= DocOps AsciiDoctor Support
-:toc:
+= 🔘 Navigation Guide
+:toc: left
+:icons: font
 
-== DocOps Extensions
+Jump to any DocOps visualization type using the category buttons below.
 
-DocOps Extensions can now be embedded in Asciidoctor Files. Using the DocOps converter, you can seamlessly integrate visualizations, diagrams, and interactive components directly into your Asciidoctor documents. This allows for a more engaging and informative way to present information, making it easier for readers to understand complex concepts and processes.
+== Charts & Metrics
 
-[docops,buttons,useDark=true]
+Visualize data with charts, gauges, and metric displays.
+
+ifdef::backend-html5[]
+[docops,buttons]
 ----
 {
   "buttons": [
     {
-      "label": "ADR",
-      "link": "adr.html",
-      "description": "Capture and share architecture decisions.",
-        "embeddedImage": {
-        "ref": "images/icons/ADRIcon.svg"
-        },
-      "type": "adr"
+      "label": "BAR CHARTS",
+      "link": "barchart.html",
+      "description": "Category comparisons",
+      "activeName": "barchart",
+      "type": "chart"
     },
     {
-      "label": "Buttons",
-      "link": "buttons.html",
-      "description": "Create a clean grid of linked actions.",
-        "embeddedImage": {
-        "ref": "images/icons/ButtonIcon.svg"
-        },
-      "type": "buttons"
+      "label": "PIE CHARTS",
+      "link": "piechart.html",
+      "description": "Proportional data",
+      "activeName": "piecharts",
+      "type": "chart"
     },
     {
-      "label": "Callouts",
-      "link": "callout.html",
-      "description": "Draw attention to key notes and warnings.",
-      "embeddedImage": {
-      "ref": "images/icons/CalloutIcon.svg"
-      },
-      "type": "callout"
+      "label": "LINE CHARTS",
+      "link": "linechart.html",
+      "description": "Trends over time",
+      "activeName": "linecharts",
+      "type": "chart"
     },
     {
-      "label": "Charts",
-      "link": "charts.html",
-      "description": "Turn data into clear, visual reports.",
-      "embeddedImage": {
-      "ref": "images/icons/ChartIcon.svg"
-      },
-            "type": "charts"
+      "label": "COMBINATION",
+      "link": "combination.html",
+      "description": "Mixed chart types",
+      "activeName": "combination",
+      "type": "chart"
     },
     {
-      "label": "Connectors",
-      "link": "connectors.html",
-      "description": "Link related items with connector lines.",
-      "embeddedImage": {
-      "ref": "images/icons/ConnectorIcon.svg"
-      },
-      "type": "connectors"
+      "label": "GAUGE",
+      "link": "gaugechart.html",
+      "description": "Single metrics",
+      "activeName": "gauge",
+      "type": "chart"
     },
     {
-      "label": "Domain Visual",
-      "link": "domain.html",
-      "description": "Visualize domain models and relationships.",
-      "embeddedImage": {
-      "ref": "images/icons/DomainVisualizationIcon.svg"
-      },
-      "type": "domain"
-    },{
-        "label": "Gherkin",
-        "link": "gherkin.html",
-        "description": "Render Gherkin scenarios as visuals.",
-      "embeddedImage": {
-      "ref": "images/icons/GherkinIcon.svg"
-      },
-        "type": "gherkin"
-    },{
-        "label": "Metrics Card",
-        "link": "metricscard.html",
-        "description": "Summarize KPIs in compact cards.",
-        "embeddedImage": {
-        "ref": "images/icons/MetricsIcon.svg"
-        },
-        "type": "metrics"
-    },{
-        "label": "Planner",
-        "link": "planner.html",
-        "description": "Plan and track work at a glance.",
-        "embeddedImage": {
-        "ref": "images/icons/PlannerIcon.svg"
-        },
-        "type": "Plan"
-    },{
-        "label": "Scorecard",
-        "link": "scorecard.html",
-        "description": "Compare performance with scorecards.",
-        "embeddedImage": {
-            "ref": "images/icons/ScorecardIcon.svg"
-        },
-        "type": "scorecard"
-    },{
-        "label": "Badges And Shield",
-        "link": "shield.html",
-        "description": "Show status with badges and shields.",
-        "embeddedImage": {
-            "ref": "images/icons/BadgeShieldIcon.svg"
-        },
-        "type": "badge"
-    },{
-        "label": "Timeline",
-        "link": "timeline.html",
-        "description": "Lay out events along a timeline.",
-        "embeddedImage": {
-            "ref": "images/icons/TimelineIcon.svg"
-        },
-        "type": "timeline"
-    },{
-        "label": "Wordcloud",
-        "link": "wordcloud.html",
-        "description": "Surface key terms in a wordcloud.",
-        "embeddedImage": {
-            "ref": "images/icons/WordcloudIcon.svg"
-        },
-        "type": "wordcloud"
-    },{
-        "label": "Tree Chart",
-        "link": "treechart.html",
-        "description": "Explore hierarchies with tree charts.",
-        "embeddedImage": {
-            "ref": "images/icons/TreechartIcon.svg"
-        },
-        "type": "Tree Chart"
-    },{
-        "label": "TreeMap",
-        "link": "treemap.html",
-        "description": "Treemap - Alpha",
-        "embeddedImage": {
-            "ref": "images/icons/TreemapIcon.svg"
-        },
-        "type": "Treemap"
-    },{
-        "label": "Mermaid Support",
-        "link": "Mermaid_Test.html",
-        "description": "Mermaid Support - Beta",
-        "embeddedImage": {
-        "ref": "images/icons/MermaidIcon.svg"
-        },
-        "type": "Mermaid"
+      "label": "METRICS CARD",
+      "link": "metricscard.html",
+      "description": "KPI snapshots",
+      "activeName": "metricscard",
+      "type": "chart"
     }
   ],
-  "buttonType": "LARGE",
+  "buttonType": "ROUND",
   "theme": {
-    "colors": [
-        "#1e3a8a"
-    ],
-    "hexLinesEnabled": false,
-    "strokeColor": "#3498db",
+    "colors": ["#06B6D4"],
+    "activeColor": "#00f5ff",
+    "useActiveColor": true,
+    "columns": 6,
     "newWin": true,
-    "columns": 4,
     "scale": 1.0,
     "buttonStyle": {
-      "labelStyle": "font-family: 'Poppins', sans-serif; font-size: 44px; fill: #fcfcfc; font-weight: bold;",
-      "descriptionStyle": "font-family: 'Poppins', sans-serif; font-size: 12px; fill: #fcfcfc;"
+      "labelStyle": "font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Outfit', sans-serif; font-size: 9px; fill: #94a3b8;"
     }
   }
 }
 ----
+endif::[]
+
+== Navigation & Organization
+
+Structure your documentation with scorecards, timelines, and navigation buttons.
+
+ifdef::backend-html5[]
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "SCORECARDS",
+      "link": "scorecard.html",
+      "description": "Before/after comparisons",
+      "activeName": "scorecard",
+      "type": "navigation"
+    },
+    {
+      "label": "TIMELINE",
+      "link": "timeline.html",
+      "description": "Chronological events",
+      "activeName": "timeline",
+      "type": "navigation"
+    },
+    {
+      "label": "BUTTONS",
+      "link": "buttons.html",
+      "description": "Navigation grids",
+      "activeName": "buttons",
+      "type": "navigation"
+    }
+  ],
+  "buttonType": "CIRCLE",
+  "theme": {
+    "colors": ["#8B5CF6"],
+    "activeColor": "#00f5ff",
+    "useActiveColor": true,
+    "newWin": true,
+    "columns": 3,
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Outfit', sans-serif; font-size: 9px; fill: #94a3b8;"
+    }
+  }
+}
+----
+endif::[]
+
+== Process & Planning
+
+Plan releases, map priorities, and visualize workflows.
+
+ifdef::backend-html5[]
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "CALLOUTS",
+      "link": "callout.html",
+      "description": "Highlighted processes",
+      "activeName": "callout",
+      "type": "process"
+    },
+    {
+      "label": "PLANNER",
+      "link": "planner.html",
+      "description": "Kanban roadmaps",
+      "activeName": "planner",
+      "type": "process"
+    },
+    {
+      "label": "CONNECTORS",
+      "link": "connectors.html",
+      "description": "Workflow arrows",
+      "activeName": "connectors",
+      "type": "process"
+    },
+    {
+      "label": "RELEASE STRATEGY",
+      "link": "releasestrategy.html",
+      "description": "Milestone timelines",
+      "activeName": "releasestrategy",
+      "type": "process"
+    },
+    {
+      "label": "QUADRANT",
+      "link": "quadrant.html",
+      "description": "2D priority mapping",
+      "activeName": "quadrant",
+      "type": "process"
+    }
+  ],
+  "buttonType": "CIRCLE",
+  "theme": {
+    "colors": ["#10B981"],
+    "activeColor": "#00f5ff",
+    "useActiveColor": true,
+    "newWin": true,
+    "columns": 5,
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Outfit', sans-serif; font-size: 9px; fill: #94a3b8;"
+    }
+  }
+}
+----
+endif::[]
+
+== Technical & Architecture
+
+Document architecture, tests, and hierarchies.
+
+ifdef::backend-html5[]
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "WORD CLOUDS",
+      "link": "wordcloud.html",
+      "description": "Text hierarchies",
+      "activeName": "wordcloud",
+      "type": "technical"
+    },
+    {
+      "label": "DOMAIN",
+      "link": "domain.html",
+      "description": "Architecture maps",
+      "activeName": "domain",
+      "type": "technical"
+    },
+    {
+      "label": "GHERKIN",
+      "link": "gherkin.html",
+      "description": "BDD scenarios",
+      "activeName": "gherkin",
+      "type": "technical"
+    },
+    {
+      "label": "TREE CHART",
+      "link": "treechart.html",
+      "description": "Hierarchies",
+      "activeName": "treechart",
+      "type": "technical"
+    },
+    {
+      "label": "TREEMAP",
+      "link": "treemap.html",
+      "description": "Proportional boxes",
+      "activeName": "treemap",
+      "type": "technical"
+    }
+  ],
+  "buttonType": "CIRCLE",
+  "theme": {
+    "colors": ["#F59E0B"],
+    "activeColor": "#00f5ff",
+    "useActiveColor": true,
+    "newWin": true,
+    "columns": 5,
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Outfit', sans-serif; font-size: 9px; fill: #94a3b8;"
+    }
+  }
+}
+----
+endif::[]
+
+== Metadata & Status
+
+Track decisions, tasks, and team information.
+
+ifdef::backend-html5[]
+[docops,buttons]
+----
+{
+  "buttons": [
+    {
+      "label": "BADGES",
+      "link": "shield.html",
+      "description": "Status indicators",
+      "activeName": "shield",
+      "type": "metadata"
+    },
+    {
+      "label": "PLACEMAT",
+      "link": "placemat.html",
+      "description": "Label grids",
+      "activeName": "placemat",
+      "type": "metadata"
+    },
+    {
+      "label": "TODO",
+      "link": "todo.html",
+      "description": "Task lists",
+      "activeName": "todo",
+      "type": "metadata"
+    },
+    {
+      "label": "VCARD",
+      "link": "vcard.html",
+      "description": "Contact cards",
+      "activeName": "vcard",
+      "type": "metadata"
+    },
+    {
+      "label": "ADR",
+      "link": "adr.html",
+      "description": "Architecture decisions",
+      "activeName": "adr",
+      "type": "metadata"
+    },
+    {
+      "label": "FEATURE CARDS",
+      "link": "featurecard.html",
+      "description": "Feature showcases",
+      "activeName": "featurecard",
+      "type": "metadata"
+    }
+  ],
+  "buttonType": "CIRCLE",
+  "theme": {
+    "colors": ["#EF4444"],
+    "activeColor": "#00f5ff",
+    "useActiveColor": true,
+    "newWin": true,
+    "columns": 6,
+    "buttonStyle": {
+      "labelStyle": "font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;",
+      "descriptionStyle": "font-family: 'Outfit', sans-serif; font-size: 9px; fill: #94a3b8;"
+    }
+  }
+}
+----
+endif::[]
+
+== Quick Reference
+
+[cols="1,3,1"]
+|===
+|Category |Use For |Count
+
+|Charts & Metrics
+|Data visualization, KPIs, trends
+|6 types
+
+|Navigation & Organization
+|Structure, timelines, navigation
+|3 types
+
+|Process & Planning
+|Roadmaps, workflows, prioritization
+|5 types
+
+|Technical & Architecture
+|System design, testing, hierarchies
+|5 types
+
+|Metadata & Status
+|Documentation, decisions, contacts
+|6 types
+|===
+
+*Total: 25 visualization types*
