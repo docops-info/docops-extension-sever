@@ -29,7 +29,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.micrometer.core.annotation.Timed
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.*
@@ -87,6 +86,7 @@ class DocOpsRouter(
             "feature" -> FeatureCardHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)
             "mermaid" -> DocOpsMermaid(csvResponse)
+            "gauge" -> GaugeHandler(csvResponse)
             "gherkin" -> GherkinHandler(csvResponse)
             "todo" -> TodoHandler(csvResponse)
             "domain" -> DomainVizHandler(csvResponse)

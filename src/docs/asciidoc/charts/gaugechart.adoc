@@ -1,0 +1,374 @@
+= DocOps Gauge Charts
+:imagesdir: images
+
+[[top]]
+== Introduction
+
+The DocOps Gauge Chart Extension allows you to create visually appealing gauge charts in your AsciiDoctor documents. Gauge charts are ideal for displaying single metrics or values within a range, commonly used for performance indicators, progress tracking, and status monitoring.
+
+This guide will help you understand the basic concepts of gauge charts, how to include them in your AsciiDoctor documents, and provide examples of different types of gauge charts.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Basic Concepts
+
+=== What are Gauge Charts?
+
+Gauge charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each gauge chart has:
+
+* A title (the main heading of the chart)
+* One or more gauge displays
+* A value shown within a defined range (min to max)
+* Optional color zones indicating status levels
+* Optional display settings for customizing the appearance
+
+The extension supports various styles of gauge charts, including:
+
+* Semi-circle gauges (classic speedometer style)
+* Full-circle gauges (360-degree radial display)
+* Linear gauges (horizontal bullet graphs)
+* Solid fill gauges (filled donut style)
+* Multi-gauge displays (grid of small gauges)
+* Digital gauges (large number with minimal arc)
+* Dashboard layouts (mixed gauge types in a grid)
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Gauge Chart Components
+
+A gauge chart includes:
+
+* A title
+* One or more gauge displays, each with:
+** A label describing the metric
+** A current value
+** A minimum value (typically 0)
+** A maximum value (typically 100)
+** A unit of measurement (%, ms, °C, etc.)
+** Optional color ranges (normal, caution, critical)
+** Optional target values
+* Display settings for visual appearance
+
+[.back-to-top]
+<<top, 🔝>>
+
+== AsciiDoctor Syntax for Gauge Charts
+
+To include gauge charts in your AsciiDoctor document, you use a special macro syntax. The DocOps extension supports a tabular format for gauge charts:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+type=SEMI_CIRCLE
+title=CPU Performance
+useDark=false
+showRanges=true
+---
+Label | Value | Min | Max | Unit | Color
+CPU Load | 72 | 0 | 100 | % |
+----
+....
+
+The macro processes this tabular data and generates an SVG representation of the gauge chart that is embedded in your document.
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Gauge Chart Configuration
+
+The configuration parameters are specified at the beginning of the content, followed by a separator line (`---`), and then the actual chart data.
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Parsing Format
+
+Gauge charts use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:
+
+1. **Configuration Section**: Contains key-value pairs in the format `key=value` before the `---` separator
+2. **Data Section**: Contains the chart data after the separator in a tabular format
+
+For more information about the parsing framework, see the xref:../parsing.adoc[Parsing Utilities] documentation.
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Configuration Parameters
+
+* `type` (required): The gauge type - SEMI_CIRCLE, FULL_CIRCLE, LINEAR, SOLID_FILL, MULTI_GAUGE, DIGITAL, or DASHBOARD
+* `title` (optional): The main heading of the chart (default: "")
+* `useDark` (optional): Whether to use dark mode styling (default: false)
+* `scale` (optional): A scaling factor for the gauge (default: 1.0)
+* `showLegend` (optional): Whether to display a legend (default: false)
+* `showRanges` (optional): Whether to display color zones (default: true)
+* `showTarget` (optional): Whether to display target line for LINEAR gauges (default: false)
+* `showLabel` (optional): Whether to display the label (default: true)
+* `showArc` (optional): Whether to display the arc for DIGITAL gauges (default: true)
+* `showStatus` (optional): Whether to display status text for DIGITAL gauges (default: false)
+* `animateArc` (optional): Whether to animate the arc (default: true)
+* `columns` (optional): Number of columns for MULTI_GAUGE layout (default: 3)
+* `layout` (optional): Grid layout for DASHBOARD (e.g., "2x3") (default: "1x1")
+* `innerRadius` (optional): Inner radius for SOLID_FILL gauges (default: 60)
+* `visualVersion` (optional): Visual style version (default: 1)
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Data Format
+
+The data for the gauge chart is specified in a simple tabular format with headers:
+
+[source]
+----
+Label | Value | Min | Max | Unit | Color
+----
+
+For LINEAR gauges with targets:
+[source]
+----
+Label | Value | Min | Max | Unit | Color | Target
+----
+
+For DIGITAL gauges with status:
+[source]
+----
+Label | Value | Min | Max | Unit | Color | StatusText
+----
+
+For DASHBOARD layouts with mixed types:
+[source]
+----
+Type | Label | Value | Min | Max | Unit | Color | Extra
+----
+
+Where:
+* `Label` is the description of the metric
+* `Value` is the current numerical value
+* `Min` is the minimum value in the range
+* `Max` is the maximum value in the range
+* `Unit` is the unit of measurement (%, ms, days, °C, etc.)
+* `Color` is an optional custom color (uses auto-assign if empty)
+* `Target` is an optional target value for LINEAR gauges
+* `StatusText` is optional status text for DIGITAL gauges
+* `Type` is the gauge type for DASHBOARD layouts
+* `Extra` is additional parameters (e.g., "target=80" or "status=optimal")
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Examples
+
+=== Semi-Circle Gauge Example
+
+The classic speedometer-style gauge, perfect for performance metrics:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge1.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Full Circle Gauge Example
+
+A 360-degree radial display for comprehensive visualization:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge2.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Linear Gauge Example
+
+A horizontal bullet graph with optional target indicator:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge3.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge3.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Solid Fill Gauge Example
+
+A filled donut style for clean, modern displays:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge4.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge4.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Multi-Gauge Example
+
+Display multiple gauges in a grid layout for server monitoring or fleet status:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge5.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge5.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Digital Gauge Example
+
+Large number display with minimal arc, ideal for prominent metrics:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge6.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge6.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Dashboard Gauge Example
+
+Mixed gauge types in a grid layout for comprehensive system monitoring:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge7.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge7.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Dark Mode Gauge Example
+
+You can enable dark mode for better visibility in dark-themed documents:
+
+[source,asciidoc]
+....
+[docops,gauge,controls=true]
+----
+include::data/gauge8.txt[]
+----
+....
+
+[docops,gauge,controls=true]
+----
+include::data/gauge8.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Color Ranges
+
+Gauge charts automatically apply color ranges to indicate status levels:
+
+* **Normal Range** (Green #10B981): 0% to 60% - Optimal performance
+* **Caution Range** (Yellow/Orange #F59E0B): 60% to 85% - Warning zone
+* **Critical Range** (Red #EF4444): 85% to 100% - Action required
+* **Overflow** (Gray #94a3b8): Values exceeding the maximum
+
+These color ranges provide immediate visual feedback about the metric's status.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Use Cases
+
+Gauge charts are ideal for:
+
+* **Performance Monitoring**: CPU usage, memory consumption, disk space
+* **Progress Tracking**: Project completion, goals achievement, task progress
+* **Status Indicators**: System health, service availability, uptime
+* **Quality Metrics**: Test coverage, code quality scores, satisfaction ratings
+* **Resource Utilization**: Bandwidth usage, capacity planning, allocation tracking
+* **Environmental Monitoring**: Temperature, humidity, air quality
+* **Financial Metrics**: Budget utilization, sales targets, revenue goals
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Interactive Features
+
+Gauge charts in the DocOps extension include several interactive features:
+
+* **Visual Indicators**: Color-coded ranges provide instant status feedback
+* **Animations**: Smooth arc animations enhance the user experience
+* **Tooltips**: Hover effects display detailed information
+* **Responsive Scaling**: Gauges scale appropriately for different screen sizes
+
+These interactive features enhance the user experience and make it easier to interpret the metrics in your charts.
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Conclusion
+
+The DocOps Gauge Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing gauge charts. The tabular data format makes it easy to create and maintain gauge charts for monitoring metrics and displaying progress.
+
+The extension supports seven different gauge types, from classic speedometer styles to modern digital displays, giving you flexibility in how you present your metric data. The automatic color ranges and dark mode support ensure your gauges are both informative and visually appealing in any context.
+
+[.back-to-top]
+<<top, 🔝>>

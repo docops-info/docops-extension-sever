@@ -1,98 +1,112 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="dark">
+            <html lang="en" data-theme="light">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    --primary: #38BDF8;
-    --primary-glow: rgba(56, 189, 248, 0.15);
-    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
-    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
+    /* Design-Tricks System */
+    --base-hue: 220;
+    --primary: hsl(var(--base-hue), 90%, 56%);
+    /* Lighter: -15% Sat, +25% Brightness */
+    --primary-light: hsl(var(--base-hue), 75%, 81%);
+    /* Darker: +15% Sat, -25% Brightness */
+    --primary-dark: hsl(var(--base-hue), 100%, 31%);
+    
+    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
+    --card-bg: #FFFFFF;
+    --text-main: #1A1F26;
+    --text-muted: #64748B;
     
     background-color: var(--bg);
-    color: #E2E8F0;
-    font-family: 'Outfit', sans-serif;
-    line-height: 1.7;
-    max-width: 850px;
-    margin: 64px auto;
-    padding: 48px;
-    border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    font-family: 'Instrument Sans', sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 48px; /* 8pt grid: 6 * 8 */
+    border-radius: 24px;
 }
 
-/* Headlines with Tracking Rules */
-.markdown-body h1 {
+/* Typography Rules from design-tricks.md */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
-    line-height: 0.95;
-    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 40px;
+    color: var(--text-main);
+    margin-top: 32px; /* 8pt grid */
+    margin-bottom: 16px;
 }
 
-.markdown-body h2 {
-    font-size: 32px;
-    letter-spacing: -0.01em;
+.markdown-body h1 { 
+    font-size: 48px; 
+    letter-spacing: -0.01em; /* Rule #2 */
+    font-weight: 800;
+}
+
+.markdown-body h2 { 
+    font-size: 32px; 
+    font-weight: 700;
+}
+
+/* 8pt Grid Spacing */
+.markdown-body p, .markdown-body ul, .markdown-body pre {
+    margin-bottom: 24px;
+}
+
+/* "3x more obvious" Primary Elements */
+.markdown-body a {
     color: var(--primary);
-    margin-top: 48px;
-}
-
-/* Motion: High-impact reveal (ui.md) */
-@keyframes reveal {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.markdown-body > * {
-    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-/* Rounded Corners (Rule #4) */
-.markdown-body pre {
-    background: var(--card-bg);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 24px;
-    border-radius: 20px; /* Outer */
-}
-
-.markdown-body code {
-    font-family: 'JetBrains Mono', monospace;
-    background: rgba(56, 189, 248, 0.1);
-    color: var(--primary);
-    padding: 4px 8px;
-    border-radius: 8px; /* Inner: 20px - 12px gap */
-}
-
-/* Tables (ui.md style) */
-.markdown-body table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 32px 0;
-    background: var(--card-bg);
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.markdown-body th {
-    background: rgba(255,255,255,0.05);
-    padding: 16px;
-    text-align: left;
+    text-decoration: none;
     font-weight: 600;
+    border-bottom: 2px solid var(--primary-light);
+    transition: all 0.2s ease;
 }
 
-.markdown-body td {
-    padding: 16px;
-    border-top: 1px solid rgba(255,255,255,0.05);
+.markdown-body a:hover {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 4px;
 }
 
+/* Card Depth without Shadows (Rule #6) */
+.markdown-body blockquote {
+    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
+    border-left: 4px solid var(--primary);
+    padding: 16px 24px;
+    margin: 32px 0;
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+}
+
+/* Code Blocks */
+.markdown-body pre {
+    background: #1E293B;
+    color: #F8FAFC;
+    padding: 24px;
+    border-radius: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+/* Ensure nested <code> doesn't override <pre> contrast */
+.markdown-body pre code {
+    color: inherit;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.55;
+    white-space: pre; /* keep the ASCII block crisp */
+}
+
+/* If the renderer wraps tokens in spans, keep them readable too */
+.markdown-body pre code span {
+    color: inherit;
+}
                 </style>
                 <style>
                 .svg-container {
@@ -692,7 +706,7 @@
         
                     @media (prefers-color-scheme: dark) {
                         body {
-                            background-color: #0d1117;
+                            background-color: #f5f5f5;
                         }
                     }
                 </style>
@@ -741,10 +755,10 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0VQy2qEMBTd368IdC21UxN14WJQCrMoDLU_EM2JBjQO8TJTSj--UQvdhJzXPTdhxxMq0S6WHzpANLhjWm4zPIt68T1uvNLDGR4rUaQpjXDDyJVQ8T47_7Z4bt13nPCS0ay__rFMKUkSOg9ugvgRZRqPJ2vzMi-pvjzXTcSF3MgcRhlLn1jZ-WGjD6-CLAy9uz4sK8Ld9Vgjn--ZTpteFhQ3ZO08wq78VXTIFbUxgTBh3RQlD6W09pXO18tGHeay16eMPmB1z0s46uXuVoUySKmeoH38CbM9Qu6hDicYQw1WN3hx1cwIfqvJ9iC6zGTdL9QzI4JYAQAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0VQy2qEMBTd368IdC21UxN14WJQCrMoDLU_EM2JBjQO8TJTSj--UQvdhJzXPTdhxxMq0S6WHzpANLhjWm4zPIt68T1uvNLDGR4rUaQpjXDDyJVQ8T47_7Z4bt13nPCS0ay__rFMKUkSOg9ugvgRZRqPJ2vzMi-pvjzXTcSF3MgcRhlLn1jZ-WGjD6-CLAy9uz4sK8Ld9Vgjn--ZTpteFhQ3ZO08wq78VXTIFbUxgTBh3RQlD6W09pXO18tGHeay16eMPmB1z0s46uXuVoUySKmeoH38CbM9Qu6hDicYQw1WN3hx1cwIfqvJ9iC6zGTdL9QzI4JYAQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_63c24f52bf8b4b3089512c8cfaf29bef" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","09e1f1a09e1d4e7ea7a77849a789402b","true","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","2b522b43e7e94f8da7e7369ab8f51e7a","","","","","","",""],["","3","Testing","80.0","80d5f88194da4c8e925a4ac73d63454e","","","","","","",""],["","4","Microservices","75.0","61e97a35949744aea7f3166df4ceff9b","","","","","","",""],["","5","Containers","70.0","a1952c7a1f064b95913ad7b731868373","","","","","","",""],["","6","Serverless","65.0","7c144377add1490e895a9db7cd5872ee","","","","","","",""],["","7","API","60.0","e469963f04534333a4b18dfc38ec4002","","","","","","",""],["","8","Refactoring","55.0","4faa2953cb0248f79eafcc6b71ed4236","","","","","","",""],["","9","Clean Code","50.0","96e1221d338e40e79ac6c57fc25b2822","","","","","","",""],["","10","Design Patterns","45.0","92e1486ed0ca491583d792921876d8e7","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_63c24f52bf8b4b3089512c8cfaf29bef" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_63c24f52bf8b4b3089512c8cfaf29bef" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_63c24f52bf8b4b3089512c8cfaf29bef" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_63c24f52bf8b4b3089512c8cfaf29bef" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_63c24f52bf8b4b3089512c8cfaf29bef"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_63c24f52bf8b4b3089512c8cfaf29bef"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_63c24f52bf8b4b3089512c8cfaf29bef .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_63c24f52bf8b4b3089512c8cfaf29bef .word-text:hover { filter: url(#wordGlow_63c24f52bf8b4b3089512c8cfaf29bef); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#backgroundGradient_63c24f52bf8b4b3089512c8cfaf29bef)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_63c24f52bf8b4b3089512c8cfaf29bef)" stroke-width="1.5" filter="url(#glassDropShadow_63c24f52bf8b4b3089512c8cfaf29bef)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#glassOverlay_63c24f52bf8b4b3089512c8cfaf29bef)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="391.18855482429694" y="396.74341129205624" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="410.28637680989686" y="265.40116589568595" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="410.4418137082584" y="205.81991175713367" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="403.8719710931353" y="455.03584818854586" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="560.1626005256556" y="320.77269394943875" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="299.3224386406064" y="344.38472784696233" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">API<title>API: weight 60.00</title></text><text class="word-text" x="535.0477831486396" y="386.99378738185067" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="270.8906389149121" y="292.6390625079532" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="262.01076999097194" y="376.541695233996" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_63c24f52bf8b4b3089512c8cfaf29bef)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_ab5d7a0b70cf40c7984c9933a084bcc9" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","5bb90841c90e4dc2ab9b4893cad13de9","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","97a2ecbb1cfd4d989a97b43836871582","","","","","","",""],["","3","Testing","80.0","2a6b8921ce8b42a191bd9d414cf3c900","","","","","","",""],["","4","Microservices","75.0","436b4450331c40ccb431a5eb05fff240","","","","","","",""],["","5","Containers","70.0","13a1f996c37a498aa19f39b85230dc65","","","","","","",""],["","6","Serverless","65.0","8d35938bc42148b48195061b8f248d30","","","","","","",""],["","7","API","60.0","a5d75a7fc4c34da2878263e1d9d572bc","","","","","","",""],["","8","Refactoring","55.0","63378fb33c564d84be92b30d88a8c237","","","","","","",""],["","9","Clean Code","50.0","c5f1b0e80665451683d9de05b36d703b","","","","","","",""],["","10","Design Patterns","45.0","0c372eff58344da7805ed13a68eefbcf","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_ab5d7a0b70cf40c7984c9933a084bcc9" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_ab5d7a0b70cf40c7984c9933a084bcc9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_ab5d7a0b70cf40c7984c9933a084bcc9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_ab5d7a0b70cf40c7984c9933a084bcc9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_ab5d7a0b70cf40c7984c9933a084bcc9"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_ab5d7a0b70cf40c7984c9933a084bcc9 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_ab5d7a0b70cf40c7984c9933a084bcc9 .word-text:hover { filter: url(#wordGlow_ab5d7a0b70cf40c7984c9933a084bcc9); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="405.78481115739106" y="396.3546605659235" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="395.74018678578193" y="264.24769669988325" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="396.7545758895812" y="207.0956484849541" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="390.82643786440764" y="455.9558266538327" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="249.33507829366644" y="392.3439354512302" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="499.4815460876271" y="340.4498406122285" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">API<title>API: weight 60.00</title></text><text class="word-text" x="255.48062180479835" y="336.6401476915401" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="535.6046094845531" y="300.84421280851285" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="538.2740637636082" y="388.5586577724086" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_ab5d7a0b70cf40c7984c9933a084bcc9)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -758,10 +772,10 @@
 </div>
 <hr />
 <h2 id="survey-themes-example">Survey Themes Example</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0WOz26DMAzG736KSDsjUQokHDhtq7TTqnV7ABMMWCNJFYz2R3v4pbRSL7b8--zPn7DM1KrHdZHgKKoDUd-h_VTvEzla4It7mVql6xwm4nGSVlVFDo79IXg58W863tXg8Ps-lwayLINnXEiFQX2k9qeaIpWHodH7tH6kOITo0NuLZMpN6vTOVHBaz-cQJRFdbzjF0SW80czY8czyc5HyTSKLFuHFC40RhYNfEq6vbj2WOMCr7wLGnv2YYGWuV71GhGNke8O3902xt_AU7OrIy2aXeGnusf8BGYPZQywBAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0WOz26DMAzG736KSDsjUQokHDhtq7TTqnV7ABMMWCNJFYz2R3v4pbRSL7b8--zPn7DM1KrHdZHgKKoDUd-h_VTvEzla4It7mVql6xwm4nGSVlVFDo79IXg58W863tXg8Ps-lwayLINnXEiFQX2k9qeaIpWHodH7tH6kOITo0NuLZMpN6vTOVHBaz-cQJRFdbzjF0SW80czY8czyc5HyTSKLFuHFC40RhYNfEq6vbj2WOMCr7wLGnv2YYGWuV71GhGNke8O3902xt_AU7OrIy2aXeGnusf8BGYPZQywBAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_f0efac2511864261880bd21c50fd44a5" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Customer Feedback Themes","1","Ease of Use","92.0","fec2de8c9c214461b1f57b9c0a9861ad","true","760","520","16","48","rectangle","1.0"],["","2","Performance","84.0","98850a14d03940cc912b2bf2ee1e1fba","","","","","","",""],["","3","Support","76.0","deaa7b12b25d4ad9adf9a8f94638fe5c","","","","","","",""],["","4","Reliability","70.0","57b7f32ad75b4cffaedbdb0495cf9b62","","","","","","",""],["","5","Integrations","64.0","3afdd0a25c9242388defd98543c33848","","","","","","",""],["","6","Onboarding","58.0","d97dc920ac454911b034fba5ff79e961","","","","","","",""],["","7","Pricing","54.0","62c4a11e799f4c03b603c4ceb57fa05b","","","","","","",""],["","8","Documentation","48.0","20dae9c308ed42609aa498202aa0bb85","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_f0efac2511864261880bd21c50fd44a5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_f0efac2511864261880bd21c50fd44a5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_f0efac2511864261880bd21c50fd44a5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_f0efac2511864261880bd21c50fd44a5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_f0efac2511864261880bd21c50fd44a5"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_f0efac2511864261880bd21c50fd44a5"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_f0efac2511864261880bd21c50fd44a5 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_f0efac2511864261880bd21c50fd44a5 .word-text:hover { filter: url(#wordGlow_f0efac2511864261880bd21c50fd44a5); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="url(#backgroundGradient_f0efac2511864261880bd21c50fd44a5)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_f0efac2511864261880bd21c50fd44a5)" stroke-width="1.5" filter="url(#glassDropShadow_f0efac2511864261880bd21c50fd44a5)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="url(#glassOverlay_f0efac2511864261880bd21c50fd44a5)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Customer Feedback Themes</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="48.0" fill="#f97316" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Ease of Use<title>Ease of Use: weight 92.00</title></text><text class="word-text" x="397.2320794329699" y="392.7255841014883" text-anchor="middle" font-size="42.0" fill="#fb7185" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Performance<title>Performance: weight 84.00</title></text><text class="word-text" x="398.3036605794625" y="267.95275638217066" text-anchor="middle" font-size="36.0" fill="#fdba74" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Support<title>Support: weight 76.00</title></text><text class="word-text" x="399.9045736761621" y="218.03453819998913" text-anchor="middle" font-size="32.0" fill="#fecaca" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Reliability<title>Reliability: weight 70.00</title></text><text class="word-text" x="415.5607634551096" y="444.97573843951096" text-anchor="middle" font-size="28.0" fill="#fda4af" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Integrations<title>Integrations: weight 64.00</title></text><text class="word-text" x="540.3326776629915" y="274.5817914764443" text-anchor="middle" font-size="23.0" fill="#fed7aa" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Onboarding<title>Onboarding: weight 58.00</title></text><text class="word-text" x="280.9196881397428" y="273.55600192380336" text-anchor="middle" font-size="20.0" fill="#fb923c" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Pricing<title>Pricing: weight 54.00</title></text><text class="word-text" x="413.9272087171065" y="180.7243303222206" text-anchor="middle" font-size="16.0" fill="#f97316" filter="url(#wordShadow_f0efac2511864261880bd21c50fd44a5)">Documentation<title>Documentation: weight 48.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_65adaaa196f34c6ba04671baaca2c52c" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Customer Feedback Themes","1","Ease of Use","92.0","67a3f7d7af9c427fab565458326a1683","false","760","520","16","48","rectangle","1.0"],["","2","Performance","84.0","8ad3d5684ccd4c09adc311fe04fe110d","","","","","","",""],["","3","Support","76.0","0b2f646ef71e426fb417af476e7bc008","","","","","","",""],["","4","Reliability","70.0","bfb4cd2954724d22ae098f3593eeb869","","","","","","",""],["","5","Integrations","64.0","f78746928b3447d5aa07b7bd37cd202a","","","","","","",""],["","6","Onboarding","58.0","9b9c456e042341118f52d4fcfbef0475","","","","","","",""],["","7","Pricing","54.0","117416d3d1c745538710269a7d313680","","","","","","",""],["","8","Documentation","48.0","5b77dff666234ff29b284a7a57c0cda3","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_65adaaa196f34c6ba04671baaca2c52c" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_65adaaa196f34c6ba04671baaca2c52c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_65adaaa196f34c6ba04671baaca2c52c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_65adaaa196f34c6ba04671baaca2c52c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_65adaaa196f34c6ba04671baaca2c52c"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_65adaaa196f34c6ba04671baaca2c52c"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_65adaaa196f34c6ba04671baaca2c52c .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_65adaaa196f34c6ba04671baaca2c52c .word-text:hover { filter: url(#wordGlow_65adaaa196f34c6ba04671baaca2c52c); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Customer Feedback Themes</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="48.0" fill="#f97316" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Ease of Use<title>Ease of Use: weight 92.00</title></text><text class="word-text" x="409.8238259154454" y="267.50329998628047" text-anchor="middle" font-size="42.0" fill="#fb7185" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Performance<title>Performance: weight 84.00</title></text><text class="word-text" x="398.9984418719873" y="391.34605520457023" text-anchor="middle" font-size="36.0" fill="#fdba74" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Support<title>Support: weight 76.00</title></text><text class="word-text" x="405.79949781870175" y="445.1618186774177" text-anchor="middle" font-size="32.0" fill="#fecaca" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Reliability<title>Reliability: weight 70.00</title></text><text class="word-text" x="393.42113200677625" y="213.2062604236725" text-anchor="middle" font-size="28.0" fill="#fda4af" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Integrations<title>Integrations: weight 64.00</title></text><text class="word-text" x="542.4999622297192" y="386.42953085779504" text-anchor="middle" font-size="23.0" fill="#fed7aa" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Onboarding<title>Onboarding: weight 58.00</title></text><text class="word-text" x="278.35138465874724" y="386.59119935216523" text-anchor="middle" font-size="20.0" fill="#fb923c" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Pricing<title>Pricing: weight 54.00</title></text><text class="word-text" x="375.2649991607947" y="482.7083430106868" text-anchor="middle" font-size="16.0" fill="#f97316" filter="url(#wordShadow_65adaaa196f34c6ba04671baaca2c52c)">Documentation<title>Documentation: weight 48.00</title></text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>

@@ -327,7 +327,6 @@ Show multiple related pie charts in a single visualization.
 outlineColor=#FA4032
 scale=1
 ---
-Label | Percent
 Toys | 14
 Furniture | 43
 Home Decoration | 15
@@ -336,6 +335,114 @@ Electronics | 28
 [/docops]
 
 ---
+
+## Gauge Charts
+
+Gauge charts are used to display a single metric or value within a range, often used for performance indicators or progress tracking.
+
+
+### Semi Circle
+
+[docops:gauge]
+type=SEMI_CIRCLE
+title=CPU Performance
+useDark=false
+scale=1.0
+visualVersion=3
+showRanges=true
+---
+Label | Value | Min | Max | Unit | Color
+CPU Load | 72 | 0 | 100 | % |
+[/docops]
+
+### Full Circle
+
+[docops:gauge]
+type=FULL_CIRCLE
+title=System Uptime
+useDark=false
+scale=1.2
+showLabel=true
+---
+Label | Value | Min | Max | Unit | Color
+Uptime | 85 | 0 | 100 | days | #10B981
+[/docops]
+
+### Linear
+
+[docops:gauge]
+type=LINEAR
+title=Response Time Analysis
+useDark=false
+showTarget=true
+showRanges=true
+---
+Label | Value | Min | Max | Unit | Color | Target
+Response Time | 68 | 0 | 100 | ms | #F59E0B | 80
+[/docops]
+
+### Solid Fill
+
+[docops:gauge]
+type=SOLID_FILL
+title=Disk Usage Monitor
+useDark=false
+scale=1.0
+innerRadius=60
+---
+Label | Value | Min | Max | Unit | Color
+Disk Usage | 92 | 0 | 100 | % | #EF4444
+[/docops]   
+
+### Multi Gauge
+
+[docops:gauge]
+type=MULTI_GAUGE
+title=Server Fleet Status
+useDark=false
+columns=3
+scale=0.8
+showLegend=false
+---
+Label | Value | Min | Max | Unit | Color
+server-01 | 75 | 0 | 100 | % | #10B981
+server-02 | 85 | 0 | 100 | % | #F59E0B
+server-03 | 65 | 0 | 100 | % | #10B981
+server-04 | 90 | 0 | 100 | % | #EF4444
+server-05 | 70 | 0 | 100 | % | #10B981
+server-06 | 80 | 0 | 100 | % | #F59E0B
+[/docops]
+
+### Digital
+
+[docops:gauge]
+type=DIGITAL
+title=Temperature Monitor
+useDark=false
+showArc=true
+showStatus=true
+---
+Label | Value | Min | Max | Unit | Color | StatusText
+Temperature | 43 | 0 | 100 | °C | #06B6D4 | optimal range
+[/docops]
+
+### Dashboard Gauge
+
+[docops:gauge]
+type=DASHBOARD
+title=System Health Dashboard
+useDark=false
+layout=2x3
+scale=1.0
+---
+Type | Label | Value | Min | Max | Unit | Color | Extra
+SEMI_CIRCLE | CPU | 72 | 0 | 100 | % | #F59E0B |
+FULL_CIRCLE | Uptime | 85 | 0 | 100 | days | #10B981 |
+LINEAR | Response | 68 | 0 | 100 | ms | #F59E0B | target=80
+SOLID_FILL | Disk | 92 | 0 | 100 | % | #EF4444 |
+DIGITAL | Temp | 43 | 0 | 100 | °C | #06B6D4 | status=optimal
+MULTI_GAUGE | Memory | 75 | 0 | 100 | % | #10B981 |
+[/docops]
 
 ## Magic Quadrant Chart
 

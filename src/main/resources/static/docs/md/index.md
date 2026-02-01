@@ -132,7 +132,16 @@ DocOps Extensions can now be embedded in Markdown Files. Using the DocOps conver
             "ref": "images/TreemapIcon.svg"
         },
         "type": "Treemap"
-    }
+    },
+        {
+        "label": "Mermaid Support",
+        "link": "mermaid/mermaid.html",
+        "description": "Mermaid Support - Beta",
+        "embeddedImage": {
+        "ref": "images/MermaidIcon.svg"
+        },
+        "type": "Mermaid"
+        }
   ],
   "buttonType": "LARGE",
   "theme": {
