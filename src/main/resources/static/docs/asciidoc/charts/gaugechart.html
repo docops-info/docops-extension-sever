@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>DocOps Gauge Charts</title>
+<title>Gauge Charts</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -2432,122 +2432,33 @@ window.onload = function() {
 </head>
 <body class="book">
 <div id="header">
-<h1>DocOps Gauge Charts</h1>
+<h1>Gauge Charts</h1>
 </div>
 <div id="content">
 <div class="sect1">
 <h2 id="top">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The DocOps Gauge Chart Extension allows you to create visually appealing gauge charts in your AsciiDoctor documents. Gauge charts are ideal for displaying single metrics or values within a range, commonly used for performance indicators, progress tracking, and status monitoring.</p>
-</div>
-<div class="paragraph">
-<p>This guide will help you understand the basic concepts of gauge charts, how to include them in your AsciiDoctor documents, and provide examples of different types of gauge charts.</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_basic_concepts">Basic Concepts</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_what_are_gauge_charts">What are Gauge Charts?</h3>
-<div class="paragraph">
-<p>Gauge charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each gauge chart has:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A title (the main heading of the chart)</p>
-</li>
-<li>
-<p>One or more gauge displays</p>
-</li>
-<li>
-<p>A value shown within a defined range (min to max)</p>
-</li>
-<li>
-<p>Optional color zones indicating status levels</p>
-</li>
-<li>
-<p>Optional display settings for customizing the appearance</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The extension supports various styles of gauge charts, including:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Semi-circle gauges (classic speedometer style)</p>
-</li>
-<li>
-<p>Full-circle gauges (360-degree radial display)</p>
-</li>
-<li>
-<p>Linear gauges (horizontal bullet graphs)</p>
-</li>
-<li>
-<p>Solid fill gauges (filled donut style)</p>
-</li>
-<li>
-<p>Multi-gauge displays (grid of small gauges)</p>
-</li>
-<li>
-<p>Digital gauges (large number with minimal arc)</p>
-</li>
-<li>
-<p>Dashboard layouts (mixed gauge types in a grid)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
+<p>Gauge charts turn single metrics into visual speedometers, perfect for monitoring performance indicators, resource utilization, and progress tracking. They provide instant status feedback through color-coded ranges and smooth animations.</p>
 </div>
 <div class="sect2">
-<h3 id="_gauge_chart_components">Gauge Chart Components</h3>
-<div class="paragraph">
-<p>A gauge chart includes:</p>
-</div>
+<h3 id="_key_features">Key Features</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>A title</p>
+<p><strong>7 gauge types</strong> - From classic speedometers to modern digital displays</p>
 </li>
 <li>
-<p>One or more gauge displays, each with:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>A label describing the metric</p>
+<p><strong>Auto color zones</strong> - Normal (green), caution (yellow), critical (red)</p>
 </li>
 <li>
-<p>A current value</p>
+<p><strong>Animated arcs</strong> - Smooth transitions enhance readability</p>
 </li>
 <li>
-<p>A minimum value (typically 0)</p>
+<p><strong>Dark mode support</strong> - Optimized for both light and dark themes</p>
 </li>
 <li>
-<p>A maximum value (typically 100)</p>
-</li>
-<li>
-<p>A unit of measurement (%, ms, °C, etc.)</p>
-</li>
-<li>
-<p>Optional color ranges (normal, caution, critical)</p>
-</li>
-<li>
-<p>Optional target values</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Display settings for visual appearance</p>
+<p><strong>Flexible layouts</strong> - Single gauge or multi-gauge grids</p>
 </li>
 </ul>
 </div>
@@ -2558,187 +2469,17 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_asciidoctor_syntax_for_gauge_charts">AsciiDoctor Syntax for Gauge Charts</h2>
+<h2 id="_semi_circle_gauge_default">Semi-Circle Gauge (Default)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To include gauge charts in your AsciiDoctor document, you use a special macro syntax. The DocOps extension supports a tabular format for gauge charts:</p>
+<p>Classic speedometer style for performance metrics:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge]
 ----
 type=SEMI_CIRCLE
 title=CPU Performance
-useDark=false
-showRanges=true
----
-Label | Value | Min | Max | Unit | Color
-CPU Load | 72 | 0 | 100 | % |
-----</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The macro processes this tabular data and generates an SVG representation of the gauge chart that is embedded in your document.</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-<div class="sect2">
-<h3 id="_gauge_chart_configuration">Gauge Chart Configuration</h3>
-<div class="paragraph">
-<p>The configuration parameters are specified at the beginning of the content, followed by a separator line (<code>---</code>), and then the actual chart data.</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-<div class="sect3">
-<h4 id="_parsing_format">Parsing Format</h4>
-<div class="paragraph">
-<p>Gauge charts use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Configuration Section</strong>: Contains key-value pairs in the format <code>key=value</code> before the <code>---</code> separator</p>
-</li>
-<li>
-<p><strong>Data Section</strong>: Contains the chart data after the separator in a tabular format</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>For more information about the parsing framework, see the <a href="../parsing.html">Parsing Utilities</a> documentation.</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_configuration_parameters">Configuration Parameters</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>type</code> (required): The gauge type - SEMI_CIRCLE, FULL_CIRCLE, LINEAR, SOLID_FILL, MULTI_GAUGE, DIGITAL, or DASHBOARD</p>
-</li>
-<li>
-<p><code>title</code> (optional): The main heading of the chart (default: "")</p>
-</li>
-<li>
-<p><code>useDark</code> (optional): Whether to use dark mode styling (default: false)</p>
-</li>
-<li>
-<p><code>scale</code> (optional): A scaling factor for the gauge (default: 1.0)</p>
-</li>
-<li>
-<p><code>showLegend</code> (optional): Whether to display a legend (default: false)</p>
-</li>
-<li>
-<p><code>showRanges</code> (optional): Whether to display color zones (default: true)</p>
-</li>
-<li>
-<p><code>showTarget</code> (optional): Whether to display target line for LINEAR gauges (default: false)</p>
-</li>
-<li>
-<p><code>showLabel</code> (optional): Whether to display the label (default: true)</p>
-</li>
-<li>
-<p><code>showArc</code> (optional): Whether to display the arc for DIGITAL gauges (default: true)</p>
-</li>
-<li>
-<p><code>showStatus</code> (optional): Whether to display status text for DIGITAL gauges (default: false)</p>
-</li>
-<li>
-<p><code>animateArc</code> (optional): Whether to animate the arc (default: true)</p>
-</li>
-<li>
-<p><code>columns</code> (optional): Number of columns for MULTI_GAUGE layout (default: 3)</p>
-</li>
-<li>
-<p><code>layout</code> (optional): Grid layout for DASHBOARD (e.g., "2x3") (default: "1x1")</p>
-</li>
-<li>
-<p><code>innerRadius</code> (optional): Inner radius for SOLID_FILL gauges (default: 60)</p>
-</li>
-<li>
-<p><code>visualVersion</code> (optional): Visual style version (default: 1)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_data_format">Data Format</h4>
-<div class="paragraph">
-<p>The data for the gauge chart is specified in a simple tabular format with headers:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Label | Value | Min | Max | Unit | Color</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For LINEAR gauges with targets:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Label | Value | Min | Max | Unit | Color | Target</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For DIGITAL gauges with status:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Label | Value | Min | Max | Unit | Color | StatusText</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For DASHBOARD layouts with mixed types:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Type | Label | Value | Min | Max | Unit | Color | Extra</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Where:
-* <code>Label</code> is the description of the metric
-* <code>Value</code> is the current numerical value
-* <code>Min</code> is the minimum value in the range
-* <code>Max</code> is the maximum value in the range
-* <code>Unit</code> is the unit of measurement (%, ms, days, °C, etc.)
-* <code>Color</code> is an optional custom color (uses auto-assign if empty)
-* <code>Target</code> is an optional target value for LINEAR gauges
-* <code>StatusText</code> is optional status text for DIGITAL gauges
-* <code>Type</code> is the gauge type for DASHBOARD layouts
-* <code>Extra</code> is additional parameters (e.g., "target=80" or "status=optimal")</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_examples">Examples</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_semi_circle_gauge_example">Semi-Circle Gauge Example</h3>
-<div class="paragraph">
-<p>The classic speedometer-style gauge, perfect for performance metrics:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
-----
-type=SEMI_CIRCLE
-title=CPU Performance
-useDark=false
-scale=1.0
-visualVersion=3
 showRanges=true
 ---
 Label | Value | Min | Max | Unit | Color
@@ -2747,7 +2488,7 @@ CPU Load | 72 | 0 | 100 | % |
 </div>
 </div>
 <div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-f63dedc0e5fe7ab8" data-theme="light" data-original-content="type=SEMI_CIRCLE
+<div class="svg-with-controls" id="svgviewer-2db1cf5589fd93f0" data-theme="light" data-original-content="type=SEMI_CIRCLE
 title=CPU Performance
 useDark=false
 scale=1.0
@@ -2756,28 +2497,28 @@ showRanges=true
 ---
 Label | Value | Min | Max | Unit | Color
 CPU Load | 72 | 0 | 100 | % |" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="179.99999999775002" viewBox="0 0 400.0 320.0" id="gauge_gauge_93140b8aeff0488c8eb19a3055b7920b" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","CPU Performance"],["Chart Type","SEMI_CIRCLE"],["Number of Gauges","1"],["Theme Version","3"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.149411Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: CPU Load ===",""],["  Label","CPU Load"],["  Value","72.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","72.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Overall Statistics ===",""],["Average Value","72.00"],["Maximum Value","72.00"],["Minimum Value","72.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .gauge-text { fill: #0f172a; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #475569; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_93140b8aeff0488c8eb19a3055b7920b" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_93140b8aeff0488c8eb19a3055b7920b" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_93140b8aeff0488c8eb19a3055b7920b" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_93140b8aeff0488c8eb19a3055b7920b"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_93140b8aeff0488c8eb19a3055b7920b"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_93140b8aeff0488c8eb19a3055b7920b" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="320.0" fill="#fafbfc" rx="12"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_93140b8aeff0488c8eb19a3055b7920b)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#0f172a" style="text-transform: uppercase; letter-spacing: 1px;">CPU Performance</text><path d="M 100.0,250.0 A 100.0,100.0 0 0,1 300.0,250.0" fill="none" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 230.90169943749476,154.89434837048464" fill="none" stroke="url(#successGrad_gauge_93140b8aeff0488c8eb19a3055b7920b)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 230.90169943749476,154.89434837048464 A 100.0,100.0 0 0 1 289.1006524188368,204.60095002604533" fill="none" stroke="url(#warningGrad_gauge_93140b8aeff0488c8eb19a3055b7920b)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 289.1006524188368,204.60095002604533 A 100.0,100.0 0 0 1 300.0,250.0" fill="none" stroke="url(#criticalGrad_gauge_93140b8aeff0488c8eb19a3055b7920b)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 263.74239897486893,172.94867572242106" fill="none" stroke="url(#warningGrad_gauge_93140b8aeff0488c8eb19a3055b7920b)" stroke-width="20" stroke-linecap="round" class="animated-arc" style="--arc-length: 226; --arc-offset: 0;" filter="url(#glow_gauge_93140b8aeff0488c8eb19a3055b7920b)"/><circle cx="200.0" cy="250.0" r="12" fill="#0a0e27"/><circle cx="200.0" cy="250.0" r="8" fill="#F59E0B"/><text x="200.0" y="265.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#F59E0B">72</text><text x="200.0" y="290.0" text-anchor="middle" class="gauge-label">CPU Load %</text><text x="100.0" y="270.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="155.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="300.0" y="270.0" text-anchor="end" class="range-label" fill="#EF4444">100</text></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="179.99999999775002" viewBox="0 0 400.0 320.0" id="gauge_gauge_0be6b407d39e456694b1d5ae553d9df3" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","CPU Performance"],["Chart Type","SEMI_CIRCLE"],["Number of Gauges","1"],["Theme Version","3"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T18:46:03.136540Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: CPU Load ===",""],["  Label","CPU Load"],["  Value","72.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","72.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Overall Statistics ===",""],["Average Value","72.00"],["Maximum Value","72.00"],["Minimum Value","72.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .gauge-text { fill: #0f172a; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #475569; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_0be6b407d39e456694b1d5ae553d9df3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_0be6b407d39e456694b1d5ae553d9df3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_0be6b407d39e456694b1d5ae553d9df3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_0be6b407d39e456694b1d5ae553d9df3"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_0be6b407d39e456694b1d5ae553d9df3"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_0be6b407d39e456694b1d5ae553d9df3" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="320.0" fill="#fafbfc" rx="12"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_0be6b407d39e456694b1d5ae553d9df3)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#0f172a" style="text-transform: uppercase; letter-spacing: 1px;">CPU Performance</text><path d="M 100.0,250.0 A 100.0,100.0 0 0,1 300.0,250.0" fill="none" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 230.90169943749476,154.89434837048464" fill="none" stroke="url(#successGrad_gauge_0be6b407d39e456694b1d5ae553d9df3)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 230.90169943749476,154.89434837048464 A 100.0,100.0 0 0 1 289.1006524188368,204.60095002604533" fill="none" stroke="url(#warningGrad_gauge_0be6b407d39e456694b1d5ae553d9df3)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 289.1006524188368,204.60095002604533 A 100.0,100.0 0 0 1 300.0,250.0" fill="none" stroke="url(#criticalGrad_gauge_0be6b407d39e456694b1d5ae553d9df3)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 263.74239897486893,172.94867572242106" fill="none" stroke="url(#warningGrad_gauge_0be6b407d39e456694b1d5ae553d9df3)" stroke-width="20" stroke-linecap="round" class="animated-arc" style="--arc-length: 226; --arc-offset: 0;" filter="url(#glow_gauge_0be6b407d39e456694b1d5ae553d9df3)"/><circle cx="200.0" cy="250.0" r="12" fill="#0a0e27"/><circle cx="200.0" cy="250.0" r="8" fill="#F59E0B"/><text x="200.0" y="265.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#F59E0B">72</text><text x="200.0" y="290.0" text-anchor="middle" class="gauge-label">CPU Load %</text><text x="100.0" y="270.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="155.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="300.0" y="270.0" text-anchor="end" class="range-label" fill="#EF4444">100</text></svg>
 <div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-f63dedc0e5fe7ab8')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-f63dedc0e5fe7ab8">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-f63dedc0e5fe7ab8')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-f63dedc0e5fe7ab8')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-f63dedc0e5fe7ab8')" title="Reset Zoom">⚪</button>
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-2db1cf5589fd93f0')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-2db1cf5589fd93f0">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-2db1cf5589fd93f0')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-2db1cf5589fd93f0')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-2db1cf5589fd93f0')" title="Reset Zoom">⚪</button>
 
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-f63dedc0e5fe7ab8')" title="Toggle Fullscreen">⛶</button>
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-2db1cf5589fd93f0')" title="Toggle Fullscreen">⛶</button>
 
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-f63dedc0e5fe7ab8')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-f63dedc0e5fe7ab8')" title="Copy as PNG">📋 PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-2db1cf5589fd93f0')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-2db1cf5589fd93f0')" title="Copy as PNG">📋 PNG</button>
 
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-f63dedc0e5fe7ab8')" title="Show CSV Data">📊 CSV</button>
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-2db1cf5589fd93f0')" title="Show CSV Data">📊 CSV</button>
 </div>
 </div>
-<div class="csv-container" id="csv-container-svgviewer-f63dedc0e5fe7ab8" style="display: none;">
+<div class="csv-container" id="csv-container-svgviewer-2db1cf5589fd93f0" style="display: none;">
     <div class="csv-header">
         <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-f63dedc0e5fe7ab8')" title="Close CSV">×</button>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-2db1cf5589fd93f0')" title="Close CSV">×</button>
     </div>
-    <div class="csv-content" id="csv-content-svgviewer-f63dedc0e5fe7ab8">
+    <div class="csv-content" id="csv-content-svgviewer-2db1cf5589fd93f0">
         <div class="csv-loading">Loading CSV data...</div>
     </div>
 </div>
@@ -2798,461 +2539,19 @@ imageblock .title {
 <p><a href="#top">🔝</a></p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_full_circle_gauge_example">Full Circle Gauge Example</h3>
-<div class="paragraph">
-<p>A 360-degree radial display for comprehensive visualization:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
-----
-type=FULL_CIRCLE
-title=System Uptime
-useDark=false
-scale=1.2
-showLabel=true
----
-Label | Value | Min | Max | Unit | Color
-Uptime | 85 | 0 | 100 | days | #10B981
-----</code></pre>
-</div>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-add938a6a5a38887" data-theme="light" data-original-content="type=FULL_CIRCLE
-title=System Uptime
-useDark=false
-scale=1.2
-showLabel=true
----
-Label | Value | Min | Max | Unit | Color
-Uptime | 85 | 0 | 100 | days | #10B981" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="270.0000107254611" height="202.5000080440958" viewBox="0 0 400.0 300.0" id="gauge_gauge_0f2ab3beea734053b9c4aee2ead2cdc2" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","System Uptime"],["Chart Type","FULL_CIRCLE"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.152795Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Uptime ===",""],["  Label","Uptime"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","days"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Overall Statistics ===",""],["Average Value","85.00"],["Maximum Value","85.00"],["Minimum Value","85.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_0f2ab3beea734053b9c4aee2ead2cdc2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_0f2ab3beea734053b9c4aee2ead2cdc2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_0f2ab3beea734053b9c4aee2ead2cdc2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_0f2ab3beea734053b9c4aee2ead2cdc2"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_0f2ab3beea734053b9c4aee2ead2cdc2"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_0f2ab3beea734053b9c4aee2ead2cdc2" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="300.0" fill="#ffffff" rx="12"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_0f2ab3beea734053b9c4aee2ead2cdc2)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">System Uptime</text><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="#1e293b" stroke-width="16"/><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="url(#warningGrad_gauge_0f2ab3beea734053b9c4aee2ead2cdc2)" stroke-width="18" stroke-linecap="round" stroke-dasharray="439.822971502571" stroke-dashoffset="65.97344572538566" transform="rotate(-90 200.0 160.0)" class="animated-arc" style="--arc-length: 439.822971502571; --arc-offset: 65.97344572538566;" filter="url(#glow_gauge_0f2ab3beea734053b9c4aee2ead2cdc2)"/><circle cx="200.0" cy="160.0" r="68.0" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.3"/><text x="200.0" y="170.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B">85</text><text x="200.0" y="190.0" text-anchor="middle" class="gauge-label">Uptime days</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-add938a6a5a38887')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-add938a6a5a38887">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-add938a6a5a38887')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-add938a6a5a38887')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-add938a6a5a38887')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-add938a6a5a38887')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-add938a6a5a38887')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-add938a6a5a38887')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-add938a6a5a38887')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-add938a6a5a38887" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-add938a6a5a38887')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-add938a6a5a38887">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-ad93cc6697a4b560" data-theme="light" data-original-content="type=FULL_CIRCLE
-title=System Uptime
-useDark=false
-scale=1.2
-showLabel=true
----
-Label | Value | Min | Max | Unit | Color
-Uptime | 85 | 0 | 100 | days | #10B981" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="270.0000107254611" height="202.5000080440958" viewBox="0 0 400.0 300.0" id="gauge_gauge_7863ce55c1254781aeb3e1db9a5232dc" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","System Uptime"],["Chart Type","FULL_CIRCLE"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.155311Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Uptime ===",""],["  Label","Uptime"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","days"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Overall Statistics ===",""],["Average Value","85.00"],["Maximum Value","85.00"],["Minimum Value","85.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #22d3ee; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_7863ce55c1254781aeb3e1db9a5232dc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_7863ce55c1254781aeb3e1db9a5232dc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_7863ce55c1254781aeb3e1db9a5232dc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_7863ce55c1254781aeb3e1db9a5232dc"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_7863ce55c1254781aeb3e1db9a5232dc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_7863ce55c1254781aeb3e1db9a5232dc"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_7863ce55c1254781aeb3e1db9a5232dc" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="400.0" height="300.0" fill="#0f172a" rx="12"/><rect width="400.0" height="300.0" fill="url(#bgGlow_gauge_7863ce55c1254781aeb3e1db9a5232dc)" rx="12" opacity="0.5"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_7863ce55c1254781aeb3e1db9a5232dc)" rx="12" opacity="0.3" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">System Uptime</text><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="#1e293b" stroke-width="16"/><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="url(#warningGrad_gauge_7863ce55c1254781aeb3e1db9a5232dc)" stroke-width="18" stroke-linecap="round" stroke-dasharray="439.822971502571" stroke-dashoffset="65.97344572538566" transform="rotate(-90 200.0 160.0)" class="animated-arc" style="--arc-length: 439.822971502571; --arc-offset: 65.97344572538566;" filter="url(#glow_gauge_7863ce55c1254781aeb3e1db9a5232dc)"/><circle cx="200.0" cy="160.0" r="68.0" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.3"/><text x="200.0" y="170.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B">85</text><text x="200.0" y="190.0" text-anchor="middle" class="gauge-label">Uptime days</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-ad93cc6697a4b560')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-ad93cc6697a4b560">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-ad93cc6697a4b560')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-ad93cc6697a4b560')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-ad93cc6697a4b560')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-ad93cc6697a4b560')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-ad93cc6697a4b560')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-ad93cc6697a4b560')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-ad93cc6697a4b560')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-ad93cc6697a4b560" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-ad93cc6697a4b560')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-ad93cc6697a4b560">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 1. Dark Mode</div></div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_linear_gauge_example">Linear Gauge Example</h3>
-<div class="paragraph">
-<p>A horizontal bullet graph with optional target indicator:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
-----
-type=LINEAR
-title=Response Time Analysis
-useDark=false
-showTarget=true
-showRanges=true
----
-Label | Value | Min | Max | Unit | Color | Target
-Response Time | 68 | 0 | 100 | ms | #F59E0B | 80
-----</code></pre>
-</div>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-5a39a76dd7ba5e25" data-theme="light" data-original-content="type=LINEAR
-title=Response Time Analysis
-useDark=false
-showTarget=true
-showRanges=true
----
-Label | Value | Min | Max | Unit | Color | Target
-Response Time | 68 | 0 | 100 | ms | #F59E0B | 80" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="157.49999999803126" viewBox="0 0 400.0 280.0" id="gauge_gauge_6447cc4d9fa74717a384d6264a4962a4" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Response Time Analysis"],["Chart Type","LINEAR"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.159117Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Response Time ===",""],["  Label","Response Time"],["  Value","68.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","ms"],["  Percentage","68.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["  Target","80.00"],["  Gap to Target","-12.00"],["  Target Achievement","85.00%"],["  Status","80"],["",""],["=== Overall Statistics ===",""],["Average Value","68.00"],["Maximum Value","68.00"],["Minimum Value","68.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_6447cc4d9fa74717a384d6264a4962a4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_6447cc4d9fa74717a384d6264a4962a4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_6447cc4d9fa74717a384d6264a4962a4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_6447cc4d9fa74717a384d6264a4962a4"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_6447cc4d9fa74717a384d6264a4962a4"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_6447cc4d9fa74717a384d6264a4962a4" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="280.0" fill="#ffffff" rx="12"/><rect width="400.0" height="280.0" fill="url(#dotPattern_gauge_6447cc4d9fa74717a384d6264a4962a4)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">Response Time Analysis</text><rect x="50.0" y="150.0" width="180.0" height="32.0" rx="4" fill="#059669" opacity="0.2"/><rect x="230.0" y="150.0" width="75.0" height="32.0" rx="4" fill="#D97706" opacity="0.2"/><rect x="305.0" y="150.0" width="45.0" height="32.0" rx="4" fill="#DC2626" opacity="0.2"/><rect x="50.0" y="154.0" width="204.00000000000003" height="24.0" rx="4" fill="url(#warningGrad_gauge_6447cc4d9fa74717a384d6264a4962a4)" filter="url(#glow_gauge_6447cc4d9fa74717a384d6264a4962a4)"/><rect x="290.0" y="146.0" width="4" height="40.0" fill="#f8fafc" opacity="0.8"/><text x="294.0" y="140.0" class="gauge-label" style="font-size: 9px;">TARGET</text><text x="50.0" y="207.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="207.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="350.0" y="207.0" text-anchor="end" class="range-label" fill="#EF4444">100</text><text x="200.0" y="242.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B">68</text><text x="200.0" y="262.0" text-anchor="middle" class="gauge-label">Response Time (ms)</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-5a39a76dd7ba5e25')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-5a39a76dd7ba5e25">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-5a39a76dd7ba5e25')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-5a39a76dd7ba5e25')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-5a39a76dd7ba5e25')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-5a39a76dd7ba5e25')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-5a39a76dd7ba5e25')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-5a39a76dd7ba5e25')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-5a39a76dd7ba5e25')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-5a39a76dd7ba5e25" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-5a39a76dd7ba5e25')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-5a39a76dd7ba5e25">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-36cf83da19152120" data-theme="light" data-original-content="type=LINEAR
-title=Response Time Analysis
-useDark=false
-showTarget=true
-showRanges=true
----
-Label | Value | Min | Max | Unit | Color | Target
-Response Time | 68 | 0 | 100 | ms | #F59E0B | 80" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="157.49999999803126" viewBox="0 0 400.0 280.0" id="gauge_gauge_91f50984205f4b4196185b124bcf66ec" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Response Time Analysis"],["Chart Type","LINEAR"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.161743Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Response Time ===",""],["  Label","Response Time"],["  Value","68.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","ms"],["  Percentage","68.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["  Target","80.00"],["  Gap to Target","-12.00"],["  Target Achievement","85.00%"],["  Status","80"],["",""],["=== Overall Statistics ===",""],["Average Value","68.00"],["Maximum Value","68.00"],["Minimum Value","68.00"],["Normal Zone Count","0"],["Caution Zone Count","1"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #22d3ee; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_91f50984205f4b4196185b124bcf66ec" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_91f50984205f4b4196185b124bcf66ec" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_91f50984205f4b4196185b124bcf66ec" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_91f50984205f4b4196185b124bcf66ec"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_91f50984205f4b4196185b124bcf66ec" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_91f50984205f4b4196185b124bcf66ec"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_91f50984205f4b4196185b124bcf66ec" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="400.0" height="280.0" fill="#0f172a" rx="12"/><rect width="400.0" height="280.0" fill="url(#bgGlow_gauge_91f50984205f4b4196185b124bcf66ec)" rx="12" opacity="0.5"/><rect width="400.0" height="280.0" fill="url(#dotPattern_gauge_91f50984205f4b4196185b124bcf66ec)" rx="12" opacity="0.3" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">Response Time Analysis</text><rect x="50.0" y="150.0" width="180.0" height="32.0" rx="4" fill="#059669" opacity="0.2"/><rect x="230.0" y="150.0" width="75.0" height="32.0" rx="4" fill="#D97706" opacity="0.2"/><rect x="305.0" y="150.0" width="45.0" height="32.0" rx="4" fill="#DC2626" opacity="0.2"/><rect x="50.0" y="154.0" width="204.00000000000003" height="24.0" rx="4" fill="url(#warningGrad_gauge_91f50984205f4b4196185b124bcf66ec)" filter="url(#glow_gauge_91f50984205f4b4196185b124bcf66ec)"/><rect x="290.0" y="146.0" width="4" height="40.0" fill="#f8fafc" opacity="0.8"/><text x="294.0" y="140.0" class="gauge-label" style="font-size: 9px;">TARGET</text><text x="50.0" y="207.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="207.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="350.0" y="207.0" text-anchor="end" class="range-label" fill="#EF4444">100</text><text x="200.0" y="242.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B">68</text><text x="200.0" y="262.0" text-anchor="middle" class="gauge-label">Response Time (ms)</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-36cf83da19152120')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-36cf83da19152120">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-36cf83da19152120')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-36cf83da19152120')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-36cf83da19152120')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-36cf83da19152120')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-36cf83da19152120')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-36cf83da19152120')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-36cf83da19152120')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-36cf83da19152120" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-36cf83da19152120')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-36cf83da19152120">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 2. Dark Mode</div></div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_solid_fill_gauge_example">Solid Fill Gauge Example</h3>
-<div class="paragraph">
-<p>A filled donut style for clean, modern displays:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
-----
-type=SOLID_FILL
-title=Disk Usage Monitor
-useDark=false
-scale=1.0
-innerRadius=60
----
-Label | Value | Min | Max | Unit | Color
-Disk Usage | 92 | 0 | 100 | % | #EF4444
-----</code></pre>
-</div>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-b7cca2e26131854e" data-theme="light" data-original-content="type=SOLID_FILL
-title=Disk Usage Monitor
-useDark=false
-scale=1.0
-innerRadius=60
----
-Label | Value | Min | Max | Unit | Color
-Disk Usage | 92 | 0 | 100 | % | #EF4444" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="179.99999999775002" viewBox="0 0 400.0 320.0" id="gauge_gauge_80dc18e6cd3b4785826fcd004863b12f" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Disk Usage Monitor"],["Chart Type","SOLID_FILL"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.165072Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Disk Usage ===",""],["  Label","Disk Usage"],["  Value","92.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","92.00%"],["  Zone","CRITICAL"],["  Color","#EF4444"],["",""],["=== Overall Statistics ===",""],["Average Value","92.00"],["Maximum Value","92.00"],["Minimum Value","92.00"],["Normal Zone Count","0"],["Caution Zone Count","0"],["Critical Zone Count","1"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_80dc18e6cd3b4785826fcd004863b12f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_80dc18e6cd3b4785826fcd004863b12f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_80dc18e6cd3b4785826fcd004863b12f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_80dc18e6cd3b4785826fcd004863b12f"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_80dc18e6cd3b4785826fcd004863b12f"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_80dc18e6cd3b4785826fcd004863b12f" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="320.0" fill="#ffffff" rx="12"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_80dc18e6cd3b4785826fcd004863b12f)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">Disk Usage Monitor</text><circle cx="200.0" cy="200.0" r="80.0" fill="#1e293b"/><path d="M 200.0,120.0 A 80.0,80.0 0 1 1 161.45970607186277,129.8954655964909 L 200.0,200.0 Z" fill="url(#criticalGrad_gauge_80dc18e6cd3b4785826fcd004863b12f)" filter="url(#glow_gauge_80dc18e6cd3b4785826fcd004863b12f)"/><circle cx="200.0" cy="200.0" r="60.0" fill="#ffffff"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#EF4444">92</text><text x="200.0" y="230.0" text-anchor="middle" class="gauge-label">Disk Usage %</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-b7cca2e26131854e')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-b7cca2e26131854e">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-b7cca2e26131854e')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-b7cca2e26131854e')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-b7cca2e26131854e')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-b7cca2e26131854e')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-b7cca2e26131854e')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-b7cca2e26131854e')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-b7cca2e26131854e')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-b7cca2e26131854e" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-b7cca2e26131854e')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-b7cca2e26131854e">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_multi_gauge_example">Multi-Gauge Example</h3>
-<div class="paragraph">
-<p>Display multiple gauges in a grid layout for server monitoring or fleet status:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true,useDark=false]
-----
-type=MULTI_GAUGE
-title=Server Fleet Status
-useDark=false
-columns=3
-scale=0.8
-showLegend=false
----
-Label | Value | Min | Max | Unit | Color
-server-01 | 75 | 0 | 100 | % | #10B981
-server-02 | 85 | 0 | 100 | % | #F59E0B
-server-03 | 65 | 0 | 100 | % | #10B981
-server-04 | 90 | 0 | 100 | % | #EF4444
-server-05 | 70 | 0 | 100 | % | #10B981
-server-06 | 80 | 0 | 100 | % | #F59E0B
-----</code></pre>
-</div>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-361696683f1af5f2" data-theme="light" data-original-content="type=MULTI_GAUGE
-title=Server Fleet Status
-useDark=false
-columns=3
-scale=0.8
-showLegend=false
----
-Label | Value | Min | Max | Unit | Color
-server-01 | 75 | 0 | 100 | % | #10B981
-server-02 | 85 | 0 | 100 | % | #F59E0B
-server-03 | 65 | 0 | 100 | % | #10B981
-server-04 | 90 | 0 | 100 | % | #EF4444
-server-05 | 70 | 0 | 100 | % | #10B981
-server-06 | 80 | 0 | 100 | % | #F59E0B" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="198.00000294795493" height="162.00000241196312" viewBox="0 0 440.0 360.0" id="gauge_gauge_e3249ef8670c4bc08a1dab170656866c" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Server Fleet Status"],["Chart Type","MULTI_GAUGE"],["Number of Gauges","6"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.167493Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: server-01 ===",""],["  Label","server-01"],["  Value","75.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","75.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 2: server-02 ===",""],["  Label","server-02"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Gauge 3: server-03 ===",""],["  Label","server-03"],["  Value","65.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","65.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 4: server-04 ===",""],["  Label","server-04"],["  Value","90.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","90.00%"],["  Zone","CRITICAL"],["  Color","#EF4444"],["",""],["=== Gauge 5: server-05 ===",""],["  Label","server-05"],["  Value","70.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","70.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 6: server-06 ===",""],["  Label","server-06"],["  Value","80.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","80.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Overall Statistics ===",""],["Average Value","77.50"],["Maximum Value","90.00"],["Minimum Value","65.00"],["Normal Zone Count","0"],["Caution Zone Count","5"],["Critical Zone Count","1"],["Normal Zone %","0.00%"],["Caution Zone %","83.33%"],["Critical Zone %","16.67%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_e3249ef8670c4bc08a1dab170656866c" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_e3249ef8670c4bc08a1dab170656866c" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_e3249ef8670c4bc08a1dab170656866c"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_e3249ef8670c4bc08a1dab170656866c"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_e3249ef8670c4bc08a1dab170656866c" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="440.0" height="360.0" fill="#ffffff" rx="12"/><rect width="440.0" height="360.0" fill="url(#dotPattern_gauge_e3249ef8670c4bc08a1dab170656866c)" rx="12" opacity="0.15" pointer-events="none"/><text x="220.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">Server Fleet Status</text><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="50.26548245743669" transform="rotate(-90 80.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 50.26548245743669; animation-delay: 0.0s;"/><text x="80.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.6s;">75</text><text x="80.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-01</text><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="30.15928947446201" transform="rotate(-90 220.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 30.15928947446201; animation-delay: 0.1s;"/><text x="220.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.7s;">85</text><text x="220.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-02</text><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="70.37167544041137" transform="rotate(-90 360.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 70.37167544041137; animation-delay: 0.2s;"/><text x="360.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.8s;">65</text><text x="360.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-03</text><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="url(#criticalGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="20.106192982974676" transform="rotate(-90 80.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 20.106192982974676; animation-delay: 0.30000000000000004s;"/><text x="80.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#EF4444" style="font-size: 28px; animation-delay: 0.9s;">90</text><text x="80.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-04</text><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="60.31857894892402" transform="rotate(-90 220.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 60.31857894892402; animation-delay: 0.4s;"/><text x="220.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.0s;">70</text><text x="220.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-05</text><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_e3249ef8670c4bc08a1dab170656866c)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="40.21238596594935" transform="rotate(-90 360.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 40.21238596594935; animation-delay: 0.5s;"/><text x="360.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.1s;">80</text><text x="360.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-06</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-361696683f1af5f2')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-361696683f1af5f2">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-361696683f1af5f2')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-361696683f1af5f2')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-361696683f1af5f2')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-361696683f1af5f2')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-361696683f1af5f2')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-361696683f1af5f2')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-361696683f1af5f2')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-361696683f1af5f2" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-361696683f1af5f2')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-361696683f1af5f2">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-4e21230229d97e66" data-theme="light" data-original-content="type=MULTI_GAUGE
-title=Server Fleet Status
-useDark=false
-columns=3
-scale=0.8
-showLegend=false
----
-Label | Value | Min | Max | Unit | Color
-server-01 | 75 | 0 | 100 | % | #10B981
-server-02 | 85 | 0 | 100 | % | #F59E0B
-server-03 | 65 | 0 | 100 | % | #10B981
-server-04 | 90 | 0 | 100 | % | #EF4444
-server-05 | 70 | 0 | 100 | % | #10B981
-server-06 | 80 | 0 | 100 | % | #F59E0B" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="198.00000294795493" height="162.00000241196312" viewBox="0 0 440.0 360.0" id="gauge_gauge_d05aaa49e980403db97a3432b3b961e5" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Server Fleet Status"],["Chart Type","MULTI_GAUGE"],["Number of Gauges","6"],["Theme Version","1"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.169650Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: server-01 ===",""],["  Label","server-01"],["  Value","75.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","75.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 2: server-02 ===",""],["  Label","server-02"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Gauge 3: server-03 ===",""],["  Label","server-03"],["  Value","65.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","65.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 4: server-04 ===",""],["  Label","server-04"],["  Value","90.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","90.00%"],["  Zone","CRITICAL"],["  Color","#EF4444"],["",""],["=== Gauge 5: server-05 ===",""],["  Label","server-05"],["  Value","70.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","70.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 6: server-06 ===",""],["  Label","server-06"],["  Value","80.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","80.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Overall Statistics ===",""],["Average Value","77.50"],["Maximum Value","90.00"],["Minimum Value","65.00"],["Normal Zone Count","0"],["Caution Zone Count","5"],["Critical Zone Count","1"],["Normal Zone %","0.00%"],["Caution Zone %","83.33%"],["Critical Zone %","16.67%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #22d3ee; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_d05aaa49e980403db97a3432b3b961e5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_d05aaa49e980403db97a3432b3b961e5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_d05aaa49e980403db97a3432b3b961e5"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_d05aaa49e980403db97a3432b3b961e5" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_d05aaa49e980403db97a3432b3b961e5"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_d05aaa49e980403db97a3432b3b961e5" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="440.0" height="360.0" fill="#0f172a" rx="12"/><rect width="440.0" height="360.0" fill="url(#bgGlow_gauge_d05aaa49e980403db97a3432b3b961e5)" rx="12" opacity="0.5"/><rect width="440.0" height="360.0" fill="url(#dotPattern_gauge_d05aaa49e980403db97a3432b3b961e5)" rx="12" opacity="0.3" pointer-events="none"/><text x="220.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">Server Fleet Status</text><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="50.26548245743669" transform="rotate(-90 80.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 50.26548245743669; animation-delay: 0.0s;"/><text x="80.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.6s;">75</text><text x="80.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-01</text><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="30.15928947446201" transform="rotate(-90 220.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 30.15928947446201; animation-delay: 0.1s;"/><text x="220.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.7s;">85</text><text x="220.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-02</text><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="70.37167544041137" transform="rotate(-90 360.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 70.37167544041137; animation-delay: 0.2s;"/><text x="360.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.8s;">65</text><text x="360.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-03</text><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="url(#criticalGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="20.106192982974676" transform="rotate(-90 80.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 20.106192982974676; animation-delay: 0.30000000000000004s;"/><text x="80.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#EF4444" style="font-size: 28px; animation-delay: 0.9s;">90</text><text x="80.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-04</text><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="60.31857894892402" transform="rotate(-90 220.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 60.31857894892402; animation-delay: 0.4s;"/><text x="220.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.0s;">70</text><text x="220.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-05</text><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_d05aaa49e980403db97a3432b3b961e5)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="40.21238596594935" transform="rotate(-90 360.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 40.21238596594935; animation-delay: 0.5s;"/><text x="360.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.1s;">80</text><text x="360.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-06</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-4e21230229d97e66')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-4e21230229d97e66">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-4e21230229d97e66')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-4e21230229d97e66')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-4e21230229d97e66')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-4e21230229d97e66')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-4e21230229d97e66')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-4e21230229d97e66')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-4e21230229d97e66')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-4e21230229d97e66" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-4e21230229d97e66')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-4e21230229d97e66">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 3. Dark Server Fleet</div></div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_digital_gauge_example">Digital Gauge Example</h3>
+<div class="sect1">
+<h2 id="_digital_gauge">Digital Gauge</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Large number display with minimal arc, ideal for prominent metrics:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge, useDark=true]
 ----
 type=DIGITAL
 title=Temperature Monitor
-useDark=true
 showArc=true
 showStatus=true
 ---
@@ -3262,7 +2561,7 @@ Temperature | 43 | 0 | 100 | °C | #06B6D4 | optimal range
 </div>
 </div>
 <div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-b9e8e15717aa9042" data-theme="light" data-original-content="type=DIGITAL
+<div class="svg-with-controls" id="svgviewer-0e6feab25dcda1b3" data-theme="light" data-original-content="type=DIGITAL
 title=Temperature Monitor
 useDark=true
 showArc=true
@@ -3270,156 +2569,28 @@ showStatus=true
 ---
 Label | Value | Min | Max | Unit | Color | StatusText
 Temperature | 43 | 0 | 100 | °C | #06B6D4 | optimal range" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="168.74999999789063" viewBox="0 0 400.0 300.0" id="gauge_gauge_233f33e7e2974ab194f4966e2f048f4d" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Temperature Monitor"],["Chart Type","DIGITAL"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.172512Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Temperature ===",""],["  Label","Temperature"],["  Value","43.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","°C"],["  Percentage","43.00%"],["  Zone","NORMAL"],["  Color","#06B6D4"],["  Status","optimal range"],["",""],["=== Overall Statistics ===",""],["Average Value","43.00"],["Maximum Value","43.00"],["Minimum Value","43.00"],["Normal Zone Count","1"],["Caution Zone Count","0"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_233f33e7e2974ab194f4966e2f048f4d" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_233f33e7e2974ab194f4966e2f048f4d" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_233f33e7e2974ab194f4966e2f048f4d" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_233f33e7e2974ab194f4966e2f048f4d"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_233f33e7e2974ab194f4966e2f048f4d"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_233f33e7e2974ab194f4966e2f048f4d" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="300.0" fill="#ffffff" rx="12"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_233f33e7e2974ab194f4966e2f048f4d)" rx="12" opacity="0.15" pointer-events="none"/><text x="200.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">Temperature Monitor</text><path d="M 120.0,200.0 A 80.0,80.0 0 1,1 280.0,200.0" fill="none" stroke="#1e293b" stroke-width="2" opacity="0.4"/><path d="M 120.0,200.0 A 80.0,80.0 0 0,1 188.8,121.9266590449002" fill="none" stroke="url(#successGrad_gauge_233f33e7e2974ab194f4966e2f048f4d)" stroke-width="3" stroke-linecap="round" opacity="0.6"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#10B981" style="font-size: 80px;">43</text><text x="200.0" y="235.0" text-anchor="middle" class="gauge-label">°C Temperature</text><circle cx="120.0" cy="270.0" r="4" fill="#10B981"/><text x="130.0" y="274.0" class="gauge-label" style="font-size: 9px;">optimal range</text></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="168.74999999789063" viewBox="0 0 400.0 300.0" id="gauge_gauge_ed852783cb6e4ceaaec964de0b4e8323" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Temperature Monitor"],["Chart Type","DIGITAL"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T18:46:03.139847Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Temperature ===",""],["  Label","Temperature"],["  Value","43.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","°C"],["  Percentage","43.00%"],["  Zone","NORMAL"],["  Color","#06B6D4"],["  Status","optimal range"],["",""],["=== Overall Statistics ===",""],["Average Value","43.00"],["Maximum Value","43.00"],["Minimum Value","43.00"],["Normal Zone Count","1"],["Caution Zone Count","0"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #22d3ee; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_ed852783cb6e4ceaaec964de0b4e8323" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_ed852783cb6e4ceaaec964de0b4e8323" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_ed852783cb6e4ceaaec964de0b4e8323" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_ed852783cb6e4ceaaec964de0b4e8323"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_ed852783cb6e4ceaaec964de0b4e8323" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_ed852783cb6e4ceaaec964de0b4e8323"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_ed852783cb6e4ceaaec964de0b4e8323" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="400.0" height="300.0" fill="#0f172a" rx="12"/><rect width="400.0" height="300.0" fill="url(#bgGlow_gauge_ed852783cb6e4ceaaec964de0b4e8323)" rx="12" opacity="0.5"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_ed852783cb6e4ceaaec964de0b4e8323)" rx="12" opacity="0.3" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">Temperature Monitor</text><path d="M 120.0,200.0 A 80.0,80.0 0 0,1 280.0,200.0" fill="none" stroke="#1e293b" stroke-width="2" opacity="0.4"/><path d="M 120.0,200.0 A 80.0,80.0 0 0 1 182.5485406882766,121.9266590449002" fill="none" stroke="url(#successGrad_gauge_ed852783cb6e4ceaaec964de0b4e8323)" stroke-width="3" stroke-linecap="round" opacity="0.6"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#10B981" style="font-size: 80px;">43</text><text x="200.0" y="235.0" text-anchor="middle" class="gauge-label">°C Temperature</text><circle cx="120.0" cy="270.0" r="4" fill="#10B981"/><text x="130.0" y="274.0" class="gauge-label" style="font-size: 9px;">optimal range</text></svg>
 <div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-b9e8e15717aa9042')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-b9e8e15717aa9042">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-b9e8e15717aa9042')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-b9e8e15717aa9042')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-b9e8e15717aa9042')" title="Reset Zoom">⚪</button>
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-0e6feab25dcda1b3')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-0e6feab25dcda1b3">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-0e6feab25dcda1b3')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-0e6feab25dcda1b3')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-0e6feab25dcda1b3')" title="Reset Zoom">⚪</button>
 
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-b9e8e15717aa9042')" title="Toggle Fullscreen">⛶</button>
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-0e6feab25dcda1b3')" title="Toggle Fullscreen">⛶</button>
 
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-b9e8e15717aa9042')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-b9e8e15717aa9042')" title="Copy as PNG">📋 PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-0e6feab25dcda1b3')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-0e6feab25dcda1b3')" title="Copy as PNG">📋 PNG</button>
 
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-b9e8e15717aa9042')" title="Show CSV Data">📊 CSV</button>
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-0e6feab25dcda1b3')" title="Show CSV Data">📊 CSV</button>
 </div>
 </div>
-<div class="csv-container" id="csv-container-svgviewer-b9e8e15717aa9042" style="display: none;">
+<div class="csv-container" id="csv-container-svgviewer-0e6feab25dcda1b3" style="display: none;">
     <div class="csv-header">
         <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-b9e8e15717aa9042')" title="Close CSV">×</button>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-0e6feab25dcda1b3')" title="Close CSV">×</button>
     </div>
-    <div class="csv-content" id="csv-content-svgviewer-b9e8e15717aa9042">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-af5fe1d84e2e8a8c" data-theme="light" data-original-content="type=DIGITAL
-title=Temperature Monitor
-useDark=true
-showArc=true
-showStatus=true
----
-Label | Value | Min | Max | Unit | Color | StatusText
-Temperature | 43 | 0 | 100 | °C | #06B6D4 | optimal range" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="168.74999999789063" viewBox="0 0 400.0 300.0" id="gauge_gauge_71ced5c6fffb406dbb6609dd02a997f8" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Temperature Monitor"],["Chart Type","DIGITAL"],["Number of Gauges","1"],["Theme Version","1"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.174789Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Temperature ===",""],["  Label","Temperature"],["  Value","43.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","°C"],["  Percentage","43.00%"],["  Zone","NORMAL"],["  Color","#06B6D4"],["  Status","optimal range"],["",""],["=== Overall Statistics ===",""],["Average Value","43.00"],["Maximum Value","43.00"],["Minimum Value","43.00"],["Normal Zone Count","1"],["Caution Zone Count","0"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #22d3ee; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_71ced5c6fffb406dbb6609dd02a997f8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_71ced5c6fffb406dbb6609dd02a997f8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_71ced5c6fffb406dbb6609dd02a997f8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_71ced5c6fffb406dbb6609dd02a997f8"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_71ced5c6fffb406dbb6609dd02a997f8" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_71ced5c6fffb406dbb6609dd02a997f8"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_71ced5c6fffb406dbb6609dd02a997f8" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="400.0" height="300.0" fill="#0f172a" rx="12"/><rect width="400.0" height="300.0" fill="url(#bgGlow_gauge_71ced5c6fffb406dbb6609dd02a997f8)" rx="12" opacity="0.5"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_71ced5c6fffb406dbb6609dd02a997f8)" rx="12" opacity="0.3" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">Temperature Monitor</text><path d="M 120.0,200.0 A 80.0,80.0 0 1,1 280.0,200.0" fill="none" stroke="#1e293b" stroke-width="2" opacity="0.4"/><path d="M 120.0,200.0 A 80.0,80.0 0 0,1 188.8,121.9266590449002" fill="none" stroke="url(#successGrad_gauge_71ced5c6fffb406dbb6609dd02a997f8)" stroke-width="3" stroke-linecap="round" opacity="0.6"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#10B981" style="font-size: 80px;">43</text><text x="200.0" y="235.0" text-anchor="middle" class="gauge-label">°C Temperature</text><circle cx="120.0" cy="270.0" r="4" fill="#10B981"/><text x="130.0" y="274.0" class="gauge-label" style="font-size: 9px;">optimal range</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-af5fe1d84e2e8a8c')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-af5fe1d84e2e8a8c">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-af5fe1d84e2e8a8c')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-af5fe1d84e2e8a8c')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-af5fe1d84e2e8a8c')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-af5fe1d84e2e8a8c')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-af5fe1d84e2e8a8c')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-af5fe1d84e2e8a8c')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-af5fe1d84e2e8a8c')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-af5fe1d84e2e8a8c" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-af5fe1d84e2e8a8c')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-af5fe1d84e2e8a8c">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 4. Dark Gauge</div></div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_dashboard_gauge_example">Dashboard Gauge Example</h3>
-<div class="paragraph">
-<p>Mixed gauge types in a grid layout for comprehensive system monitoring:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true]
-----
-type=DASHBOARD
-title=System Health Dashboard
-useDark=false
-layout=2x3
-scale=1.0
----
-Type | Label | Value | Min | Max | Unit | Color | Extra
-SEMI_CIRCLE | CPU | 72 | 0 | 100 | % | #F59E0B |
-FULL_CIRCLE | Uptime | 85 | 0 | 100 | days | #10B981 |
-LINEAR | Response | 68 | 0 | 100 | ms | #F59E0B | target=80
-SOLID_FILL | Disk | 92 | 0 | 100 | % | #EF4444 |
-DIGITAL | Temp | 43 | 0 | 100 | °C | #06B6D4 | status=optimal
-MULTI_GAUGE | Memory | 75 | 0 | 100 | % | #10B981 |
-----</code></pre>
-</div>
-</div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-d9dc7556591ba396" data-theme="light" data-original-content="type=DASHBOARD
-title=System Health Dashboard
-useDark=false
-layout=2x3
-scale=1.0
----
-Type | Label | Value | Min | Max | Unit | Color | Extra
-SEMI_CIRCLE | CPU | 72 | 0 | 100 | % | #F59E0B |
-FULL_CIRCLE | Uptime | 85 | 0 | 100 | days | #10B981 |
-LINEAR | Response | 68 | 0 | 100 | ms | #F59E0B | target=80
-SOLID_FILL | Disk | 92 | 0 | 100 | % | #EF4444 |
-DIGITAL | Temp | 43 | 0 | 100 | °C | #06B6D4 | status=optimal
-MULTI_GAUGE | Memory | 75 | 0 | 100 | % | #10B981 |" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="449.999999994375" height="573.7499999928282" viewBox="0 0 800.0 1020.0" id="gauge_gauge_835c972fac564bfd812ab0c5276dd71e" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","System Health Dashboard"],["Chart Type","DASHBOARD"],["Number of Gauges","6"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.177159Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: CPU ===",""],["  Label","CPU"],["  Value","72.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","72.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Gauge 2: Uptime ===",""],["  Label","Uptime"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","days"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 3: Response ===",""],["  Label","Response"],["  Value","68.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","ms"],["  Percentage","68.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["  Target","80.00"],["  Gap to Target","-12.00"],["  Target Achievement","85.00%"],["",""],["=== Gauge 4: Disk ===",""],["  Label","Disk"],["  Value","92.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","92.00%"],["  Zone","CRITICAL"],["  Color","#EF4444"],["",""],["=== Gauge 5: Temp ===",""],["  Label","Temp"],["  Value","43.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","°C"],["  Percentage","43.00%"],["  Zone","NORMAL"],["  Color","#06B6D4"],["  Status","optimal"],["",""],["=== Gauge 6: Memory ===",""],["  Label","Memory"],["  Value","75.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","75.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Overall Statistics ===",""],["Average Value","72.50"],["Maximum Value","92.00"],["Minimum Value","43.00"],["Normal Zone Count","1"],["Caution Zone Count","4"],["Critical Zone Count","1"],["Normal Zone %","16.67%"],["Caution Zone %","66.67%"],["Critical Zone %","16.67%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="800.0" height="1020.0" fill="#ffffff" rx="12"/><rect width="800.0" height="1020.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><text x="400.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">System Health Dashboard</text><g transform="translate(0, 60)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="320.0" fill="#ffffff" rx="12"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><path d="M 100.0,250.0 A 100.0,100.0 0 0,1 300.0,250.0" fill="none" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 230.90169943749476,154.89434837048464" fill="none" stroke="url(#successGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 230.90169943749476,154.89434837048464 A 100.0,100.0 0 0 1 289.1006524188368,204.60095002604533" fill="none" stroke="url(#warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 289.1006524188368,204.60095002604533 A 100.0,100.0 0 0 1 300.0,250.0" fill="none" stroke="url(#criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 263.74239897486893,172.94867572242106" fill="none" stroke="url(#warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="20" stroke-linecap="round" class="" filter="url(#glow_gauge_835c972fac564bfd812ab0c5276dd71e)"/><circle cx="200.0" cy="250.0" r="12" fill="#0a0e27"/><circle cx="200.0" cy="250.0" r="8" fill="#F59E0B"/><text x="200.0" y="265.0" text-anchor="middle" class="gauge-value-large " fill="#F59E0B">72</text><text x="200.0" y="290.0" text-anchor="middle" class="gauge-label">CPU %</text><text x="100.0" y="270.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="155.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="300.0" y="270.0" text-anchor="end" class="range-label" fill="#EF4444">100</text></g><g transform="translate(400, 60)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="300.0" fill="#ffffff" rx="12"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="#1e293b" stroke-width="16"/><circle cx="200.0" cy="160.0" r="70.0" fill="none" stroke="url(#warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="18" stroke-linecap="round" stroke-dasharray="439.822971502571" stroke-dashoffset="65.97344572538566" transform="rotate(-90 200.0 160.0)" class="" filter="url(#glow_gauge_835c972fac564bfd812ab0c5276dd71e)"/><circle cx="200.0" cy="160.0" r="68.0" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.3"/><text x="200.0" y="170.0" text-anchor="middle" class="gauge-value-medium " fill="#F59E0B">85</text><text x="200.0" y="190.0" text-anchor="middle" class="gauge-label">Uptime days</text></g><g transform="translate(0, 380)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="280.0" fill="#ffffff" rx="12"/><rect width="400.0" height="280.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><rect x="50.0" y="150.0" width="180.0" height="32.0" rx="4" fill="#059669" opacity="0.2"/><rect x="230.0" y="150.0" width="75.0" height="32.0" rx="4" fill="#D97706" opacity="0.2"/><rect x="305.0" y="150.0" width="45.0" height="32.0" rx="4" fill="#DC2626" opacity="0.2"/><rect x="50.0" y="154.0" width="204.00000000000003" height="24.0" rx="4" fill="url(#warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" filter="url(#glow_gauge_835c972fac564bfd812ab0c5276dd71e)"/><text x="50.0" y="207.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="207.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="350.0" y="207.0" text-anchor="end" class="range-label" fill="#EF4444">100</text><text x="200.0" y="242.0" text-anchor="middle" class="gauge-value-medium " fill="#F59E0B">68</text><text x="200.0" y="262.0" text-anchor="middle" class="gauge-label">Response (ms)</text></g><g transform="translate(400, 380)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="320.0" fill="#ffffff" rx="12"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><circle cx="200.0" cy="200.0" r="80.0" fill="#1e293b"/><path d="M 200.0,120.0 A 80.0,80.0 0 1 1 161.45970607186277,129.8954655964909 L 200.0,200.0 Z" fill="url(#criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" filter="url(#glow_gauge_835c972fac564bfd812ab0c5276dd71e)"/><circle cx="200.0" cy="200.0" r="60.0" fill="#ffffff"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large " fill="#EF4444">92</text><text x="200.0" y="230.0" text-anchor="middle" class="gauge-label">Disk %</text></g><g transform="translate(0, 700)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="400.0" height="300.0" fill="#ffffff" rx="12"/><rect width="400.0" height="300.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><path d="M 120.0,200.0 A 80.0,80.0 0 1,1 280.0,200.0" fill="none" stroke="#1e293b" stroke-width="2" opacity="0.4"/><path d="M 120.0,200.0 A 80.0,80.0 0 0,1 188.8,121.9266590449002" fill="none" stroke="url(#successGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="3" stroke-linecap="round" opacity="0.6"/><text x="200.0" y="210.0" text-anchor="middle" class="gauge-value-large " fill="#10B981" style="font-size: 80px;">43</text><text x="200.0" y="235.0" text-anchor="middle" class="gauge-label">°C Temp</text></g><g transform="translate(400, 700)"><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_835c972fac564bfd812ab0c5276dd71e" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_835c972fac564bfd812ab0c5276dd71e"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_835c972fac564bfd812ab0c5276dd71e"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="440.0" height="220.0" fill="#ffffff" rx="12"/><rect width="440.0" height="220.0" fill="url(#dotPattern_gauge_835c972fac564bfd812ab0c5276dd71e)" rx="12" opacity="0.15" pointer-events="none"/><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_835c972fac564bfd812ab0c5276dd71e)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="50.26548245743669" transform="rotate(-90 80.0 140.0)" class=""/><text x="80.0" y="148.0" text-anchor="middle" class="gauge-value-medium " fill="#F59E0B" style="font-size: 28px; ">75</text><text x="80.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">Memory</text></g></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-d9dc7556591ba396')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-d9dc7556591ba396">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-d9dc7556591ba396')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-d9dc7556591ba396')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-d9dc7556591ba396')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-d9dc7556591ba396')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-d9dc7556591ba396')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-d9dc7556591ba396')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-d9dc7556591ba396')" title="Show CSV Data">📊 CSV</button>
-</div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-d9dc7556591ba396" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-d9dc7556591ba396')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-d9dc7556591ba396">
+    <div class="csv-content" id="csv-content-svgviewer-0e6feab25dcda1b3">
         <div class="csv-loading">Loading CSV data...</div>
     </div>
 </div>
@@ -3440,72 +2611,189 @@ imageblock .title {
 <p><a href="#top">🔝</a></p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_dark_mode_gauge_example">Dark Mode Gauge Example</h3>
-<div class="paragraph">
-<p>You can enable dark mode for better visibility in dark-themed documents:</p>
 </div>
+<div class="sect1">
+<h2 id="_multi_gauge_grid">Multi-Gauge Grid</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Monitor multiple metrics in a compact grid layout:</p>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-ca8dcc1f5ebf23ae" data-theme="light" data-original-content="type=MULTI_GAUGE
+title=Server Fleet Status
+useDark=false
+columns=3
+scale=0.8
+showLegend=false
+---
+Label | Value | Min | Max | Unit | Color
+server-01 | 75 | 0 | 100 | % | #10B981
+server-02 | 85 | 0 | 100 | % | #F59E0B
+server-03 | 65 | 0 | 100 | % | #10B981
+server-04 | 90 | 0 | 100 | % | #EF4444
+server-05 | 70 | 0 | 100 | % | #10B981
+server-06 | 80 | 0 | 100 | % | #F59E0B" data-kind="gauge">
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="198.00000294795493" height="162.00000241196312" viewBox="0 0 440.0 360.0" id="gauge_gauge_fb857043cf7b4600a45d7f8269b94aac" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Server Fleet Status"],["Chart Type","MULTI_GAUGE"],["Number of Gauges","6"],["Theme Version","1"],["Dark Mode","false"],["Show Ranges","true"],["Timestamp","2026-02-01T18:46:03.142507Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: server-01 ===",""],["  Label","server-01"],["  Value","75.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","75.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 2: server-02 ===",""],["  Label","server-02"],["  Value","85.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","85.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Gauge 3: server-03 ===",""],["  Label","server-03"],["  Value","65.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","65.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 4: server-04 ===",""],["  Label","server-04"],["  Value","90.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","90.00%"],["  Zone","CRITICAL"],["  Color","#EF4444"],["",""],["=== Gauge 5: server-05 ===",""],["  Label","server-05"],["  Value","70.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","70.00%"],["  Zone","CAUTION"],["  Color","#10B981"],["",""],["=== Gauge 6: server-06 ===",""],["  Label","server-06"],["  Value","80.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","%"],["  Percentage","80.00%"],["  Zone","CAUTION"],["  Color","#F59E0B"],["",""],["=== Overall Statistics ===",""],["Average Value","77.50"],["Maximum Value","90.00"],["Minimum Value","65.00"],["Normal Zone Count","0"],["Caution Zone Count","5"],["Critical Zone Count","1"],["Normal Zone %","0.00%"],["Caution Zone %","83.33%"],["Critical Zone %","16.67%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.gauge-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; } .gauge-value-large { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10px; fill: #4338ca; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_fb857043cf7b4600a45d7f8269b94aac" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_fb857043cf7b4600a45d7f8269b94aac" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_fb857043cf7b4600a45d7f8269b94aac"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Light mode specific effects --><filter id="dropShadow_gauge_fb857043cf7b4600a45d7f8269b94aac"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0, 0, 0, 0.15)"/></filter><pattern id="dotPattern_gauge_fb857043cf7b4600a45d7f8269b94aac" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.6"/></pattern></defs><rect width="440.0" height="360.0" fill="#ffffff" rx="12"/><rect width="440.0" height="360.0" fill="url(#dotPattern_gauge_fb857043cf7b4600a45d7f8269b94aac)" rx="12" opacity="0.15" pointer-events="none"/><text x="220.0" y="35" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#111111" style="text-transform: uppercase; letter-spacing: 1px;">Server Fleet Status</text><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="50.26548245743669" transform="rotate(-90 80.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 50.26548245743669; animation-delay: 0.0s;"/><text x="80.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.6s;">75</text><text x="80.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-01</text><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="30.15928947446201" transform="rotate(-90 220.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 30.15928947446201; animation-delay: 0.1s;"/><text x="220.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.7s;">85</text><text x="220.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-02</text><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="140.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="70.37167544041137" transform="rotate(-90 360.0 140.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 70.37167544041137; animation-delay: 0.2s;"/><text x="360.0" y="148.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 0.8s;">65</text><text x="360.0" y="195.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-03</text><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="80.0" cy="280.0" r="32.0" fill="none" stroke="url(#criticalGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="20.106192982974676" transform="rotate(-90 80.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 20.106192982974676; animation-delay: 0.30000000000000004s;"/><text x="80.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#EF4444" style="font-size: 28px; animation-delay: 0.9s;">90</text><text x="80.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-04</text><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="220.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="60.31857894892402" transform="rotate(-90 220.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 60.31857894892402; animation-delay: 0.4s;"/><text x="220.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.0s;">70</text><text x="220.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-05</text><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="#1e293b" stroke-width="6"/><circle cx="360.0" cy="280.0" r="32.0" fill="none" stroke="url(#warningGrad_gauge_fb857043cf7b4600a45d7f8269b94aac)" stroke-width="7" stroke-dasharray="201.06192982974676" stroke-dashoffset="40.21238596594935" transform="rotate(-90 360.0 280.0)" class="animated-arc" style="--arc-length: 201.06192982974676; --arc-offset: 40.21238596594935; animation-delay: 0.5s;"/><text x="360.0" y="288.0" text-anchor="middle" class="gauge-value-medium animated-digit" fill="#F59E0B" style="font-size: 28px; animation-delay: 1.1s;">80</text><text x="360.0" y="335.0" text-anchor="middle" class="gauge-label" style="font-size: 8px;">server-06</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-ca8dcc1f5ebf23ae')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-ca8dcc1f5ebf23ae">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-ca8dcc1f5ebf23ae')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-ca8dcc1f5ebf23ae')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-ca8dcc1f5ebf23ae')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-ca8dcc1f5ebf23ae')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-ca8dcc1f5ebf23ae')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-ca8dcc1f5ebf23ae')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-ca8dcc1f5ebf23ae')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-ca8dcc1f5ebf23ae" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-ca8dcc1f5ebf23ae')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-ca8dcc1f5ebf23ae">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_all_gauge_types">All Gauge Types</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SEMI_CIRCLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classic performance indicators (CPU, memory, progress)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FULL_CIRCLE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">360° metrics, completion percentages</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LINEAR</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Horizontal progress bars with targets (budgets, goals)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SOLID_FILL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Modern donut-style displays</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MULTI_GAUGE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Server fleets, device monitoring (grid of 3-9 gauges)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DIGITAL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prominent single metrics (temperature, uptime)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DASHBOARD</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mixed gauge types in one view</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_format_options">Format Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_format">Basic Format</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge,controls=true,useDark=true]
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,gauge]
 ----
 type=SEMI_CIRCLE
-title=Network Throughput
-scale=1.0
+title=Your Title
 showRanges=true
-visualVersion=3
 ---
 Label | Value | Min | Max | Unit | Color
-Throughput | 58 | 0 | 100 | Mbps | #3B82F6
+CPU Load | 72 | 0 | 100 | % |
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-cd976d0bc15f3fbb" data-theme="light" data-original-content="type=SEMI_CIRCLE
-title=Network Throughput
-scale=1.0
-showRanges=true
-visualVersion=3
+</div>
+<div class="sect2">
+<h3 id="_common_options">Common Options</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>type</code> - SEMI_CIRCLE, DIGITAL, MULTI_GAUGE, LINEAR, FULL_CIRCLE, SOLID_FILL, DASHBOARD</p>
+</li>
+<li>
+<p><code>useDark=true</code> - Enable dark theme</p>
+</li>
+<li>
+<p><code>showRanges=true</code> - Display color zones (default: true)</p>
+</li>
+<li>
+<p><code>showArc=true</code> - Show arc (for DIGITAL type)</p>
+</li>
+<li>
+<p><code>animateArc=true</code> - Animate the arc (default: true)</p>
+</li>
+<li>
+<p><code>columns=3</code> - Number of columns for MULTI_GAUGE</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_linear_gauge_with_target">Linear Gauge with Target</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">type=LINEAR
+showTarget=true
+---
+Label | Value | Min | Max | Unit | Color | Target
+Budget Usage | 78 | 0 | 100 | % | | 80</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multi_gauge_grid_2">Multi-Gauge Grid</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">type=MULTI_GAUGE
+columns=3
 ---
 Label | Value | Min | Max | Unit | Color
-Throughput | 58 | 0 | 100 | Mbps | #3B82F6" data-kind="gauge">
-<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="224.9999999971875" height="179.99999999775002" viewBox="0 0 400.0 320.0" id="gauge_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" aria-label="DocOps: Gauge Chart">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Metric","Value"],"rows":[["Chart Title","Network Throughput"],["Chart Type","SEMI_CIRCLE"],["Number of Gauges","1"],["Theme Version","3"],["Dark Mode","true"],["Show Ranges","true"],["Timestamp","2026-02-01T14:04:01.182266Z"],["",""],["Normal Range Start","0.00"],["Normal Range End","60.00"],["Caution Range Start","60.00"],["Caution Range End","85.00"],["Critical Range Start","85.00"],["Critical Range End","100.00"],["",""],["=== Gauge 1: Throughput ===",""],["  Label","Throughput"],["  Value","58.00"],["  Min","0.00"],["  Max","100.00"],["  Unit","Mbps"],["  Percentage","58.00%"],["  Zone","NORMAL"],["  Color","#3B82F6"],["",""],["=== Overall Statistics ===",""],["Average Value","58.00"],["Maximum Value","58.00"],["Minimum Value","58.00"],["Normal Zone Count","1"],["Caution Zone Count","0"],["Critical Zone Count","0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .gauge-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; } .gauge-value-large { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; } .gauge-value-medium { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.02em; } .gauge-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 10px; fill: #38bdf8; text-transform: uppercase; letter-spacing: 0.15em; } .range-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; } @keyframes arcDraw { from { stroke-dashoffset: var(--arc-length); opacity: 0; } to { stroke-dashoffset: var(--arc-offset); opacity: 1; } } .animated-arc { stroke-dasharray: var(--arc-length); stroke-dashoffset: var(--arc-length); animation: arcDraw 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards; } @keyframes digitFlip { 0% { opacity: 0; transform: rotateX(-90deg); } 50% { opacity: 0; } 100% { opacity: 1; transform: rotateX(0deg); } } .animated-digit { animation: digitFlip 0.6s ease-out 1.2s both; } /* Dark mode specific enhancements */ .gauge-value-large, .gauge-value-medium { filter: drop-shadow(0px 0px 8px rgba(56, 189, 248, 0.3)); }</style><!-- Gradients --><linearGradient id="criticalGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#DC2626"/><stop offset="100%" stop-color="#EF4444"/></linearGradient><linearGradient id="warningGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient><linearGradient id="successGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10B981"/></linearGradient><!-- Glow filter with dynamic intensity --><filter id="glow_gauge_70da15c8f7ea43bb8f1162f31ccfeda8"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><!-- Dark mode specific gradients --><radialGradient id="bgGlow_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e293b" stop-opacity="1"/><stop offset="100%" stop-color="#020617" stop-opacity="1"/></radialGradient><filter id="dropShadow_gauge_70da15c8f7ea43bb8f1162f31ccfeda8"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0, 0, 0, 0.3)"/></filter><pattern id="dotPattern_gauge_70da15c8f7ea43bb8f1162f31ccfeda8" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/></pattern></defs><rect width="400.0" height="320.0" fill="#0a0e27" rx="12"/><rect width="400.0" height="320.0" fill="url(#bgGlow_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" rx="12" opacity="0.5"/><rect width="400.0" height="320.0" fill="url(#dotPattern_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" rx="12" opacity="0.3" pointer-events="none"/><text x="200.0" y="35" font-family="'Archivo', -apple-system, sans-serif" font-size="22" font-weight="800" text-anchor="middle" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 1px;">Network Throughput</text><path d="M 100.0,250.0 A 100.0,100.0 0 0,1 300.0,250.0" fill="none" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 230.90169943749476,154.89434837048464" fill="none" stroke="url(#successGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 230.90169943749476,154.89434837048464 A 100.0,100.0 0 0 1 289.1006524188368,204.60095002604533" fill="none" stroke="url(#warningGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 289.1006524188368,204.60095002604533 A 100.0,100.0 0 0 1 300.0,250.0" fill="none" stroke="url(#criticalGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><path d="M 100.0,250.0 A 100.0,100.0 0 0 1 224.8689887164855,153.14168388713688" fill="none" stroke="url(#successGrad_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)" stroke-width="20" stroke-linecap="round" class="animated-arc" style="--arc-length: 182; --arc-offset: 0;" filter="url(#glow_gauge_70da15c8f7ea43bb8f1162f31ccfeda8)"/><circle cx="200.0" cy="250.0" r="12" fill="#0a0e27"/><circle cx="200.0" cy="250.0" r="8" fill="#10B981"/><text x="200.0" y="265.0" text-anchor="middle" class="gauge-value-large animated-digit" fill="#10B981">58</text><text x="200.0" y="290.0" text-anchor="middle" class="gauge-label">Throughput Mbps</text><text x="100.0" y="270.0" class="range-label" fill="#10B981">0</text><text x="200.0" y="155.0" text-anchor="middle" class="range-label" fill="#94a3b8">50</text><text x="300.0" y="270.0" text-anchor="end" class="range-label" fill="#EF4444">100</text></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-cd976d0bc15f3fbb')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-cd976d0bc15f3fbb">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-cd976d0bc15f3fbb')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-cd976d0bc15f3fbb')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-cd976d0bc15f3fbb')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-cd976d0bc15f3fbb')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-cd976d0bc15f3fbb')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-cd976d0bc15f3fbb')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-cd976d0bc15f3fbb')" title="Show CSV Data">📊 CSV</button>
+Server 1 | 45 | 0 | 100 | % |
+Server 2 | 62 | 0 | 100 | % |
+Server 3 | 88 | 0 | 100 | % |</code></pre>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-cd976d0bc15f3fbb" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-cd976d0bc15f3fbb')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-cd976d0bc15f3fbb">
-        <div class="csv-loading">Loading CSV data...</div>
-    </div>
-</div>
-</div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
 </div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
@@ -3517,26 +2805,23 @@ imageblock .title {
 <h2 id="_color_ranges">Color Ranges</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Gauge charts automatically apply color ranges to indicate status levels:</p>
+<p>Gauges automatically apply color zones:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Normal Range</strong> (Green #10B981): 0% to 60% - Optimal performance</p>
+<p><strong>0-60%</strong> - Normal (Green #10B981) - Optimal performance</p>
 </li>
 <li>
-<p><strong>Caution Range</strong> (Yellow/Orange #F59E0B): 60% to 85% - Warning zone</p>
+<p><strong>60-85%</strong> - Caution (Yellow #F59E0B) - Warning zone</p>
 </li>
 <li>
-<p><strong>Critical Range</strong> (Red #EF4444): 85% to 100% - Action required</p>
-</li>
-<li>
-<p><strong>Overflow</strong> (Gray #94a3b8): Values exceeding the maximum</p>
+<p><strong>85-100%</strong> - Critical (Red #EF4444) - Action required</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>These color ranges provide immediate visual feedback about the metric&#8217;s status.</p>
+<p>Disable with <code>showRanges=false</code> to use custom colors.</p>
 </div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
@@ -3544,33 +2829,24 @@ imageblock .title {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_use_cases">Use Cases</h2>
+<h2 id="_common_use_cases">Common Use Cases</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Gauge charts are ideal for:</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Performance Monitoring</strong>: CPU usage, memory consumption, disk space</p>
+<p><strong>Infrastructure monitoring</strong> - CPU, memory, disk usage across server fleets</p>
 </li>
 <li>
-<p><strong>Progress Tracking</strong>: Project completion, goals achievement, task progress</p>
+<p><strong>Progress tracking</strong> - Project milestones, sprint burndown, goal completion</p>
 </li>
 <li>
-<p><strong>Status Indicators</strong>: System health, service availability, uptime</p>
+<p><strong>Environmental metrics</strong> - Temperature, humidity, air quality in facilities</p>
 </li>
 <li>
-<p><strong>Quality Metrics</strong>: Test coverage, code quality scores, satisfaction ratings</p>
+<p><strong>Budget dashboards</strong> - Spend vs. allocation, runway visualization</p>
 </li>
 <li>
-<p><strong>Resource Utilization</strong>: Bandwidth usage, capacity planning, allocation tracking</p>
-</li>
-<li>
-<p><strong>Environmental Monitoring</strong>: Temperature, humidity, air quality</p>
-</li>
-<li>
-<p><strong>Financial Metrics</strong>: Budget utilization, sales targets, revenue goals</p>
+<p><strong>Service health</strong> - Uptime percentages, response times, error rates</p>
 </li>
 </ul>
 </div>
@@ -3580,43 +2856,40 @@ imageblock .title {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_interactive_features">Interactive Features</h2>
+<h2 id="_best_practices">Best Practices</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Gauge charts in the DocOps extension include several interactive features:</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Visual Indicators</strong>: Color-coded ranges provide instant status feedback</p>
+<p><strong>Use MULTI_GAUGE for comparisons</strong> - Show 3-9 related metrics side-by-side</p>
 </li>
 <li>
-<p><strong>Animations</strong>: Smooth arc animations enhance the user experience</p>
+<p><strong>Reserve DIGITAL for hero metrics</strong> - One prominent number that demands attention</p>
 </li>
 <li>
-<p><strong>Tooltips</strong>: Hover effects display detailed information</p>
+<p><strong>Set realistic ranges</strong> - Min/max should reflect actual operating bounds</p>
 </li>
 <li>
-<p><strong>Responsive Scaling</strong>: Gauges scale appropriately for different screen sizes</p>
+<p><strong>Add targets for LINEAR</strong> - Show goal lines for budget or performance targets</p>
+</li>
+<li>
+<p><strong>Keep units consistent</strong> - Don&#8217;t mix % and absolute values in one grid</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>These interactive features enhance the user experience and make it easier to interpret the metrics in your charts.</p>
+<p>For server monitoring, use MULTI_GAUGE with 3 columns. This creates a scannable grid where anomalies (red/yellow gauges) pop instantly.</p>
 </div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_conclusion">Conclusion</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The DocOps Gauge Chart Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing gauge charts. The tabular data format makes it easy to create and maintain gauge charts for monitoring metrics and displaying progress.</p>
-</div>
-<div class="paragraph">
-<p>The extension supports seven different gauge types, from classic speedometer styles to modern digital displays, giving you flexibility in how you present your metric data. The automatic color ranges and dark mode support ensure your gauges are both informative and visually appealing in any context.</p>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
@@ -3666,7 +2939,7 @@ body.light-mode .reading-time {
 }
 </style>
 <div class="reading-time">
-    <p>📖 4 min read • 1288 words</p>
+    <p>📖 1 min read • 456 words</p>
 </div>
 <style>
 .listingblock {

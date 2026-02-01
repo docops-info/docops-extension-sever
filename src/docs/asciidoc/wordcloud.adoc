@@ -15,192 +15,140 @@ include::shared/buttons.adoc[]
 link:wordcloudshowcase.html[Word Cloud Showcase,window=_blank]
 
 
-== Overview
+== Introduction
 
-The DocOps WordCloud Extension allows you to create visually appealing word clouds to highlight key terms and their relative importance. Word clouds are a great way to visualize text data where the size of each word indicates its frequency or importance.
+Word clouds transform text data into visual hierarchies where size indicates importance. Perfect for survey results, tag clouds, keyword analysis, or any scenario where you want to show relative frequency or significance at a glance.
 
-[.back-to-top]
-<<top, 🔝>>
+=== Key Features
 
-== Features
-
-* Interactive SVG-based word clouds
-* Customizable dimensions, colors, and font sizes
-* Individual color assignment for each word
-* Hover effects for better user interaction
-* Support for both light and dark themes
-* Automatic word placement algorithm to avoid overlaps
+* *Weight-based sizing* - Higher weight = larger font
+* *Custom colors* - Assign colors per word or use palette
+* *Auto-placement* - Intelligent algorithm prevents overlaps
+* *Interactive hover* - Highlight words on mouseover
+* *Responsive scaling* - Scale entire cloud with one parameter
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Usage
+## Default Word Cloud
 
-To create a word cloud, use the `wordcloud` block type in your AsciiDoc document:
+Basic word cloud with weighted text:
 
 [source,asciidoc]
 ....
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud1.txt[]
-----
-....
-
 [docops,wordcloud]
 ----
+title= Key Technologies
+minFontSize= 12
+maxFontSize= 60
+---
+Word | Weight | Color
+Kubernetes | 95 | #3498db
+Docker | 88 | #2ecc71
+Python | 82 | #e74c3c
+JavaScript | 78 | #f39c12
+PostgreSQL | 72 | #9b59b6
+----
+....
+
+[docops,wordcloud,controls=true]
+----
 include::data/wordcloud/wordcloud1.txt[]
 ----
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Parsing Format
+== Dark Mode Cloud
 
-Word clouds use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:
+Optimized colors for dark backgrounds:
 
-1. **Configuration Section**: Contains key-value pairs in the format `key=value` before the `---` separator
-2. **Data Section**: Contains the word data after the separator in a tabular format
-
-For more information about the parsing framework, see the xref:parsing.adoc[Parsing Utilities] documentation.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Configuration Parameters
-
-The word cloud can be customized using the following configuration parameters:
-
-[cols="1,1,3"]
-|===
-|Parameter |Default |Description
-
-|title
-|Word Cloud
-|The title displayed at the top of the word cloud
-
-|width
-|800
-|The width of the word cloud in pixels
-
-|height
-|600
-|The height of the word cloud in pixels
-
-|minFontSize
-|10
-|The minimum font size for words with the lowest weight
-
-|maxFontSize
-|60
-|The maximum font size for words with the highest weight
-
-|darkMode
-|false
-|Whether to use a dark theme (true) or light theme (false)
-
-|baseColor
-|#3498db
-|The default color for words without a specific color
-
-|shape
-|rectangle
-|The shape of the word cloud (currently supports "rectangle")
-
-|scale
-|1.0
-|A scaling factor for the entire word cloud
-|===
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Word Data Format
-
-After the configuration section and the separator line (`---`), each line represents a word in the format:
-
-[source]
+[docops,wordcloud,controls=true,useDark=true]
 ----
+include::data/wordcloud/wordcloud2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Survey Results Cloud
+
+Visualize feedback themes by frequency:
+
+[docops,wordcloud,controls=true]
+----
+include::data/wordcloud/wordcloud3.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Survey analysis* - Show most common themes or keywords from feedback
+* *Tag clouds* - Display popular tags or categories from content
+* *Skill maps* - Visualize team skills with experience as weight
+* *Product features* - Highlight most-used or most-requested features
+* *Documentation topics* - Show coverage by topic frequency
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Format
+
+[source,asciidoc]
+....
+[docops,wordcloud]
+----
+title= Your Title
+minFontSize= 12
+maxFontSize= 60
+---
 Word | Weight | Color
+Term 1 | 95 | #3498db
+Term 2 | 88 | #2ecc71
+Term 3 | 72 | #e74c3c
 ----
+....
 
-Where:
+=== Common Options
 
-* `Word` is the text to display
-* `Weight` is a numeric value that determines the relative size of the word (higher values = larger font)
-* `Color` is an optional hex color code (e.g., #3498db) for the word
+* `title` - Cloud title (shown at top)
+* `minFontSize=12` - Smallest font size (default: 10)
+* `maxFontSize=60` - Largest font size (default: 60)
+* `width=800` - Canvas width (default: 800)
+* `height=600` - Canvas height (default: 600)
+* `useDark=true` - Enable dark theme
+* `scale=1.5` - Scale entire cloud
+
+=== Weight Guidelines
+
+Weights determine relative sizing:
+- **90-100**: Dominant terms (largest)
+- **70-89**: Important terms (large)
+- **50-69**: Common terms (medium)
+- **30-49**: Supporting terms (small)
+- **10-29**: Rare terms (smallest)
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Examples
+== Best Practices
 
-=== Basic Word Cloud
+* *Use 15-30 words* - Too few lacks impact; too many creates clutter
+* *Weight by significance** - Base weights on frequency, importance, or impact
+* *Color by category* - Group related terms with similar colors
+* *Leave white space* - Don't maximize font sizes; readability > density
+* *Rotate for variety* - Mix horizontal and angled words for visual interest
 
-[source,asciidoc]
-....
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud2.txt[]
-----
-....
-
-
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud2.txt[]
-----
-
-
-=== Technology Trends Word Cloud
-
-[source,asciidoc]
-....
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud3.txt[]
-----
-....
-
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud3.txt[]
-----
-
-
-=== Dark Mode Word Cloud
-
-[source,asciidoc]
-....
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud4.txt[]
-----
-....
-
-[docops,wordcloud,controls=true]
-----
-include::data/wordcloud/wordcloud4.txt[]
-----
+[TIP]
+====
+For survey results, weight by response frequency and color-code by sentiment (green=positive, red=negative, blue=neutral). This creates a visual sentiment map that's instantly readable.
+====
 
 [.back-to-top]
 <<top, 🔝>>
-
-== Technical Implementation
-
-The word cloud is generated as an SVG with the following features:
-
-* Words are arranged in a spiral pattern to maximize space usage
-* A collision detection algorithm ensures words don't overlap
-* Each word has a gradient effect based on its color
-* Words have a subtle drop shadow for depth
-* Interactive hover effects (scaling and brightness change)
-* Random rotation of some words for visual interest
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Integration
-
-The word cloud extension integrates seamlessly with AsciiDoctor documents and can be used in any DocOps-enabled documentation.
 
 

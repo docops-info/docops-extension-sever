@@ -18,279 +18,259 @@ link:todoshowcase.html[Todos Showcase, window=_blank]
 
 == Introduction
 
-The DocOps Todo Extension allows you to create visually appealing todo list visualizations in your AsciiDoctor documents. Todo lists are useful for project management, task tracking, and organizing work items in a visual format.
+_Task tracking with Kanban boards, lists, and grids_
 
-This guide will help you understand how to create different styles of todo visualizations, from simple lists to advanced Kanban boards.
+*Key features:*
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Basic Concepts
-
-=== What are Todo Visualizations?
-
-Todo visualizations in the DocOps extension are SVG-based visual elements that display task lists with:
-
-* Task descriptions
-* Status tracking (Pending, In Progress, Completed, etc.)
-* Priority levels (Low, Medium, High, Critical)
-* Optional categories, assignees, and due dates
-* Multiple layout options (Kanban, List, Grid, Timeline)
-
-=== Todo Components
-
-A todo visualization includes:
-
-* **Tasks**: The main items to be completed
-* **Status**: Current state of each task
-* **Priority**: Importance level of each task
-* **Categories**: Optional grouping for tasks
-* **Assignees**: Who is responsible for each task
-* **Due Dates**: When tasks should be completed
+* Multiple layouts (Kanban, List, Grid, Timeline)
+* Status tracking (Pending, In Progress, Completed, Blocked)
+* Priority levels with visual indicators
+* Assignee and due date support
+* Table or JSON format
 
 [.back-to-top]
 <<top, 🔝>>
 
-== AsciiDoctor Syntax for Todo Lists
+== Default Example
 
-To include todo lists in your AsciiDoctor document, you use the DocOps macro. The extension supports both table format and JSON format.
-
-=== Table Format (Simple)
-
-Here's the basic table format:
+Simple Kanban board for sprint planning:
 
 [source,asciidoc]
 ....
 [docops,todo,controls=true]
 ----
-title: My Project Tasks
+title: Sprint 23 Tasks
 layout=kanban
 groupBy=status
 ---
-Task | Status | Priority | Category | Assignee | Due Date | Tags | Description
-Setup development environment | pending | high | Development | Alice | 2024-01-15 | setup,env | Configure local development tools
-Create project wireframes | in_progress | medium | Design | Bob | 2024-01-20 | design,ui | Design initial user interface mockups
-Implement user authentication | pending | high | Development | Alice | 2024-01-25 | auth,backend | Add login and registration functionality
-Write API documentation | pending | medium | Documentation | Carol | 2024-01-30 | docs,api | Document REST API endpoints
-Deploy to staging | pending | low | DevOps | Bob | 2024-02-05 | deploy,staging | Set up staging environment
+Task | Status | Priority | Category | Assignee | Due Date
+Setup development environment | pending | high | Development | Alice | 2024-01-15
+Create project wireframes | in_progress | medium | Design | Bob | 2024-01-20
+Implement user authentication | pending | high | Development | Alice | 2024-01-25
+Write API documentation | pending | medium | Documentation | Carol | 2024-01-30
+Deploy to staging | pending | low | DevOps | Bob | 2024-02-05
+----
+....
+
+[docops,todo,controls=true]
+----
+include::data/todo/todo1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Focused Examples
+
+=== Team Task Board with Categories
+
+[source,asciidoc]
+....
+[docops,todo,controls=true]
+----
+title: Team Task Board
+layout=kanban
+groupBy=category
+showStats=true
+showAssignees=true
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Design user dashboard | in_progress | high | Frontend | Alice | 2024-01-20
+API integration tests | pending | medium | Backend | Bob | 2024-01-25
+Database schema update | completed | high | Backend | Alice | 2024-01-18
+Mobile responsiveness | in_progress | medium | Frontend | Carol | 2024-01-22
+Security audit | pending | critical | Security | Bob | 2024-01-30
+----
+....
+
+[docops,todo,controls=true]
+----
+include::data/todo/todo2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Personal List (Dark Mode)
+
+[source,asciidoc]
+....
+[docops,todo,controls=true,useDark=true]
+----
+title: Personal Tasks
+layout=list
+groupBy=priority
+---
+Task | Status | Priority | Due Date
+Review Q4 performance reports | pending | high | 2024-01-15
+Schedule team 1:1s | pending | medium | 2024-01-20
+Update project documentation | in_progress | medium | 2024-01-25
+Plan Q1 roadmap | pending | high | 2024-01-30
+Submit expense reports | completed | low | 2024-01-10
+----
+....
+
+[docops,todo,controls=true,useDark=true]
+----
+include::data/todo/todo5.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Sprint planning* - Kanban boards for agile development workflows
+* *Project management* - Track deliverables across teams
+* *Documentation tasks* - Organize writing and review assignments
+* *Personal productivity* - Individual task lists with priorities
+* *Team handoffs* - Status snapshots for project transitions
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Table Format (Simple)
+[source,asciidoc]
+....
+[docops,todo]
+----
+title: My Tasks
+layout=kanban
+groupBy=status
+---
+Task | Status | Priority | Category | Assignee | Due Date
+Task name | pending | high | Category | Person | 2024-01-15
 ----
 ....
 
 === JSON Format (Advanced)
-
-For more control, you can use the JSON format:
-
 [source,asciidoc]
 ....
-[docops,todo,controls=true]
+[docops,todo]
 ----
 {
   "config": {
-    "title": "Sprint Planning",
+    "title": "Sprint Tasks",
     "layout": "KANBAN",
     "groupBy": "STATUS",
-    "showStats": true,
-    "showCategories": true,
-    "showAssignees": true,
-    "showDueDates": true,
-    "useGlass": true
+    "showStats": true
   },
   "items": [
     {
-      "task": "Design user dashboard",
+      "task": "Design dashboard",
       "status": "IN_PROGRESS",
       "priority": "HIGH",
       "category": "Frontend",
       "assignee": "Alice",
-      "dueDate": "2024-01-20",
-      "tags": ["ui", "dashboard"],
-      "description": "Create responsive dashboard layout"
-    },
-    {
-      "task": "API integration tests",
-      "status": "PENDING",
-      "priority": "MEDIUM",
-      "category": "Backend",
-      "assignee": "Bob",
-      "dueDate": "2024-01-25",
-      "tags": ["testing", "api"],
-      "description": "Write comprehensive API tests"
+      "dueDate": "2024-01-20"
     }
   ]
 }
 ----
 ....
 
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|layout
+|"kanban", "list", "grid", "timeline"
+
+|groupBy
+|"status", "priority", "category", "assignee", "none"
+
+|showStats
+|Display task count statistics
+
+|showCategories
+|Show category labels
+
+|showAssignees
+|Display assignee names
+
+|showDueDates
+|Show due dates
+
+|useDark=true
+|Dark theme
+|===
+
 [.back-to-top]
 <<top, 🔝>>
 
-== Configuration Options
+== Status & Priority
 
-=== Layout Types
+=== Status Values
+[cols="1,1,3"]
+|===
+|Status |Icon |Meaning
 
-* **KANBAN**: Board with columns for each status (default)
-* **LIST**: Simple vertical list of tasks
-* **GRID**: Grid layout with task cards
-* **TIMELINE**: Timeline view (best with due dates)
+|PENDING
+|⏳
+|Not started
 
-=== Status Options
+|IN_PROGRESS
+|🔄
+|Currently working
 
-* **PENDING** (⏳): Not started yet
-* **IN_PROGRESS** (🔄): Currently being worked on
-* **COMPLETED** (✅): Finished
-* **BLOCKED** (🚫): Cannot proceed
-* **CANCELLED** (❌): No longer needed
-* **ON_HOLD** (⏸️): Temporarily paused
+|COMPLETED
+|✅
+|Finished
+
+|BLOCKED
+|🚫
+|Cannot proceed
+
+|CANCELLED
+|❌
+|No longer needed
+
+|ON_HOLD
+|⏸️
+|Paused temporarily
+|===
 
 === Priority Levels
+[cols="1,1,3"]
+|===
+|Priority |Color |Use When
 
-* **LOW** (🔵): Nice to have
-* **MEDIUM** (🟡): Normal priority
-* **HIGH** (🟠): Important
-* **CRITICAL** (🔴): Urgent
+|LOW
+|🔵
+|Nice to have, flexible timing
 
-=== Grouping Options
+|MEDIUM
+|🟡
+|Normal priority work
 
-* **NONE**: No grouping
-* **STATUS**: Group by task status
-* **PRIORITY**: Group by priority level
-* **CATEGORY**: Group by category
-* **ASSIGNEE**: Group by assignee
+|HIGH
+|🟠
+|Important, near-term deadline
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Examples
-
-=== Simple Project Todo List (Table Format)
-
-[source,asciidoc]
-....
-[docops,todo,controls=true]
-----
-include::data/todo/todo1.txt[]
-----
-....
-
-[docops,todo,controls=true]
-----
-include::data/todo/todo1.txt[]
-----
-
-=== Team Task Board with Assignees
-
-[source,asciidoc]
-....
-[docops,todo,controls=true]
-----
-include::data/todo/todo2.txt[]
-----
-....
-
-[docops,todo,controls=true]
-----
-include::data/todo/todo2.txt[]
-----
-
-=== Personal Task List (List Layout)
-
-[source,asciidoc]
-....
-[docops,todo,controls=true]
-----
-include::data/todo/todo3.txt[]
-----
-....
-
-[docops,todo,controls=true]
-----
-include::data/todo/todo3.txt[]
-----
-
-=== Grid Layout for Quick Overview
-
-[source,asciidoc]
-....
-[docops,todo,controls=true]
-----
-include::data/todo/todo4.txt[]
-----
-....
-
-[docops,todo,controls=true]
-----
-include::data/todo/todo4.txt[]
-----
-
-=== Dark Mode Example
-
-[source,asciidoc]
-....
-[docops,todo,controls=true,useDark=true]
-----
-include::data/todo/todo5.txt[]
-----
-....
-
-[docops,todo,controls=true,useDark=true]
-----
-include::data/todo/todo5.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Advanced Features
-
-=== Using Emojis for Visual Enhancement
-
-You can use emojis in task names and descriptions to make your todo lists more visually appealing:
-
-[source,asciidoc]
-....
-[docops,todo,controls=true]
-----
-include::data/todo/todo6.txt[]
-----
-....
-
-[docops,todo,controls=true]
-----
-include::data/todo/todo6.txt[]
-----
-
-=== Custom Status Indicators
-
-The todo visualization automatically detects various status formats:
-
-* Text: "pending", "in_progress", "completed", etc.
-* Emojis: "⏳", "🔄", "✅", etc.
-* Short forms: "todo", "working", "done", etc.
+|CRITICAL
+|🔴
+|Urgent, blocking other work
+|===
 
 [.back-to-top]
 <<top, 🔝>>
 
 == Best Practices
 
-1. **Keep task names concise** - Use clear, actionable language
-2. **Use consistent categories** - This helps with organization and filtering
-3. **Set realistic priorities** - Don't make everything critical
-4. **Regular updates** - Keep status current for team visibility
-5. **Use due dates wisely** - Only when truly needed
-6. **Leverage tags** - For cross-cutting concerns and filtering
+* *Keep task names actionable* - "Deploy API" not "API stuff"
+* *Use consistent categories* - Helps with groupBy organization
+* *Set priorities realistically* - Not everything is critical
+* *Update status regularly* - Stale boards lose value quickly
+* *Limit due dates* - Only when truly needed for coordination
+* *Choose layout by context* - Kanban for workflow, List for quick reference
+
+[TIP]
+====
+*For sprint planning:* Use Kanban layout grouped by status. Set HIGH priority for sprint commitments and MEDIUM for stretch goals. Update status daily during standup to keep the board accurate and actionable.
+====
 
 [.back-to-top]
 <<top, 🔝>>
-
-== Integration Tips
-
-The todo visualization integrates well with:
-
-* Project management workflows
-* Sprint planning documents
-* Team status reports
-* Personal productivity tracking
-* Documentation of development processes
-
-Use the CSV export feature to integrate with external project management tools and track progress over time.
 

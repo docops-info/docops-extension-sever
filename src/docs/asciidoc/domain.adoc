@@ -21,26 +21,36 @@ include::shared/buttons.adoc[]
 [.back-to-top]
 <<top, 🔝>>
 
-== Overview
+== Introduction
 
-The DocOps Domain Visualizer renders a high-level view of a business or technical domain with:
+Domain visualizations map business or technical architectures using a compact CSV format that generates clean, hierarchical diagrams. Perfect for showing system landscapes, capability maps, or any structure with shared foundations and specialized verticals.
 
-- A single MAIN node (the domain you’re describing)
-- One or more COMMON capability rows (shared across the domain)
-- Zero or more Specialized Groups (verticals or high-level operations with their own rows)
+=== Key Features
 
-Author diagrams directly in AsciiDoc using a compact CSV-like syntax inside a DocOps block. The server parses the payload and returns an SVG.
+* *Hierarchical layout* - Main node, common capabilities, specialized groups
+* *Emoji support* - Visual icons for quick identification
+* *Clickable nodes* - Wiki-style links embed documentation
+* *Glass morphism** - Modern, layered visual design
+* *Auto-layout* - Smart positioning prevents overlaps
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Quick Start
+== Simple Technology Stack
+
+Basic domain with shared and specialized layers:
 
 [source,asciidoc]
 ....
 [docops,domain,controls=true]
 ----
-include::data/domain/domain1.txt[]
+main,TECHNOLOGY
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"FRONTEND,BACKEND,DATABASE"
+COMMON,,1,"DEVOPS,DOCOPS"
+FRONTEND,🧑🏻‍💻,0,"HTML,CSS,JAVASCRIPT"
+BACKEND,🧑🏻‍💻,0,"KOTLIN,JAVA,PYTHON"
 ----
 ....
 
@@ -52,209 +62,102 @@ include::data/domain/domain1.txt[]
 [.back-to-top]
 <<top, 🔝>>
 
-== Syntax
+== Domain with Wiki Links
 
-The payload is a minimal CSV with a header and rows.
-
-Required lines:
-
-- main,<NAME>
-- type,emoji,rowIndex,nodes  (header)
-
-Rows:
-
-- COMMON rows populate the shared capability band across the diagram.
-- Any other value in the type column becomes a Specialized Group. Its emoji applies to all nodes in that group. Use rowIndex to add multiple rows within the same group.
-
-Column meanings:
-
-- type: COMMON or Group Name (e.g., FRONTEND, BACKEND, PAYMENTS)
-- emoji: An optional emoji displayed for each node in that row/group
-- rowIndex: 0-based index for the row order within COMMON or the specialized group
-- nodes: a quoted, comma-separated list of node titles (no extra quotes inside)
-
-Notes:
-
-- You may specify MAIN as a row (MAIN,,0,"NAME"). If omitted, the first line main,NAME is used.
-- Header line is mandatory for the data section: type,emoji,rowIndex,nodes
-- **Wiki-style links**: Use `[[url label]]` syntax to make nodes clickable. Multiple links can be separated with semicolons.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Wiki-Style Links
-
-Transform your domain diagrams into interactive knowledge maps by embedding clickable links directly in node names.
-
-=== Link Syntax
-
-Use the wiki-style format: `[[url label]]`
-
-- **Single link**: `[[https://docs.company.com/api API Docs]]`
-- **Multiple links**: Separate with semicolons: `[[https://github.com/repo GitHub]];[[https://docs.com Docs]]`
-- **Mixed content**: Combine linked and plain text: `DATABASE;[[https://wiki.company.com/db-guide DB Guide]]`
-
-=== Knowledge Hub Example
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-include::data/domain/domain2.txt[]
-----
-....
+Make nodes clickable with embedded documentation links:
 
 [docops,domain,controls=true]
 ----
 include::data/domain/domain2.txt[]
 ----
 
-=== Architecture Decision Records
+[.back-to-top]
+<<top, 🔝>>
 
-[source,asciidoc]
-....
-[docops,domain,useDark=true]
+== Dark Mode Architecture
+
+[docops,domain,controls=true,useDark=true]
 ----
 include::data/domain/domain3.txt[]
-----
-....
-
-[docops,domain,useDark=true]
-----
-include::data/domain/domain3.txt[]
-----
-
-=== DevOps Toolchain with Dashboards
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-include::data/domain/domain4.txt[]
-----
-....
-
-[docops,domain,controls=true]
-----
-include::data/domain/domain4.txt[]
 ----
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Creative Examples
+== Common Use Cases
 
-=== Product Platform with Shared Services
+* *System architecture* - Show tech stack layers and specialized services
+* *Capability maps* - Document shared capabilities vs. vertical-specific features
+* *Knowledge graphs* - Link nodes to docs, wikis, and repos
+* *Team structure* - Visualize shared platforms and product verticals
+* *Service landscapes* - Map microservices with shared infrastructure
 
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-include::data/domain/domain5.txt[]
-----
-....
+[.back-to-top]
+<<top, 🔝>>
 
-[docops,domain,controls=true]
-----
-include::data/domain/domain5.txt[]
-----
+== Format Options
 
-=== Payments Domain with Operations
+=== Basic Structure
 
 [source,asciidoc]
 ....
 [docops,domain]
 ----
-include::data/domain/domain6.txt[]
+main,DOMAIN_NAME
+
+type,emoji,rowIndex,nodes
+COMMON,,0,"Node1,Node2,Node3"
+COMMON,,1,"Node4,Node5"
+VERTICAL1,🚀,0,"Feature1,Feature2"
+VERTICAL2,🔧,0,"Tool1,Tool2"
 ----
 ....
 
-[docops,domain]
+=== Row Organization
+
+* **COMMON rows** - Shared capabilities across all verticals (appear at top)
+* **Specialized groups** - Named verticals with their own rows
+* **rowIndex** - Order within a group (0=first row, 1=second row, etc.)
+* **nodes** - Comma-separated list (quoted if contains commas)
+
+=== Wiki-Style Links
+
+Transform nodes into clickable links:
+
+[source]
 ----
-include::data/domain/domain6.txt[]
+"[[https://docs.com API Docs]],SERVICE,DATABASE"
 ----
 
-=== Platform Engineering View (Dark Mode)
+Multiple links per node (semicolon-separated):
 
-
-[source,asciidoc]
-....
-[docops,domain,useDark=true,controls=true]
+[source]
 ----
-include::data/domain/domain7.txt[]
-----
-....
-
-[docops,domain,useDark=true,controls=false]
-----
-include::data/domain/domain7.txt[]
+"[[https://github.com/repo Code]];[[https://wiki.com Docs]]"
 ----
 
+=== Common Options
 
-[docops,domain,controls=false,title="Neural implementation"]
-----
-include::data/domain/domain10.txt[]
-----
-
-[docops,domain,useDark=true,title="Neural implementation - Dark mode"]
-----
-include::data/domain/domain10.txt[]
-----
+* `useDark=true` - Enable dark theme
+* `useNeural=true` - Alternative neural network visual style
 
 [.back-to-top]
 <<top, 🔝>>
 
+== Best Practices
 
-=== Enterprise Data Platform (Multi-Row Groups)
+* *Start with main node* - Always declare `main,NAME` first
+* *Group by purpose* - Use COMMON for shared, named groups for verticals
+* *Limit rows per group* - 2-3 rows max for readability
+* *Use emojis sparingly* - One per vertical for visual distinction
+* *Link to documentation* - Make diagrams navigable knowledge hubs
+* *Keep node names short* - 1-2 words max; details go in linked docs
 
-This example shows how specialized groups can span multiple rows using different `rowIndex` values, perfect for organizing complex domains with many components.
-
-[source,asciidoc]
-....
-[docops,domain,controls=true]
-----
-include::data/domain/domain8.txt[]
-----
-....
-
-[docops,domain,controls=true, useDark=true]
-----
-include::data/domain/domain8.txt[]
-----
-
-Notice how each specialized group (INGESTION, STORAGE, PROCESSING, ANALYTICS, ML/AI) uses multiple `rowIndex` values:
-- **INGESTION**: 3 rows (0, 1, 2) for streaming tools, connectors, and processing methods
-- **STORAGE**: 2 rows (0, 1) separating cloud warehouses from file systems
-- **PROCESSING**: 2 rows (0, 1) for big data engines vs. workflow orchestration
-- **ANALYTICS**: 2 rows (0, 1) for BI tools vs. interactive analysis
-- **ML/AI**: 3 rows (0, 1, 2) for MLOps, frameworks, and model lifecycle
+[TIP]
+====
+For architecture diagrams, use COMMON rows for infrastructure (databases, auth, monitoring,) and specialized groups for product verticals (web app, mobile app, API). This instantly shows what's shared vs. what's unique.
+====
 
 [.back-to-top]
 <<top, 🔝>>
-
-== Block Attributes
-
-The Domain block supports the standard DocOps attributes described in xref:docops.adoc[DocOps Block Processor]:
-
-[cols="1,1,1,3"]
-|===
-|Attribute |Type |Default |Description
-
-|controls |Boolean |false |Show the interactive viewer (zoom/copy/fullscreen)
-|title    |String  |SVG Viewer |Viewer title (for controls)
-|useDark  |Boolean |false |Render using the dark theme palette
-|scale    |String  |1.0 |Scale factor sent to the server
-|role     |String  |center |Alignment for the rendered block (left/center/right)
-|===
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Tips
-
-- Keep nodes concise; multi-word titles are fine (use commas to separate nodes, keep the whole list quoted)
-- Use rowIndex to organize large groups into multiple rows
-- Emojis help quickly identify specialized groups
-- You can also post JSON to the service, but CSV is the simplest path for docs
-- Server endpoint behind the scenes is kind=domain
 

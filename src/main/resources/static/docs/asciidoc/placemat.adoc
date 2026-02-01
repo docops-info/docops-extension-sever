@@ -5,7 +5,7 @@ include::_base.adoc[]
 :prev-page-url: metricscard.html
 :next-page-title: Planner
 :next-page-url: planner.html
-= DocOps Place Mats
+= 🏷️ DocOps Place Mats
 :imagesdir: images
 
 
@@ -15,126 +15,26 @@ include::shared/buttons.adoc[]
 
 == Introduction
 
-The DocOps Place mat Extension allows you to create visually appealing grid-based diagrams in your AsciiDoctor documents. Place mats are useful for organizing related concepts, showing system components, or presenting categorized information in a structured layout.
+_Color-coded label grids for organizing concepts and components_
 
-This guide will help you understand the basic concepts of place mats, how to include them in your AsciiDoctor documents, and provide examples of different types of place mats.
+*Key features:*
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Basic Concepts
-
-=== What are Place mats?
-
-Place mats in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each place mat has:
-
-* A title (the main heading of the diagram)
-* A grid of boxes, each containing text
-* A legend that categorizes the boxes by color
-* Optional display settings for customizing the appearance
-
-The extension supports different display options, including:
-
-* Regular mode (light background)
-* Dark mode (dark background)
-* Filled or outlined boxes
-* Different scaling options
+* Grid-based layout with automatic wrapping
+* Color-coded categories via legend system
+* Filled or outlined box styles
+* Dark mode for presentations
+* JSON format for flexible configuration
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Place mat Components
+== Default Example
 
-A place mat diagram includes:
-
-* A title at the top
-* A grid of boxes, each containing text
-* Color-coding based on categories
-* A legend explaining the color categories
-
-== AsciiDoctor Syntax for Place mats
-
-To include place mats in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+Simple architecture component categorization:
 
 [source,asciidoc]
 ....
-[docops,placemat]
-----
-{
-  "title": "System Architecture Overview",
-  "placeMats": [
-    {"name": "Frontend", "legend": "UI"},
-    {"name": "Backend", "legend": "API"},
-    {"name": "Database", "legend": "DATA"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "UI", "color": "#4361ee"},
-      {"legend": "API", "color": "#3a0ca3"},
-      {"legend": "DATA", "color": "#7209b7"}
-    ]
-  }
-}
-----
-....
-
-The macro processes the JSON configuration and generates an SVG representation of the place mat that is embedded in your document.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Place mat Properties
-
-==== Main Properties
-
-* `title` (required): The main heading of the diagram
-* `placeMats` (required): An array of placemat box objects
-* `config` (required): Configuration settings for the placemat
-* `useDark` (optional): Whether to use dark mode (default: false)
-* `scale` (optional): A scaling factor for the diagram (default: 1.0)
-* `fill` (optional): Whether to use filled boxes (default: true)
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== PlaceMat Box Properties
-
-Each box in the `placeMats` array has the following properties:
-
-* `name` (required): The text displayed inside the box
-* `legend` (required): The category of the box (must match a legend entry)
-* `style` (optional): Custom CSS styling for this specific box
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Config Properties
-
-The `config` object has the following properties:
-
-* `legend` (required): An array of legend configuration objects
-* `style` (optional): Global CSS styling for the placemat
-
-==== Legend Configuration Properties
-
-Each legend configuration in the `legend` array has the following properties:
-
-* `legend` (required): The name of the category
-* `color` (required): The color code for the category
-* `style` (optional): CSS styling for the legend item
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Examples
-
-=== Basic Placemat Example
-
-Here's a simple example of a place mat diagram:
-
-[source,asciidoc]
-....
-[docops,placemat]
+[docops,placemat,controls=true]
 ----
 {
   "title": "System Architecture Overview",
@@ -176,10 +76,11 @@ Here's a simple example of a place mat diagram:
 [.back-to-top]
 <<top, 🔝>>
 
+== Focused Examples
 
-=== Technology Stack Example
+=== Technology Stack
 
-This example illustrates a technology stack with different categories:
+Multi-category grid for web development tools:
 
 [source,asciidoc]
 ....
@@ -253,398 +154,193 @@ This example illustrates a technology stack with different categories:
 [.back-to-top]
 <<top, 🔝>>
 
-=== Dark Mode Placemat Example
+=== Outlined Boxes (Dark Mode)
 
-You can create dark mode placemats by setting the `useDark` parameter to `true`:
-
-[source,asciidoc]
-....
-[docops,placemat]
-----
-{
-  "title": "Software Development Lifecycle",
-  "useDark": true,
-  "placeMats": [
-    {"name": "Requirements", "legend": "Planning"},
-    {"name": "Design", "legend": "Planning"},
-    {"name": "Implementation", "legend": "Development"},
-    {"name": "Testing", "legend": "Quality"},
-    {"name": "Deployment", "legend": "Operations"},
-    {"name": "Maintenance", "legend": "Operations"},
-    {"name": "User Feedback", "legend": "Feedback"},
-    {"name": "Iteration Planning", "legend": "Planning"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Planning", "color": "#4cc9f0"},
-      {"legend": "Development", "color": "#4361ee"},
-      {"legend": "Quality", "color": "#3a0ca3"},
-      {"legend": "Operations", "color": "#7209b7"},
-      {"legend": "Feedback", "color": "#f72585"}
-    ]
-  }
-}
-----
-....
-
-[docops,placemat]
-----
-{
-  "title": "Software Development Lifecycle",
-  "useDark": true,
-  "placeMats": [
-    {"name": "Requirements", "legend": "Planning"},
-    {"name": "Design", "legend": "Planning"},
-    {"name": "Implementation", "legend": "Development"},
-    {"name": "Testing", "legend": "Quality"},
-    {"name": "Deployment", "legend": "Operations"},
-    {"name": "Maintenance", "legend": "Operations"},
-    {"name": "User Feedback", "legend": "Feedback"},
-    {"name": "Iteration Planning", "legend": "Planning"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Planning", "color": "#4cc9f0"},
-      {"legend": "Development", "color": "#4361ee"},
-      {"legend": "Quality", "color": "#3a0ca3"},
-      {"legend": "Operations", "color": "#7209b7"},
-      {"legend": "Feedback", "color": "#f72585"}
-    ]
-  }
-}
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Outlined Boxes Example
-
-You can create place mats with outlined boxes by setting the `fill` parameter to `false`:
+Data science workflow with outline style:
 
 [source,asciidoc]
 ....
-[docops,placemat]
-----
-{
-  "title": "Data Science Workflow",
-  "fill": false,
-  "placeMats": [
-    {"name": "Data Collection", "legend": "Data"},
-    {"name": "Data Cleaning", "legend": "Data"},
-    {"name": "Exploratory Analysis", "legend": "Analysis"},
-    {"name": "Feature Engineering", "legend": "Analysis"},
-    {"name": "Model Selection", "legend": "Modeling"},
-    {"name": "Model Training", "legend": "Modeling"},
-    {"name": "Model Evaluation", "legend": "Evaluation"},
-    {"name": "Model Deployment", "legend": "Deployment"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Data", "color": "#06d6a0"},
-      {"legend": "Analysis", "color": "#1b9aaa"},
-      {"legend": "Modeling", "color": "#ef476f"},
-      {"legend": "Evaluation", "color": "#ffd166"},
-      {"legend": "Deployment", "color": "#073b4c"}
-    ]
-  }
-}
-----
-....
-
-[docops,placemat]
-----
-{
-  "title": "Data Science Workflow",
-  "fill": false,
-  "placeMats": [
-    {"name": "Data Collection", "legend": "Data"},
-    {"name": "Data Cleaning", "legend": "Data"},
-    {"name": "Exploratory Analysis", "legend": "Analysis"},
-    {"name": "Feature Engineering", "legend": "Analysis"},
-    {"name": "Model Selection", "legend": "Modeling"},
-    {"name": "Model Training", "legend": "Modeling"},
-    {"name": "Model Evaluation", "legend": "Evaluation"},
-    {"name": "Model Deployment", "legend": "Deployment"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Data", "color": "#06d6a0"},
-      {"legend": "Analysis", "color": "#1b9aaa"},
-      {"legend": "Modeling", "color": "#ef476f"},
-      {"legend": "Evaluation", "color": "#ffd166"},
-      {"legend": "Deployment", "color": "#073b4c"}
-    ]
-  }
-}
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Enterprise Architecture Example
-
-This example illustrates an enterprise architecture with different domains:
-
-[source,asciidoc]
-....
-[docops,placemat]
-----
-{
-  "title": "Enterprise Architecture Domains",
-  "placeMats": [
-    {"name": "Business Strategy", "legend": "Business"},
-    {"name": "Business Processes", "legend": "Business"},
-    {"name": "Organization Structure", "legend": "Business"},
-    {"name": "Application Portfolio", "legend": "Application"},
-    {"name": "Application Integration", "legend": "Application"},
-    {"name": "User Experience", "legend": "Application"},
-    {"name": "Data Models", "legend": "Data"},
-    {"name": "Data Governance", "legend": "Data"},
-    {"name": "Data Quality", "legend": "Data"},
-    {"name": "Infrastructure", "legend": "Technology"},
-    {"name": "Security", "legend": "Technology"},
-    {"name": "Cloud Strategy", "legend": "Technology"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Business", "color": "#ff9e00"},
-      {"legend": "Application", "color": "#ff5500"},
-      {"legend": "Data", "color": "#e10600"},
-      {"legend": "Technology", "color": "#8900f2"}
-    ]
-  }
-}
-----
-....
-
-[docops,placemat]
-----
-{
-  "title": "Enterprise Architecture Domains",
-  "placeMats": [
-    {"name": "Business Strategy", "legend": "Business"},
-    {"name": "Business Processes", "legend": "Business"},
-    {"name": "Organization Structure", "legend": "Business"},
-    {"name": "Application Portfolio", "legend": "Application"},
-    {"name": "Application Integration", "legend": "Application"},
-    {"name": "User Experience", "legend": "Application"},
-    {"name": "Data Models", "legend": "Data"},
-    {"name": "Data Governance", "legend": "Data"},
-    {"name": "Data Quality", "legend": "Data"},
-    {"name": "Infrastructure", "legend": "Technology"},
-    {"name": "Security", "legend": "Technology"},
-    {"name": "Cloud Strategy", "legend": "Technology"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Business", "color": "#ff9e00"},
-      {"legend": "Application", "color": "#ff5500"},
-      {"legend": "Data", "color": "#e10600"},
-      {"legend": "Technology", "color": "#8900f2"}
-    ]
-  }
-}
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Combining Place mats with Connectors
-
-You can use placemats to show components and then use connectors to illustrate the flow between them:
-
-First, create a placemat to show the components:
-
-[source,asciidoc]
-....
-[docops,placemat]
-----
-{
-  "title": "Microservices Architecture",
-  "placeMats": [
-    {"name": "API Gateway", "legend": "Gateway"},
-    {"name": "User Service", "legend": "Service"},
-    {"name": "Product Service", "legend": "Service"},
-    {"name": "Order Service", "legend": "Service"},
-    {"name": "Payment Service", "legend": "Service"},
-    {"name": "User Database", "legend": "Database"},
-    {"name": "Product Database", "legend": "Database"},
-    {"name": "Order Database", "legend": "Database"},
-    {"name": "Payment Database", "legend": "Database"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Gateway", "color": "#4cc9f0"},
-      {"legend": "Service", "color": "#4361ee"},
-      {"legend": "Database", "color": "#3a0ca3"}
-    ]
-  }
-}
-----
-....
-
-[docops,placemat]
-----
-{
-  "title": "Microservices Architecture",
-  "placeMats": [
-    {"name": "API Gateway", "legend": "Gateway"},
-    {"name": "User Service", "legend": "Service"},
-    {"name": "Product Service", "legend": "Service"},
-    {"name": "Order Service", "legend": "Service"},
-    {"name": "Payment Service", "legend": "Service"},
-    {"name": "User Database", "legend": "Database"},
-    {"name": "Product Database", "legend": "Database"},
-    {"name": "Order Database", "legend": "Database"},
-    {"name": "Payment Database", "legend": "Database"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Gateway", "color": "#4cc9f0"},
-      {"legend": "Service", "color": "#4361ee"},
-      {"legend": "Database", "color": "#3a0ca3"}
-    ]
-  }
-}
-----
-
-.Dark Mode
 [docops,placemat,useDark=true]
 ----
 {
-  "title": "Microservices Architecture",
+  "title": "Data Science Workflow",
+  "fill": false,
   "placeMats": [
-    {"name": "API Gateway", "legend": "Gateway"},
-    {"name": "User Service", "legend": "Service"},
-    {"name": "Product Service", "legend": "Service"},
-    {"name": "Order Service", "legend": "Service"},
-    {"name": "Payment Service", "legend": "Service"},
-    {"name": "User Database", "legend": "Database"},
-    {"name": "Product Database", "legend": "Database"},
-    {"name": "Order Database", "legend": "Database"},
-    {"name": "Payment Database", "legend": "Database"}
+    {"name": "Data Collection", "legend": "Data"},
+    {"name": "Data Cleaning", "legend": "Data"},
+    {"name": "Exploratory Analysis", "legend": "Analysis"},
+    {"name": "Feature Engineering", "legend": "Analysis"},
+    {"name": "Model Selection", "legend": "Modeling"},
+    {"name": "Model Training", "legend": "Modeling"},
+    {"name": "Model Evaluation", "legend": "Evaluation"},
+    {"name": "Model Deployment", "legend": "Deployment"}
   ],
   "config": {
     "legend": [
-      {"legend": "Gateway", "color": "#4cc9f0"},
-      {"legend": "Service", "color": "#4361ee"},
-      {"legend": "Database", "color": "#3a0ca3"}
+      {"legend": "Data", "color": "#06d6a0"},
+      {"legend": "Analysis", "color": "#1b9aaa"},
+      {"legend": "Modeling", "color": "#ef476f"},
+      {"legend": "Evaluation", "color": "#ffd166"},
+      {"legend": "Deployment", "color": "#073b4c"}
     ]
   }
 }
 ----
-Then, use connectors to show the flow between components:
-
-[source,asciidoc]
-....
-[docops,connector]
-----
-{
-  "connectors": [
-    {
-      "text": "API Gateway",
-      "baseColor": "#4cc9f0",
-      "description": "Entry point for all client requests"
-    },
-    {
-      "text": "User Service",
-      "baseColor": "#4361ee",
-      "description": "Handles user authentication and profiles"
-    },
-    {
-      "text": "User Database",
-      "baseColor": "#3a0ca3",
-      "description": "Stores user information"
-    }
-  ]
-}
-----
 ....
 
-[docops,connector]
+[docops,placemat,useDark=true]
 ----
 {
-  "connectors": [
-    {
-      "text": "API Gateway",
-      "baseColor": "#4cc9f0",
-      "description": "Entry point for all client requests"
-    },
-    {
-      "text": "User Service",
-      "baseColor": "#4361ee",
-      "description": "Handles user authentication and profiles"
-    },
-    {
-      "text": "User Database",
-      "baseColor": "#3a0ca3",
-      "description": "Stores user information"
-    }
-  ]
+  "title": "Data Science Workflow",
+  "fill": false,
+  "placeMats": [
+    {"name": "Data Collection", "legend": "Data"},
+    {"name": "Data Cleaning", "legend": "Data"},
+    {"name": "Exploratory Analysis", "legend": "Analysis"},
+    {"name": "Feature Engineering", "legend": "Analysis"},
+    {"name": "Model Selection", "legend": "Modeling"},
+    {"name": "Model Training", "legend": "Modeling"},
+    {"name": "Model Evaluation", "legend": "Evaluation"},
+    {"name": "Model Deployment", "legend": "Deployment"}
+  ],
+  "config": {
+    "legend": [
+      {"legend": "Data", "color": "#06d6a0"},
+      {"legend": "Analysis", "color": "#1b9aaa"},
+      {"legend": "Modeling", "color": "#ef476f"},
+      {"legend": "Evaluation", "color": "#ffd166"},
+      {"legend": "Deployment", "color": "#073b4c"}
+    ]
+  }
 }
 ----
-
 
 [.back-to-top]
 <<top, 🔝>>
 
-[source,asciidoc]
-....
-[docops,connector]
-----
-{
-  "connectors": [
-    {
-      "text": "API Gateway",
-      "baseColor": "#4cc9f0",
-      "description": "Entry point for all client requests"
-    },
-    {
-      "text": "Product Service",
-      "baseColor": "#4361ee",
-      "description": "Manages product catalog"
-    },
-    {
-      "text": "Product Database",
-      "baseColor": "#3a0ca3",
-      "description": "Stores product information"
-    }
-  ]
-}
-----
-....
+== Common Use Cases
 
-[source,asciidoc]
-....
-[docops,connector]
-----
-{
-  "connectors": [
-    {
-      "text": "API Gateway",
-      "baseColor": "#4cc9f0",
-      "description": "Entry point for all client requests"
-    },
-    {
-      "text": "Order Service",
-      "baseColor": "#4361ee",
-      "description": "Handles order processing"
-    },
-    {
-      "text": "Payment Service",
-      "baseColor": "#4361ee",
-      "description": "Processes payments"
-    }
-  ]
-}
-----
-....
+* *Technology inventories* - Catalog frameworks, libraries, and tools by category
+* *Architecture diagrams* - Show system components grouped by layer or function
+* *Glossaries* - Define and categorize domain terminology
+* *Team skill matrices* - Display competencies organized by role or department
+* *Compliance checklists* - Group requirements by regulatory framework
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Conclusion
+== Format Options
 
-The DocOps Place mat Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing grid-based diagrams. By using the JSON configuration format, you can create customized place mats that organize and categorize information in a structured layout.
+=== Basic Structure
+[source,asciidoc]
+....
+[docops,placemat]
+----
+{
+  "title": "Title Here",
+  "placeMats": [
+    {"name": "Item Name", "legend": "Category"}
+  ],
+  "config": {
+    "legend": [
+      {"legend": "Category", "color": "#4361ee"}
+    ]
+  }
+}
+----
+....
 
-The extension supports both regular and dark mode displays, with various customization options for colors, fill styles, and scaling.
+=== Filled vs. Outlined
+[source,asciidoc]
+....
+// Filled boxes (default)
+[docops,placemat]
+----
+{
+  "title": "Filled Style",
+  "placeMats": [...],
+  "config": {...}
+}
+----
+
+// Outlined boxes
+[docops,placemat]
+----
+{
+  "title": "Outline Style",
+  "fill": false,
+  "placeMats": [...],
+  "config": {...}
+}
+----
+....
+
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|title
+|Diagram heading
+
+|placeMats
+|Array of {"name": "text", "legend": "category"}
+
+|config.legend
+|Array of {"legend": "category", "color": "#hex"}
+
+|useDark=true
+|Dark theme for presentations
+
+|fill=false
+|Outlined boxes instead of filled
+
+|scale
+|Size multiplier (default: 1.0)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== JSON Structure
+
+Each placemat item maps to a legend category:
+
+[source,json]
+----
+{
+  "placeMats": [
+    {"name": "Component Name", "legend": "Category1"},
+    {"name": "Another Component", "legend": "Category2"}
+  ],
+  "config": {
+    "legend": [
+      {"legend": "Category1", "color": "#4361ee"},
+      {"legend": "Category2", "color": "#7209b7"}
+    ]
+  }
+}
+----
+
+* *name* - Text displayed in box
+* *legend* - Must match a legend category
+* *color* - Hex color for category
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Limit categories to 5-7* - Too many colors reduce visual distinction
+* *Use semantic colors* - Frontend (blue), Backend (purple), Database (dark purple) create natural associations
+* *Keep names concise* - 1-3 words fit best in grid boxes
+* *Group related items* - Order by category for visual clustering
+* *Choose fill style contextually* - Filled for emphasis, outlined for subtle backgrounds
+* *Combine with connectors* - Follow placemat with connector diagrams to show relationships
+
+[TIP]
+====
+*For microservices architectures:* Create separate placemats for infrastructure layers (Gateway, Services, Databases). Then use connector visualizations to show data flows between specific components from each layer.
+====
+
+[.back-to-top]
+<<top, 🔝>>

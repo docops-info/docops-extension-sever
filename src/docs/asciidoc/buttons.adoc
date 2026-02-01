@@ -19,81 +19,22 @@ link:buttonsshowcase.html[Showcase]
 
 == Introduction
 
+Buttons create organized navigation grids that turn link lists into scannable visual menus. Perfect for dashboards, index pages, and resource directories where you need users to find the right link fast.
 
-The DocOps Button Extension allows you to create visually appealing and interactive buttons in your AsciiDoctor documents. Buttons are useful for creating navigation elements, call-to-action links, and organizing related resources.
+=== Key Features
 
-This guide will help you understand the basic concepts of buttons, how to include them in your AsciiDoctor documents, and provide examples of different types of buttons.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Basic Concepts
-
-=== What are Buttons?
-
-Buttons in the DocOps extension are SVG-based interactive elements that can be included in your AsciiDoctor documents. Each button has:
-
-* A label (the text displayed on the button)
-* A link (the destination URL when clicked)
-* Optional description text
-* Optional metadata (type, date, author)
-* Optional embedded images
-* Customizable styling
-
-The extension supports multiple button shapes, including:
-
-* Regular buttons
-* Pill-shaped buttons
-* Rectangle buttons
-* Round buttons
-* Circle buttons
-* Large buttons
-* Slim buttons
-* Oval buttons
-* Hexagonal buttons
-
-Each type can be customized with various colors, gradients, and text styles.
+* *9 button shapes* - From regular rectangles to hexagons and circles
+* *Auto color-coding* - Assign colors by type for visual grouping
+* *Flexible layouts* - Control columns, scale, and spacing
+* *Embedded images* - Add icons or logos to buttons
+* *Sorting options* - Order by label, type, date, or custom order
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Button Components
+== Simple Button Grid
 
-==== Individual Button Properties
-
-An individual button includes:
-
-* `label` - The text displayed on the button
-* `link` - The destination URL when the button is clicked
-* `description` (optional) - Additional text describing the button
-* `type` (optional) - A category or classification for the button
-* `date` (optional) - A date associated with the button
-* `author` (optional) - A list of authors associated with the button
-* `embeddedImage` (optional) - An image to display on the button
-* `color` (optional) - A specific color for the button
-* Styling properties for customizing appearance
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Button Collection Properties
-
-Buttons are typically organized in collections with shared properties:
-
-* `buttonType` - The shape of all buttons in the collection
-* `theme` - Shared styling and layout settings including:
-  * `colors` - A palette of colors for the buttons
-  * `columns` - The number of columns in the button grid
-  * `scale` - Size scaling factor
-  * `buttonStyle` - Text styling for different elements
-  * Shape-specific settings (e.g., `hexLinesEnabled` for hexagonal buttons)
-
-[.back-to-top]
-<<top, 🔝>>
-
-== AsciiDoctor Syntax for Buttons
-
-To include buttons in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+Basic navigation with regular buttons:
 
 [source,asciidoc]
 ....
@@ -102,481 +43,197 @@ To include buttons in your AsciiDoctor document, you use a special macro syntax.
 {
   "buttons": [
     {
-      "label": "Button Label",
-      "link": "https://example.com",
-      "description": "Button description",
-      "type": "category"
+      "label": "Google",
+      "link": "https://www.google.com",
+      "description": "",
+      "type": "search"
     },
     {
-      "label": "Another Button",
-      "link": "https://example.org",
-      "description": "Another description",
-      "type": "another-category"
+      "label": "Amazon",
+      "link": "https://www.amazon.com",
+      "description": "books",
+      "type": "books"
     }
-    // More buttons...
   ],
   "buttonType": "REGULAR",
   "theme": {
     "colors": ["#003b6b", "#FF6F36", "#2C7865"],
     "columns": 2,
-    "scale": 1.0,
-    "buttonStyle": {
-      "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #fcfcfc; font-weight: bold;"
-    }
+    "scale": 1.0
   }
 }
 ----
 ....
 
-The macro processes the JSON configuration and generates an SVG representation of the buttons that is embedded in your document.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Button Properties
-
-==== Main Button Properties
-
-* `label` (required): The text displayed on the button
-* `link` (required): The destination URL when the button is clicked
-* `description` (optional): Additional text describing the button
-* `type` (optional): A category or classification for the button
-* `date` (optional): A date associated with the button (format: "MM/DD/YYYY")
-* `author` (optional): An array of authors associated with the button
-* `embeddedImage` (optional): An image to display on the button
-* `color` (optional): A specific color for the button (overrides theme colors)
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Embedded Image Properties
-
-The `embeddedImage` object has the following properties:
-
-* `ref` (required): The reference to the image, which can be:
-  * A path to an image file (e.g., "images/logo.svg")
-  * A predefined icon reference (e.g., "<Google>", "<Apple>")
-* `type` (optional): The MIME type of the image (default: "image/png")
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Theme Properties
-
-The `theme` object can have the following properties:
-
-* `colors` (optional): An array of color hex codes for the buttons
-* `colorTypeMap` (optional): A map associating button types with specific colors
-* `scale` (optional): A scaling factor for the buttons (default: 1.0)
-* `columns` (optional): The number of columns in the button grid (default: 3)
-* `newWin` (optional): Whether to open links in a new window (default: false)
-* `useDark` (optional): Whether to use dark mode (default: false)
-* `strokeColor` (optional): The color of the button borders
-* `sortBy` (optional): Configuration for sorting buttons
-* `buttonStyle` (optional): Styling for button text elements
-* `hexLinesEnabled` (optional): Whether to show connecting lines between hexagonal buttons (default: false)
-* `raise` (optional): Whether to apply a raised/3D effect to buttons (default: true)
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-==== Button Style Properties
-
-The `buttonStyle` object can have the following properties:
-
-* `labelStyle` (optional): CSS styling for the button label text
-* `descriptionStyle` (optional): CSS styling for the description text
-* `dateStyle` (optional): CSS styling for the date text
-* `typeStyle` (optional): CSS styling for the type text
-* `authorStyle` (optional): CSS styling for the author text
-* `linkStyle` (optional): CSS styling for link text
-* `fontSize` (optional): Base font size for text elements (default: 12)
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Sort Properties
-
-The `sortBy` object can have the following properties:
-
-* `sort` (optional): The field to sort by ("LABEL", "TYPE", "DATE", "AUTHOR", or "ORDER")
-* `direction` (optional): The sort direction ("ASCENDING" or "DESCENDING")
-
-== Examples
-
-=== Regular Buttons Example
-
-Here's a simple example of regular buttons:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons1.json[]
-----
-....
-
-.Regular Buttons
-[docops,buttons, controls=true]
-----
-include::data/buttons/buttons1.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Pill Buttons Example
-
-You can create pill-shaped buttons by setting the `buttonType` to "PILL":
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons2.json[]
-----
-....
-
-.Pill Buttons
-[docops,buttons]
-----
-include::data/buttons/buttons2.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-=== Hexagonal Buttons Example
-
-You can create hexagonal buttons with connecting lines by setting the `buttonType` to "HEX" and enabling hex lines:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons3.json[]
-----
-....
-
-.Hexagonal Buttons
-[docops,buttons]
-----
-include::data/buttons/buttons3.json[]
-----
-
-.Hexagonal Buttons - Dark Mode
-[docops,buttons,useDark=true,controls=true]
-----
-include::data/buttons/buttons3b.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Rectangular Buttons
-
-
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons4.json[]
-----
-....
-
-.Rectangular Buttons & Sub links
-[docops,buttons]
-----
-include::data/buttons/buttons4.json[]
-----
-
-.Rectangular Buttons with Dark Mode
-[docops,buttons,useDark=true]
-----
-include::data/buttons/buttons4.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-=== Buttons with Embedded Images
-
-You can include images in your buttons using the `embeddedImage` property:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons5.json[]
-----
-....
-
-.Circle Buttons
-[docops,buttons]
-----
-include::data/buttons/buttons5.json[]
-----
-// Note: The image reference 'image_buttons.svg' is a placeholder.
-// To generate this image, use the JSON configuration above with the DocOps extension.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Buttons with Metadata
-
-You can include additional metadata like dates and authors:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons6.json[]
-----
-....
-
-.Large Button Cards
-[docops,buttons]
-----
-include::data/buttons/buttons6.json[]
-----
-
-.Large Button Cards - dark
-[docops,buttons, useDark=true]
-----
-include::data/buttons/buttons6.json[]
-----
-// Note: The image reference 'metadata_buttons.svg' is a placeholder.
-// To generate this image, use the JSON configuration above with the DocOps extension.
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-== Button Types
-
-The DocOps Button Extension supports the following button types:
-
-=== REGULAR
-
-Standard rectangular buttons with slightly rounded corners.
-
-=== PILL
-
-Elongated buttons with fully rounded ends, resembling a pill shape.
-
-=== RECTANGLE
-
-Rectangular buttons with sharp corners.
-
-=== ROUND
-
-Buttons with significantly rounded corners.
-
-=== CIRCLE
-
-Perfectly circular buttons, ideal for icon-based navigation.
-
-=== LARGE
-
-Larger rectangular buttons with more space for content.
-
-=== SLIM
-
-Thin rectangular buttons for compact layouts.
-
-=== OVAL
-
-Elliptical buttons with a distinctive curved shape.
-
-=== HEX
-
-
-Hexagonal buttons that can be connected with lines to form a honeycomb pattern.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Advanced Button Examples
-
-=== Dark Mode Buttons
-
-You can create buttons with a dark theme by setting the `useDark` property to `true` in the theme:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons7.json[]
-----
-....
-
-
-.Version Control
-[docops,buttons]
-----
-include::data/buttons/buttons7.json[]
-----
-
-.Tech Giants
-[docops,buttons]
-----
-include::data/buttons/buttons7b.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Social Media Dashboard Buttons
-
-Create a social media dashboard with circle buttons and embedded icons:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons8.json[]
-----
-....
-
-.Social Media Dashboard
 [docops,buttons,controls=true]
-----
-include::data/buttons/buttons8.json[]
-----
-
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Gradient-Styled Navigation Buttons
-
-Create navigation buttons with gradient styling using the PILL button type:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons9.json[]
-----
-....
-
-.Top to Bottom PILL
-[docops,buttons]
-----
-include::data/buttons/buttons9.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Dashboard Hexagonal Buttons
-
-Create an interconnected dashboard using hexagonal buttons:
-
-[source,asciidoc,controls=true]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons10.json[]
-----
-....
-
-.Hexagonal Dashboard Links
-[docops,buttons,controls=true]
-----
-include::data/buttons/buttons10.json[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Timeline-Style Buttons
-
-Create a timeline-like sequence of events using SLIM buttons:
-
-[source,asciidoc]
-....
-[docops,buttons]
-----
-include::data/buttons/buttons11.json[]
-----
-....
-
-.SLIM Buttons
-[docops,buttons]
-----
-include::data/buttons/buttons11.json[]
-----
-
-.Dark Mode
-[docops,buttons,useDark=true]
-----
-include::data/buttons/buttons11.json[]
-----
-[.back-to-top]
-<<top, 🔝>>
-
-== Oval
-.Oval Shape Candy
-[docops,buttons]
 ----
 {
   "buttons": [
     {
-      "label": "Cookies & Cream",
-      "link": "https://www.apple.com",
-      "description": "Chocolate & Cheesecake Ice Creams with Chocolate Cookies & a Cheesecake Core",
-      "type": "Cookies"
-    },
-    {
-      "label": "Mint Chocolate Chance",
+      "label": "Google",
       "link": "https://www.google.com",
-      "description": "Mint Ice Cream Loaded with Fudge Brownies",
-      "type": "Mint"
+      "description": "",
+      "type": "search"
     },
     {
-      "label": "New York Super Fudge Chunk",
-      "link": "https://www.microsoft.com",
-      "description": "Chocolate Ice Cream with White & Dark Fudge Chunks, Pecans, Walnuts & Fudge-Covered Almonds",
-      "type": "Fudge"
-    },
-    {
-      "label": "Cherry Garcia",
+      "label": "Amazon",
       "link": "https://www.amazon.com",
-      "description": "Cherry Ice Cream with Cherries & Fudge Flakes",
-      "type": "Fruit"
-    },
-    {
-      "label": "Chunky Monkey",
-      "link": "https://www.facebook.com",
-      "description": "Banana Ice Cream with Fudge Chunks & Walnuts",
-      "type": "FB"
+      "description": "books",
+      "type": "books"
     }
   ],
-  "buttonType": "OVAL",
+  "buttonType": "REGULAR",
   "theme": {
-    "colors": [
-      "#FF6F36",
-      "#2C7865",
-      "#C40C0C",
-      "#45618E",
-      "#FF5BAE"
-    ],
-    "sortBy": {"sort": "ORDER"},
-    "buttonStyle": {
-      "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 24px; fill: #fcfcfc; letter-spacing: normal;font-weight: bold;"
-    },
-    "scale": 1
+    "colors": ["#003b6b", "#FF6F36", "#2C7865"],
+    "columns": 2,
+    "scale": 1.0
   }
 }
 ----
 
-== Conclusion
+[.back-to-top]
+<<top, 🔝>>
 
-The DocOps Button Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing and interactive buttons with easy JSON syntax. By using the JSON configuration format, you can create customized buttons that match your document's style and purpose.
+== Large Buttons with Icons
 
-The extension supports various button shapes, embedded images, metadata, and styling options, allowing for a wide range of design possibilities.
+Use LARGE button type for prominent navigation:
+
+[docops,buttons,controls=true]
+----
+include::data/buttons/buttons6.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Round Buttons (Orb Style)
+
+Modern 3D orb effect for visual impact:
+
+[docops,buttons,controls=true]
+----
+include::data/buttons/buttons3.json[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Button Shape Reference
+
+[cols="1,3"]
+|===
+| Button Type | Best For
+
+| `REGULAR`
+| Standard navigation grids, link directories
+
+| `PILL`
+| Modern UI, tag-style navigation
+
+| `LARGE`
+| Hero sections, primary actions (2-4 buttons max)
+
+| `RECTANGLE`
+| Documentation indexes, structured menus
+
+| `ROUND`
+| Dashboard widgets, feature showcases
+
+| `CIRCLE`
+| Icon-focused navigation, app launchers
+
+| `SLIM`
+| Compact menus, sidebar navigation
+
+| `OVAL`
+| Playful designs, creative projects
+
+| `HEX`
+| Technical docs, architecture diagrams
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Documentation indexes* - Organize guides, tutorials, and references
+* *Resource directories* - Link to tools, repos, and external docs
+* *Dashboard navigation* - Quick access to different sections or apps
+* *Feature showcases* - Highlight product capabilities with CTAs
+* *Team directories* - Link to team pages or contact info
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== JSON Structure
+
+[source,json]
+....
+{
+  "buttons": [
+    {
+      "label": "Button Label",
+      "link": "https://example.com",
+      "description": "Optional description",
+      "type": "category"
+    }
+  ],
+  "buttonType": "REGULAR",
+  "theme": {
+    "colors": ["#003b6b", "#FF6F36"],
+    "columns": 2,
+    "scale": 1.0,
+    "buttonStyle": {
+      "labelStyle": "font-family: Arial; font-size: 12px; fill: #fcfcfc;"
+    }
+  }
+}
+....
+
+=== Common Theme Options
+
+* `buttonType` - REGULAR, PILL, LARGE, RECTANGLE, ROUND, CIRCLE, SLIM, OVAL, HEX
+* `colors` - Array of hex colors for auto-assignment by type
+* `columns` - Number of columns (2-4 recommended)
+* `scale` - Size multiplier (default: 1.0)
+* `useDark=true` - Dark Mode
+* `newWin: true` - Open links in new window
+* `sortBy.sort` - ORDER, LABEL, TYPE, DATE, AUTHOR
+
+
+=== Embedded Images
+
+Add icons to buttons:
+
+[source,json]
+....
+{
+  "label": "Documentation",
+  "link": "https://docs.example.com",
+  "embeddedImage": {
+    "ref": "images/docs-icon.svg"
+  }
+}
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Use 2-3 columns* - More columns create cramped buttons on smaller screens
+* *Color-code by type* - Assign consistent colors to categories (docs=blue, tools=green)
+* *Keep labels short* - 1-3 words max for readability
+* *Limit grid size* - 6-12 buttons per grid; more creates decision fatigue
+* *Match shape to context* - Use REGULAR for general navigation, LARGE for primary CTAs
+
+[TIP]
+====
+For documentation indexes, use type-based color coding (e.g., "tutorial"=blue, "reference"=green, "guide"=orange). Users quickly learn the color system and can scan faster.
+====
+
+[.back-to-top]
+<<top, 🔝>>

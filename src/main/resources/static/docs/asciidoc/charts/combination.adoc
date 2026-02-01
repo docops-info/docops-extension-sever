@@ -1,64 +1,75 @@
-= DocOps Combination Charts
-:imagesdir: images
+= Combination Charts
 
 [[top]]
 == Introduction
 
-The DocOps Combination Chart Extension allows you to create powerful combination charts that display multiple data series using different chart types (bars and lines) on the same chart. This is particularly useful for visualizing related metrics that have different scales or units, such as revenue (bars) and growth rates (lines), or sales volume (bars) and profit margins (lines).
+Combination charts layer bars and lines on one chart, perfect for showing related metrics with different scales. Track revenue (bars) against growth rate (line), or sales volume (bars) versus profit margin (line). Dual Y-axes keep everything readable.
 
-This guide will help you understand the basic concepts of combination charts, how to include them in your AsciiDoctor documents, and provide examples of different types of combination charts with various styling options.
+=== Key Features
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Basic Concepts
-
-=== What are Combination Charts?
-
-Combination charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each combination chart has:
-
-* A title (the main heading of the chart)
-* Multiple data series that can be either BAR or LINE type
-* Support for dual Y-axes (primary and secondary) for different data scales
-* X-axis labels (typically categories or time periods)
-* Optional display settings for customizing the appearance
-* Interactive legend showing all data series
-
-The extension supports various features including:
-
-* Mixed BAR and LINE series on the same chart
-* Dual Y-axis support for different data scales
-* Smooth curved lines or straight line segments for line series
-* Customizable colors for each series
-* Dark mode support for better visibility in dark-themed documents
-* Grid lines and axis ticks for better readability
-* Responsive scaling and sizing options
+* *Mix bars and lines* - Combine chart types for richer insights
+* *Dual Y-axes* - Show metrics with different scales side-by-side
+* *Smart legends* - Shows chart type for each series
+* *Smooth or angular lines* - Visual control over line appearance
+* *Auto-scaling* - Each Y-axis scales independently
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Combination Chart Components
+== Revenue and Growth Rate
 
-A combination chart includes:
+Classic combination showing absolute values (bars) and rates (line):
 
-* A title
-* One or more data series, each with:
-  ** A series name (shown in the legend)
-  ** A chart type (BAR or LINE)
-  ** A set of data points, each with an x-label and y-value
-  ** An optional color specification
-  ** A Y-axis assignment (PRIMARY or SECONDARY)
-* A legend showing all data series with their types
-* Grid lines and axis ticks
-* Support for dual Y-axes when needed
-* Display settings for visual appearance
+[docops,combination,controls=true]
+----
+include::data/combo1.txt[]
+----
 
 [.back-to-top]
 <<top, 🔝>>
 
-== AsciiDoctor Syntax for Combination Charts
+== Sales Volume and Margin
 
-To include combination charts in your AsciiDoctor document, you use a special macro syntax. The DocOps extension uses a tabular format for combination charts:
+Compare volume (bars) against profitability (line):
+
+[source,asciidoc]
+....
+[docops,combination]
+----
+title=Sales Volume vs Profit Margin
+xLabel=Quarter
+yLabel=Units Sold
+yLabelSecondary=Margin (%)
+dualYAxis=true
+---
+Units Sold | BAR | Q1 | 1200 | #3498db | PRIMARY
+Units Sold | BAR | Q2 | 1450 | #3498db | PRIMARY
+Units Sold | BAR | Q3 | 1680 | #3498db | PRIMARY
+Units Sold | BAR | Q4 | 1920 | #3498db | PRIMARY
+Profit Margin | LINE | Q1 | 22.5 | #2ecc71 | SECONDARY
+Profit Margin | LINE | Q2 | 24.8 | #2ecc71 | SECONDARY
+Profit Margin | LINE | Q3 | 26.2 | #2ecc71 | SECONDARY
+Profit Margin | LINE | Q4 | 28.1 | #2ecc71 | SECONDARY
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Financial analysis* - Revenue (bars) vs. growth rate or margin (line)
+* *Operational metrics* - Volume (bars) vs. efficiency or quality (line)
+* *Marketing dashboards* - Spend (bars) vs. ROI or conversion rate (line)
+* *Product analytics* - Usage (bars) vs. satisfaction score (line)
+* *Budget tracking* - Actual spend (bars) vs. cumulative % of budget (line)
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Format
 
 [source,asciidoc]
 ....
@@ -68,334 +79,49 @@ title=Chart Title
 xLabel=X-Axis Label
 yLabel=Primary Y-Axis Label
 yLabelSecondary=Secondary Y-Axis Label
-useDark=false
-showGrid=true
-showLegend=true
-smoothLines=true
-showPoints=true
 dualYAxis=true
-Series Name | Type | X-Value | Y-Value | Color | Y-Axis
+smoothLines=true
+showGrid=true
 ---
-Revenue | BAR | Q1 | 50000 | #3498db | PRIMARY
-Revenue | BAR | Q2 | 65000 | #3498db | PRIMARY
-Growth Rate | LINE | Q1 | 15.5 | #e74c3c | SECONDARY
-Growth Rate | LINE | Q2 | 18.2 | #e74c3c | SECONDARY
-----
-....
-
-
-The macro processes this tabular data and generates an SVG representation of the combination chart that is embedded in your document.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Combination Chart Configuration
-
-The configuration parameters are specified at the beginning of the content, followed by a separator line (`---`), and then the actual chart data.
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Parsing Format
-
-Combination charts use the unified parsing framework provided by the DocOps Extension Server. The content is divided into two sections:
-
-1. **Configuration Section**: Contains key-value pairs in the format `key=value` before the `---` separator
-2. **Data Section**: Contains the chart data after the separator in a tabular format
-
-For more information about the parsing framework, see the xref:../parsing.adoc[Parsing Utilities] documentation.
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Configuration Parameters
-
-* `title` (optional): The main heading of the chart (default: "Combination Chart")
-* `xLabel` (optional): Label for the x-axis
-* `yLabel` (optional): Label for the primary y-axis
-* `yLabelSecondary` (optional): Label for the secondary y-axis (when using dual Y-axis)
-* `useDark` (optional): Whether to use dark mode styling (default: false)
-* `showGrid` (optional): Whether to display grid lines (default: true)
-* `showLegend` (optional): Whether to display a legend (default: true)
-* `smoothLines` (optional): Whether to display smooth curved lines for LINE series (default: true)
-* `showPoints` (optional): Whether to display data points on LINE series (default: true)
-* `dualYAxis` (optional): Whether to enable dual Y-axis support (default: false)
-* `useGlass` (optional): Whether to enable glass effect styling for bars (default: false)
-* `baseColor` (optional): Base color for the chart theme (default: "#4361ee")
-* `backgroundColor` (optional): Background color for the chart (default: "#f8f9fa")
-* `scale` (optional): Scaling factor for the chart (default: 1.0)
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Data Format
-
-The data for the combination chart is specified in a tabular format with the following columns:
-
-[source]
-----
 Series Name | Type | X-Value | Y-Value | Color | Y-Axis
-----
-
-Where:
-* `Series Name` is the name of the data series (shown in the legend)
-* `Type` is either "BAR" or "LINE" to specify the chart type for this series
-* `X-Value` is the label for the x-axis point (category or time period)
-* `Y-Value` is the numerical value for the data point
-* `Color` (optional) is the hex color code for this series (e.g., #3498db)
-* `Y-Axis` is either "PRIMARY" or "SECONDARY" to specify which Y-axis to use
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Examples
-
-=== Basic Revenue and Growth Rate Example
-
-This example shows a typical business scenario where you want to display revenue (as bars) alongside growth rate (as a line) on the same chart:
-
-[source,asciidoc]
-....
-[docops,combination,controls=true]
-----
-include::data/combo1.txt[]
+Revenue | BAR | Q1 | 50000 | #3498db | PRIMARY
+Growth Rate | LINE | Q1 | 15.5 | #e74c3c | SECONDARY
 ----
 ....
 
+=== Common Options
 
-[docops,combination]
-----
-include::data/combo1.txt[]
-----
+* `dualYAxis=true` - Enable second Y-axis for different scales
+* `smoothLines=true` - Curved lines (default: false)
+* `showGrid=true` - Display background grid (default: true)
+* `showLegend=true` - Display legend (default: true)
+* `showPoints=true` - Show data point markers on lines (default: true)
+* `useDark=true` - Dark theme
 
-[.back-to-top]
-<<top, 🔝>>
+=== Data Columns
 
-=== Sales Performance with Multiple Metrics
-
-This example demonstrates a more complex scenario with multiple metrics using different chart types:
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo2.txt[]
-----
-....
-
-[docops,combination]
-----
-include::data/combo2.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-==== Dark Mode & Glass effect
-
-[docops,combination]
-----
-include::data/combo3.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Website Analytics Dashboard
-
-This example shows how to visualize website analytics data with page views (bars) and bounce rate (line):
-
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo4.txt[]
-----
-....
-
-[docops,combination]
-----
-include::data/combo4.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Dark Mode Example
-
-This example demonstrates the dark mode styling for better visibility in dark-themed documents:
-
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo5.txt[]
-----
-....
-
-[docops,combination]
-----
-include::data/combo5.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-==== Dark Mode  & SmoothLines is false
-
-[docops,combination]
-----
-include::data/combo6.txt[]
-----
-=== Financial Performance Dashboard
-
-This example shows a comprehensive financial dashboard with multiple metrics:
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo7.txt[]
-----
-....
-
-[docops,combination,controls=true]
-----
-include::data/combo7.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-==== Dark Mode & Glass Effects
-
-This example shows the combination chart with dark mode and glass effects enabled:
-
-[docops,combination,controls=true]
-----
-include::data/combo8.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-=== Production Metrics with Quality Control
-
-This example demonstrates manufacturing metrics with production volume and quality scores:
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo9.txt[]
-----
-....
-
-[docops,combination]
-----
-include::data/combo9.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Glass Effect Example
-
-This example demonstrates the glass effect styling for bars, which creates a modern, translucent appearance with realistic lighting effects:
-
-[source,asciidoc]
-....
-[docops,combination]
-----
-include::data/combo10.txt[]
-----
-....
-
-[docops,combination]
-----
-include::data/combo10.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Advanced Features
-
-=== Dual Y-Axis Support
-
-When your data series have significantly different scales (e.g., revenue in thousands vs. percentages), you can use the dual Y-axis feature by setting `dualYAxis=true` and assigning series to either `PRIMARY` or `SECONDARY` Y-axis.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Glass Effect Support
-
-Enable glass effect styling for bars by setting `useGlass=true` in the configuration. This creates a modern, translucent appearance with realistic lighting effects including:
-
-* Layered glass overlay with transparency gradients
-* Radial highlights for realistic light reflections
-* Top shine highlights for depth
-* Enhanced drop shadows and blur effects
-* Interactive hover effects with glow and scaling
-
-The glass effect works well with both light and dark modes and provides a premium, modern appearance for your charts.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Dark Mode Support
-
-Enable dark mode by setting `useDark=true` in the configuration. This provides better contrast and readability in dark-themed documents.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Customization Options
-
-* **Colors**: Specify custom colors for each series using hex color codes
-* **Line Styles**: Control whether lines are smooth curves or straight segments with `smoothLines`
-* **Data Points**: Show or hide data points on line series with `showPoints`
-* **Grid**: Control grid visibility with `showGrid`
-* **Legend**: Control legend visibility with `showLegend`
-* **Scaling**: Adjust chart size with the `scale` parameter
+* `Series Name` - Label shown in legend
+* `Type` - BAR or LINE
+* `X-Value` - Category or time period label
+* `Y-Value` - Numeric value
+* `Color` - Hex color (e.g., #3498db)
+* `Y-Axis` - PRIMARY or SECONDARY
 
 [.back-to-top]
 <<top, 🔝>>
 
 == Best Practices
 
-1. **Use Dual Y-Axis Wisely**: Only use dual Y-axis when your data series have significantly different scales
-2. **Color Selection**: Choose contrasting colors for different series to improve readability
-3. **Data Clarity**: Ensure your data points are meaningful and contribute to the story you're telling
-4. **Dark Mode**: Consider your document's theme when choosing between light and dark modes
-5. **Legend**: Keep series names concise but descriptive for better legend readability
+* *Use dual Y-axes for different units* - Revenue ($) on left, rate (%) on right
+* *Bars for absolutes, lines for rates* - Volume as bars, efficiency as lines
+* *Match colors to meaning* - Blue for revenue, red for costs, green for profit
+* *Limit to 2-4 series* - One bar series, 1-3 line series maximum
+* *Label both Y-axes clearly* - Include units in axis labels
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Troubleshooting
-
-=== Common Issues
-
-* **Data Not Displaying**: Ensure all required columns are present in the data section
-* **Incorrect Scaling**: Check that Y-axis assignments (PRIMARY/SECONDARY) are appropriate for your data
-* **Color Issues**: Verify that color codes are valid hex values (e.g., #3498db)
-* **Chart Type**: Ensure chart types are specified as either "BAR" or "LINE" (case-sensitive)
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Tips
-
-* Test your charts with both light and dark modes to ensure readability
-* Use meaningful series names that will display well in the legend
-* Consider the overall document layout when setting chart dimensions
-* Preview your charts to ensure all data is visible and properly scaled
+[TIP]
+====
+Combination charts excel when one metric drives the other (e.g., marketing spend drives conversions). Use bars for the driver (input) and lines for the outcome (result) to show cause-and-effect visually.
+====
 
 [.back-to-top]
 <<top, 🔝>>

@@ -1,255 +1,294 @@
 include::_base.adoc[]
 :enable-navigation:
 :page-navigation: true
-= VCard Maker
+= 👤 DocOps VCard Maker
 
 
 include::shared/buttons.adoc[]
 
 [[top]]
 == Introduction
-The VCard Maker renders a clean, scannable contact card (SVG) from standard vCard 3.0 text. It’s great for team directories, speaker bios, internal wikis, and handoff documents. You write a tiny vCard block; DocOps turns it into a polished card with name, role, organization, phones, emails, and a compact QR code linking back to the card data.
+
+_Contact cards with QR codes for team directories and speaker bios_
+
+*Key features:*
+
+* Standard vCard 3.0 format support
+* 6 design templates from classic to modern
+* Light/dark theme toggle
+* Automatic QR code generation
+* Clean, scannable layout with role and organization
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Usage
-Insert a block using the docops extension and the vcard type. For reusability, keep your vCard content in data files and include them.
+== Default Example
+
+Basic contact card with essential information:
 
 [source,asciidoc]
 ....
 [docops,vcard]
 ----
-include::data/vcard/vcard1-basic.txt[]
+BEGIN:VCARD
+VERSION:3.0
+FN:Sarah Chen
+N:Chen;Sarah;;;
+ORG:Acme Corporation
+TITLE:Product Manager
+TEL;TYPE=WORK:+1-555-0123
+EMAIL:sarah.chen@acme.com
+URL:https://linkedin.com/in/sarachen
+END:VCARD
 ----
 ....
 
-
-=== Default
-
-.Light Mode
 [docops,vcard]
 ----
-include::data/vcard/vcard1-basic.txt[]
+BEGIN:VCARD
+VERSION:3.0
+FN:Sarah Chen
+N:Chen;Sarah;;;
+ORG:Acme Corporation
+TITLE:Product Manager
+TEL;TYPE=WORK:+1-555-0123
+EMAIL:sarah.chen@acme.com
+URL:https://linkedin.com/in/sarachen
+END:VCARD
 ----
-
-.Dark Mode
-[docops,vcard]
-----
-theme=dark
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
-=== Business Card
-
-[docops,vcard]
-----
-design=business_card_design2
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
-=== Tech Pattern
-
-[docops,vcard]
-----
-design=tech_pattern_background
-theme=dark
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
-=== Business Card Template
-
-
-[docops,vcard]
-----
-design=business_card_template
-theme=dark
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
 
 [.back-to-top]
 <<top, 🔝>>
 
+== Focused Examples
 
-== Designs
-The VCard Maker supports multiple design templates and a light/dark theme. Choose a design via a small config header placed before your vCard content, separated by ---.
+=== Creative Agency Style
 
-Supported designs:
-
-- tech_pattern_background — Tech motif background with contrast blocks; pairs well with theme=dark
-- business_card_design — Classic business look (default if not specified)
-- business_card_design2 — Modern variant of the classic business card
-- business_card_template — Minimal template with clear information areas
-- creative_agency_pro_contact_card — Playful, agency-style layout with bold accents
-- modern_card — Contemporary, airy layout with generous spacing
-
-Themes:
-
-- theme=light (default)
-- theme=dark
-
-Example selector usage:
-
-[source,asciidoc]
-....
-[docops,vcard]
-----
-design=tech_pattern_background
-theme=dark
----
-include::data/vcard/vcard1-basic.txt[]
-----
-....
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Examples
-
-=== 1) Product PM (basic)
-[source,asciidoc]
-....
-[docops,vcard]
-----
-include::data/vcard/vcard1-basic.txt[]
-----
-....
-
-[docops,vcard]
-----
-include::data/vcard/vcard1-basic.txt[]
-----
+Playful, agency-style layout with bold accents:
 
 [source,asciidoc]
 ....
 [docops,vcard]
 ----
 design=creative_agency_pro_contact_card
-include::data/vcard/vcard1-basic.txt[]
-----
-....
-
-.Light theme
-[docops,vcard]
-----
-design=creative_agency_pro_contact_card
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
-.Dark theme
-[docops,vcard]
-----
-design=creative_agency_pro_contact_card
-theme=dark
----
-include::data/vcard/vcard1-basic.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== 2) Research Scientist (multiple channels)
-[source,asciidoc]
-....
-[docops,vcard]
-----
-include::data/vcard/vcard2-social.txt[]
-----
-....
-
-
-[docops,vcard]
-----
 theme=light
 ---
-include::data/vcard/vcard2-social.txt[]
+BEGIN:VCARD
+VERSION:3.0
+FN:Alex Rivera
+N:Rivera;Alex;;;
+ORG:Design Studio
+TITLE:Creative Director
+TEL;TYPE=WORK:+1-555-0456
+TEL;TYPE=CELL:+1-555-0457
+EMAIL:alex@designstudio.com
+URL:https://designstudio.com/alex
+NOTE:Specializing in brand identity and digital experiences
+END:VCARD
+----
+....
+
+[docops,vcard]
+----
+design=creative_agency_pro_contact_card
+theme=light
+---
+BEGIN:VCARD
+VERSION:3.0
+FN:Alex Rivera
+N:Rivera;Alex;;;
+ORG:Design Studio
+TITLE:Creative Director
+TEL;TYPE=WORK:+1-555-0456
+TEL;TYPE=CELL:+1-555-0457
+EMAIL:alex@designstudio.com
+URL:https://designstudio.com/alex
+NOTE:Specializing in brand identity and digital experiences
+END:VCARD
 ----
 
-==== Modern
+[.back-to-top]
+<<top, 🔝>>
 
+=== Tech Pattern (Dark Mode)
+
+Tech motif background with high contrast:
+
+[source,asciidoc]
+....
+[docops,vcard]
+----
+design=tech_pattern_background
+theme=dark
+---
+BEGIN:VCARD
+VERSION:3.0
+FN:Dr. Emily Zhang
+N:Zhang;Emily;;Dr.;PhD
+ORG:Research Institute
+TITLE:Principal Research Scientist
+TEL;TYPE=WORK:+1-555-0789
+EMAIL:ezhang@research.edu
+URL:https://research.edu/~ezhang
+NOTE:Machine Learning & Computer Vision
+END:VCARD
+----
+....
+
+[docops,vcard]
+----
+design=tech_pattern_background
+theme=dark
+---
+BEGIN:VCARD
+VERSION:3.0
+FN:Dr. Emily Zhang
+N:Zhang;Emily;;Dr.;PhD
+ORG:Research Institute
+TITLE:Principal Research Scientist
+TEL;TYPE=WORK:+1-555-0789
+EMAIL:ezhang@research.edu
+URL:https://research.edu/~ezhang
+NOTE:Machine Learning & Computer Vision
+END:VCARD
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Team directories* - Internal contact cards for org charts
+* *Speaker bios* - Conference or webinar presenter profiles
+* *Handoff documents* - Project transfer with key contact info
+* *Client portals* - Customer-facing account manager cards
+* *Documentation wikis* - Technical writer or SME contact references
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Structure
+[source,asciidoc]
+....
+[docops,vcard]
+----
+BEGIN:VCARD
+VERSION:3.0
+FN:Full Name
+N:LastName;FirstName;;;
+ORG:Company Name
+TITLE:Job Title
+TEL;TYPE=WORK:+1-555-0000
+EMAIL:email@example.com
+URL:https://profile-url.com
+NOTE:Optional additional info
+END:VCARD
+----
+....
+
+=== With Design Template
+[source,asciidoc]
+....
 [docops,vcard]
 ----
 design=modern_card
-theme=light
+theme=dark
 ---
-include::data/vcard/vcard2-social.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== 3) Minimal contact
-[source,asciidoc]
-....
-[docops,vcard]
-----
-include::data/vcard/vcard3-minimal.txt[]
+BEGIN:VCARD
+VERSION:3.0
+FN:Name
+...
+END:VCARD
 ----
 ....
 
-[docops,vcard]
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|design
+|Template name (see Design Templates below)
+
+|theme
+|"light" (default) or "dark"
+
+|scale
+|Size multiplier (default: 1.0)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Design Templates
+
+[cols="1,3"]
+|===
+|Template |Style
+
+|business_card_design
+|Classic business card (default)
+
+|business_card_design2
+|Modern variant of classic
+
+|business_card_template
+|Minimal with clear info areas
+
+|creative_agency_pro_contact_card
+|Playful with bold accents
+
+|modern_card
+|Contemporary with generous spacing
+
+|tech_pattern_background
+|Tech motif, pairs with dark theme
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== VCard Fields
+
+Required fields:
+[source]
 ----
-include::data/vcard/vcard3-minimal.txt[]
+BEGIN:VCARD
+VERSION:3.0
+FN:Full Name           (Display name)
+N:Last;First;;;        (Structured name)
+END:VCARD
+----
+
+Common optional fields:
+[source]
+----
+ORG:Company Name       (Organization)
+TITLE:Job Title        (Role/position)
+TEL;TYPE=WORK:+1-555-0000  (Work phone)
+TEL;TYPE=CELL:+1-555-0001  (Mobile)
+EMAIL:email@company.com    (Email address)
+URL:https://profile.com    (Website/LinkedIn)
+NOTE:Additional context     (Notes)
 ----
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== 4) International profile
-[source,asciidoc]
-....
-[docops,vcard]
-----
-include::data/vcard/vcard4-international.txt[]
-----
-....
+== Best Practices
 
-[docops,vcard]
-----
-include::data/vcard/vcard4-international.txt[]
-----
+* *Use FN and N together* - FN for display, N for sorting/parsing
+* *Keep TITLE concise* - "Principal Engineer" not "Principal Engineer — Platform Reliability Team Lead"
+* *Include at least one contact method* - Email or phone minimum
+* *Add URL for profiles* - LinkedIn, GitHub, or personal site
+* *Use NOTE sparingly* - Brief specialization or context only
+* *Store in data files* - Reusable across multiple doc pages
 
-[.back-to-top]
-<<top, 🔝>>
-
-
-== Attributes
-
-- design: Optional; selects the visual template. One of:
-* tech_pattern_background,
-* business_card_design,
-* business_card_design2,
-* business_card_template,
-* creative_agency_pro_contact_card,
-* modern_card.
-Defaults to business_card_design when omitted or invalid.
-- theme: Optional; light or dark. Defaults to light.
-- scale: Optional numeric factor to scale the rendered SVG. Defaults to 1.0.
-
-Notes on styling:
-- Colors, typography, and layout follow the chosen design and theme. Designs may emphasize different typography, spacing, or accents, while theme adjusts contrast.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Tips for great cards
-- Prefer FN (Formatted Name) and N (structured name) together so names render crisply and sort correctly.
-- Keep TITLE concise (e.g., Principal Engineer vs Principal Engineer — Platform Reliability) and move details to NOTE.
-- Include at least one EMAIL or TEL; the card will adapt gracefully if one is missing.
-- Use URL to link a profile or docs page; the QR encodes the vCard so mobile users can save the contact quickly.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Notes
-[NOTE]
+[TIP]
 ====
-- The input format is vCard 3.0 lines inside the block body. The maker supports FN, N, ORG, TITLE, TEL, EMAIL, URL, NOTE and gracefully ignores unknown properties.
-- For maintainability, keep vCard blocks in data files and include them, so the same card can be reused across adoc pages.
+*For team directories:* Use `design=modern_card` with consistent theme across all cards. Store each person's vCard in `data/vcard/firstname-lastname.txt` and include by reference. The QR code encodes the full vCard so mobile users can save contacts instantly.
 ====
+
+[.back-to-top]
+<<top, 🔝>>

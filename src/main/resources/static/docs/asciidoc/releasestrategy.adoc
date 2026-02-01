@@ -17,134 +17,17 @@ include::shared/buttons.adoc[]
 
 == Introduction
 
-The DocOps Release Strategy Extension allows you to create visually appealing release roadmaps and timelines in your AsciiDoctor documents. Release strategies are useful for visualizing product release plans, roadmaps, and deployment strategies for successful product releases.
+_Visualize product release plans with timeline roadmaps_
 
-This guide will help you understand the basic concepts of release strategies, how to include them in your AsciiDoctor documents, and provide examples of different types of release strategy visualizations.
+*Key features:*
 
-[.back-to-top]
-<<top, 🔝>>
+* Timeline (TLS) and Roadmap (R) layouts for different visualization needs
+* Release types (M1, M2, RC1, GA) with dates, goals, and detailed activities
+* Modern glass design with translucent depth effects
+* Dark mode support with custom color palettes
+* Scalable visualizations for presentations and documents
 
-== Basic Concepts
-
-=== What are Release Strategies?
-
-Release strategies in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each release strategy has:
-
-* A title (the main heading of the strategy)
-* A series of releases, each with a type (M1, M2, RC1, GA, etc.), date, goal, and content
-* Display settings for customizing the appearance
-
-The extension supports several styles of release strategy visualizations:
-
-* Timeline Summary (TLS) - A condensed timeline showing key releases
-* Roadmap (R) - A detailed roadmap visualization
-
-Each style can be displayed with various customizations, including:
-
-* Custom colors for different elements
-* Dark mode visualizations
-* Different scaling options
-* Custom font colors and milestone colors
-* Modern glass design for enhanced visual appeal
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Release Strategy Components
-
-A release strategy includes:
-
-* A title
-* A series of releases, each with:
-  ** Type (M1, M2, RC1, GA, etc.)
-  ** Date
-  ** Goal
-  ** Content (lines of text describing the release)
-* Display settings for visual appearance
-
-[.back-to-top]
-<<top, 🔝>>
-
-== AsciiDoctor Syntax for Release Strategies
-
-To include release strategies in the AsciiDoctor document, use a special macro syntax. Here's the basic format:
-
-[source,asciidoc]
-....
-[docops,release,controls=true]
-----
-{
-  "title": "Release Strategy Title",
-  "style": "TLS",
-  "scale": 1.0,
-  "useDark": false,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-01-15",
-      "goal": "Milestone 1 Goal",
-      "lines": [
-        "Line 1 content",
-        "Line 2 content",
-        "Line 3 content"
-      ]
-    },
-    // More releases...
-  ],
-  "displayConfig": {
-    "fontColor": "#fcfcfc",
-    "milestoneColor": "#fcfcfc",
-    "colors": ["#5f57ff", "#2563eb", "#7149c6"],
-    "notesVisible": false
-  }
-}
-----
-....
-
-The macro processes the JSON configuration and generates an SVG representation of the release strategy that is embedded in your document.
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Release Strategy Properties
-
-==== Main Properties
-
-* `title` (required): The main heading of the strategy
-* `style` (optional): The style of the visualization (default: "TL")
-  ** "TL" - Timeline
-  ** "TLS" - Timeline Summary
-  ** "R" - Roadmap
-* `scale` (optional): A scaling factor for the visualization (default: 1.0)
-* `useDark` (optional): Whether to use dark mode (default: false)
-* `releases` (required): An array of release objects
-* `displayConfig` (optional): Settings for customizing the appearance
-
-==== Release Properties
-
-Each release in the `releases` array has the following properties:
-
-* `type` (required): The release type (M1, M2, RC1, GA, etc.)
-* `date` (required): The release date
-* `goal` (required): The goal of the release
-* `lines` (required): An array of strings describing the release activities
-
-==== DisplayConfig Properties
-
-The `displayConfig` object can have the following properties:
-
-* `fontColor` (optional): The color of the text (default: "#fcfcfc")
-* `colors` (optional): An array of colors for various elements (default: ["#5f57ff", "#2563eb", "#7149c6"])
-* `notesVisible` (optional): Whether to show notes (default: false)
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Examples
-
-=== Basic Timeline Example
-
-Here's a simple example of a timeline release strategy:
+== Default Example
 
 [source,asciidoc]
 ....
@@ -199,7 +82,11 @@ Here's a simple example of a timeline release strategy:
         "Monitoring and support"
       ]
     }
-  ]
+  ],"displayConfig": {
+    "fontColor": "#e2e8f0",
+    "colors": ["#06B6D4", "#6366F1", "#10B981"],
+    "notesVisible": true
+  }
 }
 ----
 ....
@@ -266,9 +153,9 @@ Here's a simple example of a timeline release strategy:
 [.back-to-top]
 <<top, 🔝>>
 
-=== Dark Mode Timeline Example
+== Focused Examples
 
-You can create dark mode release strategies by setting the `useDark` property to `true`:
+=== Dark Mode Mobile App Strategy
 
 [source,asciidoc]
 ....
@@ -277,7 +164,7 @@ You can create dark mode release strategies by setting the `useDark` property to
 {
   "title": "Mobile App Release Strategy",
   "style": "TLS",
-  "scale": 1.0,
+  "scale": 1.5,
   "useDark": true,
   "releases": [
     {
@@ -325,14 +212,11 @@ You can create dark mode release strategies by setting the `useDark` property to
       ]
     }
   ],
-    "displayConfig": {
-      "colors": [
-        "#5f57ff",
-        "#2563eb",
-        "#7149c6"
-      ],
-      "fontColor": "#fcfcfc"
-    }
+   "displayConfig": {
+    "fontColor": "#e2e8f0",
+    "colors": ["#06B6D4", "#6366F1", "#10B981"],
+    "notesVisible": true
+  }
 }
 ----
 ....
@@ -401,158 +285,7 @@ You can create dark mode release strategies by setting the `useDark` property to
 [.back-to-top]
 <<top, 🔝>>
 
-=== Timeline Summary Example
-
-The Timeline Summary (TLS) style provides a more condensed view of the release strategy:
-
-
-[source,asciidoc]
-....
-[docops,release,controls=true]
-----
-{
-  "title": "Website Redesign Project",
-  "style": "TLS",
-  "scale": 0.8,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-03-01",
-      "goal": "Research & Planning",
-      "lines": [
-        "Competitor analysis",
-        "User research and surveys",
-        "Content inventory",
-        "Technical requirements"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-04-15",
-      "goal": "Design & Prototyping",
-      "lines": [
-        "Information architecture",
-        "Visual design concepts",
-        "Interactive prototypes",
-        "Stakeholder review"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-05-30",
-      "goal": "Development",
-      "lines": [
-        "Frontend development",
-        "CMS integration",
-        "Responsive implementation",
-        "Content migration"
-      ]
-    },
-    {
-      "type": "RC2",
-      "date": "2023-06-15",
-      "goal": "Testing & Refinement",
-      "lines": [
-        "Quality assurance testing",
-        "Performance optimization",
-        "Accessibility compliance",
-        "Browser compatibility"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-07-01",
-      "goal": "Launch",
-      "lines": [
-        "Final approval",
-        "Production deployment",
-        "Redirect setup",
-        "Analytics configuration"
-      ]
-    }
-  ]
-}
-----
-....
-
-[docops,release,controls=true, useDark=true]
-----
-{
-  "title": "Website Redesign Project",
-  "style": "TLS",
-  "scale": 0.5,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-03-01",
-      "goal": "Research & Planning",
-      "lines": [
-        "Competitor analysis",
-        "User research and surveys",
-        "Content inventory",
-        "Technical requirements"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-04-15",
-      "goal": "Design & Prototyping",
-      "lines": [
-        "Information architecture",
-        "Visual design concepts",
-        "Interactive prototypes",
-        "Stakeholder review"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-05-30",
-      "goal": "Development",
-      "lines": [
-        "Frontend development",
-        "CMS integration",
-        "Responsive implementation",
-        "Content migration"
-      ]
-    },
-    {
-      "type": "RC2",
-      "date": "2023-06-15",
-      "goal": "Testing & Refinement",
-      "lines": [
-        "Quality assurance testing",
-        "Performance optimization",
-        "Accessibility compliance",
-        "Browser compatibility"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-07-01",
-      "goal": "Launch",
-      "lines": [
-        "Final approval",
-        "Production deployment",
-        "Redirect setup",
-        "Analytics configuration"
-      ]
-    }
-  ]
-    ,"displayConfig": {
-    "fontColor": "#e2e8f0",
-    "colors": ["#06B6D4", "#6366F1", "#10B981"]
-  }
-}
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-
-
-=== Roadmap Example
-
-The Roadmap (R) style provides a detailed roadmap visualization:
+=== Cloud Platform Roadmap
 
 [source,asciidoc]
 ....
@@ -692,128 +425,56 @@ The Roadmap (R) style provides a detailed roadmap visualization:
 [.back-to-top]
 <<top, 🔝>>
 
-=== Dark Mode Roadmap with Custom Colors
+== Common Use Cases
 
+* **Product roadmaps** - Communicate quarterly/annual release plans to stakeholders
+* **Sprint planning** - Visualize agile development cycles with milestone markers
+* **Migration projects** - Track multi-phase infrastructure or platform transitions
+* **Mobile app launches** - Coordinate design, development, testing, and release phases
+* **Compliance initiatives** - Map audit preparation, testing, and certification timelines
 
-You can combine dark mode with custom colors for a unique visualization:
+[.back-to-top]
+<<top, 🔝>>
 
+== Format Options
+
+=== Timeline Summary (TLS)
 [source,asciidoc]
 ....
-[docops,release,controls=true]
+[docops,release]
 ----
 {
-  "title": "AI Product Development Roadmap",
-  "style": "R",
-  "scale": 0.8,
-  "useDark": true,
+  "title": "Basic Timeline",
+  "style": "TLS",
   "releases": [
     {
       "type": "M1",
       "date": "2023-Q1",
-      "goal": "Data Collection & Preparation",
-      "lines": [
-        "Data sources identification",
-        "Data collection infrastructure",
-        "Data cleaning and preprocessing",
-        "Feature engineering"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-Q2",
-      "goal": "Model Development",
-      "lines": [
-        "Algorithm selection",
-        "Model training pipeline",
-        "Hyperparameter tuning",
-        "Model evaluation framework"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-Q3",
-      "goal": "Product Integration",
-      "lines": [
-        "API development",
-        "Frontend integration",
-        "Performance optimization",
-        "A/B testing framework"
-      ]
+      "goal": "Planning",
+      "lines": ["Requirements gathering", "Team formation"]
     },
     {
       "type": "GA",
-      "date": "2023-Q4",
-      "goal": "Market Launch",
-      "lines": [
-        "Production deployment",
-        "Monitoring and analytics",
-        "Continuous learning system",
-        "Customer feedback loop"
-      ]
+      "date": "2023-Q2",
+      "goal": "Launch",
+      "lines": ["Production deployment", "Marketing campaign"]
     }
-  ],
-  "displayConfig": {
-    "fontColor": "#e2e8f0",
-    "milestoneColor": "#f8fafc",
-    "colors": ["#06B6D4", "#6366F1", "#10B981"]
-  }
+  ]
 }
 ----
 ....
 
-[docops,release,useDark=true]
+=== Roadmap (R) with Custom Colors
+[source,asciidoc]
+....
+[docops,release]
 ----
 {
-  "title": "AI Product Development Roadmap",
+  "title": "Annual Roadmap",
   "style": "R",
   "scale": 0.8,
   "useDark": true,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-Q1",
-      "goal": "Data Collection & Preparation",
-      "lines": [
-        "Data sources identification",
-        "Data collection infrastructure",
-        "Data cleaning and preprocessing",
-        "Feature engineering"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-Q2",
-      "goal": "Model Development",
-      "lines": [
-        "Algorithm selection",
-        "Model training pipeline",
-        "Hyperparameter tuning",
-        "Model evaluation framework"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-Q3",
-      "goal": "Product Integration",
-      "lines": [
-        "API development",
-        "Frontend integration",
-        "Performance optimization",
-        "A/B testing framework"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-Q4",
-      "goal": "Market Launch",
-      "lines": [
-        "Production deployment",
-        "Monitoring and analytics",
-        "Continuous learning system",
-        "Customer feedback loop"
-      ]
-    }
-  ],
+  "releases": [...],
   "displayConfig": {
     "fontColor": "#e2e8f0",
     "colors": ["#06B6D4", "#6366F1", "#10B981"],
@@ -821,175 +482,47 @@ You can combine dark mode with custom colors for a unique visualization:
   }
 }
 ----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Glass Design Example
-
-The following example demonstrates the modern glass design applied to a release strategy:
-
-[source,asciidoc]
-....
-[docops,release,controls=true]
-----
-{
-  "title": "Software Platform with Glass Design",
-  "style": "TLS",
-  "scale": 0.8,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-Q1",
-      "goal": "Core Architecture",
-      "lines": [
-        "Design system architecture",
-        "Set up development environment",
-        "Implement core components",
-        "Create initial documentation"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-Q2",
-      "goal": "Feature Development",
-      "lines": [
-        "Implement user authentication",
-        "Develop data processing pipeline",
-        "Create user interface components",
-        "Set up automated testing"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-Q3",
-      "goal": "Integration & Testing",
-      "lines": [
-        "System integration",
-        "Performance optimization",
-        "Security testing",
-        "User acceptance testing"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-Q4",
-      "goal": "Production Release",
-      "lines": [
-        "Final quality assurance",
-        "Production deployment",
-        "User documentation",
-        "Support and maintenance plan"
-      ]
-    }
-  ]
-}
-----
 ....
 
-[docops,release,controls=true]
-----
-{
-  "title": "Software Platform with Glass Design",
-  "style": "TLS",
-  "scale": 0.8,
-  "releases": [
-    {
-      "type": "M1",
-      "date": "2023-Q1",
-      "goal": "Core Architecture",
-      "lines": [
-        "Design system architecture",
-        "Set up development environment",
-        "Implement core components",
-        "Create initial documentation"
-      ]
-    },
-    {
-      "type": "M2",
-      "date": "2023-Q2",
-      "goal": "Feature Development",
-      "lines": [
-        "Implement user authentication",
-        "Develop data processing pipeline",
-        "Create user interface components",
-        "Set up automated testing"
-      ]
-    },
-    {
-      "type": "RC1",
-      "date": "2023-Q3",
-      "goal": "Integration & Testing",
-      "lines": [
-        "System integration",
-        "Performance optimization",
-        "Security testing",
-        "User acceptance testing"
-      ]
-    },
-    {
-      "type": "GA",
-      "date": "2023-Q4",
-      "goal": "Production Release",
-      "lines": [
-        "Final quality assurance",
-        "Production deployment",
-        "User documentation",
-        "Support and maintenance plan"
-      ]
-    }
-  ]
-}
-----
+[cols="1,2"]
+|===
+|Option |Purpose
 
-Notice how the glass design creates a modern, sophisticated look with translucent elements, subtle shadows, and highlights. The design is automatically applied without requiring any additional configuration.
+|style: "TLS"
+|Condensed timeline view
+
+|style: "R"
+|Detailed roadmap layout
+
+|useDark: true
+|Dark theme for presentations
+
+|scale: 0.7-1.5
+|Size adjustment for different contexts
+
+|displayConfig.colors
+|Custom color palette (array of 3 hex colors)
+
+|displayConfig.notesVisible
+|Toggle activity details visibility
+|===
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Interactive Features
+== Best Practices
 
-Release strategies in the DocOps extension include several interactive features:
+1. **Use semantic release types** - M1/M2 for milestones, RC1/RC2 for release candidates, GA for general availability
+2. **Keep activity lists focused** - 3-5 activities per release for readability
+3. **Choose the right style** - TLS for high-level overviews, R for detailed quarter-by-quarter plans
+4. **Scale appropriately** - Use scale: 1.5 for presentations, 0.7-0.8 for embedded documentation
+5. **Leverage dark mode** - Dark theme with cyan/purple/green palette creates professional look for stakeholder presentations
+6. **Align dates consistently** - Use ISO dates (YYYY-MM-DD) or quarters (YYYY-Q1) throughout
 
-* **Hover Effects**: Elements have hover effects for better visibility
-* **Tooltips**: Hover over elements to see detailed information
-* **Animations**: Visualizations can be animated when they first appear on the page
-
-These interactive features enhance the user experience and make it easier to interpret the release strategy information in your documents.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Glass Design
-
-The latest version of the DocOps Release Strategy Extension includes a modern glass design that enhances the visual appeal of your release strategies. The glass design features:
-
-* Translucent elements with subtle transparency effects
-* Soft highlights and shadows for depth
-* Frosted glass appearance for cards and containers
-* Smooth gradients and reflections
-* Enhanced readability with optimized contrast
-
-The glass design is automatically applied to all release strategy visualizations, giving them a contemporary, polished look. This design approach creates a sense of depth and dimension while maintaining clarity and readability.
+[TIP]
+====
+*For multi-year roadmaps:* Use the Roadmap (R) style with quarterly dates (2023-Q1, 2023-Q2) rather than specific dates. This creates breathing room between releases and accommodates the glass design's translucent depth effects without overcrowding.
+====
 
 [.back-to-top]
 <<top, 🔝>>
-
-=== Glass Design Benefits
-
-* **Modern Aesthetics**: The glass design provides a contemporary look that aligns with modern UI trends
-* **Enhanced Readability**: Carefully balanced transparency and contrast ensure content remains highly readable
-* **Visual Hierarchy**: The design uses subtle depth cues to establish clear visual hierarchy
-* **Consistent Experience**: The glass effect is applied consistently across different elements for a cohesive look
-* **Light and Dark Mode Support**: The glass design adapts beautifully to both light and dark mode settings
-
-The glass design is particularly effective in dark mode, where the translucent elements create an elegant, premium appearance against darker backgrounds.
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Conclusion
-
-The DocOps Release Strategy Extension provides a powerful way to enhance your AsciiDoctor documents with visually appealing release roadmaps and timelines. By using the JSON configuration format, you can create customized visualizations that match your document's style and purpose.
-
-The extension supports various styles of release strategy visualizations, with different display options including custom colors, dark mode, interactive features, and the modern glass design for a premium visual experience.

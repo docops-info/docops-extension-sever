@@ -18,64 +18,31 @@ include::shared/buttons.adoc[]
 
 == Introduction
 
-The DocOps Quadrant Chart Extension allows you to create visually appealing quadrant charts in your AsciiDoctor documents. Quadrant charts are powerful visualization tools for creating strategic priority matrices and impact vs. effort analysis charts. They help teams prioritize work by plotting items on a two-dimensional grid based on their relative importance.
+_2D priority mapping for strategic decision-making_
 
-This guide will help you understand the basic concepts of quadrant charts, how to include them in your AsciiDoctor documents, and provide examples of different configurations.
+*Key features:*
 
-[.back-to-top]
-<<top, 🔝>>
-
-
-== Basic Concepts
-
-=== What are Quadrant Charts?
-
-Quadrant charts in the DocOps extension are SVG-based graphical elements that can be included in your AsciiDoctor documents. Each quadrant chart has:
-
-* A title (the main heading of the chart)
-* A subtitle (optional)
-* X and Y axis labels (typically "Effort" and "Impact")
-* Four quadrants, each with its own label and description
-* A series of data points plotted on the grid
-
-Quadrant charts are particularly useful for:
-
-* Strategic priority matrices
-* Impact vs. effort analysis
-* Risk assessment
-* Opportunity evaluation
-* Feature prioritization
+* Four-quadrant grid for impact vs. effort analysis
+* Customizable axis and quadrant labels
+* Category-based color coding for data points
+* Visual Version 2 with enhanced design
+* Dark mode support for presentations
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Quadrant Chart Components
 
-A quadrant chart includes:
+== Default Example
 
-* A title and optional subtitle
-* X and Y axis labels
-* Four quadrants with labels and descriptions
-* Data points, each with a label, x-coordinate, y-coordinate, and optional category
-
-== AsciiDoctor Syntax for Quadrant Charts
-
-To include quadrant charts in your AsciiDoctor document, you use a special macro syntax. Here's the basic format:
+Classic impact vs. effort prioritization matrix:
 
 [source,asciidoc]
 ....
 [docops,quadrant,controls=true]
 ----
-#title: Technology Magic Quadrant 2024
-#xAxis: Ability to Execute
-#yAxis: Completeness of Vision
-xAxisLabel: EFFORT REQUIRED
-yAxisLabel: IMPACT LEVEL
-#leaders: HIGH IMPACT
-#challengers: STRATEGIC
-#visionaries: FILL-INS
-#niche: THANKLESS
-
+#title: Strategic Priority Matrix
+#xAxis: EFFORT REQUIRED
+#yAxis: IMPACT LEVEL
 ---
 Feature A | 75 | 85 | Core
 Feature B | 30 | 70 | Enhancement
@@ -84,118 +51,225 @@ Feature D | 20 | 30 | Optional
 ----
 ....
 
-The macro processes the configuration and data and generates an SVG representation of the quadrant chart that is embedded in your document.
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad1.txt[]
+----
 
 [.back-to-top]
 <<top, 🔝>>
 
-=== Configuration Parameters
+== Focused Examples
 
-The following configuration parameters are available:
+=== Product Feature Prioritization
 
-* `title` (optional): The main heading of the chart (default: "Strategic Priority Matrix")
-* `subtitle` (optional): The subtitle of the chart (default: "Impact vs. Effort Analysis")
-* `xAxisLabel` (optional): The label for the X-axis (default: "EFFORT REQUIRED")
-* `yAxisLabel` (optional): The label for the Y-axis (default: "IMPACT LEVEL")
-* `leaders` (optional): The label for quadrant 1 (top-right) (default: "HIGH IMPACT")
-* `challengers` (optional): The label for quadrant 2 (top-left) (default: "STRATEGIC")
-* `visionaries` (optional): The label for quadrant 3 (bottom-left) (default: "FILL-INS")
-* `niche` (optional): The label for quadrant 4 (bottom-right) (default: "THANKLESS")
+Custom quadrant labels for business value analysis:
 
-=== Data Format
+[source,asciidoc]
+....
+[docops,quadrant,controls=true]
+----
+#title: Product Feature Prioritization
+#xAxis: COMPLEXITY
+#yAxis: BUSINESS VALUE
+#leaders: QUICK WINS
+#challengers: BIG BETS
+#visionaries: MONEY PITS
+#niche: INCREMENTAL
+---
+Feature A | 25 | 85 | Core
+Feature B | 70 | 80 | Enhancement
+Feature C | 80 | 30 | Nice-to-have
+Feature D | 30 | 20 | Optional
+Feature E | 50 | 50 | Maintenance
+----
+....
 
-After the configuration section and the separator line (`---`), each line represents a data point with the following format:
+[docops,quadrant,controls=true]
+----
+include::data/quadrant/quad2.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Risk Assessment (Dark Mode)
+
+Probability vs. impact for project risk management:
+
+[source,asciidoc]
+....
+[docops,quadrant,useDark=true]
+----
+#title: Project Risk Assessment
+#xAxis: PROBABILITY
+#yAxis: IMPACT
+#leaders: HIGH PRIORITY
+#challengers: CRITICAL
+#visionaries: LOW PRIORITY
+#niche: MEDIUM PRIORITY
+---
+Security Breach | 30 | 95 | Security
+Budget Overrun | 70 | 75 | Financial
+Schedule Delay | 80 | 60 | Timeline
+Scope Creep | 85 | 50 | Management
+Resource Shortage | 60 | 70 | Staffing
+Technical Failure | 40 | 85 | Technical
+----
+....
+
+[docops,quadrant,useDark=true]
+----
+include::data/quadrant/quad3.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Feature prioritization* - Map complexity vs. business value for roadmap planning
+* *Risk management* - Plot probability vs. impact for risk mitigation strategies
+* *Technology evaluation* - Gartner-style Magic Quadrant for vendor comparisons
+* *Portfolio analysis* - Investment opportunities by risk vs. return
+* *Sprint planning* - Effort estimation vs. stakeholder value for backlog grooming
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Format
+[source,asciidoc]
+....
+[docops,quadrant]
+----
+#title: Chart Title
+#xAxis: X-Axis Label
+#yAxis: Y-Axis Label
+---
+Item Name | X | Y | Category
+----
+....
+
+=== Custom Quadrants
+[source,asciidoc]
+....
+[docops,quadrant]
+----
+#title: Custom Labels
+#leaders: TOP RIGHT
+#challengers: TOP LEFT
+#visionaries: BOTTOM LEFT
+#niche: BOTTOM RIGHT
+---
+Item | 50 | 50 | Category
+----
+....
+
+=== Visual Version 2
+[source,asciidoc]
+....
+[docops,quadrant,useDark=true]
+----
+visualVersion=2
+#title: Modern Design
+---
+Item | X | Y | Category
+----
+....
+
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|#title
+|Chart heading
+
+|#xAxis
+|X-axis label (default: "EFFORT REQUIRED")
+
+|#yAxis
+|Y-axis label (default: "IMPACT LEVEL")
+
+|#leaders
+|Top-right quadrant (default: "HIGH IMPACT")
+
+|#challengers
+|Top-left quadrant (default: "STRATEGIC")
+
+|#visionaries
+|Bottom-left quadrant (default: "FILL-INS")
+
+|#niche
+|Bottom-right quadrant (default: "THANKLESS")
+
+|visualVersion=2
+|Enhanced visual design
+
+|useDark=true
+|Dark theme for presentations
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Quadrant Positioning
+
+[cols="1,1,3"]
+|===
+|Quadrant |Position |Typical Meaning
+
+|Leaders
+|Top-right (high Y, high X)
+|High impact, high effort (big bets)
+
+|Challengers
+|Top-left (high Y, low X)
+|High impact, low effort (quick wins)
+
+|Visionaries
+|Bottom-left (low Y, low X)
+|Low impact, low effort (fill-ins)
+
+|Niche
+|Bottom-right (low Y, high X)
+|Low impact, high effort (avoid)
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Data Format
+
+Each data point has 3-4 pipe-separated values:
 
 [source]
 ----
 Label | X | Y [| Category]
 ----
 
-* `Label` (required): The name or description of the data point
-* `X` (required): The X-coordinate (effort) value from 0 to 100
-* `Y` (required): The Y-coordinate (impact) value from 0 to 100
-* `Category` (optional): A category for the data point, which can be used for grouping or coloring
+* *Label* (required) - Item name displayed on chart
+* *X* (required) - Horizontal position (0-100)
+* *Y* (required) - Vertical position (0-100)
+* *Category* (optional) - Groups items by color
 
 [.back-to-top]
 <<top, 🔝>>
 
-== Examples
+== Best Practices
 
-=== Basic Quadrant Chart Example
+* *Label quadrants contextually* - "Quick Wins" vs. "Big Bets" is clearer than generic "High/Low"
+* *Limit to 8-12 items* - Too many points create visual clutter
+* *Use categories for grouping* - Color-code by team, phase, or priority tier
+* *Position strategically* - Place similar items apart to avoid label overlap
+* *Match axes to analysis* - Flip axes (complexity vs. value) when it clarifies meaning
+* *Add dark mode for stakeholders* - Professional look for executive presentations
 
-Here's a simple example of a quadrant chart:
-
-[source,asciidoc]
-....
-[docops,quadrant,controls=true]
-----
-include::data/quadrant/quad1.txt[]
-----
-....
-
-[docops,quadrant,controls=true]
-----
-include::data/quadrant/quad1.txt[]
-----
+[TIP]
+====
+*For risk assessment:* Place X-axis as "Probability" and Y-axis as "Impact". This matches industry standard risk matrices where top-right items (high probability + high impact) demand immediate attention.
+====
 
 [.back-to-top]
 <<top, 🔝>>
-
-=== Customized Quadrant Labels Example
-
-You can customize the labels for each quadrant:
-
-[source,asciidoc]
-....
-[docops,quadrant,controls=true]
-----
-include::data/quadrant/quad2.txt[]
-----
-....
-
-[docops,quadrant,controls=true]
-----
-include::data/quadrant/quad2.txt[]
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-=== Project Risk Assessment Example
-
-Quadrant charts can also be used for risk assessment:
-
-[source,asciidoc]
-....
-[docops,quadrant,controls=true]
-----
-include::data/quadrant/quad3.txt[]
-----
-....
-
-.Project Risk Assessment
-[docops,quadrant,controls=false,useDark=false]
-----
-include::data/quadrant/quad3.txt[]
-----
-
-.Visual Version 2
-[docops,quadrant,useDark=true, title="Project Risk Assessment"]
-----
-visualVersion=2
-include::data/quadrant/quad3.txt[]
-----
-
-
-[docops,quadrant,useDark=true]
-----
-include::data/quadrant/quad4.txt[]
-----
-[.back-to-top]
-<<top, 🔝>>
-
-== Conclusion
-
-The DocOps Quadrant Chart Extension provides a powerful way to enhance AsciiDoctor documents with visually appealing quadrant charts. By using the simple key-value configuration format and pipe-separated data, one can create customized charts that match the document's style and purpose.
-
-Quadrant charts are versatile tools that can be used for various purposes, including strategic planning, feature prioritization, risk assessment, and more. The extension makes it easy to create these charts without requiring any external tools or complex setup.
